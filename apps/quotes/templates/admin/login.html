@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>quotes.radiance.ru - вход</title>
+{% endblock %}
+
+{% block text_content %}
+
+<center>
+  <div class="login">
+      <div class="loginbody">
+        <form action="{% url apps.accounts.views.login %}" method="POST">
+            <table>
+            {{ login_form.as_table }}
+            </table>
+            <br>
+        <input type="submit" value="Welcome">
+        </form>
+      </div>
+  </div>
+</center>
+{% endblock %}
+

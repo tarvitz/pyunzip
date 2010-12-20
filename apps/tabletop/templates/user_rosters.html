@@ -1,0 +1,28 @@
+{% extends user.skin.name|getskin:"base.html" %} {% load newsfilters %} {% load i18n %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css"}}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css"}}' type='text/css' media='screen'>
+{% endblock %}
+{% block js %}
+{{ block.super }}
+<script language='javascript' src='/media/js/base.js'></script>
+{% endblock %}
+{% block text_content %}
+<a href='{% url url_add_roster %}' class='a_button' style='color: black'>Добавить</a>
+<a href='{% url url_search_rosters %}' class='a_button' style='color: black'>Поиск</a>
+
+{% if rosters.object_list %}
+{% for r in rosters.object_list %}
+	{% include settings.document.roster_inc %}
+{% endfor %}
+{% if comments.object_list %}
+	{% include settings.document.comments %}
+{% endif %}
+{% with rosters as page %}
+	{% include settings.document.links %}
+{% endwith %}
+{% else %}
+{% include settings.document.nothing_inc %}
+{% endif %}
+{% endblock %}

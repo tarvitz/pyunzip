@@ -1,0 +1,29 @@
+{% extends user.skin.name|getskin:"base.html" %} {% load newsfilters %} {% load  comments %}
+{% block text_content %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"news.css" }}' type='text/css' media='screen'>
+	<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feeds/news">
+	<link rel="alternate" type="application/rss+xml" title="ATOM" href="/feeds/news_atom">
+{% endblock %}
+<form id='search_form' action='.' method='POST'>
+{{ form.query.errors }}
+<label for='query'>Ищем: </label>
+{{ form.query }}
+<input type='submit' value='Запрос' class='button'>
+</form>
+{% with objects as news %}
+{% if news.object_list %}
+	{% include settings.document.news_inc %}
+{% else %}
+{% if query %}
+<div class='message' style="padding: 0 10%; border: 0px;">
+<div class='msg_headline' style='border: 1px dotted white;'><div class='transparency' id='black'></div>
+	Ничего похожего на &quot;{{ query }}&quot; не найденно
+</div>
+</div>
+{% endif %}
+{% endif %}
+&nbsp;
+{% endwith %}
+{% endblock %}

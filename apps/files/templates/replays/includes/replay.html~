@@ -1,0 +1,170 @@
+{% load kamwhfilters %}{% load newsfilters %} {% load votetags %}
+{% if r %}
+{# {% cycle one,two %} #}
+{% comment %}
+	cycle does not works within includes o_O" via context's variables
+{% endcomment %}
+<div align="center">
+<div class='message'>
+	<div class='msg_headline'>
+		<div class='transparency' id='black'></div>
+		<span class="msg_comment_date">[{{ r.upload_date|date:"Y/M/d H:m:s" }}]</span>
+		<span class="msg_replay_name"><span class='replay_name'>
+        {% if replays %} <a href="{% url apps.files.views.show_replay number=r.id %}">{{ r.name }}</a>{% else %} {{ r.name }}{% endif %}</span></span>
+	</div> {# headline #}
+	<div class='msg_content'>
+		<div class='transparency'></div>
+		<div class='reflects_down'></div>
+		<div class='reflects_left'></div>
+		
+		<div class='msg_avatar'>{% spaceless %}
+			{% comment %}{% get_user_ranks for r.author as ranks %}
+            {% if ranks %}
+            <span class="msg_ranks">статус:
+            {% for rn in ranks %}
+                <a href="/ranks/{{ rn.rank.codename }}">{{ rn.rank.short_name|lower }}</a>{% if not forloop.last %},{% endif %}
+            {% endfor %}
+            {% endcomment %}
+			{% if r.author.ranks.values %}
+			<span class='msg_ranks'>статус:
+				{% for rank in r.author.ranks.values %}
+					<a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+				{% endfor %}
+			</span>
+            {% endif %}{% endspaceless %}
+			{# <img src="{{ r.author.plain_avatar.url }}"> #}
+			<img src='{% url apps.wh.views.get_user_avatar nickname=r.author.nickname %}'>
+			<div align="center" class='nickname'>{% get_nickname r.author %}</div>
+            <div align="center" class='karma'>
+			{% with r.author as warn_user %}
+			 {% include "warnings/warning.html" %}
+			{% endwith %}
+			{% with r.author as karma_user %}
+			{% include "karma_power.html" %}
+			{% endwith %}
+			</div>
+			{% if not r.author.settings.invisible %}
+				{% check_if_online r.author as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
+			{% else %}&nbsp;{% endif %}
+			{% if user.is_authenticated %}{% spaceless %}
+            {% comment %}{% get_settings for user with hide_jid as hide_jid %}
+            {% get_settings for user with hide_uin as hide_uin %}
+            {% get_settings for user with hide_email as hide_email %} {% endcomment %} {% endspaceless %}
+			{% if r.author.jid and not r.author.settings.hide_jid %}<a href="xmpp:{{ r.author.jid }}">[jid]</a>{% endif %}
+            {% if r.author.uin and not r.author.settings.hide_uin %}<a href="icq:{{ r.author.uin }}">[icq]</a>{% endif %}
+            {% if r.author.email and not r.author.settings.hide_email %}<a href="mailto:{{ r.author.email }}">[mail]</a>{% endif %}
+			{% endif %}
+		</div>{# avatar #}
+		<div class='msg_text'>
+		<span class="msg_game_icon">
+		<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower %}">
+		<img src='/media/images/replays/{{ r.version.game.short_name}}_{{ r.version.name|lower }}.png'>
+		</a></span>
+			<div class='msg_replay_info'>
+				{% if r.is_set %}
+				{# set it hide #}
+				<div class='is_set'>{% spaceless %}
+					<a href="javascript:show_hide('pack_{{ r.id }}')">Пак реплеев</a>
+					<ul class='replay_pack' style="display:none;" id="pack_{{ r.id }}">
+					{% for inf in r.zip_info.info %}
+					 {% if inf.small_filename %}
+						<li>
+							{#<a href="{% url apps.files.views.return_replay_from_pack id=r.id idx=inf.idx %}"> #}
+								{{ inf.small_filename }}{# </a> #}
+							<span class="size_info">
+								{#[rec: #}[<a title='{{ inf.file_size|filesizeformat }}' href="{% url apps.files.views.return_replay_from_pack id=r.id idx=inf.idx compress='plain' %}">
+									{{ inf.file_size|filesizeformat }}</a>
+								{# |zip: <a href="{% url apps.files.views.return_replay_from_pack id=r.id idx=inf.idx compress='zip' %}"> #}
+								{# {{ inf.compress_size|filesizeformat }}</a> #}
+								{# |bz2: ~#}| <a title='{{ inf.compress_size|filesizeformat }}' href="{% url apps.files.views.return_replay_from_pack id=r.id idx=inf.idx compress='bz2' %}">
+								{{inf.compress_size|filesizeformat }}</a>]
+								{% if inf.comment %}
+								<br>
+								{{ inf.comment }}
+								{% endif %}
+							</span>
+						</li>
+					 {% endif %}
+					{% endfor %}
+					</ul>
+				{% endspaceless %}
+				</div> {# version #}
+
+				{% endif %}
+				{# implement as external html template #}
+				{% spaceless %} {% get_vote for r as vote %}
+			    {% check_user_voted for r with user as voted %} {% endspaceless %}
+				{% bind r as vote_object %}
+				{% include "stars.html" %}	
+				{% if vote %}
+				<div class='vote'>
+					<span class='title'>Рейтинг:</span> <span class='info'>{{ vote }} баллов из {{ vote.total_rating }}</span>
+				</div>
+				{% endif %}
+				<div class='filetype'>
+					<span class='title'>Тип файла:</span> <span class='info'>{{ r.replay_type }} </span>
+				</div>
+
+				<div class='version'>{% spaceless %}
+					<span class="title">Версия игры</span>:<span class="info"> 
+					<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower %}">
+					{{ r.version.game }}: {{ r.version.name }}</a>
+					[<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower patch=r.version.patch %}">{{ r.version.patch }}</a>]
+					</span>
+				{% endspaceless %}
+				</div> {# version #}
+				<div class='type'>{% spaceless %}
+				{% ifequal r.type "0" %}
+					<span class="title">Тип игры</span>:<span class="info">
+					<a href="{% url apps.files.views.all_replays gametype=r.type %}">
+					{{ r.nonstd_layout }}</a></span>
+				{% else %}
+					<span class="title">Тип игры</span>:<span class="info"> 
+					<a href="{% url apps.files.views.all_replays gametype=r.type %}">
+					{{ r.get_type }}</a></span>
+				{% endifequal %}
+				{% endspaceless %}
+				</div> {# type #}
+				<div class='races'>{% spaceless %}
+					<span class="title">Расы</span>:<span class="info"> {{ r.races }}</span>
+				{% endspaceless %}
+				</div> {# races #}
+				{% if not r.is_set %}
+				<div class='teams'>{% spaceless %}
+					<span class="title">Игроки</span>:<span class="info"> {{ r.player_teams }}</span>
+				{% endspaceless %}
+				</div> {# teams #}
+				<div class='winner'>{% spaceless %}
+					<a href="javascript:show_hide('winners_{{ r.id }}')">Команда победитель</a>:
+					<span style="display: none;" id="winners_{{ r.id }}">{{ r.winner_names }}</span>
+				{% endspaceless %}
+				</div>{# winners #}
+				{% endif %}
+				<div class='replay_link'>{% spaceless %}
+					<a href="{{ r.replay.url }}">Реплей</a> [ {{ r.replay.size|filesizeformat }} ]
+				{% endspaceless %}
+				</div>{# link #}
+			</div> {# replay_info #}
+			<hr width='35%'>
+			<div class='comment'>
+				{{ r.comments|striptags|render_filter:r.syntax|safe }}
+			</div> {# comments #}
+		<br clear='all'>
+		</div> {# text #}
+	</div> {# content #}
+	<br clear='all'>
+	<div class='msg_footer'>
+		{% if replays %} {# actions if we're listing whole replays #}
+        {% load comments %}
+        {% get_comment_count for r as comment_counts %}
+        <a href="{% url apps.files.views.show_replay number=r.id %}">Комментариев: {{ comment_counts }}</a>
+        {% else %}
+        <a href="{% url apps.files.views.edit_replay id=r.id %}">[править]</a>
+		 {# | [скрыть] |  #}
+		<a href="{% url apps.files.views.purge_replay number=r.id approve='approve' %}">[удалить]</a>
+        {% endif %}
+	</div> {# footer #}
+</div> {# replay #}
+</div> {# div center #}
+
+{% endif %}

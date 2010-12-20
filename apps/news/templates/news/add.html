@@ -1,0 +1,34 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"news.css" }}' type='text/css' media='screen'>{% endblock %}
+{% block title %}Добавить статью {% endblock %}
+{% block text_content %}
+<center>
+	<form id='add_form' enctype="multipart/form-data" action='.' method='post'>
+	 {{ form.title.errors }}
+	 Заголовок: <br>{{ form.title }}<br>
+	 {{ form.author.errors }}
+	 Автор: <br>{{ form.author }}<br>
+	 <div class='notice'>[1] Если вы являетесь автором статьи,
+	 то поле автора должно быть пустым, иначе впишите имя автора (можно ник, для неофициальных ресурсов)</div>
+	 {{ form.url.errors }}
+	 URL оригинальной статьи: <br>{{ form.url }}<br>
+	 <div class='notice'>[2] Если авторство статьи принадлежит не вам, то пожалуйста скопируйте и вставьте ссылку на данную новость, в противном случае поле следует оставить пустым</div>
+	 {{ form.category.errors }}
+ 	 Категория: <br>{{ form.category }}<br>
+	 {{ form.syntax.errors }}
+	 Синтаксис:<br>
+	 {{ form.syntax }}<br>
+	 {{ form.head_content.errors }}
+	 Заголовок новости:<br>
+	 {{ form.head_content }}<br>
+	 {{ form.content.errors }}
+	 Содержание новости: <br>{{ form.content }}<br>
+	 {{ form.attachment.errors }}
+	 Присоединенный файл: <br>
+	 {{ form.attachment }}<br>
+	 {% if edit_flag %}<input id='submit' type='submit' value='Сохранить'> {% else %}<input id='submit' type='submit' value='Добавить'>{% endif %}
+	 {{ form.hidden_syntax }}
+	</form>
+</center>
+{% endblock %}

@@ -1,0 +1,2 @@
+{% load newsfilters %}
+{{ obj.content|render_filter:obj.syntax|striptags|newscut:"500" }}

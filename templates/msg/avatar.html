@@ -1,0 +1,34 @@
+{% spaceless %}
+<div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ usr.date_joined|timesince }}</div>
+<span class='msg_ranks'>
+{% if usr.ranks %}статус:
+{% if usr.ranks.values %}
+	{% for rank in usr.ranks.values %}
+		<a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+	{% endfor %}
+</span>
+{% endif %}
+{% endif %}{% endspaceless %}
+
+<a href="{% url profile_by_nick usr.nickname %}">
+    <img class='avatar' src="{% url apps.wh.views.get_user_avatar nickname=usr.nickname %}">
+</a>
+<center>
+	{% with usr as warn_user %}
+		{% include "warnings/warning.html" %}
+	{% endwith %}
+	{% if usr.settings.show_karma_block %}
+	{% with usr as karma_user %}
+		{% include "karma_power.html" %}
+	{% endwith %}
+	{% endif %}
+</center>
+
+{% if not usr.settings.invisible %}
+	{% check_if_online usr as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
+{% else %}&nbsp;{% endif %}
+	{% if user.is_authenticated %} {# current user #}
+	{% if usr.jid and not usr.settings.hide_jid %}<a href="xmpp:{{ usr.jid }}">[jid]</a>{% endif %}
+	{% if usr.uin and not usr.settings.hide_uin %}<a href="icq:{{ usr.uin }}">[icq]</a>{% endif %}
+	{% if usr.email and not usr.settings.hide_email %}<a href="mailto:{{ usr.email }}">[mail]</a>{% endif %}
+{% endif %}

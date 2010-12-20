@@ -1,0 +1,8 @@
+{% for item in menu %}
+    {% if not item.is_current %}
+        <a href="{{ item.url }}">{{ item.title }}</a>
+    {% else %}
+        {{ item.title }}
+    {% endif %}
+    {% if not forloop.last %} / {% endif %}
+{% endfor %}

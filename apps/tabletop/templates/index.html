@@ -1,0 +1,17 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block css %}
+	{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %} {% load i18n %}
+	{% if battlereps.object_list %}
+	{% for br in battlereps.object_list %}
+		{% include settings.document.battle_report_inc %}
+	{% endfor %}
+	{% with battlereps as page %}
+		{% include settings.document.links %}
+	{% endwith %}
+	{% else %}
+            {% include settings.document.nothing_inc %}
+	{% endif %}
+{% endblock %}

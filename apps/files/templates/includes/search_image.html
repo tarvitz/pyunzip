@@ -1,0 +1,39 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block text_content %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+{% endblock %}
+<form id='search_form' action='.' method='POST'>
+{{ form.query.errors }}
+<label for='query'>Ищем: </label>
+{{ form.query }}
+<input type='submit' value='Запрос' class='button'>
+</form>
+{% with objects as images %}
+{% if images.object_list %}
+		{% with images.object_list as images %}
+			{% with "True" as gallery_general %}
+                        {% for image in images %}
+                        {% include settings.document.image_inc %}
+                        {% endfor %}
+                        {% endwith %}
+                        <br clear='all'>
+			{% with objects as page %}
+			{% include settings.document.links %}
+			{% endwith %}
+		 {% endwith %}
+{% else %}
+{% if query %}
+<div class='message' style="padding: 0 10%; border: 0px;">
+<div class='msg_headline' style='border: 1px dotted white;'><div class='transparency' id='black'></div>
+	Ничего похожего на &quot;{{ query }}&quot; не найденно
+</div>
+</div>
+{% endif %}
+{% endif %}
+&nbsp;
+{% endwith %}
+{% endblock %}

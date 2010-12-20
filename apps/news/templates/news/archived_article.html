@@ -1,0 +1,49 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}{% load kamwhfilters %}
+{% block head_content %}<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"news.css" }}' type='text/css' media='screen'>
+{# <link rel='stylesheet' href='/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}comments.css' type='text/css' media='screen'> #}
+{% endblock %}
+{% block text_content %}
+{% if article %}
+<div id='news'>
+	<img id="hdimg" src="/media/images/news/categories/{{ article.category|lower }}.png">
+	<div align="center" class='headline'>{% spaceless %}
+	{% comment %}{% if perms.news.edit_news or user.is_superuser %}
+			<span id='edit_button'><a id='button' href="{% url apps.news.views.add_article id=article.id %}">Править</a></span>
+			{% if not article.approved %}
+			<span id="edit_button"><a id='button' href="{% url apps.news.views.article_action id=article.id action='approve' %}">Утвердить</a></span>
+			{% else %}
+			<span id="edit_button"><a id='button' href='{% url apps.news.views.article_action id=article.id action='unapprove' %}'>Убрать</a></span>
+			{% endif %}
+	{% endif %} {% endcomment %}
+	{% if not article.approved %}
+		<span class='unapproved'>{{ article.title }}</span>
+	{% else %}
+		{{ article.title }} {% if user.is_superuser or perms.news.edit_archived_news %}
+			<a href='/admin/news/archivednews/{{ article.id }}'>[edit]</a>{% endif %}
+	{% endif %}{% endspaceless %}
+	</div>
+	<hr>
+ <div id='spacer'>&nbsp;</div>
+ {% if article.head_content %}{{ article.head_content|striptags|render_filter:article.syntax|safe }} {% endif %}
+ {{ article.content|striptags|render_filter:article.syntax|safe }}
+ <br clear='all'>
+ <div id='read'><a href='{{ global_referer }}'>назад</a></div>
+ <hr>
+ <div id='footer'> (by {% get_raw_nickname article.author %}), published {{ article.date }}</div>
+ {% if article.editor %}<div id='footer'>(edited by {% get_raw_nickname  article.editor %})</div>{% endif %}
+ {% if article.url %}<div id='footer' class='url'><a href='{{ article.url }}'>оригинал</a></div>{% endif %}
+{% if article.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ article.attachment.attachment.url }}'>{{ article.attachment.attachment.name|namemediacut }}</a> [{{article.attachment.attachment.size|filesizeformat}}]</div>{% endif %} 
+ </div>
+ {% if comments.object_list %}
+ <center>Коментарии</center>
+ {% with "True" as block_edit_comments %}
+	{% include settings.document.comments %}
+ {% endwith %}
+ {% with comments as page %}
+	{% include settings.document.links %}
+ {% endwith %}
+ {% endif %} {# if comments #}
+{% else %}
+<div align="center"><h1>Статья не найдена или её не существует<h1></div>
+{% endif %}
+{% endblock %}

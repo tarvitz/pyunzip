@@ -1,0 +1,65 @@
+{% extends user.skin.name|getskin:"base.html" %} {% load i18n %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskin:"tabletop.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskin:"forms.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskin:"round_message.css" }}' media='screen' type='text/css'>
+	{% if user.settings.enable_autocomplete %}<link rel='stylesheet' type='text/css' href='/styles/{{ user.skin.name|getskincss:"self-jquery-ui.css" }}' media='screen'>{% endif %}
+{% endblock %}
+{% block js %}
+{% if user.settings.enable_autocomplete %}
+{{ block.super }}
+<script language='javascript' src='/media/js/ui/core.js'></script>
+<script language='javascript' src='/media/js/ui/widget.js'></script>
+<script language='javascript' src='/media/js/ui/position.js'></script>
+<script language='javascript' src='/media/js/ui/autocomplete.js'></script>
+<script language='javascript' src='/media/js/jquery-ui-base.js'></script>
+{% endif %}
+{% endblock %}
+{% block text_content %}
+
+<center>
+<form id='id_search_rosters' action='.' method='POST'>
+		Имя игрока:<br>
+		{{ form.player.errors }}
+		{{ form.player }}<br>
+		Раса:<br>
+		{{ form.race.errors }}
+		{{ form.race }}<br>
+		Количество очков:<br>
+		{{ form.pts.errors }}
+		{{ form.pts }}<br>
+		Заголовок:<br>
+		{{ form.title.errors }}
+		{{ form.title }}<br>
+		<input type='submit' value='{% trans "submit" %}'>
+	</form>
+{% if rosters.object_list %}
+	<ul>
+	{% for r in rosters.object_list %}
+		{% include settings.document.roster_inc %}
+	{% endfor %}
+	</ul>
+	{% with rosters as page %}
+		{% include settings.document.links %}
+	{% endwith %}
+{% else %}
+	{% if query %}
+		<div class='block_notice'>
+		<div class='transparency' id='black'></div>
+		o_O ничего похожего на ваш запрос не найдено
+		</div>
+	{% endif %}
+{% endif %}
+</center>
+
+{% if user.settings.enable_autocomplete %}
+<script language='javascript'>
+    $(document).ready(function(){
+      var url = "{% url url_x_get_users_list_null %}";
+      m_user_autocomplete("#id_player",url);
+   });//ready
+</script>
+{% endif %}
+
+{% endblock %}

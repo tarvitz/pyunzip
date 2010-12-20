@@ -1,0 +1,17 @@
+{% extends user.skin.name|getskin:"admin_base.html" %}
+{% block text_content %}
+<ul class='lvl1'>
+	<li>
+	Пользовательские:
+	<ul class='lvl2'>
+		<li><a href="{% url apps.whadmin.views.user_creation %}">Создание пользователя</a></li>
+	</ul>
+	</li>
+	<li>
+	Группы, Ранги:
+	<ul class='lvl2'>
+		<li><a href="{% url apps.whadmin.views.rangs %}">Ранги</a></li>
+	</ul>
+	</li>
+</ul>
+{% endblock %}

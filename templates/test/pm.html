@@ -1,0 +1,19 @@
+{% extends "test.html" %}
+{% block head_content %}
+{% endblock %}
+{% load whfilters %}
+{% block text_content %} {{ block.super }}
+<form  method='post' action=".">
+	{{ form.title.errors }}
+	Заголовок<br>
+	{{ form.title }}<br>
+	{{ form.addressee.errors }}
+	Адресат<br>
+	{{ form.addressee }}<br>
+	{{ form.content.errors }}
+	Текст сообщения<br>
+	{{ form.content }}<br>
+	<input type='submit' value='отправить'>
+</form>
+{% endblock %}
+

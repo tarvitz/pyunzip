@@ -1,0 +1,20 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load votetags %} {% load i18n %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' media='screen' type='text/css' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}'>
+
+{% endblock %}
+{% block text_content %}
+	<center>
+	<div id='id_comment_rate'>
+		<form action='.' method='post'>	
+		{{ form.comment.errors }}
+		{% trans form.comment.label %}<br>
+		{{ form.comment }}<br>
+		{{ form.next }}
+		<input type='submit' value='{% trans "submit" %}'>
+		</form>
+	</div>
+	</center>
+{% endblock %}

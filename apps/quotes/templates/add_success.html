@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}
+quotes.radiance.ru - добавление цитаты
+{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"quotes.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+
+<center>
+<div class="quote">
+<div class='transparency'></div>
+Ваша цитата будет рассмотрена администрацией сайта. До рассмотрения цитаты на сайте ее искать бесполезно (а может и после, все зависит от вашего чувства юмора).</div>
+</center>  
+{% endblock %}
+

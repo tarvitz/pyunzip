@@ -1,0 +1,45 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}
+{% block title %} {{ block.super }}:{{ pmsg.title }} {% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %} 
+
+<center>
+<div class='message'>
+<div class='msg_headline'>
+	<div class='transparency' id='black'></div>
+	<center><b>{{ pmsg.title }}</b></center>
+</div>
+<div class='msg_content'>
+    <div class='transparency'></div>
+	<div class='msg_avatar'>
+		{% with pmsg.sender as usr %}
+			{% include "msg/avatar.html" %}
+		{% endwith %}
+	</div> <!-- msg_avatar -->
+	<div class='msg_text'>
+		<div class='msg_reply_author'>
+			{% if outcome %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.nickname %}'></a>{% else %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.nickname %}'></a>{% endif %}
+		</div>
+		{{ pmsg.content|striptags|render_filter:pmsg.syntax|safe }}<br>
+
+		<br clear='all'>
+		<!-- <a href='delete' id='button' >Удалить</a> -->
+	</div> <!-- msg_text -->
+</div> <!-- msg_content -->
+<br clear='all'>
+<div class='msg_footer'>
+<a href="{% url apps.wh.views.delete_pm pm_id=pmsg.id approve='approve' %}">удалить</a>|
+<a href="{% url url_send_pm_by_nick pmsg.sender.nickname %}">ответить</a>
+</div>
+
+</div> <!-- message -->
+</center>
+<script language='javascript'>
+    	sliding_up('.msg_reply_author img',{width: '100px',},{width: '50px',},1000);
+</script>
+{% endblock %}

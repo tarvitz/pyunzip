@@ -1,0 +1,85 @@
+<center> {% load newsfilters %}
+	<div class='round_message'>
+		<div class='msg_headline'>
+			<!-- effects -->
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<!-- end of effects -->
+			<div class='links'>	
+				{% ifequal user br.owner %}
+					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>del</a></span>
+					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+				{% else %}
+				{% if perms.tabletop.delete_battlereport or user.is_superuser %}
+					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>del</a></span>
+					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+				{% endif %}
+				{% endifequal %}
+			</div>
+			<a href='{{ br.get_absolute_url }}'>{{ br.title }} : {{ br.general_pts }} pts</a> 
+			</div><!-- msg_headline -->
+		<div class='msg_content'>
+			<div class='msg_avatar'>
+				{% spaceless %}
+						<img src='{% url url_get_avatar br.winner.show_player %}'><br>
+							{% get_raw_nickname br.winner.show_player %}
+				{% endspaceless %}
+			</div> <!-- msg_avatar -->
+			<div class='msg_text'>
+				<div class='transparency'></div>
+				<div class='reflects_left'></div>
+				<div class='reflects_right'></div>
+					{% spaceless %}
+					<div class='msg_txt'>Победитель:
+					{% if br.winner.user %}
+						{% get_nickname br.winner.user %}
+					{% else %}
+						{% get_raw_nickname br.winner.show_player %}
+					{% endif %}</div>{% endspaceless %}
+					
+					<div class='msg_txt'>Расы: <i>{% spaceless %}
+						{% for r in  br.races %}
+							{% if not forloop.last %}
+							{{ r }},
+							{% else %}
+							{{ r }}
+							{% endif %}
+						{% endfor %}
+					{% endspaceless %}
+					</i></div>
+					<div class='msg_txt'>Количество очков: {{ br.general_pts }}pts<br></div>
+					<div class='msg_txt'>Игра: {{ br.mission.game }}:{{ br.mission }}</div>
+					<div class='msg_txt'>Тип игры: {{ br.layout }}</div>
+					{% load comments %}
+					{% get_comment_count for br as comments_count %}
+					{% if comments_count %}
+						<div class='msg_txt'>Коментариев: {{ comments_count }}</div>
+					{% endif %}
+
+					{% if show_br_comment %}	
+					<div class='msg_txt'>Коментарий: </div>
+						{{ br.comment|striptags|render_filter:br.syntax|safe }}
+					{% endif %}
+
+					<div style='clear: both;'></div>
+			</div> <!-- msg_text -->
+		</div><!-- msg_content -->
+		<br clear='all'>
+		<div class='msg_footer'>
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<div class='links'>	
+                <span>{{ br.layout }}</span>
+                <span>{{ br.winner.show_player }}</span> {# already returns span #}
+                <span>{{ br.mission.game }}:{{ br.mission }}</span>
+			</div>
+			<br clear='all'>
+		</div> <!-- msg_footer -->
+	</div> <!-- message -->
+{% comment %}
+{% if comments.object_list %}
+	{% include settings.document.comments %}
+{% endif %}
+{% endcomment %}

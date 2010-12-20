@@ -1,0 +1,20 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block title %}Добавить файл {% endblock %}
+{% block text_content %}
+<center>
+	<form id='add_form' enctype="multipart/form-data" action='.' method='post'>
+	 {{ form.description.errors }}
+	 Описание: <br>{{ form.description }}<br>
+	 {{ form.file.errors }}
+	 Файл: <br>{{ form.file }}<br>
+	 <div class='notice'>[1] Если вы взяли данный файл с ресурса, который требует ссылаться на него в случае размещения файла, 
+	 то обязательно укажите URL.</div>
+	 {{ form.url.errors }}
+	 URL оригинальной загрузки: <br>{{ form.url }}<br>
+	  <input id='submit' type='submit' value='Добавить'>
+	</form>
+</center>
+{% endblock %}

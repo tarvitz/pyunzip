@@ -1,0 +1,110 @@
+<center> {% load newsfilters %}
+	<div class='round_message'>
+		<div class='msg_headline'>
+			<!-- effects -->
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<!-- end of effects -->
+			<div class='links'>	
+				{% ifequal user r.owner %}
+					{% spaceless %}
+					{% if r.is_orphan %}
+						{% ifequal user r.owner %}
+							<span class='first'><a href='{% url url_unorphan_roster r.id %}' class='restore_link'>вернуть</a></span>
+						{% else %}
+						{% if perms.tabletop.undelete_rosters or user.is_superuser %}
+							<span class='first'><a href='{% url url_unorphan_roster r.id %}' class='restore_link'>вернуть</a></span>
+						{% else %}
+							<span class='first notice'>удалён</span>
+						{% endif %}
+						{% endifequal %}
+					{% else %}
+						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>del</a></span>
+					{% endif %}{% endspaceless %}
+					<span><a href="{% url url_edit_roster r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+				{% else %}
+				{% if perms.tabletop.edit_user_rosters or user.is_superuser %}
+					{% spaceless %}
+					{% if r.is_orphan %}
+						<span class='first'><a href="{% url url_unorphan_roster r.id %}" title='' class='restore_link'>вернуть</a></span>
+					{% else %}
+						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>del</a></span>
+					{% endif %}
+					{% endspaceless  %}
+					<span><a href="{% url url_edit_roster r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+				{% else %}
+					{% if r.is_orphan %}<span class='first'>удалён</span>{% endif %}
+				{% endif %}
+				{% ifequal user r.user %}
+					<span><a href='{% url url_spawn_roster r.id %}' title='забрать данный ростер себе' class='spawn'>spawn</a></span>
+				{% endifequal %}
+				{% endifequal %}
+			</div>
+			<a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a> 
+			</div><!-- msg_headline -->
+		<div class='msg_content'>
+			<div class='msg_avatar'>
+				{% spaceless %}
+				{% comment %}
+					{% if r.user.nickname %}
+						<img src='{% url url_get_avatar r.user.nickname %}'><br>
+						{% get_nickname r.user %}
+					{% else %}
+						<img src='{% url url_get_avatar r.owner.nickname %}'><br>
+						{% get_nickname r.owner %}
+					{% endif %}
+				{% endcomment %}
+					<img src='{% url url_get_avatar r.show_player %}'><br>
+					{% if r.user %}
+						<a href='{% url url_user_rosters r.user.nickname %}'>{% get_nickname r.user %}</a>
+					{% else %}
+						{% get_raw_nickname r.show_player %}
+					{% endif %}
+				{% endspaceless %}
+			</div> <!-- msg_avatar -->
+			<div class='msg_text'>
+				<div class='transparency'></div>
+				<div class='reflects_left'></div>
+				<div class='reflects_right'></div>
+					{% spaceless %}
+						{% ifnotequal r.owner r.user %}
+							<div class='msg_txt'>Владелец: {% get_nickname r.owner %}</div>
+						{% endifnotequal %}
+					{% endspaceless %}
+					<div class='msg_txt'>Автор: <i>{% if r.user %}{% get_nickname r.user %}{% else %}{{ r.show_player }}{% endif %}</i></div>
+					<div class='msg_txt'>Раса: <i>{{ r.show_race }}</i></div>
+					<div class='msg_txt'>Очки: <i>{{ r.pts }} pts</i></div>
+					{% spaceless %}{% ifequal roster_flag "True" %}
+						<div class='msg_txt'>Ростер:<br>
+							<span class='roster'>
+								{{ r.roster|striptags|render_filter:r.syntax|safe }}
+							</span>
+						</div>
+					{% endifequal %}{% endspaceless %}
+					<div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
+					{% load comments %}
+					{% get_comment_count for r as comments_count %}
+					{% if comments_count %}
+						<div class='msg_txt'>Коментариев: {{ comments_count }}</div>
+					{% endif %}
+					<div style='clear: both;'></div>
+			</div> <!-- msg_text -->
+		</div><!-- msg_content -->
+		<br clear='all'>
+		<div class='msg_footer'>
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<div class='links'>	
+				<span><a href='{% url url_race_rosters r.show_race %}'>{{ r.show_race }}</a></span>
+				<span><a href='{% url url_pts_rosters r.pts %}'>{{ r.pts }} pts</a></span>
+			</div>
+			<br clear='all'>
+		</div> <!-- msg_footer -->
+	</div> <!-- message -->
+{% comment %}
+{% if comments.object_list %}
+	{% include settings.document.comments %}
+{% endif %}
+{% endcomment %}

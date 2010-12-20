@@ -1,0 +1,10 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load newsfilters %}{% load comments %}{% load kamwhfilters %} 
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"news.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %}
+{% for n in news.object_list %}
+
+{% endfor %}
+{% endblock %}

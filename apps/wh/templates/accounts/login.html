@@ -1,0 +1,30 @@
+{% extends "login.html" %}
+{% block title %} {{ block.super }}:Вход пользователя{% endblock %}
+{% block text_content %}
+<div align="center">
+<div id="headline" align="center">
+<div class='transparency tr_black'></div>
+Вход|<a href='/register'>Регистрация</a>
+</div>
+<div id="content" align="center">
+<div class='transparency tr_blue'></div>
+<div class='reflects_up'></div>
+<div class='reflects_left'></div>
+<div class='reflects_right'></div>
+{% if form.errors %}
+	<p class='error'>Неверный логин или пароль</p>
+{% endif %}
+
+<form action='.' method='POST'>
+	<label for='username'>Имя пользователя:</label><br>
+	 <input type='text' name='username'><br>
+	<label for='password'>Пароль:</label><br>
+	 <input type='password' name='password'></label><br>
+
+	<input type="submit" value="Войти">
+	<input type='hidden' name='next' value="{{ next|escape }}">
+	<input type='hidden' name='referer' value="{{ referer|escape }}">
+</form>
+</div>
+</div>
+{% endblock %}

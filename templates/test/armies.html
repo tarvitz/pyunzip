@@ -1,0 +1,48 @@
+{#{% extends "nothing.html" %} #}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd”>
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Update Drop-Down Without Refresh</title>
+        <script type="text/javascript" charset="utf-8">
+	    function FilterArmies(){
+	    	var armies = new Array();
+		{% for side in sides %}
+		armies[{{side.id}}] = new Array();{% endfor %}
+		sides = document.getElementById('sides');
+		form_armies = document.getElementById('armies');
+		current_selected = sides.options[sides.selectedIndex].value;
+	    	{% for list in armies_list %}{{ list|safe }}
+		{% endfor %}
+		for (var count = sides.options.length-1; count>-1; count--){
+			form_armies.options[count] = null;
+		}
+		n = 0;
+		for (i=0;i<armies[current_selected].length;i++){
+			if (armies[current_selected][i]) {
+				var option = new Option(armies[current_selected][i], n, false,false );
+				form_armies.options[form_armies.length] = option;
+				form_armies.options[n].value = i;
+				n++;
+			}
+		}
+		//alert(armies[current_selected].length);
+	    }
+        </script>
+    </head>
+    <body>
+        <p>Select your army.</p>
+        <form action="." method='get'>
+	  <select name='sides' onchange='FilterArmies()' id='sides'>
+		<option value='0'>None</option>
+		{% for side in sides %}
+			{% ifnotequal side.name 'None' %}<option value='{{ forloop.counter }}'>{{ side.name }}</option> {% endifnotequal %}{% endfor %}
+	  </select>
+	  <select name='armies' id='armies'>
+	  	<option>Choose Side</option>
+	  </select>
+	  <input type='submit' value='send'>
+	</form>
+    </body>
+</html>

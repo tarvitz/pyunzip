@@ -1,0 +1,28 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load i18n %}
+{% block css %}
+ {{ block.super }}
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' type='text/css'>
+{% endblock %}
+{% block text_content %}
+
+	<center>
+	<div id='warning_alter'>
+		<div class='reflects_up'></div>
+		<form method='post' action='.'>
+			{{ form.nickname }}
+			{{ form.level.errors }}
+			{% trans "Level" %}:<br>
+			{{ form.level }}<br>
+			{{ form.comment.errors }}
+			{% trans "Comment" %}:<br>
+			{{ form.comment }}
+			{{ form.next }}
+			<br>
+			<input type='submit' value='{% trans "submit" %}'>
+		</form>
+	</div>
+	</center>
+
+{% endblock %}
+

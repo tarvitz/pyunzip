@@ -1,0 +1,123 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load kamwhfilters %} {% load newsfilters %}
+{% block head_content %}
+<link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
+<script language="javascript" type="text/javascript" src="/media/js/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
+{% endblock %}
+
+{% block text_content %}
+<div align="center">
+<form id='search_form' action='.' method='POST'>
+{{ form.query.errors }}
+<label for='query'>Ищем: </label>
+{{ form.query }}
+<input type='submit' value='Запрос' class='button'>
+</form>
+
+{% with objects as comments %}
+
+{% for c in comments.object_list %}
+<a name="c{{ c.id }}">&nbsp;</a>
+<div class="message">
+    {% if not c.is_removed %}
+    <div class="msg_headline">
+		<div class="transparency" id="black"></div>
+		{% ifequal c.user user %}
+			<a href="{% url apps.news.views.edit_comment id=c.id %}" class="msg_button">[править]</a>
+		{% endifequal %}
+
+		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:m:s" }}]</span>
+		<span class="msg_user_nickname">{% spaceless %}
+		<a href='{{ c.get_absolute_url }}'>
+		<span class="nickname">{% get_nickname c.user %}</span>  комментирует:</a>
+		{% endspaceless %}
+		</span>
+	</div>
+    <div class="msg_content">
+		<div class='reflects_left'></div>
+		<div class='reflects_down'></div>
+		<div class="msg_avatar">{% spaceless %}
+			{% comment %}{% get_user_ranks for c.user as ranks %}
+			{% if ranks %}
+			<span class="msg_ranks">статус:
+			{% for r in ranks %}
+				<a href="{% url apps.wh.views.show_rank codename=r.rank.codename %}">{{ r.rank.short_name|lower }}</a>{% if not forloop.last %},{% endif %}
+			{% endfor %} {% endcomment %}
+			<span class='msg_ranks'>статус:
+			{% if c.user.ranks.values %}
+				{% for rank in c.user.ranks.values %}
+					<a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+				{% endfor %}
+			{# {% endif %} #}
+			{% endif %}
+			</span>
+			{% endspaceless %}
+			<img src="{% url apps.wh.views.get_user_avatar nickname=c.user.nickname %}">
+			<center>
+			{% with c.user as karma_user %}
+				{% include "karma_power.html" %}
+			{% endwith %}
+			</center>
+			{% if not r.user.settings.invisible %}
+				{% check_if_online c.user as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
+			{% else %}&nbsp;{% endif %}
+			{% if user.is_authenticated %}
+			{# implement via similar to if block 'coz listed below is really SUCKS!  #}
+			{% comment %}{% get_settings for c.user with hide_jid as hide_jid %}
+			{% get_settings for c.user with hide_uin as hide_uin %}
+			{% get_settings for c.user with hide_email as hide_email %}  {% endcomment %}
+			{% if c.user.jid and not c.user.settings.hide_jid %}<a href="xmpp:{{ c.user.jid }}">[jid]</a>{% endif %}
+			{% if c.user.uin and not c.user.settings.hide_uin %}<a href="icq:{{ c.user.uin }}">[icq]</a>{% endif %}
+			{% if c.user.email and not c.user.settings.hide_email %}<a href="mailto:{{ c.user.email }}">[mail]</a>{% endif %}
+			{% endif %}
+		</div> <!-- avatar -->
+		<div class="msg_text">
+			<div class="transparency" id="txt"></div>
+			<div id="text_{{ c.id }}">
+				{% markdownit %}
+					{{ c.comment|striptags|render_filter:c.syntax|safe }}
+				{% endmarkdownit %}
+			</div>
+			{% if c.user.about %}
+			<small>---<br>{{ c.user.about }}</small>
+			{% endif %}
+			<br clear="all">
+		</div> <!-- text -->
+    </div> <!-- content -->
+    <br clear="all">
+	{% if user.skin %}
+    <div class="msg_footer"><a href='{{ c.get_absolute_url }}'>перейти</a></div> <!-- footer -->
+	{% endif %} {# if user.skin #}
+   {% else %} {# it's deleted #}
+	{% spaceless %}
+	{% if user.skin %}
+	<div class="msg_headline">
+	{% else %}
+	<div class="msg_headline" class='anonymous'>
+	{% endif %}{% endspaceless %}
+		<div class="transparency" id="black"></div>
+		<span class="msg_user_nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
+	</div> <!-- headline -->
+    {% if user.skin %}
+	<div class="msg_footer" class="deleted"></div> <!-- footer -->
+	{% endif %} {# not an registered user #}
+{% endif %}
+</div> <!-- message -->
+
+<br clear="all">
+{% endfor %}
+
+</div> <!-- comment center -->
+{% if not comments.object_list %}
+{% if query %}
+<div class='message' style="padding: 0 10%; border: 0px;">
+<div class='msg_headline' style='border: 1px dotted white;'><div class='transparency' id='black'></div>
+	Ничего похожего на &quot;{{ query }}&quot; не найденно
+</div>
+</div>
+{% endif %}
+{% endif %}
+{% endwith %}
+
+{% endblock %}

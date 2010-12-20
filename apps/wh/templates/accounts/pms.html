@@ -1,0 +1,68 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load kamwhfilters %}
+{% block title %}Приватные сообщения{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %}
+
+{% if pms.object_list %}
+<center>
+<div class='message'>
+	<div class='msg_headline'>
+		<div class='transparency' id='black'></div>
+		<b>Непрочитанные</b>
+	</div>
+	<div class='msg_content'>
+	<div class='transparency'></div>
+	<ul>
+		{% for p in pms.object_list %}
+			{% if not p.is_read %}
+			<li><a href='/pm/{{ p.id }}'>{{ p.title }}</a>,
+			{% if outcome %} для {% get_nickname p.addressee %}
+			{%else %} от 
+				<a href="{% url apps.wh.views.profile_by_nick nickname=p.sender.nickname %}">{% get_nickname p.sender %}</a>
+			{% endif %} 
+			(<small>{{ p.sent }}</small>)&nbsp;<a href='/pm/{{ p.id }}/delete' id='button'>Удалить</a></li>
+			{% endif %}
+		{% endfor %}
+	</ul>
+	<br clear='all'>
+</div> <!-- msg_content -->
+<br clear='all'>
+</div> <!-- message -->
+</center>
+
+<center>
+<div class='message'>
+	<div class='msg_headline'>
+		<div class='transparency' id='black'></div>
+		<b>Прочитанные</b>
+	</div>
+	<div class='msg_content'>
+	<div class='transparency'></div>
+	<ul>
+	{% for p in pms.object_list %}
+		{% if p.is_read %}
+		<li><a href='/pm/{{ p.id }}'>{{ p.title }}</a>,
+		{% if outcome %} для 
+			<a href="{% url apps.wh.views.profile_by_nick nickname=p.addressee.nickname %}">{% get_nickname p.addressee %}</a>
+		{%else %} от {% get_nickname p.sender %}
+		{% endif %}
+		(<small> {{ p.sent }}</small>)&nbsp;<a href='/pm/{{ p.id }}/delete' id='button'>Удалить</a></li>
+		{% endif %}
+	{% endfor %}
+	</ul>
+	<br clear='all'>
+	</div> <!-- msg_content -->
+<br clear='all'>
+</div> <!-- message -->
+
+{# {% include settings.document.links|getskin:"links.html" %} #}
+{% include settings.document.links_template|getskin:"links.html" %}
+{% else %}
+	<center><h3>В этой категории нет сообщений</h3></center>
+{% endif %}
+
+{% endblock %}

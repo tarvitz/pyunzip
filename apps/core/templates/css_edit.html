@@ -1,0 +1,17 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% load i18n %}
+{% block css %}
+	{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+	<center>
+	<div id='id_add_edit_css'>
+		<form method='post' action='.'>
+			{{ form.css.errors }}
+			<label for='css'>CSS:</label><br>
+			{{ form.css }}<br>
+		<input type='submit' value='{% trans "submit" %}'>
+		</form>
+	</div>
+{% endblock %}

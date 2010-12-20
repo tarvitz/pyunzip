@@ -1,0 +1,25 @@
+ <center> {% load votetags %} {% load comments %}
+	{% get_vote for image as vote %}
+	{% bind image as vote_object %}
+	{% check_user_voted for image with user as voted %}
+ <div id='galleryimage' align="center">
+ <div align='right'>
+    {% if user == image.owner or user.is_superuser or perms.files.delete_images %}
+        <a id='button' href='/gallery/image/{{ image.id }}/delete'>удалить</a>
+    {% endif %}
+ </div>
+ 
+ {% include "stars.html" %}
+
+ <center><a href='{{ image.image.url }}' target="_blank">
+   <img  src="{{ image.thumbnail.url }}" title='&quot;{{ image.title }}&quot; размер: {{ image.image.size|filesizeformat }}'></a></center>
+<br>
+    {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %}
+    название: &quot;<b>{{ image.title }}</b>&quot;<br>
+    {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
+    <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
+    {# recieving comments for images #}
+    {% if gallery_general %}{% get_comment_count for image as comments %}
+    <small><a href="/gallery/image/{{image.id}}/">коментарии: <b>{{ comments }}</b></a></small> {% endif %}
+ </div>
+ </center>

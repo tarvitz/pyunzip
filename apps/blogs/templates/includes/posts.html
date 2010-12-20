@@ -1,0 +1,37 @@
+{% load comments %}{% load newsfilters %}
+{% for p in posts.object_list %}
+ <div id='news'>
+	<div align="center" class='headline'>{% spaceless %}
+		<a href="{% url apps.wh.views.profile_by_nick nickname=p.author %}"><img id="hdimg" class='right' src="{% url apps.wh.views.get_user_avatar nickname=p.author %}"></a>
+		{% if not p.approved %}
+			<span class='unapproved'> <a href='{% url apps.blogs.views.show_post id=p.id %}'>{{ p.title }}</a></span>
+		{% else %}
+			 <a href='{% url apps.blogs.views.show_post id=p.id %}'>{{ p.title }}</a>
+			 {% spaceless %}
+			 {% if user.is_superuser or perms.post.change_post %}
+			 &nbsp;<a href='/admin/blogs/post/{{ p.id }}' class='button'>[edit]</a>
+			 {% endif %}
+			 {% endspaceless %}
+		{% endif %}{% endspaceless %}
+	</div>
+	<hr>
+ <div id='spacer'>&nbsp;</div>
+ 	{{ p.content|striptags|render_filter:p.syntax|safe }}<br clear='all'>
+ <hr>
+ <div id='read'>
+	<a href='{% url apps.blogs.views.show_post id=p.id %}'>Оставить коментарий</a>
+ </div>
+ <div class='footer'> (by  {% get_raw_nickname p.author %})</div>
+ <div class='footer'>{{ p.date|date:"H:m:s от Y-m-d" }}</div>
+ {% if p.url %}<div class='footer' class='url'><a href='{{ p.url }}'>оригинал</a></div>{% endif %}
+ {% get_comment_count for p as comments %}{% if comments %}<div class='footer'><a href="{% url apps.blogs.views.show_post id=p.id %}">Коментариев: {{ comments }}</a></div> {% endif %}
+ {% if p.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ p.attachment.attachment.url }}'>{{ p.attachment.attachment.name|namemediacut }}</a> [{{ p.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
+ {% if p.tags %}<div class='footer'>тэги: {{ p.tags }}</div>{% endif %}
+ </div>
+ 
+ {% endfor %}
+{% with posts as page %}
+{% if page %}
+{% include settings.document.links %}
+{% endif %}
+{% endwith %}

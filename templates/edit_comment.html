@@ -1,0 +1,22 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}{% load kamwhfilters %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}' type='text/css' media='screen'>{% endblock %}
+{% block text_content %}
+<center>
+<form id='comment' action='.' method='post'>
+	{{ form.syntax.errors }}
+	Синтаксис:<br>
+	{{ form.syntax }}<br>
+	{{ form.comment.errors }}
+	Коментарий:<br>
+	{{ form.comment }}<br>
+	{{ form.next }}
+	{{ form.hidden_syntax }}
+	<input type='submit' value='Изменить' id='submit'>
+</form>
+</center>
+<script language='javascript'>
+	syntax = $('#id_syntax');
+	syntax.change(filter_syntax,function(){});
+</script>
+{% endblock %}

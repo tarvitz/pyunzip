@@ -1,0 +1,27 @@
+{% extends user.skin.name|getskin:"base.html" %}	
+
+{#% load vurl %#}
+{% block css %} {{ block.super }}
+<link href="/styles/{{ user.skin.name|getskincss:"quotes.css" }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block rss %}
+<link href="/rss/" rel="alternate" type="application/rss+xml" />
+{% endblock %}
+
+{% block title %}
+{{ block.super}}:Цитатник
+{% endblock %}
+	
+{% block text_content %}
+
+    {% with page.object_list as quotes %}
+        {% if quotes %}
+            {% include "includes/pager.html" %}
+            {% include "includes/quotes.html" %}
+            {% include "includes/pager.html" %}
+        {% else %}
+            {% include settings.document.nothing_inc %}
+        {% endif %}
+    {% endwith %}
+
+{% endblock %}

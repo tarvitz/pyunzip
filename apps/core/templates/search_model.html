@@ -1,0 +1,42 @@
+{% extends user.skin.name|getskin:"base.html" %}
+
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}' type='text/css' media='screen'>
+{% endblock %}
+
+{% block text_content %}
+
+<form id='search_form' action='.' method='POST'>
+{{ form.query.errors }}
+<label for='query'>Ищем: </label>
+{{ form.query }}
+<input type='submit' value='Запрос' class='button'>
+</form>
+
+{% if objects.object_list %}
+<ul>
+{% for obj in objects.object_list %}
+	<li><a href="{{ obj.get_absolute_url }}">
+	{% if obj.get_title %}
+		{{ obj.get_title }}
+	{% else %}
+		{{ obj }}
+	{% endif %}</a></li>
+{% endfor %}
+</ul>
+{% with objects as page %}
+	{% include settings.document.links %}
+{% endwith %}
+{% else %}
+
+{% if query %}
+<div class='message' style="padding: 0 10%; border: 0px;">
+<div class='msg_headline' style='border: 1px dotted white;'><div class='transparency' id='black'></div>
+	Ничего похожего на &quot;{{ query }}&quot; не найденно
+</div>
+</div>
+{% endif %}
+{% endif %}
+{% endblock %}

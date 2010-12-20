@@ -1,0 +1,43 @@
+{% extends user.skin.name|getskin:"base.html" %}
+
+{% block title %}
+{{ block.super }}:Цитатник:поиск
+{% endblock %}
+
+{% block css %} {{ block.super }}
+<link href="/styles/{{ user.skin.name|getskincss:"quotes.css" }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block text_content %}
+
+  <div class="search">
+    <div class="searchbody"><div style="width: 100%;">
+    <form action="." method="POST">
+	<label for="q">Что потеряли?</label>
+	<input type="text" name="q" maxlength="100" class="inp" value="{{ query|escape }}">
+	<input type="submit" value="Найти">
+    </form>
+    </div></div>
+  </div>
+
+{% if query %}
+    
+    {# <h2>Results for "{{ query|escape }}":</h2> #}
+
+    {% with page.object_list as quotes %}
+        {% if quotes %}
+            {% include "includes/pager.html" %}
+            {% include "includes/quotes.html" %}
+            {% include "includes/pager.html" %}
+        {% else %}
+		  <div class="quotes">
+          <div class="transparency"></div>
+			хмм, ничего похожего на "{{ query }}"..
+		  </div>
+        {% endif %}
+    {% endwith %}
+
+{% endif %}
+  
+{% endblock %}
+

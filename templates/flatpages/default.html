@@ -1,0 +1,4 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}
+{% block title %} {{ flatpage.title }} {% endblock %}
+{% block head_content %} {{ flatpage.head_content }} {% endblock %}
+{% block text_content %} <div id='flatpage'> {{ flatpage.content|striptags|spfilter|safe }}</div> {% endblock %}

@@ -1,0 +1,64 @@
+{% extends user.skin.name|getskin:"base.html" %} {% load i18n %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' media='screen' type='text/css'>
+	{% if user.settings.enable_autocomplete %}<link rel='stylesheet' type='text/css' href='/styles/{{ user.skin.name|getskincss:"self-jquery-ui.css" }}' media='screen'>{% endif %}
+{% endblock %}
+{% block js %}
+{% if user.settings.enable_autocomplete %}
+{{ block.super }}
+<script language='javascript' src='/media/js/ui/core.js'></script>
+<script language='javascript' src='/media/js/ui/widget.js'></script>
+<script language='javascript' src='/media/js/ui/position.js'></script>
+<script language='javascript' src='/media/js/ui/autocomplete.js'></script>
+<script language='javascript' src='/media/js/jquery-ui-base.js'></script>
+{% endif %}
+{% endblock %}
+{% block text_content %}
+
+<center>
+<div class='add_form' align='center'>
+<form id='id_add_roster' method='post' action='.'>
+	{{ form.title.errors }}
+	{% trans "Title" %}:<br>
+	{{ form.title }}<br>
+	{{ form.pts.errors }}
+	{% trans "pts" %}:<br>
+	<span class='notice'>количество игровых очков, по вашей расписке (ростеру), <u><i>должно быть больше 500</i></u></span>
+	{{ form.pts }}<br>
+	{{ form.player.errors }}
+	{% trans "Player" %}:<br>
+	<span class='notice'>Примечание: оставьте поле пустым, если вы хотите добавить ростер от себя</span>
+	{{ form.player }}<br>
+	{{ form.roster.errors }}
+	{% trans "Roster" %}:<br>
+	{{ form.roster }}<br>
+	{{ form.race.errors }}
+	{% trans "Race" %}:<br>
+	{{ form.race }}<br>
+	{{ form.custom_race.errors }}
+	{% trans "Custom Race" %}:<br>
+	<span class='notice'>Если вы не нашли списки рас в списке выше, вы можете записать её здесь.</span>
+	{{ form.custom_race }}<br>
+	{{ form.syntax.errors }}
+	{% trans "Syntax" %}:<br>
+	{{ form.syntax }}<br>
+	{{ form.comments.errors }}
+	{% trans "Comments" %}:<br>
+	{{ form.comments }}
+	{{ form.hidden_syntax }}
+	{{ form.referer }}
+	<br>
+	<input id='id_submit' type='submit' value='{% trans "submit" %}'>
+</form>
+</div>
+</center>
+{% if user.settings.enable_autocomplete %}
+<script language='javascript'>
+    $(document).ready(function(){
+      var url = "{% url url_x_get_users_list_null %}";
+      m_user_autocomplete("#id_player",url);
+   });//ready
+</script>
+{% endif %}
+{% endblock %}

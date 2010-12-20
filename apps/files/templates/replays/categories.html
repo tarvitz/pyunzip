@@ -1,0 +1,336 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load kamwhfilters %} {% load filesfilters %}
+{% block title %}Реплеи DoW{% endblock %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replays.css" }}' type='text/css' media='screen'>
+<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href='{% url django.contrib.syndication.views.feed "replays" %}'>
+{% endblock %}
+{% block text_content %} 
+{#{% get_pages_from replays as pages %}#}
+{#{% if user.is_authenticated and user.is_active %} #}
+    <center><h3>Все реплеи</h3></center>
+    {#&nbsp;<a id='button' href='/replays/upload'>загрузить реплей</a> #}
+    <center>
+    
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info"><a href="all">Полный список реплеев: [{{ stats.all }} шт]</a></span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <img src="/media/images/replays/all_list.png">
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены реплеи всех игр, всех аддонов игр ;)
+                [<a href='all'>перейти</a>]
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info"><a href="all/duel">Дуэльные игры: [{{ stats.duels }} шт]</a></span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='all/duel'><img src="/media/images/replays/1v1.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены дуэльные (1vs1) реплеи игр, всех аддонов игр ;)
+                [<a href='all/duel'>перейти</a>]
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info"><a href="all/team">Коммандные игры: [{{ stats.teams }} шт]</a></span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='all/team'><img src="/media/images/replays/team_vs_team.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены коммандные (2vs2, 3vs3, 4vs4) реплеи игр, всех аддонов игр ;)
+                [<a href='all/team'>перейти</a>]
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info"><a href="all/nonstd">Нестандартные игры: [{{ stats.nonstds }} шт]</a></span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='all/nonstd'><img src="/media/images/replays/nonstd.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены игры с нестандартной командной разметкой (различный ffa: 
+                3vs2, 1vs2vs1, 1vs1vs1vs1, 3vs4, 4vs2 и тд) всех аддонов игр ;)
+                [<a href='all/nonstd'>перейти</a>]
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+    
+    </center>
+
+    {% for g in games %}{% get_replays_count for g as stats %} {# overloading with dynamic resolving data about all replays #}
+    <center><h3><a href="{% url apps.files.views.all_replays type=g.short_name %}">{{ g.name }}</a></h3></center>
+    &nbsp;<a id='button' href='/replays/upload/{{ g.short_name }}'>загрузить реплей</a>
+    
+    <center>
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info">
+		<a href="{{ g.short_name }}">Полный список игр: [{{ stats.all }} шт]</a>
+		<span class='feeds'>
+			<a href="/feeds/replays_category/{{ g.short_name }}">[atom]</a>
+			<a href="/feeds/replays_category_rss/{{ g.short_name }}">[rss]</a>
+		</span>
+		</span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='{{ g.short_name }}'><img src="/media/images/replays/all_list.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлен весь список реплеев <b>{{ g.name }}</b>
+                [<a href='{{ g.short_name }}'>перейти</a>]<br>
+                {% get_versions_for_game for g as version %}
+                <ul class='replay_addons'>
+                {% for v in version %}
+                    {% get_replays_count_for_version for g as rcounts type all v.name %}
+                    {% if rcounts %}
+					<li>
+                        <a href="{{ g.short_name }}/{{ v.name }}">{{ v.name }}</a>
+                        <span class="count">[{{ rcounts }}]</span>
+						<span class="feeds">&nbsp;
+						 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}'>atom</a>&nbsp;
+						 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}'>rss</a>]
+						</span>
+                        {% get_patch_levels for v.name as patches %}
+                        <ul>
+                            {% for p in patches %}
+                                {% get_replays_count_for_version for g as rcounts_v type all v.name version p.patch %}
+                                {% if rcounts_v %}
+                                <li>{% spaceless %}
+                                <a href="{{ g.short_name }}/{{ v.name }}/{{ p.patch }}">{{ p.patch }}</a>
+                                <span class="count"> [{{ rcounts_v }}]</span>&nbsp;
+								<span class="feeds">
+								 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/{{ p.patch }}'>atom</a>&nbsp;
+								 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/{{ p.patch }}'>rss</a>]
+								{% endspaceless %}
+								</span>
+								</li>
+                                {% endif %}
+                            {% endfor %}{# {% get_version_for_game for g as rcounts2 v.name v %} #}
+                        </ul>
+                    </li>{% endif %}
+                {% endfor %}
+                </ul>
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+    
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info">
+			<a href="{{ g.short_name }}/duel">Cписок дуэльных игр: [{{ stats.duels }} шт]</a>
+		<span class='feeds'>
+			<a href="/feeds/replays_category/{{ g.short_name }}/duel">[atom]</a>
+			<a href="/feeds/replays_category_rss/{{ g.short_name }}/duel">[rss]</a>
+		</span>
+		</span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='{{ g.short_name }}/duel'><img src="/media/images/replays/1v1.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены дуэльные игры (1vs1) <b>{{ g.name }}</b>
+                [<a href='{{ g.short_name }}/duel'>перейти</a>]
+                {% get_versions_for_game for g as version %}
+                <ul class='replay_addons'>
+                {% for v in version %}
+                    {% get_replays_count_for_version for g as rcounts type duel v.name %}
+                    {% if rcounts %}
+					<li>
+                        <a href="{{ g.short_name }}/{{ v.name }}/duel">{{ v.name }}</a>
+                        <span class="count">[{{ rcounts }}]</span>
+						<span class="feeds">&nbsp;
+						 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/duel'>atom</a>&nbsp;
+						 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/duel'>rss</a>]
+						</span>
+
+                        {% get_patch_levels for v.name as patches %}
+                        <ul>
+                            {% for p in patches %}
+                                {% get_replays_count_for_version for g as rcounts_v type duel v.name version p.patch %}
+                                {% if rcounts_v %}
+                                <li>{% spaceless %}
+                                <a href="{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/duel">{{ p.patch }}</a>
+                                <span class="count"> [{{ rcounts_v }}]</span>
+								{% endspaceless %}
+								<span class="feeds">
+								 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/duel'>atom</a>&nbsp;
+								 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/{{ p.patch }}/duel'>rss</a>]
+								</span>
+								</li>
+                                {% endif %}
+                            {% endfor %}{# {% get_version_for_game for g as rcounts2 v.name v %} #}
+                        </ul>
+                    </li>{% endif %}
+                {% endfor %}
+                </ul>
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info">
+			<a href="{{ g.short_name }}/team">Cписок коммандных игр: [{{ stats.teams }} шт]</a>
+		<span class='feeds'>
+			<a href="/feeds/replays_category/{{ g.short_name }}/team">[atom]</a>
+			<a href="/feeds/replays_category_rss/{{ g.short_name }}/team">[rss]</a>
+		</span>
+		</span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='{{ g.short_name }}/team'><img src="/media/images/replays/team_vs_team.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены командные игры (2vs2,3vs3,4vs4) <b>{{ g.name }}</b>
+                [<a href='{{ g.short_name }}/team'>перейти</a>]
+                
+                {% get_versions_for_game for g as version %}
+                <ul class='replay_addons'>
+                {% for v in version %}
+                    {% get_replays_count_for_version for g as rcounts type team v.name %}
+                    {% if rcounts %}
+					<li>
+                        <a href="{{ g.short_name }}/{{ v.name }}/team">{{ v.name }}</a> 
+                        <span class="count">[{{ rcounts }}]</span>
+						<span class="feeds">&nbsp;
+						 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/team'>atom</a>&nbsp;
+						 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/team'>rss</a>]
+						</span>
+
+                        {% get_patch_levels for v.name as patches %}
+                        <ul>
+                            {% for p in patches %}
+                                {% get_replays_count_for_version for g as rcounts_v type team v.name version p.patch %}
+                                {% if rcounts_v %}
+                                <li>{% spaceless %}
+                                <a href="{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/team">{{ p.patch }}</a>
+                                <span class="count"> [{{ rcounts_v }}]</span>
+                                {% endspaceless %}
+								<span class="feeds">
+								 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/team'>atom</a>&nbsp;
+								 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/{{ p.patch }}/team'>rss</a>]
+								</span>
+								</li>
+                                {% endif %}
+                            {% endfor %}{# {% get_version_for_game for g as rcounts2 v.name v %} #}
+                        </ul>
+                    </li>{% endif %}
+                {% endfor %}
+                </ul>
+
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    <div class="message">
+        <div class="msg_headline">
+        <div class='transparency' id='black'></div>
+        <span class="info">
+			<a href="{{ g.short_name }}/nonstd">Cписок нестандартных игр: [{{ stats.nonstds }} шт]</a>
+		<span class='feeds'>
+			<a href="/feeds/replays_category/{{ g.short_name }}/nonstd">[atom]</a>
+			<a href="/feeds/replays_category_rss/{{ g.short_name }}/nonstd">[rss]</a>
+		</span>
+		</span>
+        </div> <!-- headline -->
+        <div class='msg_content'>
+        <div class='transparency'></div>
+            <div class='msg_avatar'>
+                <a href='{{ g.short_name }}/nonstd'><img src="/media/images/replays/nonstd.png"></a>
+            </div>
+            <div class='msg_text'>
+                В этой категории представлены игры с нестандартной коммандной разметкой  (различный ffa: 
+                3vs2, 1vs2vs1, 1vs1vs1vs1, 3vs4, 4vs2 и тд) <b>{{ g.name }}</b>
+                [<a href='{{ g.short_name }}/nonstd'>перейти</a>]
+                {% get_versions_for_game for g as version %}
+                <ul class='replay_addons'>
+                {% for v in version %}
+                    {% get_replays_count_for_version for g as rcounts type nonstd v.name %}
+                    {% if rcounts %}
+					<li>
+                        <a href="{{ g.short_name }}/{{ v.name }}/nonstd">{{ v.name }}</a> <span class="count">[{{ rcounts }}]</span>
+						<span class="feeds">&nbsp;
+						 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/nonstd'>atom</a>&nbsp;
+						 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/nonstd'>rss</a>]
+						</span>
+
+                        {% get_patch_levels for v.name as patches %}
+                        <ul>
+                            {% for p in patches %}
+                                {% get_replays_count_for_version for g as rcounts_v type nonstd v.name version p.patch %}
+                                {% if rcounts_v %}
+                                <li>{% spaceless %}
+                                <a href="{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/nonstd">{{ p.patch }}</a>
+                                <span class="count"> [{{ rcounts_v }}]</span>
+                                {% endspaceless %}
+								<span class="feeds">
+								 [<a href='/feeds/replays_category/{{ g.short_name }}/{{ v.name }}/{{ p.patch }}/nonstd'>atom</a>&nbsp;
+								 <a href='/feeds/replays_category_rss/{{ g.short_name}}/{{ v.name }}/{{ p.patch }}/nonstd'>rss</a>]
+								</span>
+								</li>
+                                {% endif %}
+                            {% endfor %}{# {% get_version_for_game for g as rcounts2 v.name v %} #}
+                        </ul>
+                    </li>{% endif %}
+                {% endfor %}
+                </ul>
+
+                <br clear='all'>
+            </div>
+        </div>
+        <br clear='all'>
+    </div> <!-- message -->
+
+    </center>
+    {% endfor %}
+{% endblock %}

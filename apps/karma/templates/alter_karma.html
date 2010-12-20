@@ -1,0 +1,21 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"karma.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %}
+<div class='info'>
+	Придумать здесь какое-нибудь нивъебенное описание ... &gt;_&gt;
+</div>
+<center>
+<form class='karma_comment_form' action='.' method='POST'>	
+	{{ form.comment.errors }}
+	<label for='id_comment'>Коментарий:</label><br>
+	{{ form.comment }}<br>
+	{{ form.hidden_nickname }}
+	{{ form.referer }}
+	{{ form.url }}
+	<input type='submit' value='Отправить'>
+</form>
+</center>
+{% endblock %}

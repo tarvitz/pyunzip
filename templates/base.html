@@ -1,0 +1,336 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" 
+	"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>{% load newsfilters %}{% load votetags %}
+{% if user.is_authenticated %} {% load whfilters %}{% endif %}
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<title>{% block title %}Warhammer 40,000{% endblock%}</title>
+{% block css %}
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"main.css" }}" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"rank.css" }}" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"tags.css" }}" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"karma.css" }}" type="text/css" media="screen">
+{% endblock %}
+{# stylesheet special for overriding base style templates withing one file#}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"override.css" }}' type='text/css' media='screen'>
+{# user css'es #}
+<link rel='stylesheet' href='{% url url_db_css %}' type='text/css' media='screen'>
+{% block js %}
+<script type='text/javascript' src='/media/js/core.js'></script>
+<script type='text/javascript' src='/media/js/base.js'></script>
+<script type='text/javascript' src='/media/js/jquery-1.4.4.min.js'></script>
+<script type='text/javascript' src='/media/js/m_effects.js'></script>
+{% comment %}
+<script language='javascript'>
+	//alert(isOpera);
+</script>
+{% endcomment %}
+{% endblock %}
+{% block head_content %}{% endblock %}
+</head>
+<body>
+<div id="initial_line">
+	<ul>
+		<li><a title='WarMist web ресурс' href="{% url url_news %}">сайт</a></li>
+		<li><a title='Блог разработчиков' href="{% url apps.blogs.views.blog_index %}">блог</a></li>
+		<li><a title='Форум' href="{% url pybb_index %}">форум</a></li>
+	</ul>
+</div>
+{% block tabs %}
+<div id="tabs">
+	<ul>
+                {% if user.is_superuser %}
+                <li><a href="{% url url_superlogin %}">&nbsp;S&nbsp;</a></li> 
+                {% endif %}
+                {% if user.is_staff %}
+		<li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
+		{% endif %}
+		{% if user.is_authenticated %}
+		<li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
+		{% else%}<li><a href="{% url apps.wh.views.login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+		{% if not user.is_authenticated %}<li><a href="{% url apps.wh.views.onsite_register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+		<li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
+	</ul>
+</div><br clear="left">
+{% endblock %}
+<div id="horizontal_line">
+	<div align="center">{#There's only the war in future.#}
+	{% block headline %}
+		<span>{% if miniquote %}{{ miniquote.content }}{% else %}Warhammer 40.000 {% endif %}</span>
+	{% endblock %}
+	</div>
+</div>
+ {% spaceless %}{% comment %}
+	Быть может vertical line блок зарезерировать за пользователем или добавить туда награды?
+	ИДЕИ?
+ {% endcomment %}{% endspaceless %}
+{% comment %} <div id="vertical_line">
+ <div class='transparency'></div>
+	<a class='vertical_link' href="#comments" title='перейти к коментариям'>[c]</a><br>
+	<a class='vertical_link' href="javascript:history.back();" title='назад'>&lt;-</a><br>
+	<a class='vertical_link' href="javascript:history.forward();" title='вперёд'>-&gt;</a>
+	<hr width="50%">
+ </div>
+{% endcomment %}
+<div id="content">
+<div id="control_content">
+{% block control_content %}
+	{% if user.is_authenticated %}
+	<div class='none' style="margin-top: 5px;"><span class='label' class='logo_user_profile'>Профиль</span></div>
+	<div class="user_profile"><center><b>{% get_nickname user %}</b></center>
+		<div class="transparency"><!-- wise transparency --></div>
+		<span class='reflects_up'><!-- wise reflects --></span>
+		<span class='reflects_left'></span>
+		<img alt="avatar" title="avatar" src='{% url apps.wh.views.get_user_avatar nickname=user.nickname %}'>
+		<ul>
+			<li><a href='{% url apps.wh.views.pm_view %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
+			<li><a href="{% url apps.wh.views.profile %}" title='Просмотр своего профиля'>Профиль</a></li>
+			<li class='lvl2'><a href='{% url apps.wh.views.update_profile %}' title='Настройки профиля'>Править</a></li>
+			<li class='lvl2'><a href='{% url apps.core.views.user_settings %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
+			<li class='lvl2'><a href='{% url apps.core.views.view_subscription %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
+			<li><a href='{% url apps.wh.views.users %}' title='Обитатели ресурса'>Участники</a></li>
+			<li><a href='{% url apps.karma.views.show_karma %}' title='Сила вашей положительности или отрицательности в глазах других обитателей ресурса'>Карма</a>
+			<li><a href='{% url url_user_rosters %}' title='Ваши расписки армий по настолке'>Ростеры</a>
+			    <a href='{% url url_add_roster %}'>[+]</a></li>
+		</ul><br clear='all'>
+	</div>{% endif %}
+	{% spaceless %}{% if user.is_staff %}
+	<div class='none'><span class='label' class='logo_admin_block'>Напоминалка</span></div>
+	<div class='admin_block'>
+	<div class="transparency"><!-- wise transparency --></div>
+		{% get_unread news.News as unread_news %}
+		{% get_unread wh.WishList as unread_wishes %}
+		{% if unread_news %}<span class='attention'><a class='attention' href="{% url apps.news.views.news approved='unapproved' %}">Непрочтенных новостей: <b>
+			{{ unread_news }}</a></b></span>{% else %}
+		Напоминаний пока нет{% endif %}
+		{% if perms.wh.can_approve and unread_wishes %}
+		<span class='attention'>Непрочитанных пожеланий: {{ unread_wishes }}
+		{% endif %}
+	</div>
+	{% endif %}{% endspaceless %}
+	<div class='none' {% if not user.is_authenticated %} style="margin-top: 5px;"{% endif%}><span align="right" class='label' class='logo_content'>
+	<a href="javascript:" onClick="show_hide('menu_content');">Общее</a></span></div>
+	<div class="content" id='menu_content'>
+	<div class="transparency"><!-- wise transparency --></div>
+	<!-- wise reflects -->
+	<span class='reflects_up'></span>
+	<span class='reflects_down'></span>
+	<span class='reflects_left'></span>
+		<ul>
+			{% if not user.is_authenticated %}<li><a href='{% url apps.wh.views.onsite_register %}'>Регистрация</a></li>
+			<li class='lvl2'><a href='{% url apps.wh.views.password_recover %}'>востановление пароля</a></li>{% endif %}
+			<li><a href="{% url apps.news.views.news %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
+			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='news_atom' %}">[atom</a>|
+				<a href="{% url django.contrib.syndication.views.feed url='news' %}">rss]</a></span>
+			</li>
+			<li class='lvl2'><a href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.news.views.add_article %}'>Добавить</a></li>{% endif %}
+			<li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li>
+			<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
+			<li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href="{% url apps.quotes.views.add %}">добавить</a></li> {% endif %}
+			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}
+			<li><a href="{% url apps.files.views.show_replays %}" title='Хранилище реплеев игр Dawn of War, Dawn of War II'>Реплеи</a>
+			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='replays' %}">[atom</a>|
+				<a href="{% url django.contrib.syndication.views.feed url='replays_rss' %}">rss]</a></span>
+			</li>
+			<li class='lvl2'><a href="{% url url_show_best 'replay' %}">лучшие</a></li>
+			<li class='lvl2'><a href="{% url apps.files.views.search_replay %}" title='Немного более улучшенный поиск по реплеям, чем основной'>поиск</a></li>
+			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow' %} ' title='добавить реплей'>добавить[dow]</a></li>
+			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow2' %}' title='добавить реплей'>добавить[dow2]</a></li>
+			<li><a href='{% url battle_report_index %}'>Батл репорты</a></li>
+			<li class='lvl2'><a href='{% url url_add_battle_report %}'>добавить</a></li>
+			<li><a href='{% url apps.files.views.show_all_images %}' title='Простенькая галерея ;)'>Галерея</a></li>
+			<li class='lvl2'><a href="{% url url_show_best "image" %}">лучшие</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.files.views.upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>
+			<li><a href="{% url apps.files.views.show_files %}" title='Небольшое хранилище файлов'>Файлы</a></li>
+			{% comment %}<li><a href='{% url apps.wh.views.view_wish_list %}'>Пожелания</a></li>
+			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
+		</ul>
+	</div>
+	<div class='none'><span class='label' class='search'>Поиск</span></div>
+	<div class="global_search">
+	<div class='transparency'></div>
+	<span class='reflects_up'></span>
+	<span class='reflects_left'></span>
+		<form id='search_form' action='{% url apps.core.views.search %}' method='POST'>
+			<label for='query'>Ищем? </label>
+			<input type='text' name='query' id='id_query' class='global_search'>
+			<input type='submit' value='поиск' class='button'>
+		</form>
+	</div>
+	{% if user.settings.show_last_news and user.settings %}
+	{% if briefing_news %}
+	<div class='none'><span class='label' class='logo_briefing_news'><a href="javascript:" onClick="do_hide('briefing_news');">Последние новости</a></span></div>
+	<div class="briefing_news" style='display: {{ usersettings.display_briefing_news|or:"block" }}'>
+	<div class="transparency"><!-- wise transparency --></div>
+	<span class='reflects_up'></span>
+	<span class='reflects_left'></span>
+		<ul>
+		{% for article in briefing_news %}
+			<li>
+			<a href="{% url apps.news.views.news category=article.category|lower %}"><img title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'></a>
+			<a class='notice' title='{{ article.content|spadvfilter|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %} {# if briefing news #}
+	{% endif %} {# if user.settings.show_last_news #}
+	{% if user.settings.show_last_replays and user.settings %}
+	{% if last_replays %}
+	<div class='none'><span class='label' class='logo_replays'><a href="javascript:" onClick="do_hide('last_replays');">Последние реплеи</a></span>
+	</div>
+	<div class='last_replays' style='display: {{ usersettings.display_last_replays|or:"block" }}'>
+	<div class="transparency"><!-- wise transparency --></div>
+	<span class='reflects_up'></span>
+	<span class='reflects_down'></span>
+	<span class='reflects_left'></span>
+		<ul>
+		{% for r in last_replays %}
+			<li>
+			  <a href="{% url apps.files.views.all_replays type=r.version.game.short_name|lower version=r.version.name|lower %}">
+				<img src='/media/images/replays/last/{{ r.version.game.short_name|lower }}_{{ r.version.name|lower}}.png'>
+			  </a>
+			  {% spaceless %}
+			  <span class='spacer' />
+				<small>
+					{% comment %} {% ifnotequal r.type "0" %}
+						<span class='notice'>({{ r.type}}vs{{ r.type }})
+					{% else %}
+						(unstd)</span>
+					{% endifnotequal %}
+					{% endcomment %}
+					<span class='notice'>({{ r.get_type }})</span>
+				</small>
+			  {# improve block and add bind tag #}
+			  {# {% bind r as object %} #}
+			  {# {% include votes.html #}
+			  <span class='stars'>[
+				{% get_vote_stars for r as stars %}
+				{% for star in stars %}
+					<img class='star' src='/media/images/stars/mini/{{ star }}.png'>
+				{% endfor %}
+			  ]</span>
+			  <br>
+			  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by 
+			  <a href="{% url apps.wh.views.profile_by_nick nickname=r.author.nickname %}">{% get_nickname r.author %}</a></span>
+			{% endspaceless %}
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %} {# last replays #}
+	{% endif %} {# user.settings.show_last_replays #}
+	
+	{% if user.settings.show_quotes and user.settings and expression %}
+	<div class='none'><span class='label' class='logo_quotes'><a href="javascript:" onClick="do_hide('menu_quotes');">Цитаты</a></span></div>
+	<div class="menu_quotes" style='display: {{ usersettings.display_menu_quotes|or:"block" }}'>
+	<div class="transparency"><!-- wise transparency --></div>
+	<span class='reflects_up'></span>
+	<span class='reflects_left'></span>
+		{% spaceless %}{% if expression.original_content %}
+		 <b class='expression_content'>&quot;{{ expression.original_content }}&quot;</b>
+			 {% if expression.content %}<br>
+		 		<span &quot;{{ expression.content }}&quot;
+			{% endif %}
+		{% if expression.author %}<br><i>({{ expression.author }})</i>{% endif %}
+		{% endif %}
+		{% if expression.content and not expression.original_content %}
+		<b>&quot;{{ expression.content }}&quot;</b>
+		{% if expression.author %}<br><span class='author'><i>({{expression.author }} )</i></span>{% endif %}
+		{% endif %}
+		{% endspaceless %}
+	</div>
+	{% endif %} {# user.settings.show_quotes #}
+	{% comment %}
+	<script type='text/javascript' language='javascript'>
+		text = $('.menu_quotes > b.expression_content').text();
+		author = $('.menu_quotes > i').text();
+		alert(text);
+		alert(author);
+		//$('.menu_quotes').hide(5000);
+	</script>
+	{% endcomment %}
+	{% if user.settings.show_online_users %}
+	<div class='none'><span class='label' class='logo_online_users'><a href="javascript:" onClick='do_hide("online_users");'>Online</a></span></div>
+	<div class='online_users' style='display: {{ usersettings.display_online_users|or:"block;" }}'>
+	<div class='transparency'></div>
+	<span class='reflects_right'></span>
+	<span class='reflects_left'></span>
+		{% get_guests_count as guests_count 15 %} {# 15 minutes #}
+		{% get_online_users as online_users 15 %} {# 15 minutes #}
+			{% for u in online_users %}
+				{% spaceless %}
+					{% comment %} {% if forloop.first %}
+						[{% get_nickname u %}]
+					{% else %}
+						[{% get_nickname u %}]
+					{% endif %}
+					{% endcomment %}
+					<span class='nicknames'>[<a href="{% url apps.wh.views.profile_by_nick nickname=u.nickname %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
+				{% endspaceless %}
+			{% endfor %}
+			{% if online_users %}
+			  {% if guests_count %}, Гостей({{ guests_count }}){% endif %}
+			{%else%}
+		  	   {% if guests_count %}Гостей({{ guests_count }}){% endif%}
+			{% endif %}
+	</div>
+	{% endif %} {# show online users #}
+	<!--
+	<div class='none'><span class='label' class='common'>Дрезья проекта</span></div>
+	<div class='common'>
+	<div class='transparency'></div>
+		{# сюда воткнуть кнопочки с друзьями #}
+	</div> --> <!-- common -->
+
+{% endblock %}
+</div> <!-- control content -->
+<!-- text content -->
+<div id="text_content"> <div class="transparency"><!-- transparency layer for text --></div>
+	<div class='reflects_left'></div>
+	<div class="content">
+		{% block text_content %}  {% endblock %}
+		{% if timeit %}{% include "timeit.html" %}{% endif %}
+		<div id='blackship'>
+			<a href='http://www.blackship.org/'>blackship &copy;</a>
+		</div>
+	<br clear="all">
+	</div>
+	<div class='reflects_right'></div>
+<br clear="all">
+</div>
+<br clear="all"> <!-- очищаем control_content -->
+</div> <!-- content -->
+{% comment %} Here we define js scripts that alter data above {% endcomment %}
+{% comment %}
+<div id='base_footer'>
+	<a href='http://www.blackship.org/'>blackship</a>
+</div>
+{% endcomment %}
+{% block endjs %}
+<script language='javascript' type='text/javascript'>
+	miniquote = $('#horizontal_line > div > span');
+	$(document).ready(function(){
+		setInterval('update_miniquote()',60*1000);
+	})
+	
+	var setObjText = function(str,obj){
+		obj.text(str);
+	}
+	function update_miniquote(){
+		$.getJSON('/miniquote/get/raw/', 
+			function(data){
+				jQuery.each(data, function(){
+					miniquote.fadeOut(1000);
+					setTimeout(setObjText,1000,this.fields.content,miniquote);
+					miniquote.text(miniquote.text());
+					miniquote.fadeIn(1000);
+				});
+		});	
+	}
+	//miniquote.text('fuck');
+</script>
+{% endblock %} {# endjs #}
+</body>
+</html>

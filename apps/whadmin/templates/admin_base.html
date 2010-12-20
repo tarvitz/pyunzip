@@ -1,0 +1,18 @@
+<html>
+{# new template for whadmin!! #}
+<head>
+<meta http-equiv='content-type' content='text/html;charset=utf8'>
+{% block css %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"whadmin.css"}}' media='screen' type='text/css'>
+{% endblock %}
+<title>{% block title %}WarMist admin shell{% endblock %}</title>
+{% block js %}
+<script language='javascript' type='text/javascript' href='/media/js/jquery.js'></script>
+{% endblock %}
+</head>
+
+<body>
+{% block text_content %}
+{% endblock %}
+<body>
+</html>

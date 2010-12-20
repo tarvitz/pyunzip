@@ -1,0 +1,13 @@
+{% load karmatags %}
+{% get_karma_power for karma_user as karma %}
+<div class='karma'>
+{% get_karma_status with user for karma_user as karma_status %}
+{% if karma_status %}<a href="{% url apps.karma.views.show_karmastatus_description codename=karma_status.codename %}">{{ karma_status.status }}</a><br> {% endif %}
+{% if user.comments_count|gt:settings.gsettings.KARMA_COMMENTS_COUNT %}<span class='karma_positive'><a href="{% url apps.karma.views.alter_karma choice='up' nickname=karma_user.nickname %}">+</a></span>&nbsp; {% endif %}
+{% if karma|gte:"0" %}
+<span class='karma_positive'><a  href="{% url apps.karma.views.show_karma user=karma_user.nickname %}">&lt; {{ karma }} &gt;</a></span>
+{% else %}
+<span class='karma_negative'><a href="{% url apps.karma.views.show_karma user=karma_user.nickname %}">&lt; {{ karma }} &gt;</a></span>
+{% endif %}
+{% if user.comments_count|gt:settings.gsettings.KARMA_COMMENTS_COUNT %}&nbsp;<span class='karma_negative'><a href="{% url apps.karma.views.alter_karma choice='down' nickname=karma_user.nickname %}">-</a></span> {% endif %}
+</div>

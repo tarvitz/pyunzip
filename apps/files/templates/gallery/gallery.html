@@ -1,0 +1,54 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load kamwhfilters %}{% load comments %} {% load votetags %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block title %} Галерея {% endblock %}
+{% block text_content %}
+<script language='javascript' type='text/javascript'>
+	<!--
+	function follow_to_gallery(){
+		g_list = document.getElementById('g_list');
+		window.location = "{% url apps.files.views.show_all_images %}"+ g_list.value; //.href = glist.value;
+	}
+	-->
+</script>
+{# vote requirements #}
+{% if images.object_list %}
+<script type='text/javascript' language='javascript' src='/media/js/stars.js'></script>
+<form class="gallery_form" action='.'>
+	<select name='galleries' id='g_list' onChange="follow_to_gallery();">
+		<option class='even' value='null'>-----</option>
+		{% for g in galleries %} 
+			{% spaceless %}
+			{% get_images_count for g as img_count %}
+			{% if img_count %} 
+			<option class='{% cycle odd,even %}' value="{{ g.id }}">{{ g.name }} [{{ img_count }}]</option> {% endif %}
+			{% endspaceless %}
+		{% endfor %}
+	</select>
+</form>
+<script language='javascript' type='text/javascript'>
+	g_list = document.getElementById('g_list');
+	g_list.value = {{ gallery_id }}
+</script>
+{% comment %}{% for g in galleries %}{% get_images_count for g as img_count %}
+<div id='galleries_list'>
+	<a href='/gallery/{{ g.id }}'>{{ g.name }}
+		<span id='info'>{Всего загружено изображений: {{ img_count }} }</span>
+	</a>
+</div>
+{% endfor %}
+{% endcomment %}
+{% with "True" as gallery_general %}
+{% for image in images.object_list %}
+    {% include settings.document.image_inc %} 
+{% endfor %}
+{% endwith %}
+
+ <br clear="all">
+ {% include settings.document.links %}
+{% else %}
+{% include settings.document.nothing_inc %}
+{% endif %}
+{% endblock %}
+

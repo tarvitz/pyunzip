@@ -1,0 +1,201 @@
+<html>{% load newsfilters %}
+{% if user.is_authenticated %} {% load whfilters %}{% endif %}
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<title>{% block title %}Warhammer 40,000{% endblock%}</title>
+<link rel="stylesheet" href="/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}main.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}tags.css" type="text/css" media="screen">
+<script type='text/javascript' src='/media/js/base.js'></script>
+{% block head_content %}{% endblock %}
+</head>
+<body>
+<div id="initial_line"><a href="/">⌂</a></div>
+<div id="tabs">
+	<ul>
+		{% spaceless%}{% if user.is_staff %}
+		<li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
+		{% endif %}{% endspaceless %}
+		{% if user.is_authenticated %}
+		<li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
+		{% else%}<li><a href="/login/" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+		{% if not user.is_authenticated %}<li><a href="/register/" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+		<li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
+	</ul>
+</div><br clear="left">
+<div id="horizontal_line">
+	<div align="center">{#There's only the war in future.#} {{ miniquote.content }}</div>
+</div>
+<!-- <div id="vertical_line">
+	<ul>
+		<li>V</li>
+		<li>e</li>
+		<li>n</li>
+		<li>e</li>
+		<li>r</li>
+		<li>a</li>
+		<li>t</li>
+		<li>e</li>
+		<li>&nbsp;</li>
+		<li>t</li>
+		<li>h</li>
+		<li>e</li>
+		<li>&nbsp;</li>
+		<li>I</li>
+		<li>m</li>
+		<li>m</li>
+		<li>o</li>
+		<li>r</li>
+		<li>t</li>
+		<li>a</li>
+		<li>l</li>
+		<li>&nbsp;</li>
+		<li>E</li>
+		<li>m</li>
+		<li>p</li>
+		<li>e</li>
+		<li>r</li>
+		<li>o</li>
+		<li>r</li>
+	</ul>
+</div> -->
+<div id="content">
+<div id="control_content">
+	{% if user.is_authenticated %}
+	<div class='none' style="margin-top: 5px;"><span id='label' class='logo_user_profile'>Профиль</span></div>
+	<div class="user_profile"><b>{{ user.nickname }}</b>
+	<div class="transparency"><!-- wise transparency --></div>
+		{%spaceless %}{% if user.avatar %}<img alt="avatar" title="avatar" src='{{ user.avatar.url }}'>
+		{% else %}
+		 {% spaceless %}
+		 {% if user.army.side %}
+		 <img src='/media/avatars/{{ user.army.side.name|lower }}/default.jpg'>
+		 {% else %} 
+		 <img src='/media/avatars/default.jpg'>
+		 {% endif %}
+		 {% endspaceless %}
+		{% endif %}
+		{% endspaceless %}
+		<ul>
+			<li><a href='/pm'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
+			<li><a href="/accounts/profile">Профиль</a></li>
+			<li id='lvl2'><a href='/accounts/update/profile'>Править</a></li>
+			{#<li id='lvl2'><a href='#'>Настройки</a></li> #}
+			<li><a href='/accounts'>Участники</a></li>
+		</ul><br clear='all'>
+	</div>{% endif %}
+	{% spaceless %}{% if user.is_staff %}
+	<div class='none'><span id='label' class='logo_admin_block'>Напоминалка</span></div>
+	<div class='admin_block'>
+	<div class="transparency"><!-- wise transparency --></div>
+		{% get_unread news.News as unread_news %}
+		{% get_unread wh.WishList as unread_wishes %}
+		{% if unread_news %}<span id='attention'>Непрочтенных новостей: <b>{{ unread_news }}</b></span>{% else %}
+		Напоминаний пока нет{% endif %}
+		{% if perms.wh.can_approve and unread_wishes %}
+		<span id='attention'>Непрочитанных пожеланий: {{ unread_wishes }}
+		{% endif %}
+	</div>
+	{% endif %}{% endspaceless %}
+	<div class='none' {% if not user.is_authenticated %} style="margin-top: 5px;"{% endif%}><span align="right" id='label' class='logo_content'>Общее</span></div>
+	<div class="content"> 
+	<div class="transparency"><!-- wise transparency --></div>
+		<ul>
+			{% if not user.is_authenticated %}<li><a href='/register'>Регистрация</a></li>
+			<li id='lvl2'><a href='/password/recover'>востановление пароля</a></li>{% endif %}
+			<li><a href="/news">Новости</a>
+			<span id='feeds'><a href="/feeds/news_atom">[atom</a>|<a href="/feeds/news">rss]</a></span>
+			</li>
+			{% if user.is_authenticated and user.is_active %}<li id='lvl2'><a href='/article/add'>Добавить</a></li>{% endif %}
+			<li><a href="/rules">Правила</a></li>
+			<li><a href="/replays">Реплеи</a>
+			<span id='feeds'><a href="/feeds/replays">[atom</a>|<a href="/feeds/replays_rss">rss]</a></span>
+			</li>
+			<li id='lvl2'><a href='/replays/upload/dow' title='добавить реплей'>добавить[dow]</a></li>
+			<li id='lvl2'><a href='/replays/upload/dow2' title='добавить реплей'>добавить[dow2]</a></li>
+			<li><a href='/gallery'>Галерея</a></li>
+			{% if user.is_authenticated and user.is_active %}<li id='lvl2'><a href='/gallery/upload' title='загрузить изображение в галерею'>добавить</a></li>
+			<li><a href="/files/">Файлы</a></li>
+			<li><a href='/feedback/wishes'>Пожелания</a></li>
+			<li id='lvl2'><a href='/feedback/wishes/add'>добавить</a></li>{% endif %}
+		</ul>
+	</div>
+	<div class='none'><span id='label' class='search'>Поиск</span></div>
+	<div class="search">
+		{% include "search.html" %}
+	</div>
+	{% if briefing_news %}
+	<div class='none'><span id='label' class='logo_briefing_news'>Последние новости</span></div>
+	<div class="briefing_news">
+	<div class="transparency"><!-- wise transparency --></div>
+		<ul>
+		{% for article in briefing_news %}
+			<li><img title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'>
+			<a id='notice' title='{{ article.content|spadvfilter|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %} {# if briefing news #}
+	{% if last_replays %}
+	<div class='none'><span id='label' class='logo_replays'>Последние реплеи</span></div>
+	<div class='last_replays'>
+	<div class="transparency"><!-- wise transparency --></div>
+		<ul>
+		{% for r in last_replays %}
+			<li>
+			  <img src='/media/images/replays/last/{{ r.version.game.short_name|lower }}_{{ r.version.name|lower}}.png'>
+			  <span id='spacer' /><small>{% ifnotequal r.type "0" %}<span id='notice'>({{ r.type}}vs{{ r.type }}){% else %}(unstd)</span>{% endifnotequal %}</small>
+			  <a id='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span id='notice'>by {{ r.author.nickname }}</span>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %} {# briefing news #}
+	<div class='none'><span id='label' class='logo_quotes'>Цитаты</span></div>
+	<div class="quotes">
+	<div class="transparency"><!-- wise transparency --></div>
+		{% spaceless %}{% if expression.original_content %}
+		 <b>&quot;{{ expression.original_content }}&quot;</b>
+			 {% if expression.content %}<br>
+		 		&quot;{{ expression.content }}&quot;
+			{% endif %}
+		{% if expression.author %}<br><i>({{ expression.author }})</i>{% endif %}
+		{% endif %}
+		{% if expression.content and not expression.original_content %}
+		<b>&quot;{{ expression.content }}&quot;</b>
+		{% if expression.author %}<br><i>({{expression.author }} )</i>{% endif %}
+		{% endif %}
+		{% endspaceless %}
+	</div>
+	<div class='none'><span id='label' class='logo_online_users'>Online</span></div>
+	<div class='online_users'>
+	<div class='transparency'></div>
+		{% get_guests_count as guests_count 15 %} {# 15 minutes #}
+		{% get_online_users as online_users 15 %} {# 15 minutes #}
+			{% for u in online_users %}
+				{% spaceless%}{% if forloop.first %}{{ u.nickname }}{% else %}
+				,{{ u.nickname }}{% endif %}{% endspaceless %}
+			{% endfor %}
+			{% if online_users %}
+			  {% if guests_count %}, Гостей({{ guests_count }}){% endif %}
+			{%else%}
+		  	   {% if guests_count %}Гостей({{ guests_count }}){% endif%}
+			{% endif %}
+	</div>
+	<!--
+	<div class='none'><span id='label' class='common'>Дрезья проекта</span></div>
+	<div class='common'>
+	<div class='transparency'></div>
+		{# сюда воткнуть кнопочки с друзьями #}
+	</div> --> <!-- common -->
+</div>
+<!-- text content -->
+<div id="text_content"> <div class="transparency"><!-- transparency layer for text --></div>
+	<div class="content">
+		{% block text_content %}  {% endblock %}
+	<br clear="all">
+	</div>
+<br clear="all">
+</div>
+<br clear="all"> <!-- очищаем control_content -->
+</body>
+</html>

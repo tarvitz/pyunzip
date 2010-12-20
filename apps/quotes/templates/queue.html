@@ -1,0 +1,29 @@
+{% extends user.skin.name|getskin:"base.html" %}	
+
+{% block rss %}
+<link href="/rss/" rel="alternate" type="application/rss+xml" />
+{% endblock %}
+
+{% block title %}
+{{ block.super }}:Цитатник:очередь неподтвержденных
+{% endblock %}
+
+{% block css %} {{ block.super }}
+<link href="/styles/{{ user.skin.name|getskin:"quotes.css" }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block text_content %}
+
+    {% with page.object_list as quotes %}
+        {% if quotes %}
+            {% include "includes/pager.html" %}
+            {% include "includes/queue.html" %}
+            {% include "includes/pager.html" %}
+        {% else %}
+            <div class="quotes">
+			<div class='transparency'></div>
+			<center><strong>O_O ух ты, добросовестный модератор..</strong></center></div>
+        {% endif %}
+    {% endwith %}
+
+{% endblock %}

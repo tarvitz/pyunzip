@@ -1,0 +1,11 @@
+{# spoiler #}
+<!-- spoiler -->
+<a href="javascript:void();" onClick="show_hide('spoiler_{{ spoiler_count }}');">spoiler</a>
+<div class='spoiler' id='spoiler_{{ spoiler_count }}' style='display: none;'>
+    <div class='transparency' id='spoiler'></div>
+        {{ spoiler_text|safe }}
+</div>
+<!-- end of spoiler -->
+
+{#  end of spoiler #}
+

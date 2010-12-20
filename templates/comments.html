@@ -1,0 +1,127 @@
+{% load kamwhfilters %} {% load newsfilters %}
+{% block css %}
+{{ block.super }}
+<link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
+{% endblock %}
+{% block js %}
+{{ block.super }}
+<script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
+{% endblock %}
+
+<a name='comments'>&nbsp;</a>
+<div align="center">
+{% if comments.object_list %}{% endif %}
+{% for c in comments.object_list %}
+<a name="c{{ c.id }}">&nbsp;</a>
+<div class="message">
+    {% if not c.is_removed %}
+    <div class="msg_headline">
+		<div class="transparency tr_black"></div>
+		{% if not block_edit_comments %}{% ifequal c.user user %}
+			<a href="{% url apps.news.views.edit_comment id=c.id %}?j={{ c.id }}" class="msg_button">[править]</a>
+		{% endifequal %}{% endif %}
+
+		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>
+		<span class="msg_user_nickname">{% spaceless %}
+		<span class="nickname">{% get_nickname c.user %}</span>  комментирует:
+		{% endspaceless %}
+		</span>
+	</div>
+    <div class="msg_content">
+		<div class='reflects_left'></div>
+		<div class='reflects_down'></div>
+		<div class="msg_avatar">
+			<div class='transparency'></div>
+			{% with c.user as usr %}
+				{% include "msg/avatar.html" %}
+			{% endwith %}
+		<br clear='all'>
+		</div> <!-- avatar -->
+		<div class="msg_text">
+			<div class="transparency"></div>
+			<div id="text_{{ c.id }}">
+				{% markdownit %}
+					{{ c.comment|striptags|render_filter:c.syntax|safe }}
+				{% endmarkdownit %}
+			</div>
+			{% if c.user.about %}
+			<small>---<br>{{ c.user.about }}</small>
+			{% endif %}
+			<br clear="all">
+		</div> <!-- text --> 
+    </div> <!-- content -->
+    <br clear="all">
+	{% if user.skin %}
+    <div class="msg_footer">
+	{% if not block_edit_comments %}{% spaceless %}
+		{% ifnotequal user c.user %}
+			{% if user.is_superuser or perms.news.edit_comments %}
+				<a href="javascript:void(0);" onClick='flip_to_textarea({{ c.id }})'>[быстрая правка]</a> |
+				<a href="{% url url_edit_comment id=c.id %}">[править]</a>
+			{% endif %}
+			{% if user.is_superuser or perms.news.del_restore_comments %}
+				{% if not c.is_removed %}
+					| <a href='{% url url_del_restore_comment id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
+				{% endif %}
+			{% endif %}
+			{% if user.is_superuser or perms.news.purge_comments %}
+				| <a href='{% url url_purge_comment id=c.id approve='approve' %}'>[уничтожить]</a>
+			{% endif %}
+		{% else %}
+			<a href="javascript:void(0);" onClick='flip_to_textarea({{ c.id }})'>[быстрая правка]</a> |
+			<a href="{% url url_edit_comment id=c.id %}">[править]</a>
+			{% if not c.is_removed %}
+			    | <a href='{% url url_del_restore_comment id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
+			{% endif %}
+			| <a href='{% url url_purge_comment id=c.id approve='approve' %}'>[уничтожить]</a>
+		{% endifnotequal %}
+		{% endspaceless %}
+		{% endif %} {# if not block_edit_comments #}
+    </div> <!-- footer -->
+	{% endif %} {# if user.skin #}
+{% else %} {# it's deleted #}
+    {% spaceless %}
+	{% if user.skin %}
+	<div class="msg_headline">
+	{% else %}
+	<div class="msg_headline" class='anonymous'>
+	{% endif %}{% endspaceless %}
+		<div class="transparency" id="black"></div>
+		<span class="msg_user_nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
+	</div> <!-- headline -->
+    {% if user.skin %}
+	<div class="msg_footer" class="deleted">
+	{% spaceless %}
+    {% if perms.news.edit_comments or user.is_superuser %}
+            <a href="{% url url_edit_comment id=c.id %}">[править]</a> | 
+    {% endif %}
+    {% ifequal user c.user %}
+			{% if c.is_removed %}
+				<a href="{% url url_del_restore_comment id=c.id flag='restore' %}?j={{ c.id }}">[показать]</a> |
+			{% endif %}
+            <a href="{% url url_purge_comment id=c.id approve='approve' %}">[уничтожить]</a>
+        {% else %}
+        {% if perms.news.del_restore_comments or user.is_superuser %}
+				<a href="{% url url_del_restore_comment id=c.id flag='restore'%}?j={{ c.id }}">[показать]</a> |
+        {% endif %}
+        {% if perms.news.purge_comments or user.is_superuser %}
+            <a href="{% url url_purge_comment id=c.id approve='approve' %}">[уничтожить]</a>
+        {% endif %}
+    {% endifequal %}
+    {% endspaceless %}
+	</div> <!-- footer -->
+	{% endif %} {# not an registered user #}
+{% endif %}
+</div> <!-- message -->
+
+<br clear="all">
+{% endfor %}
+</div> <!-- comment center -->
+<script language='javascript'>
+$('.message .msg_headline .transparency:even').addClass('tr_navy');
+{% comment %}
+/*$('.message:nth-child(odd) .msg_content .msg_text .transparency').addClass('tr_black');
+$('.message:nth-child(odd) .msg_content .msg_avatar .transparency').addClass('tr_navy');
+$('.message:nth-child(odd) .msg_headline .transparency').addClass('tr_navy');
+*/{% endcomment %}
+</script>

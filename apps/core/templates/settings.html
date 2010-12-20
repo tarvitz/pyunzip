@@ -1,0 +1,18 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+<center>
+<div id='settings_form'>
+	<form name='settings' action='.' method='POST'>
+		Редактировать собственные: <u><a href='{% url url_add_edit_css %}'>стили</a></u>
+		<ul>
+			{{ form.as_ul }}
+		</ul>
+		<input type='submit' value='Обновить'>
+	</form>
+ </div>
+</center>
+{% endblock %}

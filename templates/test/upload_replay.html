@@ -1,0 +1,53 @@
+{% extends "test.html" %}
+{% block head_content %}
+<script type="text/javascript" charset="utf-8">
+ 	function changeVisibility(){
+		var mode = document.getElementById('id_type').value;
+		if (mode == 0) 
+		{ 
+		  document.getElementById('nonstd_layout').style.display = 'block';
+                 } else {                                                                                                                                 
+                 document.getElementById('nonstd_layout').style.display = 'none';                                                                                  
+                 } 	
+	}
+ </script>
+{% endblock %}
+{% load whfilters %}
+{% block text_content %} {{ block.super }}
+
+<form enctype="multipart/form-data" method="post" action=".">
+{{ form.name.errors }}
+<label for='name'>Имя: </label><br>
+{{ form.name }}<br>
+{{ form.version.errors }}
+<label for='version'>Версия игры:</label><br>
+{{ form.version }}<br>
+{{ form.type.errors }}
+<label for='type'>Тип игры</label></br>
+{{ form.type|add_js:"onchange='changeVisibility()'"|safe }}<br>
+{{ form.nonstd_layout.errors }}
+<div id='nonstd_layout'>
+<label for='nonstd_layout'>Нестандартный тип</label><br>
+{{ form.nonstd_layout }}<br>
+</div>
+{{ form.teams.errors }}
+<label for='teams'>Команды</label><br>
+{{ form.teams }}<br>
+{{ form.winners.errors }}
+<label for='winners'>Победитель</label><br>
+{{ form.winners }}<br>
+{{ form.replay.errors }}
+<label for='replay'>Реплей:</label><br>
+{{ form.replay }}<br>
+{{ form.comments.errors }}
+<label for='comments'>Коментарий к реплею:</label><br>
+{{ form.comments }}
+<input type='submit' value'загрузить'>
+</form>
+<script type="text/javascript">
+if_visible = document.getElementById('id_type').value;
+if ( if_visible != 0) document.getElementById('nonstd_layout').style.display = 'none';
+
+</script>
+{% endblock %}
+

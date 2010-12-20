@@ -1,0 +1,11 @@
+{# {% extends "O_O" %} #}
+{{ obj.version.game.name }}:{{ obj.version.name }} v{{ obj.version.patch }}, 
+{% ifequal obj.type "0" %}
+Нестандартный тип игры: {{ obj.nostd_layout }}, 
+{% else %}
+Тип игры: {{ obj.type }}vs{{ obj.type }}, 
+Игроки: {{ obj.player_teams }}, 
+Загружено: {% get_nickname obj.author %}, 
+Размер реплея: {{ obj.replay.size|filesizeformat }}, 
+{% endifequal %}
+Комментарий: {{ obj.comments }}.

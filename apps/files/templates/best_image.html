@@ -1,0 +1,12 @@
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' media='screen'>
+{% endblock %}
+{% if object %}
+    {% with object as image %}
+        {% with "True" as gallery_general %}
+            {% include settings.document.image_inc %}
+        {% endwith %}
+    {% endwith %}
+{% endif %}
+

@@ -1,0 +1,37 @@
+{% extends user.skin.name|getskin:"base.html" %} {% load newsfilters %}
+{% block head_content %}
+<link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media='screen' >
+<link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"ranks.css" }}" media='screen'>
+<script language="javascript" type="text/javascript" src="/media/js/jquery.js"></script>
+<script language="javascript" type="text/javascript" src="/media/js/jq_base.js"></script>
+{% endblock %}
+{% block text_content %}
+<div align="center">
+<div class="message">
+	<div class="msg_headline">
+		<div class="transparency" id='black'><!-- wise transparency --></div>
+		{{ status.status }}
+	</div>
+	<div class="msg_content">
+	<div class='transparency'></div>
+		<div class="msg_avatar">
+			<img src="/media/{{ img }}.png">
+		</div>
+		<div class="msg_text" id="status_{{ status.id }}">
+			{{ status.description|striptags|render_filter:status.syntax|safe }}
+			<br clear="all">
+		</div>
+	{% comment %}
+	{% if user.is_superuser %}
+	<div class="msg_footer">
+		<center>
+			<a href="javascript:void(0);" onClick="flip_to_textarea('#rank',{{ rank.id }},'/ranks/{{ rank.codename }}/get/');">[правка]</a>
+		</center>
+	</div>
+	{% endif %}
+	{% endcomment %}
+	</div> <!-- content -->
+	<br clear="all">
+</div> <!-- end description -->
+</div> <!-- center -->
+{% endblock %}

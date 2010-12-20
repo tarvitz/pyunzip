@@ -1,0 +1,140 @@
+<html>{% load newsfilters %}
+{% if user.is_authenticated %} {% load whfilters %}{% endif %}
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<title>{% block title %}{{ flatpage.title }}{% endblock%}</title>
+<link rel="stylesheet" href="/styles/main.css" type="text/css" media="screen">
+{% block head_content %}{% endblock %}
+</head>
+<body>
+<div id="initial_line">T</div>
+<div id="tabs">
+	<ul>
+		{% spaceless%}{% if user.is_staff %}
+		<li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
+		{% endif %}{% endspaceless %}
+		{% if user.is_authenticated %}
+		<li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
+		{% else%}<li><a href="/login/" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+		<li><a href="/register/" title="register">&nbsp;♨&nbsp;</a></li>
+		<li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
+	</ul>
+</div><br clear="left">
+<div id="horizontal_line">
+	<div align="center">Children of the Emperor! Death for his foes!</div>
+</div>
+<div id="vertical_line">
+	<ul>
+		<li>V</li>
+		<li>e</li>
+		<li>n</li>
+		<li>e</li>
+		<li>r</li>
+		<li>a</li>
+		<li>t</li>
+		<li>e</li>
+		<li>&nbsp;</li>
+		<li>t</li>
+		<li>h</li>
+		<li>e</li>
+		<li>&nbsp;</li>
+		<li>I</li>
+		<li>m</li>
+		<li>m</li>
+		<li>o</li>
+		<li>r</li>
+		<li>t</li>
+		<li>a</li>
+		<li>l</li>
+		<li>&nbsp;</li>
+		<li>E</li>
+		<li>m</li>
+		<li>p</li>
+		<li>e</li>
+		<li>r</li>
+		<li>o</li>
+		<li>r</li>
+	</ul>
+</div>
+<div id="content">
+<div id="control_content">
+	{% if user.is_authenticated %}
+	<div class='none' style="margin-top: 5px;"><span id='label' class='user_profile'>Профиль</span></div>
+	<div class="user_profile"><b>{{ user.nickname }}</b>
+		{%spaceless %}{% if user.avatar %}<img alt="avatar" title="avatar" src='{{ user.avatar.url|avatarcut }}'>
+		{% else %}
+		 <img src='/media/avatars/{{ user.army.side.name|lower }}/default.jpg'>
+		{% endif %}
+		{% endspaceless %}
+		<ul>
+			<a href="/pm">ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}
+			<li><a href="/accounts/profile">Профиль</a></li>
+			<li><a href='/accounts/update/profile'>Обновить</a></li>
+			<li><a href='#'>Настройки</a></li>
+			<li><a href='/accounts'>Участники</a></li>
+		</ul><br clear='all'>
+	</div>{% endif %}
+	<div class='none' {% if not user.is_authenticated %} style="margin-top: 5px;"{% endif%}><span align="right" id='label' class='content'>Общее</span></div>
+	<div class="content"> 
+		<ul>
+			<li><a href="/news">Новости</a></li>
+			<li><a href="/rules">Правила</a></li>
+			<li><a href="/replays">Реплеи DoW</a></li>
+			<li id='lvl2'><a href='/replays/upload' title='добавить реплей'>добавить</a></li>
+			<li><a href='/gallery'>Галерея</a></li>
+			{% if user.is_authenticated and user.is_active %}<li id='lvl2'><a href='/gallery/upload' title='загрузить изображение в галерею'>добавить</a></li>{% endif %}
+		</ul>
+	</div>
+	<div class='none'><span id='label' class='search'>Поиск</span></div>
+	<div class="search" align="center">Поиск:
+		<form action='.' method='POST'>
+			<input type='text' name='search'>
+			<input type='submit' value='Искать'>
+		</form>
+	</div>
+	<div class='none'><span id='label' class='briefing_news'>Последние новости</span></div>
+	<div class="briefing_news">
+		<ul>
+		{% for article in briefing_news %}
+			<li><img title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'>
+			<a title='{{ article.content|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+		{% endfor %}
+		</ul>
+	</div>
+	<div class='none'><span id='label' class='replays'>Последние реплеи</span></div>
+	<div class='last_replays'>
+		<ul>
+		{% for r in last_replays %}
+			<li>
+			  <small>{% ifnotequal r.type "0" %}({{ r.type}}vs{{ r.type }}){% else %}(unstd){% endifnotequal %}</small>
+			  <a href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"16" }}</a><br><small>by {{ r.author.nickname }}</small>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	<div class='none'><span id='label' class='quotes'>Цитаты</span></div>
+	<div class="quotes">
+		{% spaceless %}{% if expression.original_content %}
+		 <b>&quot;{{ expression.original_content }}&quot;</b>
+			 {% if expression.content %}<br>
+		 		&quot;{{ expression.content }}&quot;
+			{% endif %}
+		{% if expression.author %}<br><i>({{ expression.author }})</i>{% endif %}
+		{% endif %}
+		{% if expression.content and not expression.original_content %}
+		<b>&quot;{{ expression.content }}&quot;</b>
+		{% if expression.author %}<br><i>({{expression.author }} )</i>{% endif %}
+		{% endif %}
+		{% endspaceless %}
+	</div>
+</div>
+<div id="text_content">
+	<div class="content">
+	{% block text_content %} {{ flatpage.content }} {% endblock %}
+	<br clear="all">
+	</div>
+<br clear="all">
+</div>
+<br clear="all"> <!-- очищаем control_content -->
+</body>
+</html>

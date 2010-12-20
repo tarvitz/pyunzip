@@ -1,0 +1,52 @@
+SELECT id,votes,max(score) as score FROM vote_vote GROUP BY votes,id ORDER BY score DESC LIMIT 5; - запрос формирующий THE BEST
+SELECT id,votes,max((score/votes)) as score FROM vote_vote GROUP BY votes,id ORDER BY score DESC LIMIT 5; - более точная выборка по рейту
+
+warhammer=> SELECT id,votes,score FROM vote_vote;
+ id | votes | score
+----+-------+-------
+ 19 |     1 |     4
+ 25 |     2 |    10
+ 29 |     1 |     3
+ 30 |     1 |     4
+ 31 |     1 |     5
+ 32 |     1 |     5
+ 35 |    20 |    20
+ 33 |    10 |    50
+ 28 |     4 |    16
+ 34 |    30 |    38
+(10 rows)
+
+warhammer=> SELECT id,votes,max((score/votes)) as score FROM vote_vote GROUP BY votes,id ORDER BY score DESC LIMIT 5;
+ id | votes | score
+----+-------+-------
+ 33 |    10 |     5
+ 32 |     1 |     5
+ 25 |     2 |     5
+ 31 |     1 |     5
+ 19 |     1 |     4
+(5 rows)
+SELECT id,votes,max((score/votes)) as score FROM vote_vote GROUP BY votes,score,id ORDER BY score DESC, votes DESC; - последний правильный вариант:
+warhammer=> SELECT id,votes,max((score/votes)) as score FROM vote_vote GROUP BY votes,score,id ORDER BY score DESC, votes DESC;
+ id | votes |      score
+----+-------+------------------
+ 33 |    10 |                5 -> победитель
+ 25 |     2 |                5 -> максимальное количество баллов при большем чем у нижнего вхождения и меньшим чем у вверхнего количеством голосов
+ 32 |     1 |                5 -> идентично
+ 31 |     1 |                5 -> следует конечно понизить первую планку, чтобы votes было больше 10 как минимум, ну это не так и сложно - WHERE :))
+ 28 |     4 |                4 -> 4 балла при 4х голосах ;)
+ 19 |     1 |                4
+ 30 |     1 |                4
+ 29 |     1 |                3
+ 34 |    30 | 1.26666666666667
+ 35 |    20 |                1
+
+Рейт объектов выглядит очень странно и пиздец как необычно на мой взгляд, необходима более умная замена
+SELECT id,votes,max((score/votes)) as score FROM vote_vote WHERE votes>5 AND score/votes>3 GROUP BY votes,score,id ORDER BY score DESC, votes DESC; - выбирается все сущности где количество голосов больше пяти и рейтинг объекта больше 3х балов (удовлетворительно), все это отсортировывается сначала по количеству голосов, отданному объекту, потом по количеству рейтинга (который равен votes/score). 
+warhammer=> SELECT id,votes,max((score/votes)) as score FROM vote_vote WHERE votes>5 AND score/votes>3 GROUP BY votes,score,id ORDER BY score DESC, votes DESC;
+ id | votes | score
+----+-------+-------
+ 33 |    10 |     5
+(1 запись)
+
+Добавить возможность для декоратора vote_allow_objects смотреть по app_label.model_name, а не только по имени модели
+Добавить возможность коментировать результат голосования (в модели все ок)

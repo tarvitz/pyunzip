@@ -1,0 +1,56 @@
+<div id='news'> {% load newsfilters %} {% load comments %}
+	<div align="center" class='headline'>{% spaceless %}
+		<a href="{% url apps.news.views.news category=n.category|lower %}">
+		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
+		<img id='hdimg' class='right' src='{% url apps.wh.views.get_user_avatar nickname=n.author %}'>
+		{% if perms.news.edit_news or user.is_superuser %}
+			<span id='edit_button' class='first'><a id='button' href="{% url apps.news.views.add_article id=n.id %}">Править</a></span>
+			{% if not n.approved %}
+			<span id="edit_button"><a id='button' href="{% url apps.news.views.article_action id=n.id action='approve' %}">Утвердить</a></span>
+			{% else %}
+			<span id="edit_button"><a id='button' href='{% url apps.news.views.article_action id=n.id action='unapprove' %}'>Убрать</a></span>
+			{% endif %}
+		{% endif %}
+		{% if not n.approved %}
+                        {% spaceless%}
+                        {% if news_general %}
+			<span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
+				<a href="{% url apps.news.views.show_article number=n.id %}">{{ n.title }}</a>
+			</span>
+                        {% else %}
+                            <span class='unapproved'>{{ n.title }}</span>
+                        {% endif %}{% endspaceless %}
+		{% else %}
+			{% spaceless %}                        
+                        {% if news_general %}
+                        <a href='{% url apps.news.views.show_article number=n.id %}'>{{ n.title }}</a>
+                        {% else %}
+                        {{ n.title }}
+                        {% endif %}{% endspaceless %}
+		{% endif %}{% endspaceless %}
+	</div>
+	<hr>
+ <div id='spacer'>&nbsp;</div>
+ {% if news_general %}
+ {% if not n.head_content %}
+ 	{{ n.content|striptags|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'> 
+ {% else %}
+	{{ n.head_content|striptags|render_filter:n.syntax|safe }}{% if n.content %} ... 
+ {% endif %} <br clear='all'>
+ {% endif %}
+ {% else %}
+    {{ n.head_content|striptags|render_filter:n.syntax|safe }}
+    {{ n.content|striptags|render_filter:n.syntax|safe }}<br clear='all'>
+ {% endif %}
+ <div id='read'>
+ {# <a href='article/{{ n.id }}'>читать далее</a> #}
+ {% if news_general %} <a href='{% url apps.news.views.show_article number=n.id %}'>читать далее</a> {% endif %}
+ </div>
+ <hr>
+ <div id='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
+ {% if n.editor %}<div id='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
+ {% if n.url %}<div id='footer' class='url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
+ {% get_comment_count for n as comments %}<div id='footer'>Коментариев: {{ comments }}</div>
+ {% if n.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
+ </div>
+

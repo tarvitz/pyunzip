@@ -1,0 +1,24 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' media='screen' href='/styles/{{ user.skin.name|getskincss:"news.css" }}'>
+{% endblock %}
+{% block text_content %}
+{% if article %}
+{% with article as n %}
+    {% include "includes/article.html" %}
+{% endwith %}
+{% if comments.object_list %}
+    {% include settings.document.comments %}
+    {% include settings.document.links %}
+{% endif %}
+{% if user.is_authenticated %}
+    {% include settings.document.comments_form %}
+{% endif %}
+{% else %}
+<div align='center' class='block_notice'>
+    <div class='transparent tr_black'></div>
+    Извините, но данной статьи не существует или она не была удалена
+</div>
+{% endif %}
+{% endblock %}

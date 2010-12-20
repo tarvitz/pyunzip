@@ -1,0 +1,17 @@
+{% extends user.skin.name|getskin:"base.html" %}{% load kamwhfilters %} {% load newsfilters %} {% load votetags %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}'type='text/css' media='screen'>
+{% endblock %}
+{% block js %}
+{{ block.super }}
+<script language='javascript' type='text/javascript' src='/media/js/stars.js'></script>
+{% endblock %}
+{% block title %} Галерея: &quot;{{ image.gallery.name }}&quot; {% endblock %}
+{% block text_content %}
+<center>{% include settings.document.image_inc %}</center>
+<br clear='all'>
+{% include settings.document.comments %}
+{% include settings.document.links %}
+{% include settings.document.comments_form %}
+{% endblock %}

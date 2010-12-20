@@ -1,0 +1,41 @@
+{% load comments %}{% load newsfilters %}
+ <div id='news'>
+	<div align="center" class='headline'>{% spaceless %}
+		<a href="{% url apps.wh.views.profile_by_nick nickname=p.author %}"><img id="hdimg" class='right' src="{% url apps.wh.views.get_user_avatar nickname=p.author %}"></a>
+		{% if not p.approved %}
+			<span class='unapproved'>{# <a href='article/{{ p.id }}'>{{ p.title }}</a>#}
+				{# <a href="{% url apps.news.views.show_article number=p.id %}"> #} {{ p.title }} {#</a> #}
+			</span>
+		{% else %}
+			{# <a href='{% url apps.news.views.show_article number=p.id %}'> --#}{{ p.title }} <!--</a> -->
+		{% endif %}{% endspaceless %}
+	</div>
+	<hr>
+ <div id='spacer'>&nbsp;</div>
+ 	{{ p.content|striptags|render_filter:p.syntax|safe }}<br clear='all'>
+ <hr>
+ <div class='footer'> (by  {% get_raw_nickname p.author %}), published {{ p.date }}</div>
+ {% if p.url %}<div class='footer' class='url'><a href='{{ p.url }}'>оригинал</a></div>{% endif %}
+ {% get_comment_count for p as comments_count %}<div class='footer'>Коментариев: {{ comments_count }}</div>
+ {% if p.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ p.attachment.attachment.url }}'>{{ p.attachment.attachment.name|namemediacut }}</a> [{{ p.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
+ {% if p.tags %}<div class='footer'>тэги: {{ p.tags }}</div>{% endif %}
+ </div>
+
+
+{% with comments as page %}
+{% if page.object_list %}
+{% include settings.document.links %}
+{% endif %}
+{% endwith %}
+
+{% include settings.document.comments %}
+
+{% with comments as page %}
+{% if page.object_list %}
+	{% include settings.document.links %}
+{% endif %}
+{% endwith %}
+
+{% include settings.document.comments_form %}
+
+

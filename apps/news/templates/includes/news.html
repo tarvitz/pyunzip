@@ -1,0 +1,20 @@
+{% load comments %}{% load newsfilters %}
+{% with "True" as news_general %}
+{% if news.object_list %}
+{% for n in news.object_list %}
+    {% include settings.document.article_inc %}
+{% endfor %}
+
+{% if page %}
+    {% include settings.document.links %}
+{% endif %}
+
+{% else %}
+	<center>
+	<div class='block_notice'>
+		<div class='transparency tr_black'></div>
+		o_O нет ничего
+	</div>
+	</center>
+{% endif %} {# if news.object_list #}
+{% endwith %}

@@ -1,0 +1,9 @@
+{% extends skin|lower %}
+{% block text_content %}
+{{ path }}
+<br>
+{% for i in urls %}
+{{ i }}, 
+{% if forloop.last %} {{ i }} {% endif %}
+{% endfor %}
+{% endblock %}

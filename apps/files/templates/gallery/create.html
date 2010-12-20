@@ -1,0 +1,12 @@
+{% extends user.skin.name|getskin:"base.html" %}
+
+{% block title %} Создание Галлереи {% endblock %}
+{% block text_content %}
+{{ message }}
+<form method='post' action='.'>
+	{{ form.name.errors }}
+	<label for='name'>Имя галлереи</label><br>
+	{{ form.name }}<br>
+	<input type='submit' value='добавить'>
+</form>
+{% endblock %}

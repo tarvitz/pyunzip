@@ -1,0 +1,15 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block text_content %}
+	{% if subscription.object_list %}
+	<ul>
+	{% for sub  in  subscription.object_list %}
+		<li>
+			<a href='{{ sub.get_real_object.get_absolute_url }}'>{{ sub.get_model }} : {{ sub.get_title }}</a>
+			<a href='{% url url_unsubscribe sub.id "approve" %}'>[отписаться]</a></li>
+	{% endfor %}
+	</ul>
+	{% endif %}
+{% with subscription as page %}
+	{% include settings.document.links %}
+{% endwith %}
+{% endblock %}

@@ -1,0 +1,8 @@
+{% load newsfilters %}
+{% autoescape off %}
+{% if obj.head_content %} 
+	{{ obj.head_content|render_filter:obj.syntax }}
+{% else %}
+	{{ obj.content|render_filter:obj.syntax|newscut:"500" }}
+{% endif %}
+{% endautoescape %}

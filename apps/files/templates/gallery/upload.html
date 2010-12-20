@@ -1,0 +1,25 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block title %}Загрузить изображение{% endblock %}
+{% block head_content %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %}
+<center>
+	Вы можете загрузить файл размером в 1 Мегабайт, разрешением 2048x2048
+	<form id='upload_form' enctype="multipart/form-data" method="post" action=".">
+	{{ form.title.errors }}
+	<label for='title'>Название</label><br>
+	{{ form.title }}<br>
+	{{ form.image.errors }}
+	<label for='title'>Изображение</label><br>
+	{{ form.image }}<br>
+	{{ form.comments.errors }}
+	<label for='comments'>Коментарии</label><br>
+	{{ form.comments }}<br>
+	{{ form.gallery.errors }}
+	<label for='gallery'>Название галлереи</label><br>
+	{{ form.gallery }}<br>
+	<input id='submit' type='submit' value='загрузить'>
+	</form>
+</center>
+{% endblock %}

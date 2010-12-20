@@ -1,0 +1,72 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block title %}Пользователи{% endblock %}
+{% block css %}
+	{{ block.super }}
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"profileng.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+
+{% for user in users.object_list %}
+	<center>
+	<div class='round_message'>
+		<div class='msg_headline'>
+			<!-- effects -->
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<!-- end of effects -->
+
+			<a href='{% url profile_by_nick user.nickname %}'>{% get_nickname user %}</a>
+		</div><!-- msg_headline -->
+		<div class='msg_content'>
+			<div class='msg_avatar'>
+				<img src='{% url url_get_avatar user.nickname %}'>
+			</div> <!-- msg_avatar -->
+			<div class='msg_text'>
+				<div class='transparency'></div>
+				<div class='reflects_left'></div>
+				<div class='reflects_right'></div>
+					{% spaceless %}
+						{% if user.first_name or user.last_name %}
+						<div class='msg_txt'>Реальное имя: <i>{{ user.first_name }} {{ user.last_name }}</i></div>
+					{% endif %}{% endspaceless %}
+					<div class='msg_txt'>С нами с {{ user.date_joined|date:"d M Y" }} года</div>
+					{% if user.about %}<div class='msg_txt'>Мыслит: &quot;<i>{{ user.about }}</i>&quot;</div>{% endif %}
+					{% if user.comments_count %}<div class='msg_txt'>Коментов: <i>{{ user.comments_count }}</i></div>{% endif %}
+					{% if user.replays_count %}<div class='msg_txt'>Реплеев: <i>{{ user.replays_count }}</i></div>{% endif %}
+					{% if user.karma_value %}<div class='msg_txt'>Кармическая сила: <i>{% spaceless %}
+							{% if user.karma_value|gt:"0" %}<span class='karma_pos'>{% else %}
+							<span class='karma_neg'>{% endif %}{{ user.karma_value }}</span>
+					{% endspaceless%}</i></div>{% endif %}
+					<div style='clear: both;'></div>
+			</div> <!-- msg_text -->
+		</div><!-- msg_content -->
+		<br clear='all'>
+		<div class='msg_footer'>
+			<div class='transparency_black'></div>
+			<div class='reflects_left'></div>
+			<div class='reflects_right'></div>
+			<div class='links'>	
+				<span class='first'><a href='{% url profile_by_nick user.nickname %}'>profile</a></span>
+				<span><a href='{% url url_send_pm_by_nick user.nickname  %}'>pm</a></span>
+				<span>{{ user.army.side.name }}</span>
+				<span>{% if not user.settings.invisible %}{% get_online user %}{% else %}offline{% endif %}</span>
+				{% if not user.settings.hide_jid %} <span><a href='xmpp://{{ user.jid }}'>{{ user.jid }}</a></span>{% endif %}
+				{% if not user.settings.hide_uin %} <span><a href='icq://{{ user.uin }}'>{{ user.uin }}</a></span>{% endif %}
+				{% if not user.settings.hide_email %} <span><a href='mailto://{{ user.email }}'>{{ user.email }}</a></span>{% endif %}
+			</div>
+			<br clear='all'>
+		</div> <!-- msg_footer -->
+	</div> <!-- message -->
+		{% comment %}
+		<a class='profile' href='{% url apps.wh.views.profile_by_nick nickname=user.nickname %}'>
+		<img class='account_user_img' src='{% url apps.wh.views.get_user_avatar nickname=user.nickname %}'>
+		<img class='account_side_icon' src='{% url apps.wh.views.get_user_side_icon nickname=user.nickname %}'>
+		{% get_nickname  user %}</a>
+		{% endcomment %}
+	</center>
+ {% endfor %}
+
+{% include settings.document.links %}
+{% endblock %}

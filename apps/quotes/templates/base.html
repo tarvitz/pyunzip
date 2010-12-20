@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="Cache-control" content="no-cache" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+	{# <meta name="keywords" content="" /> #}
+	{# <meta name="description" content="" /> #}
+
+	<link href="/favicon.ico" rel="shortcut icon" />
+	
+	{% block css %}
+	<link href="/media/styles/style.css" rel="stylesheet" type="text/css" />
+	{% endblock %}
+
+	{% block rss %}
+	{# <link href="/rss/" rel="alternate" type="application/rss+xml" /> #}
+	{% endblock %}
+
+	{% block title %}
+	<title>quotes.radiance.ru</title>
+	{% endblock %}
+	
+	{% block js %}
+	<script type="text/javascript" src="/media/scripts/util.js"></script>
+	{% endblock %}
+</head>
+
+<body>
+
+	<div class="header">
+		{% block header %}
+		<h1>quotes.radiance.ru - просто цитатник для своих</h1>
+		{#<div>Тудэй из э риалли грэйт дэй. Хэппи берсдэй, <strong>EST</strong> с канала guitars!<br>Охренительного звука тебе, человече!!</div>#}
+		{% endblock %}
+	</div>
+
+	<div class="menu">
+        {% include "includes/menu.html" %}
+	</div><hr />
+
+    {% comment %}
+    <div class="notification">
+        господа, если кто-то реально ждал рефакторинга, то вы его дождались.
+    </div>
+	{% endcomment %}
+
+	{% block text_content %}
+
+	{% endblock %}
+
+	<div class="menu">
+	    {% include "includes/menu.html" %}
+	</div><hr />
+
+	<div class="copy">
+		quotes.radiance.ru - цитатник для своих<br />
+		{# Почта вебмастера: <a href="&#109;&#097;&#105;&#108;&#116;&#111;&#058;%20%69&#109;&#097;&#105;%6c%40%69&#098;%61&#115;%68&#046;%6f&#114;%67&#046;&#114;&#117;">&#105;&#109;&#097;&#105;&#108;@&#105;&#098;&#097;&#115;&#104;&#046;&#111;&#114;&#103;&#046;&#114;&#117;</a> #}
+	</div>
+
+	{#<div class="topline"> </div>#}
+
+</body>
+</html>

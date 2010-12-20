@@ -1,0 +1,27 @@
+{% extends user.skin.name|getskin:"base.html" %}
+{% block title %}Приватные сообщения{% endblock %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' media='screen' type='text/css'>
+{% endblock %}
+
+{% block text_content %}
+<a href='/pm/send/'>Отправить сообщение</a><br>
+
+<center>
+<div class='message'>
+<div class='msg_headline'>
+	<div class='transparency' id='black'></div>
+	<b>Сообщения</b>
+</div>
+<div class='msg_content'>
+<div class='transparency'></div>
+	<a href='/pm/income/'>Входящие</a><small>[<b>{{ pm_recv }}/100</b>]</small><br>
+	<a href='/pm/sent/'>Исходящие</a><small>[<b>{{ pm_sent }}/100</b>]</small><br>
+	<small>всего: {{ pm_all }}</small>
+</div><!-- msg_text -->
+<br clear='all'>
+</div><!-- message -->
+</center>
+
+{% endblock %}

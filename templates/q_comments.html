@@ -1,0 +1,21 @@
+{# quote #}{% load newsfilters %}
+<div class='quote_content'>
+	<div class='quote_headline'>
+		<div class='transparency' id='black'></div>
+		{% if quote_user.nickname %}<a href="{% url apps.wh.views.profile_by_nick nickname=quote_user.nickname %}">
+			{% get_nickname quote_user %} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
+		{% else %}
+			{{ quote_user }} писал(а): 
+		{% endif %}
+		</div>
+	<div class='quote_txt'>
+		<div class='transparency tr_black'></div>
+		<div class='reflects_up'></div> 
+		<div class='reflects_down'></div>
+		<div class='reflects_left'></div>
+		{% if quote_user.nickname %}<img class='quote_avatar' src='{% url apps.wh.views.get_user_avatar nickname=quote_user.nickname %}'> {% endif %}
+		{{ quote_text|safe }}
+	</div>
+</div>
+{#  end of quote #}
+
