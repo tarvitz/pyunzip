@@ -1,0 +1,65 @@
+.karma_list{
+	margin-top: 0;
+	margin-bottom: 0px;
+	border: 1px solid white;
+	width: 60%;
+	text-align: left;
+	padding: 5px;
+	position: relative;
+}
+
+.karma_list .transparency_black{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: #000;
+    opacity: 0.55;
+    filter: alpha(opacity=55);
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+}
+.karma_comment_form textarea,
+.karma_comment_form input{
+	border: 1px solid black;
+	width: 70%;
+}
+.karma_comment_form input{
+	width: inherit;
+}
+.karma_alter_failed,.null_karma{
+	color: black;
+	font-weight: bold;
+	/*margin-left: 10px;*/
+}
+.karma_alter_positive,.karma_pos{
+	color: lightgreen;
+	font-style: italic;
+	padding-right: 3px;
+}
+.karma_positive a{
+	color: lightgreen;
+}
+.karma_negative a{
+	color: red;
+}
+.karma_alter_negative,.karma_neg{
+	color: red;
+	font-style: italic;
+	padding-right: 3px;
+}
+.karma_value{
+	padding: 0 10px;
+}
+.karma_voter{
+	font-size: xx-small;
+	padding-left: 3px;
+}
+.karma_date{
+	font-size: xx-small;
+	padding-left: 3px;
+}
+.karma_comment{
+	padding-left: 3px;
+	font-style: italic;
+}

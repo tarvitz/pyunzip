@@ -1,0 +1,7 @@
+textarea,input{
+	width: 80%;
+	border: 1px solid black;
+	}
+input#submit{
+	width: inherit;
+}

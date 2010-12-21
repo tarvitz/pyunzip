@@ -1,0 +1,23 @@
+.ui-menu{
+	display: block;
+	list-style: none;
+	padding: 2px;
+	margin: 0;
+	float: left;
+}
+.ui-autocomplete{
+	/*background-color: red; */
+	position: absolute;
+}
+.ui-menu .ui-menu-item a{
+	color: black;
+	display: block;
+	line-height: 1.5;
+	zoom: 1;
+	padding: .2em .4em;
+	/*border: 1px solid white;
+	border-bottom: none; */
+}
+.ui-menu .ui-menu-item a:hover{
+	color: grey;
+}

@@ -1,0 +1,54 @@
+#upload_replay{
+	width: 80%;
+	border: 1px solid silver;
+	text-align: center;
+	position: relative;
+}
+#upload_replay #annotation{
+	font-size: small;
+	text-align: left;
+	border: 1px solid red;
+	width: 80%;
+	display: none;
+	position: relative;
+}
+#upload_replay #annotation u{
+	/*color: white; */
+}
+#upload_replay .button{
+	margin: 0px;
+	padding: 5px 0px;
+	position: relative;
+}
+
+#upload_replay .button a{
+	color: white;
+	text-decoration: bold;
+	font-size: xx-small;
+}
+#upload_replay .button a:hover{ color: grey }
+input,select,textarea{
+	width: 90%;
+	border: 1px solid black;
+}
+textarea{ width: 80%; }
+input#submit, input#id_is_set{
+	width: inherit;
+}
+
+.transparency{
+    position: absolute;
+    height: 100%;
+    background-color: #666666;
+    opacity: 0.55;
+    filter: alpha(opacity=55);
+    top: 0px;
+    left: 0px;
+    z-index:-1;
+    border: 0px;
+}
+
+.transparency#black{
+   background-color: black;
+}
+

@@ -1,0 +1,21 @@
+body{
+	background-image: url('/media/images/login.jpg');
+	background-repeat: no-repeat;
+	background-position: top center;
+}
+
+#headline{
+	margin: 200px 0 0 0;
+	border: 1px solid lightblue;
+	width: 300px;
+	background: white url('/media/images/hl_reflect.png') repeat-x top;
+	_background: #6A5665;
+}
+#content{
+	border: 1px solid lightblue;
+	width: 300px;
+}
+.error{
+	color: red;
+	font-weight: bold;
+}

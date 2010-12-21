@@ -1,0 +1,62 @@
+#galleryimage{
+	float: left;
+	border: 1px solid white;
+	width: 300px;
+	height: 350px;
+	margin: 5px 5px;
+	text-align: center;
+}
+
+#galleryimage2{
+	border: 1px solid white;
+	width: 300px;
+	height: 300px;
+	margin: 2px 2px;
+	text-align: center;
+}
+#galleryimage a{
+	text-decoration: none;
+}
+#galleryimage img{
+	/*float: right;*/
+	margin: 2px 2px;
+}
+
+#upload_form input,select{
+	width: 75%;
+	border: 1px solid black;
+}
+#upload_form input#submit{
+	width: inherit;
+}
+
+#galleries_list{
+	border: 1px solid white;
+	margin: 5px 10px;
+	padding: 10px 10px;
+}
+.gallery_form{
+	width: 50%;
+	padding: 0px;
+	margin: 0px;
+}
+.gallery_form select{
+	border: 1px solid black;
+}
+.gallery_form option{
+	border-top: 1px solid black;
+}
+/*ODD,EVEN works only with Mozilla */
+.gallery_form option.even{
+	background-color: white;
+}
+.gallery_form option.odd{
+	background-color: #F5F5F5;
+}
+.gallery_form option span{
+	font-size: xx-small;
+	color: red;
+}
+#galleries_list #info{
+	font-size: xx-small;
+}

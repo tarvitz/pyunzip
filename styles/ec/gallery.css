@@ -1,0 +1,23 @@
+#galleryimage{
+	float: left;
+	border: 1px solid white;
+	width: 280px;
+	height: 310px;
+	margin: 2px 2px;
+	text-align: center;
+}
+
+#galleryimage2{
+	border: 1px solid white;
+	width: 75%;
+	height: 300px;
+	margin: 2px 2px;
+	text-align: center;
+}
+#galleryimage a{
+	text-decoration: none;
+}
+#galleryimage img{
+	/*float: right;*/
+	margin: 2px 2px;
+}

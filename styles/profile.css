@@ -1,0 +1,62 @@
+/*DEPRECATED CSS */
+a{
+	color: white;
+	text-decoration: none;
+}
+body{
+	margin: 0px;
+	padding: 0px;
+	background-color: #666;
+	background-image: url("images/bg.jpg");
+	color: #FFE7BA;
+}
+
+#content{
+	border: 1px solid lightblue;
+}
+.error{
+	color: red;
+	font-weight: bold;
+}
+
+#headline{
+	width: 1222px;
+	height: 299;
+	margin-left: -611px;
+	position: absolute;
+	left: 50%;
+	top: 0%;
+	background-image: url('/media/head_2.png');
+	background-repeat: no-repeat;
+	padding: 0px;
+}
+
+#headline #avatar{
+	position: absolute;
+	z-index: -1;
+	margin-left: 195px;
+	margin-top: 41px;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+#headline #army{
+	position: absolute;
+	z-index: -1;
+	margin-left: 944px;
+	margin-top: 43px;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+#headline_space {
+	margin-top: 164px; /* отступ от headline*/
+}
+#profile_data{
+	position: relative;
+	text-align: center;
+	border: 0px solid gold;
+	margin: 0 50px;
+}
+.update_profile {
+	width: 80%;
+	border: 1px dotted grey;
+}

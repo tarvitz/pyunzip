@@ -1,0 +1,264 @@
+/*вот*/
+/*Разметка*/
+#initial_line{
+	border: 1px solid #FFE4E1;
+	border-bottom: 0px;
+	width: 40px;
+	color: purple;
+	margin: 0 15px;
+	float:left;
+	padding: 0px;
+	text-align: center;
+}
+#tabs{
+	float: right;
+}
+#tabs ul{
+	display: inline;
+	margin: 0px 15px;
+}
+#tabs li{
+	display: inline;
+	border: 1px solid #FFE4E1;
+	margin: 0px 1px 0px 0px;
+	padding: 0px;
+	border-bottom: 0px;
+	padding: 0 3px;
+}
+#tabs li a{
+	text-decoration: none;
+}
+#horizontal_line{
+	border: 1px solid #FFE4E1;
+	margin: 0 5px;
+}
+#horizontal_line div{
+	font-weight: bold;
+	font-size: x-large;
+	color: #FF9F00;
+	background-color: purple;
+	background-image: url('/media/images/hl_reflect.png');
+	background-repeat: repeat-x;
+}
+#vertical_line{
+	border: 1px solid #FFE4E1;
+	border-top: 0px;
+	margin: 0 0 0 15px;
+	width: 40px;
+	float: left;
+}
+#vertical_line ul{
+	list-style-type: none;
+	text-align: center;
+	padding: 0px;
+}
+#content{
+	margin: 0px 5px 0px 55px;
+/*	border: 1px solid black;*/
+	border-top: 0px;
+}
+#text_content{
+	color: gold;
+	padding: 0px;
+	border: 1px solid #FFE4E1;
+	margin: 0px 215px 0px 20px; /*195+20=215*/
+	border-top: 0px;
+	padding: 0px;
+}
+#text_content .content{
+	float: left;
+	/*border-top: 1px solid #FFE4E1;*/
+	margin: 5px 0 0 0;
+	padding: 0px;
+	width: 100%;
+}
+#text_content .content ul{
+	margin: 0px;
+	padding: 0px;
+	
+}
+
+#text_content .content ol{
+	margin: 0px;
+	padding: 0px;
+}
+#text_content .content ol li{
+	list-style-type: decimal;
+}
+
+#text_content .content li{
+	list-style-type: square;
+
+}
+#control_content{
+	color: #FFE4E1;
+	width: 195px;
+	/*border: 1px solid gold;*/
+	float: right;
+	font-family: Arial;
+}
+#control_content .content{
+	padding: 0 0 0 5px;
+	border: 1px solid #FFE4E1;
+}
+#control_content .content #lvl2{
+	margin-left: 10px;
+	font-size: x-small;
+}
+#control_content .user_profile #lvl2{
+	float: left;
+	margin-left: 10px;
+	font-size: xx-small;
+}
+#control_content div{
+	padding: 0 0 0 5px;
+	border: 1px solid #FFE4E1;
+	margin-bottom: 5px;
+}
+#control_content .none{
+	padding: 0px;
+	border: 0px;
+	margin: 0px;
+	text-align: right;
+}
+#control_content #label{
+	font-size: xx-small;
+	font-color: white;
+	border: 1px solid #FFE4E1;
+	border-bottom: 0px;
+	clear:all;
+}
+
+#control_content img{
+}
+#control_content ul{
+	list-style-type: square;
+	margin: 3px 0px;
+}
+#control_content ul a{
+	text-decoration: none;
+	color: pink;
+}
+#control_content ul a:hover{
+	color: yellow;
+}
+#control_content ul a:visited{
+	color: gold;
+}
+#control_content .search{
+	display: none;
+}
+#control_content .search ul{
+	text-align: left;
+	padding: 0px 3px;
+	margin: 0px 0 0 15px;
+}
+
+#control_content .quotes{
+
+}
+#control_content .user_profile{
+	text-align: left;
+}
+#control_content .user_profile img{
+	float: left;
+	width: 90px;
+	padding-right: 10px;
+}
+#control_content .user_profile ul{
+	margin: 0px;
+	list-style: lower-greek;
+	font-size: x-small;
+	font-weight: bold;
+	color: white;
+	list-style-type: none;
+}
+.user_profile ul a{
+	font-weight: normal;
+}
+
+#control_content .briefing_news ul{
+	list-style-type: none;
+	padding: 0px;
+	margin: 5px 0px 0 0;
+}
+#control_content .last_replays ul{
+	list-style-type: none;
+	padding: 0px;
+	margin: 0px;
+}
+#control_content .last_replays #spacer{
+	margin-left: 18px;
+}
+#control_content .last_replays img{
+	position: absolute;
+	margin-top: 3px;
+}
+#notice{
+	font-size: x-small;
+	width: 40%;
+}
+#text{
+	color: white;
+	margin: 5px;
+}
+/*Конец разметки*/
+#button{
+	border: 1px solid black;
+	padding: 2px;
+	background-color: #FFE4E1;
+	text-decoration: none;
+	color: black;
+	font-size: xx-small;
+}
+
+/*Расцветка*/
+body{
+	background-color: #6A5665;
+	color: gold;
+	font-family: Vernada, Sans-Serif;
+}
+a{
+	color: yellow;
+}
+a:hover{
+	color: gold;
+}
+a:visited{
+	color: pink;
+}
+
+/*Общие модули*/
+#comments{
+	width: 85%;
+	border: 1px solid white;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	clear: all;
+	text-align: left;
+	color: white;
+}
+#comments #approved_by{
+	float: left;
+	font-size: xx-small;
+}
+#comments #date_submitted{
+	float: right;
+	font-size: xx-small;
+}
+#comments img{
+	float: left;
+	margin: 2px;
+}
+
+#img_right{
+	float: right;
+	margin: 2px;
+	border: 1px dotted white;
+}
+
+#img_left{
+	float: left;
+	margin: 2px;
+	border: 1px dotted white;
+}

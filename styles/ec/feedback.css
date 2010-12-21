@@ -1,0 +1,10 @@
+#wish{
+	color: white;
+	border: 1px solid white;
+	padding: 10px;
+	margin: 5px;
+}
+#wish #approve{
+	font-size: xx-small;
+	color: yellow;
+}

@@ -1,0 +1,64 @@
+.message .msg_headline .msg_replay_name {
+    font-weight: bold;
+	color: grey;
+}
+.message .msg_text .msg_replay_info{
+	font-size: small;
+	border: 1px dotted white;
+	padding: 3px;
+}
+
+/*OBSOLETE use msg_right_icon*/
+.message .msg_game_icon{
+	float: right;
+	margin-top: -30px;
+	margin-right: -40px;
+}
+.message .msg_game_icon a img{
+	border: 0px;
+}
+.message .msg_ranks{
+    float: left;
+}
+.message .msg_avatar .nickname{
+	font-weight: bold;
+}
+
+.msg_text .is_set{ color: gold; }
+.msg_text .version .title,
+.msg_text .teams .title,
+.msg_text .races .title,
+.msg_text .type .title,
+.msg_text .vote .title,
+.msg_text .filetype .title{
+	font-weight: bold;
+}
+
+.msg_text .version .info,
+.msg_text .teams .info,
+.msg_text .type .info,
+.msg_text .races .info,
+.msg_text .winner .winners{ 
+}
+
+.msg_text .replay_link{ color: gold; }
+
+.is_set a{
+	color: gold;
+}
+div.is_set{
+	width: 95%;
+	font-size: x-small;
+}
+.replay_pack span.size_info{
+	font-size: 8pt;
+	color: grey;
+}
+.replay_pack{
+	color: white;
+}
+.replay_pack li{
+	margin-top: 1px;
+}
+/*end of replay message form styles*/
+

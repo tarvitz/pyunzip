@@ -1,0 +1,68 @@
+body{
+}
+#replay{
+	margin-top: 20px;
+	width: 85%;
+	border: 1px solid white;
+	text-align: left;
+	color: white;
+}
+#replay #avatar{
+	float: right;
+	margin: 2px;
+	border: 1px dotted pink;
+}
+
+#comments{
+	width: 85%;
+	border: 1px solid white;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	clear: all;
+	text-align: left;
+	color: white;
+}
+#comments #approved_by{
+	float: left;
+	font-size: xx-small;
+}
+#comments #date_submitted{
+	float: right;
+	font-size: xx-small;
+}
+#comments img{
+	float: left;
+	margin: 2px;
+}
+#list_replays{
+	margin: 2px 5px;
+	border: 1px solid white;
+	color: white;
+}
+#list_replays img{
+	float: left;
+	margin: 2px;
+}
+#list_replays #game{
+	float: right;
+	margin-top: -10px;
+	margin-right: -15px;
+}
+#list_replays #link{
+	font-size: small;
+	float: left;
+}
+#list_replays #next{
+	font-size: small;
+}
+
+#list_category{
+	margin: 5px;
+	height: 40px;
+	padding: 5px;
+	color: white;
+	border: 1px solid white;
+}
+#list_category img{
+	float: left;
+}

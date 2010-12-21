@@ -1,0 +1,11 @@
+/*
+ * stable
+ .message .msg_content .msg_avatar{ width: 175px; } 
+ .message .msg_content .msg_text{ margin-left: 180px;}
+*/
+.message .msg_content .msg_avatar{ width: 175px; padding-right: 5px; } /*tesing */
+.message .msg_content .msg_text{ margin-left: 180px; min-height: 230px;}
+textarea.quick_edit{ width: 70%;
+	height: 200px;
+	border: 1px solid black
+	margin-left: 10px;}

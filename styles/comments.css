@@ -1,0 +1,111 @@
+/*comments*/
+#message{
+    margin-top: 5px;
+    border: 1px solid darkgrey;
+    width: 80%;
+}
+#message #msg_headline{
+    color: white;
+    font-size: x-small;
+    border-bottom: 1px dotted darkgrey;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 3px;
+
+}
+#message #msg_headline.anonymous{
+	border: 0px;
+}
+#message #msg_headline a#msg_button{
+    color: white;
+    float: right;
+}
+#message #msg_comment_date{
+    float: left;
+    font-size: 80%;
+}
+
+#message #msg_user_nickname{
+    text-align: center;
+}
+#message #msg_ranks{
+    float: left;
+}
+#message #msg_content{
+    text-align: justify;
+    float: left;
+    width: 100%;
+    
+}
+
+#message #msg_content #msg_avatar{
+    float: left;
+    margin: 0px;
+    width: 105px;
+    color: white;
+    font-size: x-small;
+}
+#message #msg_content #msg_avatar img{
+    padding-bottom: 3px;
+    padding-top: 3px;
+    padding-left: 5px;
+}
+#message #msg_content #msg_text{
+    border-left: 1px dotted darkgrey;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    text-indent: 8px;
+    margin-left: 110px;
+    color: white;
+}
+
+#message #msg_footer{
+    color: white;
+    font-size: x-small;
+    padding: 0px;
+    border-top: 1px dotted darkgrey;
+}
+#message #msg_footer.deleted{ border: 0px; }
+
+#message #msg_headline,
+#message #msg_content,
+#message #msg_avatar,
+#message #msg_text,
+#message #msg_footer{
+    position: relative;
+}
+#message .transparency{
+    position: absolute;
+    height: 100%;
+    background-color: #666666;
+    opacity: 0.55;
+    filter: alpha(opacity=55);
+    top: 0px;
+    left: 0px;
+    z-index:-1;
+    border: 0px;
+}
+
+#message .transparency#black{
+    background-color: black;
+}
+#message .transparency#txt{
+    background-color: #666;
+    opacity: 0.80;
+    filter: alpha(opacity=80);
+}
+#message span#nickname{
+    font-weight: bold;
+    color: grey;
+}
+textarea#id_comment{
+	width: 80%;
+	height: 300px;
+	border: 1px solid black;
+}
+input#submit{
+	border: 1px solid black;
+}
+/*endofcomments*/
