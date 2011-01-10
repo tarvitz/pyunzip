@@ -1,6 +1,5 @@
-<div class="quotes"{#{% ifequal quote.author user %} style="background-color: #F5F5F5;"{% endifequal %}#}>
+<div class="quotes" {#{% ifequal quote.author user %} style="background-color: #F5F5F5;"{% endifequal %}#}>
     <div class="quotehead">
-        <div class='transparency_black'></div>
 		<span><a href="{% url apps.quotes.views.queue_quote id=quote.id %}"><strong>#{{ quote.id }}</strong></a></span>
         <span>
             <a href="{% url apps.quotes.views.approve id=quote.id %}" onclick="return confirm('Проголосовать за? Это приведет к немедленному утверждению цитаты.');">за</a> /
