@@ -36,7 +36,7 @@ def pages(request):
 		'page': int(page)
 	}
 def get_skin_template(user,template):
-    if hasattr(user,'username'):
+    if user.is_authenticated():
         if hasattr(user,'skin'):
             if user.skin:
 	    	skin_path = "skins/%s" % (user.skin.name.lower())

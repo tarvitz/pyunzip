@@ -30,6 +30,7 @@ SETTINGS = {
     'last_news_amount': 5,
     'show_karma_block': True,
     'enable_autocomplete': True,
+    'enable_dbcss': False,
     #'show_hidden_content': True,
     #'some_field': 10,
 }
@@ -64,6 +65,7 @@ SETTINGS_FIELDS = {
     'last_news_amount': forms.IntegerField(label=_('Last News block objects amount')),
     'show_karma_block': forms.BooleanField(label=_('Show karma block'),required=False),
     'enable_autocomplete': forms.BooleanField(label=_('Enables autocomplete on site'),required=False),
+    'enable_dbcss': forms.BooleanField(label=_('Enables user css styles hosted in database'),required=False),
    #'show_hidden_content': forms.BooleanField(label=_('show hidden stuff'),required=False),
     #'some_field': forms.IntegerField(label=_('Some field'),required=False),
 

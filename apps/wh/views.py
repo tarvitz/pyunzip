@@ -59,9 +59,10 @@ def login(request):
         referer = request.POST.get('referer','')
         #print redirect
         user = auth.authenticate(username=username,password=password)
-        if hasattr(user,'is_active'):
-            if not user.is_active:
-                return HttpResponseRedirect('/banned/')
+        if hasattr(user,'is_authenticated'):
+            if user.is_authenticated():
+                if not user.is_active:
+                    return HttpResponseRedirect('/banned/')
         if user is not None and user.is_active:
             auth.login(request,user)
             if not redirect:
@@ -490,10 +491,11 @@ def get_math_image(request,sid=''):
     #for joke sake
     if not sid:
         image = Image.new('RGBA', (630,40),(0,0,0))
-        ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'/arial.ttf'), 24)
+        print os.path.join(settings.MEDIA_ROOT,'arial.ttf')
+        ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
         draw = ImageDraw.Draw(image)
         draw.text((2,0), 'Hope is the first step on the road to the disappointment', font=ifo)
-        img_path = os.path.join(settings.MEDIA_ROOT+'tmp/bannerimage.png')
+        img_path = os.path.join(settings.MEDIA_ROOT,'tmp/bannerimage.png')
         image.save(img_path,'PNG')
         image = open(img_path).read()
         os.remove(img_path)
@@ -505,8 +507,8 @@ def get_math_image(request,sid=''):
         if f % s == 0: break
     t = randint(0,20)
     image = Image.new('RGBA',(95,40),(0,0,0))
-    font_path = settings.MEDIA_ROOT+"/arial.ttf" # os.path.join does not work
-    ifo = ImageFont.truetype(os.path.join(font_path), 24)
+    ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
+    print ifo
     draw = ImageDraw.Draw(image)
     draw.text((2, 0), str(f)+'/'+str(s)+'-'+str(t), font=ifo)
     fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT,str(random())[2:6])
@@ -514,7 +516,7 @@ def get_math_image(request,sid=''):
     image = open(fp_name,'r').read()
     os.remove(fp_name)
     answ = f/s-t
-        #if sid:
+    #if sid:
     offset = int(8)
     expired = datetime.now() + timedelta(minutes=offset)
     ip = request.META['REMOTE_ADDR']

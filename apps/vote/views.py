@@ -86,6 +86,8 @@ def vote_rate(request,app_label='',model_name='',obj_id=0,rate=0):
             pass
     return HttpResponseRedirect(referer)
 
+#Ehm, it feeds :) the memory, the proc resources
+#We should something to do
 def cleanse_null_votes():
     #make cleanse votes that link on deleted objects from db
     votes = Vote.objects.all()

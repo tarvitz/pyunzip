@@ -6,7 +6,8 @@ from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 #from markdown import Markdown
-from markdown2 import markdown as Markdown
+#from markdown2 import markdown as Markdown
+from apps.thirdpaty.markdown2 import markdown as Markdown
 
 from apps.pybb.markups import mypostmarkup 
 from apps.pybb.fields import AutoOneToOneField, ExtendedImageField

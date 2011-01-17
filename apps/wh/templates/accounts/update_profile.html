@@ -37,9 +37,9 @@ var filter_skins = function(){
 					pk = this.pk;
                                         {% comment %}it cause danger if there is no skin id user have it's a bug{% endcomment %}
 					{% if user.skin.id %}
-                                        skin_option.options[n] = Option(opts['name'],pk,false,{{ user.skin.id }} == this.pk ? true: false);
+                                        skin_option.options[n] = new Option(opts['name'],pk,false,{{ user.skin.id }} == this.pk ? true: false);
 					{% else %}
-                                        skin_option.options[n] = Option(opts['name'],1,false,true); {# 1 SHOULD BE DEFAULT, FIXME #}
+                                        skin_option.options[n] = new Option(opts['name'],1,false,true); {# 1 SHOULD BE DEFAULT, FIXME #}
                                         {% endif %}
                                         n++;
 				});
@@ -57,9 +57,9 @@ var filter_skins = function(){
 					n = 0;
 					jQuery.each(data,function(){
 						{% if user.army %}
-                                                opt = Option(this.fields.name,this.pk,false,{{ user.army.id }} == this.pk ? true: false); // Get User setted army
+                                                var opt = new Option(this.fields.name,this.pk,false,{{ user.army.id }} == this.pk ? true: false); // Get User setted army
 						{% else %}
-                                                opt = Option(this.fields.name,this.pk,false,true);
+                                                var opt = new Option(this.fields.name,this.pk,false,true);
                                                 {% endif %}
                                                 army_option.options[n] = opt;
 						army_lower_name = String(this.fields.name).toLowerCase().replace(' ','_');
@@ -199,7 +199,8 @@ input#submit{
 </center>
 
 <script type='text/javascript'>
-	side = document.getElementById('id_side');
+	$(document).ready(function(){
+        side = document.getElementById('id_side');
 	{% if user.army.side %}
             side.value = {{ user.army.side.id }};
         {% else %}
@@ -213,5 +214,6 @@ input#submit{
 	filter_options();
 	filter_skins();
 	set_side_imgs();
+        });
 </script>
 {% endblock %}

@@ -75,7 +75,7 @@ class UpdateProfileForm(RequestForm):
     )
     avatar = forms.ImageField(required=False)
     photo = forms.ImageField(required=False)
-    nickname = forms.RegexField(regex=re.compile('[\w\s-]+',re.U),required=False)
+    nickname = forms.CharField(required=False)
     side =    forms.ChoiceField(choices=SIDES_CHOICE,required=False)
     #army = forms.ChoiceField(choices=((0,_('Choose Side')),), required=False)
     gender = forms.ChoiceField(choices=GENDER_FIELD, required=False)
@@ -125,10 +125,14 @@ class UpdateProfileForm(RequestForm):
             raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
         return value
 
-    #FIXME: breaks with apache
     def clean_nickname(self):
         current_nickname = self.request.user.nickname
         value = self.cleaned_data.get('nickname','')
+        r = re.compile('[\w\s-]+',re.U)
+        if r.match(value):
+            return r.match(value).group()
+        else:
+            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
         try:
             user = User.objects.get(nickname__exact=value)
             if not user.nickname == current_nickname:
@@ -213,11 +217,20 @@ class RegisterForm(forms.Form):
     def clean_nickname(self):
         value = self.cleaned_data.get('nickname', '')
         if not value: return value
+
+        r = re.compile('[\w\s-]+',re.U)
+        
+        if r.match(value):
+            return r.match(value).group()
+        else:
+            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
+        
         try:
             if_busy = User.objects.get(nickname=value)
             raise forms.ValidationError(_('This nick is busy, sorry'))
         except User.DoesNotExist:
             return value
+
     def clean(self):
         cleaned_data = self.cleaned_data
         password1 = cleaned_data.get('password1','')

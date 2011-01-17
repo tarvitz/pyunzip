@@ -58,7 +58,10 @@ urlpatterns = patterns('apps.files.views',
     (r'^gallery/upload/$', 'upload_image'),
     (r'^gallery/(?P<gallery_name>[\w\s]+)/$', 'show_gallery'),
     #can delete both way: via url address and delete_function:
-    (r'^gallery/image/(?P<id>\d+)/(?P<action>delete)/$', 'action_image'),
+    url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/approve/$','action_image',
+        name='url_delete_image'),
+    url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/$','action_image',
+        name='url_force_delete_image'),
     (r'^gallery/image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'}),
     (r'^image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'}), #alias
     (r'^files/$', 'show_files'),
