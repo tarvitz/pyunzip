@@ -33,16 +33,12 @@
 	</div> <!-- msg_avatar -->
 	<div class='msg_text'>
 		<div id='profile_data'>
-			{% ifequal user usr %}<form action='/accounts/password/change' method='get'><input type='submit' value='Сменить пароль'></form>{% endifequal %}
-			<br>
-			<a href='{% url url_send_pm_by_nick usr.nickname %}' title='Отправить сообщение'>Отправить ЛС</a><br>
 			{% if usr.photo %}<b><i><a href='{% url url_user_photo usr.nickname %}'>Фото</a></b></i><br>{% endif %}
 			<b>Имя</b> <span class='notice'>(никнейм)</span>: {% get_nickname usr %}<br>
 			{% spaceless %}
 			{% if usr.first_name or usr.last_name %}
 			<b>Реальное имя</b>: {{ usr.first_name }} {{ usr.last_name }}<br>
 			{% endif %}{% endspaceless %}
-			{% if usr.is_staff %} <b><i>Логин</i></b>: <i>{{ usr.username }}</i><br>{% endif %}
 			{% ifnotequal usr.army.side.name "None" %}<b>Состоит на службе у</b> {{ usr.army.side.name }}<br>
 			<b>Приписан к</b>: {{ usr.army.name }}<br> {% endifnotequal %}
 			<b>Пол</b>: {{ usr.gender|gender_transform }}<br>
@@ -59,8 +55,12 @@
 	</div> <!-- msg_text -->
 	</div> <!-- msg_content -->
 	<br clear='all'>
-	<div class='msg_footer'>
-		foo();
+	<div class='msg_footer' style='text-align: left'>
+		[<a class='act_link' href="{% url url_send_pm_by_nick usr.nickname %}" title='отправить лс'>pm</a>]
+                {% if user == usr %}[<a class='act_link' href='{% url auth_password_change %}' title='сменить пароль'>***</a>]{% endif %}
+
+                {% if user.is_staff %}[{{ usr.username }}]{% endif %}
+
 	</div><!-- msg_footer -->
 </div> <!-- message -->
 </center>

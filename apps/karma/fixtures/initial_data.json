@@ -1,41 +1,5 @@
 [
  {
-  "pk": 3, 
-  "model": "karma.karma", 
-  "fields": {
-   "comment": "\u0415\u0449\u0435 \u0430\u043f ;)", 
-   "voter": 2, 
-   "url": "", 
-   "value": 1, 
-   "user": 3, 
-   "date": "2010-08-18 12:39:59"
-  }
- }, 
- {
-  "pk": 2, 
-  "model": "karma.karma", 
-  "fields": {
-   "comment": "\u041c\u0435\u0433\u0430 \u0430\u043f!", 
-   "voter": 3, 
-   "url": "", 
-   "value": 1, 
-   "user": 1, 
-   "date": "2010-08-18 10:55:32"
-  }
- }, 
- {
-  "pk": 1, 
-  "model": "karma.karma", 
-  "fields": {
-   "comment": "\u041f\u043b\u044e\u0441\u0435\u0433 :)", 
-   "voter": 1, 
-   "url": "", 
-   "value": 1, 
-   "user": 3, 
-   "date": "2010-08-18 09:43:01"
-  }
- }, 
- {
   "pk": 1, 
   "model": "karma.karmastatus", 
   "fields": {

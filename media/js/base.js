@@ -31,3 +31,7 @@ var done = function(res,status){
 	}else{
 	}
 }
+function go_to(loc){
+    //document.location = loc;
+    alert(this);
+}

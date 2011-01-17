@@ -26,11 +26,11 @@
 			{% endspaceless %}
 		{% endfor %}
 	</select>
-</form>
+</form>{% if gallery_id %}
 <script language='javascript' type='text/javascript'>
 	g_list = document.getElementById('g_list');
 	g_list.value = {{ gallery_id }}
-</script>
+</script>{% endif %}
 {% comment %}{% for g in galleries %}{% get_images_count for g as img_count %}
 <div id='galleries_list'>
 	<a href='/gallery/{{ g.id }}'>{{ g.name }}
@@ -43,10 +43,18 @@
 {% for image in images.object_list %}
     {% include settings.document.image_inc %} 
 {% endfor %}
-{% endwith %}
 
  <br clear="all">
- {% include settings.document.links %}
+<script language='javascript'>
+    $(document).ready(function(){
+        $('.frame').hover(function(){
+                    $(this).toggleClass('frame_hover');
+        }); // hover
+    });
+</script>
+{% endwith %}
+
+{% include settings.document.links %}
 {% else %}
 {% include settings.document.nothing_inc %}
 {% endif %}

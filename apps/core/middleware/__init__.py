@@ -84,7 +84,7 @@ class UserSettingsMiddleware(object):
     def process_request(self,request):
         from apps.core.models import Settings
         #for user that exists
-        if hasattr(request.user,'nickname'):
+        if request.user.is_authenticated():
             try:
                 s = Settings.objects.get(user=request.user)
                 #obsolete

@@ -2,7 +2,8 @@
 	{% get_vote for image as vote %}
 	{% bind image as vote_object %}
 	{% check_user_voted for image with user as voted %}
- <div id='galleryimage' align="center">
+{% comment %}
+<div id='galleryimage' align="center">
  <div align='right'>
     {% if user == image.owner or user.is_superuser or perms.files.delete_images %}
         <a id='button' href='/gallery/image/{{ image.id }}/delete'>удалить</a>
@@ -23,3 +24,36 @@
     <small><a href="/gallery/image/{{image.id}}/">коментарии: <b>{{ comments }}</b></a></small> {% endif %}
  </div>
  </center>
+{% endcomment %}
+
+<div class='frame {% if gallery_general %} frame_float{% endif %}' >
+    <div class='transparency tr_black'></div>
+    <div class='reflects_up'></div>
+    <div class='reflects_down'></div>
+    <div class='image'>
+        <div class='transparency tr_darker'></div>
+        <div class='reflects_up'></div>
+        <div class='reflects_left'></div>
+        <div class='actions'>
+            <div class='transparency tr_black'></div>
+        {# <a class='edit_link' href='#'>[edit]</a> #}
+        <a class='del_link' href='{% url url_delete_image image.id 'delete' %}' title='удалить'>[удалить]</a>
+        </div>
+        <center>
+            <a href='{{ image.image.url }}' target='_blank'>
+            <img src='{{ image.thumbnail.url }}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
+            </a>
+            <br>
+            {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %}
+            название: &quot;<b>{{ image.title }}</b>&quot;<br>
+            {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
+            <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
+            {# recieving comments for images #}
+            {% get_comment_count for image as comments %}
+            {% if gallery_general %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a></small>{% else %}
+            <small>коментариев: <b>{{ comments}}</b></small>
+            {% endif %}
+        </center>
+    </div>
+</div>
+    

@@ -130,6 +130,9 @@ def save_comment(request,template,vars,ct,object_pk,redirect_to=None):
 def send_email(email,content,**kwargs):
    pass 
 
+def purge_unexistable_comments():
+    pass
+
 #OVERWRITE IT =\
 #instance is the object passing through the signal
 def send_notification(instance,**kwargs):
@@ -152,7 +155,8 @@ def send_notification(instance,**kwargs):
                     instance_user = getattr(instance,kwargs['user_field'])
                 else:
                     instance_user = instance.user
-                
+                if not instance_user.is_authenticated():
+                    return
                 if 'content_field' in kwargs:
                     content = getattr(instance,kwargs['content_field'])
                 else:
