@@ -9,6 +9,7 @@ from PIL import Image
 from cStringIO import StringIO
 from apps.core.forms import RequestForm
 from apps.core.widgets import TinyMkWidget
+from django.conf import settings
 
 #abstract forms
 class IncomeFileForm(forms.Form):
