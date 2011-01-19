@@ -541,7 +541,7 @@ def show_image(request, number=1,object_model='files.image'):
     comments = paginate(comments,page,pages=_pages_) 
     #Form for authenticated user to leave their's comments
     #saves comment with all validations
-    if hasattr(request.user,'nickname'):
+    if request.user.is_authenticated():
         redirect = save_comment(request=request,template=template,
             vars={
                 'image':image,
@@ -562,7 +562,7 @@ def show_image(request, number=1,object_model='files.image'):
     form = CommentForm(request=request)
     return render_to_response(template,
         {'image':image,
-        'comments': comments,
+        'img_comments': comments,
         'form': form,
         'page': comments},
         context_instance=RequestContext(request,

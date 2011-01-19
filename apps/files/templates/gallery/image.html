@@ -11,7 +11,9 @@
 {% block text_content %}
 <center>{% include settings.document.image_inc %}</center>
 <br clear='all'>
+{% with img_comments as comments %}
 {% include settings.document.comments %}
+{% endwith %}
 {% include settings.document.links %}
 {% include settings.document.comments_form %}
 {% endblock %}
