@@ -34,6 +34,7 @@
 		<li><a title='WarMist web ресурс' href="{% url url_news %}">сайт</a></li>
 		<li><a title='Блог разработчиков' href="{% url apps.blogs.views.blog_index %}">блог</a></li>
 		<li><a title='Форум' href="{% url pybb_index %}">форум</a></li>
+                {% if self_ipaddress %}<li>{{ self_ipaddress }}</li>{% endif %}
 	</ul>
 </div>
 {% block tabs %}
