@@ -34,6 +34,7 @@
         <div class='transparency tr_darker'></div>
         <div class='reflects_up'></div>
         <div class='reflects_left'></div>
+<<<<<<< HEAD
         {% if user == image.owner or user.is_superuser or perms.files.delete_images %}
         <div class='actions'>
             <div class='transparency tr_black'></div>
@@ -45,6 +46,14 @@
         
         {% include "stars.html" %}
         <br>
+=======
+        <div class='actions'>
+            <div class='transparency tr_black'></div>
+        {# <a class='edit_link' href='#'>[edit]</a> #}
+        <a class='del_link' href='{% url url_delete_image image.id 'delete' %}' title='удалить'>[удалить]</a>
+        </div>
+        <center>
+>>>>>>> 1afed3c2990a72ae089f7bed11389a886b3fb869
             <a href='{{ image.image.url }}' target='_blank'>
             <img src='{{ image.thumbnail.url }}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
             </a>
