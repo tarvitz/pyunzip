@@ -63,6 +63,7 @@
 /* NEW sort of images */
 .frame{
     margin-left: 5px;
+    margin-top: 5px;
     width: 350px;
     height: 350px;
     position: relative;

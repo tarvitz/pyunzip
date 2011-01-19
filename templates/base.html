@@ -104,7 +104,7 @@
 			{{ unread_news }}</a></b></span>{% else %}
 		Напоминаний пока нет{% endif %}
 		{% if perms.wh.can_approve and unread_wishes %}
-		<span class='attention'>Непрочитанных пожеланий: {{ unread_wishes }}
+		<span class='attention'>Непрочитанных пожеланий: {{ unread_wishes }}</span>
 		{% endif %}
 	</div>
 	{% endif %}{% endspaceless %}
@@ -288,7 +288,6 @@
 </div> <!-- control content -->
 <!-- text content -->
 <div id="text_content"> <div class="transparency"><!-- transparency layer for text --></div>
-	<div class='reflects_left'></div>
 	<div class="content">
 		{% block text_content %}  {% endblock %}
 		{% if timeit %}{% include "timeit.html" %}{% endif %}
@@ -297,7 +296,6 @@
 		</div>
 	<br clear="all">
 	</div>
-	<div class='reflects_right'></div>
 <br clear="all">
 </div>
 <br clear="all"> <!-- очищаем control_content -->
@@ -313,6 +311,9 @@
 	miniquote = $('#horizontal_line > div > span');
 	$(document).ready(function(){
 		if (isFireFox) setInterval('update_miniquote()',60*1000);
+                $('#control_content div').hover(function(){
+                    if (! $(this).hasClass('none') ) $(this).toggleClass('hover');
+                });
 	})
 	
 	var setObjText = function(str,obj){
