@@ -46,13 +46,7 @@
         {% include "stars.html" %}
         <br>
         
-        <div class='actions'>
-            <div class='transparency tr_black'></div>
-        {# <a class='edit_link' href='#'>[edit]</a> #}
-        <a class='del_link' href='{% url url_delete_image image.id 'delete' %}' title='удалить'>[удалить]</a>
-        </div>
         <center>
-            
             <a href='{{ image.image.url }}' target='_blank'>
             <img src='{{ image.thumbnail.url }}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
             </a>
