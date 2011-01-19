@@ -177,6 +177,7 @@ def upload_replay(request,game):
 
     form = UploadReplayForm()
     form.fields['version'].choices = version_choices
+    form.fields['hidden_syntax'].initial = settings.SYNTAX[0][0]
     #form.fields['version']._choices = version_choices 
     return render_to_response(template,
         {'form': form},

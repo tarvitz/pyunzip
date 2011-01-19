@@ -49,6 +49,12 @@ class ActionReplayForm(forms.Form):
         comments = get_safe_message(comments)
         return comments
 
+    #always set it to default
+    def clean_hidden_syntax(self):
+        syntax = self.clean_data.get('hiddent_syntax','')
+        if not syntax:
+            return settings.SYNTAX[0][0]
+
     def clean(self):
         cleaned_data = self.cleaned_data
         nonstd_layout = cleaned_data.get('nonstd_layout')

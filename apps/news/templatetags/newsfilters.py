@@ -116,8 +116,9 @@ def bbfilter(value):
 #takes syntax as arg
 @register.filter(name='render_filter')
 def render_filter(value,arg):
-    if arg == '': #could be None obj passed
-        return ''
+    #TODO: FIXME: fix this issue
+    #if arg == '': #could be None obj passed
+    #    return ''
     syntaxes = [i[0] for i in settings.SYNTAX]
     if arg in syntaxes:
         #how we could render ?
