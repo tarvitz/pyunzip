@@ -52,7 +52,7 @@ class ActionReplayForm(forms.Form):
 
     #always set it to default
     def clean_hidden_syntax(self):
-        syntax = self.cleaned_data.get('hiddent_syntax','')
+        syntax = self.cleaned_data.get('hidden_syntax','')
         if not syntax:
             return settings.SYNTAX[0][0]
 
