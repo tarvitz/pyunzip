@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from celery import conf
 from celery import states
+from celery.app import default_app
 from celery.result import AsyncResult
 from celery.task import PeriodicTask
 from celery.utils import gen_unique_id
@@ -85,7 +85,8 @@ class TestDatabaseBackend(unittest.TestCase):
 
         self.assertEqual(b.TaskModel._default_manager.count(), 3)
 
-        then = datetime.now() - conf.TASK_RESULT_EXPIRES * 2
+        then = datetime.now() - \
+                default_app.conf.CELERY_TASK_RESULT_EXPIRES * 2
         # Have to avoid save() because it applies the auto_now=True.
         b.TaskModel._default_manager.filter(task_id__in=ids[:-1]) \
                                     .update(date_done=then)

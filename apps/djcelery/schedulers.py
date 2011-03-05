@@ -42,11 +42,13 @@ class ModelEntry(ScheduleEntry):
         self.model = model
 
         if not model.last_run_at:
-            model.last_run_at = self._default_now()
+            model.last_run_at = datetime.now()
         self.last_run_at = model.last_run_at
 
-    def _default_now(self):
-        return datetime.now()
+    def is_due(self):
+        if not self.model.enabled:
+            return False, 5.0   # 5 second delay for re-enable.
+        return self.schedule.is_due(self.last_run_at)
 
     def next(self):
         self.model.last_run_at = datetime.now()
@@ -100,15 +102,16 @@ class DatabaseScheduler(Scheduler):
     _last_timestamp = None
 
     def __init__(self, *args, **kwargs):
-        Scheduler.__init__(self, *args, **kwargs)
-        self.max_interval = 5
         self._dirty = set()
         self._last_flush = None
         self._flush_every = 3 * 60
         self._finalize = Finalize(self, self.flush, exitpriority=5)
+        Scheduler.__init__(self, *args, **kwargs)
+        self.max_interval = 5
 
     def setup_schedule(self):
-        pass
+        self.install_default_entries(self.schedule)
+        self.update_from_dict(self.app.conf.CELERYBEAT_SCHEDULE)
 
     def all_as_schedule(self):
         self.logger.debug("DatabaseScheduler: Fetching database schedule")
@@ -122,6 +125,15 @@ class DatabaseScheduler(Scheduler):
 
     def schedule_changed(self):
         if self._last_timestamp is not None:
+            # If MySQL is running with transaction isolation level
+            # REPEATABLE-READ (default), then we won't see changes done by
+            # other transactions until the current transaction is
+            # committed (Issue #41).
+            try:
+                transaction.commit()
+            except transaction.TransactionManagementError:
+                pass  # not in transaction management.
+
             ts = self.Changes.last_change()
             if not ts or ts < self._last_timestamp:
                 return False

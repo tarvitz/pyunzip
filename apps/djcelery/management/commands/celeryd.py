@@ -5,9 +5,10 @@ Start the celery daemon from the Django management command.
 """
 from celery.bin import celeryd
 
+from apps.djcelery.app import app
 from apps.djcelery.management.base import CeleryCommand
 
-worker = celeryd.WorkerCommand()
+worker = celeryd.WorkerCommand(app=app)
 
 
 class Command(CeleryCommand):

@@ -7,15 +7,15 @@ DEFAULT_APPS = ("django.contrib.auth",
                 "django.contrib.sites",
                 "django.contrib.admin",
                 "django.contrib.admindocs",
-                "djcelery")
+                "apps.djcelery")
 
-DEFAULTS = {"ROOT_URLCONF": "djcelery.monproj.urls",
+DEFAULTS = {"ROOT_URLCONF": "apps.djcelery.monproj.urls",
             "DATABASE_ENGINE": "sqlite3",
-            "DATABASE_NAME": "djcelerymon.db",
+            "DATABASE_NAME": "apps.djcelerymon.db",
             "BROKER_HOST": "localhost",
-            "BROKER_USER": "guest",
-            "BROKER_PASSWORD": "guest",
-            "BROKER_VHOST": "/",
+            "BROKER_USER": "tarvitz",
+            "BROKER_PASSWORD": "xv88zf506az",
+            "BROKER_VHOST": "/imperium",
             "INSTALLED_APPS": DEFAULT_APPS,
             "DEBUG": True}
 
@@ -33,7 +33,7 @@ def configure():
 
 
 def run_monitor(argv):
-    from apps.djcelery.management.commands import djcelerymon
+    from apps.djcelery.management.commands from apps import djcelerymon
     djcelerymon.Command().run_from_argv([argv[0], "djcelerymon"] + argv[1:])
 
 

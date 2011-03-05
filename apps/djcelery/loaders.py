@@ -1,7 +1,10 @@
 import imp
 import importlib
+import warnings
 
+from celery import signals
 from celery.loaders.base import BaseLoader
+from celery.datastructures import DictAttribute
 
 from django.core.mail import mail_admins
 
@@ -16,13 +19,28 @@ class DjangoLoader(BaseLoader):
             "database": "apps.djcelery.backends.database.DatabaseBackend",
             "cache": "apps.djcelery.backends.cache.CacheBackend"}
 
+    def __init__(self, *args, **kwargs):
+        super(DjangoLoader, self).__init__(*args, **kwargs)
+        self._install_signal_handlers()
+
+    def _install_signal_handlers(self):
+        # Need to close any open database connection after
+        # any embedded celerybeat process forks.
+        signals.beat_embedded_init.connect(self.close_database)
+
     def read_configuration(self):
         """Load configuration from Django settings."""
         from django.conf import settings
         self.configured = True
-        return settings
+        # Default backend needs to be the database backend for backward
+        # compatibility.
+        backend = getattr(settings, "CELERY_RESULT_BACKEND", None) or \
+                    getattr(settings, "CELERY_BACKEND", None)
+        if not backend:
+            settings.CELERY_RESULT_BACKEND = "database"
+        return DictAttribute(settings)
 
-    def close_database(self):
+    def close_database(self, **kwargs):
         import django.db
         db_reuse_max = getattr(self.conf, "CELERY_DB_REUSE_MAX", None)
         if not db_reuse_max:
@@ -33,9 +51,8 @@ class DjangoLoader(BaseLoader):
         self._db_reuse += 1
 
     def close_cache(self):
-        from django.core import cache
-        # reset cache connection (if supported).
         try:
+            from django.core import cache
             cache.cache.close()
         except (TypeError, AttributeError):
             pass
@@ -57,6 +74,12 @@ class DjangoLoader(BaseLoader):
         listed in ``INSTALLED_APPS``.
 
         """
+
+        from django.conf import settings
+        if settings.DEBUG:
+            warnings.warn("Using settings.DEBUG leads to a memory leak, never"
+                          "use this setting in production environments!")
+
         # the parent process may have established these,
         # so need to close them.
         self.close_database()
@@ -64,7 +87,7 @@ class DjangoLoader(BaseLoader):
         self.import_default_modules()
         autodiscover()
 
-    def mail_admins(self, subject, body, fail_silently=False):
+    def mail_admins(self, subject, body, fail_silently=False, **kwargs):
         return mail_admins(subject, body, fail_silently=fail_silently)
 
 

@@ -7,14 +7,13 @@ from django.template import TemplateDoesNotExist
 
 from anyjson import deserialize
 
-from celery import conf
 from celery import states
-from celery.backends import default_backend
+from celery.app import default_app
 from celery.exceptions import RetryTaskError
 from celery.datastructures import ExceptionInfo
-from celery.decorators import task
+from celery.task import task
 from celery.utils import gen_unique_id, get_full_cls_name
-from celery.utils.functional import curry
+from celery.utils.functional import partial
 
 from apps.djcelery.views import task_webhook
 from apps.djcelery.tests.req import MockRequest
@@ -24,10 +23,24 @@ def reversestar(name, **kwargs):
     return reverse(name, kwargs=kwargs)
 
 
-task_is_successful = curry(reversestar, "celery-is_task_successful")
-task_status = curry(reversestar, "celery-task_status")
-task_apply = curry(reverse, "celery-apply")
-registered_tasks = curry(reverse, "celery-tasks")
+class MyError(Exception):
+    # On Py2.4 repr(exc) includes the object id, so comparing
+    # texts is pointless when the id the "same" KeyError does not match.
+
+    def __repr__(self):
+        return "<%s: %r>" % (self.__class__.__name__, self.args)
+
+
+class MyRetryTaskError(Exception):
+
+    def __repr__(self):
+        return "<%s: %r>" % (self.__class__.__name__, self.args)
+
+
+task_is_successful = partial(reversestar, "celery-is_task_successful")
+task_status = partial(reversestar, "celery-task_status")
+task_apply = partial(reverse, "celery-apply")
+registered_tasks = partial(reverse, "celery-tasks")
 scratch = {}
 
 
@@ -45,7 +58,7 @@ def catch_exception(exception):
     try:
         raise exception
     except exception.__class__, exc:
-        exc = default_backend.prepare_exception(exc)
+        exc = default_app.backend.prepare_exception(exc)
         return exc, ExceptionInfo(sys.exc_info()).traceback
 
 
@@ -76,23 +89,23 @@ class ViewTestCase(DjangoTestCase):
 class test_task_apply(ViewTestCase):
 
     def test_apply(self):
-        conf.ALWAYS_EAGER = True
+        default_app.conf.CELERY_ALWAYS_EAGER = True
         try:
             self.client.get(task_apply(kwargs={"task_name":
                 mytask.name}) + "?x=4&y=4")
             self.assertEqual(scratch["result"], 16)
         finally:
-            conf.ALWAYS_EAGER = False
+            default_app.conf.CELERY_ALWAYS_EAGER = False
 
     def test_apply_raises_404_on_unregistered_task(self):
-        conf.ALWAYS_EAGER = True
+        default_app.conf.CELERY_ALWAYS_EAGER = True
         try:
             name = "xxx.does.not.exist"
-            action = curry(self.client.get, task_apply(kwargs={
+            action = partial(self.client.get, task_apply(kwargs={
                         "task_name": name}) + "?x=4&y=4")
             self.assertRaises(TemplateDoesNotExist, action)
         finally:
-            conf.ALWAYS_EAGER = False
+            default_app.conf.CELERY_ALWAYS_EAGER = False
 
 
 class test_registered_tasks(ViewTestCase):
@@ -124,7 +137,7 @@ class test_webhook_task(ViewTestCase):
         def error_webhook(request):
             x = int(request.GET["x"])
             y = int(request.GET["y"])
-            raise KeyError(x + y)
+            raise MyError(x + y)
 
         request = MockRequest().get("/tasks/error", dict(x=10, y=10))
         response = error_webhook(request)
@@ -137,13 +150,13 @@ class test_task_status(ViewTestCase):
 
     def assertStatusForIs(self, status, res, traceback=None):
         uuid = gen_unique_id()
-        default_backend.store_result(uuid, res, status,
+        default_app.backend.store_result(uuid, res, status,
                                      traceback=traceback)
         json = self.client.get(task_status(task_id=uuid))
         expect = dict(id=uuid, status=status, result=res)
-        if status in default_backend.EXCEPTION_STATES:
-            instore = default_backend.get_result(uuid)
-            self.assertEqual(str(instore.args), str(res.args))
+        if status in default_app.backend.EXCEPTION_STATES:
+            instore = default_app.backend.get_result(uuid)
+            self.assertEqual(str(instore.args[0]), str(res.args[0]))
             expect["result"] = repr(res)
             expect["exc"] = get_full_cls_name(res.__class__)
             expect["traceback"] = traceback
@@ -154,12 +167,12 @@ class test_task_status(ViewTestCase):
         self.assertStatusForIs(states.SUCCESS, "The quick brown fox")
 
     def test_failure(self):
-        exc, tb = catch_exception(KeyError("foo"))
+        exc, tb = catch_exception(MyError("foo"))
         self.assertStatusForIs(states.FAILURE, exc, tb)
 
     def test_retry(self):
-        oexc, _ = catch_exception(KeyError("Resource not available"))
-        exc, tb = catch_exception(RetryTaskError(str(oexc), oexc))
+        oexc, _ = catch_exception(MyError("Resource not available"))
+        exc, tb = catch_exception(MyRetryTaskError(str(oexc), oexc))
         self.assertStatusForIs(states.RETRY, exc, tb)
 
 
@@ -168,7 +181,7 @@ class test_task_is_successful(ViewTestCase):
     def assertStatusForIs(self, status, outcome):
         uuid = gen_unique_id()
         result = gen_unique_id()
-        default_backend.store_result(uuid, result, status)
+        default_app.backend.store_result(uuid, result, status)
         json = self.client.get(task_is_successful(task_id=uuid))
         self.assertJSONEqual(json, {"task": {"id": uuid,
                                              "executed": outcome}})

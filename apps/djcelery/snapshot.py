@@ -8,8 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from celery import states
 from celery.events.state import Task
 from celery.events.snapshot import Polaroid
-from celery.utils import maybe_iso8601
 from celery.utils.compat import defaultdict
+from celery.utils.timeutils import maybe_iso8601
 
 from apps.djcelery.models import WorkerState, TaskState
 
@@ -128,8 +128,9 @@ class Camera(Polaroid):
         dirty = sum(self.TaskState.objects.expire_by_states(states, expires)
                         for states, expires in self.expire_states.items())
         if dirty:
-            self.debug("Cleanup: Marked %s objects as dirty." % (dirty, ))
+            self.logger.debug(
+                    "Cleanup: Marked %s objects as dirty." % (dirty, ))
             self.TaskState.objects.purge()
-            self.debug("Cleanup: %s objects purged." % (dirty, ))
+            self.logger.debug("Cleanup: %s objects purged." % (dirty, ))
             return dirty
         return 0

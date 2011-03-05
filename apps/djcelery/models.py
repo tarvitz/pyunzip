@@ -3,15 +3,16 @@ from time import time, mktime
 
 import django
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.db.models import signals
 from django.utils.translation import ugettext_lazy as _
 
-from apps.picklefield.fields import PickledObjectField
+from picklefield.fields import PickledObjectField
 
-from celery import conf
 from celery import schedules
 from celery import states
+from celery.app import default_app
 from celery.utils.timeutils import timedelta_seconds
 
 from apps.djcelery.managers import TaskManager, TaskSetManager, ExtendedManager
@@ -93,14 +94,21 @@ class IntervalSchedule(models.Model):
         return schedules.schedule(timedelta(**{self.period: self.every}))
 
     @classmethod
-    def from_schedule(cls, schedule):
-        return cls(every=timedelta_seconds(schedule.run_every),
-                   period="seconds")
+    def from_schedule(cls, schedule, period="seconds"):
+        every = timedelta_seconds(schedule.run_every)
+        try:
+            return cls.objects.get(every=every, period=period)
+        except cls.DoesNotExist:
+            return cls(every=every, period=period)
+        except MultipleObjectsReturned:
+            cls.objects.filter(every=every, period=period).delete()
+            return cls(every=every, period=period)
 
     def __unicode__(self):
         if self.every == 1:
-            return _(u"every %s") % self.period[:-1]
-        return _(u"every %s %s") % (self.every, self.period)
+            return _(u"every %(period)s") % {"period": self.period[:-1]}
+        return _(u"every %(every)s %(period)s") % {"every": self.every,
+                                                   "period": self.period}
 
 
 class CrontabSchedule(models.Model):
@@ -256,7 +264,7 @@ class WorkerState(models.Model):
 class TaskState(models.Model):
     state = models.CharField(_(u"state"),
                 max_length=64,
-                choices=TASK_STATE_CHOICES)
+                choices=TASK_STATE_CHOICES, db_index=True)
     task_id = models.CharField(_(u"UUID"),
                 max_length=36, unique=True)
     name = models.CharField(_(u"name"),
@@ -274,7 +282,7 @@ class TaskState(models.Model):
     retries = models.IntegerField(_(u"number of retries"), default=0),
     worker = models.ForeignKey(WorkerState, null=True,
                                verbose_name=_("worker"))
-    hidden = models.BooleanField(editable=False, default=False)
+    hidden = models.BooleanField(editable=False, default=False, db_index=True)
 
     objects = TaskStateManager()
 
@@ -304,6 +312,6 @@ class TaskState(models.Model):
 if (django.VERSION[0], django.VERSION[1]) >= (1, 1):
     # keep models away from syncdb/reset if database backend is not
     # being used.
-    if conf.RESULT_BACKEND != 'database':
+    if default_app.conf.CELERY_RESULT_BACKEND != 'database':
         TaskMeta._meta.managed = False
         TaskSetMeta._meta.managed = False

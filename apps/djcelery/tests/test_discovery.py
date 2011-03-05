@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from celery.task import tasks
+from celery.registry import tasks
 
 from apps.djcelery.loaders import autodiscover
 from apps.djcelery.tests.utils import unittest

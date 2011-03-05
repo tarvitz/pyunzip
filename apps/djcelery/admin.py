@@ -13,7 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from celery import states
 from celery import registry
-from celery.messaging import establish_connection
+from celery.app import default_app
 from celery.task.control import broadcast, revoke, rate_limit
 from celery.utils import abbrtask
 
@@ -167,14 +167,35 @@ class TaskMonitor(ModelMonitor):
     list_filter = ("state", "name", "tstamp", "eta", "worker")
     search_fields = ("name", "task_id", "args", "kwargs", "worker__hostname")
     actions = ["revoke_tasks",
+               "terminate_tasks",
+               "kill_tasks",
                "rate_limit_tasks"]
 
     @action(_("Revoke selected tasks"))
     def revoke_tasks(self, request, queryset):
-        connection = establish_connection()
+        connection = default_app.broker_connection()
         try:
             for state in queryset:
                 revoke(state.task_id, connection=connection)
+        finally:
+            connection.close()
+
+    @action(_("Terminate selected tasks"))
+    def terminate_tasks(self, request, queryset):
+        connection = default_app.broker_connection()
+        try:
+            for state in queryset:
+                revoke(state.task_id, connection=connection, terminate=True)
+        finally:
+            connection.close()
+
+    @action(_("Kill selected tasks"))
+    def kill_tasks(self, request, queryset):
+        connection = default_app.broker_connection()
+        try:
+            for state in queryset:
+                revoke(state.task_id, connection=connection,
+                       terminate=True, signal="KILL")
         finally:
             connection.close()
 
@@ -185,7 +206,7 @@ class TaskMonitor(ModelMonitor):
         app_label = opts.app_label
         if request.POST.get("post"):
             rate = request.POST["rate_limit"]
-            connection = establish_connection()
+            connection = default_app.broker_connection()
             try:
                 for task_name in tasks:
                     rate_limit(task_name, rate, connection=connection)
@@ -314,9 +335,8 @@ class PeriodicTaskAdmin(admin.ModelAdmin):
 
     def changelist_view(self, request, extra_context=None):
         extra_context = extra_context or {}
-        if not hasattr(settings, 'CELERYBEAT_SCHEDULER') \
-           or settings.CELERYBEAT_SCHEDULER != \
-                'djcelery.schedulers.DatabaseScheduler':
+        scheduler = getattr(settings, "CELERYBEAT_SCHEDULER", None)
+        if scheduler != 'djcelery.schedulers.DatabaseScheduler':
             extra_context['wrong_scheduler'] = True
         return super(PeriodicTaskAdmin, self).changelist_view(request,
                                                               extra_context)
