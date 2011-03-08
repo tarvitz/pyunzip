@@ -452,6 +452,9 @@ div#search_form .submit{
 	font-size: x-small;
 	margin: 0 3px;
 }
+div.stars{
+    margin-bottom: 5px;
+}
 a.stars img{
 	border: 0px;
 }
