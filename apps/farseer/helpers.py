@@ -40,8 +40,12 @@ def get_discounts():
     #names
     r = re.compile(r'<h4>(.*?)</h4>',re.I|re.U)
     names = r.findall(block)
+    #url
+    #r = re.compile(
+    r = re.compile(r'href="(http://store.steampowered.com/app/.*?)"',re.S|re.I|re.U)
+    urls = r.findall(block)
     #return dict(zip(names,prices))
-    return zip(names,real_prices,prices)
+    return zip(names,real_prices,prices,urls)
 
 def update_discount_items(): 
     Discount.objects.all().delete()
@@ -52,7 +56,7 @@ def update_discount_items():
         #response.write('falied')
         return None
     for i in discounts:
-        d = Discount(name=i[0],price=i[1],current_price=i[2])
+        d = Discount(name=i[0],price=i[1],current_price=i[2],url=i[3])
         d.save()
     return True
 

@@ -7,6 +7,7 @@ class Discount(models.Model):
     name = models.CharField(_('Game name'),max_length=100)
     price = models.FloatField(_('Price'))
     current_price = models.FloatField(_('Discount'))
+    url = models.URLField(_('URL'),max_length=200)
 
     def __unicode__(self):
         return name
