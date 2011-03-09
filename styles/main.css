@@ -612,6 +612,9 @@ p{
 #blackship a{
 	color: black;
 }
+.new {
+    color: lightgreen;
+}
 /*disable ugly border within firefox img links*/
 .profile img{border: 0px;}
 .account_user_img{
