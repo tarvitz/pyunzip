@@ -59,7 +59,7 @@
        <li class='tablist-inner-row'>
         {% if steam_discounts %}
         {% for d in steam_discounts %}
-            <b>{{ d.name }}</b> <strike>{{ d.price }}</strike>&nbsp;<i>{{ d.current_price }}</i>
+            <b><a style='color: black' class='steam_link' href='{{ d.url }}' target="_blank">{{ d.name }}</a></b> <strike>${{ d.price }}</strike>&nbsp;<i>${{ d.current_price }}</i>
                 (<font color='lightgreen'>{{ d.discount }}%</font>)<br>
         {% endfor %}
         {% endif %}
