@@ -16,6 +16,7 @@
         <div class="tab-selector first active" onclick="openTab(this, 'last-topics')">{% trans "Last topics" %}</div>
         <div class="tab-selector" onclick="openTab(this, 'last-posts')">{% trans "Last posts" %}</div>
         <div class="tab-selector" onclick="openTab(this, 'stats')">{% trans "Statistics" %}</div>
+        <div class="tab-selector" onclick="openTab(this, 'discounts')">{% trans "Discounts" %}</div>
         <div class="clear"></div>
     </h3>
     <ul class="tablist-inner tab-body last-topics">
@@ -53,6 +54,16 @@
         <li class="tablist-inner-row">{% trans "Users" %}: {{ quick.users }}</li>
         {% endif %}
         </table>
+    </ul>
+    <ul class='tablist-inner tab-body discounts' style="display:none;">
+       <li class='tablist-inner-row'>
+        {% if steam_discounts %}
+        {% for d in steam_discounts %}
+            <b>{{ d.name }}</b> <strike>{{ d.price }}</strike>&nbsp;<i>{{ d.current_price }}</i>
+                (<font color='lightgreen'>{{ d.discount }}%</font>)<br>
+        {% endfor %}
+        {% endif %}
+       </li>
     </ul>
     </li>
 </ul>
