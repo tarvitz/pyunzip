@@ -18,7 +18,7 @@
     <div class="msg_headline">
 		<div class="transparency tr_black"></div>
 		{% if not block_edit_comments %}{% ifequal c.user user %}
-			<a href="{% url apps.news.views.edit_comment id=c.id %}?j={{ c.id }}" class="msg_button">[править]</a>
+			<a href="{% url url_edit_comment id=c.id %}?j=y" class="msg_button">[править]</a>
 		{% endifequal %}{% endif %}
 
 		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>

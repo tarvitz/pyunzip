@@ -48,26 +48,9 @@ def show_post(request,id,object_model='blogs.post'):
     page = request.GET.get('page',1)
     _pages_ = get_settings(request.user,'comments_on_page',30)
     comments = paginate(raw_comments,page,pages=_pages_,jump='#comments')
-    #saves comment with all validation
-    if hasattr(request.user,'nickname'):
-        redirect = save_comment(request=request,template=template,
-            vars={
-                'p':post,
-                'comments':comments,
-            },
-            ct=ct,object_pk=str(post.id)
-        )
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            else:
-                return render_to_response(template,
-                    {'p':post,
-                    'form':redirect['form']},
-                    context_instance=RequestContext(request,
-                        processors=[benchmark]))
-
-    form = CommentForm()
+    
+    form = CommentForm(request=request,initial={'app_n_model':'blogs.post','obj_id': id,'url':
+                request.META.get('PATH_INFO','')})
     return render_to_response(template,{'p':post,'form':form,'comments':comments},
         context_instance=RequestContext(request,processors=[benchmark]))
 

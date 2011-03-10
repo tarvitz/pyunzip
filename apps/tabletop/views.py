@@ -52,24 +52,9 @@ def show_battle_report(request,id):
 
     ct = get_content_type(BattleReport)
     #kind a huge one, we need to cut it up ^^
-    if hasattr(request.user,'nickname'):
-        redirect = save_comment(request=request,template=template,
-            vars={'battle_report':battle_report,
-            'comments':comments},
-            ct=ct,object_pk=str(id),
-            redirect_to=request.META.get('HTTP_REFERER','/'))
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            else:
-                return render_to_response(template,
-                    {'battle_report': battle_report,
-                    'comments':comments,
-                    'form':redirect['form']},
-                    context_instance=RequestContext(request,
-                        processors=[benchmark]))
-
-    form = CommentForm(request=request)
+    #upd: we 'ud it up!
+    form = CommentForm(request=request,initial={'app_n_model':'tabletop.battlereport','obj_id': id,'url':
+                request.META.get('PATH_INFO','')})
     return render_to_response(template,
         {
             'battle_report':battle_report,
@@ -316,22 +301,8 @@ def show_roster(request,id):
     page = request.GET.get('page',1)
     comments = paginate(comments,page,pages=_pages_,jump='#comments')
 
-    if hasattr(request.user,'nickname'):
-        redirect = save_comment(request=request,template=template,
-            vars={'roster':roster,
-            'comments':comments},
-            ct=ct,object_pk=str(id),
-            redirect_to=request.META.get('HTTP_REFERER','/'))
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            else:
-                return direct_to_template(request,template,
-                    {'roster': roster,
-                    'comments':comments,
-                    'form':redirect['form']})
-
-    form = CommentForm(request=request)
+    form = CommentForm(request=request,initial={'app_n_model':'tabletop.roster','obj_id': id,'url':
+                request.META.get('PATH_INFO','')})
 
     return render_to_response(template,
         {'roster':roster,'form':form,'comments':comments},

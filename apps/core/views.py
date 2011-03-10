@@ -1,14 +1,17 @@
 # coding: utf-8
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
-from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm
+from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking
+from apps.core.helpers import validate_object
+
 from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext,Template,Context
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from django.contrib.comments.models import Comment
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import Q
@@ -19,7 +22,7 @@ from apps.news.models import News
 from django.core.paginator import InvalidPage, EmptyPage
 from django.contrib.contenttypes.models import ContentType
 from django.views.generic.simple import direct_to_template
-from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act
+from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,get_content_type
 from django.shortcuts import get_object_or_404
 #simple
 
@@ -376,3 +379,87 @@ def add_edit_css(request):
         if css:
             form.fields['css'].initial = css.css
         return direct_to_template(request,template,{'form':form})
+
+@login_required
+def save_comment(request):
+    #obj_id could cause a lot of problems if it would have much bigger blocks
+    #of data then simple strings or numbers
+    #use it careful until it's overwritten
+    
+    template = get_skin_template(request.user, 'add_comments_site.html')
+    if request.method == 'POST':
+        form = CommentForm(request.POST,request=request)
+        if form.is_valid():
+            app_n_model = form.cleaned_data['app_n_model']
+            obj_id = form.cleaned_data['obj_id']
+            #Prevent saving comment for void
+            if not validate_object(app_n_model,obj_id):  #app_label.model 13 for example
+                return HttpResponseRedirect('/comment/could/not/be/saved') #replace it with something wise 
+
+            ct = get_content_type(app_n_model) #we had already checked up existance of single object
+            comment = form.cleaned_data['comment']
+            syntax = form.cleaned_data['syntax']
+            hidden_syntax = form.cleaned_data['hidden_syntax']
+            subscribe = form.cleaned_data['subscribe'] #implement announcement here
+            unsubscribe = form.cleaned_data['unsubscribe'] #WTF??? Cleanse this as soon as possible
+            #saving comment
+            
+            c = get_object_or_none(Comment,content_type=ct,object_pk=str(obj_id))
+            #exists, updating
+            from datetime import datetime
+            now = datetime.now()
+            if c:
+                if c.comment != comment:
+                    #new comment and not a dublicate
+                    c.comment += comment
+                    c.submit_date = now
+                    ip = request.META.get('REMOTE_ADDR','')
+                    if ip: c.ip_address = ip
+                    c.save()
+            else:
+                c = Comment(user=request.user,syntax=syntax,submit_date=now,
+                    is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
+                c.comment = comment
+                c.save()
+            url = form.cleaned_data['url']
+            page = 'last'
+            #deprecated :)
+            #page = request.GET.get('page','') or form.cleaned_data['page']
+            if page: url += '?page=%s' % page
+            return HttpResponseRedirect("%s#c%i" % (url,c.id))
+        else:
+            return direct_to_template(request,template,{'form':form})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+
+#TODO: TEST IT right
+@login_required
+def edit_comment(request,id):
+    template = get_skin_template(request.user, 'edit_comment_ng.html')
+    c = get_object_or_none(Comment,id=id)
+    if not c:
+        return HttpResponseRedirect('/comment/not/found')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST, request=request)
+        if form.is_valid():
+            fields = ('comment','syntax',
+                'hidden_syntax')
+            for f in fields:
+                setattr(c,f,form.cleaned_data[f])
+            url = form.cleaned_data['url']
+            c.save()
+            _jmp = request.GET.get('j','')
+            if _jmp: url += '#c%s' % _jmp
+            return HttpResponseRedirect(url)
+            
+        else:
+            return direct_to_template(request,template,{'form':form})
+    url = request.META.get('HTTP_REFERER','/')
+    _jmp = request.GET.get('j','') #We jump :)
+    if _jmp: url += '#c%i' % c.id
+
+    form = CommentForm(initial={'comment':c.comment,
+        'syntax':c.syntax,'url':url
+        })
+
+    return direct_to_template(request,template,{'form':form,'comment_id':c.id})
