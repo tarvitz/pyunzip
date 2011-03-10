@@ -67,5 +67,6 @@ urlpatterns = patterns('apps.core.views',
         name='url_db_css'),
     url('^db/css/edit/$','add_edit_css',
         name='url_add_edit_css'),
-
+    url('^ipaddress/$','get_ip_address',
+        name='url_get_ip_address'),
 )
