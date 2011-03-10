@@ -30,6 +30,7 @@ from os import stat
 #filters
 from apps.news.templatetags.newsfilters import spadvfilter,bbfilter
 from django.template.defaultfilters import striptags
+from apps.tracker.decorators import user_visit
 from apps.core.helpers import get_settings,save_comment,paginate,can_act
 from apps.core.decorators import benchmarking,update_subscription_new,has_permission,render_to
 from apps.core import benchmark #processors
@@ -87,7 +88,7 @@ def news(request,approved='approved',category=''):
     for n in all_news:
         if  older > n.date:
             n.archive()
-
+    #TODO: DELETE duplicated code
     if request.user.is_superuser or can_approve_news:
         news = News.objects.all().order_by('-date').filter(category__name__icontains=category)
         if  approved == 'unapproved':
@@ -100,7 +101,6 @@ def news(request,approved='approved',category=''):
     else:
         news = News.objects.filter(approved__exact=True).order_by('-date')
     _pages_ = get_settings(request.user,'news_on_page',30)
-    
     news = paginate(news,page,pages=_pages_,
         view='apps.news.views.news')
 
@@ -116,6 +116,7 @@ def search_article(request):
     return render_to_response(template, {'form':''},
     context_instance=RequestContext(request))
 
+#@user_visit(object_pk='number',ct='news.news') testing
 @update_subscription_new(app_model='news.news',pk_field='number')
 def show_article(request, number=1,object_model='news.news'):
     template = get_skin_template(request.user,'news/article.html')
@@ -137,7 +138,7 @@ def show_article(request, number=1,object_model='news.news'):
     comments = Comment.objects.filter(content_type=news_type.id, object_pk=str(article.id))
     _pages_ = get_settings(request.user,'comments_on_page',20)
     comments = paginate(comments,page,pages=_pages_)
-
+    """
     #checks for validation and saves a comment
     if hasattr(request.user,'nickname'):
         redirect = save_comment(request=request,template=template,
@@ -152,8 +153,11 @@ def show_article(request, number=1,object_model='news.news'):
                     {'article':article,
                     'page':comments,
                     'form':redirect['form']})
-    
-    form = CommentForm(request=request)
+    """
+    #app_n_model breaks functionallity
+    #form = CommentForm(app_n_model='news.news',obj_id=number,request=request)
+    form = CommentForm(request=request,initial={'app_n_model':'news.news','obj_id': number,'url':
+        request.META.get('PATH_INFO',''),'page':request.GET.get('page','')})
     return render_to_response(template,
         {'article': article,
         'comments': comments,
@@ -295,7 +299,7 @@ def add_article(request,id=None,edit_flag=False):
 @login_required
 #@has_permission('comments.change_comment') #blocks the comment edition
 def edit_comment(request, id=0):
-    template = get_skin_template(request.user, "edit_comment.html")
+    template = get_skin_template(request.user, "edit_comment_ng.html")
     can_edit_comments = request.user.has_perm('news.edit_comments') 
     try:
         comment = Comment.objects.get(id=id)
@@ -308,16 +312,16 @@ def edit_comment(request, id=0):
         form = CommentForm(request.POST,request=request)
         if form.is_valid():
             comment = form.cleaned_data['comment']
-            next = form.cleaned_data['next']
+            url = form.cleaned_data['url']
             _jump = request.GET.get('j',None) 
-            if _jump: next += "#j=%s" % _jump
+            if _jump: url += "#j=%s" % _jump
             syntax = form.cleaned_data['syntax']
             c = Comment.objects.get(id=id)
             c.comment = comment
             c.syntax = syntax
             c.save()
-            if next:
-                return HttpResponseRedirect(next)
+            if url:
+                return HttpResponseRedirect(url)
             return HttpResponseRedirect('/comment/edit/successfull') #request.META['HTTP_REFERER']
         else:
             return render_to_response(template,
@@ -328,7 +332,7 @@ def edit_comment(request, id=0):
     if request.META.get('HTTP_REFERER',None):
         referer = "%s%s" % (request.META['HTTP_REFERER'], "#c%i" % int(id) )
     else: referer = '/'
-    form.fields['next'].initial = referer
+    form.fields['url'].initial = referer
     form.fields['syntax'].initial = comment.syntax
     return render_to_response(template,
         {'form':form},

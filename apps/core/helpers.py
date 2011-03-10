@@ -1,6 +1,7 @@
 # coding: utf-8
 #
 from apps.core.forms import CommentForm
+from apps.tracker.decorators import user_add_content
 from django.http import HttpResponseRedirect
 from django.views.generic.simple import direct_to_template
 from django.contrib.comments.models import Comment
@@ -14,7 +15,7 @@ from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage,EmptyPage
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
-from celery.decorators import task
+from celery.task import task
 from django.utils.translation import ugettext_lazy as _
 send_email_message = task()(send_mail)
 
@@ -50,7 +51,8 @@ def can_act(func):
 
 @login_required
 @can_act
-def save_comment(request,template,vars,ct,object_pk,redirect_to=None):
+#@user_add_content(ct='ct',object_pk='object_pk')
+def save_comment(request,template,vars,ct=None,object_pk=None,redirect_to=None):
     if request.method == 'POST':
         form = CommentForm(request.POST,request=request)
         if form.is_valid():
@@ -165,21 +167,21 @@ def send_notification(instance,**kwargs):
 
                 if instance_user != user:
                     announcement.notified(user)
-                    text_content = _("""
-                    Please do not answer this mail, it have been configurated by site-bot
+                    text_content = ("""Please do not answer this mail, it have been configurated by site-bot
                     
-                    There is changes within "%s" on: "%s%s"
+                    There is changes within '%s' on: '%s%s'
                     Please visit this page to firgure out that have been done there.
                     --
                     sincerely yours AstroPath
                     """ %
                         (real_object.get_title(),settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))
                     text_content
+                    
                     send_email_message.delay(_('Warmist no-replay notification'),text_content,settings.FROM_EMAIL,
                         [user.email],fail_silently=False,
                         auth_user=settings.EMAIL_HOST_USER,
                         auth_password=settings.EMAIL_HOST_PASSWORD)
-
+                    
                     #we should make it async :(
                     #from time import sleep
                     #sleep(60)
@@ -238,17 +240,38 @@ def get_user(username=None,nickname=None,id=None):
             return None
 
 def get_content_type(Object):
-    model = Object.__name__.lower()
-    app_label_raw = Object.__module__
-    app_label_raw = app_label_raw[:app_label_raw.rindex('.models')]
-    _len = len(app_label_raw.split('.'))
-    app_label = app_label_raw.split('.')[_len-1]
+    """works with ModelBase based classes, its instances
+    and with format string 'app_label.model_name'
+    retrieves content_type or raise the common django Exception
+    Examples:
+    get_content_type(User)
+    get_content_type(onsite_user)
+    get_content_type('auth.user')
+    """
+
+    if callable(Object): #class
+        #print "class: ", Object
+        #retrieving content_type from class object
+        model = Object.__name__.lower() 
+        app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
+        #ct = ContentType.objects.get(app_label=app_label,model=model)
+    elif hasattr(Object,'Meta'): #class instance
+        #print "class instance: ", Object
+        app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
+        model = Object.__class__.__name__.lower()
+        #ct = ContentType.objects.get(app_label=app_label,model=model)
+        #model = 
+    elif isinstance(Object,str) or isinstance(Object,unicode):
+        #print "str: ", Object
+        #retrieving content_type from string format 'app_label.model'
+        app_label,model = Object.split('.')
     ct = ContentType.objects.get(app_label=app_label,model=model)
     return ct
 
 def get_content_type_or_none(Object):
     try:
         ct = get_content_type(Object)
+        return ct
     except:
         return None
 
@@ -268,6 +291,9 @@ def paginate(Objects,page,**kwargs):
     else: _pages_ = 20 #by default
     #print page,isinstance(page,int)
     paginator = Paginator(Objects,_pages_)
+    #?page=last goes for the last page
+    if isinstance(page,str) or isinstance(page,unicode):
+        if page in ('last','end'): page = paginator.num_pages
     try:
         objects = paginator.page(page)
     except (EmptyPage,InvalidPage):
@@ -290,3 +316,12 @@ def get_template_or_none(template,plain=False):
             return t
     except TemplateDoesNotExist:
         return None
+
+def validate_object(app_n_label,obj_id):
+    app_label,model = app_n_label.split('.')
+    try:
+        ct = ContentType.objects.get(app_label=app_label,model=model)
+        ct.model_class().objects.get(pk=str(obj_id))
+        return True
+    except:
+        return False
