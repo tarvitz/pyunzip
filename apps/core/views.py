@@ -376,3 +376,11 @@ def add_edit_css(request):
         if css:
             form.fields['css'].initial = css.css
         return direct_to_template(request,template,{'form':form})
+
+def get_ip_address(request):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/plain'
+    from apps.helpers import get_self_ip_address
+    ip = get_self_ip_address()
+    response.write(ip or 'none detected')
+    return response
