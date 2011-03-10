@@ -15,8 +15,9 @@ urlpatterns = patterns('apps.news.views',
     (r'^article/add/$', 'add_article'),
     (r'^article/edit/(?P<id>\d+)/$','add_article', {'edit_flag':'True'}),
     (r'^article/(?P<id>\d+)/(?P<action>(approve|unapprove))/$', 'article_action'),
-    url('^comment/edit/(?P<id>\d+)/$', 'edit_comment',
-        name='url_edit_comment'),
+    #moved to apps.core.urls and apps.core.views
+    #url('^comment/edit/(?P<id>\d+)/$', 'edit_comment',
+    #    name='url_edit_comment'),
     url('^comment/(?P<id>\d+)/(?P<flag>(delete|restore))/$', 'del_restore_comment',
         name='url_del_restore_comment'), #do delete,restore
     #here is a half-a-fake function, that will be completed via core.views.approve_action, see core.urls :)

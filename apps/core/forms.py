@@ -42,14 +42,37 @@ class SettingsForm(RequestForm):
 SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
 
 #duplicates with files.forms need more 'usable' interface for comments
-class CommentForm(RequestForm):
+class CommentForm(forms.Form):
     syntax = forms.ChoiceField(choices=settings.SYNTAX,required=False)
     comment = forms.CharField(widget=TinyMkWidget())
-    next = forms.CharField(required=False,widget=forms.HiddenInput())
+    url = forms.CharField(required=False,widget=forms.HiddenInput())
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     subscribe = forms.BooleanField(required=False)
     unsubscribe = forms.BooleanField(required=False)
+    app_n_model = forms.CharField(required=False,widget=forms.HiddenInput()) #required if we add the comment
+    obj_id = forms.CharField(required=False,widget=forms.HiddenInput()) #required the same as above
+    page = forms.IntegerField(required=False,widget=forms.HiddenInput())
 
+    def __init__(self,*args,**kwargs):
+        
+        if 'request' in kwargs:
+            self.request = kwargs['request']
+            del kwargs['request']
+        #if 'app_n_model' in kwargs['request']:
+        #    self.base_fields['app_n_model'].initial = kwargs['app_n_model']
+        #    del kwargs['request']
+        #if 'obj_id' in kwargs:
+        #    self.base_fields['obj_id'].initial = kwargs['obj_id']
+        #    del kwargs['obj_id']
+
+        #overriding url by default if not set
+        if hasattr(self,'request'):
+            #if there clean value we set it up
+            self.base_fields['url'].initial = "%s/%s" % (self.request.META.get('HTTP_HOST','http://localhost'),
+                    self.request.META.get('INFO_PATH',''))
+        
+        super(CommentForm,self).__init__(*args,**kwargs)
+    
     def clean_comment(self):
         comment = self.cleaned_data['comment']
         comment = get_safe_message(comment)
@@ -58,6 +81,9 @@ class CommentForm(RequestForm):
         
         if len(comment) > 10000:
             raise forms.ValidationError(_('You can not post over 10000 symbols within your comment!'))
+       
+        #staff and super user is allowed to post
+        #any shit they want o_O
         user = self.request.user
         if user.is_superuser or user.is_staff:
             return comment
@@ -88,3 +114,4 @@ class CommentForm(RequestForm):
                 raise forms.ValidationError(_('Syntax value should be correct'))
         else:
             return syntax
+

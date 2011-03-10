@@ -213,7 +213,7 @@ def show_replay(request, number=1,object_model='files.replay'):
     #links = make_links(paginator.num_pages,'')
     #links = paginator.page_range
     comments = paginate(comments,page,pages=_pages_,jump='#comments')
-
+    """ #old, ugly and not wise code block 
     #saving comments with all validations
     #if authenticated ;)
     if hasattr(request.user,'nickname'):
@@ -238,8 +238,10 @@ def show_replay(request, number=1,object_model='files.replay'):
                     },
                     context_instance=RequestContext(request,
                         processors=[benchmark]))
+    """
 
-    form = CommentForm()
+    form = CommentForm(request=request,initial={'app_n_model':'files.replay','obj_id': number,
+    'url': request.META.get('PATH_INFO','')})
     return render_to_response(template,
         {'replay':replay,
         'comments': comments,
@@ -540,26 +542,8 @@ def show_image(request, number=1,object_model='files.image'):
     page = request.GET.get('page',1)
     comments = paginate(comments,page,pages=_pages_) 
     #Form for authenticated user to leave their's comments
-    #saves comment with all validations
-    if request.user.is_authenticated():
-        redirect = save_comment(request=request,template=template,
-            vars={
-                'image':image,
-                'page':comments,
-                'comments':comments,
-            },
-            ct=image_type,
-            object_pk=str(image.id)
-        )
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            else:
-                return direct_to_template(request,template,
-                {'image':image,
-                'page':comments,
-                'form':redirect['form']})
-    form = CommentForm(request=request)
+    form = CommentForm(request=request,initial={'app_n_model':'files.image','obj_id': number,'url':
+                request.META.get('PATH_INFO','')})
     return render_to_response(template,
         {'image':image,
         'img_comments': comments,
