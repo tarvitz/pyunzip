@@ -26,6 +26,9 @@ from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,g
 from django.shortcuts import get_object_or_404
 #simple
 
+#additional modules
+#from apps.tracker.decorators import user_add_content
+
 def action_approve_simple(request,url,message):
     if not url:
         return HttpResponseRedirect('/')
@@ -412,19 +415,21 @@ def save_comment(request):
             unsubscribe = form.cleaned_data['unsubscribe'] #WTF??? Cleanse this as soon as possible
             #saving comment
             
-            c = get_object_or_none(Comment,content_type=ct,object_pk=str(obj_id))
+            c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id),
+                user=request.user).order_by('submit_date')
+            print c
             #exists, updating
             from datetime import datetime
             now = datetime.now()
-            if c:
-                if c.comment != comment:
+            if c: #exists
+                if c.user == request.user and c.comment != comment: #is equal
                     #new comment and not a dublicate
                     c.comment += comment
                     c.submit_date = now
                     ip = request.META.get('REMOTE_ADDR','')
                     if ip: c.ip_address = ip
                     c.save()
-            else:
+            if not c: #looks not great :)
                 c = Comment(user=request.user,syntax=syntax,submit_date=now,
                     is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
                 c.comment = comment
