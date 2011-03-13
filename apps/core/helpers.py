@@ -1,7 +1,6 @@
 # coding: utf-8
 #
 from apps.core.forms import CommentForm
-from apps.tracker.decorators import user_add_content
 from django.http import HttpResponseRedirect
 from django.views.generic.simple import direct_to_template
 from django.contrib.comments.models import Comment
@@ -49,9 +48,9 @@ def can_act(func):
         return func(request,*args,**kwargs)
     return wrapper
 
+#obsolete, moved to views with another level functionallity
 @login_required
 @can_act
-#@user_add_content(ct='ct',object_pk='object_pk')
 def save_comment(request,template,vars,ct=None,object_pk=None,redirect_to=None):
     if request.method == 'POST':
         form = CommentForm(request.POST,request=request)

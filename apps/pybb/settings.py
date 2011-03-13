@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.conf import settings
 
 def get(key, default):
@@ -16,7 +17,7 @@ SIGNATURE_MAX_LINES = get('PYBB_SIGNATURE_MAX_LINES', 3)
 QUICK_TOPICS_NUMBER = get('PYBB_QUICK_TOPICS_NUMBER', 10)
 QUICK_POSTS_NUMBER = get('PYBB_QUICK_POSTS_NUMBER', 10)
 READ_TIMEOUT = get('PYBB_READ_TIMEOUT', 3600 * 24 * 7)
-HEADER = get('PYBB_HEADER', 'WarMist Forum')
+HEADER = get('PYBB_HEADER', 'WarMist Forum [ДС]')
 TAGLINE = get('PYBB_TAGLINE', 'Django based forum engine')
 DEFAULT_MARKUP = get('PYBB_DEFAULT_MARKUP', 'bbcode')
 NOTICE = get('PYBB_NOTICE', '')

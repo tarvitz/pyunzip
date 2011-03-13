@@ -391,6 +391,8 @@ def get_ip_address(request):
     response.write(ip or 'none detected')
     return response
 
+from apps.tracker.decorators import new_comment
+@new_comment
 @login_required
 def save_comment(request):
     #obj_id could cause a lot of problems if it would have much bigger blocks

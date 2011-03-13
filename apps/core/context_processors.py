@@ -4,6 +4,10 @@ from apps.files.models import Replay
 from apps.core import get_skin_template
 from apps.core.helpers import get_settings
 from django.template.loader import get_template, TemplateDoesNotExist
+from apps.helpers import get_self_ip_address
+
+def server_ip(request):
+    return {'self_ipaddress':get_self_ip_address()}
 
 def expressions(request):
     #random
