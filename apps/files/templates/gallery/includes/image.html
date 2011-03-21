@@ -1,4 +1,4 @@
- <center> {% load votetags %} {% load comments %}
+ <center> {% load votetags %} {% load comments %}{% load trackertags %}
 	{% get_vote for image as vote %}
 	{% bind image as vote_object %}
 	{% check_user_voted for image with user as voted %}
@@ -52,12 +52,20 @@
             <br>
             {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %}
             название: &quot;<b>{{ image.title }}</b>&quot;<br>
+            {% check_for_updates image isnew user %}
             {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
             <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
             {# recieving comments for images #}
             {% get_comment_count for image as comments %}
-            {% if gallery_general %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a></small>{% else %}
-            <small>коментариев: <b>{{ comments}}</b></small>
+            {% if gallery_general %}{% spaceless %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>
+            {% if isnew %}&nbsp;<span class='new'>[new]</span>{% endif %}
+</small>{% endspaceless %}{% else %}
+            {% spaceless %}
+            
+            <small>коментариев: <b>{{ comments}}</b>&nbsp;
+            {# {% if isnew %}<span class='new'>[new]</span> {% endif %} #}
+            </small>
+            {% endspaceless %}
             {% endif %}
         </center>
     </div>

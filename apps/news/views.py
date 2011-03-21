@@ -116,8 +116,8 @@ def search_article(request):
     return render_to_response(template, {'form':''},
     context_instance=RequestContext(request))
 
-#@user_visit(object_pk='number',ct='news.news') testing
 @update_subscription_new(app_model='news.news',pk_field='number')
+@user_visit(object_pk='number',ct='news.news')
 def show_article(request, number=1,object_model='news.news'):
     template = get_skin_template(request.user,'news/article.html')
     page = request.GET.get('page',1)
