@@ -23,6 +23,7 @@ from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, 
 from apps.core.helpers import can_act
 from apps.files.decorators import *
 from apps.core.decorators import update_subscription,update_subscription_new,benchmarking
+from apps.tracker.decorators import user_visit
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages,benchmark, get_skin_template
 from apps.core.forms import ApproveActionForm,SearchForm
@@ -524,6 +525,7 @@ def action_image(request, id, action):
         return HttpResponseRedirect('/gallery/image/undeletable')
 
 @update_subscription
+@user_visit(object_pk='number',ct='files.image')
 def show_image(request, number=1,object_model='files.image'):
     template_err = get_skin_template(request.user, 'gallery/404.html')
     template = get_skin_template(request.user, 'gallery/image.html')

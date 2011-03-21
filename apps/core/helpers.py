@@ -247,14 +247,14 @@ def get_content_type(Object):
     get_content_type(onsite_user)
     get_content_type('auth.user')
     """
-
+    #print Object
     if callable(Object): #class
         #print "class: ", Object
         #retrieving content_type from class object
         model = Object.__name__.lower() 
         app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
         #ct = ContentType.objects.get(app_label=app_label,model=model)
-    elif hasattr(Object,'Meta'): #class instance
+    elif hasattr(Object,'pk'): #class instance
         #print "class instance: ", Object
         app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
         model = Object.__class__.__name__.lower()

@@ -13,6 +13,7 @@ class CheckForUpdates(Node):
 
     def render(self,context):
         obj = self.object.resolve(context,ignore_failures=True)
+        print obj.id
         user = self.user.resolve(context,ignore_failures=True)
         if user.is_anonymous(): 
             context[self.varname] = False 
