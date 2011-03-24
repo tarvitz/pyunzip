@@ -36,12 +36,10 @@ def get_discounts():
     r = re.compile(r'<div class="col search_price.*?<strike>.*?(\d+\.\d{1,2})</strike>.*?</div>',re.S|re.U|re.I)
     real_prices = r.findall(block)
     #discount
-    #discount = get_discount_percent(real_prices,prices)
     #names
     r = re.compile(r'<h4>(.*?)</h4>',re.I|re.U)
     names = r.findall(block)
     #url
-    #r = re.compile(
     r = re.compile(r'href="(http://store.steampowered.com/app/.*?)"',re.S|re.I|re.U)
     urls = r.findall(block)
     #return dict(zip(names,prices))
@@ -49,7 +47,13 @@ def get_discounts():
 
 def update_discount_items(): 
     Discount.objects.all().delete()
-    discounts = get_discounts()
+    #ehm, lazy fixing? !true lazy
+    while True:
+        try:
+            discounts = get_discounts()
+            break
+        except:
+            pass
     #response = HttpResponse
     #response['Content-Type'] = 'plain/text'
     if discounts is None:
