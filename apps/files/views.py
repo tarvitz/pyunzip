@@ -1,7 +1,7 @@
 # Create your views here.
 
 from django.shortcuts import render_to_response
-from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from django.template import RequestContext
 from django.contrib import auth
 from django.db.models import get_model,Q

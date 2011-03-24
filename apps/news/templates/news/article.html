@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %}
+{% extends base_template %}
 {% block css %}
     {{ block.super }}
     <link rel='stylesheet' media='screen' href='/styles/{{ user.skin.name|getskincss:"news.css" }}'>

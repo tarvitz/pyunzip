@@ -108,6 +108,7 @@ def getskin(value,arg=None):
         return arg
     else:
         return ''
+
 @register.filter(name='getskincss')
 def getskincss(value,arg=None):
     if not arg:

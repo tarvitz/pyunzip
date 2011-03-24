@@ -14,7 +14,7 @@ SETTINGS = {
     'rosters_on_page': 30,
     'rates_on_page': 100,
     'hide_jid': False,
-    'hide_uin': True, #it's secure by default to hide it to prevent hackers spaming it
+    'hide_uin': True, #it's secure by default to hide it to prevent hackers spaming
     'hide_email': True, #the same
     'show_null_karma': True,
     'show_self_null_karma': True,

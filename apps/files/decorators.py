@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.http import HttpResponse,HttpResponseRedirect
-from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 #decorators ARE here
 
 def can_purge_replays(func,*args,**kwargs):

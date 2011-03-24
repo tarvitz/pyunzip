@@ -1,4 +1,4 @@
- <center> {% load votetags %} {% load comments %}{% load trackertags %}
+ <center>{% spaceless %}{% load votetags %} {% load comments %}{% load trackertags %}
 	{% get_vote for image as vote %}
 	{% bind image as vote_object %}
 	{% check_user_voted for image with user as voted %}
@@ -24,7 +24,7 @@
     <small><a href="/gallery/image/{{image.id}}/">коментарии: <b>{{ comments }}</b></a></small> {% endif %}
  </div>
  </center>
-{% endcomment %}
+{% endcomment %}{% endspaceless %}
 
 <div class='frame {% if gallery_general %} frame_float{% endif %}' >
     <div class='transparency tr_black'></div>

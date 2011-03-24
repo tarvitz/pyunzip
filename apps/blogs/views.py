@@ -3,7 +3,6 @@
 from apps.core.decorators import null_function
 from apps.core import get_skin_template
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.simple import direct_to_template
 from apps.blogs.models import Post
 from apps.core.forms import CommentForm
 from django.contrib.contenttypes.models import ContentType

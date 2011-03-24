@@ -13,7 +13,8 @@ from django.shortcuts               import get_object_or_404, \
 
 from django.contrib.admin.views.decorators import staff_member_required
 
-from django.views.generic.simple    import direct_to_template
+#from django.views.generic.simple    import direct_to_template
+from apps.core.shortcuts            import direct_to_template
 from django.template                import RequestContext
 from django.utils.translation       import ugettext as _
 

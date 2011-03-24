@@ -1,10 +1,8 @@
 {% load kamwhfilters %} {% load newsfilters %}
 {% block css %}
-{{ block.super }}
 <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
 {% endblock %}
-{% block js %}
-{{ block.super }}
+{% block js %} 
 <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
 {% endblock %}
 

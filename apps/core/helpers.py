@@ -2,7 +2,7 @@
 #
 from apps.core.forms import CommentForm
 from django.http import HttpResponseRedirect
-from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User
 from datetime import datetime
