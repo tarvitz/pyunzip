@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}
+{% extends base_template %}{% load newsfilters %}
 {% block title %} {{ block.super }}:{{ pmsg.title }} {% endblock %}
 {% block css %}
 {{ block.super }}

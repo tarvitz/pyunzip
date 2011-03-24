@@ -9,7 +9,10 @@ from apps.files.helpers import save_uploaded_file as save_file
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
 from apps.core.views import action_approve_simple
-from django.views.generic.simple import direct_to_template
+#deprecated
+#from django.views.generic.simple import direct_to_template
+#overriding
+from apps.core.shortcuts import direct_to_template
 from apps.core.forms import ApproveActionForm
 #from apps.settings import MEDIA_ROOT
 from django.conf import settings
@@ -103,7 +106,6 @@ def news(request,approved='approved',category=''):
     _pages_ = get_settings(request.user,'news_on_page',30)
     news = paginate(news,page,pages=_pages_,
         view='apps.news.views.news')
-
     return render_to_response(template,
         {'news': news,
         'page': news},

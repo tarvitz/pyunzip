@@ -6,6 +6,18 @@ from apps.core.helpers import get_settings
 from django.template.loader import get_template, TemplateDoesNotExist
 from apps.helpers import get_self_ip_address
 
+def base_template(request):
+    template = 'base.html'
+    if request.user.is_authenticated():
+        if request.user.skin:
+            templ = "skins/%s/base.html" % (request.user.skin.name.lower())
+            try:
+                get_template(templ)
+                template = templ
+            except:
+                pass
+    return ({'base_template':template})
+
 def server_ip(request):
     return {'self_ipaddress':get_self_ip_address()}
 

@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}
+{% extends base_template %}{% load newsfilters %}
 {% block title %} Добавить пожелание {% endblock %}
 {% block head_content %}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replays.css" }}' type='text/css' media='screen'>

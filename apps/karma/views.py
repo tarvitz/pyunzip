@@ -2,7 +2,7 @@
 from django.http import HttpResponseRedirect
 from apps.core.decorators import null_function
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from apps.core import get_skin_template
 from apps.karma.models import Karma,KarmaStatus
 from django.contrib.auth.models import User

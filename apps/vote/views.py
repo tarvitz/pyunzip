@@ -7,7 +7,8 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse,HttpResponseServerError
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-from django.views.generic.simple import direct_to_template
+#from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 #from django.contrib import auth
 from django.contrib.contenttypes.models import ContentType
 #from django.utils import simplejson

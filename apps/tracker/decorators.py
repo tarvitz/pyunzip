@@ -24,6 +24,7 @@ def new_comment(func):
             return func(*args,**kwargs)
         return func(*args,**kwargs)
     return wrapper
+
 #obsolete
 def user_add_content(obj=None,object_pk=None,ct=None):
     def fnc(func):
@@ -54,13 +55,13 @@ def user_add_content(obj=None,object_pk=None,ct=None):
 def user_visit(obj=None,object_pk=None,ct=None):
     def fnc(func):
         def wrapper(*args, **kwargs):
-            print "user_visit decorator initialized"
+            #print "user_visit decorator initialized"
             request = args[0]
             if not request.user.is_authenticated():
-                print "not authenticated"
+                #print "not authenticated"
                 return func(*args,**kwargs)
             if obj is None and (object_pk is None or ct is None):
-                print "nothing have passed"
+                #print "nothing have passed"
                 return func(*args, **kwargs)
             if obj:
                 pk = obj.pk
@@ -72,14 +73,14 @@ def user_visit(obj=None,object_pk=None,ct=None):
                 from apps.core.helpers import get_object_or_none
                 content_type = get_object_or_none(ContentType,app_label=app_label,
                     model=model)
-            print "ct: %r" % content_type
+            #print "ct: %r" % content_type
             if content_type:
                 so = SeenObject.objects.filter(content_type=content_type,
                     object_pk=str(pk),
                     user=request.user)
-                print "so exists, so: %r" % so
+                #print "so exists, so: %r" % so
                 if not so: #includes nothiing
-                    print "saving.."
+                    #print "saving.."
                     so = SeenObject(content_type=content_type,object_pk=str(pk),
                         user=request.user)
                     so.save()

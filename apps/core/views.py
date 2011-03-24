@@ -21,7 +21,7 @@ from apps.news.models import News
 
 from django.core.paginator import InvalidPage, EmptyPage
 from django.contrib.contenttypes.models import ContentType
-from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,get_content_type
 from django.shortcuts import get_object_or_404
 #simple
@@ -419,7 +419,7 @@ def save_comment(request):
             
             c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id),
                 user=request.user).order_by('submit_date')
-            print c
+            #print "Comment: ",c
             #exists, updating
             from datetime import datetime
             now = datetime.now()

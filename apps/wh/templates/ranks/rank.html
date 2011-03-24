@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %} {% load newsfilters %}
+{% extends base_template %} {% load newsfilters %}
 {% block head_content %}
 <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media='screen' >
 <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"ranks.css" }}" media='screen'>

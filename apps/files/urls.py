@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template,redirect_to
+from apps.core.shortcuts import direct_to_template
 from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = patterns('apps.files.views',

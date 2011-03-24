@@ -13,7 +13,8 @@ from django.conf import settings
 from django.shortcuts import render_to_response,get_object_or_404
 from apps.core import pages, get_skin_template
 from apps.core.forms import CommentForm
-from django.views.generic.simple import direct_to_template
+#from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError

@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %} {% load i18n %}
+{% extends base_template  %} {% load i18n %}
 {% block css %}
 	{{ block.super }}
 	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' media='screen' type='text/css'>

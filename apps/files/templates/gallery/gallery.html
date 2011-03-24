@@ -1,4 +1,4 @@
-{% extends user.skin.name|getskin:"base.html" %}{% load kamwhfilters %}{% load comments %} {% load votetags %}
+{% extends base_template %}{% load kamwhfilters %}{% load comments %} {% load votetags %}
 {% block head_content %}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
 {% endblock %}
@@ -47,9 +47,15 @@
  <br clear="all">
 <script language='javascript'>
     $(document).ready(function(){
-        $('.frame').hover(function(){
+        /*$('.frame').hover(function(){
                     $(this).toggleClass('frame_hover');
-        }); // hover
+        }); */// hover
+        $('.frame').bind('mouseover', function(){
+            $(this).addClass('frame_hover');
+        });
+        $('.frame').bind('mouseout', function(){
+            $(this).removeClass('frame_hover');
+        });
     });
 </script>
 {% endwith %}

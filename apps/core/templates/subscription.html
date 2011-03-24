@@ -1,6 +1,6 @@
-{% extends user.skin.name|getskin:"base.html" %}
+{% extends base_template %}
 {% block text_content %}
-	{% if subscription.object_list %}
+    {% if subscription.object_list %}
 	<ul>
 	{% for sub  in  subscription.object_list %}
 		<li>
@@ -8,8 +8,10 @@
 			<a href='{% url url_unsubscribe sub.id "approve" %}'>[отписаться]</a></li>
 	{% endfor %}
 	</ul>
-	{% endif %}
-{% with subscription as page %}
+    {% with subscription as page %}
 	{% include settings.document.links %}
-{% endwith %}
+    {% endwith %}
+    {% else %}
+    <span class='info'>Подписок нет</span>
+    {% endif %}
 {% endblock %}

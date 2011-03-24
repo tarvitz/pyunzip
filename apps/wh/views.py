@@ -31,7 +31,8 @@ from django.template import Template,Context
 #filters
 from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
-from django.views.generic.simple import direct_to_template
+#from django.views.generic.simple import direct_to_template
+from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import get_settings,get_object_or_none,paginate,can_act
 import os
 

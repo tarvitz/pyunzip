@@ -160,8 +160,8 @@ class Skin(models.Model):
         return self.name.lower()
     def __repr__(self):
         return self.name.lower()
-    def __str__(self):
-        return self.name.lower()
+    #def __str__(self):
+    #    return self.name.lower()
 
 class RankType(models.Model):
     type = models.CharField(_('Type'),max_length=50)
@@ -381,7 +381,7 @@ class UserExtension(object):
 
     def __repr__(self):
         return '<User: %s>' % (self.nickname)
-    
+   
     def __unicode__(self):
         return self.nickname
 
