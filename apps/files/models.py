@@ -150,7 +150,7 @@ class Replay(models.Model):
                        team += players[i+count] + '/'
                     else:
                         player = players[i+count]
-                        team += player[player.index(' ')+1:]
+                        team += player#[player.index(' ')+1:]
                 team_list.append(team)
                 team = ''
                 count += int(teams[t])
