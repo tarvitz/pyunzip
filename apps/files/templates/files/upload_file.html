@@ -5,7 +5,8 @@
 {% block title %}Добавить файл {% endblock %}
 {% block text_content %}
 <center>
-	<form id='add_form' enctype="multipart/form-data" action='.' method='post'>
+        <div id='upload_progress' style='display: none'></div>	
+        <form id='upload_form' target="upload_frame" enctype="multipart/form-data" action='{% url url_progress_uploader app_n_model='files.file' filefield='file' %}' method='post'>
 	 {{ form.description.errors }}
 	 Описание: <br>{{ form.description }}<br>
 	 {{ form.file.errors }}
@@ -16,5 +17,13 @@
 	 URL оригинальной загрузки: <br>{{ form.url }}<br>
 	  <input id='submit' type='submit' value='Добавить'>
 	</form>
+<iframe id='upload_frame' name='upload_frame' style='display: none'></iframe>
 </center>
+<script language='javascript'>
+    var app_n_model = 'files.file';
+    var progress_url_global = "{% url url_upload_progress %}";
+    //var filefield = 'file';
+    var action_field = "{% url url_progress_uploader app_n_model='files.file' filefield='file' %}";
+</script>
+<script language='javascript' src='/media/js/jq_progress_upload.js'></script>
 {% endblock %}

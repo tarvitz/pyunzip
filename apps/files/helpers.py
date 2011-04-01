@@ -246,3 +246,75 @@ class ZipPack():
             #print sub_info
             #info['files_info'].append(sub_info)
         return info
+
+    #only valid form is
+    
+def upload_image(request,form):
+    if not form.is_valid():
+        raise "You should pass valid form!"
+    from apps.files.models import Image,Gallery
+    from django.conf import settings
+    #image_file = form.cleaned_data['image']
+    gallery = form.cleaned_data['gallery']
+    comments = form.cleaned_data['comments']
+    title = form.cleaned_data['title'] 
+    g = Gallery.objects.get(id=gallery)
+    db = Image(title=title,gallery=g)
+    #,image=db_path,thumbnail=db_thmb_path)
+    #generating thumbnail
+    if comments: db.comments = comments
+    db.owner = request.user
+    db.save()
+    return db.pk
+
+def upload_file(request,form):
+    if not form.is_valid():
+        raise "You should pass valid form!"
+    from apps.files.models import File
+    from django.conf import settings
+    from datetime import datetime
+    description = form.cleaned_data['description']
+    owner = request.user
+    url = form.cleaned_data['url']
+    now = datetime.now()
+    db = File(description=description,owner=owner,url=url,upload_date=now)
+    db.save()
+    return db.pk
+
+def upload_replay(request,form):
+    if not form.is_valid():
+        raise "You should pass valid form!"
+    from apps.files.models import Replay
+    from django.conf import settings
+    from datetime import datetime
+    #fields
+    name = form.cleaned_data['name']
+    type = form.cleaned_data.get('type',0)
+    nonstd_layout = form.cleaned_data['nonstd_layout']
+    teams = form.cleaned_data.get('teams','Just a lot of players')
+    winners = form.cleaned_data['winners']
+    version = form.cleaned_data['version']
+    comments = form.cleaned_data['comments']
+    replay_data = form.cleaned_data['replay']
+    races = form.cleaned_data['races']
+    is_set = form.cleaned_data['is_set']
+    syntax = form.cleaned_data['hidden_syntax']
+    if is_set:
+        type = 5
+    #if (replay_data.size/1024/1024)>5: #5mb replay
+    #    return HttpResponseRedirect('/upload/size/overlimited')
+    #path = os.path.join(settings.MEDIA_ROOT,"replays/")+str(request.user.id)
+    #compress = False
+    #if not is_zip_file(replay_data): compress = True
+    #replay_db = save_uploaded_file(replay_data, path,compress=compress)
+    #already've been downloaded
+    #if not replay_db:
+    #    return None #HttpResponseRedirect('/replay/already/downloaded')
+    upload_date = datetime.now()
+    r = Replay(name=name, type=type, nonstd_layout=nonstd_layout, teams = teams,
+        winner = winners, version=version,comments=comments,
+        #adv fields
+        upload_date=datetime.now(),
+        author=request.user, races=races, is_set=is_set,syntax=syntax)
+    r.save()
+    return r.pk

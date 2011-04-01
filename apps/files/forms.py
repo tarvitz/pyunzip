@@ -10,6 +10,8 @@ from cStringIO import StringIO
 from apps.core.forms import RequestForm
 from apps.core.widgets import TinyMkWidget
 from django.conf import settings
+import logging
+logger = logging.getLogger(__name__)
 
 #abstract forms
 class IncomeFileForm(forms.Form):
@@ -57,13 +59,14 @@ class ActionReplayForm(forms.Form):
             return settings.SYNTAX[0][0]
 
     def clean(self):
+        open('/tmp/log','w').write('ActionReplayForm clean initialized')
+        logger.info('ActionReplayForm clean initialized')
         cleaned_data = self.cleaned_data
-        nonstd_layout = cleaned_data.get('nonstd_layout')
         players = cleaned_data.get('teams')
         type = cleaned_data.get('type')
         winners = int(cleaned_data.get('winners'))
         is_set = int(cleaned_data.get('is_set'))
-	print is_set, " :is_set"
+	logger.info(is_set, " :is_set")
         if is_set or is_set == 0: return cleaned_data #get exitin with 
         
         teams = self.cleaned_data['teams']
@@ -140,19 +143,36 @@ class ActionReplayForm(forms.Form):
         if not value:
             raise forms.ValidationError(_('The field should be at least includes one race, for example space marines'))
         return value
+
 class EditReplayForm(ActionReplayForm):
     url = forms.CharField(widget=forms.HiddenInput())
     hidden_syntax = forms.CharField(widget=forms.HiddenInput())
+
 class UploadReplayForm(ActionReplayForm):
-    replay = forms.FileField()
+    replay = forms.FileField()    
+    """
+    def clean(self):
+        open('/tmp/log','w').write('UploadReplayForm clean initialized')
+        logger.info("UploadImageForm initialized")
+        cleaned_data = self.cleaned_data
+        replay = self.cleaned_data.get('replay',None)
+        if replay is None:
+            logger.error("Replay field is not set")
+            msg = _('You shoud fill replay field')
+            self._errors['replay'] = ErrorList([msg])
+            del cleaned_data['replay'] 
+        cleaned_data = UploadImageForm.super(UploadReplayForm,self).clean(self)
+        return cleaned_data
+    """
 
     def clean_replay(self):
-        value = self.cleaned_data.get('replay','')
-        if not value: return None
-        #print value.name
-        name = value.name
-        #TODO: implement replay detection
-        #type validation is realy sucks ;)
+        logger.info('clean replay')
+        replay = self.cleaned_data.get('replay',None)
+        if not replay:
+            logger.error('replay is not clean')
+            raise forms.ValidationError(_('Replay field should be set'))
+        return replay
+                
         """try:
             ext = name[name.rindex('.')+1:]
         except ValueError:
@@ -168,12 +188,18 @@ class UploadReplayForm(ActionReplayForm):
         return value
 
     def clean(self):
+        #lazy way conflicts with json
+        from django.utils.translation import ugettext as _t 
+        logger.info('UploadReplayForm initialized')
         cleaned_data = self.cleaned_data
         is_set = cleaned_data.get('is_set',False)
         if is_set:
-            replay = cleaned_data.get('replay','')
-            if not is_zip_file(replay):
-                msg = _("The set of replay pack should be packed as zip file!")
+            replay = cleaned_data.get('replay',None)
+            if not replay:
+                msg = _t('The replay field should be set')
+                self._errors['replay'] = ErrorList([msg])
+            elif not is_zip_file(replay):
+                msg = _t("The set of replay pack should be packed as zip file!")
                 self._errors['replay'] = ErrorList([msg])
                 del cleaned_data['replay']
         return cleaned_data

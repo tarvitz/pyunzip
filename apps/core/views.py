@@ -1,12 +1,13 @@
 # coding: utf-8
+import os
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
-from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm
+from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm
 from apps.core.models import Settings,Announcement,Css
-from apps.core.decorators import benchmarking
+from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext as _t
 from django.template import RequestContext,Template,Context
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
 from django.shortcuts import render_to_response
@@ -22,8 +23,14 @@ from apps.news.models import News
 from django.core.paginator import InvalidPage, EmptyPage
 from django.contrib.contenttypes.models import ContentType
 from apps.core.shortcuts import direct_to_template
-from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,get_content_type
+from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,get_content_type,\
+    handle_uploaded_file,get_upload_form,get_upload_helper
+from apps.core.handlers import UploadProgressHandler
 from django.shortcuts import get_object_or_404
+import simplejson
+import logging
+logger = logging.getLogger(__name__)
+
 #simple
 
 #additional modules
@@ -478,3 +485,129 @@ def edit_comment(request,id):
         })
 
     return direct_to_template(request,template,{'form':form,'comment_id':c.id})
+
+@login_required
+@progress_upload_handler
+def upload_file(request,app_n_model,filefield): 
+    logger.info('upload_file initialized')
+    #print "initial"
+    error = None
+    progress_id = None
+    #print request.GET
+    #pId = request.GET.get('X-Progress-ID',None) 
+    #print "pId: ", pId
+    """It seems it's deprecated now """
+    #if   'X-Progress-ID' in request.GET:
+    #    prigress_id =  request.GET['X-Progress-ID']
+    #elif 'X-Progress-ID' in request.META:
+    #    progress_id = request.META['X-Progress-ID']
+    #
+    #print "Initializing upload UploadPogressHandler"
+    progress_id = request.GET.get('X-Progress-ID',None)
+    #request.upload_handlers.insert(0,UploadProgressHandler(request,progress_id)) #set via decorator
+    #print "progress_id: ", progress_id
+    if request.method == 'POST':
+        #print "request POST initialized"
+        #print "getting form via settings"
+        if progress_id:
+                cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
+                status_data = request.session.get(cache_key,None)
+
+        UploadForm = get_upload_form(app_n_model)
+        helper_saver = get_upload_helper(app_n_model)
+        if UploadForm is None or helper_saver is None:
+            status_data = {'complete':True,'error':_t('invalid UploadForm has passed or improperly configurated')}
+            request.session[cache_key] = status_data
+            return HttpResponseServerError(_t('Invalid UploadForm has passed or improperly configurated'))
+        #print "Form: ", UploadForm
+        #it's kindda horror monkey patching method
+        if not RequestForm in UploadForm.__bases__:
+            UploadForm.__bases__ = (RequestForm,) + UploadForm.__bases__
+        form = UploadForm(request.POST,request.FILES,request=request)
+        #print "UploadForm initialized"
+        #print form.is_valid()
+        #getting some data before validation
+        #print form.fields 
+        if form.is_valid():
+            #print "form is valid, saving file"
+            #here we set where we saving
+            from apps.core.settings import UPLOAD_SETTINGS
+            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'],str(request.user.id))
+            #Should we handle it?
+            filename = handle_uploaded_file(request.FILES[filefield],save_to)
+            #insert some sort of validation here
+            error = None
+            #error = validate_file(filename)
+            if not error:
+                #fd = open(filename,'rb')
+                #saving file
+                ct = get_content_type(app_n_model)
+                #print "getting ct ", ct
+                if ct:
+                    #print "saving instance" 
+                    pk = helper_saver(request,form)
+                    instance = ct.model_class().objects.get(pk=pk)
+                    setattr(instance,filefield,filename)
+                    instance.save()
+                #fd.close()
+                return HttpResponse('Ok')
+        else:
+            #what shall we do it the form is invalid ? :D
+            #print "form is invalid"
+            #print form.errors
+            #print "form.is_invalid()"
+            if progress_id:
+                #print "[1] progress id: ",progress_id
+                cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
+                #print request.session.keys()
+                #it's very strange but it could not exists :)
+                #i was shocked
+                status_data = request.session.get(cache_key,None)
+                #print "[a] ", status_data
+                if status_data:
+                    #print "[2] inserting errors: ", form.errors
+                    status_data['error'] = form.errors
+                    status_data.update({'errors': simplejson.dumps(form.errors)})
+                    request.session[cache_key] = status_data
+                    #print "[3] ",request.session[cache_key]
+                else:
+                    status_data = {'complete': True, 'error': form.errors.as_text(),
+                        'errors': form.errors,
+                    }
+                    request.session[cache_key] = status_data
+            response = HttpResponse()
+            response['Content-Type'] = 'text/javascript'
+            response.write(simplejson.dumps(form.errors.as_text()))
+            return response
+        if error:
+            if status_data:
+                status_data['error'] = error
+                request.session[cache_key] = status_data
+    return HttpResponse('NOT Ok') #<-wtf? 
+
+def uploader_progress(request):
+    """
+    Return JSON object with information about the progress of an upload
+    """
+    #print "uploader_progress initialized"
+    progress_id = request.GET.get('X-Progress-ID',None)
+    #if   'X-Progress-ID' in request.GET:
+    #    progress_id =  request.GET['X-Progress-ID']
+    #elif 'X-Progress-ID' in request.META:
+    #   progress_id = request.META['X-Progress-ID']
+    #print "upload_progress progress_id: ",progress_id
+    if progress_id:
+        cache_key = "%s_%s" % (request.META['REMOTE_ADDR'], progress_id)
+        #print "getting data"
+        data = request.session.get(cache_key, None)
+        #print "data: ", data
+        if data:
+            if data['complete']:
+                del request.session[cache_key]
+                #print "response: ",simplejson.dumps(data)
+            return HttpResponse(simplejson.dumps(data))
+        else:
+            return HttpResponseServerError(_t('Invalid X-Progress-ID have passed, or session key is missing'))
+    else:
+        #print "Server Error: You must provide X-Progress-ID header or query param."
+        return HttpResponseServerError(_t('Server Error: You must provide X-Progress-ID header or query param.'))

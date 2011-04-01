@@ -279,6 +279,25 @@ class Image(models.Model):
          ('delete_images', 'Can delete images'),
         )
     get_title = lambda self: self.title
+    def generate_thumbnail(self,size=(200,200)):
+        if not self.image:
+            return
+        from PIL import Image
+        from cStringIO import StringIO
+        image = Image.open(StringIO(self.image.file.read()))
+        path = os.path.join('images/galleries/thumbnails',str(self.owner.id))
+        path = os.path.join(path,self.image.file.name.split('/')[-1])
+        full_path = os.path.join(settings.MEDIA_ROOT,path)
+        x,y = image.size
+        sx,sy = size
+        if (x > sx or y>sy):
+            if x>y: sy = int(y*((sy/(x/100.0))/100.0))
+            if y>x: sx = int(x*((sx/(y/100.0))/100.0))
+            image = image.resize((sx,sy))
+        image.save(full_path)
+        self.thumbnail = path
+        self.save()
+
     def get_absolute_url(self):
         #return "/image/%i/" % self.id
         return reverse('apps.files.views.show_image', kwargs={'number': self.id})
@@ -296,4 +315,6 @@ class File(IncomeFile):
     class Meta:
         verbose_name = _('File')
         verbose_name_plural = _('Files')
-    
+
+from apps.files.signals import setup_signals
+setup_signals()

@@ -7,6 +7,7 @@ from apps.core.helpers import get_settings
 from apps.core import get_skin_template
 from django.core.urlresolvers import reverse
 from django.template import TemplateSyntaxError
+from apps.core.handlers import UploadProgressHandler
 
 """
 def can_post_articles(func, *args, **kwargs):
@@ -141,3 +142,10 @@ def render_to(template_path):
 
     return decorator
 
+def progress_upload_handler(func):
+    def wrapper(*args,**kwargs):
+        request = args[0]
+        progress_id = request.GET.get('X-Progress-ID',None)
+        request.upload_handlers.insert(0,UploadProgressHandler(request,progress_id))
+        return func(*args,**kwargs)
+    return wrapper

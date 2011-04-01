@@ -2,7 +2,30 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms.util import ErrorList
+from settings_path import rel_path
+from django.conf import settings
+import os
+#upload schema
+UPLOAD_SETTINGS = {
+    'default': rel_path('media/files'),
+    'files.image': {
+        'form':'apps.files.forms.UploadImageForm',
+        'helper': 'apps.files.helpers.upload_image',
+        'schema': 'images/galleries/',
 
+    },
+    'files.file': {
+        'form': 'apps.files.forms.FileUploadForm',
+        'helper': 'apps.files.helpers.upload_file',
+        'schema': 'files/',
+    },
+    'files.replay':{
+        'form': 'apps.files.forms.UploadReplayForm',
+        'helper': 'apps.files.helpers.upload_replay',
+        'schema': 'replays/',
+    }
+}
+#user settings
 SETTINGS = {
     #field              defaults
     'objects_on_page':40,
