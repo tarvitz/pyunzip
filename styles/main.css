@@ -466,6 +466,10 @@ a.stars img{
 	font-size: x-small;
 	width: 40%;
 }
+.error{
+    font-size: x-small;
+    color: red;
+}
 #text{
 	color: white;
 	margin: 5px;
@@ -612,6 +616,9 @@ p{
 #blackship a{
 	color: black;
 }
+#upload_frame{
+    width: 80%;
+}
 .new {
     color: lightgreen;
 }
@@ -681,6 +688,21 @@ span.link,div.link{
 	color: white;
 	text-align: center;
 }
+.progressbar{
+    border: 1px dotted white;
+    padding: 5 15px;
+    width: 375px;
+    position: relative;
+}
+.progress_info{
+   color: lightgreen;
+   float: left;
+}
+.progress_values{
+    color: white;
+    float: right;
+}
+
 /*Links beaties and so on motha-a-h fukka! 
 Works with FF,Opera and normal browsers not IE, IE MUST DIE!!! */
 /*base settings*/

@@ -12,6 +12,8 @@ urlpatterns = patterns('apps.core.views',
     url('^edit/comment/(?P<id>\d+)/','edit_comment',name='url_edit_comment'),
     url('^show/comments/(?P<model>[\w\s]+)/(?P<object_pk>[\w\s]+)/$','show_comments',
         name='show_comments'),
+    url('^upload/get/progress/$','uploader_progress',name='url_upload_progress'),
+    url('^upload/(?P<app_n_model>[\w\.]+)/(?P<filefield>\w+)/$', 'upload_file',name='url_progress_uploader'),
     (r'^gallery/image/(?P<obj_id>\d+)/delete/approve/$', 'approve_action',
         {
         'message': _('Do you realy want to delete this image?'),

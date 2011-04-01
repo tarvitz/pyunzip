@@ -52,7 +52,9 @@
 	<i><u>Реплей</u>: </i> сам файл реплея или реплеев должен быть упакован в zip, gz, bz2, rec (без сжатия) формат или он не будет загружен.<br>
 	<i><u>Коментарий к реплею</u>:</i> все что вы можете рассказать об реплеи или паке реплеев<br>
 	</div></center>
-	<form enctype="multipart/form-data" method="post" action=".">
+        <center><div id='upload_progress' style='display:none;'></div></center>
+	<form enctype="multipart/form-data" method="post" target="upload_frame" id="upload_form" action="{% url url_progress_uploader app_n_model='files.replay' filefield='replay' %}">
+        {# <form enctype='multipart/form-data' method='post' id='upload_form' action='.'> #}
 		{{ form.name.errors }}
 		<label for='name'>Имя: </label><br>
 		{{ form.name }}<br>
@@ -106,6 +108,7 @@
 		{{ form.hidden_syntax }}
 		<input id='submit' type='submit' value='{% if edit_flag %}обновить{% else %}загрузить{% endif %}'>
 	</form>
+        <iframe id='upload_frame' name='upload_frame' style='display: none'></iframe>
 </div>
 </center>
 <script type="text/javascript">
@@ -135,7 +138,11 @@
 	is_set.click(do_hide_fields, function(){});
 	//winner = $("#id_winners");
 	//winner.change(do_alert, function(){});
-
+        
+        var app_n_model = 'files.replay';
+        var progress_url_global = "{% url url_upload_progress %}";
+        var action_field = "{% url url_progress_uploader app_n_model='files.replay' filefield='replay' %}";
 </script>
+<script language='javascript' src='/media/js/jq_progress_upload.js'></script>
 {% endblock %}
 

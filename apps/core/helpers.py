@@ -1,5 +1,6 @@
 # coding: utf-8
 #
+import os
 from apps.core.forms import CommentForm
 from django.http import HttpResponseRedirect
 from apps.core.shortcuts import direct_to_template
@@ -16,6 +17,7 @@ from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
 from celery.task import task
 from django.utils.translation import ugettext_lazy as _
+import bz2
 send_email_message = task()(send_mail)
 
 def get_object_or_none(Object,**kwargs):
@@ -324,3 +326,47 @@ def validate_object(app_n_label,obj_id):
         return True
     except:
         return False
+
+def handle_uploaded_file(f,path,compress=False):
+    from django.conf import settings
+    fp_path = os.path.join(settings.MEDIA_ROOT,path)
+    os.path.exists(fp_path) or os.makedirs(fp_path) #equivalent to if statement
+    fp_path = os.path.join(fp_path,f.name)
+    #print "fp_path: ", fp_path
+    fp = open(fp_path,'wb+')
+    """
+    if compress:
+        fp_path += '.bz2'
+        compressor = bz2.BZ2Compressor(7)
+        for chunk in f.chunks():
+            compressor.compress(chunk)
+        data = compressor.flush()
+        open(fp,'wb+').write(data)
+    else:
+    """
+    for chunk in f.chunks():
+        fp.write(chunk)
+    #print "filename: ", os.path.join(path,f.name)
+    return os.path.join(path,f.name)
+
+def get_upload_form(path):
+    from apps.core.settings import UPLOAD_SETTINGS
+    try:
+        _module_ = UPLOAD_SETTINGS[path]['form']
+        _mod_ = _module_[:_module_.rindex('.')]
+        _form_ = _module_[_module_.rindex('.')+1:]
+        _module_ = __import__(_mod_,{},{},[''],0)
+        return getattr(_module_,_form_)
+    except:
+        return None
+
+def get_upload_helper(path):
+    from apps.core.settings import UPLOAD_SETTINGS
+    try:
+        mod = UPLOAD_SETTINGS[path]['helper']
+        m = mod[:mod.rindex('.')]
+        helper = mod[mod.rindex('.')+1:]
+        module = __import__(m,{},{},[''],0)
+        return getattr(module,helper)
+    except:
+        return None
