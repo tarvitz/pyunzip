@@ -425,15 +425,16 @@ def save_comment(request):
             #saving comment
             
             c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id),
-                user=request.user).order_by('submit_date')
+                user=request.user).order_by('-submit_date')
             #print "Comment: ",c
             #exists, updating
             from datetime import datetime
             now = datetime.now()
             if c: #exists
+                c = c[0]
                 if c.user == request.user and c.comment != comment: #is equal
                     #new comment and not a dublicate
-                    c.comment += comment
+                    c.comment += "\n"+comment
                     c.submit_date = now
                     ip = request.META.get('REMOTE_ADDR','')
                     if ip: c.ip_address = ip
