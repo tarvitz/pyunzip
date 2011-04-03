@@ -56,6 +56,8 @@ SETTINGS = {
     'enable_dbcss': False,
     #'show_hidden_content': True,
     #'some_field': 10,
+    #nonwh
+    'show_l4d2_stats': False,
 }
 #Overriding defaults for AnonymousUser
 ANONYMOUS_SETTINGS = {
@@ -90,6 +92,8 @@ SETTINGS_FIELDS = {
     'enable_autocomplete': forms.BooleanField(label=_('Enables autocomplete on site'),required=False),
     'enable_dbcss': forms.BooleanField(label=_('Enables user css styles hosted in database'),required=False),
    #'show_hidden_content': forms.BooleanField(label=_('show hidden stuff'),required=False),
+    #nonwh
+    'show_l4d2_stats': forms.BooleanField(label=_('Show L4D stats block'),required=False),
     #'some_field': forms.IntegerField(label=_('Some field'),required=False),
 
 }

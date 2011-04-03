@@ -702,7 +702,9 @@ span.link,div.link{
     color: white;
     float: right;
 }
-
+.l4d2_stats{
+    font-size: small;
+}
 /*Links beaties and so on motha-a-h fukka! 
 Works with FF,Opera and normal browsers not IE, IE MUST DIE!!! */
 /*base settings*/
