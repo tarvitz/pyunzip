@@ -53,7 +53,7 @@ class UploadProgressHandler(FileUploadHandler):
             data = s[self.cache_key]
             if data:
                 #print "saving progress"
-                sleep(0.35)
+                #sleep(0.35)
                 data['uploaded'] += self.chunk_size 
                 if data['uploaded'] > data['length']:
                     data['uploaded'] = data['length'] #SAD BUT TRUE :(

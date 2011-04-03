@@ -69,6 +69,8 @@ urlpatterns = patterns('apps.wh.views',
         name='alter_warning_form'),
     (r'^miniquote/get/raw', 'get_miniquote_raw'),
     (r'^favicon.ico$', 'favicon'),
+    url(r'^l4d2/banner', direct_to_template, {'template': 'non40k/l4d2_banner.html'},
+        name='url_nonwh_l4d2_banner'),
     #(r'^test/view_pm/(?P<page>\d+)/$', 'view_pm'),
     #(r'^test/urls_parse/$', 'urls_parse'),
 )
