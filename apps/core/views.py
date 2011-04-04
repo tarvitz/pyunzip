@@ -257,6 +257,7 @@ def search_model(request,model):
 
     #return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 #IT BLOWS MY MIND ;) sometimes and i can not believe that i've written this block of code
+@login_required
 def user_settings(request):
     template = get_skin_template(request.user,'settings.html')
     try:
