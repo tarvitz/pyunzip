@@ -95,6 +95,20 @@
 			    <a href='{% url url_add_roster %}'>[+]</a></li>
 		</ul><br clear='all'>
 	</div>{% endif %}
+        {% if l4d2 %}
+        <div class='none'><span class='label logo_briefing_news'>l4d2</span></div>
+        <div class='briefing_news'>
+        <div class='transparency'></div>
+        <span class='reflects_up'></span><span class='reflects_left'></span><span class='reflects_right'></span>
+            <ul class='l4d2_stats'>
+                <li><b>hostname:</b> {{ l4d2.hostname }}</li>
+                <li><b>ip:</b> {{ l4d2.ip }}</li>
+                <li><b>version:</b> {{ l4d2.version }}</li>
+                <li><b>map:</b> {{ l4d2.map }}</li>
+                <li><b>users:</b> {{ l4d2.players }}</li>
+            </ul>
+        </div>
+        {% endif %}
 	{% spaceless %}{% if user.is_staff %}
 	<div class='none'><span class='label' class='logo_admin_block'>Напоминалка</span></div>
 	<div class='admin_block'>
@@ -252,7 +266,7 @@
 		//$('.menu_quotes').hide(5000);
 	</script>
 	{% endcomment %}
-	{% if user.settings.show_online_users %}
+        {% if user.settings.show_online_users %}
 	<div class='none'><span class='label' class='logo_online_users'><a href="javascript:" onClick='do_hide("online_users");'>Online</a></span></div>
 	<div class='online_users' style='display: {{ usersettings.display_online_users|or:"block;" }}'>
 	<div class='transparency'></div>
