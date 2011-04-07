@@ -18,6 +18,9 @@ from django.core.mail import send_mail
 from celery.task import task
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import bz2
+import logging
+logger = logging.getLogger(__name__)
+
 send_email_message = task()(send_mail)
 
 IM_TEXT="""
@@ -378,7 +381,12 @@ def get_upload_helper(path):
 @task
 def send_network_message(host,port,message):
     import socket
-    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    sock.connect((host,port))
-    sock.send(message)
-    sock.close()
+    try:
+        sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+        sock.connect((host,port))
+        sock.send(message)
+        sock.close()
+        return True
+    except:
+        logger.error('Could not send message')
+        return False
