@@ -400,6 +400,7 @@ def get_ip_address(request):
     return response
 
 from apps.tracker.decorators import new_comment
+
 @new_comment
 @login_required
 def save_comment(request):
@@ -445,6 +446,16 @@ def save_comment(request):
                     is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
                 c.comment = comment
                 c.save()
+            #saving announcement
+            if subscribe:
+                announcement = get_object_or_none(Announcement,object_pk=str(obj_id),content_type=ct)
+                if announcement: 
+                    announcement.subscribe(request.user)
+                else:
+                    announcement = Announcement(object_pk=str(obj_id),content_type=ct)
+                    announcement.save()
+                    announcement.subscribe(request.user)
+                    
             url = form.cleaned_data['url']
             page = 'last'
             #deprecated :)

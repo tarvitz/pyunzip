@@ -278,7 +278,11 @@ class Image(models.Model):
          ('can_upload', 'Can upload images'),
          ('delete_images', 'Can delete images'),
         )
-    get_title = lambda self: self.title
+        verbose_name = _('Image')
+        verbose_name_plural = _('Images')
+        
+    #get_title = lambda self: self.title
+    
     def generate_thumbnail(self,size=(200,200)):
         if not self.image:
             return
@@ -297,7 +301,7 @@ class Image(models.Model):
         image.save(full_path)
         self.thumbnail = path
         self.save()
-
+    
     def get_absolute_url(self):
         #return "/image/%i/" % self.id
         return reverse('apps.files.views.show_image', kwargs={'number': self.id})

@@ -46,14 +46,15 @@ class Announcement(models.Model):
     #what else ?
     #subscribe the user to get notifications
     def subscribe(self,user):
-        if user in self.notified_users:
+        if user in self.notified_users.distinct():
             self.users.add(user)
             self.notified_users.remove(user)
             self.save()
-        if user not in self.users:
+        if user not in self.users.distinct():
             self.users.add(user)
             self.save()
         return self
+    
     #unsubscribe the user refuse of getting notifications
     def unsubscribe(self,user):
         self.users.remove(user)
@@ -87,6 +88,7 @@ class Announcement(models.Model):
             self.users.add(user)
             self.save()
         return self
+    
     def get_real_object(self):
         """ gets real object for its announcemet"""
         real_object = self.content_type.model_class().objects.get(pk=str(self.object_pk))
@@ -103,9 +105,16 @@ class Announcement(models.Model):
     def get_title(self):
         real_object = self.get_real_object()
         title = ''
+        map = ['title','name','object_name']
         if hasattr(real_object,'get_title'):
             title = real_object.get_title()
-        return title or real_object
+        else:
+            for m in map:
+                if hasattr(real_object,m):
+                    title = getattr(real_object,m)
+                    break
+                
+        return title or real_object #if it has nor title in ['name','title','object_name'] nor get_title ;)
 
     def get_model(self):
         """gets a model name within get_model property or returns __str__"""
@@ -113,7 +122,7 @@ class Announcement(models.Model):
         if hasattr(real_object,'get_model'):
             return real_object.get_model()
         else:
-            return _(real_object.__unicode__())
+            return real_object._meta.verbose_name
 
     def unsubscribe_link(self):
         """ return link for the announcement unsubscription"""
@@ -169,4 +178,3 @@ class Settings(models.Model):
 #makes a bug ?
 from apps.core import signals
 signals.setup_signals()
-
