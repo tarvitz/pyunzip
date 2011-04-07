@@ -124,7 +124,15 @@ class UpdateProfileForm(RequestForm):
         except:
             raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
         return value
-
+    
+    def clean_jid(self):
+        jid = self.cleaned_data['jid']
+        from apps.core.helpers import get_object_or_none
+        user = get_object_or_none(User,jid=jid)
+        if user:
+            raise forms.ValidationError(_('User with such JID is already exists'))
+        return jid
+    
     def clean_nickname(self):
         current_nickname = self.request.user.nickname
         value = self.cleaned_data.get('nickname','')
