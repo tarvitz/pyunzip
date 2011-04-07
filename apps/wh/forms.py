@@ -131,7 +131,7 @@ class UpdateProfileForm(RequestForm):
         user = get_object_or_none(User,jid__iexact=jid)
         if user:
             raise forms.ValidationError(_('User with such JID already exists'))
-        return jid
+        return "".join(jid).lower()
     
     def clean_nickname(self):
         current_nickname = self.request.user.nickname
