@@ -426,20 +426,25 @@ def save_comment(request):
             unsubscribe = form.cleaned_data['unsubscribe'] #WTF??? Cleanse this as soon as possible
             #saving comment
             
-            c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id),
-                user=request.user).order_by('-submit_date')
+            c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id)).order_by('-submit_date')
             #print "Comment: ",c
             #exists, updating
             from datetime import datetime
             now = datetime.now()
+            #TODO: make this more flexible
             if c: #exists
                 c = c[0]
                 if c.user == request.user and c.comment != comment: #is equal
                     #new comment and not a dublicate
                     c.comment += "\n"+comment
-                    c.submit_date = now
+                    #c.submit_date = now
                     ip = request.META.get('REMOTE_ADDR','')
                     if ip: c.ip_address = ip
+                    c.save()
+                else:
+                    c = Comment(user=request.user,syntax=syntax,submit_date=now,
+                        is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
+                    c.comment = comment
                     c.save()
             if not c: #looks not great :)
                 c = Comment(user=request.user,syntax=syntax,submit_date=now,
