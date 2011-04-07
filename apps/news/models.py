@@ -109,7 +109,13 @@ class News(AbstractNews):
         self.delete()
 
         return a
-
+    
+    def get_content_plain(self):
+        if self.head_content:
+            return "%s\n%s\n%s" %(self.title,self.head_content,self.content)
+        else:
+            return "%s\%s" % (self.title,self.content)
+    
     class Meta:
         verbose_name = _('Article')
         verbose_name_plural = _('News')
