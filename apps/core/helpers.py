@@ -16,10 +16,95 @@ from django.core.paginator import InvalidPage,EmptyPage
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
 from celery.task import task
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import bz2
 send_email_message = task()(send_mail)
 
+IM_TEXT="""
+user '%s' has left comment on '%s%s?page=last'
+Please visit this page to figure out that have been done there.
+"""
+EMAIL_TEXT = """"""
+
+#TODO: OVERWRITE IT =\
+#instance is the object passing through the signal
+def send_notification(instance,**kwargs):
+    #comment-instance like object
+    if hasattr(instance,'content_type') and hasattr(instance,'object_pk'):
+        #
+        #getting real object
+        real_object = instance.content_type.model_class().objects.get(pk=str(instance.object_pk))
+        #do anything we want to do ;)
+        #print real_object
+        # do notification
+        # DO NOT FORGET THAT Primary info contained in instance object not in real, we just test if real object has user that shoud be
+        # announcemented
+        try:
+            announcement = Announcement.objects.get(content_type=instance.content_type,object_pk=str(instance.object_pk))
+            for user in announcement.users.distinct():
+                #sending notification
+                #it would be wise to do not notify yourself :)
+                if 'user_field' in kwargs:
+                    instance_user = getattr(instance,kwargs['user_field'])
+                else:
+                    instance_user = instance.user
+                if not instance_user.is_authenticated():
+                    return
+                if 'content_field' in kwargs:
+                    content = getattr(instance,kwargs['content_field'])
+                else:
+                    content = instance.get_content()
+                if callable(content): content = content()
+
+                if instance_user != user:
+                    announcement.notified(user)
+                    text_content = tr(IM_TEXT %
+                        (instance_user.nickname,settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))
+                    
+                    #OBSOLETE
+                    #send_email_message.delay(_('Warmist no-replay notification'),text_content,settings.FROM_EMAIL,
+                    #    [user.email],fail_silently=False,
+                    #    auth_user=settings.EMAIL_HOST_USER,
+                    #    auth_password=settings.EMAIL_HOST_PASSWORD)
+                    if user.jid:
+                        message = "s_notify jid:%s message:%s" % (user.jid,text_content)                    
+                        send_network_message.delay('localhost', 40001, message)
+                    #we should make it async :(
+                    #from time import sleep
+                    #sleep(60)
+                    #TODO: implement here notification sending
+                    #print user
+                    #move notified user in the notified list
+                #pass
+        except Announcement.DoesNotExist:
+            #do nothing
+            pass
+        #print "do notification for %r" % real_object
+    #real object still not tested
+    #TODO: test it?
+    else:
+        #do notification here
+        #print instance
+        try:
+            model_name = object.__class__.__doc__.split('(')[0].lower()
+            # TODO: 
+            #app_label = 
+            try:
+                content_type = ContentType.objects.get(model=model_name)
+                object_pk = instance.pk
+            except (ContentType.DoesNotExist,ContentType.MultipleObjectsReturned):
+                # Probably there is Multiply objects, need to implement app_label extraction before fixing it 
+                return
+            announcement = Announcement.objects.get(content_type=content_type,object_pk=str(object_pk))
+            for user in  announcement.users.distinct():
+                announcement.notified(user)
+                #sending notification for a user from userlist
+                #print user
+        except Announcement.DoesNotExist:
+            #nothing to do? :)
+            pass
+        #print "do notification for %r" % instance
+        
 def get_object_or_none(Object,**kwargs):
     try:
         obj = Object.objects.get(**kwargs)
@@ -136,88 +221,7 @@ def send_email(email,content,**kwargs):
 def purge_unexistable_comments():
     pass
 
-#OVERWRITE IT =\
-#instance is the object passing through the signal
-def send_notification(instance,**kwargs):
-    #comment-instance like object
-    if hasattr(instance,'content_type') and hasattr(instance,'object_pk'):
-        #
-        #getting real object
-        real_object = instance.content_type.model_class().objects.get(pk=str(instance.object_pk))
-        #do anything we want to do ;)
-        #print real_object
-        # do notification
-        # DO NOT FORGET THAT Primary info contained in instance object not in real, we just test if real object has user that shoud be
-        # announcemented
-        try:
-            announcement = Announcement.objects.get(content_type=instance.content_type,object_pk=str(instance.object_pk))
-            for user in announcement.users.distinct():
-                #sending notification
-                #it would be wise to do not notify yourself :)
-                if 'user_field' in kwargs:
-                    instance_user = getattr(instance,kwargs['user_field'])
-                else:
-                    instance_user = instance.user
-                if not instance_user.is_authenticated():
-                    return
-                if 'content_field' in kwargs:
-                    content = getattr(instance,kwargs['content_field'])
-                else:
-                    content = instance.get_content()
-                if callable(content): content = content()
 
-                if instance_user != user:
-                    announcement.notified(user)
-                    text_content = ("""Please do not answer this mail, it have been configurated by site-bot
-                    
-                    There is changes within '%s' on: '%s%s'
-                    Please visit this page to firgure out that have been done there.
-                    --
-                    sincerely yours AstroPath
-                    """ %
-                        (real_object.get_title(),settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))
-                    text_content
-                    
-                    send_email_message.delay(_('Warmist no-replay notification'),text_content,settings.FROM_EMAIL,
-                        [user.email],fail_silently=False,
-                        auth_user=settings.EMAIL_HOST_USER,
-                        auth_password=settings.EMAIL_HOST_PASSWORD)
-                    
-                    #we should make it async :(
-                    #from time import sleep
-                    #sleep(60)
-                    #TODO: implement here notification sending
-                    #print user
-                    #move notified user in the notified list
-                #pass
-        except Announcement.DoesNotExist:
-            #do nothing
-            pass
-        #print "do notification for %r" % real_object
-    #real object still not tested
-    #TODO: test it?
-    else:
-        #do notification here
-        #print instance
-        try:
-            model_name = object.__class__.__doc__.split('(')[0].lower()
-            # TODO: 
-            #app_label = 
-            try:
-                content_type = ContentType.objects.get(model=model_name)
-                object_pk = instance.pk
-            except (ContentType.DoesNotExist,ContentType.MultipleObjectsReturned):
-                # Probably there is Multiply objects, need to implement app_label extraction before fixing it 
-                return
-            announcement = Announcement.objects.get(content_type=content_type,object_pk=str(object_pk))
-            for user in  announcement.users.distinct():
-                announcement.notified(user)
-                #sending notification for a user from userlist
-                #print user
-        except Announcement.DoesNotExist:
-            #nothing to do? :)
-            pass
-        #print "do notification for %r" % instance
 
 #TODO implement code below with kwargs passing style
 def get_user(username=None,nickname=None,id=None):
@@ -370,3 +374,11 @@ def get_upload_helper(path):
         return getattr(module,helper)
     except:
         return None
+    
+@task
+def send_network_message(host,port,message):
+    import socket
+    sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+    sock.connect((host,port))
+    sock.send(message)
+    sock.close()
