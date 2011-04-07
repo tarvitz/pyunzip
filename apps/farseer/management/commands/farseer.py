@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 from apps.farseer.seer import SeerBot
 import logging
 logger = logging.getLogger(__name__)
+from apps.farseer.settings import *
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -19,8 +20,8 @@ class Command(BaseCommand):
     help = """farseer jabber bot"""
 
     def handle(self, **options):
-        jid = options.get('jid',None)
-        password = options.get('password',None)
+        jid = options.get('jid',None) or BOT_JID
+        password = options.get('password',None) or BOT_PASSWORD
         if not jid or not password:
             print "please pass valid options for jabberbot connection"
             from sys import exit
@@ -32,7 +33,7 @@ class Command(BaseCommand):
         xmpp.registerPlugin('xep_0004') # Data Forms
         xmpp.registerPlugin('xep_0060') # PubSub
         xmpp.registerPlugin('xep_0199') # XMPP Ping
-        if xmpp.connect():
+        if xmpp.connect((BOT_SERVER,BOT_PORT)):
             xmpp.process(threaded=True)
             logger.info("connection complete")
         else:
