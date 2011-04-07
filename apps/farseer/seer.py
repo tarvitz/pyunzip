@@ -19,6 +19,7 @@ import re
 from optparse import OptionParser
 
 from apps.thirdpaty import sleekxmpp
+from apps.farseer.decorators import su_required
 import logging
 logger = logging.getLogger(__name__)
 
@@ -29,11 +30,11 @@ HELP_TEXT = """
 'send_notification' <jid:<USERJID> message:<MESSAGE>>
 's_notify' is alias to 'send_notification'
 """
+
 HELP_JABBER = """
 !help - shows this message
-!test - tests authorized message send
-!get_roster - shows bot's roster
-!get_subscribed - shows bot's rosters filters everyone who has subscription both or to
+!get_roster - shows bot's roster, admins only
+!get_subscribed - shows bot's rosters filters everyone who has subscription both or to, admins only
 !get_last_news - shows last news
 !whoami - shows who are you :D
 """
@@ -46,6 +47,7 @@ if sys.version_info < (3, 0):
     reload(sys)
     sys.setdefaultencoding('utf8')
 
+RESOURCE = 'AstroPath'
 
 class SeerBot(sleekxmpp.ClientXMPP):
 
@@ -53,6 +55,9 @@ class SeerBot(sleekxmpp.ClientXMPP):
     A simple SeerBot bot that will act withing network interface
     which is runned on 40001 and accepts commands from local connections only
     """
+    @property
+    def JID(self):
+        return self.boundjid.full
 
     def __init__(self, jid, password):
         #altering resource
@@ -137,7 +142,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
             except IndexError as (errmsg):
                 logger.info(errmsg)
             if jid is None and message is None: return
-            m = {'mto':jid,'mfrom':self.boundjid._full,'mtype':'chat','mbody':unicode(message)}
+            m = {'mto':jid,'mfrom':self.JID,'mtype':'chat','mbody':unicode(message)}
             self.send_message(**m)
             logger.info("sending notification to '%s'", m['mto'])
         else:
@@ -170,6 +175,26 @@ class SeerBot(sleekxmpp.ClientXMPP):
     #
     #=====================================================
     
+    @su_required
+    def send_get_roster(self,msg):
+        #msg.reply("Get Roster initiated").send()
+        message = ''
+        for r in self.roster.keys():
+            message += r+'\n'
+        m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':message}
+        self.send_message(**m)
+    
+    @su_required    
+    def send_get_subscribed(self,msg):
+        #roster = msg.stream.roster
+        roster_list = ''
+        for r in self.roster.keys():
+            if self.roster[r]['subscription'] in ('to','both'):
+                roster_list+="%s\n" % r
+        m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':roster_list}
+        self.send_message(**m)
+        #msg.reply(roster_list).send()
+        
     def send_authorized_message(self,mtype,mbody):
         """ Sends Authorized users message """
         m = {'mfrom':self.boundjid._full,'mtype':mtype,'mbody':mbody}
@@ -195,45 +220,23 @@ class SeerBot(sleekxmpp.ClientXMPP):
             self.send_message(**m)
             
         elif '!get_roster' in msg['body']:
-            #msg.reply("Get Roster initiated").send()
-            #roster = msg.stream.roster
-            message = ''
-            for r in self.roster.keys():
-                message += r+'\n'
-                #    def send_message(self, mto, mbody, msubject=None, mtype=None,
-                #     mhtml=None, mfrom=None, mnick=None):
-                #m = dict() # it appears to be Message object. but ну его нахуй
-                #m['mtype'] = 'chat'
-                #m['mto'] = msg['from'] #ehm?
-                #m['mfrom'] = msg['to'] #construct from reply
-                ##m['id'] = '0xdead'
-                #m['mbody'] = r
-                #if r == 'lilfox@krctc':
-            m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':message}
-            self.send_message(**m)
+            self.send_get_roster(msg)
                 
         elif '!get_subscribed' in msg['body']:
-            #roster = msg.stream.roster
-            roster_list = ''
-            for r in self.roster.keys():
-                if self.roster[r]['subscription'] in ('to','both'):
-                    #single message
-                    #m = {'mtype':'chat', 'mto': msg['from'],'mfrom':msg['to'],'mbody':r}
-                    #self.send_message(**m)
-                    #reply (works once!)
-                    roster_list+="%s\n" % r
-            msg.reply(roster_list).send()
+            self.send_get_subscribed(msg)
+            
         elif "!get_last_news" in msg['body']:
             from apps.news.models import News
             n = News.objects.all()
             if n: n=n[0]
-            m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':"%s\n%s" % (n.title,n.get_content_plain())}
-            self.send_message(**m)
-        elif "!test" in msg['body']:
-            self.send_authorized_message('chat', 'test message')
+            m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':"%s" % (n.get_content_plain())}
+            self.send_message(**m)   
+        #elif "!test" in msg['body']:
+        #    self.send_authorized_message('chat', 'test message')
+            
         elif '!whoami' in msg['body']:
             from django.contrib.auth.models import User
-            m = {'mto':msg['from'],'mfrom':self.boundjid.full,'mtype':'chat'}
+            m = {'mto':msg['from'],'mfrom':self.JID,'mtype':'chat'}
             jid = msg['from']._jid #<-- nya?
             if '/' in jid: jid = until(jid,'/')
             u = User.objects.filter(jid=jid)
