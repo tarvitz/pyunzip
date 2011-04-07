@@ -128,9 +128,9 @@ class UpdateProfileForm(RequestForm):
     def clean_jid(self):
         jid = self.cleaned_data['jid']
         from apps.core.helpers import get_object_or_none
-        user = get_object_or_none(User,jid=jid)
+        user = get_object_or_none(User,jid__iexact=jid)
         if user:
-            raise forms.ValidationError(_('User with such JID is already exists'))
+            raise forms.ValidationError(_('User with such JID already exists'))
         return jid
     
     def clean_nickname(self):
