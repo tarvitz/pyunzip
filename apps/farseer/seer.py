@@ -10,6 +10,7 @@
 """
 
 import sys
+#sys.path.insert(0,'/home/www/warmist')
 import logging
 import time
 import socket
@@ -20,9 +21,6 @@ from optparse import OptionParser
 from apps.thirdpaty import sleekxmpp
 import logging
 logger = logging.getLogger(__name__)
-
-JID='farseer@inferno'
-RESOURCE  = 'FarSeer'
 
 HELP_TEXT = """
 'help' - show current list of commands
@@ -57,10 +55,12 @@ class SeerBot(sleekxmpp.ClientXMPP):
     """
 
     def __init__(self, jid, password):
-        sleekxmpp.ClientXMPP.__init__(self, jid, password)
         #altering resource
-        #self.resource = 'FarSeer'
-        self.set_jid("%s/%s" % (JID,RESOURCE))
+        sleekxmpp.ClientXMPP.__init__(self, jid, password)
+        self.boundjid.resource = RESOURCE
+        #may cause disconnects
+        #self.set_jid("%s/%s" % (JID,RESOURCE))
+        
         #thread.start_new_thread(self.net_listen,())
         # The session_start event will be triggered when
         # the bot establishes its connection with the server
@@ -137,7 +137,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
             except IndexError as (errmsg):
                 logger.info(errmsg)
             if jid is None and message is None: return
-            m = {'mto':jid,'mfrom':self.jid,'mtype':'chat','mbody':unicode(message)}
+            m = {'mto':jid,'mfrom':self.boundjid._full,'mtype':'chat','mbody':unicode(message)}
             self.send_message(**m)
             logger.info("sending notification to '%s'", m['mto'])
         else:
@@ -172,7 +172,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
     
     def send_authorized_message(self,mtype,mbody):
         """ Sends Authorized users message """
-        m = {'mfrom':self.jid,'mtype':mtype,'mbody':mbody}
+        m = {'mfrom':self.boundjid._full,'mtype':mtype,'mbody':mbody}
         auth_list = [r for r in self.roster.keys() if self.roster[r]['subscription'] in ('to','both')]
         for user in auth_list:
             m.update({'mto':user})
@@ -197,17 +197,20 @@ class SeerBot(sleekxmpp.ClientXMPP):
         elif '!get_roster' in msg['body']:
             #msg.reply("Get Roster initiated").send()
             #roster = msg.stream.roster
+            message = ''
             for r in self.roster.keys():
+                message += r+'\n'
                 #    def send_message(self, mto, mbody, msubject=None, mtype=None,
                 #     mhtml=None, mfrom=None, mnick=None):
-                m = dict() # it appears to be Message object. but ну его нахуй
-                m['mtype'] = 'chat'
-                m['mto'] = msg['from'] #ehm?
-                m['mfrom'] = msg['to'] #construct from reply
-                #m['id'] = '0xdead'
-                m['mbody'] = r
+                #m = dict() # it appears to be Message object. but ну его нахуй
+                #m['mtype'] = 'chat'
+                #m['mto'] = msg['from'] #ehm?
+                #m['mfrom'] = msg['to'] #construct from reply
+                ##m['id'] = '0xdead'
+                #m['mbody'] = r
                 #if r == 'lilfox@krctc':
-                self.send_message(**m)
+            m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':message}
+            self.send_message(**m)
                 
         elif '!get_subscribed' in msg['body']:
             #roster = msg.stream.roster
@@ -230,8 +233,8 @@ class SeerBot(sleekxmpp.ClientXMPP):
             self.send_authorized_message('chat', 'test message')
         elif '!whoami' in msg['body']:
             from django.contrib.auth.models import User
-            m = {'mto':msg['from'],'mfrom':self.jid,'mtype':'chat'}
-            jid = msg['from']._jid
+            m = {'mto':msg['from'],'mfrom':self.boundjid.full,'mtype':'chat'}
+            jid = msg['from']._jid #<-- nya?
             if '/' in jid: jid = until(jid,'/')
             u = User.objects.filter(jid=jid)
             if u:
@@ -243,8 +246,8 @@ class SeerBot(sleekxmpp.ClientXMPP):
             msg.reply("please enter !help to get whole list of the commands" % msg).send()
 
 
-"""
-#old useless code :)
+
+#Debug
 if __name__ == '__main__':
     # Setup the command line arguments.
     optp = OptionParser()
@@ -275,7 +278,8 @@ if __name__ == '__main__':
     # Setup the EchoBot and register plugins. Note that while plugins may
     # have interdependencies, the order in which you register them does
     # not matter.
-    xmpp = SeerBot(opts.jid, opts.password)
+    jid,password = "farseer@inferno:farseer".split(':')
+    xmpp = SeerBot(jid,password)
     xmpp.registerPlugin('xep_0030') # Service Discovery
     xmpp.registerPlugin('xep_0004') # Data Forms
     xmpp.registerPlugin('xep_0060') # PubSub
@@ -294,4 +298,3 @@ if __name__ == '__main__':
         logger.info('Seer: connection complete')
     else:
         logger.error("Seer: Unable to connect.")
-"""
