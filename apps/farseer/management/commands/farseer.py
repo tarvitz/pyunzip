@@ -3,8 +3,8 @@ from optparse import make_option
 from django.core.management.base import BaseCommand, CommandError
 from apps.farseer.seer import SeerBot
 import logging
-logger = logging.getLogger(__name__)
 from apps.farseer.settings import *
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + (
@@ -22,18 +22,19 @@ class Command(BaseCommand):
     def handle(self, **options):
         jid = options.get('jid',None) or BOT_JID
         password = options.get('password',None) or BOT_PASSWORD
+        print "jid: %s\npassword: %s" % (jid,password)
         if not jid or not password:
             print "please pass valid options for jabberbot connection"
             from sys import exit
             exit(-1)
-        server = options.get('server','localhost')
-        port = options.get('port',5222)
+        server = options.get('server',None) or BOT_SERVER
+        port = options.get('port',None) or BOT_PORT
         xmpp = SeerBot(jid,password)
         xmpp.registerPlugin('xep_0030') # Service Discovery
         xmpp.registerPlugin('xep_0004') # Data Forms
         xmpp.registerPlugin('xep_0060') # PubSub
         xmpp.registerPlugin('xep_0199') # XMPP Ping
-        if xmpp.connect((BOT_SERVER,BOT_PORT)):
+        if xmpp.connect((server,port)):
             xmpp.process(threaded=True)
             logger.info("connection complete")
         else:
