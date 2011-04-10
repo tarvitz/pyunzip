@@ -92,7 +92,8 @@ def update_subscription_new(app_model,pk_field='id'):
             app_label,model = app_model.split('.')
             request = args[0]
             user = request.user 
-
+            if not user.is_authenticated():
+                return func(*args,**kwargs)
             ct = ContentType.objects.get(app_label=app_label,model=model)
             auto_update_subscription = get_settings(user,'auto_update_subscription', False)
             if auto_update_subscription:

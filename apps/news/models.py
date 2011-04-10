@@ -115,7 +115,7 @@ class News(AbstractNews):
             return "%s\n%s\n%s" %(self.title,self.head_content,self.content)
         else:
             return "%s\%s" % (self.title,self.content)
-    
+
     class Meta:
         verbose_name = _('Article')
         verbose_name_plural = _('News')
