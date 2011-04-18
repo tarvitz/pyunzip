@@ -9,6 +9,7 @@ from datetime import datetime
 from datetime import timedelta
 from apps.core.settings import SETTINGS,ANONYMOUS_SETTINGS
 from apps.core.helpers import get_object_or_none
+from apps.core.decorators import null
 
 class SetRemoteAddrFromForwardedFor(object):
     def process_request(self, request):
@@ -79,7 +80,7 @@ class GuestActivityMiddleware(object):
                 ip_account = GuestActivity(activity_ip=ip_address,activity_date=now)
                 ip_account.save()
         return None
-            
+
 class UserSettingsMiddleware(object):
     def process_request(self,request):
         from apps.core.models import Settings

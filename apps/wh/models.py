@@ -12,6 +12,7 @@ from django.contrib.comments.models import Comment
 #from django.contrib.auth.admin import UserAdmin
 from apps.core.models import Settings as UserSettings
 from django.core.urlresolvers import reverse
+from apps.core.decorators import null
 
 class Universe(models.Model):
     codename = models.CharField(_('Codename'),max_length=20,unique=True,primary_key=True)
@@ -353,6 +354,7 @@ User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, def
 Comment.add_to_class('syntax',models.CharField(_('Syntax'),max_length=20,null=True,blank=True,choices=settings.SYNTAX))
 #works here O_O
 from django.contrib.auth.admin import UserAdmin
+UserAdmin.raw_id_fields += ('ranks',)
 UserAdmin.fieldsets += (
      (_('Profile'),
         
@@ -403,6 +405,8 @@ class UserExtension(object):
     def _get_fraction(self):
         return self.army.side.fraction.title
     fraction = property(_get_fraction)
+    
+    #TODO: IT LAGZ
     def get_settings(self):
         try:
             s = UserSettings.objects.get(user=self)
@@ -410,7 +414,7 @@ class UserExtension(object):
             return {}
         return s.get_decoded()
     settings = property(get_settings)
-
+    
     def _get_comments_count(self):
         count = Comment.objects.filter(user=self).count()
         return count

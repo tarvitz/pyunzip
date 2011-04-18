@@ -85,7 +85,8 @@ class CommentForm(forms.Form):
         #staff and super user is allowed to post
         #any shit they want o_O
         user = self.request.user
-        if user.is_superuser or user.is_staff:
+        ally = user.ranks.filter(codename='Ally')
+        if user.is_superuser or user.is_staff or ally:
             return comment
         #ten words
         if len(comment.split(' '))<10:
