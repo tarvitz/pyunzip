@@ -18,6 +18,11 @@ def can_post_articles(func, *args, **kwargs):
         if user.is_superuser or user.is_staff or user.user_permissions(
     return wrapper
 """
+def null(func):
+    def wrapper(*args, **kwargs):
+        return ''
+    return wrapper
+
 
 def has_permission(perms):
     """checks if request.user has permission"""
@@ -70,7 +75,8 @@ def update_subscription(func,*args,**kwargs):
                 ct = ContentType.objects.get(app_label=app_label,model=model)
                 try:
                     announcement = Announcement.objects.get(content_type=ct,object_pk=str(id))
-                    announcement.update(user)
+                    if request.user.is_authenticated():
+                        announcement.update(user)
                 except Announcement.DoesNotExist:
                     pass
                     

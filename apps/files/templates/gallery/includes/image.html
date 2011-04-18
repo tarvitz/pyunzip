@@ -1,4 +1,4 @@
- <center>{% spaceless %}{% load votetags %} {% load comments %}{% load trackertags %}
+{% spaceless %}{% load votetags %} {% load comments %}{% load trackertags %}
 	{% get_vote for image as vote %}
 	{% bind image as vote_object %}
 	{% check_user_voted for image with user as voted %}
@@ -41,11 +41,9 @@
             <a class='del_link' href='{% url url_delete_image image.id 'delete' %}' title='удалить'>[удалить]</a>
         </div>
         {% endif %}
-        <center>
-        
-        {% include "stars.html" %}
-        
-        <center>
+        <center> 
+        {# {% include "stars.html" %} #}
+
             <a href='{{ image.image.url }}' target='_blank'>
             <img src='{{ image.thumbnail.url }}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
             </a>
@@ -70,4 +68,3 @@
         </center>
     </div>
 </div>
-    

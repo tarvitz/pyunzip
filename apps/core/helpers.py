@@ -116,7 +116,6 @@ def get_object_or_none(Object,**kwargs):
         return None
     return None
 
-
 def get_settings(user,settings,default=False):
     if hasattr(user,'settings'):
         return user.settings.get(settings,default)

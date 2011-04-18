@@ -418,6 +418,7 @@ def upload_image(request):
         {'form': form},
         context_instance=RequestContext(request))
 
+@benchmarking
 def show_all_images(request,id=''):
     template = get_skin_template(request.user,'gallery/gallery.html')
     try:
@@ -440,7 +441,7 @@ def show_all_images(request,id=''):
         'page': images,
         'gallery_id': id},
         context_instance=RequestContext(request,
-            processors=[pages]))
+            processors=[pages,benchmark]))
 
 """ USER GALLERIES
 @login_required
@@ -470,6 +471,8 @@ def create_gallery(request):
         {'form': form},
         context_instance=RequestContext(request))
 """
+
+@benchmarking
 def show_gallery(request,gallery=1,gallery_name=None):
     template = get_skin_template(request.user,'gallery/usergallery.html')
     template_err = get_skin_template(request.user,'gallery/404.html')
@@ -494,7 +497,8 @@ def show_gallery(request,gallery=1,gallery_name=None):
         {'gallery': g,
         'images': images,
         'page': images},
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request,
+            processors=[benchmark]))
 
 @login_required
 @can_act
