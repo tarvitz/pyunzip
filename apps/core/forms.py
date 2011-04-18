@@ -6,6 +6,7 @@ from apps.core.settings import SettingsFormOverload
 from django.conf import settings
 from apps.core import get_safe_message
 from apps.core.widgets import TinyMkWidget
+import re
 
 class RequestForm(forms.Form):
 	def __init__(self, *args, **kwargs):
@@ -51,7 +52,7 @@ class CommentForm(forms.Form):
     unsubscribe = forms.BooleanField(required=False)
     app_n_model = forms.CharField(required=False,widget=forms.HiddenInput()) #required if we add the comment
     obj_id = forms.CharField(required=False,widget=forms.HiddenInput()) #required the same as above
-    page = forms.IntegerField(required=False,widget=forms.HiddenInput())
+    page = forms.RegexField(regex=re.compile(r'\d+|last',re.S|re.U),required=False,widget=forms.HiddenInput())
 
     def __init__(self,*args,**kwargs):
         
@@ -115,4 +116,8 @@ class CommentForm(forms.Form):
                 raise forms.ValidationError(_('Syntax value should be correct'))
         else:
             return syntax
-
+    
+    def clean_page(self):
+        page = self.cleaned_data.get('page',None)
+        if 'last' in page:
+            return page
