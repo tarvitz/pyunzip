@@ -98,6 +98,13 @@ def create(include=None, exclude=None, use_pygments=True, **kwargs):
     add_tag(SimpleTag, 'i', 'em')
     add_tag(SimpleTag, 'u', 'u')
     add_tag(SimpleTag, 's', 'strike')
+    
+    #fixtures
+    add_tag(SimpleTag, 'tbl', 'table')
+    add_tag(SimpleTag, 'tr', 'tr')
+    add_tag(SimpleTag, 'td', 'td')
+    add_tag(SimpleTag, 'th', 'th')
+    #endof fixtures
 
     add_tag(LinkTag, 'link', **kwargs)
     add_tag(LinkTag, 'url', **kwargs)
