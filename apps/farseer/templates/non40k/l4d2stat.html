@@ -1,0 +1,44 @@
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<title>l4d2 statistic</title>
+<style type='text/css'>
+    body{
+        background-color: #FFF1B1;
+    }
+    .info{
+        text-align: justify;
+        width: 500px;
+        border: 1px dotted grey;
+        margin-bottom: 3px;
+    }
+    .jabber{
+        color: green;
+        text-decoration: underline;
+    }
+    .block{
+        border: 1px dotted red;
+        list-style-type: square;
+        width: 500px;
+        text-transform: capitalize;
+    }
+</style>
+</head>
+<body>
+<div class='info'>
+Если у вас есть <span class='ya'>yandex</span>, Google почта, qip учетная запись или просто jabber учетка, подключайтесь: <span class='jabber'>left_4_dead_2_kam@conference.jabber.ru</span><br>
+Для обсуждений, сборов ну и просто так ;)<br>
+Мануал <a href="/forum/topic/9/">тут</a>.
+</div>
+<div class='block'>
+<ul class='l4d2_stats'>
+    <li><b>hostname:</b> {{ l4d2.hostname }}</li>
+    <li><b>ip:</b> {{ l4d2.ip }}</li>
+    <li><b>version:</b> {{ l4d2.version }}</li>
+    <li><b>map:</b> {{ l4d2.map }}</li>
+    <li><b>users:</b> {{ l4d2.players }}</li>
+</ul>
+</div>
+
+</body>
+</html>
