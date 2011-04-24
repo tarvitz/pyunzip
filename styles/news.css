@@ -25,6 +25,7 @@ div #news{
 	border: 1px dotted white;
 	margin-top: 3px;
 }
+#news #hdimg.first { width: 100px; }
 #news #spacer{
 	height: 16px;
 }
