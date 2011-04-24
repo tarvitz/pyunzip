@@ -198,7 +198,8 @@ def delete_roster(request,id=None,action=''):
     if request.method == 'POST':
         form = ApproveActionForm(request.POST)
         if form.is_valid():
-            referer = form.cleaned_data['url']
+            #todo: make this hotfix more flexible
+            referer = referer or form.cleaned_data['url']
     
     return HttpResponseRedirect(referer)
 

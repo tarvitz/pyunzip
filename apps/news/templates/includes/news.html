@@ -4,7 +4,15 @@
 {% for n in news.object_list %}
     {% include settings.document.article_inc %}
 {% endfor %}
+<script language='javascript'>
+$('.headline img.right').click(
+    function(){
+        if (this.width == 100){ var width = 60; }
+        else { var width = 100 };
+        $(this).animate({width: width,},1000);
+});
 
+</script>
 {% if page %}
     {% include settings.document.links %}
 {% endif %}
