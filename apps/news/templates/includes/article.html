@@ -2,7 +2,7 @@
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url apps.news.views.news category=n.category|lower %}">
 		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
-		<img id='hdimg' class='right' src='{% url apps.wh.views.get_user_avatar nickname=n.author %}'>
+		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% url apps.wh.views.get_user_avatar nickname=n.author %}'>
 		{% if perms.news.edit_news or user.is_superuser %}
 			<span id='edit_button' class='first'><a id='button' href="{% url apps.news.views.add_article id=n.id %}">Править</a></span>
 			{% if not n.approved %}
