@@ -52,15 +52,18 @@ function paste_code(obj,block){
 		if (syntax_object.value == 'bb-code'){
 			switch (obj){
 				case 'bold':{
-					textarea_object.value += '[b][/b]';
+					insertBlockTag(block, {start: "[b]", end: "[/b]"});
+                                        //textarea_object.value += '[b][/b]';
 					break;
 				 };
 				case 'italic':{
-					textarea_object.value += '[i][/i]';
+					insertBlockTag(block, {start: "[i]", end: "[/i]"});
+                                        //textarea_object.value += '[i][/i]';
 					break;
 				};
-				case 'underline':{
-					textarea_object.value += '[u][/u]';
+				case 'underline':{	
+					insertBlockTag(block, {start: "[u]", end: "[/u]"});
+                                        textarea_object.value += '[u][/u]';
 					break;
 				};
 				case 'quote':{
@@ -74,15 +77,20 @@ function paste_code(obj,block){
 		}else{ //markdown by default
 		switch (obj){
 			case 'bold': {
-					textarea_object.value += '** **';
+					
+					insertBlockTag(block, {start: "**", end: "**"});
+                                        //textarea_object.value += '** **';
 					break;
 			};
 			case 'italic':{
-				textarea_object.value += '* *';
+				
+				insertBlockTag(block, {start: "*", end: "*"});
+                                //textarea_object.value += '* *';
 				break;
 			};
 			case 'underline':{
-				textarea_object.value += '_ _'
+				insertBlockTag(block, {start: "_", end: "_"});
+                                //textarea_object.value += '_ _'
 				break;
 			};
 			case 'quote':{
