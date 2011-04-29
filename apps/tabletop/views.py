@@ -18,7 +18,7 @@ from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.db.models import Q
 from apps.core.decorators import benchmarking,has_permission
@@ -179,6 +179,7 @@ def unorphan(request,id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
 @login_required
+@permission_required('tabletop.delete_roster')
 def delete_roster(request,id=None,action=''):
     roster = get_object_or_none(Roster,id__exact=id)
     if roster:
