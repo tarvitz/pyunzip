@@ -193,13 +193,14 @@ def delete_roster(request,id=None,action=''):
             else:
                 #deletes roster if there's no battelreport mention
                 roster.delete()
-    referer = '/roster/purged'
+    #referer = '/roster/purged'
     #deleting via approve_action
     if request.method == 'POST':
         form = ApproveActionForm(request.POST)
         if form.is_valid():
             #todo: make this hotfix more flexible
-            referer = referer or form.cleaned_data['url']
+            referer = reverse('url_user_rosters')
+            #form.cleaned_data['url']
     
     return HttpResponseRedirect(referer)
 
