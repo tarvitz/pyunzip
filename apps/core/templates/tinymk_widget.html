@@ -2,14 +2,14 @@
 <script src='/media/js/tinymk.js' type='text/javascript'></script>
 <div class='tinymk_panel'>
 	<div class='transparency' id='black'></div>
-	<img title='Жирный шрифт' src="/media/tinymk/bold.png" onClick='insertBlockTag("id_comment", {start: "[b]", end: "[/b]"});'>
-	<img title='Курсив' src="/media/tinymk/italic.png"     onClick='insertBlockTag("id_comment", {start: "[i]", end: "[/i]"});'>
-	<img title='Подчёркнутый шрифт' src="/media/tinymk/underline.png" onClick='insertBlockTag("id_comment", {start: "[u]", end: "[/u]"});'>
+	<img title='Жирный шрифт' src="/media/tinymk/bold.png" onClick='paste_code("bold","{{ tinymk.id }}");'>
+	<img title='Курсив' src="/media/tinymk/italic.png"     onClick='paste_code("italic","{{ tinymk.id }}");'>
+	<img title='Подчёркнутый шрифт' src="/media/tinymk/underline.png" onClick='paste_code("underline","{{ tinymk.id }}");'>
 	{% if not tinymk.disable_user_quote %}
-	<img title='Пользовательская цитата' src="/media/tinymk/quote.png" onClick='insertQuote()';'>
+	<img title='Пользовательская цитата' src="/media/tinymk/quote.png" onClick='insertQuote()';>
 	{% endif %}
 	{% if not tinymk.disable_syntax %}
 	  [<img src="/media/tinymk/markdown.png" onClick='change_syntax("id_syntax_change");' id='id_syntax_change' title='Markdown syntax is active'>]
-	  <script language='javascript'>reload_image("id_syntax_change");</script> 
+	  <script language='javascript'>reload_image("id_syntax_change");</script>
 	{% endif %}
 </div>
