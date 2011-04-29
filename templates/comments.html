@@ -19,7 +19,7 @@
 			<a href="{% url url_edit_comment id=c.id %}?j=y" class="msg_button">[править]</a>
 		{% endifequal %}{% endif %}
                 {% if user.is_authenticated %}
-                    <a href='#id_comment' class='msg_button' onClick='insertQuote("{{ c.user.nickname }}");'>[цитировать]</a>
+                    <a href='#id_comment' class='msg_button' onClick='insertQuoteUser("{{ c.user.nickname }}");'>[цитировать]</a>
                 {% endif %}
 		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>
 		<span class="msg_user_nickname">{% spaceless %}

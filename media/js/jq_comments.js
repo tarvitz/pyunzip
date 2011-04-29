@@ -73,7 +73,7 @@ onClick="recieve_formatted_comment('+this.pk+')">\
 	}
 //	});
 
-function insertQuote(user){
+function insertQuoteUser(user){
     t = document.getElementById('id_comment');
     if (window.getSelection){
         quote_text = window.getSelection().toString();
