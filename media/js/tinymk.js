@@ -37,6 +37,7 @@ function change_syntax(obj){
 		}
 }
 
+/* deprecated */
 function paste_code(obj,block){
 		textarea_object = document.getElementById(block);
 		//alert(textarea_object);
@@ -94,4 +95,32 @@ function paste_code(obj,block){
 		 } //switch
 		}//endif
 	}
+
+
+function insertQuote(){
+    t = document.getElementById('id_comment');
+    if (window.getSelection){
+        quote_text = window.getSelection().toString();
+    }
+    else if (document.getSelection){
+        quote_text = document.getSelection().toString();
+    }
+    if (quote_text)
+        t.value += "\n(User){"+quote_text+"}";
+}
+
+function insertBlockTag(element, pattern){
+    t = document.getElementById(element);
+    sel_start = t.selectionStart;
+    sel_end = t.selectionEnd;
+    text = t.value;
+    
+    s_text = text.substr(0,sel_start);
+    e_text = text.substr(sel_end, text.length);
+    tg_text = text.substr(sel_start, sel_end - sel_start);
+
+    var new_text =  String(s_text + pattern.start + tg_text + pattern.end + e_text);
+    t.value = new_text;
+
+}
 

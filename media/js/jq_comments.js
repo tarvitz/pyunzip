@@ -72,3 +72,18 @@ onClick="recieve_formatted_comment('+this.pk+')">\
 		});
 	}
 //	});
+
+function insertQuote(user){
+    t = document.getElementById('id_comment');
+    if (window.getSelection){
+        quote_text = window.getSelection().toString();
+    }
+    else if (document.getSelection){
+        quote_text = document.getSelection().toString();
+    }
+    if (quote_text){
+        text = "("+user+"){"+quote_text+"}";
+        if (t.value) t.value += "\n" + text;
+        else t.value += text;
+    }
+}
