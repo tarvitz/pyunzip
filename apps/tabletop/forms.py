@@ -4,12 +4,13 @@ from apps.core.helpers import get_object_or_none
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from apps.core.forms import RequestForm
+from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 from apps.wh.models import Side
 from django.forms.util import ErrorList
-from apps.tabletop.models import Mission,Roster
+from apps.tabletop.models import Mission,Roster, BattleReport
+from apps.tabletop import fields
 import re
 
 class AddBattleReportForm(RequestForm):
@@ -23,7 +24,7 @@ class AddBattleReportForm(RequestForm):
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True}))
     next = forms.CharField(required=False,widget=forms.HiddenInput()) # could it be dangerous ?
-
+    
     def clean_rosters(self):
         rosters_raw = self.cleaned_data['rosters']
         rosters = [int(i) for i in rosters_raw.split(',')]
@@ -74,6 +75,73 @@ class AddBattleReportForm(RequestForm):
 
         return cleaned_data
 
+class AddBattleReportModelForm(RequestModelForm):
+    search_rosters = forms.CharField(required=False, label=_('Search rosters'),
+        help_text=_('If you do not see rosters you need below you may search them'))
+    ids = Roster.objects.all()[0:10]
+    rosters_choice = forms.ModelMultipleChoiceField(queryset=Roster.objects.filter(pk__in=ids),
+        help_text=_("You can add this rosters to battle report"),
+        label=_('Available rosters'),
+        required=False)
+    del ids
+    rosters = fields.NonCheckMultipleChoiceField(help_text=_('Chosen rosters'))
+    winner_choice = fields.NonCheckChoiceField(
+        choices=((-1, '-----'),),
+        label=_('Winner'),
+        help_text=_('Person who won the battle'))
+    layout = forms.RegexField(regex=re.compile(r'^[\d+vs]+',re.M),required=True,
+        help_text=_('Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        layout = cleaned_data.get('layout', None)
+        rosters = cleaned_data.get('rosters', None)
+        if layout and rosters:
+            l = sum([int(l) for l in layout.split('vs') if l ])
+            if len(rosters) != l:
+                msg =_('You should set right layout, for example 2vs2, 3vs1, number of players should be equal to number of rosters you\'ve passed')
+                self._errors['rosters'] = ErrorList([msg])
+                del cleaned_data['rosters']
+        return cleaned_data
+    def clean_layout(self):
+        layout = self.cleaned_data['layout']
+        l = sum([int(l) for l in layout.split('vs') if l])
+        if l > 10:
+            raise forms.ValidationError(_('10 players is absolute maximum, do not try to add layout with more players, it\'s strickly forbidden'))
+        return layout
+    def clean_winner_choice(self):
+        wc = self.cleaned_data['winner_choice']
+        winner = get_object_or_none(Roster, pk=wc)
+        if not winner:
+            raise forms.ValidationError(_('Such winner roster does not exist'))
+        self.cleaned_data['winner_instance'] = winner
+        return wc
+
+    def clean_rosters(self):
+        rosters = self.cleaned_data['rosters']
+        try:
+            rosters = [int(r) for r in rosters]
+        except:
+            raise forms.ValidationError(_('Rosters id\'s should be int type'))
+        #pts = None
+        self.cleaned_data['roster_instances'] = list()
+        for r in rosters:
+            roster = get_object_or_none(Roster, id=r)
+            #if not pts: pts = roster.pts
+            #if pts != roster.pts:
+            #    raise forms.ValidationError(_('You should user rosters with equal pts'))
+            if not roster:
+                raise forms.ValidationError(_("Roster with id '%i' does not exist" % r))
+                del self.cleaned_data['roster_instances']
+            self.cleaned_data['roster_instances'].append(roster)
+        return rosters
+
+    class Meta:
+        model = BattleReport
+        fields = ('title', 'layout','mission', 'syntax', 'search_rosters',
+            'rosters_choice', 'rosters','winner_choice','comment')
+        exclude = ['owner','winner', 'published', 'approved', 'ip_address', 'users']
+        
 class DeepSearchRosterForm(RequestForm):
     player = forms.CharField(required=False)
     race = forms.CharField(required=False)

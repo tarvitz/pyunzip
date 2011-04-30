@@ -1,52 +1,75 @@
-{% extends base_template %}
-{% block css %} {% load i18n %}
+{% extends "base.html" %} {% load i18n %}
+{% block css %}
 {{ block.super }}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+<link rel='stylesheet' type='text/css' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen'>
 {% endblock %}
 {% block text_content %}
-
 <center>
-<form id='add_battle_report' action='.' method='post'>
-	{{ form.title.errors }}
-	{% trans "Tilte" %}:<br>
-	<span class='notice'>
-		Здесь записывается заголовок батлрепорта, то есть его имя
-	</span><br>
-	{{ form.title }}<br>
-	{{ form.rosters.errors }}
-	{% trans "Rosters' ids" %}:<br>
-	<span class='notice'>[1]Здесь указываются уникальные номера ростеров, которые учавствовали в сражении.<br>
-	Стоит отметить также, что количество очков у ростеров должно быть равным!</span>
-	{{ form.rosters }}<br>
-	{{ form.winner.errors }}
-	{% trans "Winner" %}:<br>
-	<span class='notice'>
-		[2] Победитель должен указываться из тех уникальных номеров ростеров,
-		которые вы представили в поле выше
-	</span>
-	{{ form.winner }}<br>
-	{{ form.mission.errors }}
-	{% trans "Mission" %}:<br>
-	{{ form.mission }}<br>
-	{{ form.layout.errors }}
-	{% trans "Layout" %}:<br>
-	<span class='notice'>Разметка может быть любой, заданной по формуле NvsM, где N - число от 1 до 9, M - число от 1 до 9<br></span>
-	{{ form.layout }}<br>
-	{{ form.hidden_syntax }}
-	{{ form.syntax.errors }}
-	{% trans "Syntax" %}:<br>
-	{{ form.syntax }}<br>
-	{{ form.comment.errors }}
-	{% trans "Comment" %}:<br>
-	{{ form.comment }}<br>
-	{{ form.next }}
-	<input type='submit' value=' {% trans "submit" %} '>
+<div class='form'>
+<form id='id_add_battle_report' action='.' method='post'>
+    {{ form.as_ul }}
+    <input type='submit' value='{% trans "submit" %}'>
 </form>
+</div>
 </center>
-
 <script language='javascript'>
-	syntax = $('#id_syntax');
-	syntax.change(filter_syntax,function(){});
-</script>
+$(document).ready(function(){
+    var updateWinner = function(){
+        //cleanse
+        wc = document.getElementById('id_winner_choice');
+        sel = wc.selectedIndex;
+        r = document.getElementById('id_rosters');
+        for (var i = 0; i<wc.options.length; i++) wc.options[i] = null;
+        wc.options[0] = new Option('-----', -1, false, false);
+        
+        for (var i = 0; i<r.options.length; i++){
+            wc.options[i] = new Option(r.options[i].text, r.options[i].value,
+                false, false)
+        }//for
+    };
+    $('#id_rosters_choice').dblclick(function(){
+        rosters = document.getElementById("id_rosters");
+        _l = rosters.options.length;
+        _s = this.selectedIndex;
+        rosters.options[_l] = new Option(this.options[_s].text,
+            this.options[_s].value, false, true);
+        
+        updateWinner();
+    });
+    $('#id_rosters').dblclick(function(){
+        rosters = document.getElementById(this.id);
+        _s = rosters.selectedIndex;
+        rosters.options[_s] = null;
 
+        updateWinner();
+    });
+    $('#id_search_rosters').keydown(function(){
+        sr = document.getElementById('id_search_rosters');
+        if (sr.textLength < 3) return;
+        
+        text = sr.value;
+        r = document.getElementById('id_rosters_choice');
+        url = '{% url xhr_search_rosters %}' + text;
+        $.getJSON(url, function(data){
+            //cleanse old data
+            for (var count = r.length - 1; count>-1; count--) r[count] = null;
+            var n = 0;
+            jQuery.each(data, function(){
+                r.options[n] = new Option(this['title'],this['pk'],false,false);
+                n++;
+            });//each
+        });//getJSON
+        /* geting roster via entered text */
+
+    });
+    $('#id_add_battle_report').submit(function(){
+        r = document.getElementById('id_rosters');
+        for (var i = 0; r.options.length; i++) r.options[i].selected = true;
+    });
+    r = document.getElementById('id_rosters');
+    {% if winner %} r.selectedIndex = {{ winner }}; {% endif %}
+    //if (r.options.length>0)  updateWinner();
+
+});
+</script>
 {% endblock %}

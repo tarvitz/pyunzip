@@ -3,7 +3,7 @@
 from django.utils.translation import ugettext_lazy as _
 from apps.tabletop.models import Roster,Mission,Game,BattleReport
 from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
-    AddBattleReportForm
+    AddBattleReportForm, AddBattleReportModelForm
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -27,6 +27,8 @@ from apps.core import benchmark
 from apps.wh.models import Side
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
+from django.core import serializers
+from anyjson import serialize as serialize_json
 
 from datetime import datetime
 
@@ -312,9 +314,10 @@ def show_roster(request,id):
         {'roster':roster,'form':form,'comments':comments},
         context_instance=RequestContext(request,processors=[benchmark]))
 
+#obsolete
 @login_required
 @can_act
-def add_battle_report(request,id=None,action=''):
+def add_old_battle_report(request,id=None,action=''):
     template = get_skin_template(request.user,'add_battle_report.html')
     if request.method == 'POST':
         referer = request.META.get('HTTP_REFERER','/')
@@ -387,16 +390,69 @@ def add_battle_report(request,id=None,action=''):
 
 @login_required
 @can_act
+def add_battle_report(request):
+    template = get_skin_template(request.user, 'add_battle_report.html')
+    if request.method == 'POST':
+        form = AddBattleReportModelForm(request.POST, request=request)
+        if form.is_valid():
+            instance = form.instance
+            instance.owner = request.user
+            instance.published = datetime.now()
+            instance.approved = True
+            instance.ip_address = request.META.get('REMOTE_ADDR','127.0.0.1')
+            instance.winner = form.cleaned_data['winner_instance']
+            instance.save()
+            for r in form.cleaned_data['roster_instances']:
+                instance.users.add(r)
+            form.save()
+            #form.save()
+            return HttpResponseRedirect(reverse('battle_report_index'))
+        else:
+            #print dir(form.data)
+            #print form.data.getlist('rosters')
+            rosters = [int(x) for x in form.data.getlist('rosters')]
+            winner = int(form.data.get('winner_choice'))
+            for r in rosters:
+                _r = get_object_or_none(Roster, id=r)
+                if len(form.base_fields['rosters'].choices) < len(rosters):
+                    form.base_fields['rosters']._choices.append((_r.id, _r.__unicode__()))
+                    form.base_fields['winner_choice']._choices.append((_r.id, _r.__unicode__()))
+
+            return direct_to_template(request, template, {'form': form,
+                'winner': winner})
+    form = AddBattleReportModelForm()
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+def xhr_rosters(request, search):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    queryset = (Q(title__icontains=search) | Q(owner__nickname__icontains=search)
+        | Q(pts__icontains=search)
+        | Q(race__name__icontains=search)
+        | Q(custom_race__icontains=search)
+        | Q(player__icontains=search)
+    )
+    rosters = Roster.objects.filter(queryset)
+    lw_rosters = list()
+    raw = [ (r.pk, r.__unicode__()) for r in rosters ]
+    lw_rosters = [ {'pk': r[0], 'title': r[1] } for r in raw ]
+    #response.write(serializers.serialize("json",lw_rosters))    
+    response.write(serialize_json(lw_rosters))
+    return response
+
+@login_required
+@can_act
 def delete_battle_report(request,id,approve=''):
     br = get_object_or_none(BattleReport,id=id)
     if br.owner == request.user or request.user.is_superuser or\
         request.user.has_perm('tabletop.delete_battlereports'):
         if br:
             br.delete()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+            return HttpResponseRedirect(reverse('battle_report_index'))
         else:
             return HttpResponseRedirect('/report/doest/not/exist')
     else:
         return HttpResponseRedirect('/permission/denied')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    return HttpResponseRedirect(reverse('battle_report_index'))
 

@@ -8,6 +8,13 @@ from apps.core import get_safe_message
 from apps.core.widgets import TinyMkWidget
 import re
 
+class RequestModelForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        if 'request' in kwargs:
+            self.request = kwargs['request']
+            del kwargs['request']
+        super(RequestModelForm, self).__init__(*args, **kwargs)
+
 class RequestForm(forms.Form):
 	def __init__(self, *args, **kwargs):
                 if 'request' in kwargs:

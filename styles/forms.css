@@ -1,4 +1,4 @@
-textarea,input{
+textarea,input, select{
 	width: 80%;
 	border: 1px solid black;
     }
@@ -30,4 +30,10 @@ input[type='submit']{
     list-style-type: none;
     border: 1px dotted grey;
     text-align: left;
+}
+form input, form label, form textarea, form select{
+    display: block;
+}
+form ul, form li{
+    list-style-type: none !important;
 }

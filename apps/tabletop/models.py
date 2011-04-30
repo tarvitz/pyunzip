@@ -34,6 +34,7 @@ class Roster(models.Model):
     def show_race(self):
         return self.race or self.custom_race
     show_race.short_description = _('Race')
+
     def get_title(self):
         return self.title
 
@@ -86,7 +87,7 @@ class BattleReport(models.Model):
     owner = models.ForeignKey(User,related_name=_('Owner'))
     published = models.DateTimeField(_('Published'))
     #boo :) 
-    users = models.ManyToManyField(Roster)
+    users = models.ManyToManyField(Roster, verbose_name=_('Rosters'))
     winner = models.ForeignKey(Roster,related_name='winner')
     mission = models.ForeignKey(Mission)
     layout = models.CharField(_('Layout'),max_length=30)

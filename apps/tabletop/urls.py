@@ -3,6 +3,8 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('apps.tabletop.views', 
     url('^report/add/$','add_battle_report',
         name='url_add_battle_report'),
+    #url('^new/report/add/$','add_new_battle_report',
+    #    name='url_add_new_battle_report'),
     url('^reports/$','index',
         name='battle_report_index'),
     url('^reports/show/(?P<id>\d+)/$','show_battle_report',
@@ -45,5 +47,8 @@ urlpatterns = patterns('apps.tabletop.views',
         name='url_show_roster'),
     url('^roster/unorphan/(?P<id>\d+)/$','unorphan',
         name='url_unorphan_roster'),
+    #xhr
+    url('^xhr/rosters/$','xhr_rosters', {'search': 'test'}, name='xhr_search_rosters'),
+    url('^xhr/rosters/(?P<search>[\w\s_]+)/$','xhr_rosters', name='xhr_search_rosters'),
 )
 

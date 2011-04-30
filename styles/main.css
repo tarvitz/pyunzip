@@ -458,7 +458,9 @@ div.stars{
 a.stars img{
 	border: 0px;
 }
-
+div.stars img {
+    border: 0px;
+}
 #control_content .admin_block{
 	font-size: x-small;
 }
