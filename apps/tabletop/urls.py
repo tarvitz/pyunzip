@@ -50,5 +50,6 @@ urlpatterns = patterns('apps.tabletop.views',
     #xhr
     url('^xhr/rosters/$','xhr_rosters', {'search': 'test'}, name='xhr_search_rosters'),
     url('^xhr/rosters/(?P<search>[\w\s_]+)/$','xhr_rosters', name='xhr_search_rosters'),
+    url('^xhr/get/roster/(?P<id>\d+)/$', 'xhr_get_roster', name='xhr_get_roster'),
 )
 

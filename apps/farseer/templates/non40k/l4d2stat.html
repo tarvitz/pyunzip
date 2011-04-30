@@ -11,6 +11,8 @@
         width: 500px;
         border: 1px dotted grey;
         margin-bottom: 3px;
+        position: relative;
+        top: 100px;
     }
     .jabber{
         color: green;
@@ -21,10 +23,14 @@
         list-style-type: square;
         width: 500px;
         text-transform: capitalize;
+        top: 100px;
+        position: relative;
+        text-align: left;
     }
 </style>
 </head>
 <body>
+<center>
 <div class='info'>
 Если у вас есть <span class='ya'>yandex</span>, Google почта, qip учетная запись или просто jabber учетка, подключайтесь: <span class='jabber'>left_4_dead_2_kam@conference.jabber.ru</span><br>
 Для обсуждений, сборов ну и просто так ;)<br>
@@ -39,6 +45,7 @@
     <li><b>users:</b> {{ l4d2.players }}</li>
 </ul>
 </div>
+</center>
 
 </body>
 </html>

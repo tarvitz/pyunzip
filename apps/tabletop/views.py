@@ -443,6 +443,20 @@ def xhr_rosters(request, search):
     return response
 
 @login_required
+def xhr_get_roster(request, id):
+    from apps.news.templatetags.newsfilters import render_filter, bbfilter
+    from django.utils.safestring import mark_safe
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    roster = get_object_or_none(Roster, id=id)
+    if roster:
+        roster.roster = render_filter(roster.roster, roster.syntax)
+        response.write(serializers.serialize("json", [roster]))
+    else:
+        response.write("[]")
+    return response
+
+@login_required
 @can_act
 def delete_battle_report(request,id,approve=''):
     br = get_object_or_none(BattleReport,id=id)

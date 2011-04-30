@@ -75,13 +75,18 @@
 					<div class='msg_txt'>Автор: <i>{% if r.user %}{% get_nickname r.user %}{% else %}{{ r.show_player }}{% endif %}</i></div>
 					<div class='msg_txt'>Раса: <i>{{ r.show_race }}</i></div>
 					<div class='msg_txt'>Очки: <i>{{ r.pts }} pts</i></div>
-					{% spaceless %}{% ifequal roster_flag "True" %}
+					{% ifequal roster_flag "True" %}
 						<div class='msg_txt'>Ростер:<br>
 							<span class='roster'>
 								{{ r.roster|striptags|render_filter:r.syntax|safe }}
 							</span>
 						</div>
-					{% endifequal %}{% endspaceless %}
+                                        {% else %}
+                                                <div class='msg_txt' id='id_roster_{{ r.id }}'>
+                                                    <a href='#id_roster_{{ r.id }}' onClick="get_roster('{% url xhr_get_roster r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
+                                                    <span class='roster'></span>
+                                                </div>
+					{% endifequal %}
 					<div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
 					{% load comments %}
 					{% get_comment_count for r as comments_count %}
