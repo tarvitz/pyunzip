@@ -64,6 +64,7 @@ $(document).ready(function(){
     });
     $('#id_add_battle_report').submit(function(){
         r = document.getElementById('id_rosters');
+        s = document.getElementById('id_search_rosters').value = '';
         for (var i = 0; r.options.length; i++) r.options[i].selected = true;
     });
     r = document.getElementById('id_rosters');
