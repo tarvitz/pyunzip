@@ -91,7 +91,9 @@ class AddBattleReportModelForm(RequestModelForm):
         help_text=_('Person who won the battle'))
     layout = forms.RegexField(regex=re.compile(r'^[\d+vs]+',re.M),required=True,
         help_text=_('Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
-
+    comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,
+        'disable_syntax': True})) 
+    
     def clean(self):
         cleaned_data = self.cleaned_data
         layout = cleaned_data.get('layout', None)

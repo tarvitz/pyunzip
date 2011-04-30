@@ -116,6 +116,10 @@ class BattleReport(models.Model):
         super(BattleReport,self).delete(*args,**kwargs)
 
     def _get_general_pts(self):
+        pts = self.users.distinct()[0].pts
+        for r in self.users.all():
+            if r.pts != pts:
+                return _('[fuzzy] ')
         return self.users.distinct()[0].pts
     general_pts = property(_get_general_pts)
     
