@@ -412,6 +412,7 @@ def add_battle_report(request):
             #print form.data.getlist('rosters')
             rosters = [int(x) for x in form.data.getlist('rosters')]
             winner = int(form.data.get('winner_choice'))
+            form.base_fields['winner_choice']._choices = ((-1, '-----'),)
             for r in rosters:
                 _r = get_object_or_none(Roster, id=r)
                 if len(form.base_fields['rosters'].choices) < len(rosters):

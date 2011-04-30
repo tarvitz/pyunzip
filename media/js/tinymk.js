@@ -10,9 +10,7 @@ function filter_syntax(){
 	if (hidden_syntax){
 			hidden_syntax.value = syntax.value;
 	}
-	if syntax.value
-		syntax_img.src = '/media/tinymk/'+syntax.value+'.png';
-	else syntax_img.src = '/media/tinymk/markdown.png';
+	syntax_img.src = '/media/tinymk/'+syntax.value+'.png';
 }
 
 function change_syntax(obj){

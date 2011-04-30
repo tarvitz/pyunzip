@@ -22,8 +22,12 @@
 		<div class='msg_content'>
 			<div class='msg_avatar'>
 				{% spaceless %}
-						<img src='{% url url_get_avatar br.winner.show_player %}'><br>
+						{% if br.winner %}
+                                                <img src='{% url url_get_avatar br.winner.show_player %}'><br>
 							{% get_raw_nickname br.winner.show_player %}
+                                                {% else %}
+                                                <img src='/media/avatars/none.png'>
+                                                {% endif %}
 				{% endspaceless %}
 			</div> <!-- msg_avatar -->
 			<div class='msg_text'>
@@ -31,12 +35,14 @@
 				<div class='reflects_left'></div>
 				<div class='reflects_right'></div>
 					{% spaceless %}
-					<div class='msg_txt'>Победитель:
+					<div class='msg_txt'>{% if br.winner %}Победитель:
 					{% if br.winner.user %}
 						{% get_nickname br.winner.user %}
 					{% else %}
 						{% get_raw_nickname br.winner.show_player %}
-					{% endif %}</div>{% endspaceless %}
+					{% endif %}
+                                        {% else %}
+                                        Ничья</div> {% endif %}{% endspaceless %}
 					
 					<div class='msg_txt'>Расы: <i>{% spaceless %}
 						{% for r in  br.races %}

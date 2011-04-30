@@ -88,7 +88,8 @@ class BattleReport(models.Model):
     published = models.DateTimeField(_('Published'))
     #boo :) 
     users = models.ManyToManyField(Roster, verbose_name=_('Rosters'))
-    winner = models.ForeignKey(Roster,related_name='winner')
+    winner = models.ForeignKey(Roster,related_name='winner',
+        blank=True, null=True)
     mission = models.ForeignKey(Mission)
     layout = models.CharField(_('Layout'),max_length=30)
     comment = models.TextField(_('Comment'),max_length=10240)

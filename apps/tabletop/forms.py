@@ -88,7 +88,8 @@ class AddBattleReportModelForm(RequestModelForm):
     winner_choice = fields.NonCheckChoiceField(
         choices=((-1, '-----'),),
         label=_('Winner'),
-        help_text=_('Person who won the battle'))
+        help_text=_('Person who won the battle'),
+        required=False)
     layout = forms.RegexField(regex=re.compile(r'^[\d+vs]+',re.M),required=True,
         help_text=_('Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,
@@ -115,7 +116,9 @@ class AddBattleReportModelForm(RequestModelForm):
         wc = self.cleaned_data['winner_choice']
         winner = get_object_or_none(Roster, pk=wc)
         if not winner:
-            raise forms.ValidationError(_('Such winner roster does not exist'))
+            self.cleaned_data['winner_instance'] = None
+            return None
+            #raise forms.ValidationError(_('Such winner roster does not exist'))
         self.cleaned_data['winner_instance'] = winner
         return wc
 

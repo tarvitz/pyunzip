@@ -20,9 +20,9 @@ $(document).ready(function(){
         sel = wc.selectedIndex;
         r = document.getElementById('id_rosters');
         for (var i = 0; i<wc.options.length; i++) wc.options[i] = null;
-        wc.options[0] = new Option('-----', -1, false, false);
         
-        for (var i = 0; i<r.options.length; i++){
+        wc.options[0] = new Option('-----', -1, false, false); 
+        for (var i = 1; i<r.options.length+1; i++){
             wc.options[i] = new Option(r.options[i].text, r.options[i].value,
                 false, false)
         }//for

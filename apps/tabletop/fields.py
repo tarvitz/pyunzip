@@ -17,7 +17,8 @@ class NonCheckMultipleChoiceField(forms.MultipleChoiceField):
     widget = forms.widgets.SelectMultiple
     def __init__(self, choices=(), required=True, widget=None,
         label=None, initial=None, help_text=None, *args, **kwargs):
-            super(NonCheckMultipleChoiceField, self).__init__(*args, **kwargs)
+            super(NonCheckMultipleChoiceField, self).__init__(choices, required,
+                widget, label, initial, help_text,*args, **kwargs)
 
     def validate(self, value):
         pass
