@@ -23,7 +23,7 @@ $(document).ready(function(){
         
         wc.options[0] = new Option('-----', -1, false, false); 
         for (var i = 1; i<r.options.length+1; i++){
-            wc.options[i] = new Option(r.options[i].text, r.options[i].value,
+            wc.options[i] = new Option(r.options[i-1].text, r.options[i-1].value,
                 false, false)
         }//for
     };
@@ -67,6 +67,8 @@ $(document).ready(function(){
         s = document.getElementById('id_search_rosters').value = '';
         for (var i = 0; r.options.length; i++) r.options[i].selected = true;
     });
+    
+    document.getElementById('id_winner_choice').options[0] = new Option ('-----', -1, false, false);
     r = document.getElementById('id_rosters');
     {% if winner %} r.selectedIndex = {{ winner }}; {% endif %}
     //if (r.options.length>0)  updateWinner();
