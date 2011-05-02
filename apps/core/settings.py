@@ -44,7 +44,7 @@ SETTINGS = {
     'karma_humor': True,
     'invisible': False,
     'auto_update_subscription': False,
-    'show_last_news': True,
+    'show_last_news': False,
     'show_last_replays': True,
     'show_quotes': True,
     'show_online_users': True,

@@ -55,10 +55,21 @@
 }
 .add_form form input#id_submit{
 	width: inherit;
+        color: white;
+        padding: 2px 10px;
+        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
 }
-
+.msg_txt{
+    font-family: Verdana;
+}
 .msg_txt .roster{
     text-indent: 0;
     margin-left: 18px;
     margin-bottom: 10px;
+}
+.msg_txt a.lister{
+    color: lightgreen;
+}
+.msg_text a.lister[alt='[-]']{
+    color: red;
 }

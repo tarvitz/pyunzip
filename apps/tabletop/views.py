@@ -442,7 +442,6 @@ def xhr_rosters(request, search):
     response.write(serialize_json(lw_rosters))
     return response
 
-@login_required
 def xhr_get_roster(request, id):
     from apps.news.templatetags.newsfilters import render_filter, bbfilter
     from django.utils.safestring import mark_safe

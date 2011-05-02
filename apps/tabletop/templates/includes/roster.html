@@ -1,5 +1,5 @@
 <center> {% load newsfilters %}
-	<div class='round_message'>
+	<div class='round_message' id='roster_{{ r.id }}'>
 		<div class='msg_headline'>
 			<!-- effects -->
 			<div class='transparency tr_black'></div>
@@ -20,7 +20,7 @@
 						{% endif %}
 						{% endifequal %}
 					{% else %}
-						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>del</a></span>
+						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}{% endspaceless %}
 					<span><a href="{% url url_edit_roster r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
@@ -29,7 +29,7 @@
 					{% if r.is_orphan %}
 						<span class='first'><a href="{% url url_unorphan_roster r.id %}" title='' class='restore_link'>вернуть</a></span>
 					{% else %}
-						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>del</a></span>
+						<span class='first'><a href='{% url url_delete_roster r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}
 					{% endspaceless  %}
 					<span><a href="{% url url_edit_roster r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
@@ -83,7 +83,7 @@
 						</div>
                                         {% else %}
                                                 <div class='msg_txt' id='id_roster_{{ r.id }}'>
-                                                    <a href='#id_roster_{{ r.id }}' onClick="get_roster('{% url xhr_get_roster r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
+                                                    Ростер: <a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url xhr_get_roster r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
                                                     <span class='roster'></span>
                                                 </div>
 					{% endifequal %}
@@ -108,6 +108,7 @@
 			<br clear='all'>
 		</div> <!-- msg_footer -->
 	</div> <!-- message -->
+</center>
 {% comment %}
 {% if comments.object_list %}
 	{% include settings.document.comments %}

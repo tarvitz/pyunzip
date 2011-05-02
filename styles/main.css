@@ -482,9 +482,17 @@ div.stars img {
 	padding: 2px;
 	background-color: #FFE4E1;
 	text-decoration: none;
-	color: black;
-	margin-left: 1px;
-	font-size: x-small;
+	margin-left: 2px;
+	font-size: 0.55em;
+        font-family: Verdana;
+        color: white !important;
+        padding: 2px 10px;
+        font-weight: normal !important;
+        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
+
+}
+#button:hover, .a_button:hover{
+    color: lightgreen !important;
 }
 /*Расцветка*/
 body{
@@ -492,6 +500,7 @@ body{
 	font-family: Vernada, Sans-Serif;
         /* background: url('images/bg.jpg'); */
 	background-color: #292929;
+        position: relative;
 }
 blockquote{
 	outline: 1px solid white;
@@ -566,6 +575,10 @@ p{
 }
 #form_comment input#submit{
 	border: 1px solid black;
+        color: white;
+        padding: 2px 10px;
+        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
+
 }
 .attention, .attention a{
 	color: red;
@@ -605,6 +618,9 @@ p{
 }*/
 #search_form input.button{
 	width: inherit;
+        color: white;
+        padding: 2px 10px;
+        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
 }
 #blackship{
 	color: black;
@@ -670,6 +686,7 @@ a.warnings{
 }
 .del_link,.edit_link,.restore_link,.act_link{
 	color: grey;
+        font-family: Verdana;
 }
 .del_link:hover{ color : red; }
 .edit_link:hover{ color: gold; }
@@ -724,6 +741,9 @@ a[href$='.zip']{
 }
 a[href$='.rec'],a[href$='/plain/']{
 	background-image: url('images/files/plain.png');
+}
+img[title='avatar']{
+    border: 1px dotted grey;
 }
 *[font_color='red']{
 	color: red;

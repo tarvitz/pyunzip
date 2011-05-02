@@ -182,7 +182,7 @@ class AddRosterForm(RequestForm):
     RACE_CHOICES.insert(0,(0,'------'))
     title = forms.CharField()
     player = forms.RegexField(regex=re.compile(r'^[\w\s-]+$',re.U),required=False)
-    roster = forms.CharField(widget=forms.Textarea(attrs={'rows':20,'cols':'60'}))
+    roster = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,'rows':20,'cols':'60'}))
     race = forms.ChoiceField(choices=RACE_CHOICES,initial=(0,'------'))
     custom_race = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=False)
     pts = forms.IntegerField()

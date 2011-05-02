@@ -25,8 +25,8 @@
 
 .message .msg_comment_date{
     float: left;
-    font-size: 6pt;
-    font-family: Sans-Serif;
+    font-size: 1em;
+    font-family: Verdana;
 }
 
 .message .msg_user_nickname{
