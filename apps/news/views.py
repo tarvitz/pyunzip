@@ -191,7 +191,10 @@ def article_action(request,id=None,action=None):
             article.approved = True
         if action == 'unapprove':
             article.approved = False
-        article.save()
+        if action == 'delete':
+            article.delete()
+        if action != 'delete':
+            article.save()
         #return HttpResponseRedirect(article.get_absolute_url()) //too simple to uz
         #we should use more clear way to interact with articles and retrieve
         #urls via last url state ;)

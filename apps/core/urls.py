@@ -22,6 +22,13 @@ urlpatterns = patterns('apps.core.views',
         'action_type': 'delete',
         },
     ),
+    url(r'article/(?P<obj_id>\d+)/delete/approve/$', 'approve_action',
+        {
+        'action_type': 'delete',
+        'message': _('Do you realy want to delete this article?'),
+        'action_function': 'apps.news.views.article_action',
+        }, name='url_article_delete_approve',
+    ),
     (r'^comment/(?P<obj_id>\d+)/purge/approve/$', 'approve_action',
         {
           #'url': '/comment/\%s/purge/',
