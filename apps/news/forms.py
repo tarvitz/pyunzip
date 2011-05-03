@@ -25,7 +25,7 @@ class ArticleForm(forms.Form):
     content = forms.CharField(widget=TinyMkWidget(attrs={'disable_syntax':False,'disable_user_quote': True}))
     category = forms.ChoiceField(choices=CATEGORIES)
     attachment = forms.FileField(required=False)
-    syntax = forms.ChoiceField(choices=(('markdown','markdown'),('bb-code','bb-code'),))
+    syntax = forms.ChoiceField(choices=settings.SYNTAX)
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
 
     #recieving all request :)

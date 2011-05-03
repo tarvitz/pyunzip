@@ -12,6 +12,7 @@ except ImportError:
 		return value
 from apps.helpers.markdown2_wrapper import markdown2_color
 from apps.thirdpaty.postmarkup import render_bbcode
+from apps.thirdpaty.creole.shortcuts import creole_filter as render_creole
 from django.conf import settings
 
 import re
@@ -113,6 +114,10 @@ def spfilter2(value):
 def bbfilter(value):
     return render_bbcode(value)
 
+@register.filter(name='creole_filter')
+def creole_filter(value):
+    return render_creole(value)
+
 #takes syntax as arg
 @register.filter(name='render_filter')
 def render_filter(value,arg):
@@ -124,6 +129,8 @@ def render_filter(value,arg):
         #how we could render ?
         if arg in 'bb-code':
             return render_bbcode(value)
+        elif arg in 'creole' or 'wiki':
+            return creole_filter(value)
         #default filter
         return spadvfilter(value)
     else:
