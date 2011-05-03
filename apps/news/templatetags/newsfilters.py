@@ -13,6 +13,7 @@ except ImportError:
 from apps.helpers.markdown2_wrapper import markdown2_color
 from apps.thirdpaty.postmarkup import render_bbcode
 from apps.thirdpaty.creole.shortcuts import creole_filter as render_creole
+from apps.thirdpaty.textile import render_textile
 from django.conf import settings
 
 import re
@@ -118,6 +119,10 @@ def bbfilter(value):
 def creole_filter(value):
     return render_creole(value)
 
+@register.filter(name='textile_filter')
+def textile_filter(value):
+    return render_textile(value)
+
 #takes syntax as arg
 @register.filter(name='render_filter')
 def render_filter(value,arg):
@@ -125,12 +130,15 @@ def render_filter(value,arg):
     #if arg == '': #could be None obj passed
     #    return ''
     syntaxes = [i[0] for i in settings.SYNTAX]
+    print arg
     if arg in syntaxes:
         #how we could render ?
         if arg in 'bb-code':
             return render_bbcode(value)
-        elif arg in 'creole' or 'wiki':
+        elif arg in 'creole' or arg in 'wiki':
             return creole_filter(value)
+        elif arg in 'textile':
+            return render_textile(value)
         #default filter
         return spadvfilter(value)
     else:

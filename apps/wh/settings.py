@@ -22,7 +22,8 @@ ARTICLE_INC = "includes/article.html"
 IMAGE_INC_TEMPLATE = 'gallery/includes/image.html'
 
 #syntaxes enabled on site
-SYNTAX=(('markdown','markdown'),('bb-code','bb-code'),('creole', 'wiki'),)
+#SYNTAX=(('markdown','markdown'),('bb-code','bb-code'),('textile','textile'),('creole', 'wiki'),)
+SYNTAX=(('textile', 'textile'), ('bb-code', 'bb-code'),)
 SIGN_CHOICES = (
         (1,'[*]'),
         (2,'[*][*]'),
