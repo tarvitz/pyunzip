@@ -35,3 +35,22 @@ def check_for_updates(parser,tokens):
     return CheckForUpdates(obj,bits[2],user)
 check_for_updates = register.tag(check_for_updates)
 
+class GetAppNModel(Node):
+    def __init__(self, obj):
+        self.obj = obj
+    
+    def render(self, context):
+        obj = self.obj.resolve(context, ignore_failures=True)
+        app = [x for x in reversed(obj.__module__.split('.')) if x not in 'models'][0]
+        model = obj.__class__.__name__.lower()
+        return "%s.%s" % (app, model)
+
+def get_app_n_model(parser, tokens):
+    bits = tokens.contents.split()
+    if len(bits) != 3: #get_app_n_model for object
+        raise TemplateSyntaxError, "get_app_n_model takes 1 arguments at least"
+    if bits[1] != 'for':
+        raise TemplateSyntaxError, "first argument must be 'for'"
+    obj = parser.compile_filter(bits[2])
+    return GetAppNModel(obj)
+get_app_n_model = register.tag(get_app_n_model)

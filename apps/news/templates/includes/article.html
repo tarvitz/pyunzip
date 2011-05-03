@@ -46,17 +46,16 @@
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
  {% if news_general %} <a href='{% url apps.news.views.show_article number=n.id %}'>читать далее</a> {% endif %}
  </div>
- <hr> {% load trackertags %}
+ <hr>
  <div id='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
  {% if n.editor %}<div id='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
  {% if n.url %}<div id='footer' class='url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
  {% spaceless %}
     {% get_comment_count for n as comments %}
-    {% check_for_updates n isnew user %}
  <div id='footer'>Коментариев: {{ comments }} 
- {% if isnew %}
- <span class='new'>[new]</span>
- {% endif %}
+ {% with n as object %}
+    {% include "tracker/is_new.html" %}
+ {% endwith %}
  </div>
  {% endspaceless %}
  {% if n.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}

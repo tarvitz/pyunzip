@@ -50,13 +50,14 @@
             <br>
             {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %}
             название: &quot;<b>{{ image.title }}</b>&quot;<br>
-            {% check_for_updates image isnew user %}
             {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
             <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
             {# recieving comments for images #}
             {% get_comment_count for image as comments %}
-            {% if gallery_general %}{% spaceless %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>
-            {% if isnew %}&nbsp;<span class='new'>[new]</span>{% endif %}
+            {% if gallery_general %}{% spaceless %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>&nbsp;
+            {% with image as object %}
+                {% include "tracker/is_new.html" %}
+            {% endwith %}
 </small>{% endspaceless %}{% else %}
             {% spaceless %}
             

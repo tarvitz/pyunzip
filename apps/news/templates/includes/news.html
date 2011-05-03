@@ -4,6 +4,8 @@
 {% for n in news.object_list %}
     {% include settings.document.article_inc %}
 {% endfor %}
+{% include "tracker/tracker_js.html" %} {# provides tracker user-js implementation #}
+
 <script language='javascript'>
 $('.headline img.right').click(
     function(){

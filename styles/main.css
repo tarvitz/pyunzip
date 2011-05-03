@@ -637,7 +637,7 @@ p{
 #upload_frame{
     width: 80%;
 }
-.new {
+.is_new {
     color: lightgreen;
 }
 /*disable ugly border within firefox img links*/
