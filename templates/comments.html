@@ -40,11 +40,9 @@
 		<div class="msg_text">
 			<div class="transparency"></div>
 			<div id="text_{{ c.id }}">
-				<noscript>
                                 {% markdownit %}
 					{{ c.comment|striptags|render_filter:c.syntax|safe }}
 				{% endmarkdownit %}
-                                </noscript>
 			</div>
 			{% if c.user.about %}
 			<small>---<br>{{ c.user.about }}</small>
