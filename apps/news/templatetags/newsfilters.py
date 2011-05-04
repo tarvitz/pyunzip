@@ -130,7 +130,6 @@ def render_filter(value,arg):
     #if arg == '': #could be None obj passed
     #    return ''
     syntaxes = [i[0] for i in settings.SYNTAX]
-    print arg
     if arg in syntaxes:
         #how we could render ?
         if arg in 'bb-code':
