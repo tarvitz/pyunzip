@@ -98,4 +98,5 @@ onClick="recieve_formatted_comment('+this.pk+')">\
 			the_text.replaceWith(text_area);
 		});
 	}
-//	});
+    
+   //	});

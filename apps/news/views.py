@@ -31,7 +31,7 @@ from django.core import serializers
 from datetime import datetime,timedelta
 from os import stat
 #filters
-from apps.news.templatetags.newsfilters import spadvfilter,bbfilter
+from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import get_settings,save_comment,paginate,can_act
@@ -354,10 +354,7 @@ def get_comment(request, id=0,raw=False):
         comment = Comment.objects.get(id__exact=id)
         if not raw:
             comment.comment = striptags(comment.comment)
-            if comment.syntax == 'bb-code':
-                comment.comment = bbfilter(comment.comment)
-            else:
-                comment.comment = spadvfilter(comment.comment) #striptags|spadvfilter|safe
+            comment.comment = render_filter(comment.comment, comment.syntax) #striptags|spadvfilter|safe
         response.write(serializers.serialize("json",[comment]))
         return response
     except Comment.DoesNotExist:

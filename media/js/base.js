@@ -35,3 +35,4 @@ function go_to(loc){
     //document.location = loc;
     alert(this);
 }
+

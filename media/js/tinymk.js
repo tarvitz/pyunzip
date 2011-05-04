@@ -28,7 +28,7 @@ function change_syntax(obj){
 		if (syntax_object.value == 'bb-code'){
 			syntax_object.value = 'textile';
 			img_obj.src = '/media/tinymk/markdown.png';
-			img_obj.title = 'Markdown syntax is active';
+			img_obj.title = 'Textile syntax is active';
 		}
 		else {
 			syntax_object.value = 'bb-code';

@@ -175,14 +175,34 @@
 	border: 1px dotted white;
 }
 
-.transparency#spoiler{
-	background-color: #CF0000;
-	width: 100%;
+.spoiler_block{
+    max-width: 90%;
+    padding: 0px;
+    margin: 0px;
 }
+.spoiler_show{
+    border: 1px dotted white;
+}
+.spoiler_block .marker, .spoiler_block a, .spoiler_block .text{
+    font-family: Verdana;
+    font-size: 0.7em;
+}
+
+.tr_spoiler{
+	background-color: #CF0000 !important;
+	width: 100%;
+        height: 100%;
+}
+
 .spoiler{
 	position: relative;
-	border: 1px dotted white;
+	border-top: 1px dotted white;
 	margin-top: 5px;
+}
+/*to prevent transparent coloring show wrong despite
+ * the elements margin*/
+.spoiler *{
+    margin: 0px;
 }
 
 .offtopic{
