@@ -75,7 +75,7 @@ function paste_code(obj,block){
                     break;
                 };
                 case 'offtopic':{
-                    textarea_object.value += "(offtopic)[ offtopic text here :) ]";
+                    textarea_object.value += "(off)[ offtopic text here :) ]";
                     break;
                 };
 				default:{
@@ -110,7 +110,7 @@ function paste_code(obj,block){
                 break;
             };
             case 'offtopic':{
-                textarea_object.value += "(offtopic)[ offtopic text here :) ]";
+                textarea_object.value += "(off)[ offtopic text here :) ]";
                 break;
             };
 			default: {
