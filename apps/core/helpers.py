@@ -18,6 +18,7 @@ from django.core.mail import send_mail
 from celery.task import task
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import bz2
+import re
 import logging
 logger = logging.getLogger(__name__)
 
@@ -337,7 +338,10 @@ def handle_uploaded_file(f,path,compress=False):
     from django.conf import settings
     fp_path = os.path.join(settings.MEDIA_ROOT,path)
     os.path.exists(fp_path) or os.makedirs(fp_path) #equivalent to if statement
-    fp_path = os.path.join(fp_path,f.name)
+    f_name = re.sub(re.compile(r'\(|\ |\)|!|\'|\"|\?|:|\+|}|{|\^|\%|\$|\#|@|~|`|,', re.S ),'_',f.name)
+    f_name = re.sub(re.compile(r'_+'),'_',f_name)
+
+    fp_path = os.path.join(fp_path,f_name)
     #print "fp_path: ", fp_path
     fp = open(fp_path,'wb+')
     """
@@ -353,7 +357,7 @@ def handle_uploaded_file(f,path,compress=False):
     for chunk in f.chunks():
         fp.write(chunk)
     #print "filename: ", os.path.join(path,f.name)
-    return os.path.join(path,f.name)
+    return os.path.join(path,f_name)
 
 def get_upload_form(path):
     from apps.core.settings import UPLOAD_SETTINGS
