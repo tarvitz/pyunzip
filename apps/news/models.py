@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-
+from apps.djangosphinx.models import SphinxSearch
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(_('Category'), max_length=100, blank=False, null=False)
@@ -91,6 +91,11 @@ class ArchivedNews(AbstractNews):
         verbose_name_plural = _('Archived news')
 
 class News(AbstractNews):
+    search = SphinxSearch(weights={
+        'title': 100,
+        'head_content': 100,
+        'content': 100,
+    })
     def get_absolute_url(self):
         return reverse('apps.news.views.show_article',kwargs={'number':self.id})
 
