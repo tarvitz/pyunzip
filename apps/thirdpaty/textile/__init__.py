@@ -1,6 +1,8 @@
 from apps.thirdpaty.textile.functions import textile, textile_restricted, Textile
-
-__all__ = ['textile', 'textile_restricted']
+from apps.thirdpaty.textile.textilefactory import TextileFactory
 
 def render_textile(value):
-    return textile(value)
+    t = TextileFactory()
+    return t.process(value)
+
+__all__ = ['textile', 'textile_restricted', 'render_textile']
