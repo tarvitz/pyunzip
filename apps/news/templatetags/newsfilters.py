@@ -139,9 +139,13 @@ def render_filter(value,arg):
             return creole_filter(value)
         elif arg in 'textile':
             return render_textile(value)
+        elif arg in 'markdown':
+            return spadvfilter(value)
+        return render_textile(value)
         #default filter
-        return spadvfilter(value)
+        #return spadvfilter(value)
     else:
-        return spadvfilter(value) #markdown by default
+        return render_textile(value)
+        #spadvfilter(value) #markdown by default
 
     
