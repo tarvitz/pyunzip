@@ -2,11 +2,13 @@
 <script src='/media/js/tinymk.js' type='text/javascript'></script>
 <div class='tinymk_panel'>
 	<div class='transparency' id='black'></div>
-	<img title='Жирный шрифт' src="/media/tinymk/bold.png" onClick='paste_code("bold","{{ tinymk.id }}");'>
-	<img title='Курсив' src="/media/tinymk/italic.png"     onClick='paste_code("italic","{{ tinymk.id }}");'>
-	<img title='Подчёркнутый шрифт' src="/media/tinymk/underline.png" onClick='paste_code("underline","{{ tinymk.id }}");'>
+	<img title='Жирный шрифт' alt='[b]' src="/media/tinymk/bold.png" onClick='paste_code("bold","{{ tinymk.id }}");'>
+	<img title='Курсив' alt='[i]' src="/media/tinymk/italic.png"     onClick='paste_code("italic","{{ tinymk.id }}");'>
+	<img title='Подчёркнутый шрифт' alt='[u]' src="/media/tinymk/underline.png" onClick='paste_code("underline","{{ tinymk.id }}");'>
 	{% if not tinymk.disable_user_quote %}
-	<img title='Пользовательская цитата' src="/media/tinymk/quote.png" onClick='insertQuote()';>
+	<img title='Пользовательская цитата' alt='[quote]' src="/media/tinymk/quote.png" onClick='insertQuote()';>
+        <img title='Спойлер' src='/media/tinymk/spoiler.png' alt='[spoil]' onClick='paste_code("spoiler", "{{ tinymk.id }}");'>
+        <img title='Оффтоп' src='/media/tinymk/offtopic.png' alt='[off]' onClick='paste_code("offtopic", "{{ tinymk.id }}");'>
 	{% endif %}
 	{% if not tinymk.disable_syntax %}
 	  [<img src="/media/tinymk/markdown.png" onClick='change_syntax("id_syntax_change");' id='id_syntax_change' title='Markdown syntax is active'>]

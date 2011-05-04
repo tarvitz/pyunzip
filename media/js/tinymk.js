@@ -69,7 +69,15 @@ function paste_code(obj,block){
 				case 'quote':{
 					textarea_object.value += '(User){userquote}';
 					break;
-				}
+				};
+                case 'spoiler':{
+                    textarea_object.value += "(spoiler)[ spoiler text here :) ]";
+                    break;
+                };
+                case 'offtopic':{
+                    textarea_object.value += "(offtopic)[ offtopic text here :) ]";
+                    break;
+                };
 				default:{
 					break;	
 				}
@@ -97,6 +105,14 @@ function paste_code(obj,block){
 				textarea_object.value += '(User){userquote}';
 				break;
 			};
+            case 'spoiler':{
+                textarea_object.value += "(spoiler)[ spoiler text here :) ]";
+                break;
+            };
+            case 'offtopic':{
+                textarea_object.value += "(offtopic)[ offtopic text here :) ]";
+                break;
+            };
 			default: {
 				//alert('unknown');
 			};
