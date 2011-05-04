@@ -63,7 +63,7 @@ function paste_code(obj,block){
 				};
 				case 'underline':{	
 					insertBlockTag(block, {start: "[u]", end: "[/u]"});
-                                        textarea_object.value += '[u][/u]';
+                    //textarea_object.value += '[u][/u]';
 					break;
 				};
 				case 'quote':{
