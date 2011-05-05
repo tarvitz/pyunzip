@@ -265,8 +265,12 @@ def get_content_type(Object):
         #ct = ContentType.objects.get(app_label=app_label,model=model)
     elif hasattr(Object,'pk'): #class instance
         #print "class instance: ", Object
-        app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
-        model = Object.__class__.__name__.lower()
+        if hasattr(Object, '_sphinx'):
+            app_label = (x for x in reversed(Object._current_object.__module__.split('.')) if x not in 'models').next()
+            model = Object._current_object.__class__.__name__.lower()
+        else:
+            app_label = (x for x in reversed(Object.__module__.split('.')) if x not in 'models').next()
+            model = Object.__class__.__name__.lower()
         #ct = ContentType.objects.get(app_label=app_label,model=model)
         #model = 
     elif isinstance(Object,str) or isinstance(Object,unicode):
