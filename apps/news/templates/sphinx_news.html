@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% load i18n %}
+{% block text_content %}
+<form action='.' method='post' id='id_sph_news'>
+    {{ form.as_ul }}
+    <input type='submit' value='{% trans "submit" %}'>
+</form>
+
+{% if news %}
+<ul>
+{% for n in news %}
+    <li>{{ n.title }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}

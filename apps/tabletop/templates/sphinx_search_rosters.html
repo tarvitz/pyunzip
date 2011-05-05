@@ -1,0 +1,38 @@
+{% extends base_template %} {% load i18n %}
+{% block js %}
+    {{ block.super }}
+    <script language='javascript' src='/media/js/jq_tabletop.js'></script>
+{% endblock %}
+{% block css %}
+ {{ block.super }}
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' type='text/css' media='screen'>
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' type='text/css' media='screen'>
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' type='text/css' media='screen'>
+{% endblock %}
+{% block text_content %}
+<div style='margin-left: 2em;'>
+<form id='id_sph_search_rosters' method='post' action='.'>
+    {{ form.as_ul }}
+    <input type='submit' value="{% trans "submit" %}">
+</form>
+</div>
+
+{% if rosters.object_list %}
+    {% for r in rosters.object_list %}
+        {% include settings.document.roster_inc %}
+    {% endfor %}
+{% with rosters as page %}
+    {% include settings.document.links %}
+{% endwith %}
+{% else %}
+{% if search_query %}
+<center>
+<div class='block_notice'>
+    <div class='transparency tr_black'></div>
+    ничего не найдено o_O"
+</div>
+</center>
+{% endif %}
+{% endif %}
+
+{% endblock %}
