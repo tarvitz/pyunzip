@@ -59,13 +59,13 @@ def _is_sourcable_field(field):
 # No trailing slashes on paths
 DEFAULT_SPHINX_PARAMS = {
     'database_engine': _get_database_engine(),
-    'database_host': settings.DATABASE_HOST,
-    'database_port': settings.DATABASE_PORT,
-    'database_name': settings.DATABASE_NAME,
-    'database_user': settings.DATABASE_USER,
-    'database_password': settings.DATABASE_PASSWORD,
+    'database_host': settings.DATABASES['default']['HOST'],
+    'database_port': settings.DATABASES['default']['PORT'],
+    'database_name': settings.DATABASES['default']['NAME'],
+    'database_user': settings.DATABASES['default']['USER'],
+    'database_password': settings.DATABASES['default']['PASSWORD'],
     'log_file': '/var/log/sphinx/searchd.log',
-    'data_path': '/var/data',
+    'data_path': settings.SPHINX_DATA_PATH or '/var/data',
 }
 
 def get_index_context(index):
