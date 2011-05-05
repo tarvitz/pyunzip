@@ -12,6 +12,7 @@ from utils.middleware import threadlocals
 
 from utils import text
 from django.core.urlresolvers import reverse
+from apps.djangosphinx.models import SphinxSearch
 
 class Quote(models.Model):
 
@@ -30,6 +31,8 @@ class Quote(models.Model):
     sender_ip   = models.IPAddressField(_('sender ip'), blank=True, null=True)
 
     tags        = apps.tagging.fields.TagField()
+    
+    search      = SphinxSearch(weights={'text': 40})
 
     def __unicode__(self):
 	    return (_('quote #%s') % self.id).capitalize()

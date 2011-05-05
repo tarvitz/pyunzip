@@ -13,6 +13,7 @@ from django.contrib.comments.models import Comment
 from apps.core.models import Settings as UserSettings
 from django.core.urlresolvers import reverse
 from apps.core.decorators import null
+from apps.djangosphinx.models import SphinxSearch
 
 class Universe(models.Model):
     codename = models.CharField(_('Codename'),max_length=20,unique=True,primary_key=True)
@@ -352,6 +353,8 @@ User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, def
 #User.add_to_class('settings', models.ForeignKey(Settings))
 #Comment
 Comment.add_to_class('syntax',models.CharField(_('Syntax'),max_length=20,null=True,blank=True,choices=settings.SYNTAX))
+Comment.add_to_class('search', SphinxSearch(weights={'comment': 100}))
+
 #works here O_O
 from django.contrib.auth.admin import UserAdmin
 UserAdmin.raw_id_fields += ('ranks',)

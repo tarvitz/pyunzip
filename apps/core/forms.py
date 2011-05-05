@@ -128,3 +128,6 @@ class CommentForm(forms.Form):
         page = self.cleaned_data.get('page',None)
         if 'last' in page:
             return page
+
+class SphinxSearchForm(forms.Form):
+    query = forms.CharField(required=True)

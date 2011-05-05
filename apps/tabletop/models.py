@@ -8,6 +8,7 @@ from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from apps.wh.models import Side
+from apps.djangosphinx.models import SphinxSearch
 
 class Roster(models.Model):
     owner = models.ForeignKey(User,related_name='roster_owner')
@@ -24,6 +25,7 @@ class Roster(models.Model):
     syntax = models.CharField(_('Syntax'), max_length=20,blank=True,null=True,choices=settings.SYNTAX)
 
     is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True) 
+    search = SphinxSearch(weights={'title': 30, 'comments': 30})
 
     def show_player(self):
        if hasattr(self.user,'nickname'): return self.user.nickname
@@ -96,7 +98,7 @@ class BattleReport(models.Model):
     approved = models.BooleanField(_('Approved'),default=False,blank=True)
     ip_address = models.IPAddressField(_('IP address'),blank=True,null=True)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX)
-    
+    search = SphinxSearch(weights={'title': 30, 'comment': 30})
     
     def __unicode__(self):
         return "%s [%s:%s]" % (

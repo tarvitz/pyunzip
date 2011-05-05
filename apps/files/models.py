@@ -9,6 +9,8 @@ from cStringIO import StringIO
 from apps.files.helpers import ZipPack
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
+from apps.djangosphinx.models import SphinxSearch
+
 #Abstract Classes
 
 class IncomeFile(models.Model):
@@ -94,7 +96,10 @@ class Replay(models.Model):
     comments = models.TextField(_('Comments'),blank=True)
     is_set = models.BooleanField(_('is set'), blank=True)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True) 
-
+    search = SphinxSearch(weights={
+        'title': 30,
+        'comment': 40,
+    })
     get_title = lambda self: self.name
     get_content = lambda self: self.comments
     owner = lambda self: self.author
@@ -272,7 +277,11 @@ class Image(models.Model):
     image = models.ImageField(_('Image'), upload_to=os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
     thumbnail = models.ImageField(_('Thumbnail'), upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/"))
     owner = models.ForeignKey(User)
-    
+    search = SphinxSearch(weights={
+        'title': 40,
+        'comments': 30,
+    })
+
     class Meta:
         permissions = (
          ('can_upload', 'Can upload images'),
