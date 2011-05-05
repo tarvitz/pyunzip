@@ -12,7 +12,7 @@ from apps.core.helpers import get_settings,save_comment,get_comments,get_content
 from django.conf import settings
 from django.shortcuts import render_to_response,get_object_or_404
 from apps.core import pages, get_skin_template
-from apps.core.forms import CommentForm
+from apps.core.forms import CommentForm, SphinxSearchForm
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
@@ -171,6 +171,26 @@ def search_rosters(request):
             form.fields['race'].initial = roster_query['race']
         return render_to_response(template,{'form':form,'rosters':rosters,'query':roster_query},
             context_instance=RequestContext(request,processors=[benchmark]))
+
+@benchmarking
+def sphinx_search_rosters(request):
+    template = get_skin_template(request.user, "sphinx_search_rosters.html")
+    if request.method == 'POST':
+        form = SphinxSearchForm(request.POST)
+        if form.is_valid():
+            rosters = Roster.search.query(form.cleaned_data['query'])
+            _pages_ = get_settings(request.user, 'rosters_on_page', 20)
+            page = request.GET.get('page', 1)
+            rosters = paginate(rosters, page, pages=_pages_)
+            return direct_to_template(request, template,
+                {'form': form, 'rosters': rosters, 'search_query': True},
+                processors=[benchmark])
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'search_query': True}, processors=[benchmark])
+    form = SphinxSearchForm()
+    return direct_to_template(request, template, {'form': form},
+        processors=[benchmark])
 
 @login_required
 def unorphan(request,id):

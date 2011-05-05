@@ -47,6 +47,8 @@ urlpatterns = patterns('apps.tabletop.views',
         name='url_show_roster'),
     url('^roster/unorphan/(?P<id>\d+)/$','unorphan',
         name='url_unorphan_roster'),
+    url('^sphinx/rosters/$', 'sphinx_search_rosters',
+        name='url_sph_search_rosters'),
     #xhr
     url('^xhr/rosters/$','xhr_rosters', {'search': 'test'}, name='xhr_search_rosters'),
     url('^xhr/rosters/(?P<search>[\w\s_]+)/$','xhr_rosters', name='xhr_search_rosters'),

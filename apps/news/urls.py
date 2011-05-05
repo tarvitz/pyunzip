@@ -29,4 +29,5 @@ urlpatterns = patterns('apps.news.views',
     (r'^comment/(?P<id>\d+)/update/$', 'edit_comment_ajax'),
     (r'^comment/(?P<id>\d+)/get/$', 'get_comment'), #json format reply
     (r'^comment/(?P<id>\d+)/get/raw/$', 'get_comment', {'raw':True}), #json format reply
+    url(r'^sphinx/news/$', 'sphinx_news',name='url_sphinx_news'),
 )

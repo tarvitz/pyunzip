@@ -3,7 +3,7 @@
 import os
 from apps.news.models import News,Category,ArchivedNews
 from apps.news.forms import ArticleForm
-from apps.core.forms import CommentForm
+from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.files.models import Attachment
 from apps.files.helpers import save_uploaded_file as save_file
 from apps.core import make_links_from_pages as make_links
@@ -468,3 +468,18 @@ def purge_comment(request,id=0,approve='force'):
         return HttpResponseRedirect('/comment/purged')
     else:
         return HttpResponseRedirect('/comment/not/found')
+
+def sphinx_news(request):
+    template = get_skin_template(request.user, 'sphinx_news.html')
+    if request.method == 'POST':
+        form = SphinxSearchForm(request.POST)
+        if form.is_valid():
+            news = News.search.query(form.cleaned_data['query']).all()
+            return direct_to_template(request, template,
+                {'form': form, 'news': news})
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = SphinxSearchForm()
+    return direct_to_template(request, template,
+        {'form': form})
