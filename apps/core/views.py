@@ -2,7 +2,8 @@
 import os
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
-from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm
+from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm, \
+    SphinxSearchForm
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object
@@ -256,6 +257,39 @@ def search_model(request,model):
         context_instance=RequestContext(request,processors=[benchmark]))
 
     #return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+#@todo: add base sphinx search implementation for models search
+@benchmarking
+def sphinx_search_model(request, model):
+    template = get_skin_template(request.user, 'sphinx_search_model.html')
+    from django.template.loader import get_template,TemplateDoesNotExist
+    #trying to search already implemented sphinx_search_%(model)s.html"
+    try:
+        template_src = get_skin_template(request.user,'includes/sphinx_search_%s.html' % model )
+        template_t = get_template(template_src)
+        template = template_src
+    except TemplateDoesNotExist:
+        pass
+    ct = get_object_or_404(ContentType, model=model)
+    if request.method == 'POST':
+        form = SphinxSearchForm(request.POST)
+        if form.is_valid():
+            _pages_ = 20
+            page = request.GET.get('page', 1)
+            Class = ct.model_class()
+            objects = Class.search.query(form.cleaned_data['query'])
+            objects = paginate(objects, page, pages=_pages_)
+            return direct_to_template(request, template,
+                {'form': form, 'objects': objects, 'query': form.cleaned_data['query'] },
+                processors=[benchmark])
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'query': form.cleaned_data['query']},
+                processors=[benchmark])
+    form = SphinxSearchForm()
+    return direct_to_template(request, template,
+        {'form': form},
+        processors=[benchmark])
+
 #IT BLOWS MY MIND ;) sometimes and i can not believe that i've written this block of code
 @login_required
 def user_settings(request):

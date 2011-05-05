@@ -1,0 +1,39 @@
+{% extends base_template %} {% load i18n %}
+{% block js %}
+    {{ block.super }}
+{% endblock %}
+{% block css %}
+ {{ block.super }}
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' type='text/css' media='screen'>
+{% endblock %}
+
+{% block text_content %}
+
+<div style='margin-left: 2em;'>
+<form id='id_sph_search' method='post' action='.'>
+    {{ form.as_ul }}
+    <input type='submit' value="{% trans "search" %}">
+</form>
+</div>
+
+{% block sphinx_block %}
+{% if objects.object_list %}
+<ul>
+{% for o in objects.object_list %}
+    <li>{{ o.get_title }}</li>
+{% endfor %}
+</ul>
+{% else %}
+{% if query %}
+    <center>
+        <div class='block_notice'>
+            <div class='transparency tr_black'></div>
+            ничего по запросу &quot;{{ query }}&quot; не найдено o_O"
+        </div>
+    </center>
+{% endif %}
+{% endif %}
+
+{% endblock %}
+
+{% endblock %}

@@ -174,7 +174,7 @@ def search_rosters(request):
 
 @benchmarking
 def sphinx_search_rosters(request):
-    template = get_skin_template(request.user, "sphinx_search_rosters.html")
+    template = get_skin_template(request.user, "includes/sphinx_search_roster.html")
     if request.method == 'POST':
         form = SphinxSearchForm(request.POST)
         if form.is_valid():
@@ -183,7 +183,7 @@ def sphinx_search_rosters(request):
             page = request.GET.get('page', 1)
             rosters = paginate(rosters, page, pages=_pages_)
             return direct_to_template(request, template,
-                {'form': form, 'rosters': rosters, 'search_query': True},
+                {'form': form, 'objects': rosters, 'search_query': True},
                 processors=[benchmark])
         else:
             return direct_to_template(request, template,

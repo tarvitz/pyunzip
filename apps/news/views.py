@@ -469,17 +469,20 @@ def purge_comment(request,id=0,approve='force'):
     else:
         return HttpResponseRedirect('/comment/not/found')
 
-def sphinx_news(request):
-    template = get_skin_template(request.user, 'sphinx_news.html')
+def sphinx_search_news(request):
+    template = get_skin_template(request.user, 'includes/sphinx_search_news.html')
     if request.method == 'POST':
         form = SphinxSearchForm(request.POST)
         if form.is_valid():
             news = News.search.query(form.cleaned_data['query']).all()
+            page = request.GET.get('page',1)
+            _pages_ = get_settings(request.user, 'news_on_page', 20)
+            news = paginate(news, page, pages=_pages_)
             return direct_to_template(request, template,
-                {'form': form, 'news': news})
+                {'form': form, 'news': news, 'query': form.cleaned_data['query']})
         else:
             return direct_to_template(request, template,
-                {'form': form})
+                {'form': form, 'query': form.cleaned_data['query']})
     form = SphinxSearchForm()
     return direct_to_template(request, template,
         {'form': form})
