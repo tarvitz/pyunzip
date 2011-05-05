@@ -132,7 +132,9 @@
 	<span class='reflects_down'></span>
 	<span class='reflects_left'></span>
 		<ul>
-			{% if not user.is_authenticated %}<li><a href='{% url apps.wh.views.onsite_register %}'>Регистрация</a></li>
+			{% if not user.is_authenticated %}
+                        <li><a href="{% url auth_login %}">Логин</a> |
+         <a href='{% url apps.wh.views.onsite_register %}'>Регистрация</a></li>
 			<li class='lvl2'><a href='{% url apps.wh.views.password_recover %}'>востановление пароля</a></li>{% endif %}
 			<li><a href="{% url apps.news.views.news %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
 			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='news_atom' %}">[atom</a>|
@@ -140,7 +142,7 @@
 			</li>
 			<li class='lvl2'><a href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.news.views.add_article %}'>Добавить</a></li>{% endif %}
-			<li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li>
+			{# <li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li> #}
 			<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
 			<li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href="{% url apps.quotes.views.add %}">добавить</a></li> {% endif %}
