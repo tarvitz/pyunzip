@@ -290,8 +290,8 @@ class Image(models.Model):
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
         
-    #get_title = lambda self: self.title
-    
+    get_title = lambda self: self.title
+     
     def generate_thumbnail(self,size=(200,200)):
         if not self.image:
             return

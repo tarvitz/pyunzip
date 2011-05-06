@@ -9,19 +9,19 @@ from apps.vote.helpers import vote_stars_calculate as stars_calculate
 
 register = Library()
 class GetVotesForObject(Node):
-    def __init__(self, object, varname, stars=False):
+    def __init__(self, obj, varname, stars=False):
         self.varname = varname
-        self.object = object
+        self.obj = obj
         self.stars = stars
     def render(self, context):
-        object = self.object.resolve(context, ignore_failures=True)
+        obj = self.obj.resolve(context, ignore_failures=True)
         #obsolete
-        model_name = object.__class__.__doc__.split('(')[0].lower()
-        ct = ContentType.objects.get(model=model_name)
+        #model_name = object.__class__.__doc__.split('(')[0].lower()
+        #ct = ContentType.objects.get(model=model_name)
         #TODO: fixit
-        #ct = get_content_type(object)
+        ct = get_content_type(obj)
         try:
-            vote = Vote.objects.get(content_type=ct,object_pk=str(object.pk))
+            vote = Vote.objects.get(content_type=ct,object_pk=str(obj.pk))
             if self.stars:
                 context[self.varname] = stars_calculate(float(vote.rating))
             else:    
@@ -40,8 +40,8 @@ def get_vote(parser, tokens):
         raise TemplateSyntaxError, "the second argument must be 'for'"
     if bits[3] != 'as':
         raise TemplateSyntaxError, "the fourth argument must be 'as'"
-    object = parser.compile_filter(bits[2])
-    return GetVotesForObject(object,bits[4])
+    obj = parser.compile_filter(bits[2])
+    return GetVotesForObject(obj,bits[4])
 get_vote = register.tag(get_vote)
 
 def get_vote_stars(parser, tokens):
@@ -66,8 +66,10 @@ class GetUserVotedForObject(Node):
     def render(self, context):
         object = self.object.resolve(context, ignore_failures=True)
         user = self.user.resolve(context, ignore_failures=True)
-        model_name = object.__class__.__doc__.split('(')[0].lower()
-        ct = ContentType.objects.get(model=model_name)
+        #model_name = object.__class__.__doc__.split('(')[0].lower()
+        #ct = ContentType.objects.get(model=model_name)
+        ct = get_content_type(object)
+
         try:
             vote = Vote.objects.get(content_type=ct,object_pk=str(object.pk))
             voted = vote.users.filter(id=user.id)
@@ -111,8 +113,13 @@ class DoBindObject(Node):
             app_label = app_label.split('.')[1]
         except:
             pass
+        #sphinx fixtures
+        if hasattr(object, '_sphinx') or hasattr(object, '_current_object'):
+            obj = object._current_object.__class__.__name__.lower()
+        else:
+            obj = object.__class__.__name__.lower()
         values = {
-            'model_name':object.__doc__.split('(')[0].lower(),
+            'model_name': obj,
             'app_label': app_label,
         }
         context['votes'] = values

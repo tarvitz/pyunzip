@@ -257,6 +257,47 @@ def search_model(request,model):
         context_instance=RequestContext(request,processors=[benchmark]))
 
     #return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+@benchmarking
+def sphinx_search(request):
+    template = get_skin_template(request.user, 'sphinx_search.html')
+    page = request.GET.get('page', 1)
+    pages = get_settings(request.user, 'objects_on_page', 20)
+    objs = list()
+    query = request.POST.get('query', '') or request.session.get('query', None)
+    
+    if request.get_full_path() == reverse('url_sph_search'):
+        if query:
+            if 'query' in request.session:
+                del request.session['query']
+                request.session.save()
+
+    if request.method == 'POST':
+        form = SphinxSearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+            request.session['query'] = query
+            for sf in settings.CORE_SEARCH_FIELDS:
+                app, model, fields, kw = sf
+                ct = get_content_type("%s.%s" % (app, model))
+                if ct:
+                    Class = ct.model_class()
+                    objects = Class.search.query(query)
+                    if objects.count():
+                        objects = paginate(objects, page, pages=pages)
+                        objects.view = 'apps.core.views.sphinx_search_model'
+                        objects.raw_model = Class.__name__.lower()
+                        objs.append(objects)
+            return direct_to_template(request, template, {'form': form,
+                'query': form.cleaned_data['query'],
+                'objects': objs},
+                processors=[benchmark])
+        else:
+            return direct_to_template(request, template, {'form': form,
+                'query': form.cleaned_data['query']},
+                processors=[benchmark])
+    form = SphinxSearchForm()
+    return direct_to_template(request, template, {'form': form})
+
 #@todo: add base sphinx search implementation for models search
 @benchmarking
 def sphinx_search_model(request, model):
@@ -270,26 +311,31 @@ def sphinx_search_model(request, model):
     except TemplateDoesNotExist:
         pass
     ct = get_object_or_404(ContentType, model=model)
+    Class = ct.model_class()
+    query = request.POST.get('query', None) or request.session.get('query', None)
+    page = request.GET.get('page', 1)
+    _pages_ = get_settings(request.user, 'objects_on_page', 20)
+    #query processing
+    if request.get_full_path() == reverse('url_sph_search_model', args=(model,)):
+            if 'query' in request.session['query']:
+                del request.session['query']
+                requrest.session()
     if request.method == 'POST':
-        form = SphinxSearchForm(request.POST)
+        form = SphinxSearchForm(request.POST)        
         if form.is_valid():
-            _pages_ = 20
-            page = request.GET.get('page', 1)
-            Class = ct.model_class()
-            objects = Class.search.query(form.cleaned_data['query'])
-            objects = paginate(objects, page, pages=_pages_)
-            return direct_to_template(request, template,
-                {'form': form, 'objects': objects, 'query': form.cleaned_data['query'] },
-                processors=[benchmark])
+            query = form.cleaned_data['query']
         else:
             return direct_to_template(request, template,
-                {'form': form, 'query': form.cleaned_data['query']},
+                {'form': form, 'query': query},
                 processors=[benchmark])
-    form = SphinxSearchForm()
+    
+    form = SphinxSearchForm(initial={'query': query})
+    objects = Class.search.query(query)
+    objects = paginate(objects, page, pages=_pages_)
     return direct_to_template(request, template,
-        {'form': form},
+        {'form': form, 'objects': objects, 'query': query },
         processors=[benchmark])
-
+    
 #IT BLOWS MY MIND ;) sometimes and i can not believe that i've written this block of code
 @login_required
 def user_settings(request):

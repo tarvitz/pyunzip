@@ -69,6 +69,11 @@ class AbstractNews(models.Model):
 
 
 class ArchivedNews(AbstractNews):
+    search = SphinxSearch(weights={
+        'title': 100,
+        'head_content': 100,
+        'content': 100,
+    })
     class Meta:
         verbose_name = _('Archived Article')
         verbose_name_plural = _('Archived News')
@@ -96,6 +101,7 @@ class News(AbstractNews):
         'head_content': 100,
         'content': 100,
     })
+
     def get_absolute_url(self):
         return reverse('apps.news.views.show_article',kwargs={'number':self.id})
 

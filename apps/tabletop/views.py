@@ -408,12 +408,16 @@ def add_old_battle_report(request,id=None,action=''):
             return HttpResponseRedirect('/report/doest/not/exist/')
     return direct_to_template(request,template,{'form':form})
 
+#@todo: may be should be MORE CLEAN?
 @login_required
 @can_act
-def add_battle_report(request):
+def add_battle_report(request, action=None, id=None):
     template = get_skin_template(request.user, 'add_battle_report.html')
+    br = None
+    if action == 'edit':
+        br = get_object_or_404(BattleReport, id=id)
     if request.method == 'POST':
-        form = AddBattleReportModelForm(request.POST, request=request)
+        form = AddBattleReportModelForm(request.POST, request=request, instance=br)
         if form.is_valid():
             instance = form.instance
             instance.owner = request.user
@@ -432,16 +436,17 @@ def add_battle_report(request):
             #print form.data.getlist('rosters')
             rosters = [int(x) for x in form.data.getlist('rosters')]
             winner = int(form.data.get('winner_choice'))
-            form.base_fields['winner_choice']._choices = ((-1, '-----'),)
             for r in rosters:
                 _r = get_object_or_none(Roster, id=r)
                 if len(form.base_fields['rosters'].choices) < len(rosters):
                     form.base_fields['rosters']._choices.append((_r.id, _r.__unicode__()))
-                    form.base_fields['winner_choice']._choices.append((_r.id, _r.__unicode__()))
 
             return direct_to_template(request, template, {'form': form,
                 'winner': winner})
-    form = AddBattleReportModelForm()
+    if br:
+        form = AddBattleReportModelForm(instance=br)
+    else:
+        form = AddBattleReportModelForm()
     return direct_to_template(request, template, {'form': form})
 
 @login_required

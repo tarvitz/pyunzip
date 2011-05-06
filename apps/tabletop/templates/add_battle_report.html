@@ -68,10 +68,18 @@ $(document).ready(function(){
         for (var i = 0; r.options.length; i++) r.options[i].selected = true;
     });
     
-    document.getElementById('id_winner_choice').options[0] = new Option ('-----', -1, false, false);
+    wc = document.getElementById('id_winner_choice');
+    wc.options[0] = new Option ('-----', -1, false, false);
     r = document.getElementById('id_rosters');
-    {% if winner %} r.selectedIndex = {{ winner }}; {% endif %}
-    //if (r.options.length>0)  updateWinner();
+    {% if winner %}
+    if (r.options.length>0)  updateWinner();
+        for (var i=0; i<wc.options.length; i++){
+            if (wc.options[i].value == '{{ winner }}'){
+                wc.selectedIndex = wc.options[i].index;
+                break;
+            }
+        };
+    {% endif %}
 
 });
 </script>

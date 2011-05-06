@@ -11,8 +11,8 @@
 
 {% block sphinx_block %}
 {% if objects.object_list %}
-    {% for r in objects.object_list %}
-        {% include settings.document.roster_inc %}
+    {% for br in objects.object_list %}
+        {% include settings.document.battle_report_inc %}
     {% endfor %}
 {% with objects as page %}
     {% include settings.document.links %}

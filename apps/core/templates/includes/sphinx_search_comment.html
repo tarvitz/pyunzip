@@ -5,15 +5,14 @@
 {% endblock %}
 {% block css %}
  {{ block.super }}
- <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' type='text/css' media='screen'>
- <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' type='text/css' media='screen'>
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
 {% endblock %}
 
 {% block sphinx_block %}
 {% if objects.object_list %}
-    {% for r in objects.object_list %}
-        {% include settings.document.roster_inc %}
-    {% endfor %}
+    {% with objects as comments %}
+        {% include settings.document.comments %}
+    {% endwith %}
 {% with objects as page %}
     {% include settings.document.links %}
 {% endwith %}

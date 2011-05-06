@@ -95,6 +95,21 @@ class AddBattleReportModelForm(RequestModelForm):
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,
         'disable_syntax': True})) 
     
+   
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs:
+            instance = kwargs['instance']
+            if instance:
+                self.base_fields['winner_choice'].choices = []
+                self.base_fields['rosters'].choices = []
+                self.base_fields['winner_choice'].choices.append((-1, '-----'))
+                for r in instance.users.all():
+                    self.base_fields['rosters'].choices.append((r.id, r.__unicode__()))
+                    self.base_fields['winner_choice'].choices.append((r.id, r.__unicode__()))
+                self.base_fields['winner_choice'].initial = instance.winner.id
+        super(AddBattleReportModelForm, self).__init__(*args, **kwargs)
+    
+
     def clean(self):
         cleaned_data = self.cleaned_data
         layout = cleaned_data.get('layout', None)

@@ -1,0 +1,21 @@
+{% load vurl %}
+{% for sobjects in objects %}
+    {% if sobjects.object_list %}
+    <ul><a href="{% vurl sobjects.view model=sobjects.raw_model %}">{{ sobjects.raw_model }}</a>
+    {% for o in sobjects.object_list %}
+        <li>{% spaceless %}
+        {% if o.get_title %}
+            <a href='{{ o.get_absolute_url }}'>{{ o.get_title }}</a>
+        {% else %} 
+            <a href='{{ o.get_absolute_url }}'>{{ o }}</a>
+        {% endif %}
+        {% endspaceless %}</li>
+    {% endfor %}
+    </ul>
+
+    {% with sobjects as page %}
+        {% include settings.document.links %}
+    {% endwith %}
+{% endif %}
+{% endfor %}
+

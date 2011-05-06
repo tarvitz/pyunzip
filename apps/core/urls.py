@@ -2,10 +2,12 @@ from django.conf.urls.defaults import *
 from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = patterns('apps.core.views',
-    (r'^search/$', 'search'),
-    (r'^search/(?P<model>\w+)/$', 'search_model'),
-    url(r'^sphinx/search/(?P<model>\w+)/$', 'sphinx_search_model',
+    #(r'^search/$', 'search'),
+    #(r'^search/(?P<model>\w+)/$', 'search_model'),
+    url(r'^search/(?P<model>\w+)/$', 'sphinx_search_model',
         name='url_sph_search_model'),
+    url(r'^search/$', 'sphinx_search',
+        name='url_sph_search'),
     (r'^settings/$','user_settings'),
     (r'^settings/store/(?P<key>[\w_]+)/(?P<value>\w+)/$','set_settings'),
     (r'^subscription/$','view_subscription'),
