@@ -26,7 +26,7 @@ def index_ctx(request):
     cats = {}
     forums = {}
 
-    for forum in Forum.objects.all().select_related():
+    for forum in Forum.objects.filter(is_hidden=False).select_related():
         cat = cats.setdefault(forum.category.id,
             {'cat': forum.category, 'forums': []})
         cat['forums'].append(forum)

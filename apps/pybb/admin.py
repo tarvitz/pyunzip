@@ -3,6 +3,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import admin
 from apps.pybb.models import Category, Forum, Topic, AnonymousPost, Post, Profile, Read
 
+#actions
+def revert_hidden(modeladmin, request, queryset):
+    for q in queryset:
+        q.is_hidden = not q.is_hidden
+        q.save()
+    return queryset
+
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'position', 'forum_count']
     list_per_page = 20
@@ -10,13 +17,14 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 class ForumAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'position', 'topic_count']
+    list_display = ['name', 'category', 'position', 'topic_count', 'is_hidden']
     list_per_page = 20
     ordering = ['-category']
     search_fields = ['name', 'category__name']
+    actions = [revert_hidden,]
     fieldsets = (
         (None, {
-                'fields': ('category', 'name', 'updated')
+                'fields': ('category', 'name', 'updated', 'is_hidden')
                 }
          ),
         (_('Additional options'), {

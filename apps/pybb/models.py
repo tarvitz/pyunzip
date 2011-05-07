@@ -71,6 +71,7 @@ class Forum(models.Model):
     moderators = models.ManyToManyField(User, blank=True, null=True, verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
+    is_hidden = models.BooleanField(_('is hidden'))
 
     class Meta:
         ordering = ['position']
