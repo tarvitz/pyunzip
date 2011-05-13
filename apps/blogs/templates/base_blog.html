@@ -1,6 +1,17 @@
 {% extends base_template %} {% load tagging_tags %}
 {% block js %}
 <script type='text/javascript' src='/media/js/base.js'></script>
+
+<script type='text/javascript' src='/media/js/syntax/scripts/shCore.js'></script>
+<script type='text/javascript' src='/media/js/syntax/scripts/shBrushJScript.js'></script>
+<script type='text/javascript' src='/media/js/syntax/scripts/shBrushPython.js'></script>
+<script type='text/javascript' src='/media/js/syntax/scripts/shBrushCss.js'></script>
+
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+{% endblock %}
+{% block css %}
+ {{ block.super }}
+ <link type="text/css" rel="stylesheet" href="/media/js/syntax/styles/shCoreDefault.css"/>
 {% endblock %}
 {% block tabs %}
 <div id="tabs">
