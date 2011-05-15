@@ -76,6 +76,7 @@ class AddBattleReportForm(RequestForm):
         return cleaned_data
 
 class AddBattleReportModelForm(RequestModelForm):
+    required_css_class='required'
     search_rosters = forms.CharField(required=False, label=_('Search rosters'),
         help_text=_('If you do not see rosters you need below you may search them'))
     ids = Roster.objects.all()[0:10]
