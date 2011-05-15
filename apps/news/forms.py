@@ -13,6 +13,7 @@ class AddNewsForm(forms.Form):
     approved = forms.BooleanField(required=False)
 
 class ArticleForm(forms.Form):
+    required_css_class='required'
     categories = NewsCategory.objects.all()
     CATEGORIES = list()
     for c in categories:
