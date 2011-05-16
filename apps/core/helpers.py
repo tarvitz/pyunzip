@@ -63,13 +63,12 @@ def send_notification(instance,**kwargs):
                 if instance_user != user:
                     announcement.notified(user)
                     text_content = tr(IM_TEXT %
-                        (instance_user.nickname,settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))
-                    
+                        (instance_user.nickname,settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))               
                     #OBSOLETE
-                    #send_email_message.delay(_('Warmist no-replay notification'),text_content,settings.FROM_EMAIL,
-                    #    [user.email],fail_silently=False,
-                    #    auth_user=settings.EMAIL_HOST_USER,
-                    #    auth_password=settings.EMAIL_HOST_PASSWORD)
+                    send_email_message.delay(_('WarMist no-replay notification'),text_content,settings.FROM_EMAIL,
+                        [user.email],fail_silently=False,
+                        auth_user=settings.EMAIL_HOST_USER,
+                        auth_password=settings.EMAIL_HOST_PASSWORD)
                     if user.jid:
                         message = "s_notify jid:%s message:%s" % (user.jid,text_content)                    
                         send_network_message.delay('localhost', 40001, message)
