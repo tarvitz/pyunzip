@@ -141,7 +141,7 @@
 				<a href="{% url django.contrib.syndication.views.feed url='news' %}">rss]</a></span>
 			</li>
 			<li class='lvl2'><a href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
-			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.news.views.add_article %}'>Добавить</a></li>{% endif %}
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_add_article %}'>Добавить</a></li>{% endif %}
 			{# <li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li> #}
 			<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
 			<li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li>
