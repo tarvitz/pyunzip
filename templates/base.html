@@ -331,29 +331,19 @@
 {% endcomment %}
 {% block endjs %}
 <script language='javascript' type='text/javascript'>
-	miniquote = $('#horizontal_line > div > span');
-	$(document).ready(function(){
-		if (isFireFox) setInterval('update_miniquote()',60*1000);
-                $('#control_content div').hover(function(){
-                    if (! $(this).hasClass('none') ) $(this).toggleClass('hover');
-                });
-	})
-	
-	var setObjText = function(str,obj){
-		obj.text(str);
-	}
-	function update_miniquote(){
-		$.getJSON('/miniquote/get/raw/', 
-			function(data){
-				jQuery.each(data, function(){
-					miniquote.fadeOut(1000);
-					setTimeout(setObjText,1000,this.fields.content,miniquote);
-					miniquote.text(miniquote.text());
-					miniquote.fadeIn(1000);
-				});
-		});	
-	}
-	//miniquote.text('fuck');
+    miniquote = $('#horizontal_line > div > span');
+    $(document).ready(function(){
+        setInterval('update_miniquote()', 60*1000);
+    });  
+    
+    function update_miniquote(){
+        $.getJSON('{% url xhr_get_miniquote %}', function(data){
+            miniquote.fadeOut(1500, function(){
+                miniquote.text(data[0].fields['content']);
+                miniquote.fadeIn(1500);
+            });
+        });
+    }
 </script>
 {% endblock %} {# endjs #}
 </body>
