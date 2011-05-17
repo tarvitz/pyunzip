@@ -15,7 +15,7 @@
 <script language='javascript'>
 $(document).ready(function(){
     var side = document.getElementById('id_side');
-    var army = document.getElementById('id_army_raw');
+    var army = document.getElementById('id_army');
     var updateArmy = function(callback){
         army_id = side.options[side.selectedIndex].value;
         url = "{% url xhr_get_armies %}" + army_id;

@@ -59,19 +59,15 @@ class UploadAvatarForm(forms.Form):
 class UpdateProfileModelForm(RequestModelForm):
     required_css_class='required'
     side = forms.ChoiceField(choices=((i.id, i.name) for i in Side.objects.all()), required=False)
-    army_raw = forms.ChoiceField(choices=((-1, '-----'),), required=True)
+    army = forms.ModelChoiceField(queryset=Army.objects, required=True)
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email', 'nickname', 'avatar', 'photo',
-            'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army_raw', 'tz'
+            'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army', 'tz'
         ]
         exclude = ['password', 'username', 'groups', 'ranks', 'user_permissions', 'is_staff',
-            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar', 'army',
+            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar',
         ]
-    def __init__(self, *args, **kwargs):
-        self.base_fields['army_raw'].choices = [(-1, '-----')] + [(i.id, i.name) for i in Army.objects.all()]
-        self.base_fields['army_raw'].empty_label = None
-        super(UpdateProfileModelForm, self).__init__(*args, **kwargs)
 
     def clean_nickname(self):
         current_nickname = self.request.user.nickname

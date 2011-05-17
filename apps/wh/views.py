@@ -229,8 +229,6 @@ def update_profile(request):
                 photo = handle_uploaded_file(request.FILES['photo'],
                     'photos/%s' % request.user.id)
                 form.instance.photo = photo
-            army = get_object_or_404(Army, id=int(form.cleaned_data['army_raw']))
-            form.instance.army = army
             form.save()
             return HttpResponseRedirect(reverse('url_profile'))
         else:
