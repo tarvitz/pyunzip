@@ -5,6 +5,7 @@
 {% endblock %}
 {% block text_content %}
 <center>
+<div id='upload_progress' style='display: none'></div>
 <div class='forms'>
 <form id='upload_form' target="upload_frame" enctype="multipart/form-data" action='{% url url_progress_uploader app_n_model='files.file' filefield='file' %}' method='post'>
  {% csrf_token %}
