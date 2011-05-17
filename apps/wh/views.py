@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response,get_object_or_404
 from django.contrib import auth
 from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission
 #from django.contrib.auth.models import User
@@ -19,7 +20,8 @@ from django.core import serializers
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.mail import send_mail
 from django.forms.util import ErrorList
-from apps.wh.forms import UploadAvatarForm,UpdateProfileForm,PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm
+from apps.wh.forms import UploadAvatarForm, UpdateProfileForm, UpdateProfileModelForm, \
+    PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
 from cStringIO import StringIO
@@ -33,7 +35,8 @@ from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
-from apps.core.helpers import get_settings,get_object_or_none,paginate,can_act
+from apps.core.helpers import get_settings, get_object_or_none, paginate, can_act, \
+    handle_uploaded_file
 import os
 
 #decorators
@@ -215,6 +218,30 @@ def upload_avatar(request):
 @login_required
 def update_profile(request):
     template = get_skin_template(request.user, 'accounts/update_profile.html')
+    if request.method == 'POST':
+        form = UpdateProfileModelForm(request.POST, request.FILES, instance=request.user, request=request)
+        if form.is_valid():
+            if 'avatar' in request.FILES:
+                avatar = handle_uploaded_file(request.FILES['avatar'],
+                    'avatars/%s' % request.user.id)
+                form.instance.avatar = avatar
+            if 'photo' in request.FILES:
+                photo = handle_uploaded_file(request.FILES['photo'],
+                    'photos/%s' % request.user.id)
+                form.instance.photo = photo
+            army = get_object_or_404(Army, id=int(form.cleaned_data['army_raw']))
+            form.instance.army = army
+            form.save()
+            return HttpResponseRedirect(reverse('url_profile'))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = UpdateProfileModelForm(instance=request.user, request=request)
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+def update_profile_old(request):
+    template = get_skin_template(request.user, 'accounts/update_profile_old.html')
     sides = Side.objects.all().order_by('id')
     armies = Army.objects.all()
     sides_list = []
@@ -492,7 +519,7 @@ def get_math_image(request,sid=''):
     #for joke sake
     if not sid:
         image = Image.new('RGBA', (630,40),(0,0,0))
-        print os.path.join(settings.MEDIA_ROOT,'arial.ttf')
+        #print os.path.join(settings.MEDIA_ROOT,'arial.ttf')
         ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
         draw = ImageDraw.Draw(image)
         draw.text((2,0), 'Hope is the first step on the road to the disappointment', font=ifo)
@@ -509,7 +536,7 @@ def get_math_image(request,sid=''):
     t = randint(0,20)
     image = Image.new('RGBA',(95,40),(0,0,0))
     ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
-    print ifo
+    #print ifo
     draw = ImageDraw.Draw(image)
     draw.text((2, 0), str(f)+'/'+str(s)+'-'+str(t), font=ifo)
     fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT,str(random())[2:6])
@@ -772,6 +799,17 @@ def get_miniquote_raw(request):
     
     return response
 
+def xhr_get_armies(request, id=None):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    if not id:
+        response.write("[]")
+        return response
+    armies = Army.objects.filter(side__id=id)
+    response.write(serializers.serialize("json", armies))
+    return response
+
+#deprecated, cleanse as soon as possible
 def get_armies_raw(request,id):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
@@ -800,8 +838,8 @@ def get_user_avatar(request,nickname=''):
     response['Content-Type'] = 'image/png'
     try:
         user = User.objects.get(nickname__iexact=nickname)
-        if user.plain_avatar:
-            response.write(user.plain_avatar.read())
+        if user.avatar:
+            response.write(user.avatar.read())
         else:
             if hasattr(user.army,'side'):
                 img_path = os.path.join(settings.MEDIA_ROOT,"avatars/%s/default.png" % (user.army.side.name.lower()))

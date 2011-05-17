@@ -38,7 +38,11 @@ input[type='submit']{
     border: 1px dotted grey;
     text-align: left;
 }
-form input, form label, form textarea, form select{
+
+form input, form textarea, form select{
+    display: block;
+}
+form label{
     display: block;
 }
 form ul, form li{
@@ -48,3 +52,19 @@ form input[type='checkbox']{
     width: inherit !important;
     display: inline;
 }
+/*New forms implementation*/
+.forms{
+
+}
+.forms form label{
+    text-align: left;
+    width: 80%;
+}
+.forms form li.required label:before{content: "(*)"; color: grey;}
+.forms form li.required label:hover:before{ color: red; }
+.forms label[for$='-clear_id']{
+    display: inline;
+    font-size: 0.6em;
+}
+.forms label[for$='-clear_id']:before{content: "["}
+.forms label[for$='-clear_id']:after{content: "]"}

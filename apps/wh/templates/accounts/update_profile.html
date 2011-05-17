@@ -1,219 +1,58 @@
-{% extends base_template %}
-{% load kamwhfilters %}
-{% block title %}Обновление профиля{% endblock %}
-{% block js %}
-	<script type='text/javascript' src='/media/js/core.js'></script>
-	<script type='text/javascript' src='/media/js/jquery.js'></script>
-{% endblock %}
+{% extends base_template %} {% load i18n %}
 {% block css %}
-	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"profileng.css" }}' type='text/css' media='screen'>
-{% endblock %}
-{% block head_content %} 
-
-<script type="text/javascript" charset="utf-8">
-var set_side_imgs = function(){
-	side = document.getElementById('id_side');
-	for (var i = 0; i<side.options.length; i++){
-		if (isFireFox){
-			url = "url('/media/images/armies/"+String(side.options[i].text).toLowerCase()+"/title_16x16.png') top right no-repeat";
-			side.options[i].style.background = url;
-		}
-		//alert(url);
-	}	
-}
-
-var filter_skins = function(){
-		side = document.getElementById('id_side');
-		url = '/accounts/get/skins/'+String(side.value);
-		skin_option = document.getElementById('id_skin');
-		skins = $.getJSON(url,
-			function(data){
-				for (var count = skin_option.length - 1; count>-1; count--) skin_option[count] = null;
-				n = 0;
-				jQuery.each(data,function(){
-					opts = this.fields;
-					pk = this.pk;
-                                        {% comment %}it cause danger if there is no skin id user have it's a bug{% endcomment %}
-					{% if user.skin.id %}
-                                        skin_option.options[n] = new Option(opts['name'],pk,false,{{ user.skin.id }} == this.pk ? true: false);
-					{% else %}
-                                        skin_option.options[n] = new Option(opts['name'],1,false,true); {# 1 SHOULD BE DEFAULT, FIXME #}
-                                        {% endif %}
-                                        n++;
-				});
-			});
-	}
-	var filter_options = function(){
-		//alert('O_O');
-		//if (!side.value) { return };
-		side = document.getElementById('id_side');
-		url = '/accounts/get/armies/'+String(side.value);
-		st = $.getJSON(url,
-				function(data){
-					army_option = document.getElementById('id_army');
-					for (var count = army_option.length - 1; count>-1; count--) army_option[count] = null;
-					n = 0;
-					jQuery.each(data,function(){
-						{% if user.army %}
-                                                var opt = new Option(this.fields.name,this.pk,false,{{ user.army.id }} == this.pk ? true: false); // Get User setted army
-						{% else %}
-                                                var opt = new Option(this.fields.name,this.pk,false,true);
-                                                {% endif %}
-                                                army_option.options[n] = opt;
-						army_lower_name = String(this.fields.name).toLowerCase().replace(' ','_');
-						army_lower_name = army_lower_name.replace("'",'');
-						side_txt = side.options[(this.fields.side)-1].text.toLowerCase();
-						if (isFireFox){
-							url_img =  "url('/media/images/armies/"+side_txt+"/"+army_lower_name+"_16x16.png') top right no-repeat";
-							army_option.options[n].style.background = url_img;
-						}
-						n++;
-				});
-			});
-		filter_skins();
-		
-		if (isFireFox){
-			//side_img = "url('/media/images/armies/"+side.options[side.selectedIndex].text.toLowerCase()+"/title_16x16.png') 95% 100% no-repeat";
-			//side.style.background = side_img;
-		}//isfirefox
-	}
-
-var test_options = function(){
-	army = document.getElementById('id_army');
-	alert(army.options[4].text+':'+army.options[4].value);
-}
-</script>
-
-<style type="text/css">
-<!--
-textarea,input,select{
-	width: 35%;
-	border: 1px solid black;
-}
-input#submit{
-	width: inherit;
-}
--->
-</style>
+    {{ block.super }}
+    <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
 {% endblock %}
 {% block text_content %}
-
 <center>
-<div class='message'>
-<div class='msg_headline'>
-	<div class='transparency' id='black'></div>
-	<span>{% get_nickname user %}</span>
-</div> <!-- msg_headline -->
-<div class='msg_content'>
-	<div class='transparency'></div>
-	<div class='reflects_left'></div>
-	<div class='reflects_down'></div>
-	
-	<div class='msg_avatar'>
-		<div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ c.user.date_joined|timesince }}</div>
-            <span class='msg_ranks'>статус:
-            {% if user.ranks.values %}
-                {% for rank in user.ranks.values %}
-                    <a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
-                {% endfor %}
-             {% endif %}
-            </span>
-		<img src='{% url url_get_avatar user.nickname %}'>
-	    {# make sentences below as external include file and paste it everywhere #}	
-		<center>
-			{% with user as warn_user %}
-				{% include "warnings/warning.html" %}
-            {% endwith %}
-            {% with user as karma_user %}
-				{% include "karma_power.html" %}
-            {% endwith %}
-        </center>
-        {% if not user.settings.invisible %}
-                {% check_if_online user as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
-        {% else %}&nbsp;{% endif %}
-        {% if user.is_authenticated %}
-            {% if user.jid and not user.settings.hide_jid %}<a href="xmpp:{{ user.jid }}">[jid]</a>{% endif %}
-            {% if user.uin and not user.settings.hide_uin %}<a href="icq:{{ user.uin }}">[icq]</a>{% endif %}
-            {% if user.email and not user.settings.hide_email %}<a href="mailto:{{ user.email }}">[mail]</a>{% endif %}
-        {% endif %}
-	</div> <!-- msg_avatar -->
-	<div class='msg_text'>
-		<center>
-		<div class='upload_profile'>
-		<form action='.' method='post' enctype="multipart/form-data">
-			{{ form.nickname.errors }}
-			<label for='nickname'>Псевдоним пользовалетя (nickname):<br>
-			{{ form.nickname }}<br>
-			<label for='first_name'>Имя (<span class='notice'>необязательно</span>):<br>
-			{{ form.first_name }}<br>
-			<label for='last_name'>Фамилия (<span class='notice'>необязательно</span>):<br>
-			{{ form.last_name }}<br>
-			{{ form.gender.errors }}
-			<label for='gender'>Пол:</label><br>
-			{{ form.gender }}<br>
-			{{ form.avatar.errors }}
-			<label for='avatar'>Аватар пользователя:<br>
-			{{ form.avatar }}
-			{{ form.photo.errors }}<br>
-			<label for='photo'>Фотография пользователя:<br>
-			{{ form.photo }}<br>
-			{{ form.side.errors }}
-			<label for='side'>Раса:<br>
-			{# {{ form.side|add_js:"onchange='FilterArmies()'"|safe }}<br> #}
-			<div class='transparency'></div>
-			{{ form.side }}<br>
-			{#{{ form.army.errors }}#}
-			<label for='army'>Армия<br>
-			<select id='id_army' name='army'>
-				<option value='0'>Выберите расу</option>
-			</select><br>
-			{{ form.skin.errors }}
-			<label for='skin'>Скин: </label><br>
-			{{ form.skin }}<br>
-			{{ form.jid.errors }}
-			<label for='jid'>Jabber ID:</label><br>
-			{{ form.jid }}<br>
-			{{ form.uin.errors }}
-			<label for='uin'>ICQ Number:</label><br>
-			{{ form.uin }}<br>
-			{{ form.email.errors }}
-			<label for='email'>E-Mail</label><br>
-			{{ form.email }}<br>
-			{{ form.about.errors }}
-			<label for='about'>About myself:</label><br>
-			{{ form.about }}<br>
-			<input id='submit' type='submit' value='обновить'>
-		</form>
-		</div> <!-- upload_profile -->
-		</center>
-
-	</div> <!-- msg_text -->
-</div> <!-- msg_content -->
-<br clear='all'>
-	<div class='msg_footer'>
-		foo();
-	</div> <!-- msg_footer -->
-</div> <!-- message -->
+<div class='forms'>
+    <form id='id_update_profile_form' action='.' method='post' enctype='multipart/form-data'>
+        {{ form.as_ul }}
+        <input type='submit' value='{% trans "submit" %}'>
+    </form>
+</div>
 </center>
-
-<script type='text/javascript'>
-	$(document).ready(function(){
-        side = document.getElementById('id_side');
-	{% if user.army.side %}
-            side.value = {{ user.army.side.id }};
-        {% else %}
-            side.value = 0;
-        {% endif %}
-	//FilterArmies(); //update our list then set our army
-	//
-	side = $('#id_side');
-	army = $('#id_army');
-	side.change(filter_options,function(){});
-	filter_options();
-	filter_skins();
-	set_side_imgs();
+<script language='javascript'>
+$(document).ready(function(){
+    var side = document.getElementById('id_side');
+    var army = document.getElementById('id_army_raw');
+    var updateArmy = function(callback){
+        army_id = side.options[side.selectedIndex].value;
+        url = "{% url xhr_get_armies %}" + army_id;
+        $.getJSON(url, function(data){
+            army.options.length = 1; // cleanse
+            var i = 1;
+            $.each(data, function(key, val){
+               army.options[i] = new Option(this.fields['name'], this.pk, false, false);
+               i++;
+            });
         });
+    }
+    $('#id_side').change(function(){
+        updateArmy();
+    });
+    var setDefaults = function(){
+        for (var i = 0; i<side.options.length; i++){
+            if (side.options[i].value == {{ user.army.side.id }})
+                side.selectedIndex = i;
+        }
+        /*cleanse useless data*/
+        army.options.length = 1;
+        var i = 1;
+        xhr_url = "{% url xhr_get_armies %}" + side.options[side.selectedIndex].value;
+        $.getJSON(xhr_url, function(data){
+            $.each(data, function(key, val){
+                army.options[i] = new Option(this.fields['name'], this.pk, false,
+                    {{ user.army.id }} == this.pk ? true: false);
+                i++;
+            });
+        });
+    };
+    {% if user.army %}
+        setDefaults();
+    {% else %}
+        updateArmy();
+    {% endif %}
+});
 </script>
 {% endblock %}

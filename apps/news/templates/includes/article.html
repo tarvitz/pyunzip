@@ -4,7 +4,7 @@
 		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% url apps.wh.views.get_user_avatar nickname=n.author %}'>
 		{% if perms.news.edit_news or user.is_superuser %}
-                        <span id='edit_button' class='first'><a id='button' href="{% url apps.news.views.add_article id=n.id %}">Править</a></span>
+                        <span id='edit_button' class='first'><a id='button' href="{% url url_edit_article n.id %}">Править</a></span>
 			{% if not n.approved %}
 			<span id="edit_button"><a id='button' href="{% url apps.news.views.article_action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}

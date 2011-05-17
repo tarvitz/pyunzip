@@ -2,7 +2,7 @@
 # ^^, coding: utf-8 ^^,
 import os
 from apps.news.models import News,Category,ArchivedNews
-from apps.news.forms import ArticleForm
+from apps.news.forms import ArticleForm, ArticleModelForm
 from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.files.models import Attachment
 from apps.files.helpers import save_uploaded_file as save_file
@@ -24,17 +24,18 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from datetime import datetime,timedelta
 from os import stat
 #filters
 from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
-from apps.core.helpers import get_settings,save_comment,paginate,can_act
+from apps.core.helpers import get_settings,save_comment,paginate,can_act, handle_uploaded_file
 from apps.core.decorators import benchmarking,update_subscription_new,has_permission,render_to
 from apps.core import benchmark #processors
 
@@ -168,6 +169,7 @@ def show_article(request, number=1,object_model='news.news'):
         context_instance=RequestContext(request,
             processors=[pages]))
 
+#@semiobsolete, better use action_article 
 @login_required
 def article_action(request,id=None,action=None):
     if not action or not id:
@@ -206,6 +208,7 @@ def article_action(request,id=None,action=None):
     else:
         return HttpResponseRedirect('/permission/denied')
 
+#@obsolete
 @login_required    
 @can_act
 def add_article(request,id=None,edit_flag=False):
@@ -300,6 +303,41 @@ def add_article(request,id=None,edit_flag=False):
             {'form': form,
             'edit_flag': edit_flag},
             context_instance=RequestContext(request))
+
+#make it 
+@login_required
+@can_act
+def action_article(request, id=None, action=None):   
+    template = get_skin_template(request.user, 'news/action_article.html')
+    article_instance = None
+    if action: #None means add article, other actions depends on instance existance
+        article_instance = get_object_or_404(News, id=id)
+    if request.method == 'POST':
+        form = ArticleModelForm(request.POST, instance=article_instance)
+        if form.is_valid():
+            if not action:
+                form.instance.author_ip = request.META.get('REMOTE_ADDR','127.0.0.1')
+                form.instance.date = datetime.now()
+                form.instance.author = form.cleaned_data.get('author', None) or\
+                    request.user.nickname
+                if request.user.has_perm('news.add_news') or user.is_superuser:
+                    form.instance.approved = True
+                form.save()
+                return HttpResponseRedirect(reverse('url_show_article', 
+                    args=(form.instance.id, ))
+                )
+            elif action == 'edit':
+                form.instance.editor = request.user.nickname
+                form.save()
+                next = form.cleaned_data.get('next', None) or \
+                    reverse('url_show_article', args=(form.instance.id, ))
+                return HttpResponseRedirect(next)
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = ArticleModelForm(instance=article_instance,
+        initial={'next': request.META.get('HTTP_REFERER', None)})
+    return direct_to_template(request, template, {'form': form})
 
 @login_required
 #@has_permission('comments.change_comment') #blocks the comment edition

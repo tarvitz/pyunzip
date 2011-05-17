@@ -48,6 +48,7 @@ class Army(models.Model):
     class Meta:
         verbose_name = _('Army')
         verbose_name_plural = _('Armies')
+        ordering = ['side', ]
 
 class MiniQuote(models.Model):
     content = models.CharField(_('Content'),max_length=255)

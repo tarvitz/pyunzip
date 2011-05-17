@@ -86,7 +86,7 @@
 		<ul>
 			<li><a href='{% url apps.wh.views.pm_view %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
 			<li><a href="{% url apps.wh.views.profile %}" title='Просмотр своего профиля'>Профиль</a></li>
-			<li class='lvl2'><a href='{% url apps.wh.views.update_profile %}' title='Настройки профиля'>Править</a></li>
+			<li class='lvl2'><a href='{% url url_update_profile %}' title='Настройки профиля'>Править</a></li>
 			<li class='lvl2'><a href='{% url apps.core.views.user_settings %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
 			<li class='lvl2'><a href='{% url apps.core.views.view_subscription %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
 			<li><a href='{% url apps.wh.views.users %}' title='Обитатели ресурса'>Участники</a></li>
