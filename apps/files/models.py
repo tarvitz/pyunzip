@@ -15,8 +15,7 @@ from apps.djangosphinx.models import SphinxSearch
 
 class IncomeFile(models.Model):
     file = models.FileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,'files/'))
-    description = models.CharField(_('Description'),max_length=255\
-        ,null=True,blank=True)
+    description = models.CharField(_('Description'),max_length=255)
     owner = models.ForeignKey(User)
     upload_date = models.DateTimeField(_('Upload date'))
     class Meta:

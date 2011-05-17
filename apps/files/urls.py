@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = patterns('apps.files.views',
     (r'^upload/file/$', 'upload_file'),
+    url(r'^new/upload/file/$', 'new_upload_file',
+        name='url_upload_file'),
     (r'^replays/$', 'show_replays'),
     (r'^replays/search/$', 'search_replay'),
     (r'^replays/category/(?P<type>\w+)/$', 'show_categories'),
@@ -64,7 +66,8 @@ urlpatterns = patterns('apps.files.views',
         name='url_force_delete_image'),
     (r'^gallery/image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'}),
     (r'^image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'}), #alias
-    (r'^files/$', 'show_files'),
+    url(r'^files/$', 'show_files',
+        name='url_show_files'),
     (r'^test/upload_replay/$', 'upload_replay'),
     #(r'^test/upload_image/$', 'upload_image'),
     (r'^test/make_fake_attachments/$', 'make_fake_attachments'),
