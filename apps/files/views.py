@@ -44,8 +44,8 @@ import os
 @login_required
 @can_act
 @csrf_protect
-def new_upload_file(request):
-    template = get_skin_template(request.user, 'files/new_upload_file.html')
+def upload_file(request):
+    template = get_skin_template(request.user, 'files/upload_file.html')
     if request.method == 'POST':
         form = UploadFileModelForm(request.POST, request.FILES)
         if form.is_valid():
@@ -63,8 +63,8 @@ def new_upload_file(request):
 
 @login_required
 @can_act
-def upload_file(request):
-    template = get_skin_template(request.user, 'files/upload_file.html')
+def upload_file_old(request):
+    template = get_skin_template(request.user, 'files/upload_file_old.html')
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():

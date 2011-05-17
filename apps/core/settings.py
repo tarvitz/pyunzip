@@ -16,7 +16,7 @@ UPLOAD_SETTINGS = {
     },
     'files.file': {
         'form': 'apps.files.forms.UploadFileModelForm',
-        'helper': 'apps.files.helpers.new_upload_file',
+        'helper': 'apps.files.helpers.upload_file',
         'schema': 'files/',
     },
     'files.replay':{

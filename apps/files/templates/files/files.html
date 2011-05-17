@@ -6,7 +6,7 @@
 {% block text_content %}
 
 {% if user and user.is_active %}
-<a id='button' href='/upload/file'>Загрузить</a><br>
+<a id='button' href='{% url url_upload_file %}'>Загрузить</a><br>
 {% endif %}
 {% if files.object_list %}
 <ul>

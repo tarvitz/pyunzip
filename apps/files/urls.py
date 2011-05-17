@@ -3,8 +3,8 @@ from apps.core.shortcuts import direct_to_template
 from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = patterns('apps.files.views',
-    (r'^upload/file/$', 'upload_file'),
-    url(r'^new/upload/file/$', 'new_upload_file',
+    #(r'^upload/file/$', 'upload_file'),
+    url(r'^upload/file/$', 'upload_file',
         name='url_upload_file'),
     (r'^replays/$', 'show_replays'),
     (r'^replays/search/$', 'search_replay'),
