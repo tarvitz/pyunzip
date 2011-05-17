@@ -15,12 +15,13 @@ from django.core.urlresolvers       import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
-    EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm
+    EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
+    UploadFileModelForm
 from apps.core.forms import CommentForm
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
-from apps.core.helpers import can_act
+from apps.core.helpers import can_act, handle_uploaded_file
 from apps.files.decorators import *
 from apps.core.decorators import update_subscription,update_subscription_new,benchmarking
 from apps.tracker.decorators import user_visit
@@ -34,7 +35,7 @@ from os import mkdir,stat
 from cStringIO import StringIO
 from apps.core.helpers import get_settings,save_comment,paginate
 from django.shortcuts import get_object_or_404
-
+from django.views.decorators.csrf import csrf_protect
 import zipfile
 import bz2
 import os
@@ -42,10 +43,30 @@ import os
 
 @login_required
 @can_act
+@csrf_protect
+def new_upload_file(request):
+    template = get_skin_template(request.user, 'files/new_upload_file.html')
+    if request.method == 'POST':
+        form = UploadFileModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = handle_uploaded_file(request.FILES['file'],
+                'files/%s' % request.user.id)
+            form.instance.file = file
+            form.instance.owner = request.user
+            form.instance.upload_date = datetime.now()
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_files'))
+        else:
+            return direct_to_template(request, template, {'form': form})
+    form = UploadFileModelForm()
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+@can_act
 def upload_file(request):
     template = get_skin_template(request.user, 'files/upload_file.html')
     if request.method == 'POST':
-        form = FileUploadForm(request.POST,request.FILES)
+        form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             raw_file_data = form.cleaned_data['file']
             description = form.cleaned_data['description']

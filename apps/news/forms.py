@@ -18,7 +18,8 @@ class ArticleModelForm(forms.ModelForm):
     required_css_class = 'required'
     author = forms.CharField(required=False)
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
-
+    hidden_syntax = forms.CharField(widget=forms.HiddenInput(), required=False)
+    
     class Meta:
         model = News
         fields = ['title', 'author','category', 'syntax', 'head_content', 'content', 'url']

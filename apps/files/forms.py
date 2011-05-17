@@ -2,7 +2,7 @@ from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from apps.files.models import Version,Gallery
+from apps.files.models import Version, Gallery, File
 from apps.core import get_safe_message
 from apps.files.helpers import is_zip_file
 from PIL import Image
@@ -20,6 +20,13 @@ class IncomeFileForm(forms.Form):
 #end of abstract forms
 class FileUploadForm(IncomeFileForm):
     url = forms.URLField(required=False)
+
+class UploadFileModelForm(forms.ModelForm):
+    required_css_class='required'
+    class Meta:
+        model = File
+        fields = ['description', 'url', 'file' ]
+        exclude = ['upload_date', 'owner']
 
 #default to DoW1
 class ActionReplayForm(forms.Form):

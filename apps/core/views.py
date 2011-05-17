@@ -643,7 +643,7 @@ def upload_file(request,app_n_model,filefield):
                 #print "getting ct ", ct
                 if ct:
                     #print "saving instance" 
-                    pk = helper_saver(request,form)
+                    pk = helper_saver(request, form)
                     instance = ct.model_class().objects.get(pk=pk)
                     setattr(instance,filefield,filename)
                     instance.save()

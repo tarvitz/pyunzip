@@ -267,6 +267,14 @@ def upload_image(request,form):
     db.save()
     return db.pk
 
+def new_upload_file(request, form):
+    if not form.is_valid():
+        raise "You should provide a valid form!"
+    form.instance.owner = request.user
+    form.instance.upload_date = datetime.now()
+    form.save()
+    return form.instance.pk
+
 def upload_file(request,form):
     if not form.is_valid():
         raise "You should pass valid form!"
