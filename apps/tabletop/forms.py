@@ -85,84 +85,62 @@ class AddBattleReportModelForm(RequestModelForm):
         label=_('Available rosters'),
         required=False)
     del ids
-    rosters = fields.NonCheckMultipleChoiceField(help_text=_('Chosen rosters'))
-    winner_choice = fields.NonCheckChoiceField(
-        choices=((-1, '-----'),),
-        label=_('Winner'),
-        help_text=_('Person who won the battle'),
-        required=False)
+    users = forms.ModelMultipleChoiceField(queryset=Roster.objects.none(),
+        label=_('Rosters'))
+    winner = forms.ModelChoiceField(queryset=Roster.objects.none(), required=False)
     layout = forms.RegexField(regex=re.compile(r'^[\d+vs]+',re.M),required=True,
         help_text=_('Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,
         'disable_syntax': True})) 
-    
+  
+    class Meta:
+        model = BattleReport
+        fields = ('title', 'layout','mission', 'syntax', 'search_rosters',
+            'rosters_choice', 'users', 'winner', 'comment')
+        exclude = ['owner', 'published', 'approved', 'ip_address',]
    
     def __init__(self, *args, **kwargs):
         if 'instance' in kwargs:
             instance = kwargs['instance']
+            #what do we have when we want to edit battle report ;)
             if instance:
-                self.base_fields['winner_choice'].choices = []
-                self.base_fields['rosters'].choices = []
-                self.base_fields['winner_choice'].choices.append((-1, '-----'))
-                for r in instance.users.all():
-                    self.base_fields['rosters'].choices.append((r.id, r.__unicode__()))
-                    self.base_fields['winner_choice'].choices.append((r.id, r.__unicode__()))
-                self.base_fields['winner_choice'].initial = instance.winner.id
+                if instance.users.all():
+                    self.base_fields['users'].queryset = Roster.objects.filter(pk__in=(
+                        instance.users.all()))
+                    self.base_fields['winner'].queryset = Roster.objects.filter(pk__in=(
+                        instance.users.all()))
+        
+        #checking up for valid value existance
+        if args:
+            if 'users' in args[0]:
+                plain_users = args[0].getlist('users')
+                self.base_fields['users'].queryset = Roster.objects.filter(id__in=(plain_users))
+            if 'winner' in args[0]:
+                plain_winner = args[0]['winner']
+                if plain_winner:
+                    self.base_fields['winner'].queryset = Roster.objects.filter(id=plain_winner)
         super(AddBattleReportModelForm, self).__init__(*args, **kwargs)
     
 
     def clean(self):
         cleaned_data = self.cleaned_data
         layout = cleaned_data.get('layout', None)
-        rosters = cleaned_data.get('rosters', None)
-        if layout and rosters:
+        users = cleaned_data.get('users', None)
+        if layout and users:
             l = sum([int(l) for l in layout.split('vs') if l ])
-            if len(rosters) != l:
+            if len(users) != l:
                 msg =_('You should set right layout, for example 2vs2, 3vs1, number of players should be equal to number of rosters you\'ve passed')
-                self._errors['rosters'] = ErrorList([msg])
-                del cleaned_data['rosters']
+                self._errors['users'] = ErrorList([msg])
+                del cleaned_data['users']
         return cleaned_data
+
     def clean_layout(self):
         layout = self.cleaned_data['layout']
         l = sum([int(l) for l in layout.split('vs') if l])
         if l > 10:
             raise forms.ValidationError(_('10 players is absolute maximum, do not try to add layout with more players, it\'s strickly forbidden'))
         return layout
-    def clean_winner_choice(self):
-        wc = self.cleaned_data['winner_choice']
-        winner = get_object_or_none(Roster, pk=wc)
-        if not winner:
-            self.cleaned_data['winner_instance'] = None
-            return None
-            #raise forms.ValidationError(_('Such winner roster does not exist'))
-        self.cleaned_data['winner_instance'] = winner
-        return wc
-
-    def clean_rosters(self):
-        rosters = self.cleaned_data['rosters']
-        try:
-            rosters = [int(r) for r in rosters]
-        except:
-            raise forms.ValidationError(_('Rosters id\'s should be int type'))
-        #pts = None
-        self.cleaned_data['roster_instances'] = list()
-        for r in rosters:
-            roster = get_object_or_none(Roster, id=r)
-            #if not pts: pts = roster.pts
-            #if pts != roster.pts:
-            #    raise forms.ValidationError(_('You should user rosters with equal pts'))
-            if not roster:
-                raise forms.ValidationError(_("Roster with id '%i' does not exist" % r))
-                del self.cleaned_data['roster_instances']
-            self.cleaned_data['roster_instances'].append(roster)
-        return rosters
-
-    class Meta:
-        model = BattleReport
-        fields = ('title', 'layout','mission', 'syntax', 'search_rosters',
-            'rosters_choice', 'rosters','winner_choice','comment')
-        exclude = ['owner','winner', 'published', 'approved', 'ip_address', 'users']
-        
+   
 class DeepSearchRosterForm(RequestForm):
     player = forms.CharField(required=False)
     race = forms.CharField(required=False)

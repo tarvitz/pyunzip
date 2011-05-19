@@ -2,9 +2,7 @@
 	<div class='round_message' id='roster_{{ r.id }}'>
 		<div class='msg_headline'>
 			<!-- effects -->
-			<div class='transparency tr_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
+			<div class='transparency_black'></div>
 			<!-- end of effects -->
 			<div class='links'>	
 				{% ifequal user r.owner %}
@@ -99,8 +97,6 @@
 		<br clear='all'>
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<div class='links'>	
 				<span><a href='{% url url_race_rosters r.show_race %}'>{{ r.show_race }}</a></span>
 				<span><a href='{% url url_pts_rosters r.pts %}'>{{ r.pts }} pts</a></span>

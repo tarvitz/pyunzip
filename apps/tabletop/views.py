@@ -424,29 +424,11 @@ def add_battle_report(request, action=None, id=None):
             instance.published = datetime.now()
             instance.approved = True
             instance.ip_address = request.META.get('REMOTE_ADDR','127.0.0.1')
-            instance.winner = form.cleaned_data['winner_instance']
-            instance.save()
-            for r in form.cleaned_data['roster_instances']:
-                instance.users.add(r)
             form.save()
-            #form.save()
             return HttpResponseRedirect(reverse('battle_report_index'))
         else:
-            #print dir(form.data)
-            #print form.data.getlist('rosters')
-            rosters = [int(x) for x in form.data.getlist('rosters')]
-            winner = int(form.data.get('winner_choice'))
-            for r in rosters:
-                _r = get_object_or_none(Roster, id=r)
-                if len(form.base_fields['rosters'].choices) < len(rosters):
-                    form.base_fields['rosters']._choices.append((_r.id, _r.__unicode__()))
-
-            return direct_to_template(request, template, {'form': form,
-                'winner': winner})
-    if br:
-        form = AddBattleReportModelForm(instance=br)
-    else:
-        form = AddBattleReportModelForm()
+            return direct_to_template(request, template, {'form': form})
+    form = AddBattleReportModelForm(instance=br)
     return direct_to_template(request, template, {'form': form})
 
 @login_required
