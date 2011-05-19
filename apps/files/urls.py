@@ -60,7 +60,7 @@ urlpatterns = patterns('apps.files.views',
         {'template': 'gallery/created.html'}),
     #deprecated, cleanse
     #(r'^gallery/upload/$', 'upload_image'),
-    url(r'^gallery/upload/$', 'new_upload_image',
+    url(r'^gallery/upload/$', 'upload_image',
         name='url_upload_image'),
     (r'^gallery/(?P<gallery_name>[\w\s]+)/$', 'show_gallery'),
     #can delete both way: via url address and delete_function:
