@@ -393,10 +393,11 @@ def category_replays(request,type='',gametype='',version='',patch=''):
         context_instance=RequestContext(request,
             processors=[pages]))
 
+@csrf_protect
 @login_required
 @can_act
-def new_upload_image(request):
-    template = get_skin_template(request, 'gallery/new_upload.html')
+def upload_image(request):
+    template = get_skin_template(request, 'gallery/upload.html')
     form = UploadImageModelForm()
     if request.method == 'POST':
         form = UploadImageForm(request.POST)
@@ -412,7 +413,7 @@ def new_upload_image(request):
 
 @login_required
 @can_act
-def upload_image(request):
+def upload_image_old(request):
     template = get_skin_template(request.user,'gallery/upload.html')
     galleries = Gallery.objects.all()
     if not galleries:
