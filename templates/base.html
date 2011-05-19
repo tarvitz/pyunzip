@@ -161,7 +161,7 @@
 			<li class='lvl2'><a href='{% url url_add_battle_report %}'>добавить</a></li>
 			<li><a href='{% url apps.files.views.show_all_images %}' title='Простенькая галерея ;)'>Галерея</a></li>
 			<li class='lvl2'><a href="{% url url_show_best "image" %}">лучшие</a></li>
-			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.files.views.upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>
 			<li><a href="{% url apps.files.views.show_files %}" title='Небольшое хранилище файлов'>Файлы</a></li>
 			{% comment %}<li><a href='{% url apps.wh.views.view_wish_list %}'>Пожелания</a></li>
 			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}

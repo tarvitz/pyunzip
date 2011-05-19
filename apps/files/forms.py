@@ -2,7 +2,8 @@ from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from apps.files.models import Version, Gallery, File
+from apps.files.models import Version, Gallery, File, Image as ModelImage, \
+    Replay
 from apps.core import get_safe_message
 from apps.files.helpers import is_zip_file
 from PIL import Image
@@ -27,6 +28,17 @@ class UploadFileModelForm(forms.ModelForm):
         model = File
         fields = ['description', 'url', 'file' ]
         exclude = ['upload_date', 'owner']
+
+class UploadImageModelForm(forms.ModelForm):
+    required_css_class='required'
+    class Meta:
+        model = ModelImage
+        exclude = ['thumbnail', 'owner']
+
+class ActionReplayModelForm(forms.ModelForm):
+    required_css_class='required'
+    class Meta:
+        model = Replay
 
 #default to DoW1
 class ActionReplayForm(forms.Form):

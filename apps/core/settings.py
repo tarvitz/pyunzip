@@ -9,7 +9,7 @@ import os
 UPLOAD_SETTINGS = {
     'default': rel_path('media/files'),
     'files.image': {
-        'form':'apps.files.forms.UploadImageForm',
+        'form':'apps.files.forms.UploadImageModelForm',
         'helper': 'apps.files.helpers.upload_image',
         'schema': 'images/galleries/',
 

@@ -16,7 +16,7 @@ from django.core.urlresolvers       import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
-    UploadFileModelForm
+    UploadFileModelForm, UploadImageModelForm
 from apps.core.forms import CommentForm
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
@@ -392,6 +392,23 @@ def category_replays(request,type='',gametype='',version='',patch=''):
         'page': replays},
         context_instance=RequestContext(request,
             processors=[pages]))
+
+@login_required
+@can_act
+def new_upload_image(request):
+    template = get_skin_template(request, 'gallery/new_upload.html')
+    form = UploadImageModelForm()
+    if request.method == 'POST':
+        form = UploadImageForm(request.POST)
+        if form.is_valid():
+            form.instance.owner = request.user
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_galleries'))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    return direct_to_template(request, template,
+        {'form': form})
 
 @login_required
 @can_act

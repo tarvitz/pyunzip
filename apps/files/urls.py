@@ -49,7 +49,8 @@ urlpatterns = patterns('apps.files.views',
     #(r'^replays/(?P<gametype>\w+)/(?P<type>\d+)/$', 'category_replays'),
     #(r'^replays/(?P<type>\d+)/$', 'all_'),
     #
-    (r'^gallery/$', 'show_all_images'),
+    url(r'^gallery/$', 'show_all_images',
+        name='url_show_galleries'),
     (r'^gallery/(?P<id>\d+)/$', 'show_all_images'),
     #(r'^gallery/create/$', 'create_gallery'),
     (r'^gallery/exists/$', direct_to_template,
@@ -57,7 +58,10 @@ urlpatterns = patterns('apps.files.views',
     #(r'^gallery/(?P<gallery>\d+)/$', 'show_gallery'),
     (r'^gallery/created/$', direct_to_template,
         {'template': 'gallery/created.html'}),
-    (r'^gallery/upload/$', 'upload_image'),
+    #deprecated, cleanse
+    #(r'^gallery/upload/$', 'upload_image'),
+    url(r'^gallery/upload/$', 'new_upload_image',
+        name='url_upload_image'),
     (r'^gallery/(?P<gallery_name>[\w\s]+)/$', 'show_gallery'),
     #can delete both way: via url address and delete_function:
     url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/approve/$','action_image',
@@ -68,13 +72,14 @@ urlpatterns = patterns('apps.files.views',
     (r'^image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'}), #alias
     url(r'^files/$', 'show_files',
         name='url_show_files'),
-    (r'^test/upload_replay/$', 'upload_replay'),
+    #(r'^test/upload_replay/$', 'upload_replay'),
+    #obsolete #todo: cleanse it all!
     #(r'^test/upload_image/$', 'upload_image'),
-    (r'^test/make_fake_attachments/$', 'make_fake_attachments'),
-    (r'^test/make_fake_files/replays/$', 'make_fake_files', {'model':'files.replay','field':'replay'}),
-    (r'^test/make_fake_files/files/$', 'make_fake_files', {'model':'files.file','field':'file'}),
-    (r'^test/make_fake_files/images/$', 'make_fake_files', {'model':'files.image','field':'image'}),
-    (r'^test/make_fake_files/thumbnails/$', 'make_fake_files', {'model':'files.image','field':'thumbnail'}),
+    #(r'^test/make_fake_attachments/$', 'make_fake_attachments'),
+    #(r'^test/make_fake_files/replays/$', 'make_fake_files', {'model':'files.replay','field':'replay'}),
+    #(r'^test/make_fake_files/files/$', 'make_fake_files', {'model':'files.file','field':'file'}),
+    #(r'^test/make_fake_files/images/$', 'make_fake_files', {'model':'files.image','field':'image'}),
+    #(r'^test/make_fake_files/thumbnails/$', 'make_fake_files', {'model':'files.image','field':'thumbnail'}),
 
 )
 

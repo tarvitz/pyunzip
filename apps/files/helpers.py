@@ -249,7 +249,14 @@ class ZipPack():
 
     #only valid form is
     
-def upload_image(request,form):
+def upload_image(request, form):
+    if not form.is_valid():
+        raise "You should pass valid form!"
+    form.instance.owner = request.user
+    form.save()
+    return form.instance.pk
+
+def upload_image_old(request,form):
     if not form.is_valid():
         raise "You should pass valid form!"
     from apps.files.models import Image,Gallery
