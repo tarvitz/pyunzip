@@ -13,8 +13,6 @@
 		<div class='msg_headline'>
 			<!-- effects -->
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<!-- end of effects -->
 
 			<a href='{% url profile_by_nick user.nickname %}'>{% get_nickname user %}</a>
@@ -45,8 +43,6 @@
 		<br clear='all'>
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<div class='links'>	
 				<span class='first'><a href='{% url profile_by_nick user.nickname %}'>profile</a></span>
 				<span><a href='{% url url_send_pm_by_nick user.nickname  %}'>pm</a></span>

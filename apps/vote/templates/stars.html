@@ -7,11 +7,11 @@
         {# implement here vote settings #}
         {% check_user_voted for vote_object with user as voted %}
         {% if voted %}
-            <img src="/media/images/stars/{{ star }}.png">
+            <img src="/media/images/stars/{{ star }}.png" alt="[{{ star }}]">
         {% else %}
         {# <implement within ajax: <a href="javascript:void(0);" onClick="do_vote({{ forloop.counter }});"> #}
             <a class="stars" href="{% url apps.vote.views.vote_rate app_label=votes.app_label model_name=votes.model_name obj_id=vote_object.id rate=forloop.counter %}">
-				<img src="/media/images/stars/{{ star }}.png" id='star_{{ vote_object.pk }}_{{ forloop.counter }}'
+				<img alt='[{{ star }}]' src="/media/images/stars/{{ star }}.png" id='star_{{ vote_object.pk }}_{{ forloop.counter }}'
 					onMouseMove="change_star('star_{{ vote_object.pk }}',{{ forloop.counter }},'/media/images/stars/star.png',
 						'/media/images/stars/star_0.png');" 
 					onMouseOut="stars_back('star_{{ vote_object.pk }}',{{ forloop.counter }},{{ stars }},'/media/images/stars/');">
