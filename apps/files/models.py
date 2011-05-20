@@ -127,9 +127,9 @@ class Replay(models.Model):
         else: return 'team'
     @property
     def get_type(self):
-        if self.type == '5':
+        if self.type == 5:
             return 'set'
-        elif self.type == '0' or 0:
+        elif self.type == 0:
             return 'unstd'
         else:
             return str(self.type)+'vs'+str(self.type)
