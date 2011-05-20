@@ -132,7 +132,7 @@ class Replay(models.Model):
         elif self.type == '0' or 0:
             return 'unstd'
         else:
-            return self.type+'vs'+self.type
+            return str(self.type)+'vs'+str(self.type)
     
     def _get_players_teamlist_new(self):
         if not self.is_set:
