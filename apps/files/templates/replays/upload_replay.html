@@ -21,9 +21,12 @@
     var app_n_model = 'files.replay';
     var progress_url_global = "{% url url_upload_progress %}";
     var action_field = "{% url url_progress_uploader app_n_model='files.replay' %}";
+    var _xhr_request = '{% url xhr_get_replay_versions %}';
 </script>
 
 <script language='javascript' src='/media/js/jq_progress_upload.js'></script>
+<script language='javascript' src='/media/js/jq_replays.js'></script>
+{% comment %}
 <script language='javascript'>
     version = document.getElementById('id_version');
     game = document.getElementById('id_game'); 
@@ -45,6 +48,6 @@
             updateVersion();
         });
     });
-</script>
+</script>{% endcomment %}
 
 {% endblock %}

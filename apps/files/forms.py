@@ -107,6 +107,30 @@ class UploadReplayModelForm(forms.ModelForm):
                 del cleaned_data['races']
         return cleaned_data
 
+class ActionReplayModelForm(UploadReplayModelForm):
+    game = forms.ModelChoiceField(queryset=Game.objects, required=False)
+    version = forms.ModelChoiceField(queryset=Version.objects)
+    class Meta:
+        model = Replay
+        fields = ['name', 'game', 'version', 'type', 'nonstd_layout', 'teams',
+            'races', 'winner', 'syntax', 'comments',
+        ]
+        exclude = ['author', 'upload_date', 'replay' ]
+        widgets = {
+            'comments': TinyMkWidget(attrs=({'disable_user_quote': True})),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs:
+            instance = kwargs['instance']
+            if instance:
+                self.base_fields['version'].queryset = Version.objects.filter(game__pk=instance.version.game.pk)
+        if args:
+            POST = args[0]
+            if 'version' in POST:
+                self.base_fields['version'].queryset = Version.objects.filter(pk=POST['version'])
+        super(ActionReplayModelForm, self).__init__(*args, **kwargs)
+
 #default to DoW1
 class ActionReplayForm(forms.Form):
     TYPE_CHOICES=(

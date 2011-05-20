@@ -17,7 +17,8 @@ from django.core import serializers
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
-    UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm
+    UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
+    ActionReplayModelForm
 from apps.core.forms import CommentForm
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
@@ -120,9 +121,28 @@ def choose_game_to_upload(request):
         {'games': games},
         context_instance=RequestContext(request))
 
+@can_act
+@csrf_protect
+@login_required
+def edit_replay(request, id):
+    template = get_skin_template(request.user, 'replays/edit_replay.html')
+    instance = get_object_or_404(Replay, id=id)
+    if request.method == 'POST':
+        form = ActionReplayModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_replay',
+                args=(form.instance.pk, )))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+        
+    form = ActionReplayModelForm(instance=instance)
+    return direct_to_template(request, template, {'form': form})
+
 @login_required
 @can_act
-def edit_replay(request,id=0):
+def edit_replay_old(request,id=0):
     template = get_skin_template(request.user, 'replays/upload_replay.html')
     can_edit = request.user.user_permissions.filter(codename='edit_replay')
     try:
