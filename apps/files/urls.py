@@ -26,7 +26,8 @@ urlpatterns = patterns('apps.files.views',
         name='url_author_replays'),
     url('^replays/author/(?P<nickname>[\w\s]+)/(?P<game>\w+)/(?P<version>[\w\s]+)/(?P<patch>[\w\d\s.]+)/$','replays_by_author',
         name='url_author_replays'),
-    ('^replays/(?P<number>\d+)/$','show_replay',{'object_model':'files.replay'}),
+    url('^replays/(?P<number>\d+)/$','show_replay',{'object_model':'files.replay'},
+        name='url_show_replay'), #WTF????
     (r'^replays/(?P<id>\d+)/(?P<idx>\d+)/$', 'return_replay_from_pack'), #returns replay from zipped filepack
     (r'^replays/(?P<id>\d+)/(?P<idx>\d+)/(?P<compress>(plain|zip|bz2))/$', 'return_replay_from_pack'), #returns replay from zipped filepack
     (r'^replays/all/$', 'all_replays'),
