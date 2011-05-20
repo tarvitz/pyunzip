@@ -586,7 +586,7 @@ def edit_comment(request,id):
 
 @login_required
 @progress_upload_handler
-def upload_file(request,app_n_model,filefield): 
+def upload_file(request,app_n_model,filefield=None): 
     logger.info('upload_file initialized')
     #print "initial"
     error = None
@@ -630,9 +630,19 @@ def upload_file(request,app_n_model,filefield):
             #print "form is valid, saving file"
             #here we set where we saving
             from apps.core.settings import UPLOAD_SETTINGS
-            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'],str(request.user.id))
+            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'], 
+                str(request.user.id))
             #Should we handle it?
-            filename = handle_uploaded_file(request.FILES[filefield],save_to)
+            #filename = handle_uploaded_file(request.FILES[filefield],save_to)
+            #if filefield in form.fields:
+            #    form.fields[filefield].upload_to = save_to
+            #else:
+            #    return HttpResponse('Not Ok')
+            #setattr(form, filefield, filename)
+            helper_saver(request, form)
+            return HttpResponse('Ok')
+            """ old code instance for non model form saving """
+            """
             #insert some sort of validation here
             error = None
             #error = validate_file(filename)
@@ -649,6 +659,7 @@ def upload_file(request,app_n_model,filefield):
                     instance.save()
                 #fd.close()
                 return HttpResponse('Ok')
+            """
         else:
             #what shall we do it the form is invalid ? :D
             #print "form is invalid"

@@ -20,7 +20,7 @@ UPLOAD_SETTINGS = {
         'schema': 'files/',
     },
     'files.replay':{
-        'form': 'apps.files.forms.UploadReplayForm',
+        'form': 'apps.files.forms.UploadReplayModelForm',
         'helper': 'apps.files.helpers.upload_replay',
         'schema': 'replays/',
     }

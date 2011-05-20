@@ -12,11 +12,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers       import reverse
+from django.core import serializers
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
-    UploadFileModelForm, UploadImageModelForm
+    UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm
 from apps.core.forms import CommentForm
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
@@ -40,6 +41,23 @@ import zipfile
 import bz2
 import os
 
+
+@login_required
+@can_act
+@csrf_protect
+def upload_replay(request):
+    template = get_skin_template(request.user, 'replays/upload_replay.html')
+    if request.method == 'POST':
+        form = UploadReplayModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.upload_date = datetime.now()            
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_replays'))
+        else:
+            return direct_to_template(request, template, {'form': form})
+    form = UploadReplayModelForm()
+    return direct_to_template(request, template, {'form': form})
 
 @login_required
 @can_act
@@ -149,8 +167,8 @@ def edit_replay(request,id=0):
 @login_required
 @can_act
 @benchmarking
-def upload_replay(request,game):
-    template = get_skin_template(request.user, 'replays/upload_replay.html')
+def upload_replay_old(request,game):
+    template = get_skin_template(request.user, 'replays/upload_replay_old.html')
     if request.method == 'POST':
         form = UploadReplayForm(request.POST, request.FILES)
         if form.is_valid():
@@ -770,3 +788,13 @@ def search_replay(request):
         'form': form,
         'query': query},
         context_instance=RequestContext(request))
+
+def xhr_get_replay_versions(request, id=None):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    if not id:
+        response.write('[]')
+        return response
+    versions = Version.objects.filter(game__id=id)
+    response.write(serializers.serialize("json",versions))
+    return response

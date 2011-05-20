@@ -3,7 +3,7 @@ from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from apps.files.models import Version, Gallery, File, Image as ModelImage, \
-    Replay
+    Replay, Game
 from apps.core import get_safe_message
 from apps.files.helpers import is_zip_file
 from PIL import Image
@@ -31,14 +31,81 @@ class UploadFileModelForm(forms.ModelForm):
 
 class UploadImageModelForm(forms.ModelForm):
     required_css_class='required'
+    
     class Meta:
         model = ModelImage
-        exclude = ['thumbnail', 'owner']
-
-class ActionReplayModelForm(forms.ModelForm):
+        exclude = ['thumbnail', 'owner']  
+   
+class UploadReplayModelForm(forms.ModelForm):
     required_css_class='required'
+    game = forms.ModelChoiceField(queryset=Game.objects)
+    version = forms.ModelChoiceField(queryset=Version.objects.none())
+
     class Meta:
         model = Replay
+        fields = ['name', 'game', 'version', 'type', 'nonstd_layout', 'teams',
+            'races', 'winner', 'replay', 'syntax', 'comments',
+        ]
+        exclude = ['author', 'upload_date', ]
+        widgets = {
+            'comments': TinyMkWidget(attrs=({'disable_user_quote': True})),
+        }
+    
+    def __init__(self, *args, **kwargs):
+        if args:
+            POST = args[0]
+            if 'version' in POST:
+                self.base_fields['version'].queryset = Version.objects.filter(pk=POST['version'])
+        super(UploadReplayModelForm, self).__init__(*args, **kwargs)
+    
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        teams = cleaned_data.get('teams', None)
+        nonstd_layout = cleaned_data.get('nonstd_layout', None)
+        winner = cleaned_data.get('winner', None)
+        _type_ = cleaned_data.get('type', None)
+        races = cleaned_data.get('races', None)
+        print _type_
+        #if there is clean
+        if winner is None: return cleaned_data
+        if _type_ is None: return cleaned_data
+        if teams is None: return cleaned_data
+        if races is None: return cleaned_data
+
+        if _type_ != 5 and _type_ != 0:
+            if len(teams.split(',')) != _type_ * 2:
+                msg = _('You should use the same number of players as the number you\'ve passed via type or layout')
+                self._errors['teams'] = ErrorList([msg])
+                del cleaned_data['teams']
+            if winner > 2:
+                msg = _('You can choose only team1 or team2 as no more team are exist in this type')
+                self._errors['winner'] = ErrorList([msg])
+                del cleaned_data['winner']
+            if len(races.split(',')) > _type_ * 2:
+                msg = _("You can not pass more than '%i' races, less is available" % _type_ * 2)
+                self._errors['races'] = ErrorList([msg])
+                del cleaned_data['races']
+        elif _type_ == 0:
+            if not nonstd_layout:
+                msg = _('Required')
+                self._errors['nonstd_layout'] = ErrorList([msg])
+                del cleaned_data['nonstd_layout']
+                return cleaned_data
+            team_num = len([x for x in nonstd_layout.split('vs') if x])
+            num = sum([int(i) for i in nonstd_layout.split('vs')])
+            if len(teams.split(',')) != num:
+                msg = _('You should use the same number of players as the number you\'ve passed via type or layout')
+                self._errors['teams'] = ErrorList([msg])
+                del cleaned_data['teams']
+            if winner > team_num:
+                msg = _("You can not choose team which is about '%i' number" % team_num )
+                self._errors['winner'] = ErrorList([msg])
+                del cleaned_data['winner']
+            if len(races.split(',')) > team_num:
+                msg = _("You can not pass more than '%i' races, less is available" % team_num)
+                self._errors['races'] = ErrorList([msg])
+                del cleaned_data['races']
+        return cleaned_data
 
 #default to DoW1
 class ActionReplayForm(forms.Form):

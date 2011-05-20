@@ -248,7 +248,7 @@ class ZipPack():
         return info
 
     #only valid form is
-    
+
 def upload_image(request, form):
     if not form.is_valid():
         raise "You should pass valid form!"
@@ -297,6 +297,14 @@ def upload_file_old(request,form):
     return db.pk
 
 def upload_replay(request,form):
+    if not form.is_valid():
+        raise "You should pass valid form!"
+    form.instance.author = request.user
+    form.instance.upload_date = datetime.now()
+    form.save()
+    return form.instance.pk
+
+def upload_replay_old(request,form):
     if not form.is_valid():
         raise "You should pass valid form!"
     from apps.files.models import Replay
