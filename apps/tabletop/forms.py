@@ -7,11 +7,39 @@ from django.conf import settings
 from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
+from apps.core.helpers import get_content_type
 from apps.wh.models import Side
 from django.forms.util import ErrorList
-from apps.tabletop.models import Mission,Roster, BattleReport
+from apps.tabletop.models import Mission,Roster, BattleReport, Codex
 from apps.tabletop import fields
 import re
+
+from apps.wh.models import Fraction, Side, Army
+class AddCodexModelForm(forms.ModelForm):
+    required_css_class = 'required'
+    side = forms.ModelChoiceField(queryset=Side.objects)
+    army = forms.ModelChoiceField(queryset=Army.objects.none(),
+        required=False)
+    
+    class Meta:
+        model = Codex
+        fields = ['title', 'side', 'army', 'revisions', ]
+        exclude = ['content_type', 'object_id', ]
+
+    def __init__(self, *args, **kwargs):
+        if 'instance' in kwargs:
+            instance = kwargs['instance']
+            if instance:
+                pass
+        if args:
+            POST = args[0]
+            if 'army' in POST:
+                if POST['army']:
+                    self.base_fields['army'].queryset = Army.objects.filter(pk=POST['army'])
+        super(AddCodexModelForm, self).__init__(*args, **kwargs)
+    
+    def save(self, *args, **kwargs):
+        super(AddCodexModelForm, self).save(*args, **kwargs)
 
 class AddBattleReportForm(RequestForm):
     title = forms.CharField()

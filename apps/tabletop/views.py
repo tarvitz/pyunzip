@@ -1,9 +1,9 @@
 # Create your views here.
 # coding: utf-8
 from django.utils.translation import ugettext_lazy as _
-from apps.tabletop.models import Roster,Mission,Game,BattleReport
+from apps.tabletop.models import Roster,Mission,Game,BattleReport, Codex
 from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
-    AddBattleReportForm, AddBattleReportModelForm
+    AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -25,6 +25,7 @@ from apps.core.decorators import benchmarking,has_permission
 from apps.core.forms import ApproveActionForm
 from apps.core import benchmark
 from apps.wh.models import Side
+from django.views.decorators.csrf import csrf_protect
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
@@ -477,3 +478,44 @@ def delete_battle_report(request,id,approve=''):
         return HttpResponseRedirect('/permission/denied')
     return HttpResponseRedirect(reverse('battle_report_index'))
 
+@csrf_protect
+@login_required
+@has_permission('tabletop.add_codex')
+def action_codex(request, id=None, action=None):
+    template = get_skin_template(request.user, 'add_codex.html')
+    instance = None
+    if id:
+        instance = get_object_or_404(Codex, id=id)
+    if request.method == 'POST':
+        form = AddCodexModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            instance = form.instance
+            if request.POST['army']:
+                instance.content_type = get_content_type('wh.army')
+                instance.object_id = int(request.POST['army'])
+            else:
+                instance.content_type = get_content_type('wh.side')
+                instance.object_id = int(request.POST['side'])
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_codex', args=(instance.pk,)))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = AddCodexModelForm(instance=instance)
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+def show_codex(request, id):
+    template = get_skin_template(request.user, 'show_codex.html')
+    codex = get_object_or_404(Codex, id=id)
+    return direct_to_template(request, template, {'codex': codex})
+
+@login_required
+def show_codexes(request):
+    template = get_skin_template(request.user, 'show_codexes.html')
+    codexes = Codex.objects.all()
+    _pages_ = get_settings(request.user, 'objects_on_page', 20)
+    page = request.GET.get('page', 1)
+    codexes = paginate(codexes, page, pages=_pages_)
+    return direct_to_template(request, template,
+        {'codexes': codexes})

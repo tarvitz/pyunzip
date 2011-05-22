@@ -1,0 +1,19 @@
+{% extends base_template %}
+{% block text_content %}
+{% if codexes.object_list %}
+    <ul>
+    {% for codex in codexes.object_list %}
+    {# include more tasty codex-template view here #}
+    <li>
+        <span class=''>{{ codex.title }}</span>
+        <span class=''>{{ codex.revisions }}</span>
+        <span class=''>{{ codex.bound }}</span>
+        <a href='{% url url_edit_codex codex.id %}'>[edit]</a>
+    </li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% with codexes as page %}
+    {% include settings.document.links %}
+{% endwith %}
+{% endblock %}

@@ -9,6 +9,24 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from apps.wh.models import Side
 from apps.djangosphinx.models import SphinxSearch
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import generic
+
+class Codex(models.Model):
+    content_type = models.ForeignKey(ContentType,
+        verbose_name=_('content type'),
+        related_name="ct_set_for_%(class)s")
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey(ct_field="content type",
+        fk_field="object_id")
+    title = models.CharField(_('Title'), max_length=128)
+    revisions = models.CommaSeparatedIntegerField(_('Revisions'), max_length=64)
+    
+    def bound(self):
+        try:
+            return self.content_type.model_class().objects.get(pk=self.object_id)
+        except:
+            return None
 
 class Roster(models.Model):
     owner = models.ForeignKey(User,related_name='roster_owner')
