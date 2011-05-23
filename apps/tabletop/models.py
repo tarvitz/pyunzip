@@ -21,6 +21,7 @@ class Codex(models.Model):
     content_object = generic.GenericForeignKey(ct_field="content type",
         fk_field="object_id")
     title = models.CharField(_('Title'), max_length=128)
+    plain_side = models.CharField(_('Plain side'), max_length=128, blank=True) #for sphinx search optimization
     revisions = models.CommaSeparatedIntegerField(_('Revisions'), max_length=64)
     
     def bound(self):
@@ -28,9 +29,20 @@ class Codex(models.Model):
             return self.content_type.model_class().objects.get(pk=self.object_id)
         except:
             return None
-    
+
     def __unicode__(self):
         return self.bound().__unicode__()
+    
+    def save(self, *args, **kwargs):
+        #write plain_side for better search withing sphinx
+        bound = self.bound()
+        if bound:
+            bound_name = bound.__class__.__name__.lower()
+            if 'army' in bound_name:
+                self.plain_side = bound.side.name
+            else:
+                self.plain_side = bound.name
+        super(Codex, self).save(*args, **kwargs)
 
 class Roster(models.Model):
     def valid_revision(value):

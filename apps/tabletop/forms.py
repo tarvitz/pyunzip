@@ -253,7 +253,7 @@ class AddRosterModelForm(forms.ModelForm):
     required_css_class = 'required'
     class Meta:
         model = Roster
-        exclude = ['owner', 'user', 'is_orphan', ]
+        exclude = ['owner', 'user', 'is_orphan', 'plain_side']
         widgets = {
             'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
             'roster': TinyMkWidget(attrs={'disable_user_quote': True})
