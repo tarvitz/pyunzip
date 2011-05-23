@@ -258,7 +258,7 @@ class AddRosterModelForm(forms.ModelForm):
             'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
             'roster': TinyMkWidget(attrs={'disable_user_quote': True})
         }
-        fields = ['title', 'pts', 'syntax', 'codex', 'custom_codex', 'revision', 'roster', 'comments' ]
+        fields = ['title', 'player', 'pts', 'syntax', 'codex', 'custom_codex', 'revision', 'roster', 'comments' ]
     
     def clean(self):
         cleaned_data = self.cleaned_data
