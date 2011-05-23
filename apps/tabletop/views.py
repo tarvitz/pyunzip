@@ -249,7 +249,9 @@ def action_roster(request, id=None, action=None):
     if request.method == 'POST':
         form = AddRosterModelForm(request.POST, instance=instance)
         if form.is_valid():
-            form.instance.owner = request.user
+            #do not let overriding owner
+            if not form.instance.owner:
+                form.instance.owner = request.user
             form.save()
             return HttpResponseRedirect(reverse('url_show_roster',
                 args=(form.instance.pk,)))
