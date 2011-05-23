@@ -337,7 +337,7 @@ def get_all_perms(self):
 #monkey patching
 #User.has_perm = has_perm_overload
 #User.get_all_permissions = get_all_perms
-User.__unicode__ = lambda x: x.nickname #dirty hack xD
+User.__unicode__ = lambda x: x.nickname #dirty cheat xD
 User.add_to_class('nickname', models.CharField(_('Nickname'), max_length=30, null=False, unique=True))
 User.add_to_class('photo', models.ImageField(_('Photo'),upload_to=os.path.join(settings.MEDIA_ROOT+'photos/'),blank=True))
 User.add_to_class('avatar', models.ImageField(_('Avatar'),upload_to=os.path.join(settings.MEDIA_ROOT+'avatars/'),blank=True))
@@ -348,7 +348,7 @@ User.add_to_class('uin', models.IntegerField(_('UIN (icq number)'), max_length=1
 User.add_to_class('about', models.CharField(_('About myself'),max_length=512, blank=True))
 User.add_to_class('skin', models.ForeignKey(Skin, null=True, blank=True))
 User.add_to_class('ranks', models.ManyToManyField(Rank, null=True, blank=True))
-User.add_to_class('army', models.ForeignKey(Army, null=True, blank=True))
+User.add_to_class('army', models.ForeignKey(Army, unique=True, null=True, blank=True))
 User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, default=0))
 
 #User.add_to_class('settings', models.ForeignKey(Settings))

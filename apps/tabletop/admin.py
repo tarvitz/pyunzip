@@ -20,8 +20,8 @@ admin.site.register(Game,GameAdmin)
 admin.site.register(Mission)
 
 class RosterAdmin(admin.ModelAdmin):
-    list_display = ('show_player','show_race','pts')
-    list_display_links = ('show_player','show_race','pts')
+    list_display = ('show_player','codex','pts')
+    list_display_links = ('show_player','codex','pts')
 admin.site.register(Roster,RosterAdmin)
 
 #class CategoryAdmin(admin.ModelAdmin):

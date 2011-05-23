@@ -40,12 +40,9 @@
             </span>
 			{% endif %}{% endspaceless %}
 		{% endif %}
-			<img src='{% spaceless %}
-				{% if roster.user %}
-					{% url url_get_avatar nickname=roster.user.nickname %}
-				{% else %}
-					{% url url_get_race_icon roster.show_race %}
-				{% endif %}{% endspaceless %}'>
+			{% if roster.user %}
+                            <img src='{% url url_get_avatar nickname=roster.user.nickname %}'>
+                        {% endif %}
 		{% if roster.user %}
 			<center>
             {% with roster.user as warn_user %}
@@ -67,13 +64,14 @@
 		</div> <!-- msg_avatar -->
 		<div class='msg_text'>
 		<span class='msg_right_icon'>
-			<a href='{% url url_race_rosters race=roster.show_race %}'><img src="{% url url_get_race_icon roster.show_race %}"></a>
+			{# <a href='{% url url_race_rosters race=roster.show_race %}'><img src="{% url url_get_race_icon roster.show_race %}"> </a> #}
 		</span><!--implement with message.css -->
 		{# almost all text should be placed here #}
 			<center>
 			<div class='roster_info'>{# places with tabletop.css #}
 				Количество очков: <span class='pts'>{{ roster.pts }}</span><br>
-				Раса: <div class='race'>{{ roster.show_race }}</div>
+				Кодекс: <div class='race'>{{ roster.codex }}</div>
+                                Издание: <div class='revision'> {{ roster.revision }}</div>
 				{% if not roster.user %}Имя игрока: <div class='player'>{{ roster.player }}</div> {% endif %}
 				Ростер:<div class='roster'>
 					{{ roster.roster|striptags|render_filter:roster.syntax|safe }}

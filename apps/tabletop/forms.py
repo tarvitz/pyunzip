@@ -10,7 +10,7 @@ from apps.core.widgets import TinyMkWidget
 from apps.core.helpers import get_content_type
 from apps.wh.models import Side
 from django.forms.util import ErrorList
-from apps.tabletop.models import Mission,Roster, BattleReport, Codex
+from apps.tabletop.models import Mission, Roster, BattleReport, Codex
 from apps.tabletop import fields
 import re
 
@@ -248,75 +248,42 @@ class AddRosterForm(RequestForm):
             return pts
         else:
             raise forms.ValidationError(_('The common pts should be greater than 500'))
-"""
-class AddNewsForm(forms.Form):
-    author = forms.CharField(required=True)
-    content = forms.CharField(widget=forms.Textarea())
-    approved = forms.BooleanField(required=False)
 
-class ArticleForm(forms.Form):
-    categories = NewsCategory.objects.all()
-    CATEGORIES = list()
-    for c in categories:
-        CATEGORIES.append((c.id, c.name))
-    title = forms.CharField()
-    author = forms.CharField(required=False)
-    editor = forms.CharField(required=False)
-    url = forms.URLField(required=False)
-    head_content = forms.CharField(widget=forms.Textarea(),required=False)
-    content = forms.CharField(widget=TinyMkWidget(attrs={'disable_syntax':True,'disable_user_quote': True}))
-    category = forms.ChoiceField(choices=CATEGORIES)
-    attachment = forms.FileField(required=False)
-    syntax = forms.ChoiceField(choices=(('markdown','markdown'),('bb-code','bb-code'),))
-    hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
-
-    #recieving all request :)
-    def __init__(self, *args, **kwargs):
-                if 'request' in kwargs:
-                        self.request = kwargs['request']
-                        del kwargs['request']
-                super(ArticleForm, self).__init__(*args, **kwargs)
+class AddRosterModelForm(forms.ModelForm):
+    required_css_class = 'required'
+    class Meta:
+        model = Roster
+        exclude = ['owner', 'user', 'is_orphan', ]
+        widgets = {
+            'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
+            'roster': TinyMkWidget(attrs={'disable_user_quote': True})
+        }
+        fields = ['title', 'pts', 'syntax', 'codex', 'custom_codex', 'revision', 'roster', 'comments' ]
     
-    def clean_head_content(self):
-        head_content = self.cleaned_data.get('head_content','')
-        if len(head_content)>1000:
-            raise forms.ValidationError(_("You can not use more than 1000 symbols within headline news editing, please shortage the head of the news"))
-        return get_safe_message(head_content)
-
-    def clean_content(self):
-        content = self.cleaned_data.get('content','')
-        content = get_safe_message(content)
-        if len(content) > 20000:
-            raise forms.ValidationError(_("You can not use more then 20000 symbols while you post article"))
-        return content
-
     def clean(self):
         cleaned_data = self.cleaned_data
-        author = cleaned_data.get('author','')
-        if not author:
-            author = self.request.user.nickname
-            cleaned_data['author'] = author
-        else:
-            editor = self.request.user.nickname
-            cleaned_data['editor'] = editor
+        revision = cleaned_data.get('revision', None)
+        codex = cleaned_data.get('codex', None)
+        if not codex or not revision: return cleaned_data
+        if not str(revision) in codex.revisions.split(','):
+            msg = _('There is no such revision in "%s", try to pass %s as valid values' %
+                (codex.__unicode__(), codex.revisions))
+            self._errors['revision'] = ErrorList([msg])
+            del cleaned_data['revision']
         return cleaned_data
 
-    def clean_attachment(self):
-        attachment = self.cleaned_data.get('attachment','')
-        if not attachment:
-            #print attachment
-            return None
+    def clean_pts(self):
+        pts = self.cleaned_data.get('pts', None)
+        if pts > 500:
+            return pts
         else:
-            name = attachment.name
-            #it's better to use type validation instead of ext validation
-            try:
-                ext = name[name.rindex('.')+1:]
-            except ValueError:
-                raise forms.ValidationError(_('Unknow type of file'))
-            if not ext.lower() in ['zip','gz','bz2','gzip']:
-                raise forms.ValidationError(_('Only zip files supported'))
-            return attachment
+            raise forms.ValidationError(_('The common pts should be greater than 500'))
+    
+    def clean_player(self):
+        player = self.cleaned_data.get('player',None)
+        if len(player)>64:
+	    raise forms.ValidationError(_('You can not pass player\'s name that contains more than 64 symbols'))
+        if not player:
+            player = self.request.user.nickname
+        return player
 
-class ApproveActionForm(forms.Form):
-     url = forms.CharField(widget=forms.HiddenInput())
-"""
