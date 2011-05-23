@@ -18,7 +18,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
-    ActionReplayModelForm
+    ActionReplayModelForm, SimpleFilesActionForm
 from apps.core.forms import CommentForm
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
@@ -641,7 +641,21 @@ def show_files(request):
     page = request.GET.get('page',1)
     files = File.objects.all().order_by('-upload_date')
     _pages_ = get_settings(request.user,'objects_on_page',100)
-    files = paginate(files,page,pages=_pages_) 
+    files = paginate(files,page,pages=_pages_)
+    if request.method == 'POST':
+        form = SimpleFilesActionForm(request.POST)
+        if form.is_valid():
+            files = File.objects.filter(id__in=(
+                    [int(i) for i in request.POST.getlist('files')]
+            ))
+            print files
+            if form.cleaned_data['action'] == 'delete':
+                files.delete()
+            return HttpResponseRedirect(reverse('url_show_files'))
+        else:
+            return direct_to_templates(request, template,
+                {'files': files, 'page': files, 'form': form},
+                processors=[pages])
     return render_to_response(template,
         {'files':files,
         'page': files},

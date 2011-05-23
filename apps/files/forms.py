@@ -384,3 +384,9 @@ class CreateGalleryForm(forms.Form):
         if len(name)>100:
             raise forms.ValidationError(_('The length of gallery name was exceeded'))
         return name
+
+class SimpleFilesActionForm(forms.Form):
+    action = forms.ChoiceField(choices=
+        ((None, '------'),('delete', _('delete'))),
+        required=False)
+    #files = forms.MultipleChoiceField(Select=forms.CheckboxSelectMultiple())
