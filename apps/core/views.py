@@ -317,9 +317,10 @@ def sphinx_search_model(request, model):
     _pages_ = get_settings(request.user, 'objects_on_page', 20)
     #query processing
     if request.get_full_path() == reverse('url_sph_search_model', args=(model,)):
-            if 'query' in request.session['query']:
-                del request.session['query']
-                requrest.session()
+            if 'query' in request.session:
+                if 'query' in request.session['query']:
+                    del request.session['query']
+                    requrest.session()
     if request.method == 'POST':
         form = SphinxSearchForm(request.POST)        
         if form.is_valid():
