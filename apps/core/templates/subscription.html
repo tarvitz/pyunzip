@@ -1,13 +1,26 @@
-{% extends base_template %}
+{% extends base_template %} {% load i18n %}
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+{% endblock %}
 {% block text_content %}
     {% if subscription.object_list %}
+    <div class='forms'>
+    <form id='id_subscription_action_form' action='.' method='POST'>
+    {% csrf_token %}
+    {{ form.action.errors }}
+    {{ form.action }}
 	<ul>
 	{% for sub  in  subscription.object_list %}
 		<li>
+                        <input type='checkbox' value='{{ sub.id }}' name='items'>
 			<a href='{{ sub.get_real_object.get_absolute_url }}'>{{ sub.get_model }} : {{ sub.get_title }}</a>
-			<a href='{% url url_unsubscribe sub.id "approve" %}'>[отписаться]</a></li>
+			<a href='{% url url_unsubscribe sub.id "approve" %}' title='отписаться' class='del_link'>[x]</a></li>
 	{% endfor %}
 	</ul>
+    <input type='submit' value='{% trans "submit" %}'>
+    </form>
+    </div>
     {% with subscription as page %}
 	{% include settings.document.links %}
     {% endwith %}

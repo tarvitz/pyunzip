@@ -131,3 +131,14 @@ class CommentForm(forms.Form):
 
 class SphinxSearchForm(forms.Form):
     query = forms.CharField(required=True)
+
+def action_formset(qset, actions):
+    """ taken within stackoverflow,
+    form which allows the user to pick specified action to perform on a chosen
+    subset of items from queryset"""
+    
+    class _ActionForm(forms.Form):
+        items = forms.ModelMultipleChoiceField(queryset=qset)
+        action = forms.ChoiceField(choices=[(None, '--------'),]+zip(actions, actions))
+
+    return _ActionForm

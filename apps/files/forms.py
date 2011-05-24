@@ -35,7 +35,13 @@ class UploadImageModelForm(forms.ModelForm):
     class Meta:
         model = ModelImage
         exclude = ['thumbnail', 'owner']  
-   
+
+class ImageModelForm(UploadImageModelForm):
+    required_css_class='required'
+    class Meta:
+        model = ModelImage
+        exclude = ['image', 'thumbnail', 'owner']
+
 class UploadReplayModelForm(forms.ModelForm):
     required_css_class='required'
     game = forms.ModelChoiceField(queryset=Game.objects)
@@ -386,7 +392,7 @@ class CreateGalleryForm(forms.Form):
         return name
 
 class SimpleFilesActionForm(forms.Form):
-    action = forms.ChoiceField(choices=
-        ((None, '------'),('delete', _('delete'))),
-        required=False)
-    #files = forms.MultipleChoiceField(Select=forms.CheckboxSelectMultiple())
+    action = forms.ChoiceField(choices=[(None, '------'), ('delete', _('delete'))])
+    #files = forms.ModelMultipleChoiceField(queryset=File.objects)
+
+

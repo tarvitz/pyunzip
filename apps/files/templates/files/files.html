@@ -12,16 +12,14 @@
 {% if user.is_superuser %}
 <form action='.' method='post' id='id_files_actions_form'>
 {% csrf_token %}
-<select id='id_action' name='action'>
-    <option>------</option>
-    <option value='delete'>delete</option>
-</select>
+{{ form.action.errors }}
+{{ form.action }}
 {% endif %}
 <ul>
 {% for f in files.object_list %}
 <li id='file_list'>
         {% if user.is_superuser %}
-        <input class='' type='checkbox' name='files' value='{{ f.id }}'>
+        <input class='' type='checkbox' name='items' value='{{ f.id }}'>
         {% endif %}
 	[{% get_nickname f.owner %}]
 	<a href="{{ f.file.url }}">{{ f.file.name|namemediacut }}</a>
