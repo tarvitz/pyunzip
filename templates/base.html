@@ -20,6 +20,7 @@
 <script type='text/javascript' src='/media/js/base.js'></script>
 <script type='text/javascript' src='/media/js/jquery-1.4.4.min.js'></script>
 <script type='text/javascript' src='/media/js/m_effects.js'></script>
+<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>
 {% comment %}
 <script language='javascript'>
 	//alert(isOpera);
@@ -339,9 +340,12 @@
     
     function update_miniquote(){
         $.getJSON('{% url xhr_get_miniquote %}', function(data){
-            miniquote.fadeOut(1500, function(){
+            
+            if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
+            miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
                 miniquote.text(data[0].fields['content']);
-                miniquote.fadeIn(1500);
+                miniquote.fadeIn(isFireFox ?1000 :1500);
+                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
             });
         });
     }
