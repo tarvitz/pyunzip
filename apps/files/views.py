@@ -516,7 +516,9 @@ def upload_image_old(request):
 def show_all_images(request, id=None, action=None):
     template = get_skin_template(request, 'gallery/gallery.html')
     galleries = Gallery.objects.filter(type='global').order_by('-id')
-    images = GalleryImage.objects.filter(gallery__type='global').order_by('-id')
+    qset = Q(gallery__type='global')
+    if id: qset = qset|Q(gallery__id=id)
+    images = GalleryImage.objects.filter(qset).order_by('-id')
     page = request.GET.get('page', 1)
     _pages_ = get_settings(request.user, 'objects_on_page', 27)
     formclass = action_formset(images, ('delete',))
