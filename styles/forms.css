@@ -45,6 +45,7 @@ input[type='submit']{
 
 form input, form textarea, form select{
     display: block;
+    margin-left: 4px;
 }
 form label{
     display: block;
@@ -58,7 +59,6 @@ form input[type='checkbox']{
 }
 /*New forms implementation*/
 .forms{
-
 }
 .forms form label{
     text-align: left;
@@ -75,3 +75,15 @@ form input[type='checkbox']{
 }
 .forms label[for$='-clear_id']:before{content: "["}
 .forms label[for$='-clear_id']:after{content: "]"}
+.forms input.left{ 
+    float: left;
+    width: 15px !important;
+    height: 15px !important;
+    margin: 0px 0px 0px 2px;
+    padding: 0px;
+    top: 0px;
+}
+.forms #id_action{
+    min-width: 200px !important;
+    width: inherit;
+}

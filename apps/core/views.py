@@ -3,7 +3,7 @@ import os
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
 from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm, \
-    SphinxSearchForm
+    SphinxSearchForm, action_formset
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object
@@ -391,6 +391,21 @@ def view_subscription(request):
     template = get_skin_template(request.user,'subscription.html')
     subscription = Announcement.objects.filter(Q(users=request.user)|Q(notified_users=request.user)).distinct()
     _pages_ = get_settings(request.user,'objects_on_page',20)
+    #easy queryset
+    formclass = action_formset(subscription, ('delete',)) 
+    #paginate
+    subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            action = form.cleaned_data['action']
+            qset = form.cleaned_data['items']
+            if action == 'delete':
+                qset.delete()
+            return HttpResponseRedirect(reverse('url_view_subscription'))
+        else:
+            return direct_to_template(request, template,
+                {'subscription': subscription, 'form': form})
     #paginator = Paginator(subscription,_pages_)
     #try:
     #    page = request.GET.get('page',1)
@@ -399,9 +414,8 @@ def view_subscription(request):
     #except (EmptyPage,InvalidPage):
     #    subscription = paginator.page(1)
     #    subscription.number = 1
-    subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
-
-    return direct_to_template(request,template,{'subscription':subscription})
+    form = formclass()
+    return direct_to_template(request,template,{'subscription':subscription, 'form': form})
 
 @login_required
 def delete_subscription(request,id,action=''):

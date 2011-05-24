@@ -1,0 +1,16 @@
+{% extends base_template %} {% load i18n %}
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+<center>
+<div class='forms'>
+<form id='id_action_image_form' action='.' method='post'>
+ {% csrf_token %}
+ {{ form.as_ul }}
+ <input type='submit' value='{% trans "submit" %}'>
+</form>
+</div>
+</center>
+{% endblock %}

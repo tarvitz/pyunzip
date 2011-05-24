@@ -18,8 +18,8 @@ from django.http import HttpResponse,HttpResponseRedirect
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
-    ActionReplayModelForm, SimpleFilesActionForm
-from apps.core.forms import CommentForm
+    ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm
+from apps.core.forms import CommentForm, action_formset
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
@@ -435,7 +435,7 @@ def category_replays(request,type='',gametype='',version='',patch=''):
 @login_required
 @can_act
 def upload_image(request):
-    template = get_skin_template(request, 'gallery/upload.html')
+    template = get_skin_template(request.user, 'gallery/upload.html')
     form = UploadImageModelForm()
     if request.method == 'POST':
         form = UploadImageForm(request.POST)
@@ -446,6 +446,23 @@ def upload_image(request):
         else:
             return direct_to_template(request, template,
                 {'form': form})
+    return direct_to_template(request, template,
+        {'form': form})
+
+@csrf_protect
+@login_required
+def action_image(request, id, action=None):
+    template = get_skin_template(request.user, 'gallery/action_image.html')
+    instance = get_object_or_404(GalleryImage, id=id)
+    if request.method == 'POST':
+        form = ImageModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_image', args=(form.instance.pk,)))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = ImageModelForm(instance=instance)
     return direct_to_template(request, template,
         {'form': form})
 
@@ -496,7 +513,39 @@ def upload_image_old(request):
         context_instance=RequestContext(request))
 
 @benchmarking
-def show_all_images(request,id=''):
+def show_all_images(request, id=None, action=None):
+    template = get_skin_template(request, 'gallery/gallery.html')
+    galleries = Gallery.objects.filter(type='global').order_by('-id')
+    images = GalleryImage.objects.filter(gallery__type='global').order_by('-id')
+    page = request.GET.get('page', 1)
+    _pages_ = get_settings(request.user, 'objects_on_page', 27)
+    formclass = action_formset(images, ('delete',))
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            action = form.cleaned_data['action']
+            qset = form.cleaned_data['items']
+            if action == 'delete':
+                if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
+                    qset.delete()
+            return HttpResponseRedirect(reverse('url_show_galleries'))
+        else:
+            return direct_to_template(request, template,
+                {
+                    'galleries': galleries, 'images': images,
+                    'form': form
+                }, processors=[benchmark]
+            )
+    form = formclass()
+    images = paginate(images, page, pages=_pages_)
+    return direct_to_template(request, template,
+        {'galleries': galleries, 'images': images,
+        'form': form},
+        processors=[benchmark])
+
+#ITZ FUCKING UGLY!!!!
+@benchmarking
+def show_all_images_old(request,id=''):
     template = get_skin_template(request.user,'gallery/gallery.html')
     try:
         page = int(request.GET.get('page',1))
@@ -579,7 +628,7 @@ def show_gallery(request,gallery=1,gallery_name=None):
 
 @login_required
 @can_act
-def action_image(request, id, action):
+def action_image_old(request, id, action):
     next = ''
     if request.method == 'POST':
         form = ApproveActionForm(request.POST)
@@ -642,23 +691,23 @@ def show_files(request):
     files = File.objects.all().order_by('-upload_date')
     _pages_ = get_settings(request.user,'objects_on_page',100)
     files = paginate(files,page,pages=_pages_)
+    formclass = action_formset(File.objects.all(), ('delete', 'smth'))
     if request.method == 'POST':
-        form = SimpleFilesActionForm(request.POST)
+        form = formclass(request.POST)
         if form.is_valid():
-            files = File.objects.filter(id__in=(
-                    [int(i) for i in request.POST.getlist('files')]
-            ))
-            print files
-            if form.cleaned_data['action'] == 'delete':
-                files.delete()
+            action = form.cleaned_data['action']
+            qset = form.cleaned_data['items']
+            if action == 'delete':
+                qset.delete()
             return HttpResponseRedirect(reverse('url_show_files'))
         else:
-            return direct_to_templates(request, template,
+            return direct_to_template(request, template,
                 {'files': files, 'page': files, 'form': form},
-                processors=[pages])
+                context_processors=[pages])
     return render_to_response(template,
         {'files':files,
-        'page': files},
+        'page': files,
+        'form': formclass},
         context_instance=RequestContext(request,
             processors=[pages]))
 
