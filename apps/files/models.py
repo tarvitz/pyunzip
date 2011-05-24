@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 #from apps.bincase.fields import BinCaseField as BinCaseFileField
 from cStringIO import StringIO
 from apps.files.helpers import ZipPack
+from apps.files import actions
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from apps.djangosphinx.models import SphinxSearch
@@ -321,9 +322,10 @@ class Image(models.Model):
     def __unicode__(self):
         return "Images"
 
+
 class File(IncomeFile):
     url = models.URLField(_('Original URL'),blank=True)
-    
+    actions = [actions.file_delete_qset, ]
     def show_user(self):
         return self.owner.username
     show_user.short_description = _('owner')    

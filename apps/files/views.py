@@ -19,7 +19,7 @@ from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
     ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm
-from apps.core.forms import CommentForm, action_formset
+from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
@@ -693,14 +693,11 @@ def show_files(request):
     files = File.objects.all().order_by('-upload_date')
     _pages_ = get_settings(request.user,'objects_on_page',100)
     files = paginate(files,page,pages=_pages_)
-    formclass = action_formset(File.objects.all(), ('delete', 'smth'))
+    formclass = action_formset_ng(request, File.objects.all(), File)
     if request.method == 'POST':
         form = formclass(request.POST)
         if form.is_valid():
-            action = form.cleaned_data['action']
-            qset = form.cleaned_data['items']
-            if action == 'delete':
-                qset.delete()
+            qset = form.act(form.cleaned_data['action'], form.cleaned_data['items'])
             return HttpResponseRedirect(reverse('url_show_files'))
         else:
             return direct_to_template(request, template,

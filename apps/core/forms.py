@@ -1,6 +1,7 @@
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 from apps.core.settings import SETTINGS as USER_DEFAULT_SETTINGS, SETTINGS_FIELDS as USER_DEFAULT_FIELDS
 from apps.core.settings import SettingsFormOverload
 from django.conf import settings
@@ -141,4 +142,27 @@ def action_formset(qset, actions):
         items = forms.ModelMultipleChoiceField(queryset=qset)
         action = forms.ChoiceField(choices=[(None, '--------'),]+zip(actions, actions))
 
+    return _ActionForm
+
+def action_formset_ng(request, qset, model):
+    """ more useable generic action form """
+
+    class _ActionForm(forms.Form):
+        items = forms.ModelMultipleChoiceField(queryset=qset)
+        #_actions = [(s.short_description, s.short_description) for s in model.actions]
+        _actions = []
+        for x in range(0, len(model.actions)):
+            _actions.append((x, model.actions[x].short_description))
+        action = forms.ChoiceField(choices=[(None, '--------'),]+ _actions)
+        
+        del _actions
+        def act(self, action, _qset):
+            if hasattr(self, 'is_valid'):
+                action = model.actions.pop(int(action))
+                return action(request, _qset)
+            else:
+                raise ObjectDoesNotExist, "form.is_valid should be ran fist"
+        def __init__(self, *args, **kwargs):
+            self.request = request
+            super(_ActionForm, self).__init__(*args, **kwargs)
     return _ActionForm
