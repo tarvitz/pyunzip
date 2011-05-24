@@ -156,12 +156,14 @@ def action_formset_ng(request, qset, model):
         action = forms.ChoiceField(choices=[(None, '--------'),]+ _actions)
         
         del _actions
-        def act(self, action, _qset):
+
+        def act(self, action, _qset, **kwargs):
             if hasattr(self, 'is_valid'):
                 action = model.actions.pop(int(action))
-                return action(request, _qset)
+                return action(request, _qset, **kwargs)
             else:
                 raise ObjectDoesNotExist, "form.is_valid should be ran fist"
+
         def __init__(self, *args, **kwargs):
             self.request = request
             super(_ActionForm, self).__init__(*args, **kwargs)
