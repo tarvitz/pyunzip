@@ -6,7 +6,7 @@ urlpatterns = patterns('apps.tabletop.views',
     #url('^new/report/add/$','add_new_battle_report',
     #    name='url_add_new_battle_report'),
     url('^reports/$','index',
-        name='battle_report_index'),
+        name='battle_report_index'), #battle_report_index ? <-- stale url schema
     url('^reports/show/(?P<id>\d+)/$','show_battle_report',
         name='show_battle_report'),
     url('^reports/(?P<id>\d+)/$', 'show_battle_report',

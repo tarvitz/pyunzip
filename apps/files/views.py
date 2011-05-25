@@ -353,6 +353,7 @@ def show_categories(request,type=''):
         'games': games},
         context_instance=RequestContext(request))
 
+@csrf_protect
 @benchmarking
 def all_replays(request,type='',version='',patch='',gametype=''):
     template = get_skin_template(request.user, 'replays/all.html')
@@ -366,7 +367,18 @@ def all_replays(request,type='',version='',patch='',gametype=''):
             version__patch__icontains=patch).order_by('-id')
     else: replays = Replay.objects.all().order_by('-id')
     _pages_ = get_settings(request.user,'replays_on_page',20)
-    
+    formclass = action_formset_ng(request, replays, Replay,
+        permissions=['files.delete_replay', 'files.change_replay'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            return HttpResponseRedirect(request.get_full_path())
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'replays': replays, 'page': page},
+                processors=[benchmark])
     #paginator = Paginator(replays,_pages_)
     #links = make_links(paginator.num_pages,'')
     #links = paginator.page_range
@@ -376,13 +388,15 @@ def all_replays(request,type='',version='',patch='',gametype=''):
     #except (EmptyPage,InvalidPage):
     #    replays = paginator.page(1)
     #    paginator.number = int(1)
+    form = formclass()
     replays = paginate(replays,page,pages=_pages_)
     return render_to_response(template,
         {'replays': replays,
-        'page': replays},
+        'page': replays, 'form': form},
         context_instance=RequestContext(request,
             processors=[benchmark]))
 
+@csrf_protect
 @benchmarking
 def replays_by_author(request,nickname,game='',version='',patch=''):
     template = get_skin_template(request.user,'replays/all.html')
@@ -393,9 +407,22 @@ def replays_by_author(request,nickname,game='',version='',patch=''):
     
     _pages_ = get_settings(request.user,'replays_on_page',30)
     page = int(request.GET.get('page',1))
+    formclass = action_formset_ng(request, replays, Replay,
+        permissions=['files.delete_replay', 'files.change_replay'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            return HttpResponseRedirect(request.get_full_path())
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'replays': replays, 'page': page},
+                processors=[benchmark])
+    
+    form = formclass()
     replays = paginate(replays,page,pages=_pages_)
-
-    return render_to_response(template,{'replays':replays,'page':replays},
+    return render_to_response(template,{'replays':replays,'page':replays, 'form': form},
         context_instance=RequestContext(request,processors=[benchmark]))
 
 #TODO: rewrite it, version__game__short_name=bla-bla gives an logical breaks
@@ -521,15 +548,18 @@ def show_all_images(request, id=None, action=None):
     images = GalleryImage.objects.filter(qset).order_by('-id')
     page = request.GET.get('page', 1)
     _pages_ = get_settings(request.user, 'objects_on_page', 27)
-    formclass = action_formset(images, ('delete',))
+    formclass = action_formset_ng(request, images, GalleryImage,
+        permissions=['files.delete_image', 'files.change_image'])
     if request.method == 'POST':
         form = formclass(request.POST)
         if form.is_valid():
-            action = form.cleaned_data['action']
-            qset = form.cleaned_data['items']
-            if action == 'delete':
-                if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
-                    qset.delete()
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            #action = form.cleaned_data['action']
+            #qset = form.cleaned_data['items']
+            #if action == 'delete':
+            #    if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
+            #        qset.delete()
             return HttpResponseRedirect(reverse('url_show_galleries'))
         else:
             return direct_to_template(request, template,
@@ -686,14 +716,15 @@ def show_image(request, number=1,object_model='files.image'):
         context_instance=RequestContext(request,
             processors=[pages]))
 
-
+@csrf_protect
 def show_files(request):
     template = get_skin_template(request.user, 'files/files.html')
     page = request.GET.get('page',1)
     files = File.objects.all().order_by('-upload_date')
     _pages_ = get_settings(request.user,'objects_on_page',100)
     files = paginate(files,page,pages=_pages_)
-    formclass = action_formset_ng(request, File.objects.all(), File)
+    formclass = action_formset_ng(request, File.objects.all(), File,
+        permissions=['files.delete_file', 'files.change_file'])
     if request.method == 'POST':
         form = formclass(request.POST)
         if form.is_valid():

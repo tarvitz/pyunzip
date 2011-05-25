@@ -10,6 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from apps.core.actions import common_delete_action
 
 """
 class SettingsManager(models.Manager):
@@ -42,7 +43,7 @@ class Announcement(models.Model):
     content_object = generic.GenericForeignKey(ct_field='content type',fk_field='object_pk')
     users = models.ManyToManyField(User,related_name='users',blank=True)
     notified_users = models.ManyToManyField(User,related_name='notified_users',blank=True)
-    
+    actions = [common_delete_action, ] 
     #what else ?
     #subscribe the user to get notifications
     def subscribe(self,user):

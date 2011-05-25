@@ -6,11 +6,12 @@
 {% block text_content %}
     {% if subscription.object_list %}
     <div class='forms'>
-    <form id='id_subscription_action_form' action='.' method='POST'>
+    <form id='id_subscription_action_form' action='.' method='POST' class='action_form'>
     {% csrf_token %}
     {{ form.action.errors }}
-    {{ form.action }}
-	<ul>
+    {{ form.action }}	
+    <input type='submit' value='{% trans "submit" %}'><br clear='all' />
+    <ul>
 	{% for sub  in  subscription.object_list %}
 		<li>
                         <input type='checkbox' value='{{ sub.id }}' name='items'>
@@ -18,7 +19,6 @@
 			<a href='{% url url_unsubscribe sub.id "approve" %}' title='отписаться' class='del_link'>[x]</a></li>
 	{% endfor %}
 	</ul>
-    <input type='submit' value='{% trans "submit" %}'>
     </form>
     </div>
     {% with subscription as page %}

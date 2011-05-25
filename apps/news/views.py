@@ -320,7 +320,7 @@ def action_article(request, id=None, action=None):
                 form.instance.date = datetime.now()
                 form.instance.author = form.cleaned_data.get('author', None) or\
                     request.user.nickname
-                if request.user.has_perm('news.add_news') or user.is_superuser:
+                if request.user.has_perm('news.add_news') or request.user.is_superuser:
                     form.instance.approved = True
                 form.save()
                 return HttpResponseRedirect(reverse('url_show_article', 

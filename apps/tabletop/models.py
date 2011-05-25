@@ -12,6 +12,7 @@ from apps.djangosphinx.models import SphinxSearch
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
+from apps.core.actions import common_delete_action
 
 class Codex(models.Model):
     content_type = models.ForeignKey(ContentType,
@@ -66,6 +67,7 @@ class Roster(models.Model):
 
     is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True) 
     search = SphinxSearch(weights={'title': 30, 'comments': 30})
+    actions = [common_delete_action, ]
 
     def show_player(self):
        if hasattr(self.user,'nickname'): return self.user.nickname
@@ -134,7 +136,7 @@ class BattleReport(models.Model):
     ip_address = models.IPAddressField(_('IP address'),blank=True,null=True)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX)
     search = SphinxSearch(weights={'title': 30, 'comment': 30})
-    
+    actions = [common_delete_action, ]
     def __unicode__(self):
         return "%s [%s:%s]" % (
             self.title,

@@ -3,7 +3,7 @@ import os
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
 from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm, \
-    SphinxSearchForm, action_formset
+    SphinxSearchForm, action_formset, action_formset_ng
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object
@@ -392,16 +392,19 @@ def view_subscription(request):
     subscription = Announcement.objects.filter(Q(users=request.user)|Q(notified_users=request.user)).distinct()
     _pages_ = get_settings(request.user,'objects_on_page',20)
     #easy queryset
-    formclass = action_formset(subscription, ('delete',)) 
+    #formclass = action_formset(subscription, ('delete',)) 
+    formclass = action_formset_ng(request, subscription, Announcement)
     #paginate
     subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
     if request.method == 'POST':
         form = formclass(request.POST)
         if form.is_valid():
-            action = form.cleaned_data['action']
-            qset = form.cleaned_data['items']
-            if action == 'delete':
-                qset.delete()
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            #action = form.cleaned_data['action']
+            #qset = form.cleaned_data['items']
+            #if action == 'delete':
+            #    qset.delete()
             return HttpResponseRedirect(reverse('url_view_subscription'))
         else:
             return direct_to_template(request, template,

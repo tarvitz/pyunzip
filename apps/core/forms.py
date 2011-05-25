@@ -1,5 +1,7 @@
 
 from django import forms
+from django.http import Http404
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from apps.core.settings import SETTINGS as USER_DEFAULT_SETTINGS, SETTINGS_FIELDS as USER_DEFAULT_FIELDS
@@ -144,10 +146,10 @@ def action_formset(qset, actions):
 
     return _ActionForm
 
-def action_formset_ng(request, qset, model):
+def action_formset_ng(request, qset, model, permissions=[]):
     """ more useable generic action form """
 
-    class _ActionForm(forms.Form):
+    class _ActionForm(forms.Form): 
         items = forms.ModelMultipleChoiceField(queryset=qset)
         #_actions = [(s.short_description, s.short_description) for s in model.actions]
         _actions = []
@@ -159,6 +161,8 @@ def action_formset_ng(request, qset, model):
 
         def act(self, action, _qset, **kwargs):
             if hasattr(self, 'is_valid'):
+                if action == 'None':
+                    return _qset #return what do we got, nothing else
                 action = model.actions.pop(int(action))
                 return action(request, _qset, **kwargs)
             else:
@@ -166,5 +170,9 @@ def action_formset_ng(request, qset, model):
 
         def __init__(self, *args, **kwargs):
             self.request = request
+            if args:
+                #blocking out users without permissions we need
+                if not request.user.has_perms(permissions):
+                    raise Http404('Your user does not have permissions you need to complete this operation.')
             super(_ActionForm, self).__init__(*args, **kwargs)
     return _ActionForm

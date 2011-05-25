@@ -249,7 +249,7 @@ class AddRosterForm(RequestForm):
         else:
             raise forms.ValidationError(_('The common pts should be greater than 500'))
 
-class AddRosterModelForm(forms.ModelForm):
+class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
     class Meta:
         model = Roster

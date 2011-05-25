@@ -5,6 +5,9 @@
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 			<div class='links'>	
+                {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
+                    <input class='left' value='{{ r.id }}' type='checkbox' name='items'>
+                {% endif %}
 				{% ifequal user r.owner %}
 					{% spaceless %}
 					{% if r.is_orphan %}
