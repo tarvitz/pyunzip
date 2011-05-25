@@ -8,8 +8,10 @@
 <div class='message'>
 	<div class='msg_headline'>
 		<div class='transparency' id='black'></div>
-		{% if perms.files.delete_replay and perms.files.change_replay %}
+	{% if replays_global %}{% spaceless %}
+        {% if perms.files.delete_replay and perms.files.change_replay %}
         <input class='left' type='checkbox' value='{{ r.id }}' name='items'>
+        {% endif %}{% endspaceless %}
         {% endif %}
         <span class="msg_comment_date">[{{ r.upload_date|date:"Y/M/d H:m:s" }}]</span>
 		<span class="msg_replay_name"><span class='replay_name'>

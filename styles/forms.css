@@ -99,4 +99,5 @@ form input[type='checkbox']{
     float: right;
     margin: 0px;
     padding: 0px 10px;
+    border-radius: 0px !important;
 }
