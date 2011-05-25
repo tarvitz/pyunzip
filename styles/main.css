@@ -650,6 +650,7 @@ p{
 #blacklibrary a{
 	color: black;
 }
+#blacklibrary a:hover{ text-shadow: 0 0 1px white; }
 .copyright{
     font-size: 0.6em;
     width: 60%;
