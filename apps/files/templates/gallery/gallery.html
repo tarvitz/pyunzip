@@ -36,20 +36,19 @@
 
 {% with "True" as gallery_general %}
 
+{% if perms.files.delete_image and perms.files.change_image %} 
 <div class='forms'>
-<form id='id_images_action_form' action='.' method='post'>
-{% if user.is_superuser or perms.files.delete_images %} 
-<br />
-<label for='id_action'>Действия: </label>
+<form id='id_images_action_form' action='.' method='post' class='action_form'>
+{% csrf_token %}
 {{ form.action.errors }}
 {{ form.action }}
+<input type='submit' value='{% trans "submit" %}'> <br clear='all' />
 {% endif %}
 {% for image in images.object_list %}
     {% include settings.document.image_inc %} 
 {% endfor %}
 <br clear="all">
-{% if user.is_superuser or perms.files.delete_images %}
-<input type='submit' value='{% trans "submit" %}' style='clear: all;'>
+{% if perms.files.change_image and perms.files.delete_image %}
 {% endif %}
 </form>
 </div>

@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from cStringIO import StringIO
 from apps.files.helpers import ZipPack
 from apps.files import actions
+from apps.core.actions import common_delete_action
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from apps.djangosphinx.models import SphinxSearch
@@ -100,6 +101,7 @@ class Replay(models.Model):
         'title': 30,
         'comment': 40,
     })
+    actions = [common_delete_action, ]
     get_title = lambda self: self.name
     get_content = lambda self: self.comments
     owner = lambda self: self.author
@@ -285,7 +287,7 @@ class Image(models.Model):
         'title': 40,
         'comments': 30,
     })
-
+    actions = [common_delete_action, ]
     class Meta:
         permissions = (
          ('can_upload', 'Can upload images'),

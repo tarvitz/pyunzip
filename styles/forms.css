@@ -53,6 +53,7 @@ form label{
 form ul, form li{
     list-style-type: none !important;
 }
+
 form input[type='checkbox']{
     width: inherit !important;
     display: inline;
@@ -75,15 +76,27 @@ form input[type='checkbox']{
 }
 .forms label[for$='-clear_id']:before{content: "["}
 .forms label[for$='-clear_id']:after{content: "]"}
+/*
+.forms input[type='checkbox']{
+    width: inherit !important;
+    display: inline;
+}*/
 .forms input.left{ 
     float: left;
     width: 15px !important;
     height: 15px !important;
-    margin: 0px 0px 0px 2px;
+    margin: 0px 2px 0px 2px;
     padding: 0px;
     top: 0px;
 }
 .forms #id_action{
     min-width: 200px !important;
     width: inherit;
+    display: inline;
+    float: right;
+}
+.action_form input[type='submit']{
+    float: right;
+    margin: 0px;
+    padding: 0px 10px;
 }
