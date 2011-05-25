@@ -20,7 +20,7 @@
 {% endif %}
     {# {% for replay in replays.object_list %} #}
 		{% with replays.object_list as replays %}
-			{% include settings.document.replays_inc %}
+			{% with True as replays_global %}{% include settings.document.replays_inc %}{% endwith %}
 			{% include settings.document.links %}
 		 {% endwith %}
 	{# {% endfor %} #}

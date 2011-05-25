@@ -94,9 +94,11 @@ form input[type='checkbox']{
     width: inherit;
     display: inline;
     float: right;
+    margin-right: 3px;
 }
 .action_form input[type='submit']{
     float: right;
     margin: 0px;
     padding: 0px 10px;
+    border-radius: 0px !important;
 }
