@@ -164,7 +164,7 @@ def action_formset_ng(request, qset, model, permissions=[]):
                 if action == 'None':
                     return _qset #return what do we got, nothing else
                 action = model.actions.pop(int(action))
-                return action(request, _qset, **kwargs)
+                return action(self.request, _qset, **kwargs)
             else:
                 raise ObjectDoesNotExist, "form.is_valid should be ran fist"
 
@@ -172,7 +172,7 @@ def action_formset_ng(request, qset, model, permissions=[]):
             self.request = request
             if args:
                 #blocking out users without permissions we need
-                if not request.user.has_perms(permissions):
+                if not self.request.user.has_perms(permissions):
                     raise Http404('Your user does not have permissions you need to complete this operation.')
             super(_ActionForm, self).__init__(*args, **kwargs)
     return _ActionForm
