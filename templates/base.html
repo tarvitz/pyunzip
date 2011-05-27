@@ -144,10 +144,10 @@
 			<li class='lvl2'><a href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_add_article %}'>Добавить</a></li>{% endif %}
 			{# <li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li> #}
-			<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
+			{% comment %}<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
 			{# <li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li> #}
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href="{% url apps.quotes.views.add %}">добавить</a></li> {% endif %}
-			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}
+			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}{% endcomment %}
 			<li><a href="{% url apps.files.views.show_replays %}" title='Хранилище реплеев игр Dawn of War, Dawn of War II'>Реплеи</a>
 			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='replays' %}">[atom</a>|
 				<a href="{% url django.contrib.syndication.views.feed url='replays_rss' %}">rss]</a></span>
