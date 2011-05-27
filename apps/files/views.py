@@ -733,7 +733,7 @@ def show_files(request):
         else:
             return direct_to_template(request, template,
                 {'files': files, 'page': files, 'form': form},
-                context_processors=[pages])
+                processors=[pages])
     return render_to_response(template,
         {'files':files,
         'page': files,

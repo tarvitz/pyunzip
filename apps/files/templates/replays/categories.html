@@ -93,7 +93,7 @@
 
     {% for g in games %}{% get_replays_count for g as stats %} {# overloading with dynamic resolving data about all replays #}
     <center><h3><a href="{% url apps.files.views.all_replays type=g.short_name %}">{{ g.name }}</a></h3></center>
-    &nbsp;<a id='button' href='/replays/upload/{{ g.short_name }}'>загрузить реплей</a>
+    {# &nbsp;<a id='button' href='/replays/upload/{{ g.short_name }}'>загрузить реплей</a> #}
     
     <center>
 
