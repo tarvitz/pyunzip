@@ -524,6 +524,8 @@ def xhr_rosters(request, search):
     raw = [ (r.pk, r.__unicode__()) for r in rosters ]
     lw_rosters = [ {'pk': r[0], 'title': r[1] } for r in raw ]
     #response.write(serializers.serialize("json",lw_rosters))    
+    if lw_rosters> 20:
+        lw_rosters = lw_rosters[:20]
     response.write(serialize_json(lw_rosters))
     return response
 
