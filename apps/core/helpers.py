@@ -65,11 +65,14 @@ def send_notification(instance,**kwargs):
                     text_content = tr(IM_TEXT %
                         (instance_user.nickname,settings.GLOBAL_SITE_NAME,real_object.get_absolute_url()))               
                     #OBSOLETE
-                    send_email_message.delay(_('WarMist no-replay notification'),text_content,settings.FROM_EMAIL,
-                        [user.email],fail_silently=False,
-                        auth_user=settings.EMAIL_HOST_USER,
-                        auth_password=settings.EMAIL_HOST_PASSWORD)
-                    if user.jid:
+                    notify_jid = user.settings.get('notify_jid', False)
+                    notify_email = user.settings.get('notify_email', True)
+                    if user.email and notify_email:
+                        send_email_message.delay(_('WarMist no-replay notification'),text_content,settings.FROM_EMAIL,
+                            [user.email],fail_silently=False,
+                            auth_user=settings.EMAIL_HOST_USER,
+                            auth_password=settings.EMAIL_HOST_PASSWORD)
+                    if user.jid and notify_jid:
                         message = "s_notify jid:%s message:%s" % (user.jid,text_content)                    
                         send_network_message.delay('localhost', 40001, message)
                     #we should make it async :(

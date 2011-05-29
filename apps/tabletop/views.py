@@ -159,8 +159,21 @@ def codex_rosters(request, id, revision):
     rosters = Roster.objects.filter(codex=codex)
     page = request.GET.get('page', 1)
     _pages_ = get_settings(request.user, 'rosters_on_page', 20)
+    formclass = action_formset_ng(request, rosters, Roster,
+        permissions=['tabletop.delete_roster', 'tabletop.change_roster'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            return HttpResponseRedirect(reverse('url_user_rosters'))
+        else:
+            return direct_to_template(request, template,
+                {'rosters': rosters, 'form': form},
+                processors=[benchmark])
+    form = formclass()
     rosters = paginate(rosters, page, pages=_pages_)
-    return direct_to_template(request, template, {'rosters': rosters},
+    return direct_to_template(request, template, {'rosters': rosters, 'form': form},
         processors=[benchmark])
 
 @benchmarking
@@ -514,8 +527,9 @@ def xhr_rosters(request, search):
     response['Content-Type'] = 'text/javascript'
     queryset = (Q(title__icontains=search) | Q(owner__nickname__icontains=search)
         | Q(pts__icontains=search)
-        | Q(race__name__icontains=search)
-        | Q(custom_race__icontains=search)
+        | Q(codex__title__icontains=search)
+        | Q(codex__plain_side__icontains=search)
+        | Q(custom_codex__icontains=search)
         | Q(player__icontains=search)
     )
     rosters = Roster.objects.filter(queryset)
@@ -523,6 +537,8 @@ def xhr_rosters(request, search):
     raw = [ (r.pk, r.__unicode__()) for r in rosters ]
     lw_rosters = [ {'pk': r[0], 'title': r[1] } for r in raw ]
     #response.write(serializers.serialize("json",lw_rosters))    
+    if lw_rosters> 20:
+        lw_rosters = lw_rosters[:20]
     response.write(serialize_json(lw_rosters))
     return response
 

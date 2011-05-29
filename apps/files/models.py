@@ -12,6 +12,7 @@ from apps.core.actions import common_delete_action
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from apps.djangosphinx.models import SphinxSearch
+from django.core.exceptions import ValidationError
 
 #Abstract Classes
 
@@ -276,7 +277,15 @@ class Image(models.Model):
     #def upload_to(self, filename):
     #    return 'images/galleries/%s/%s' % (str(self.owner.id), filename)
 
+    def valid_alias(value):
+        if value.replace('_','').isalnum():
+            return value
+        raise ValidationError("You should use only letters, digits and _")
     title = models.CharField(_('Title'), max_length=100)
+    alias = models.CharField(_('Alias'), max_length=32, blank=True,
+        unique=True,
+        help_text=_('Fast name to access unit'),
+        validators=[valid_alias]) #shorter, wiser
     comments = models.TextField(_('Comments'))
     gallery = models.ForeignKey(Gallery)
     image = models.ImageField(_('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (str(s.owner.id), fn))

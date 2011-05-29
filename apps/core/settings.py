@@ -36,6 +36,8 @@ SETTINGS = {
     'karmas_on_page': 50,
     'rosters_on_page': 30,
     'rates_on_page': 100,
+    'notify_email': True,
+    'notify_jid': False,
     'hide_jid': False,
     'hide_uin': True, #it's secure by default to hide it to prevent hackers spaming
     'hide_email': True, #the same
@@ -91,6 +93,8 @@ SETTINGS_FIELDS = {
     'show_karma_block': forms.BooleanField(label=_('Show karma block'),required=False),
     'enable_autocomplete': forms.BooleanField(label=_('Enables autocomplete on site'),required=False),
     'enable_dbcss': forms.BooleanField(label=_('Enables user css styles hosted in database'),required=False),
+    'notify_email': forms.BooleanField(label=_('If it\'s on you will recieve email notifications'),required=False),
+    'notify_jid': forms.BooleanField(label=_('If it\'s on you will recieve jabber notifications (remember need subscription)'),required=False),
    #'show_hidden_content': forms.BooleanField(label=_('show hidden stuff'),required=False),
     #nonwh
     'show_l4d2_stats': forms.BooleanField(label=_('Show L4D stats block'),required=False),
