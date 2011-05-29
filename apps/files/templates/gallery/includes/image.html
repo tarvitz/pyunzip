@@ -34,6 +34,7 @@
             <br>
             {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %}
             название: &quot;<b>{{ image.title }}</b>&quot;<br>
+            {% if image.alias %}Алиас: {{ image.alias }}<br>{% endif %}
             {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
             <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
             {# recieving comments for images #}

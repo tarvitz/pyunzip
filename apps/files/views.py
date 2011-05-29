@@ -14,7 +14,7 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers       import reverse
 from django.core import serializers
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect, Http404
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
@@ -688,16 +688,22 @@ def action_image_old(request, id, action):
 
 @update_subscription
 @user_visit(object_pk='number',ct='files.image')
-def show_image(request, number=1,object_model='files.image'):
+def show_image(request, number=None,object_model='files.image', alias=None):
     template_err = get_skin_template(request.user, 'gallery/404.html')
     template = get_skin_template(request.user, 'gallery/image.html')
-    try:
-        image = GalleryImage.objects.get(id__exact=number)
-    except GalleryImage.DoesNotExist:
-        return render_to_response(template_err,
-            {},
-            context_instance=RequestContext(request))
-
+    if number:
+        image = get_object_or_404(GalleryImage, id=number)
+    elif alias:
+        image = get_object_or_404(GalleryImage, alias__iexact=alias)
+    else:
+        raise Http404("No data was passed")
+    #try:
+    #    image = GalleryImage.objects.get(id__exact=number)
+    #except GalleryImage.DoesNotExist:
+    #    return render_to_response(template_err,
+    #        {},
+    #        context_instance=RequestContext(request))
+    #
     #Comments
     image_type = ContentType.objects.get(app_label='files', model='image')
     #Pages
@@ -715,6 +721,21 @@ def show_image(request, number=1,object_model='files.image'):
         'page': comments},
         context_instance=RequestContext(request,
             processors=[pages]))
+
+def show_raw_image(request, alias, thumbnail=False):
+    import Image
+    response = HttpResponse()
+    image = get_object_or_404(GalleryImage, alias__iexact=alias)
+    if thumbnail:
+        f = image.thumbnail.file.read()
+    else:
+        f = image.image.file.read()
+    img = Image.open(StringIO(f))
+    content_type = 'image/' + img.format.lower()
+    response['Content-Type'] = content_type
+    del img
+    response.write(f)
+    return response
 
 @csrf_protect
 def show_files(request):
