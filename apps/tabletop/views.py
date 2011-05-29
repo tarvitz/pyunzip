@@ -514,7 +514,8 @@ def xhr_rosters(request, search):
     response['Content-Type'] = 'text/javascript'
     queryset = (Q(title__icontains=search) | Q(owner__nickname__icontains=search)
         | Q(pts__icontains=search)
-        | Q(race__name__icontains=search)
+        | Q(codex__title__icontains=search)
+        | Q(codex__plain_side__icontains=search)
         | Q(custom_race__icontains=search)
         | Q(player__icontains=search)
     )
