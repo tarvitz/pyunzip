@@ -632,7 +632,7 @@ def create_gallery(request):
 
 @benchmarking
 def show_gallery(request,gallery=1,gallery_name=None):
-    template = get_skin_template(request.user,'gallery/usergallery.html')
+    template = get_skin_template(request.user,'gallery/gallery.html')
     template_err = get_skin_template(request.user,'gallery/404.html')
     gallery = int(gallery)
     try:
