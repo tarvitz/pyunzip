@@ -568,6 +568,7 @@ p{
 .img_right{
 	float: right;
 	margin: 2px;
+        margin-left: 10px;
 	padding: 3px;
 	border: 1px solid white;
 	background-color: #292929;
@@ -576,6 +577,7 @@ p{
 .img_left{
 	float: left;
 	margin: 2px;
+        margin-right: 10px;
 	padding: 2px;
 	border: 1px solid white;
 	background-color: #292929;
