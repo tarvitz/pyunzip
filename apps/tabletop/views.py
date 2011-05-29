@@ -516,7 +516,7 @@ def xhr_rosters(request, search):
         | Q(pts__icontains=search)
         | Q(codex__title__icontains=search)
         | Q(codex__plain_side__icontains=search)
-        | Q(custom_race__icontains=search)
+        | Q(custom_codex__icontains=search)
         | Q(player__icontains=search)
     )
     rosters = Roster.objects.filter(queryset)
