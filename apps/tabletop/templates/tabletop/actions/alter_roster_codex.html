@@ -12,4 +12,17 @@
     </form>
 </div>
 </center>
+<script language='javascript'>
+var _xhr_get_codex_revisions = '{% url xhr_get_codex_revisions %}';
+var revision = document.getElementById('id_revision');
+var codex = document.getElementById('id_codex');
+</script>
+<script language='javascript' src='/media/js/jq_tabletop.js'></script>
+<script language='javascript'>
+$(document).ready(function(){
+    $('#id_codex').change(function(){
+        updateRevision();
+    });
+});
+</script>
 {% endblock %}

@@ -291,3 +291,4 @@ class AddRosterModelForm(RequestModelForm):
 class ActionAlterRosterCodex(ActionForm):
     required_css_class='required'
     codex = forms.ModelChoiceField(queryset=Codex.objects)
+    revision = forms.CharField(label=_('Revision'), required=False)

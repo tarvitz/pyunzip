@@ -11,6 +11,7 @@ def alter_codex_action(request, qset, model, **kwargs):
         if form.is_valid():
             for q in qset:
                 q.codex = form.cleaned_data['codex']
+                q.revision = form.cleaned_data.get('revision', None) or q.revision
                 q.save()
             return {'qset': qset}
         else: 
