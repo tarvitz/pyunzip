@@ -155,6 +155,7 @@ def action_formset_ng(request, qset, model, permissions=[]):
         _actions = []
         for x in range(0, len(model.actions)):
             _actions.append((x, model.actions[x].short_description))
+
         action = forms.ChoiceField(choices=[(None, '--------'),]+ _actions)
         
         del _actions
@@ -163,8 +164,8 @@ def action_formset_ng(request, qset, model, permissions=[]):
             if hasattr(self, 'is_valid'):
                 if action == 'None':
                     return _qset #return what do we got, nothing else
-                action = model.actions.pop(int(action))
-                return action(self.request, _qset, **kwargs)
+                action = model.actions[int(action)]
+                return action(self.request, _qset, model, **kwargs)
             else:
                 raise ObjectDoesNotExist, "form.is_valid should be ran fist"
 
@@ -176,3 +177,23 @@ def action_formset_ng(request, qset, model, permissions=[]):
                     raise Http404('Your user does not have permissions you need to complete this operation.')
             super(_ActionForm, self).__init__(*args, **kwargs)
     return _ActionForm
+
+class ActionForm(forms.Form):
+    items = forms.ModelMultipleChoiceField(queryset=[], widget=forms.MultipleHiddenInput())
+    action = forms.ChoiceField(widget=forms.HiddenInput())
+    
+    def __init__(self, *args, **kwargs):
+        model = kwargs['model']
+        qset = kwargs['qset']
+        del kwargs['qset']
+        del kwargs['model']
+        self.base_fields['items'].queryset = qset
+        _actions = []
+        for x in range(0, len(model.actions)):
+            _actions.append((x, x))
+        self.base_fields['action'].choices = _actions
+        del _actions
+        super(ActionForm, self).__init__(*args, **kwargs)
+
+class ActionApproveForm(ActionForm):
+    approve = forms.BooleanField(required=True, help_text=_('Yes, i approve'))   

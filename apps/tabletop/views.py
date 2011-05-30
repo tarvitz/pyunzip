@@ -48,6 +48,7 @@ def index(request):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('battle_report_index'))
         else:
             return direct_to_template(request, tempalte,
@@ -95,6 +96,7 @@ def index_rosters(request):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('url_all_rosters'))
         else:
             return direct_to_template(request, template,
@@ -138,6 +140,7 @@ def user_rosters(request,nickname='', pts=''):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('url_user_rosters'))
         else:
             return direct_to_template(request, template,
@@ -166,6 +169,7 @@ def codex_rosters(request, id, revision):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('url_user_rosters'))
         else:
             return direct_to_template(request, template,

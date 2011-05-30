@@ -405,6 +405,7 @@ def view_subscription(request):
             #qset = form.cleaned_data['items']
             #if action == 'delete':
             #    qset.delete()
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('url_view_subscription'))
         else:
             return direct_to_template(request, template,

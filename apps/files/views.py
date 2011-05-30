@@ -374,6 +374,7 @@ def all_replays(request,type='',version='',patch='',gametype=''):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(request.get_full_path())
         else:
             return direct_to_template(request, template,
@@ -414,6 +415,7 @@ def replays_by_author(request,nickname,game='',version='',patch=''):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(request.get_full_path())
         else:
             return direct_to_template(request, template,
@@ -555,6 +557,7 @@ def show_all_images(request, id=None, action=None):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             #action = form.cleaned_data['action']
             #qset = form.cleaned_data['items']
             #if action == 'delete':
@@ -570,6 +573,8 @@ def show_all_images(request, id=None, action=None):
             )
     form = formclass()
     images = paginate(images, page, pages=_pages_)
+    print "form init"
+    print form.fields['action']._choices
     return direct_to_template(request, template,
         {'galleries': galleries, 'images': images,
         'form': form},
@@ -750,6 +755,7 @@ def show_files(request):
         form = formclass(request.POST)
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'], form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('url_show_files'))
         else:
             return direct_to_template(request, template,
