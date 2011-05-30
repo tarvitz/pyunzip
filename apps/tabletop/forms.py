@@ -8,6 +8,7 @@ from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 from apps.core.helpers import get_content_type
+from apps.core.forms import ActionForm
 from apps.wh.models import Side
 from django.forms.util import ErrorList
 from apps.tabletop.models import Mission, Roster, BattleReport, Codex
@@ -287,3 +288,6 @@ class AddRosterModelForm(RequestModelForm):
             player = self.request.user.nickname
         return player
 
+class ActionAlterRosterCodex(ActionForm):
+    required_css_class='required'
+    codex = forms.ModelChoiceField(queryset=Codex.objects)

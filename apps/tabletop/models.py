@@ -13,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
+from apps.tabletop.actions import alter_codex_action
 
 class Codex(models.Model):
     content_type = models.ForeignKey(ContentType,
@@ -67,7 +68,7 @@ class Roster(models.Model):
 
     is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True) 
     search = SphinxSearch(weights={'title': 30, 'comments': 30})
-    actions = [common_delete_action, ]
+    actions = [common_delete_action, alter_codex_action]
 
     def show_player(self):
        if hasattr(self.user,'nickname'): return self.user.nickname

@@ -196,4 +196,5 @@ class ActionForm(forms.Form):
         super(ActionForm, self).__init__(*args, **kwargs)
 
 class ActionApproveForm(ActionForm):
-    approve = forms.BooleanField(required=True, help_text=_('Yes, i approve'))   
+    approve = forms.BooleanField(label=_('Approve'), required=True,
+        help_text=_('Yes, i approve'))   

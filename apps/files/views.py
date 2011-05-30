@@ -573,8 +573,6 @@ def show_all_images(request, id=None, action=None):
             )
     form = formclass()
     images = paginate(images, page, pages=_pages_)
-    print "form init"
-    print form.fields['action']._choices
     return direct_to_template(request, template,
         {'galleries': galleries, 'images': images,
         'form': form},
