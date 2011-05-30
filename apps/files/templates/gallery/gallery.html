@@ -64,8 +64,9 @@
     });
 </script>
 {% endwith %}
-
+{% with images as page %}
 {% include settings.document.links %}
+{% endwith %}
 {% else %}
 {% include settings.document.nothing_inc %}
 {% endif %}
