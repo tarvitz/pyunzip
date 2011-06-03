@@ -133,13 +133,13 @@ def render_filter(value,arg):
     if arg in syntaxes:
         #how we could render ?
         if arg in 'bb-code':
-            return striptags(render_bbcode(value))
+            return render_bbcode(striptags(value))
         elif arg in 'creole' or arg in 'wiki':
-            return striptags(creole_filter(value))
+            return creole_filter(striptags(value))
         elif arg in 'textile':
             return render_textile(value)
         elif arg in 'markdown':
-            return striptags(spadvfilter(value))
+            return spadvfilter(striptags(value))
         return render_textile(value)
         #default filter
         #return spadvfilter(value)
