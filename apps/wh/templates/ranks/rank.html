@@ -23,7 +23,7 @@
 			<img src="/media/{{ img }}">
 		</div>
 		<div class="msg_text" id="rank_{{ rank.id }}">
-			{{ rank.description|striptags|render_filter:rank.syntax|safe }}
+			{{ rank.description|render_filter:rank.syntax|safe }}
 			<br clear="all">
 		</div>
 	{% if user.is_superuser %}

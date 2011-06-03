@@ -15,7 +15,7 @@ from apps.thirdpaty.postmarkup import render_bbcode
 from apps.thirdpaty.creole.shortcuts import creole_filter as render_creole
 from apps.thirdpaty.textile import render_textile
 from django.conf import settings
-
+from django.template.defaultfilters import striptags
 import re
 
 register = Library()
@@ -133,13 +133,13 @@ def render_filter(value,arg):
     if arg in syntaxes:
         #how we could render ?
         if arg in 'bb-code':
-            return render_bbcode(value)
+            return striptags(render_bbcode(value))
         elif arg in 'creole' or arg in 'wiki':
-            return creole_filter(value)
+            return striptags(creole_filter(value))
         elif arg in 'textile':
             return render_textile(value)
         elif arg in 'markdown':
-            return spadvfilter(value)
+            return striptags(spadvfilter(value))
         return render_textile(value)
         #default filter
         #return spadvfilter(value)

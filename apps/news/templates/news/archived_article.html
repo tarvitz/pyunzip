@@ -24,8 +24,8 @@
 	</div>
 	<hr>
  <div id='spacer'>&nbsp;</div>
- {% if article.head_content %}{{ article.head_content|striptags|render_filter:article.syntax|safe }} {% endif %}
- {{ article.content|striptags|render_filter:article.syntax|safe }}
+ {% if article.head_content %}{{ article.head_content|render_filter:article.syntax|safe }} {% endif %}
+ {{ article.content|render_filter:article.syntax|safe }}
  <br clear='all'>
  <div id='read'><a href='{{ global_referer }}'>назад</a></div>
  <hr>

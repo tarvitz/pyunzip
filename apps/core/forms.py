@@ -1,4 +1,4 @@
-
+# coding: utf8
 from django import forms
 from django.http import Http404
 from django.db.models.query import QuerySet

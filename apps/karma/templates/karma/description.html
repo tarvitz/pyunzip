@@ -18,7 +18,7 @@
 			<img src="/media/{{ img }}.png">
 		</div>
 		<div class="msg_text" id="status_{{ status.id }}">
-			{{ status.description|striptags|render_filter:status.syntax|safe }}
+			{{ status.description|render_filter:status.syntax|safe }}
 			<br clear="all">
 		</div>
 	{% comment %}

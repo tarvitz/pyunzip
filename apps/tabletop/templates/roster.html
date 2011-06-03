@@ -74,12 +74,12 @@
                                 Издание: <div class='revision'> {{ roster.revision }}</div>
 				{% if not roster.user %}Имя игрока: <div class='player'>{{ roster.player }}</div> {% endif %}
 				Ростер:<div class='roster'>
-					{{ roster.roster|striptags|render_filter:roster.syntax|safe }}
+					{{ roster.roster|render_filter:roster.syntax|safe }}
 				</div>
 			</div>
 			</center> <!-- before roster_info -->
 			<div class='comment'>
-				{{ roster.comments|striptags|render_filter:roster.syntax|safe }}
+				{{ roster.comments|render_filter:roster.syntax|safe }}
 			</div>
 		<br clear='all'>
 		</div> <!-- msg_text -->

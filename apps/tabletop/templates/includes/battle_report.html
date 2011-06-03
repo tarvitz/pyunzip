@@ -67,7 +67,7 @@
 
 					{% if show_br_comment %}	
 					<div class='msg_txt'>Коментарий: </div>
-						{{ br.comment|striptags|render_filter:br.syntax|safe }}
+						{{ br.comment|render_filter:br.syntax|safe }}
 					{% endif %}
 
 					<div style='clear: both;'></div>

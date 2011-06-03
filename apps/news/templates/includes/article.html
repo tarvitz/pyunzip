@@ -34,14 +34,14 @@
  <div id='spacer'>&nbsp;</div>
  {% if news_general %}
  {% if not n.head_content %}
- 	{{ n.content|striptags|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'> 
+ 	{{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'> 
  {% else %}
-	{{ n.head_content|striptags|render_filter:n.syntax|safe }}{% if n.content %} ... 
+	{{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ... 
  {% endif %} <br clear='all'>
  {% endif %}
  {% else %}
-    {{ n.head_content|striptags|render_filter:n.syntax|safe }}
-    {{ n.content|striptags|render_filter:n.syntax|safe }}<br clear='all'>
+    {{ n.head_content|render_filter:n.syntax|safe }}
+    {{ n.content|render_filter:n.syntax|safe }}<br clear='all'>
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}

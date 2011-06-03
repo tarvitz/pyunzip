@@ -25,7 +25,7 @@
 			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.nickname %}'></a>{% else %}
 			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.nickname %}'></a>{% endif %}
 		</div>
-		{{ pmsg.content|striptags|render_filter:pmsg.syntax|safe }}<br>
+		{{ pmsg.content|render_filter:pmsg.syntax|safe }}<br>
 
 		<br clear='all'>
 		<!-- <a href='delete' id='button' >Удалить</a> -->

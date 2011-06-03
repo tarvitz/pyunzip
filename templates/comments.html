@@ -41,7 +41,7 @@
 			<div class="transparency"></div>
 			<div id="text_{{ c.id }}">
                                 {% markdownit %}
-					{{ c.comment|striptags|render_filter:c.syntax|safe }}
+					{{ c.comment|render_filter:c.syntax|safe }}
 				{% endmarkdownit %}
 			</div>
 			{% if c.user.about %}

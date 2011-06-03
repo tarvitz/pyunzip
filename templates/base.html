@@ -191,7 +191,7 @@
 		{% for article in briefing_news %}
 			<li>
 			<a href="{% url apps.news.views.news category=article.category|lower %}"><img alt='{{ article.category.name }}' title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'></a>
-			<a class='notice' title='{{ article.content|spadvfilter|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+			<a class='notice' title='{{ article.content|render_filter:article.syntax|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
 		{% endfor %}
 		</ul>
 	</div>
