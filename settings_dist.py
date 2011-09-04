@@ -193,7 +193,7 @@ INSTALLED_APPS = (
     'apps.tracker',
     'apps.farseer',
     'apps.pybb',
-    'apps.djcelery',
+    'djcelery',
     'apps.djangosphinx',
 )
 
