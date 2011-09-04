@@ -1,0 +1,34 @@
+# coding: utf-8
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = '_THE_SECRET_KEY_SHOULD_BE_SET_HERE'
+
+DATABASES={
+    'default':{
+        'ENGINE':'django.db.backends.',
+        'NAME':'',
+        'USER':'',
+        'PASSWORD':'',
+        'HOST':'',
+        'PORT': '',
+    },
+    'defaults':{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'sqlite.db'
+    }
+}
+
+BROKER_HOST='localhost'
+BROKER_PORT= 5672
+BROKER_USER = ''
+BROKER_PASSWORD = ''
+BROKER_VHOST = ''
+CELERY_IMPORTS = ('apps.farseer.helpers',)
+CELERYBEAT_SCHEDULER='apps.djcelery.schedulers.DatabaseScheduler'
+CELERY_RESULT_BACKEND='amqp'
+SPHINX_API_VERSION = 0x116
+SPHINX_DATA_PATH = '/var/lib/sphinxsearch/data/'
+
+EMAIL_HOST=''
+EMAIL_HOST_USER=''
+EMAIL_HOST_PASSWORD=''
+FROM_EMAIL='AstroPath (no replay) <user@host>'
