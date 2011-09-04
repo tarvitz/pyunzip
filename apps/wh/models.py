@@ -16,7 +16,7 @@ from apps.core.decorators import null
 from apps.djangosphinx.models import SphinxSearch
 
 class Universe(models.Model):
-    codename = models.CharField(_('Codename'),max_length=20,unique=True,primary_key=True)
+    codename = models.CharField(_('Codename'),max_length=100,unique=True,primary_key=True)
     title = models.CharField(_('Title'),max_length=100)
     def __unicode__(self):
         return self.codename
@@ -57,7 +57,7 @@ class MiniQuote(models.Model):
         verbose_name_plural = _('Mini Quotes')
 
 class Expression(models.Model):
-    author = models.CharField(_('Author'), max_length=50, blank=True)
+    author = models.CharField(_('Author'), max_length=100, blank=True)
     original_content = models.TextField(_('Original'), help_text=_('Original text of expression'), max_length=500, blank=True)
     content = models.TextField(_('Translation'), help_text=_('Translation of original sentence'),  max_length=500, blank=True)
     fraction = models.ForeignKey(Fraction)
@@ -119,7 +119,7 @@ class PM(models.Model):
     sent = models.DateTimeField(_('Sent'))
     dbs = models.BooleanField(_('Deleted by sendr'))
     dba = models.BooleanField(_('Delete by addr'))
-    syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True)
+    syntax = models.CharField(_('Syntax'),max_length=50,choices=settings.SYNTAX,blank=True,null=True)
     #TODO: Do we need files in PM ?
     #file = models.ForeignKey(_____)
     
@@ -166,7 +166,7 @@ class Skin(models.Model):
     #    return self.name.lower()
 
 class RankType(models.Model):
-    type = models.CharField(_('Type'),max_length=50)
+    type = models.CharField(_('Type'),max_length=100)
     magnitude = models.IntegerField(_('Magnitude'), help_text=_('Lower magnitude id more powerfull '))
     style = models.TextField(_('CSS Style'), max_length=1024, null=True,blank=True) # (#FF FF FF); gold, purple and so on
     css_class = models.CharField(_('CSS class'), max_length=64, null=True,blank=True)
@@ -177,15 +177,15 @@ class RankType(models.Model):
         return self.type
 
 class Rank(models.Model):
-    short_name = models.CharField(_('Short name'), max_length=20)
-    codename = models.CharField(_('Codename'), max_length=30,unique=True)
+    short_name = models.CharField(_('Short name'), max_length=50)
+    codename = models.CharField(_('Codename'), max_length=100,unique=True)
     type = models.ForeignKey(RankType, null=True, blank=True)
     description = models.TextField(_('Description'))
     magnitude = models.IntegerField(_('Magnitude'),help_text=_('Lower magnitude more powerfull'),blank=True,null=True)
     #fraction = models.ForeignKey(Fraction,blank=True,null=True)
     side = models.ManyToManyField(Side,blank=True)
     is_general = models.BooleanField(_('is General'),blank=True)
-    syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True)
+    syntax = models.CharField(_('Syntax'),max_length=50,choices=settings.SYNTAX,blank=True,null=True)
     def __unicode__(self):
         if self.type is not None:
             return "%s:%s" % (self.type.type,self.short_name)
@@ -352,7 +352,7 @@ User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, def
 
 #User.add_to_class('settings', models.ForeignKey(Settings))
 #Comment
-Comment.add_to_class('syntax',models.CharField(_('Syntax'),max_length=20,null=True,blank=True,choices=settings.SYNTAX))
+Comment.add_to_class('syntax',models.CharField(_('Syntax'),max_length=50,null=True,blank=True,choices=settings.SYNTAX))
 Comment.add_to_class('search', SphinxSearch(weights={'comment': 100}))
 
 #works here O_O
