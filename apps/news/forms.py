@@ -6,11 +6,29 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.forms import RequestForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
+from apps.news.models import News
 import re
+
 class AddNewsForm(forms.Form):
     author = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=True)
     content = forms.CharField(widget=forms.Textarea())
     approved = forms.BooleanField(required=False)
+
+class ArticleModelForm(forms.ModelForm):
+    required_css_class = 'required'
+    author = forms.CharField(required=False)
+    next = forms.CharField(widget=forms.HiddenInput(), required=False)
+    hidden_syntax = forms.CharField(widget=forms.HiddenInput(), required=False)
+    
+    class Meta:
+        model = News
+        fields = ['title', 'author','category', 'syntax', 'head_content', 'content', 'url']
+        exclude = ['editor', 'approved', 'author_ip', 'is_event', 'date',
+        
+        ]
+        widgets = {
+            'content': TinyMkWidget(attrs={'disable_user_quote': True}),
+        }
 
 class ArticleForm(forms.Form):
     required_css_class='required'
@@ -23,7 +41,8 @@ class ArticleForm(forms.Form):
     editor = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=False)
     url = forms.URLField(required=False)
     head_content = forms.CharField(widget=forms.Textarea(),required=False)
-    content = forms.CharField(widget=TinyMkWidget(attrs={'disable_syntax':False,'disable_user_quote': True}))
+    content = forms.CharField(widget=TinyMkWidget(attrs={'disable_syntax':False,
+        'disable_user_quote': True}))
     category = forms.ChoiceField(choices=CATEGORIES)
     attachment = forms.FileField(required=False)
     syntax = forms.ChoiceField(choices=settings.SYNTAX)

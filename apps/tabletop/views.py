@@ -1,9 +1,10 @@
 # Create your views here.
 # coding: utf-8
 from django.utils.translation import ugettext_lazy as _
-from apps.tabletop.models import Roster,Mission,Game,BattleReport
+from apps.tabletop.models import Roster,Mission,Game,BattleReport, Codex
 from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
-    AddBattleReportForm, AddBattleReportModelForm
+    AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,\
+    AddRosterModelForm
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -22,9 +23,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.db.models import Q
 from apps.core.decorators import benchmarking,has_permission
-from apps.core.forms import ApproveActionForm
+from apps.core.forms import ApproveActionForm, action_formset_ng
 from apps.core import benchmark
 from apps.wh.models import Side
+from django.views.decorators.csrf import csrf_protect
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
@@ -33,16 +35,31 @@ from anyjson import serialize as serialize_json
 from datetime import datetime
 
 @benchmarking
+@csrf_protect
 def index(request):
     template = get_skin_template(request.user,'battle_report_index.html')
     battlereps = BattleReport.objects.all()
     _pages_ = get_settings(request.user,'objects_on_page',20)
     page = request.GET.get('page',1)
-    battlereps = paginate(battlereps,page,pages=_pages_)
-
-    return render_to_response(template,
-        {'battlereps': battlereps},
-        context_instance=RequestContext(request,processors=[benchmark]))
+    formclass = action_formset_ng(request, battlereps, BattleReport,
+        permissions=['tabletop.delete_battlereport', 'tabletop.change_battlereport'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('battle_report_index'))
+        else:
+            return direct_to_template(request, tempalte,
+                {'battlereps': battlereps,
+                'form': form}, processors=[benchmark])
+    form = formclass()
+    battlereps = paginate(battlereps,page,pages=_pages_) 
+    return direct_to_template(request, template,
+        {'battlereps': battlereps,
+        'form': form},
+        processors=[benchmark])
 
 @benchmarking
 def show_battle_report(request,id):
@@ -72,17 +89,33 @@ def index_rosters(request):
     rosters = Roster.objects.all()
     _pages_ = get_settings(request.user,'rosters_on_page',20)
     page = request.GET.get('page',1)
+    formclass = action_formset_ng(request, rosters, Roster,
+        permissions=['tabletop.change_roster', 'tabletop.delete_roster'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('url_all_rosters'))
+        else:
+            return direct_to_template(request, template,
+                {'rosters': rosters, 'form': form},
+                processors=[benchmark])
     rosters = paginate(rosters,page,pages=_pages_)
-    
-    return render_to_response(template,{'rosters':rosters},
-        context_instance=RequestContext(request,processors=[benchmark]))
+    form = formclass()
+    return direct_to_template(request, template,
+        {'rosters': rosters, 'form': form},
+        processors=[benchmark])
+    #render_to_response(template,{'rosters':rosters},
+    #    context_instance=RequestContext(request,processors=[benchmark]))
 
 @login_required
 @benchmarking
-def user_rosters(request,nickname='',race='',pts=''):
+def user_rosters(request,nickname='', pts=''):
     kw = dict()
-    if race and 'all' not in race : kw.update({'race__name__iexact': race })
-    elif race and 'all' in race: pass
+    #if race and 'all' not in race : kw.update({'race__name__iexact': race })
+    #elif race and 'all' in race: pass
 
     if pts: kw.update({'pts':pts})
     
@@ -96,14 +129,56 @@ def user_rosters(request,nickname='',race='',pts=''):
     template = get_skin_template(request.user,'user_rosters.html')
     _pages_ = get_settings(request.user, 'objects_on_page',20)
     if nickname:    qset_nicks = Q(owner=user)|Q(user=user)|Q(player__iexact=user.nickname)
-    elif not nickname and (pts or race): qset_nicks = Q()
+    elif not nickname and pts: qset_nicks = Q()
     else: qset_nicks = Q(owner=request.user)
     rosters = Roster.objects.filter(qset_nicks,Q(**kw))
     page = request.GET.get('page',1)
+    formclass = action_formset_ng(request, rosters, Roster,
+        permissions=['tabletop.delete_roster', 'tabletop.change_roster'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('url_user_rosters'))
+        else:
+            return direct_to_template(request, template,
+                {'rosters': rosters, 'form': form},
+                processors=[benchmark])
+    form = formclass()
     rosters = paginate(rosters,page,pages=_pages_)
-    
-    return render_to_response(template,{'rosters': rosters},
-        context_instance=RequestContext(request,processors=[benchmark]))
+    return direct_to_template(request, template,
+        {'rosters': rosters, 'form': form},
+        processors=[benchmark])
+    #render_to_response(template,{'rosters': rosters},
+        #context_instance=RequestContext(request,processors=[benchmark]))
+
+@login_required
+@benchmarking
+def codex_rosters(request, id, revision):
+    template = get_skin_template(request.user, 'user_rosters.html')
+    codex = get_object_or_404(Codex, id=id)
+    rosters = Roster.objects.filter(codex=codex)
+    page = request.GET.get('page', 1)
+    _pages_ = get_settings(request.user, 'rosters_on_page', 20)
+    formclass = action_formset_ng(request, rosters, Roster,
+        permissions=['tabletop.delete_roster', 'tabletop.change_roster'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('url_user_rosters'))
+        else:
+            return direct_to_template(request, template,
+                {'rosters': rosters, 'form': form},
+                processors=[benchmark])
+    form = formclass()
+    rosters = paginate(rosters, page, pages=_pages_)
+    return direct_to_template(request, template, {'rosters': rosters, 'form': form},
+        processors=[benchmark])
 
 @benchmarking
 def search_rosters(request):
@@ -223,12 +298,31 @@ def delete_roster(request,id=None,action=''):
         if form.is_valid():
             #todo: make this hotfix more flexible
             referer = reverse('url_user_rosters')
-            #form.cleaned_data['url']
-    
+            #form.cleaned_data['url'] 
     return HttpResponseRedirect(referer)
 
 @login_required
-def action_roster(request,id=None,action=''):
+def action_roster(request, id=None, action=None):
+    instance = None
+    if id:
+        instance = get_object_or_404(Roster, id=id)
+    template = get_skin_template(request.user, 'add_roster.html')
+    if request.method == 'POST':
+        form = AddRosterModelForm(request.POST, instance=instance, request=request)
+        if form.is_valid():
+            #do not let overriding owner
+            if not hasattr(form.instance, 'owner'):
+                form.instance.owner = request.user
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_roster',
+                args=(form.instance.pk,)))
+        else:
+            return direct_to_template(request, template, {'form': form})
+    form = AddRosterModelForm(instance=instance, request=request)
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+def action_roster_old(request,id=None,action=''):
     template = get_skin_template(request.user,'add_roster.html')
     if request.method == 'POST':
         form = AddRosterForm(request.POST,request=request)
@@ -424,29 +518,11 @@ def add_battle_report(request, action=None, id=None):
             instance.published = datetime.now()
             instance.approved = True
             instance.ip_address = request.META.get('REMOTE_ADDR','127.0.0.1')
-            instance.winner = form.cleaned_data['winner_instance']
-            instance.save()
-            for r in form.cleaned_data['roster_instances']:
-                instance.users.add(r)
             form.save()
-            #form.save()
             return HttpResponseRedirect(reverse('battle_report_index'))
         else:
-            #print dir(form.data)
-            #print form.data.getlist('rosters')
-            rosters = [int(x) for x in form.data.getlist('rosters')]
-            winner = int(form.data.get('winner_choice'))
-            for r in rosters:
-                _r = get_object_or_none(Roster, id=r)
-                if len(form.base_fields['rosters'].choices) < len(rosters):
-                    form.base_fields['rosters']._choices.append((_r.id, _r.__unicode__()))
-
-            return direct_to_template(request, template, {'form': form,
-                'winner': winner})
-    if br:
-        form = AddBattleReportModelForm(instance=br)
-    else:
-        form = AddBattleReportModelForm()
+            return direct_to_template(request, template, {'form': form})
+    form = AddBattleReportModelForm(instance=br)
     return direct_to_template(request, template, {'form': form})
 
 @login_required
@@ -455,8 +531,9 @@ def xhr_rosters(request, search):
     response['Content-Type'] = 'text/javascript'
     queryset = (Q(title__icontains=search) | Q(owner__nickname__icontains=search)
         | Q(pts__icontains=search)
-        | Q(race__name__icontains=search)
-        | Q(custom_race__icontains=search)
+        | Q(codex__title__icontains=search)
+        | Q(codex__plain_side__icontains=search)
+        | Q(custom_codex__icontains=search)
         | Q(player__icontains=search)
     )
     rosters = Roster.objects.filter(queryset)
@@ -464,6 +541,8 @@ def xhr_rosters(request, search):
     raw = [ (r.pk, r.__unicode__()) for r in rosters ]
     lw_rosters = [ {'pk': r[0], 'title': r[1] } for r in raw ]
     #response.write(serializers.serialize("json",lw_rosters))    
+    if lw_rosters> 20:
+        lw_rosters = lw_rosters[:20]
     response.write(serialize_json(lw_rosters))
     return response
 
@@ -478,6 +557,21 @@ def xhr_get_roster(request, id):
         response.write(serializers.serialize("json", [roster]))
     else:
         response.write("[]")
+    return response
+
+def xhr_get_codex_revisions(request, id=None):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    codex = get_object_or_none(Codex, id=id)
+    if codex:
+        response.write(serialize_json(
+            {
+                'revisions': codex.revisions,
+                'revlist': [int(i) for i in codex.revisions.split(',')],
+            }
+        ))
+    else:
+        response.write('[]')
     return response
 
 @login_required
@@ -495,3 +589,44 @@ def delete_battle_report(request,id,approve=''):
         return HttpResponseRedirect('/permission/denied')
     return HttpResponseRedirect(reverse('battle_report_index'))
 
+@csrf_protect
+@login_required
+@has_permission('tabletop.add_codex')
+def action_codex(request, id=None, action=None):
+    template = get_skin_template(request.user, 'add_codex.html')
+    instance = None
+    if id:
+        instance = get_object_or_404(Codex, id=id)
+    if request.method == 'POST':
+        form = AddCodexModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            instance = form.instance
+            if request.POST['army']:
+                instance.content_type = get_content_type('wh.army')
+                instance.object_id = int(request.POST['army'])
+            else:
+                instance.content_type = get_content_type('wh.side')
+                instance.object_id = int(request.POST['side'])
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_codex', args=(instance.pk,)))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = AddCodexModelForm(instance=instance)
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+def show_codex(request, id):
+    template = get_skin_template(request.user, 'show_codex.html')
+    codex = get_object_or_404(Codex, id=id)
+    return direct_to_template(request, template, {'codex': codex})
+
+@login_required
+def show_codexes(request):
+    template = get_skin_template(request.user, 'show_codexes.html')
+    codexes = Codex.objects.all()
+    _pages_ = get_settings(request.user, 'objects_on_page', 20)
+    page = request.GET.get('page', 1)
+    codexes = paginate(codexes, page, pages=_pages_)
+    return direct_to_template(request, template,
+        {'codexes': codexes})

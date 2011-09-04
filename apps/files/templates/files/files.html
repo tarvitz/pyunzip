@@ -1,17 +1,28 @@
-{% extends base_template %}{% load kamwhfilters %}
+{% extends base_template %}{% load kamwhfilters %} {% load i18n %}
 {% block head_content %}
-{# <link rel='stylesheet' href='/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}forms.css' type='text/css' media='screen'> #}
+ <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}'  type='text/css' media='screen'>
 {% endblock %}
 {% block title %}Добавить файл {% endblock %}
 {% block text_content %}
 
 {% if user and user.is_active %}
-<a id='button' href='/upload/file'>Загрузить</a><br>
+<a id='button' href='{% url url_upload_file %}'>Загрузить</a><br>
 {% endif %}
 {% if files.object_list %}
+{% if perms.files.delete_file and perms.files.change_file %}
+<div class='forms'>
+<form action='.' method='post' id='id_files_actions_form' class='action_form'>
+{% csrf_token %}
+{{ form.action.errors }}
+{{ form.action }}
+<input type='submit' value='submit'><br clear='all' />
+{% endif %}
 <ul>
 {% for f in files.object_list %}
 <li id='file_list'>
+        {% if perms.files.delete_file and perms.files.change_file %}
+        <input class='' type='checkbox' name='items' value='{{ f.id }}'>
+        {% endif %}
 	[{% get_nickname f.owner %}]
 	<a href="{{ f.file.url }}">{{ f.file.name|namemediacut }}</a>
 	[{{f.file.size|filesizeformat }}]<small>
@@ -20,6 +31,10 @@
 	</li>
 {% endfor %}
 </ul>
+{% if perms.files.delete_file and perms.files.change_file %}
+</form>
+</div>
+{% endif %}
 {% include settings.document.links %}
 </center>
 {% else %}

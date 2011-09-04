@@ -5,7 +5,7 @@
 {% endblock %}
 {% block text_content %}
 <center>
-<div class='form'>
+<div class='forms'>
 <form id='id_add_battle_report' action='.' method='post'>
     {{ form.as_ul }}
     <input type='submit' value='{% trans "submit" %}'>
@@ -16,9 +16,9 @@
 $(document).ready(function(){
     var updateWinner = function(){
         //cleanse
-        wc = document.getElementById('id_winner_choice');
+        wc = document.getElementById('id_winner');
         sel = wc.selectedIndex;
-        r = document.getElementById('id_rosters');
+        r = document.getElementById('id_users');
         for (var i = 0; i<wc.options.length; i++) wc.options[i] = null;
         
         wc.options[0] = new Option('-----', -1, false, false); 
@@ -28,7 +28,7 @@ $(document).ready(function(){
         }//for
     };
     $('#id_rosters_choice').dblclick(function(){
-        rosters = document.getElementById("id_rosters");
+        rosters = document.getElementById("id_users");
         _l = rosters.options.length;
         _s = this.selectedIndex;
         rosters.options[_l] = new Option(this.options[_s].text,
@@ -36,7 +36,7 @@ $(document).ready(function(){
         
         updateWinner();
     });
-    $('#id_rosters').dblclick(function(){
+    $('#id_users').dblclick(function(){
         rosters = document.getElementById(this.id);
         _s = rosters.selectedIndex;
         rosters.options[_s] = null;
@@ -63,24 +63,11 @@ $(document).ready(function(){
 
     });
     $('#id_add_battle_report').submit(function(){
-        r = document.getElementById('id_rosters');
+        r = document.getElementById('id_users');
         s = document.getElementById('id_search_rosters').value = '';
         for (var i = 0; r.options.length; i++) r.options[i].selected = true;
     });
     
-    wc = document.getElementById('id_winner_choice');
-    wc.options[0] = new Option ('-----', -1, false, false);
-    r = document.getElementById('id_rosters');
-    {% if winner %}
-    if (r.options.length>0)  updateWinner();
-        for (var i=0; i<wc.options.length; i++){
-            if (wc.options[i].value == '{{ winner }}'){
-                wc.selectedIndex = wc.options[i].index;
-                break;
-            }
-        };
-    {% endif %}
-
 });
 </script>
 {% endblock %}

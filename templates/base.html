@@ -20,6 +20,7 @@
 <script type='text/javascript' src='/media/js/base.js'></script>
 <script type='text/javascript' src='/media/js/jquery-1.4.4.min.js'></script>
 <script type='text/javascript' src='/media/js/m_effects.js'></script>
+<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>
 {% comment %}
 <script language='javascript'>
 	//alert(isOpera);
@@ -86,7 +87,7 @@
 		<ul>
 			<li><a href='{% url apps.wh.views.pm_view %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
 			<li><a href="{% url apps.wh.views.profile %}" title='Просмотр своего профиля'>Профиль</a></li>
-			<li class='lvl2'><a href='{% url apps.wh.views.update_profile %}' title='Настройки профиля'>Править</a></li>
+			<li class='lvl2'><a href='{% url url_update_profile %}' title='Настройки профиля'>Править</a></li>
 			<li class='lvl2'><a href='{% url apps.core.views.user_settings %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
 			<li class='lvl2'><a href='{% url apps.core.views.view_subscription %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
 			<li><a href='{% url apps.wh.views.users %}' title='Обитатели ресурса'>Участники</a></li>
@@ -143,25 +144,26 @@
 			<li class='lvl2'><a href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_add_article %}'>Добавить</a></li>{% endif %}
 			{# <li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li> #}
-			<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
-			<li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li>
+			{% comment %}<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
+			{# <li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li> #}
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href="{% url apps.quotes.views.add %}">добавить</a></li> {% endif %}
-			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}
+			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}{% endcomment %}
 			<li><a href="{% url apps.files.views.show_replays %}" title='Хранилище реплеев игр Dawn of War, Dawn of War II'>Реплеи</a>
 			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='replays' %}">[atom</a>|
 				<a href="{% url django.contrib.syndication.views.feed url='replays_rss' %}">rss]</a></span>
 			</li>
 			<li class='lvl2'><a href="{% url url_show_best 'replay' %}">лучшие</a></li>
-			<li class='lvl2'><a href="{% url apps.files.views.search_replay %}" title='Немного более улучшенный поиск по реплеям, чем основной'>поиск</a></li>
-			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow' %} ' title='добавить реплей'>добавить[dow]</a></li>
-			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow2' %}' title='добавить реплей'>добавить[dow2]</a></li>
+			{# <li class='lvl2'><a href="{% url apps.files.views.search_replay %}" title='Немного более улучшенный поиск по реплеям, чем основной'>поиск</a></li> #}
+			{% comment %}<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow' %} ' title='добавить реплей'>добавить[dow]</a></li>
+			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow2' %}' title='добавить реплей'>добавить[dow2]</a></li> {% endcomment %}
+                        <li class='lvl2'><a href='{% url url_upload_replay %}' title='добавить реп'>добавить</a></li>
 
                         <li><a href="{% url url_all_rosters %}">Ростеры</a></li>
 			<li><a href='{% url battle_report_index %}'>Батл репорты</a></li>
 			<li class='lvl2'><a href='{% url url_add_battle_report %}'>добавить</a></li>
 			<li><a href='{% url apps.files.views.show_all_images %}' title='Простенькая галерея ;)'>Галерея</a></li>
 			<li class='lvl2'><a href="{% url url_show_best "image" %}">лучшие</a></li>
-			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url apps.files.views.upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>
 			<li><a href="{% url apps.files.views.show_files %}" title='Небольшое хранилище файлов'>Файлы</a></li>
 			{% comment %}<li><a href='{% url apps.wh.views.view_wish_list %}'>Пожелания</a></li>
 			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
@@ -189,7 +191,7 @@
 		{% for article in briefing_news %}
 			<li>
 			<a href="{% url apps.news.views.news category=article.category|lower %}"><img alt='{{ article.category.name }}' title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'></a>
-			<a class='notice' title='{{ article.content|spadvfilter|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+			<a class='notice' title='{{ article.content|render_filter:article.syntax|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
 		{% endfor %}
 		</ul>
 	</div>
@@ -331,29 +333,22 @@
 {% endcomment %}
 {% block endjs %}
 <script language='javascript' type='text/javascript'>
-	miniquote = $('#horizontal_line > div > span');
-	$(document).ready(function(){
-		if (isFireFox) setInterval('update_miniquote()',60*1000);
-                $('#control_content div').hover(function(){
-                    if (! $(this).hasClass('none') ) $(this).toggleClass('hover');
-                });
-	})
-	
-	var setObjText = function(str,obj){
-		obj.text(str);
-	}
-	function update_miniquote(){
-		$.getJSON('/miniquote/get/raw/', 
-			function(data){
-				jQuery.each(data, function(){
-					miniquote.fadeOut(1000);
-					setTimeout(setObjText,1000,this.fields.content,miniquote);
-					miniquote.text(miniquote.text());
-					miniquote.fadeIn(1000);
-				});
-		});	
-	}
-	//miniquote.text('fuck');
+    miniquote = $('#horizontal_line > div > span');
+    $(document).ready(function(){
+        setInterval('update_miniquote()', 60*1000);
+    });  
+    
+    function update_miniquote(){
+        $.getJSON('{% url xhr_get_miniquote %}', function(data){
+            
+            if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
+            miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
+                miniquote.text(data[0].fields['content']);
+                miniquote.fadeIn(isFireFox ?1000 :1500);
+                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
+            });
+        });
+    }
 </script>
 {% endblock %} {# endjs #}
 </body>

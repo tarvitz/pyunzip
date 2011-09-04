@@ -3,7 +3,7 @@ import os
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
 from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm, \
-    SphinxSearchForm
+    SphinxSearchForm, action_formset, action_formset_ng
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object
@@ -317,9 +317,10 @@ def sphinx_search_model(request, model):
     _pages_ = get_settings(request.user, 'objects_on_page', 20)
     #query processing
     if request.get_full_path() == reverse('url_sph_search_model', args=(model,)):
-            if 'query' in request.session['query']:
-                del request.session['query']
-                requrest.session()
+            if 'query' in request.session:
+                if 'query' in request.session['query']:
+                    del request.session['query']
+                    requrest.session()
     if request.method == 'POST':
         form = SphinxSearchForm(request.POST)        
         if form.is_valid():
@@ -390,6 +391,25 @@ def view_subscription(request):
     template = get_skin_template(request.user,'subscription.html')
     subscription = Announcement.objects.filter(Q(users=request.user)|Q(notified_users=request.user)).distinct()
     _pages_ = get_settings(request.user,'objects_on_page',20)
+    #easy queryset
+    #formclass = action_formset(subscription, ('delete',)) 
+    formclass = action_formset_ng(request, subscription, Announcement)
+    #paginate
+    subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            #action = form.cleaned_data['action']
+            #qset = form.cleaned_data['items']
+            #if action == 'delete':
+            #    qset.delete()
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('url_view_subscription'))
+        else:
+            return direct_to_template(request, template,
+                {'subscription': subscription, 'form': form})
     #paginator = Paginator(subscription,_pages_)
     #try:
     #    page = request.GET.get('page',1)
@@ -398,9 +418,8 @@ def view_subscription(request):
     #except (EmptyPage,InvalidPage):
     #    subscription = paginator.page(1)
     #    subscription.number = 1
-    subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
-
-    return direct_to_template(request,template,{'subscription':subscription})
+    form = formclass()
+    return direct_to_template(request,template,{'subscription':subscription, 'form': form})
 
 @login_required
 def delete_subscription(request,id,action=''):
@@ -586,7 +605,7 @@ def edit_comment(request,id):
 
 @login_required
 @progress_upload_handler
-def upload_file(request,app_n_model,filefield): 
+def upload_file(request,app_n_model,filefield=None): 
     logger.info('upload_file initialized')
     #print "initial"
     error = None
@@ -630,9 +649,19 @@ def upload_file(request,app_n_model,filefield):
             #print "form is valid, saving file"
             #here we set where we saving
             from apps.core.settings import UPLOAD_SETTINGS
-            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'],str(request.user.id))
+            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'], 
+                str(request.user.id))
             #Should we handle it?
-            filename = handle_uploaded_file(request.FILES[filefield],save_to)
+            #filename = handle_uploaded_file(request.FILES[filefield],save_to)
+            #if filefield in form.fields:
+            #    form.fields[filefield].upload_to = save_to
+            #else:
+            #    return HttpResponse('Not Ok')
+            #setattr(form, filefield, filename)
+            helper_saver(request, form)
+            return HttpResponse('Ok')
+            """ old code instance for non model form saving """
+            """
             #insert some sort of validation here
             error = None
             #error = validate_file(filename)
@@ -643,12 +672,13 @@ def upload_file(request,app_n_model,filefield):
                 #print "getting ct ", ct
                 if ct:
                     #print "saving instance" 
-                    pk = helper_saver(request,form)
+                    pk = helper_saver(request, form)
                     instance = ct.model_class().objects.get(pk=pk)
                     setattr(instance,filefield,filename)
                     instance.save()
                 #fd.close()
                 return HttpResponse('Ok')
+            """
         else:
             #what shall we do it the form is invalid ? :D
             #print "form is invalid"

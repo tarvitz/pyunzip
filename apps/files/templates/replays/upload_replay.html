@@ -1,148 +1,53 @@
-{% extends base_template %}
-{% block head_content %}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay_upload.css" }}' type='text/css' media='screen'>
-<script type="text/javascript" charset="utf-8">
- 	function changeVisibility(){
-		var mode = document.getElementById('id_type').value;
-		if (mode == 0) 
-		{ 
-		  document.getElementById('nonstd_layout').style.display = 'block';
-                 } else {                                                                                                                                 
-                 document.getElementById('nonstd_layout').style.display = 'none';                                                                                  
-                 } 	
-	}
-	function show_hide(name,link_id){
-		var mode = document.getElementById(name).style.display;
-		if (mode == 'block'){
-			document.getElementById(name).style.display = 'none';
-			document.getElementById(link_id).innerHTML = 'Информация';
-		}else{
-			document.getElementById(name).style.display = 'block';
-			document.getElementById(link_id).innerHTML = 'Информация';
-		}
-	}
- </script>
+{% extends base_template %} {% load i18n %}
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
 {% endblock %}
 {% block text_content %}
-{% load whfilters %}
 <center>
-<div align="center" id='upload_replay'>
-<div class='button'>
-	<div class='transparency' id='black'></div>
-	<a title='Показать/Скрыть аннотацию' id='show_link' href='javascript:show_hide("annotation","show_link")'>Информация</a>
-	</div>
-	<center><div id='annotation'>
-	 <i><u>Имя</u>: </i> реплея выбирается любым, но оно не должно превышать некоторый набор символов, иначе реплей не будет загружен.<br>
-	 <i><u>Версия игры</u>: </i> можно выбрать любую версию игры кроме пустой (----)<br>
-	 <i><u>Тип игры</u>: </i> выбирается один из перечисленных типов игры<br>
-	 <i><u>*Нестандартный тип</u>: </i> при выборе нестандартного типа (в типе игры указан nonstd ),
-	 необходимо ввести разметку на которой играли команды
-	 к примеру: <b>1vs3vs1</b> или <b>1vs2</b> или <b>2vs3</b> или <b>3vs1vs3</b> или <b>1vs1vs1vs1vs1</b>.
-	 Необходимо указать количество игроков в команде, команды разделяются с помощью
-	 'vs' без пробельных символов.<br>
-	 <i><u>Имена игроков</u>: </i> Имена игроков разделяются при помоши запятой. Также количество имен должно точно соответствовать разметке,
-	 которая была выбрана, к примеру, если тип игры <b>2vs2</b>, то игроки должны былть заполнены так:
-	<i>Player1,Player2,Player3,Player4</i>. Важно не только количество игроков, но и порядок. По порядку описываются игроки первой команды,
-	затем второй, третьей (если такая есть), четвертой и так далее. Если же представлен набор непостоянных команд, то вписывайте игроков,
-	которые присутствуют на всех реплеях или впишите игроков как Player# или Игрок#, где # - номер игрока.<br>
-	<i><u>Победитель</u>: </i>команда победитель выбирается из учета команд, если количество команд равно 2 (то есть к примеру 1vs1 или 4vs4), то
-	команда 3 не может победить в этих обстоятельствах, так как её не существуют. Все восемь команд были оставлены для нестандартной разметки,
-	где количество команд возможно восьми( 1vs1vs1vs1vs1vs1vs1vs1 ).<br>
-	<i><u>Рассы</u>:</i> поле на выбор, можно заполнить расы в любом порядке, но лучше конечно придерживаться форм, форма ввода любая: Космодесант, Space Marines, SM, SoB. Не приветствуется жаргон и ахинея.<br>
-	<i><u>Реплей</u>: </i> сам файл реплея или реплеев должен быть упакован в zip, gz, bz2, rec (без сжатия) формат или он не будет загружен.<br>
-	<i><u>Коментарий к реплею</u>:</i> все что вы можете рассказать об реплеи или паке реплеев<br>
-	</div></center>
-        <center><div id='upload_progress' style='display:none;'></div></center>
-	<form enctype="multipart/form-data" method="post" target="upload_frame" id="upload_form" action="{% url url_progress_uploader app_n_model='files.replay' filefield='replay' %}">
-        {# <form enctype='multipart/form-data' method='post' id='upload_form' action='.'> #}
-		{{ form.name.errors }}
-		<label for='name'>Имя: </label><br>
-		{{ form.name }}<br>
-		{{ form.version.errors }}
-		<label for='version'>Версия игры:</label><br>
-		{{ form.version }}<br>
-		<div id='type'>
-			{{ form.type.errors }}
-			<label for='type'>Тип игры</label></br>
-			{{ form.type }}<br>
-			{{ form.nonstd_layout.errors }}
-			<div id='nonstd_layout'>
-				<label for='nonstd_layout'>Нестандартный тип</label><br>
-				{{ form.nonstd_layout }}<br>
-			</div>
-		</div>
-		<div id='teams'>
-			{{ form.teams.errors }}
-			<label for='teams'>Имена игроков</label><br>
-			{{ form.teams }}<br>
-		</div>
-		<div id='races'>
-			{{ form.races.errors }}
-			<label for='races'>Расы</label><br>
-			{{ form.races }}<br>
-		</div>
-		<div id='winners'>
-			{{ form.winners.errors }}
-			<label for='winners'>Победитель</label><br>
-			{{ form.winners }}<br>
-		</div>
-		{% if form.replay %}
-			{{ form.replay.errors }}
-			<label for='replay'>Реплей:</label><br>
-			<div style='display:{% if edit_flag %}none{% else %}block{% endif %};'>
-				{{ form.replay }}<br>
-			</div>
-		{% endif %}
-		{% if form.is_set %}{{ form.is_set.errors }}
-		<label for='is_set'>Пак реплеев</label><br>{% endif %}
-		{# improve whith jquery functions =\ #}
-		{{ form.is_set }}<br>
-		<center>
-		{{ form.comments.errors }}
-		<label for='comments'>Коментарий к реплею:</label><br>
-		{{ form.comments }}<br>
-		</center>
-		{% if edit_flag %}
-		{{ form.url }}
-		{% endif %}
-		{{ form.hidden_syntax }}
-		<input id='submit' type='submit' value='{% if edit_flag %}обновить{% else %}загрузить{% endif %}'>
-	</form>
-        <iframe id='upload_frame' name='upload_frame' style='display: none'></iframe>
+<div id='upload_progress' style='display: none'></div>
+<div class='forms'>
+<form id='upload_form' target="upload_frame" enctype="multipart/form-data" action='{% url url_progress_uploader app_n_model='files.replay' %}' method='post'>
+{# <form id='upload_form' enctype='multipart/form-data' action='.' method='post'> #}
+ {% csrf_token %}
+ {{ form.as_ul }}
+ <input type='submit' value='{% trans "submit" %}'>
+</form>
+<iframe id='upload_frame' name='upload_frame' style='display: none'></iframe>
 </div>
 </center>
-<script type="text/javascript">
-	if_visible = document.getElementById('id_type').value;
-	if ( if_visible != 0) document.getElementById('nonstd_layout').style.display = 'none';
-	{% if replay_version_id %}
-	version = document.getElementById('id_version');
-	version.value = {{ replay_version_id }}
-	type = document.getElementById('id_type');
-	type.value = {{ replay_type }}
-	winners = document.getElementById('id_winners');
-	winners.value = {{ replay_winners }}
-	{% endif %}
-	
-	var do_hide_fields = function(){
-		is_set = document.getElementById('id_is_set');
-		fields = ['teams','winners','type'];
-		for (f in fields){
-			obj = document.getElementById(fields[f]);
-			display = is_set.checked ? "none" : "block";
-			obj.style.display=display;
-		}
-	}
-	do_hide_fields(); //prepend
-	is_set = $('#id_is_set');
-	//is_set.click(); //works
-	is_set.click(do_hide_fields, function(){});
-	//winner = $("#id_winners");
-	//winner.change(do_alert, function(){});
-        
-        var app_n_model = 'files.replay';
-        var progress_url_global = "{% url url_upload_progress %}";
-        var action_field = "{% url url_progress_uploader app_n_model='files.replay' filefield='replay' %}";
-</script>
-<script language='javascript' src='/media/js/jq_progress_upload.js'></script>
-{% endblock %}
 
+<script language='javascript'>
+    var app_n_model = 'files.replay';
+    var progress_url_global = "{% url url_upload_progress %}";
+    var action_field = "{% url url_progress_uploader app_n_model='files.replay' %}";
+    var _xhr_request = '{% url xhr_get_replay_versions %}';
+</script>
+
+<script language='javascript' src='/media/js/jq_progress_upload.js'></script>
+<script language='javascript' src='/media/js/jq_replays.js'></script>
+{% comment %}
+<script language='javascript'>
+    version = document.getElementById('id_version');
+    game = document.getElementById('id_game'); 
+    $(document).ready(function(){
+        var updateVersion = function(){
+        url = '{% url xhr_get_replay_versions %}' + game.options[game.selectedIndex].value;
+        game_name = game.options[game.selectedIndex].text;
+        $.getJSON(url, function(data){
+            version.options.length = 1;
+            var i = 1;
+            $.each(data, function(key, val){
+                version.options[i] = new Option(game_name + ": " + this.fields['name'] + ' ' + this.fields['patch'], this.pk, false, false);
+                i++;
+            });//each
+         });//json
+        }//update Game
+
+        $('#id_game').change(function(){
+            updateVersion();
+        });
+    });
+</script>{% endcomment %}
+
+{% endblock %}

@@ -5,8 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from cStringIO import StringIO
 from PIL import Image
 from apps.wh.models import User
-from apps.wh.models import Side,RegisterSid, Skin
+from apps.wh.models import Side,RegisterSid, Skin, Army
 from apps.core import get_safe_message
+from apps.core.forms import RequestModelForm
+from django.contrib.auth.models import User
 import re
 #from apps.core.forms import RequestForm
 
@@ -54,6 +56,84 @@ class UploadAvatarForm(forms.Form):
             raise forms.ValidationError(_('Upload a valid avatar. Avatar\'s size should not be greater than 100x100 pixels'))
         return value
 
+class UpdateProfileModelForm(RequestModelForm):
+    required_css_class='required'
+    side = forms.ChoiceField(choices=((i.id, i.name) for i in Side.objects.all()), required=False)
+    army = forms.ModelChoiceField(queryset=Army.objects, required=True)
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'email', 'nickname', 'avatar', 'photo',
+            'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army', 'tz'
+        ]
+        exclude = ['password', 'username', 'groups', 'ranks', 'user_permissions', 'is_staff',
+            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar',
+        ]
+
+    def clean_nickname(self):
+        current_nickname = self.request.user.nickname
+        value = self.cleaned_data.get('nickname','')
+        r = re.compile('[\w\s-]+',re.U)
+        if r.match(value):
+            return r.match(value).group()
+        else:
+            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
+        try:
+            user = User.objects.get(nickname__exact=value)
+            if not user.nickname == current_nickname:
+                raise forms.ValidationError(_('Another user with %s nickname exists.' % (value)))
+            else:
+                return value
+        except User.DoesNotExist:
+            return value
+
+    def clean_avatar(self):
+        value = self.cleaned_data.get('avatar','')
+        if not value: return None
+        file = ''
+        for i in value.chunks(): file += i
+        #content = value.read()
+        content = file
+        if 'content-type' in value:
+            main, sub = value['content-type'].split('/')
+            if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
+                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+        try:
+            img = Image.open(StringIO(content))
+            x,y = img.size
+        except:
+            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
+        if y>100 or x >100:
+            raise forms.ValidationError(_('Upload a valid avatar. Avatar\'s size should not be greater than 100x100 pixels'))
+        return value
+
+    def clean_photo(self):
+        value = self.cleaned_data.get('photo','')
+        if not value: return None
+        file = ''
+        for i in value.chunks(): file += i
+        #content = value.read()
+        content = file
+        if 'content-type' in value:
+            main, sub = value['content-type'].split('/')
+            if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
+                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+        try:
+            img = Image.open(StringIO(content))
+            x,y = img.size
+        except:
+            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
+        return value
+    
+    def clean_jid(self):
+        jid = self.cleaned_data['jid']
+        from apps.core.helpers import get_object_or_none
+        u = self.request.user
+	user = get_object_or_none(User,jid__iexact=jid)
+        if user and user != u:
+            raise forms.ValidationError(_('User with such JID already exists'))
+        return "".join(jid).lower()
+
+#obsolete
 class UpdateProfileForm(RequestForm):
     #TODO: make something with None fraction, delete it or not?
     #sides = Side.objects.exclude(fraction__title__iexact='None').order_by('id')

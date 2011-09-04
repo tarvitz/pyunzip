@@ -8,7 +8,12 @@
 <div class='message'>
 	<div class='msg_headline'>
 		<div class='transparency' id='black'></div>
-		<span class="msg_comment_date">[{{ r.upload_date|date:"Y/M/d H:m:s" }}]</span>
+	{% if replays_global %}{% spaceless %}
+        {% if perms.files.delete_replay and perms.files.change_replay %}
+        <input class='left' type='checkbox' value='{{ r.id }}' name='items'>
+        {% endif %}{% endspaceless %}
+        {% endif %}
+        <span class="msg_comment_date">[{{ r.upload_date|date:"Y/M/d H:m:s" }}]</span>
 		<span class="msg_replay_name"><span class='replay_name'>
         {% if replays %} <a href="{% url apps.files.views.show_replay number=r.id %}">{{ r.name }}</a>{% else %} {{ r.name }}{% endif %}</span></span>
 	</div> {# headline #}
@@ -114,7 +119,7 @@
 			</div> {# replay_info #}
 			<hr width='35%'>
 			<div class='comment'>
-				{{ r.comments|striptags|render_filter:r.syntax|safe }}
+				{{ r.comments|render_filter:r.syntax|safe }}
 			</div> {# comments #}
 		<br clear='all'>
 		</div> {# text #}

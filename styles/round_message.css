@@ -11,7 +11,7 @@
 .round_message .transparency_black{
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
-    -moz-border-radius-topleft: 8px;
+        -moz-border-radius-topleft: 8px;
 	-moz-border-radius-topright: 8px;
 	-webkit-border-radius-topright: 8px;
 	-webkit-border-radius-topleft: 8px;

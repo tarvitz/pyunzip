@@ -2,11 +2,12 @@
 	<div class='round_message' id='roster_{{ r.id }}'>
 		<div class='msg_headline'>
 			<!-- effects -->
-			<div class='transparency tr_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
+			<div class='transparency_black'></div>
 			<!-- end of effects -->
 			<div class='links'>	
+                {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
+                    <input class='left' value='{{ r.id }}' type='checkbox' name='items'>
+                {% endif %}
 				{% ifequal user r.owner %}
 					{% spaceless %}
 					{% if r.is_orphan %}
@@ -73,12 +74,13 @@
 						{% endifnotequal %}
 					{% endspaceless %}
 					<div class='msg_txt'>Автор: <i>{% if r.user %}{% get_nickname r.user %}{% else %}{{ r.show_player }}{% endif %}</i></div>
-					<div class='msg_txt'>Раса: <i>{{ r.show_race }}</i></div>
+					<div class='msg_txt'>Кодекс: <i>{{ r.codex }}</i></div>
+					<div class='msg_txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>
 					<div class='msg_txt'>Очки: <i>{{ r.pts }} pts</i></div>
 					{% ifequal roster_flag "True" %}
 						<div class='msg_txt'>Ростер:<br>
 							<span class='roster'>
-								{{ r.roster|striptags|render_filter:r.syntax|safe }}
+								{{ r.roster|render_filter:r.syntax|safe }}
 							</span>
 						</div>
                                         {% else %}
@@ -99,10 +101,10 @@
 		<br clear='all'>
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<div class='links'>	
-				<span><a href='{% url url_race_rosters r.show_race %}'>{{ r.show_race }}</a></span>
+                                <span><a href='{% url url_codex_rosters r.codex.id r.revision %}' {% spaceless %}
+                                    title='{{ r.revision }}-я редакция кодекса'
+                                {% endspaceless %}>{{ r.codex }} [{{ r.revision }}]</a></span>
 				<span><a href='{% url url_pts_rosters r.pts %}'>{{ r.pts }} pts</a></span>
 			</div>
 			<br clear='all'>

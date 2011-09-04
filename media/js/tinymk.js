@@ -1,7 +1,8 @@
 function reload_image(obj){
 	img = document.getElementById(obj);
 	syntax = document.getElementById('id_syntax');
-	if (syntax)	img.src = '/media/tinymk/'+syntax.value+'.png';
+	if (syntax.value)	img.src = '/media/tinymk/'+syntax.value+'.png';
+    else img.src = '/media/tinymk/markdown.png';
 }
 function filter_syntax(){
 	syntax = document.getElementById('id_syntax');
@@ -9,8 +10,11 @@ function filter_syntax(){
 	syntax_img = document.getElementById('id_syntax_change');
 	if (hidden_syntax){
 			hidden_syntax.value = syntax.value;
-	}
-	syntax_img.src = '/media/tinymk/'+syntax.value+'.png';
+	}	
+    if (syntax.value)
+        syntax_img.src = '/media/tinymk/'+syntax.value+'.png';
+    else
+        syntax_img.src = '/media/tinymk/markdown.png';
 }
 
 function change_syntax(obj){

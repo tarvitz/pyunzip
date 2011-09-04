@@ -7,16 +7,18 @@ from django.utils.translation import ugettext_lazy as _
 #from apps.bincase.fields import BinCaseField as BinCaseFileField
 from cStringIO import StringIO
 from apps.files.helpers import ZipPack
+from apps.files import actions
+from apps.core.actions import common_delete_action
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from apps.djangosphinx.models import SphinxSearch
+from django.core.exceptions import ValidationError
 
 #Abstract Classes
 
 class IncomeFile(models.Model):
-    file = models.FileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,'files/'))
-    description = models.CharField(_('Description'),max_length=255\
-        ,null=True,blank=True)
+    file = models.FileField(_('File'),upload_to=lambda s, fn: "files/%s/%s" % (str(s.owner.id), fn))
+    description = models.CharField(_('Description'),max_length=255)
     owner = models.ForeignKey(User)
     upload_date = models.DateTimeField(_('Upload date'))
     class Meta:
@@ -51,7 +53,7 @@ class Version(models.Model):
             return "%s v%s" % (self.game.name, self.patch)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['-release_number', '-patch']
         verbose_name = _('Addon version')
         verbose_name_plural = _('Addon versions')
 
@@ -76,20 +78,20 @@ class DowReplayNg(IncomeReplay):
 #TODO: AnonymousReplay :) should it be?
 class Replay(models.Model):
     #choices for game type
-    choices= [('1','1vs1'),('2','2vs2'),('3','3vs3'),('4','4vs4'),('5','set'),('0','non standard')]
+    choices= [(1,'1vs1'),(2,'2vs2'),(3,'3vs3'),(4,'4vs4'),(5,'set'),(0,'non standard')]
     winners = list()
-    for i in xrange(8): winners.append(('%i' % (i+1), _('team')+ " %i" % (i+1)))
+    for i in xrange(8): winners.append((i+1, _('Team')+ " %i" % (i+1)))
     name = models.CharField(_('Name'), max_length=100, null=False)
     version = models.ForeignKey(Version) #Version by itself includes game name and its version ;) for example DoW SS
     upload_date = models.DateTimeField(_('Upload date'), null=False)
-    type = models.CharField(_('Type'), max_length=30,choices=choices,null=False)
+    type = models.IntegerField(_('Type'), max_length=30,choices=choices,null=False)
     nonstd_layout = models.CharField(_('Non Std layout'), max_length=30, blank=True)
     teams  = models.CharField(_('Teams'), max_length=200, blank=True)
     races = models.CharField(_('Races'), max_length=100, null=False)
-    winner = models.CharField(_('Winner'), choices=winners, max_length=30, null=False)
+    winner = models.IntegerField(_('Winner'), choices=winners, max_length=30, null=False)
     #author = models.CharField(_('Author'), max_length=100, null=False)
     author = models.ForeignKey(User)
-    replay = models.FileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,"replays/"))
+    replay = models.FileField(_('File'),upload_to=lambda s, fn: "replays/%s/%s" % (str(s.author.id), fn))
     #implement it =\
     #replay = BinCaseFileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,"replays/"))
     #users_announcement = models.ForeignKey(Announcement,null=True,blank=True)
@@ -100,6 +102,7 @@ class Replay(models.Model):
         'title': 30,
         'comment': 40,
     })
+    actions = [common_delete_action, ]
     get_title = lambda self: self.name
     get_content = lambda self: self.comments
     owner = lambda self: self.author
@@ -128,12 +131,12 @@ class Replay(models.Model):
         else: return 'team'
     @property
     def get_type(self):
-        if self.type == '5':
+        if self.type == 5:
             return 'set'
-        elif self.type == '0' or 0:
+        elif self.type == 0:
             return 'unstd'
         else:
-            return self.type+'vs'+self.type
+            return str(self.type)+'vs'+str(self.type)
     
     def _get_players_teamlist_new(self):
         if not self.is_set:
@@ -270,18 +273,30 @@ class Gallery(MetaGallery):
         verbose_name = _('Gallery')
         verbose_name_plural = _('Galleries')
 
-class Image(models.Model):
+class Image(models.Model): 
+    #def upload_to(self, filename):
+    #    return 'images/galleries/%s/%s' % (str(self.owner.id), filename)
+
+    def valid_alias(value):
+        if value.replace('_','').isalnum():
+            return value
+        raise ValidationError("You should use only letters, digits and _")
     title = models.CharField(_('Title'), max_length=100)
+    alias = models.CharField(_('Alias'), max_length=32, blank=True,
+        unique=True,
+        help_text=_('Fast name to access unit'),
+        validators=[valid_alias]) #shorter, wiser
     comments = models.TextField(_('Comments'))
     gallery = models.ForeignKey(Gallery)
-    image = models.ImageField(_('Image'), upload_to=os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
+    image = models.ImageField(_('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (str(s.owner.id), fn))
+    #os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
     thumbnail = models.ImageField(_('Thumbnail'), upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/"))
     owner = models.ForeignKey(User)
     search = SphinxSearch(weights={
         'title': 40,
         'comments': 30,
     })
-
+    actions = [common_delete_action, ]
     class Meta:
         permissions = (
          ('can_upload', 'Can upload images'),
@@ -318,9 +333,10 @@ class Image(models.Model):
     def __unicode__(self):
         return "Images"
 
+
 class File(IncomeFile):
     url = models.URLField(_('Original URL'),blank=True)
-    
+    actions = [actions.file_delete_qset, ]
     def show_user(self):
         return self.owner.username
     show_user.short_description = _('owner')    

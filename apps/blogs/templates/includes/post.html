@@ -12,7 +12,7 @@
 	</div>
 	<hr>
  <div id='spacer'>&nbsp;</div>
- 	{{ p.content|striptags|render_filter:p.syntax|safe }}<br clear='all'>
+ 	{{ p.content|render_filter:p.syntax|safe }}<br clear='all'>
  <hr>
  <div class='footer'> (by  {% get_raw_nickname p.author %}), published {{ p.date }}</div>
  {% if p.url %}<div class='footer' class='url'><a href='{{ p.url }}'>оригинал</a></div>{% endif %}

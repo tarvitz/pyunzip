@@ -1,6 +1,9 @@
-
+# coding: utf8
 from django import forms
+from django.http import Http404
+from django.db.models.query import QuerySet
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 from apps.core.settings import SETTINGS as USER_DEFAULT_SETTINGS, SETTINGS_FIELDS as USER_DEFAULT_FIELDS
 from apps.core.settings import SettingsFormOverload
 from django.conf import settings
@@ -131,3 +134,67 @@ class CommentForm(forms.Form):
 
 class SphinxSearchForm(forms.Form):
     query = forms.CharField(required=True)
+
+def action_formset(qset, actions):
+    """ taken within stackoverflow,
+    form which allows the user to pick specified action to perform on a chosen
+    subset of items from queryset"""
+    
+    class _ActionForm(forms.Form):
+        items = forms.ModelMultipleChoiceField(queryset=qset)
+        action = forms.ChoiceField(choices=[(None, '--------'),]+zip(actions, actions))
+
+    return _ActionForm
+
+def action_formset_ng(request, qset, model, permissions=[]):
+    """ more useable generic action form """
+
+    class _ActionForm(forms.Form): 
+        items = forms.ModelMultipleChoiceField(queryset=qset)
+        #_actions = [(s.short_description, s.short_description) for s in model.actions]
+        _actions = []
+        for x in range(0, len(model.actions)):
+            _actions.append((x, model.actions[x].short_description))
+
+        action = forms.ChoiceField(choices=[(None, '--------'),]+ _actions)
+        
+        del _actions
+
+        def act(self, action, _qset, **kwargs):
+            if hasattr(self, 'is_valid'):
+                if action == 'None':
+                    return _qset #return what do we got, nothing else
+                action = model.actions[int(action)]
+                return action(self.request, _qset, model, **kwargs)
+            else:
+                raise ObjectDoesNotExist, "form.is_valid should be ran fist"
+
+        def __init__(self, *args, **kwargs):
+            self.request = request
+            if args:
+                #blocking out users without permissions we need
+                if not self.request.user.has_perms(permissions):
+                    raise Http404('Your user does not have permissions you need to complete this operation.')
+            super(_ActionForm, self).__init__(*args, **kwargs)
+    return _ActionForm
+
+class ActionForm(forms.Form):
+    items = forms.ModelMultipleChoiceField(queryset=[], widget=forms.MultipleHiddenInput())
+    action = forms.ChoiceField(widget=forms.HiddenInput())
+    
+    def __init__(self, *args, **kwargs):
+        model = kwargs['model']
+        qset = kwargs['qset']
+        del kwargs['qset']
+        del kwargs['model']
+        self.base_fields['items'].queryset = qset
+        _actions = []
+        for x in range(0, len(model.actions)):
+            _actions.append((x, x))
+        self.base_fields['action'].choices = _actions
+        del _actions
+        super(ActionForm, self).__init__(*args, **kwargs)
+
+class ActionApproveForm(ActionForm):
+    approve = forms.BooleanField(label=_('Approve'), required=True,
+        help_text=_('Yes, i approve'))   

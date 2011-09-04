@@ -53,7 +53,7 @@ urlpatterns = patterns('',
     (r'^devblog/', include('apps.blogs.urls')),
     (r'^whadmin/', include('apps.whadmin.urls')),
     (r'^test/test/$', direct_to_template,{'template': 'test.html'}), 
-    (r'^quotes/',include('apps.quotes.urls')),
+    #(r'^quotes/',include('apps.quotes.urls')),
     #(r'^sitemap.xml$', 'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
     #(r'^rules/$', direct_to_template,
     #    {'template':'codex.html'})

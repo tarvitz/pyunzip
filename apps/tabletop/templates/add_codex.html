@@ -1,0 +1,24 @@
+{% extends "base.html" %} {% load i18n %}
+{% block css %}
+{{ block.super }}
+<link rel='stylesheet' type='text/css' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen'>
+{% endblock %}
+{% block text_content %}
+
+<center>
+<div class='forms'>
+<form id='id_add_codex' action='.' method='post'>
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type='submit' value='{% trans "submit" %}'>
+</form>
+</div>
+</center>
+
+<script language='javascript'>
+    var _xhr_get_armies = "{% url xhr_get_armies %}";
+    var _user_army_side_id = null;
+    var _user_army_id = null;
+</script>
+<script language='javascript' src='/media/js/jq_wh.js'></script>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends base_template %}
+{% block text_content %}
+    <div class='codexes'>
+        <span class=''>{{ codex.title }}</span>
+        <span class=''>{{ codex.revisions }}</span>
+        <span class=''>{{ codex.bound }}</span>
+        <a href='{% url url_edit_codex codex.id %}'>[edit]</a>
+    </div>
+{% endblock %}

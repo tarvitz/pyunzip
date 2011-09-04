@@ -3,16 +3,17 @@
 		<div class='msg_headline'>
 			<!-- effects -->
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<!-- end of effects -->
 			<div class='links'>	
+	            {% if perms.tabletop.change_battlereport or perms.tabletop.delete_battlereport %}
+                    <input class='left' type='checkbox' name='items' value='{{ br.id }}'>
+                {% endif %}
 				{% ifequal user br.owner %}
-					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>del</a></span>
+					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>[x]</a></span>
 					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
 				{% if perms.tabletop.delete_battlereport or user.is_superuser %}
-					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>del</a></span>
+					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>[x]</a></span>
 					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% endif %}
 				{% endifequal %}
@@ -42,7 +43,8 @@
 						{% get_raw_nickname br.winner.show_player %}
 					{% endif %}
                                         {% else %}
-                                        Ничья</div> {% endif %}{% endspaceless %}
+                                        Ничья
+                                        {% endif %}{% endspaceless %}
 					
 					<div class='msg_txt'>Расы: <i>{% spaceless %}
 						{% for r in  br.races %}
@@ -65,7 +67,7 @@
 
 					{% if show_br_comment %}	
 					<div class='msg_txt'>Коментарий: </div>
-						{{ br.comment|striptags|render_filter:br.syntax|safe }}
+						{{ br.comment|render_filter:br.syntax|safe }}
 					{% endif %}
 
 					<div style='clear: both;'></div>
@@ -73,11 +75,10 @@
 		</div><!-- msg_content -->
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
-			<div class='reflects_left'></div>
-			<div class='reflects_right'></div>
 			<div class='links'>	
                 <span>{{ br.layout }}</span>
-                <span>{{ br.winner.show_player }}</span> {# already returns span #}
+                {% if br.winner %}<span>{{ br.winner.show_player }}</span> {# already returns span #} {% else %}
+                <span>Ничья</span>{% endif %}
                 <span>{{ br.mission.game }}:{{ br.mission }}</span>
 			</div>
 		<br clear='all'>

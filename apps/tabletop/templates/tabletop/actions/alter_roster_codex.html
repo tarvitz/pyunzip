@@ -1,0 +1,28 @@
+{% extends base_template %}
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+{% endblock %}
+{% block text_content %}
+<center>
+<div class='forms'>
+    <form action='.' method='post' id='id_action_alter_codex_roster'>
+        {{ form.as_ul }}
+        <input type='submit' value='submit'>
+    </form>
+</div>
+</center>
+<script language='javascript'>
+var _xhr_get_codex_revisions = '{% url xhr_get_codex_revisions %}';
+var revision = document.getElementById('id_revision');
+var codex = document.getElementById('id_codex');
+</script>
+<script language='javascript' src='/media/js/jq_tabletop.js'></script>
+<script language='javascript'>
+$(document).ready(function(){
+    $('#id_codex').change(function(){
+        updateRevision();
+    });
+});
+</script>
+{% endblock %}

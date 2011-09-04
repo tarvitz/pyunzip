@@ -78,6 +78,7 @@
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 	-webkit-border-radius:8px;
+        /*box-shadow: 0 0 2px 0px #ADD8E6; */
 }
 
 #horizontal_line div{
@@ -91,7 +92,15 @@
 	-moz-border-radius: 8px;
 	border-radius: 8px;
 	-webkit-border-radius:8px;
+        box-shadow: inset 0px 0px 10px #000, inset 0px 0px 2px 1px #333, 0px 0px 3px lightblue;
+        text-shadow: -2px 2px 4px black;
 	
+}
+#horizontal_line div:hover{
+    box-shadow: inset 0px 0px 10px #000, inset 0px 0px 2px 1px #333, 0px 0px 3px red;
+}
+.blink_shadow{
+    box-shadow: 0px 0px 15px lightblue;
 }
 .vertical_link{
 	font-size: 7pt;
@@ -222,6 +231,7 @@
 	float: right;
 	font-family: Arial;
 	position: relative;
+        text-shadow: 2px 2px 10px black;
 }
 #control_content .transparency{
 	position: absolute;
@@ -234,6 +244,12 @@
 	left: 0px;
 	z-index:-1;
 	border: 0px;
+}
+#control_content > div:hover{
+    box-shadow: 0px 0px 10px lightblue;
+}
+#control_content > div.none:hover{
+    box-shadow: none !important; 
 }
 #control_content .content #control_content, .user_profile, #control_content .briefing_news,
 	#control_content .last_replays,
@@ -509,12 +525,12 @@ a{
 	color: darkgrey;
 	text-decoration: none;
 }
-
 a:visited{
 	color: #D0D0D0;
 }
 a:hover{
 	color:#FAEBD7;
+        text-shadow: 1px 1px black;
 }
 p{
 	margin: 15px 0 0;
@@ -552,6 +568,7 @@ p{
 .img_right{
 	float: right;
 	margin: 2px;
+        margin-left: 10px;
 	padding: 3px;
 	border: 1px solid white;
 	background-color: #292929;
@@ -560,6 +577,7 @@ p{
 .img_left{
 	float: left;
 	margin: 2px;
+        margin-right: 10px;
 	padding: 2px;
 	border: 1px solid white;
 	background-color: #292929;
@@ -634,6 +652,7 @@ p{
 #blacklibrary a{
 	color: black;
 }
+#blacklibrary a:hover{ text-shadow: 0 0 1px white; }
 .copyright{
     font-size: 0.6em;
     width: 60%;

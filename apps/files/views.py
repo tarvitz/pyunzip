@@ -12,15 +12,18 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers       import reverse
+from django.core import serializers
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect, Http404
 from apps.files.forms import UploadReplayForm,\
-    EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm
-from apps.core.forms import CommentForm
+    EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
+    UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
+    ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm
+from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
-from apps.core.helpers import can_act
+from apps.core.helpers import can_act, handle_uploaded_file
 from apps.files.decorators import *
 from apps.core.decorators import update_subscription,update_subscription_new,benchmarking
 from apps.tracker.decorators import user_visit
@@ -34,7 +37,7 @@ from os import mkdir,stat
 from cStringIO import StringIO
 from apps.core.helpers import get_settings,save_comment,paginate
 from django.shortcuts import get_object_or_404
-
+from django.views.decorators.csrf import csrf_protect
 import zipfile
 import bz2
 import os
@@ -42,10 +45,47 @@ import os
 
 @login_required
 @can_act
+@csrf_protect
+def upload_replay(request):
+    template = get_skin_template(request.user, 'replays/upload_replay.html')
+    if request.method == 'POST':
+        form = UploadReplayModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.instance.author = request.user
+            form.instance.upload_date = datetime.now()            
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_replays'))
+        else:
+            return direct_to_template(request, template, {'form': form})
+    form = UploadReplayModelForm()
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+@can_act
+@csrf_protect
 def upload_file(request):
     template = get_skin_template(request.user, 'files/upload_file.html')
     if request.method == 'POST':
-        form = FileUploadForm(request.POST,request.FILES)
+        form = UploadFileModelForm(request.POST, request.FILES)
+        if form.is_valid():
+            file = handle_uploaded_file(request.FILES['file'],
+                'files/%s' % request.user.id)
+            form.instance.file = file
+            form.instance.owner = request.user
+            form.instance.upload_date = datetime.now()
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_files'))
+        else:
+            return direct_to_template(request, template, {'form': form})
+    form = UploadFileModelForm()
+    return direct_to_template(request, template, {'form': form})
+
+@login_required
+@can_act
+def upload_file_old(request):
+    template = get_skin_template(request.user, 'files/upload_file_old.html')
+    if request.method == 'POST':
+        form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
             raw_file_data = form.cleaned_data['file']
             description = form.cleaned_data['description']
@@ -81,9 +121,28 @@ def choose_game_to_upload(request):
         {'games': games},
         context_instance=RequestContext(request))
 
+@can_act
+@csrf_protect
+@login_required
+def edit_replay(request, id):
+    template = get_skin_template(request.user, 'replays/edit_replay.html')
+    instance = get_object_or_404(Replay, id=id)
+    if request.method == 'POST':
+        form = ActionReplayModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_replay',
+                args=(form.instance.pk, )))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+        
+    form = ActionReplayModelForm(instance=instance)
+    return direct_to_template(request, template, {'form': form})
+
 @login_required
 @can_act
-def edit_replay(request,id=0):
+def edit_replay_old(request,id=0):
     template = get_skin_template(request.user, 'replays/upload_replay.html')
     can_edit = request.user.user_permissions.filter(codename='edit_replay')
     try:
@@ -128,8 +187,8 @@ def edit_replay(request,id=0):
 @login_required
 @can_act
 @benchmarking
-def upload_replay(request,game):
-    template = get_skin_template(request.user, 'replays/upload_replay.html')
+def upload_replay_old(request,game):
+    template = get_skin_template(request.user, 'replays/upload_replay_old.html')
     if request.method == 'POST':
         form = UploadReplayForm(request.POST, request.FILES)
         if form.is_valid():
@@ -294,6 +353,7 @@ def show_categories(request,type=''):
         'games': games},
         context_instance=RequestContext(request))
 
+@csrf_protect
 @benchmarking
 def all_replays(request,type='',version='',patch='',gametype=''):
     template = get_skin_template(request.user, 'replays/all.html')
@@ -307,7 +367,19 @@ def all_replays(request,type='',version='',patch='',gametype=''):
             version__patch__icontains=patch).order_by('-id')
     else: replays = Replay.objects.all().order_by('-id')
     _pages_ = get_settings(request.user,'replays_on_page',20)
-    
+    formclass = action_formset_ng(request, replays, Replay,
+        permissions=['files.delete_replay', 'files.change_replay'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(request.get_full_path())
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'replays': replays, 'page': page},
+                processors=[benchmark])
     #paginator = Paginator(replays,_pages_)
     #links = make_links(paginator.num_pages,'')
     #links = paginator.page_range
@@ -317,13 +389,15 @@ def all_replays(request,type='',version='',patch='',gametype=''):
     #except (EmptyPage,InvalidPage):
     #    replays = paginator.page(1)
     #    paginator.number = int(1)
+    form = formclass()
     replays = paginate(replays,page,pages=_pages_)
     return render_to_response(template,
         {'replays': replays,
-        'page': replays},
+        'page': replays, 'form': form},
         context_instance=RequestContext(request,
             processors=[benchmark]))
 
+@csrf_protect
 @benchmarking
 def replays_by_author(request,nickname,game='',version='',patch=''):
     template = get_skin_template(request.user,'replays/all.html')
@@ -334,9 +408,23 @@ def replays_by_author(request,nickname,game='',version='',patch=''):
     
     _pages_ = get_settings(request.user,'replays_on_page',30)
     page = int(request.GET.get('page',1))
+    formclass = action_formset_ng(request, replays, Replay,
+        permissions=['files.delete_replay', 'files.change_replay'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(request.get_full_path())
+        else:
+            return direct_to_template(request, template,
+                {'form': form, 'replays': replays, 'page': page},
+                processors=[benchmark])
+    
+    form = formclass()
     replays = paginate(replays,page,pages=_pages_)
-
-    return render_to_response(template,{'replays':replays,'page':replays},
+    return render_to_response(template,{'replays':replays,'page':replays, 'form': form},
         context_instance=RequestContext(request,processors=[benchmark]))
 
 #TODO: rewrite it, version__game__short_name=bla-bla gives an logical breaks
@@ -372,9 +460,44 @@ def category_replays(request,type='',gametype='',version='',patch=''):
         context_instance=RequestContext(request,
             processors=[pages]))
 
+@csrf_protect
 @login_required
 @can_act
 def upload_image(request):
+    template = get_skin_template(request.user, 'gallery/upload.html')
+    form = UploadImageModelForm()
+    if request.method == 'POST':
+        form = UploadImageForm(request.POST)
+        if form.is_valid():
+            form.instance.owner = request.user
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_galleries'))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    return direct_to_template(request, template,
+        {'form': form})
+
+@csrf_protect
+@login_required
+def action_image(request, id, action=None):
+    template = get_skin_template(request.user, 'gallery/action_image.html')
+    instance = get_object_or_404(GalleryImage, id=id)
+    if request.method == 'POST':
+        form = ImageModelForm(request.POST, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('url_show_image', args=(form.instance.pk,)))
+        else:
+            return direct_to_template(request, template,
+                {'form': form})
+    form = ImageModelForm(instance=instance)
+    return direct_to_template(request, template,
+        {'form': form})
+
+@login_required
+@can_act
+def upload_image_old(request):
     template = get_skin_template(request.user,'gallery/upload.html')
     galleries = Gallery.objects.all()
     if not galleries:
@@ -419,7 +542,45 @@ def upload_image(request):
         context_instance=RequestContext(request))
 
 @benchmarking
-def show_all_images(request,id=''):
+def show_all_images(request, id=None, action=None):
+    template = get_skin_template(request, 'gallery/gallery.html')
+    galleries = Gallery.objects.filter(type='global').order_by('-id')
+    qset = Q(gallery__type='global')
+    if id: qset = qset & Q(gallery__id=id)
+    images = GalleryImage.objects.filter(qset).order_by('-id')
+    page = request.GET.get('page', 1)
+    _pages_ = get_settings(request.user, 'objects_on_page', 27)
+    formclass = action_formset_ng(request, images, GalleryImage,
+        permissions=['files.delete_image', 'files.change_image'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'],
+                form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            #action = form.cleaned_data['action']
+            #qset = form.cleaned_data['items']
+            #if action == 'delete':
+            #    if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
+            #        qset.delete()
+            return HttpResponseRedirect(reverse('url_show_galleries'))
+        else:
+            return direct_to_template(request, template,
+                {
+                    'galleries': galleries, 'images': images,
+                    'form': form
+                }, processors=[benchmark]
+            )
+    form = formclass()
+    images = paginate(images, page, pages=_pages_)
+    return direct_to_template(request, template,
+        {'galleries': galleries, 'images': images,
+        'form': form},
+        processors=[benchmark])
+
+#ITZ FUCKING UGLY!!!!
+@benchmarking
+def show_all_images_old(request,id=''):
     template = get_skin_template(request.user,'gallery/gallery.html')
     try:
         page = int(request.GET.get('page',1))
@@ -474,7 +635,7 @@ def create_gallery(request):
 
 @benchmarking
 def show_gallery(request,gallery=1,gallery_name=None):
-    template = get_skin_template(request.user,'gallery/usergallery.html')
+    template = get_skin_template(request.user,'gallery/gallery.html')
     template_err = get_skin_template(request.user,'gallery/404.html')
     gallery = int(gallery)
     try:
@@ -502,7 +663,7 @@ def show_gallery(request,gallery=1,gallery_name=None):
 
 @login_required
 @can_act
-def action_image(request, id, action):
+def action_image_old(request, id, action):
     next = ''
     if request.method == 'POST':
         form = ApproveActionForm(request.POST)
@@ -530,16 +691,22 @@ def action_image(request, id, action):
 
 @update_subscription
 @user_visit(object_pk='number',ct='files.image')
-def show_image(request, number=1,object_model='files.image'):
+def show_image(request, number=None,object_model='files.image', alias=None):
     template_err = get_skin_template(request.user, 'gallery/404.html')
     template = get_skin_template(request.user, 'gallery/image.html')
-    try:
-        image = GalleryImage.objects.get(id__exact=number)
-    except GalleryImage.DoesNotExist:
-        return render_to_response(template_err,
-            {},
-            context_instance=RequestContext(request))
-
+    if number:
+        image = get_object_or_404(GalleryImage, id=number)
+    elif alias:
+        image = get_object_or_404(GalleryImage, alias__iexact=alias)
+    else:
+        raise Http404("No data was passed")
+    #try:
+    #    image = GalleryImage.objects.get(id__exact=number)
+    #except GalleryImage.DoesNotExist:
+    #    return render_to_response(template_err,
+    #        {},
+    #        context_instance=RequestContext(request))
+    #
     #Comments
     image_type = ContentType.objects.get(app_label='files', model='image')
     #Pages
@@ -558,16 +725,44 @@ def show_image(request, number=1,object_model='files.image'):
         context_instance=RequestContext(request,
             processors=[pages]))
 
+def show_raw_image(request, alias, thumbnail=False):
+    import Image
+    response = HttpResponse()
+    image = get_object_or_404(GalleryImage, alias__iexact=alias)
+    if thumbnail:
+        f = image.thumbnail.file.read()
+    else:
+        f = image.image.file.read()
+    img = Image.open(StringIO(f))
+    content_type = 'image/' + img.format.lower()
+    response['Content-Type'] = content_type
+    del img
+    response.write(f)
+    return response
 
+@csrf_protect
 def show_files(request):
     template = get_skin_template(request.user, 'files/files.html')
     page = request.GET.get('page',1)
     files = File.objects.all().order_by('-upload_date')
     _pages_ = get_settings(request.user,'objects_on_page',100)
-    files = paginate(files,page,pages=_pages_) 
+    files = paginate(files,page,pages=_pages_)
+    formclass = action_formset_ng(request, File.objects.all(), File,
+        permissions=['files.delete_file', 'files.change_file'])
+    if request.method == 'POST':
+        form = formclass(request.POST)
+        if form.is_valid():
+            qset = form.act(form.cleaned_data['action'], form.cleaned_data['items'])
+            if 'response' in qset: return qset['response']
+            return HttpResponseRedirect(reverse('url_show_files'))
+        else:
+            return direct_to_template(request, template,
+                {'files': files, 'page': files, 'form': form},
+                processors=[pages])
     return render_to_response(template,
         {'files':files,
-        'page': files},
+        'page': files,
+        'form': formclass},
         context_instance=RequestContext(request,
             processors=[pages]))
 
@@ -731,3 +926,13 @@ def search_replay(request):
         'form': form,
         'query': query},
         context_instance=RequestContext(request))
+
+def xhr_get_replay_versions(request, id=None):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    if not id:
+        response.write('[]')
+        return response
+    versions = Version.objects.filter(game__id=id)
+    response.write(serializers.serialize("json",versions))
+    return response

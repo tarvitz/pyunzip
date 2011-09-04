@@ -1,6 +1,8 @@
-{% extends base_template %}{% load kamwhfilters %}{% load comments %} {% load votetags %}
-{% block head_content %}
+{% extends base_template %}{% load kamwhfilters %}{% load comments %} {% load votetags %} {% load i18n %}
+{% block css %}
+{{ block.super }}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' type='text/css' media='screen'>
 {% endblock %}
 {% block title %} Галерея {% endblock %}
 {% block text_content %}
@@ -20,9 +22,9 @@
 		<option class='even' value='null'>-----</option>
 		{% for g in galleries %} 
 			{% spaceless %}
-			{% get_images_count for g as img_count %}
-			{% if img_count %} 
-			<option class='{% cycle odd,even %}' value="{{ g.id }}">{{ g.name }} [{{ img_count }}]</option> {% endif %}
+			{# {% get_images_count for g as img_count %} #}
+			{# {% if img_count %} #}
+			<option class='{% cycle odd,even %}' value="{{ g.id }}">{{ g.name }} {# [{{ img_count }}] #}</option> {#{% endif %} #}
 			{% endspaceless %}
 		{% endfor %}
 	</select>
@@ -31,26 +33,28 @@
 	g_list = document.getElementById('g_list');
 	g_list.value = {{ gallery_id }}
 </script>{% endif %}
-{% comment %}{% for g in galleries %}{% get_images_count for g as img_count %}
-<div id='galleries_list'>
-	<a href='/gallery/{{ g.id }}'>{{ g.name }}
-		<span id='info'>{Всего загружено изображений: {{ img_count }} }</span>
-	</a>
-</div>
-{% endfor %}
-{% endcomment %}
+
 {% with "True" as gallery_general %}
+
+{% if perms.files.delete_image and perms.files.change_image %} 
+<div class='forms'>
+<form id='id_images_action_form' action='.' method='post' class='action_form'>
+{% csrf_token %}
+{{ form.action.errors }}
+{{ form.action }}
+<input type='submit' value='{% trans "submit" %}'> <br clear='all' />
+{% endif %}
 {% for image in images.object_list %}
     {% include settings.document.image_inc %} 
 {% endfor %}
+<br clear="all">
+{% if perms.files.change_image and perms.files.delete_image %}
+{% endif %}
+</form>
+</div>
 {% include "tracker/tracker_js.html" %}
-
- <br clear="all">
 <script language='javascript'>
     $(document).ready(function(){
-        /*$('.frame').hover(function(){
-                    $(this).toggleClass('frame_hover');
-        }); */// hover
         $('.frame').bind('mouseover', function(){
             $(this).addClass('frame_hover');
         });
@@ -60,8 +64,9 @@
     });
 </script>
 {% endwith %}
-
+{% with images as page %}
 {% include settings.document.links %}
+{% endwith %}
 {% else %}
 {% include settings.document.nothing_inc %}
 {% endif %}

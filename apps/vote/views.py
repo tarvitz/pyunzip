@@ -1,47 +1,27 @@
 # Create your views here.
 # ^^, coding: utf-8 ^^,
-#from settings import MEDIA_ROOT,FROM_EMAIL
 from apps.vote.models import Vote,Rate
 from apps.vote.forms import VoteForm
 from django.conf import settings
 from django.http import HttpResponseRedirect, HttpResponse,HttpResponseServerError
 from django.template import RequestContext
 from django.shortcuts import render_to_response
-#from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
-#from django.contrib import auth
 from django.contrib.contenttypes.models import ContentType
-#from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.decorators import login_required
-#from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, InvalidPage
-#from django.core import serializers
 from django.db.models.loading import get_model
-#from django.contrib.auth.models import User
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
-#from django.core.mail import send_mail
-#from django.forms.util import ErrorList
-#from apps.wh.forms import UploadAvatarForm,UpdateProfileForm,PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm
-#from apps.core import make_links_from_pages as make_links
 from apps.core import get_skin_template
 from apps.core.helpers import get_settings,paginate,get_content_type_or_none,\
     get_object_or_none
-#from cStringIO import StringIO
-#import Image
-#from datetime import datetime,timedelta
-#from hashlib import sha1
-#from random import randint, random
 from django.template import Template,Context
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission
 from apps.vote.decorators import vote_allow_objects
 from apps.core.helpers import can_act
-#filters
-#from apps.news.templatetags.newsfilters import spadvfilter
-#from django.template.defaultfilters import striptags
-#import os
+import os
 
 @login_required
 @vote_allow_objects(settings.ALLOW_VOTE_OBJECTS)
@@ -113,10 +93,6 @@ def show_voted(request, id):
     page = request.GET.get('page',1)
     rates = paginate(rates,page,pages=_pages_)
     return direct_to_template(request,template,{'vote': vote,'rates':rates})
-    
-    #return render_to_response(template,
-    #    {'vote':vote},
-    #    context_instance=RequestContext(request) )
 
 #@has_permission('auth.can_test')
 def show_best(request,app_model):
@@ -148,7 +124,6 @@ def comment_rate(request,id):
             rate.save()
             return HttpResponseRedirect(form.cleaned_data.get('next','/'))
         else:
-            print form.errors
             return direct_to_template(request,template,{'form':form})
     else:
         form = VoteForm()
