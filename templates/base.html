@@ -148,16 +148,14 @@
 			{# <li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li> #}
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href="{% url apps.quotes.views.add %}">добавить</a></li> {% endif %}
 			{% if user.is_superuser or user.is_staff %}<li class='lvl2'><a href="{% url apps.quotes.views.queue %}">очередь</a></li>{% endif %}{% endcomment %}
-			<li><a href="{% url apps.files.views.show_replays %}" title='Хранилище реплеев игр Dawn of War, Dawn of War II'>Реплеи</a>
+			{% comment %}<li><a href="{% url apps.files.views.show_replays %}" title='Хранилище реплеев игр Dawn of War, Dawn of War II'>Реплеи</a>
 			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='replays' %}">[atom</a>|
 				<a href="{% url django.contrib.syndication.views.feed url='replays_rss' %}">rss]</a></span>
 			</li>
 			<li class='lvl2'><a href="{% url url_show_best 'replay' %}">лучшие</a></li>
 			{# <li class='lvl2'><a href="{% url apps.files.views.search_replay %}" title='Немного более улучшенный поиск по реплеям, чем основной'>поиск</a></li> #}
-			{% comment %}<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow' %} ' title='добавить реплей'>добавить[dow]</a></li>
-			<li class='lvl2'><a href='{% url apps.files.views.upload_replay game='dow2' %}' title='добавить реплей'>добавить[dow2]</a></li> {% endcomment %}
                         <li class='lvl2'><a href='{% url url_upload_replay %}' title='добавить реп'>добавить</a></li>
-
+			{% endcomment %}
                         <li><a href="{% url url_all_rosters %}">Ростеры</a></li>
 			<li><a href='{% url battle_report_index %}'>Батл репорты</a></li>
 			<li class='lvl2'><a href='{% url url_add_battle_report %}'>добавить</a></li>
