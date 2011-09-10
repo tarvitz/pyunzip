@@ -348,7 +348,7 @@ User.add_to_class('uin', models.IntegerField(_('UIN (icq number)'), max_length=1
 User.add_to_class('about', models.CharField(_('About myself'),max_length=512, blank=True))
 User.add_to_class('skin', models.ForeignKey(Skin, null=True, blank=True))
 User.add_to_class('ranks', models.ManyToManyField(Rank, null=True, blank=True))
-User.add_to_class('army', models.ForeignKey(Army, unique=True, null=True, blank=True))
+User.add_to_class('army', models.ForeignKey(Army, null=True, blank=True))
 User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, default=0))
 
 #User.add_to_class('settings', models.ForeignKey(Settings))
