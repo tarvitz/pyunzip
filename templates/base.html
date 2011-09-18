@@ -167,7 +167,7 @@
 			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
 		</ul>
 	</div>
-    {% if perms.core.can_test in %}
+    {% if perms.core.can_test %}
 	<div class='none'><span class='label' class='search'>Поиск</span></div>
 	<div class="global_search">
 	<div class='transparency'></div>
