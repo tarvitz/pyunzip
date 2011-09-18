@@ -167,6 +167,7 @@
 			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
 		</ul>
 	</div>
+    {% if perms.core.can_test in %}
 	<div class='none'><span class='label' class='search'>Поиск</span></div>
 	<div class="global_search">
 	<div class='transparency'></div>
@@ -178,6 +179,7 @@
 			<input type='submit' value='поиск' class='button'>
 		</form>
 	</div>
+    {% endif %}
 	{% if user.settings.show_last_news and user.settings %}
 	{% if briefing_news %}
 	<div class='none'><span class='label' class='logo_briefing_news'><a href="javascript:" onClick="do_hide('briefing_news');">Последние новости</a></span></div>
