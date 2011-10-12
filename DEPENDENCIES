@@ -1,0 +1,4 @@
+Depends on:
+    anyjson
+    python-beautifulsoup
+    django-extwidgets (git://github.com/tarvitz/django-extwidgets.git)
