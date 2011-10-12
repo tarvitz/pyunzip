@@ -11,6 +11,7 @@ from cStringIO import StringIO
 from apps.core.forms import RequestForm
 from apps.core.widgets import TinyMkWidget
 from django.conf import settings
+from extwidgets.widgets import AjaxValidateInput
 import logging
 logger = logging.getLogger(__name__)
 
@@ -31,7 +32,11 @@ class UploadFileModelForm(forms.ModelForm):
 
 class UploadImageModelForm(forms.ModelForm):
     required_css_class='required'
-    
+    alias = forms.CharField(widget=AjaxValidateInput(
+        request_url='xhr_get_img_alias',
+        error_message=_('Such alias is already exists')),
+        help_text=_('Fast name to access unit')
+    )
     class Meta:
         model = ModelImage
         exclude = ['thumbnail', 'owner']  

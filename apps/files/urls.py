@@ -96,6 +96,10 @@ urlpatterns = patterns('apps.files.views',
         name='xhr_get_replay_versions'),
     url(r'^xhr/get/replay/versions/(?P<id>\d+)/$', 'xhr_get_replay_versions',
         name='xhr_get_replay_versions'),
+    url('^xhr/get/img/alias/(?P<alias>[\w\d_]+)/$', 'xhr_get_img_alias',
+        name='xhr_get_img_alias'),
+    url('^xhr/get/img/alias/$', 'xhr_get_img_alias',
+        {'alias': 0,},
+        name='xhr_get_img_alias'),
 )
-
 

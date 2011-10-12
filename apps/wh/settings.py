@@ -38,4 +38,4 @@ SIGN_CHOICES = (
 
 #OTHER SETTINGS
 READONLY_LEVEL=5
-GLOBAL_SITE_NAME='http://tarvitz.no-ip.org'
+GLOBAL_SITE_NAME='http://w40k.net'

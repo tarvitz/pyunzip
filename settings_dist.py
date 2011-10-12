@@ -4,7 +4,7 @@ import os,sys
 from apps import djcelery
 djcelery.setup_loader()
 
-DEBUG = True
+DEBUG = False#True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -195,6 +195,7 @@ INSTALLED_APPS = (
     'apps.pybb',
     'djcelery',
     'apps.djangosphinx',
+    'extwidgets',
 )
 
 import apps.djcelery

@@ -936,3 +936,16 @@ def xhr_get_replay_versions(request, id=None):
     versions = Version.objects.filter(game__id=id)
     response.write(serializers.serialize("json",versions))
     return response
+
+def xhr_get_img_alias(request, alias):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    try:
+        image = GalleryImage.objects.get(alias=alias)
+    except GalleryImage.DoesNotExist:
+        response.write("false")
+        return response
+    from anyjson import serialize as serialize_json
+    out = serialize_json({'alias': image.alias})
+    response.write(out)
+    return response
