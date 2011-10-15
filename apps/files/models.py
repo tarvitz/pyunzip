@@ -284,6 +284,7 @@ class Image(models.Model):
     title = models.CharField(_('Title'), max_length=100)
     alias = models.CharField(_('Alias'), max_length=32, blank=True,
         unique=True,
+        null=True,
         help_text=_('Fast name to access unit'),
         validators=[valid_alias]) #shorter, wiser
     comments = models.TextField(_('Comments'))

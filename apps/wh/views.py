@@ -537,7 +537,7 @@ def get_math_image(request,sid=''):
     #print ifo
     draw = ImageDraw.Draw(image)
     draw.text((2, 0), str(f)+'/'+str(s)+'-'+str(t), font=ifo)
-    fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT,str(random())[2:6])
+    fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT, str(random())[2:6])
     image.save(fp_name, 'PNG')
     image = open(fp_name,'r').read()
     os.remove(fp_name)
