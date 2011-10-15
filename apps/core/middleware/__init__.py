@@ -144,6 +144,7 @@ class DevMiddleware(object):
         if request.get_full_path() == reverse('url_login'):
             return response
         if 'dev.' in request.META.get('HTTP_HOST', ''):
-            if request.user.has_perm('wh.can_test'):
-                return response
+            if hasattr(request, 'user'):
+                if request.user.has_perm('wh.can_test'):
+                    return response
         return HttpResponseRedirect(reverse('url_login'))
