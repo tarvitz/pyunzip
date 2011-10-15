@@ -1,17 +1,13 @@
 #
 # Django settings for WarMist project.
 import os,sys
-from apps import djcelery
-djcelery.setup_loader()
-
-DEBUG = False#True
-TEMPLATE_DEBUG = DEBUG
+#from apps import djcelery
+#djcelery.setup_loader()
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
-from settings_net import *
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -34,10 +30,13 @@ LANGUAGES = (
 # to load the internationalization machinery.
 USE_I18N = True
 
+from settings_path import rel_path
+
+MEDIA_ROOT=rel_path('media')
+STYLES_ROOT = rel_path('styles')
+ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-from settings_path import *
-from settings_quotes import *
 from apps.wh.settings import *
 from search_settings import *
 from apps.karma.settings import *
@@ -95,7 +94,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.farseer.context_processors.steam_discounts',
     'apps.farseer.context_processors.l4d2_stats',
 )
-
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -196,6 +194,7 @@ INSTALLED_APPS = (
     'djcelery',
     'apps.djangosphinx',
     'extwidgets',
+    'south',
 )
 
 import apps.djcelery

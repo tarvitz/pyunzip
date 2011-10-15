@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 urlpatterns = patterns('apps.wh.views',
     #(r'^$', direct_to_template,
     #    {'template':'homepage.html'}),
-    (r'^login/$', 'login'),
+    url('^login/$', 'login', name='url_login'),
     url('^sulogin/$', 'sulogin',
         name='url_superlogin'),
     url('^accounts/login/$', 'login',name='auth_login'),

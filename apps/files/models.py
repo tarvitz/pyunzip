@@ -13,6 +13,7 @@ from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from apps.djangosphinx.models import SphinxSearch
 from django.core.exceptions import ValidationError
+from django.http import Http404
 
 #Abstract Classes
 
@@ -315,6 +316,17 @@ class Image(models.Model):
         from cStringIO import StringIO
         image = Image.open(StringIO(self.image.file.read()))
         path = os.path.join('images/galleries/thumbnails',str(self.owner.id))
+        upload_path = os.path.join(settings.MEDIA_ROOT, path)
+        try:
+            os.stat(upload_path)
+        except OSError as (errno, err):
+            if errno == 2:
+                try:
+                    os.makedirs(
+                        os.path.join(settings.MEDIA_ROOT, path)
+                    )
+                except:
+                    raise Http404("Could not make dir, please contact with administrator")
         path = os.path.join(path,self.image.file.name.split('/')[-1])
         full_path = os.path.join(settings.MEDIA_ROOT,path)
         x,y = image.size

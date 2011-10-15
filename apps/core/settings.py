@@ -2,7 +2,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms.util import ErrorList
-from settings_path import rel_path
+from apps.helpers import rel_path
 from django.conf import settings
 import os
 #upload schema

@@ -1,5 +1,6 @@
 # coding: utf-8
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import get_template
 from django.template import Context
 from apps.wh.models import UserActivity, GuestActivity, User, Skin,Army, Rank
@@ -137,3 +138,12 @@ class BenchmarkingMiddleware(object):
         if hasattr(requset,'timeit'):
            pass 
         return response
+
+class DevMiddleware(object):
+    def process_response(self, request, response):
+        if request.get_full_path() == reverse('url_login'):
+            return response
+        if 'dev.' in request.META.get('HTTP_HOST', ''):
+            if request.user.has_perm('wh.can_test'):
+                return response
+        return HttpResponseRedirect(reverse('url_login'))
