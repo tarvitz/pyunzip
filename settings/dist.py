@@ -89,7 +89,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.core.context_processors.base_template',
     'apps.core.context_processors.session',
     'apps.farseer.context_processors.steam_discounts',
-    'apps.farseer.context_processors.l4d2_stats',
 )
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".

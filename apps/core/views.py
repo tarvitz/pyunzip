@@ -341,11 +341,11 @@ def sphinx_search_model(request, model):
 @login_required
 def user_settings(request):
     template = get_skin_template(request.user,'settings.html')
-    try:
-        user_settings = Settings.objects.get(user=request.user)
-    except Settings.DoesNotExist:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-    _values_ = user_settings.get_decoded()
+    #try:
+    #    user_settings = Settings.objects.get(user=request.user)
+    #except Settings.DoesNotExist:
+    #    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    _values_ = request.user.settings
     form = SettingsForm()
     for k in _values_.keys():
         if k in form.fields:
@@ -358,11 +358,8 @@ def user_settings(request):
             data_store = {}
             for k in FIELD_SETTINGS.keys():
                 data_store[k] = cleaned_data.get(k,FIELD_SETTINGS[k])
-            _buffer_ = user_settings.get_decoded()
-            _buffer_.update(data_store)
-            user_settings.store_data(_buffer_)
-            user_settings.save()
-
+            request.user.settings.update(data_store)
+            request.user.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
         else:
             return direct_to_template(request,template,{'form': form})
