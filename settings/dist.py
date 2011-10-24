@@ -37,10 +37,6 @@ STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-from apps.wh.settings import *
-from search_settings import *
-from apps.karma.settings import *
-from apps.vote.settings import *
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -91,6 +87,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.core.context_processors.user_settings',
     'apps.core.context_processors.global_referer',
     'apps.core.context_processors.base_template',
+    'apps.core.context_processors.session',
     'apps.farseer.context_processors.steam_discounts',
     'apps.farseer.context_processors.l4d2_stats',
 )
@@ -181,8 +178,8 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    'apps.vote',
     'apps.quotes',
+    'apps.vote',
     'apps.tagging',
     'utils',
     #'apps.bincase',
@@ -196,6 +193,13 @@ INSTALLED_APPS = (
     'extwidgets',
     'south',
 )
+#settings
+APP_VOTE_ENABLED=True
+#import settings from another app
+from apps.vote.settings import *
+from apps.wh.settings import *
+from search_settings import *
+from apps.karma.settings import *
 
 import apps.djcelery
 apps.djcelery.setup_loader()

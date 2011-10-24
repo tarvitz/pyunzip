@@ -111,7 +111,7 @@ def show_best(request,app_model):
 
 @login_required
 @can_act
-def comment_rate(request,id):
+def comment_rate(request, id):
     template = get_skin_template(request.user,'comment_rate.html')
     rate = get_object_or_none(Rate,id=id)
     if request.method == 'POST':

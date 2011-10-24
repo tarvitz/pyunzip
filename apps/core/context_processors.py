@@ -6,6 +6,9 @@ from apps.core.helpers import get_settings
 from django.template.loader import get_template, TemplateDoesNotExist
 from apps.helpers import get_self_ip_address
 
+def session(request):
+    return {'session': request.session}
+
 def base_template(request):
     template = 'base.html'
     if request.user.is_authenticated():
@@ -45,8 +48,10 @@ def expressions(request):
     }
     
 def global_referer(request):
+    from django.conf import settings
     return {
-        'global_referer': request.META.get('HTTP_REFERER','/')
+        'global_referer': request.META.get('HTTP_REFERER','/'),
+        'global_settings': settings,
     }
 def briefing_news(request):
     last_news = get_settings(request.user,'last_news_amount',10)

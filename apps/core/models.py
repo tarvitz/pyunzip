@@ -130,7 +130,7 @@ class Announcement(models.Model):
         return reverse('apps.core.views.delete_subscription',kwargs={'id':self.id})
     
 class Settings(models.Model):
-    user = models.ForeignKey(User,primary_key=True)
+    user = models.ForeignKey(User, primary_key=True, related_name='user_settings_set')
     data = models.TextField(_('Decoded Data'),blank=True,null=True)
     #objects = SettingsManager()
     

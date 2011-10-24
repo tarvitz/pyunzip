@@ -1,3 +1,4 @@
+{% if global_settings.APP_VOTE_ENABLED %}
 {% load votetags %}
 {# js implementation #}
 <div class='stars'>
@@ -22,3 +23,4 @@
 	{% endif %}
     {% endspaceless %}
 </div>
+{% endif %}

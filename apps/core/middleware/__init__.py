@@ -87,21 +87,9 @@ class UserSettingsMiddleware(object):
         from apps.core.models import Settings
         #for user that exists
         if request.user.is_authenticated():
-            try:
-                s = Settings.objects.get(user=request.user)
-                #obsolete
-                #setattr(request,'usersettings',sets)
-                default = s.get_decoded()
-                sets = SETTINGS
-                sets.update(default)
-                if default != sets:
-                    s.store_data(sets)
-                    s.save()
-
-            except Settings.DoesNotExist:
-                s = Settings(user=request.user)
-                #import default settings here
-                s.save()
+            if not request.user.settings:
+                request.user.settings = SETTINGS
+                request.user.save()
         #for anonymous users by defaults
         else:
             anonymous_settings = SETTINGS

@@ -11,6 +11,7 @@ from django.contrib.comments.models import Comment
 #breaks model using via another apps
 #from django.contrib.auth.admin import UserAdmin
 from apps.core.models import Settings as UserSettings
+from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
 from apps.core.decorators import null
 from apps.djangosphinx.models import SphinxSearch
@@ -350,6 +351,7 @@ User.add_to_class('skin', models.ForeignKey(Skin, null=True, blank=True))
 User.add_to_class('ranks', models.ManyToManyField(Rank, null=True, blank=True))
 User.add_to_class('army', models.ForeignKey(Army, null=True, blank=True))
 User.add_to_class('tz', models.FloatField(_('Time zone'),choices=TZ_CHOICES, default=0))
+User.add_to_class('settings', PickledObjectField(_('Settings'), null=True, blank=True))
 
 #User.add_to_class('settings', models.ForeignKey(Settings))
 #Comment
@@ -410,24 +412,17 @@ class UserExtension(object):
         return self.army.side.fraction.title
     fraction = property(_get_fraction)
     
-    #TODO: IT LAGZ
-    def get_settings(self):
-        try:
-            s = UserSettings.objects.get(user=self)
-        except UserSettings.DoesNotExist:
-            return {}
-        return s.get_decoded()
-    settings = property(get_settings)
-    
     def _get_comments_count(self):
         count = Comment.objects.filter(user=self).count()
         return count
     comments_count = property(_get_comments_count)
+
     def _get_replays_count(self):   
         from apps.files.models import Replay
         count = Replay.objects.filter(author=self).count()
         return count
     replays_count = property(_get_replays_count)
+
     def _get_karma_value(self):
         from apps.karma.models import Karma
         raw = Karma.objects.filter(user=self)
