@@ -35,7 +35,8 @@ class UploadImageModelForm(forms.ModelForm):
     alias = forms.CharField(widget=AjaxValidateInput(
         request_url='xhr_get_img_alias',
         error_message=_('Such alias is already exists')),
-        help_text=_('Fast name to access unit')
+        help_text=_('Fast name to access unit'),
+        required=False,
     )
     class Meta:
         model = ModelImage
