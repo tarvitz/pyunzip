@@ -252,6 +252,7 @@ class AddRosterForm(RequestForm):
 
 class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
+    codex = forms.ModelChoiceField(queryset=Codex.objects, required=True)
     class Meta:
         model = Roster
         exclude = ['owner', 'user', 'is_orphan', 'plain_side']
