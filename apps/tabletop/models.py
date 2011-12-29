@@ -60,7 +60,7 @@ class Roster(models.Model):
     #changes
     comments = models.TextField(_('Comments'),max_length=10240,blank=True,null=True)
     #race = models.ForeignKey(Side,related_name='race',blank=True,null=True)
-    codex = models.ForeignKey(Codex, blank=True, null=True)
+    codex = models.ForeignKey(Codex, blank=True, null=True, default=1)
     custom_codex = models.CharField(_('Custom Codex'),max_length=50,blank=True,null=True)
     revision = models.IntegerField(_('Revision'), validators=[valid_revision,])
     pts = models.IntegerField(_('pts')) #we should make A LOT OF CHECK UPS :( within
