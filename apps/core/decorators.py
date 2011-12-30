@@ -156,3 +156,17 @@ def progress_upload_handler(func):
         request.upload_handlers.insert(0,UploadProgressHandler(request,progress_id))
         return func(*args,**kwargs)
     return wrapper
+
+
+def check_user_fields(parse_dict):
+    """ check user field states """
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            if request.user.is_superuser:
+                return func(request, *args, **kwargs)
+            for key in parse_dict.keys():
+                if not parse_dict[key] != getattr(request.user, key):
+                    return HttpResponseRedirect(reverse('url_permission_denied'))
+                return func(request, *args, **kwargs)
+        return wrapper
+    return decorator

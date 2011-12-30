@@ -25,7 +25,8 @@ from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
 from apps.core.helpers import can_act, handle_uploaded_file
 from apps.files.decorators import *
-from apps.core.decorators import update_subscription,update_subscription_new,benchmarking
+from apps.core.decorators import update_subscription,update_subscription_new,benchmarking, \
+    check_user_fields
 from apps.tracker.decorators import user_visit
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages,benchmark, get_skin_template
@@ -63,6 +64,7 @@ def upload_replay(request):
 @login_required
 @can_act
 @csrf_protect
+@check_user_fields({'is_staff': True})
 def upload_file(request):
     template = get_skin_template(request.user, 'files/upload_file.html')
     if request.method == 'POST':
@@ -741,6 +743,8 @@ def show_raw_image(request, alias, thumbnail=False):
     return response
 
 @csrf_protect
+@login_required
+@check_user_fields({'is_staff': True})
 def show_files(request):
     template = get_skin_template(request.user, 'files/files.html')
     page = request.GET.get('page',1)

@@ -1,5 +1,6 @@
 from django.conf.urls.defaults import *
 from django.utils.translation import ugettext_lazy as _
+from apps.core.shortcuts import direct_to_template
 
 urlpatterns = patterns('apps.core.views',
     #(r'^search/$', 'search'),
@@ -85,4 +86,7 @@ urlpatterns = patterns('apps.core.views',
         name='url_add_edit_css'),
     url('^ipaddress/$','get_ip_address',
         name='url_get_ip_address'),
+    url('^permission/denied/$', direct_to_template,
+        {'template': 'static/permission_denied.html'},
+        name='url_permission_denied'),
 )
