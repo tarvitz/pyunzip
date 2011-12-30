@@ -58,7 +58,7 @@
 				{% endcomment %}
 					<img src='{% url url_get_avatar r.show_player %}'><br>
 					{% if r.user %}
-						<a href='{% url url_user_rosters r.user.nickname %}'>{% get_nickname r.user %}</a>
+						<a href='{% url url_user_rosters r.user.get_username %}'>{% get_nickname r.user %}</a>
 					{% else %}
 						{% get_raw_nickname r.show_player %}
 					{% endif %}

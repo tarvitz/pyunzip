@@ -2,9 +2,9 @@
 {% get_warning for warn_user as warn %}
 {% if user.is_superuser or perms.wh.set_warnings %}
 	Предупреждения: <br><span class='warnings'>[
-	<a title='повышает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.nickname "increase" %}">+</a>|
-	<a title='понижает или снимает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.nickname "decrease" %}">−</a>|
-	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url alter_warning_form warn_user.nickname %}">?</a>
+	<a title='повышает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.get_username "increase" %}">+</a>|
+	<a title='понижает или снимает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.get_username "decrease" %}">−</a>|
+	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url alter_warning_form warn_user.get_username %}">?</a>
 	]</span>
 <br>
 {% endif %}

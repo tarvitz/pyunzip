@@ -22,7 +22,7 @@
 			<li><a href='/pm/{{ p.id }}'>{{ p.title }}</a>,
 			{% if outcome %} для {% get_nickname p.addressee %}
 			{%else %} от 
-				<a href="{% url apps.wh.views.profile_by_nick nickname=p.sender.nickname %}">{% get_nickname p.sender %}</a>
+				<a href="{% url apps.wh.views.profile_by_nick nickname=p.sender.get_username %}">{% get_nickname p.sender %}</a>
 			{% endif %} 
 			(<small>{{ p.sent }}</small>)&nbsp;<a href='/pm/{{ p.id }}/delete' id='button'>Удалить</a></li>
 			{% endif %}

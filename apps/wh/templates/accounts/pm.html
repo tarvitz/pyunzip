@@ -22,8 +22,8 @@
 	<div class='msg_text'>
 		<div class='msg_reply_author'>
 			{% if outcome %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.get_username %}'></a>{% else %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.get_username %}'></a>{% endif %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.get_username %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.get_username %}'></a>{% else %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.get_username %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.get_username %}'></a>{% endif %}
 		</div>
 		{{ pmsg.content|render_filter:pmsg.syntax|safe }}<br>
 
@@ -34,7 +34,7 @@
 <br clear='all'>
 <div class='msg_footer'>
 <a href="{% url apps.wh.views.delete_pm pm_id=pmsg.id approve='approve' %}">удалить</a>|
-<a href="{% url url_send_pm_by_nick pmsg.sender.nickname %}">ответить</a>
+<a href="{% url url_send_pm_by_nick pmsg.sender.get_username %}">ответить</a>
 </div>
 
 </div> <!-- message -->

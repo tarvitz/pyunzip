@@ -2,7 +2,7 @@
 <div class='quote_content'>
 	<div class='quote_headline'>
 		<div class='transparency' id='black'></div>
-		{% if quote_user.nickname %}<a href="{% url apps.wh.views.profile_by_nick nickname=quote_user.nickname %}">
+		{% if quote_user.nickname %}<a href="{% url apps.wh.views.profile_by_nick nickname=get_username %}">
 			{% get_nickname quote_user %} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
 		{% else %}
 			{{ quote_user }} писал(а): 

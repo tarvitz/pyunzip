@@ -10,7 +10,7 @@
             <a href="{% url apps.quotes.views.vote id=quote.id, how="down" %}" onclick="return vote({{ quote.id }}, 'down');">–</a>
         </span>
         добавлено {{ quote.date_pub|date:"Y-m-d H:i:s" }}
-		<a href="{% url apps.wh.views.profile_by_nick nickname=quote.moderator.nickname %}">{% get_nickname quote.moderator %}</a>
+		<a href="{% url apps.wh.views.profile_by_nick nickname=quote.moderator.get_username %}">{% get_nickname quote.moderator %}</a>
     </div>
 	<div class="quotebody">
      <div class="transparency"></div> {# haha! #}

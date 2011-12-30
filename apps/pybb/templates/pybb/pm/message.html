@@ -31,7 +31,7 @@
                             </a>
                         </div>{% endcomment %}
                         <div class='avatar'>
-                            <a href="{% url profile_by_nick post_user.nickname %}">
+                            <a href="{% url profile_by_nick post_user.get_username %}">
                             <img src="{% url url_get_avatar post_user.nickname %}" />
                             </a>
                         </div>

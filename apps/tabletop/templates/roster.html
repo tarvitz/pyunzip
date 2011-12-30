@@ -88,7 +88,7 @@
 	<div class='msg_footer'>
 		{% spaceless %}
 			{% ifnotequal roster.user roster.owner %}
-				[добавлено: <a href='{% url url_user_rosters roster.owner.nickname %}'{% get_nickname roster.owner %}</a>]
+				[добавлено: <a href='{% url url_user_rosters roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
 			{% endifnotequal %}
 			{% ifequal roster.owner user %}
 				[<a href='{% url url_delete_roster roster.id "approve" %}'>удалить</a>]

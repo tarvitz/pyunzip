@@ -15,7 +15,7 @@
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 
-			<a href='{% url profile_by_nick user.nickname %}'>{% get_nickname user %}</a>
+			<a href='{% url profile_by_nick user.get_username %}'>{% get_nickname user %}</a>
 		</div><!-- msg_headline -->
 		<div class='msg_content'>
 			<div class='msg_avatar'>
@@ -45,7 +45,7 @@
 			<div class='transparency_black'></div>
 			<div class='links'>	
 				<span class='first'><a href='{% url profile_by_nick user.nickname %}'>profile</a></span>
-				<span><a href='{% url url_send_pm_by_nick user.nickname  %}'>pm</a></span>
+				<span><a href='{% url url_send_pm_by_nick user.get_username %}'>pm</a></span>
 				<span>{{ user.army.side.name }}</span>
 				<span>{% if not user.settings.invisible %}{% get_online user %}{% else %}offline{% endif %}</span>
 				{% if not user.settings.hide_jid %} <span><a href='xmpp://{{ user.jid }}'>{{ user.jid }}</a></span>{% endif %}
