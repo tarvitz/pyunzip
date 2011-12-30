@@ -1,0 +1,4 @@
+READ carefully
+
+* before running python ./manage syncdb do not forget to comment south in INSTALLED_APPS, because it can break the process or startup functionallity.
+* first alter super user profile in /admin/ section, selecte skin and other data to prevent site from crushing (it would be fixed soon)
