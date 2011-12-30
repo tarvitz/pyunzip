@@ -89,4 +89,7 @@ urlpatterns = patterns('apps.core.views',
     url('^permission/denied/$', direct_to_template,
         {'template': 'static/permission_denied.html'},
         name='url_permission_denied'),
+    url('^currently/unavailable/$', direct_to_template,
+        {'template': 'static/currently_unavailable.html'},
+        name='url_currently_unavailable'),
 )

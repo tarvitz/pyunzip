@@ -8,6 +8,12 @@ ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
+def get_local(value, default):
+    import local
+    if hasattr(local, value):
+        return getattr(local, value)
+    return default
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -194,6 +200,8 @@ INSTALLED_APPS = (
 )
 #settings
 APP_VOTE_ENABLED=True
+PRODUCTION=get_local('PRODUCTION', True)
+DEVELOPMENT=get_local('DEVELOPMENT', False)
 #import settings from another app
 from apps.vote.settings import *
 from apps.wh.settings import *
