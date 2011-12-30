@@ -385,21 +385,29 @@ CommentsAdmin.fieldsets += (
 # here is a bug?
 class UserExtension(object):
     def get_absolute_url(self):
-        return reverse('profile_by_nick',args=(self.nickname,))
+        return reverse('profile_by_nick', args=(
+            self.nickname or self.username,))
 
     def __repr__(self):
-        return '<User: %s>' % (self.nickname)
+        return '<User: %s>' % (self.nickname or self.username)
    
     def __unicode__(self):
-        return self.nickname
+        return self.nickname or self.username
+
+    @property
+    def get_username(self):
+        return self.nickname or self.username
 
     def _get_nickname(self):
         if self.is_superuser:
-            return "<span style='color: #E37BC0;'>%s</span>" % (self.nickname)
+            return "<span style='color: #E37BC0;'>%s</span>" % \
+                (self.nickname or self.username)
         if self.is_staff:
-            return "<span style='color: gold;'>%s</span>" % (self.nickname)
+            return "<span style='color: gold;'>%s</span>" % \
+                (self.nickname or self.username)
         #make here color implementation
-        return self.nickname
+        return self.nickname or self.username
+
     get_nickname = property(_get_nickname)
     def _get_ranks_groups(self):
         tuple = list()
@@ -407,6 +415,7 @@ class UserExtension(object):
             if rank.type.group:
                 tuple.append(rank.type.group)
         return tuple
+
     get_ranks_groups = property(_get_ranks_groups)
     def _get_fraction(self):
         return self.army.side.fraction.title

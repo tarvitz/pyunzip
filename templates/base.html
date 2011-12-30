@@ -85,7 +85,7 @@
 		<div class="transparency"><!-- wise transparency --></div>
 		<span class='reflects_up'><!-- wise reflects --></span>
 		<span class='reflects_left'></span>
-		<img alt="avatar" title="avatar" src='{% url apps.wh.views.get_user_avatar nickname=user.nickname %}'>
+		<img alt="avatar" title="avatar" src='{% url apps.wh.views.get_user_avatar nickname=user.get_username %}'>
 		<ul>
 			<li><a rel='twipsy' href='{% url apps.wh.views.pm_view %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
 			<li><a rel='twipsy' href="{% url apps.wh.views.profile %}" title='Просмотр своего профиля'>Профиль</a></li>

@@ -53,7 +53,7 @@
 			{% endif %}
 			</span>
 			{% endspaceless %}
-			<img src="{% url apps.wh.views.get_user_avatar nickname=c.user.nickname %}">
+			<img src="{% url apps.wh.views.get_user_avatar nickname=c.user.get_username %}">
 			<center>
 			{% with c.user as karma_user %}
 				{% include "karma_power.html" %}

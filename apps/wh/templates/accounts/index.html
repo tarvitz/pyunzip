@@ -57,7 +57,7 @@
 	</div> <!-- message -->
 		{% comment %}
 		<a class='profile' href='{% url apps.wh.views.profile_by_nick nickname=user.nickname %}'>
-		<img class='account_user_img' src='{% url apps.wh.views.get_user_avatar nickname=user.nickname %}'>
+		<img class='account_user_img' src='{% url apps.wh.views.get_user_avatar nickname=user.get_nickname %}'>
 		<img class='account_side_icon' src='{% url apps.wh.views.get_user_side_icon nickname=user.nickname %}'>
 		{% get_nickname  user %}</a>
 		{% endcomment %}

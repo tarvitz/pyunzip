@@ -11,7 +11,7 @@
 {% endif %}{% endspaceless %}
 
 <a href="{% url profile_by_nick usr.nickname %}">
-    <img class='avatar' src="{% url apps.wh.views.get_user_avatar nickname=usr.nickname %}">
+    <img class='avatar' src="{% url apps.wh.views.get_user_avatar nickname=usr.get_username %}">
 </a>
 <center>
 	{% with usr as warn_user %}

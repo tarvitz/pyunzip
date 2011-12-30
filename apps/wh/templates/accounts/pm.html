@@ -22,8 +22,8 @@
 	<div class='msg_text'>
 		<div class='msg_reply_author'>
 			{% if outcome %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.nickname %}'></a>{% else %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.nickname %}'></a>{% endif %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.get_username %}'></a>{% else %}
+			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.nickname %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.get_username %}'></a>{% endif %}
 		</div>
 		{{ pmsg.content|render_filter:pmsg.syntax|safe }}<br>
 

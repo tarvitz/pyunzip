@@ -13,7 +13,7 @@
 		<div class='reflects_up'></div> 
 		<div class='reflects_down'></div>
 		<div class='reflects_left'></div>
-		{% if quote_user.nickname %}<img class='quote_avatar' src='{% url apps.wh.views.get_user_avatar nickname=quote_user.nickname %}'> {% endif %}
+		{% if quote_user.nickname %}<img class='quote_avatar' src='{% url apps.wh.views.get_user_avatar nickname=quote_user.get_username %}'> {% endif %}
 		{{ quote_text|safe }}
 	</div>
 </div>
