@@ -1,0 +1,15 @@
+*.py[co]
+/media/avatars
+/media/images/galleries
+/settings/*_local.py
+/celery*
+/*shell
+/wsgi_*handler.py
+/settings_dev
+/apps/farseer/settings.py
+*.sw[po]
+/error_log
+/media/files/
+/media/pybb/avatars/
+/reload
+/settings/local.py
