@@ -20,13 +20,13 @@ class SettingsManager(models.Manager):
         ###
         pickled = pickle.dumps(data_dict)
         return base64.encodestring(pickled)
-    
+
     def save(self,user,data):
         s = self.model(user,self.encode(data))
         if data:
             s.save()
-        return s   
-    
+        return s
+
 """
 class Css(models.Model):
     user = models.ForeignKey(User,primary_key=True)
@@ -43,7 +43,7 @@ class Announcement(models.Model):
     content_object = generic.GenericForeignKey(ct_field='content type',fk_field='object_pk')
     users = models.ManyToManyField(User,related_name='users',blank=True)
     notified_users = models.ManyToManyField(User,related_name='notified_users',blank=True)
-    actions = [common_delete_action, ] 
+    actions = [common_delete_action, ]
     #what else ?
     #subscribe the user to get notifications
     def subscribe(self,user):
@@ -55,7 +55,7 @@ class Announcement(models.Model):
             self.users.add(user)
             self.save()
         return self
-    
+
     #unsubscribe the user refuse of getting notifications
     def unsubscribe(self,user):
         self.users.remove(user)
@@ -76,7 +76,7 @@ class Announcement(models.Model):
             self.save()
         return self
 
-    #user commented one more time without subscription cancelation  
+    #user commented one more time without subscription cancelation
     #updating users field as being await for new notifications
     def update(self,user):
         #moving user from notified_users list to users to reach the notification
@@ -89,7 +89,7 @@ class Announcement(models.Model):
             self.users.add(user)
             self.save()
         return self
-    
+
     def get_real_object(self):
         """ gets real object for its announcemet"""
         real_object = self.content_type.model_class().objects.get(pk=str(self.object_pk))
@@ -102,7 +102,7 @@ class Announcement(models.Model):
         if hasattr(real_object,'get_content'):
             content = real_object.get_content()
         return content or real_object
-    
+
     def get_title(self):
         real_object = self.get_real_object()
         title = ''
@@ -114,7 +114,7 @@ class Announcement(models.Model):
                 if hasattr(real_object,m):
                     title = getattr(real_object,m)
                     break
-                
+
         return title or real_object #if it has nor title in ['name','title','object_name'] nor get_title ;)
 
     def get_model(self):
@@ -128,21 +128,22 @@ class Announcement(models.Model):
     def unsubscribe_link(self):
         """ return link for the announcement unsubscription"""
         return reverse('apps.core.views.delete_subscription',kwargs={'id':self.id})
-    
+
+#obsolete
 class Settings(models.Model):
     user = models.ForeignKey(User, primary_key=True, related_name='user_settings_set')
     data = models.TextField(_('Decoded Data'),blank=True,null=True)
     #objects = SettingsManager()
-    
+
     def encode(self,data_dict):
         pickled = pickle.dumps(data_dict)
         return base64.encodestring(pickled)
-    
+
     #implement store,delete,update and get API for decoded settings
     def store_data(self,data_dict,blank=False):
         if not self.data:
             self.data = self.encode(data_dict)
-        else:   
+        else:
             _buffer_ = self.get_decoded()
             #deletes all data stored before
             if blank:
@@ -151,7 +152,7 @@ class Settings(models.Model):
             else:
                 _buffer_.update(data_dict)
             self.data = self.encode(_buffer_)
-    
+
     def delete_key(self,key):
         _buffer_ = self.get_decoded()
         try:
@@ -169,7 +170,7 @@ class Settings(models.Model):
             except:
                 return {}
         return {}
-    
+
     settings = property(get_decoded,store_data)
 
     class Meta:

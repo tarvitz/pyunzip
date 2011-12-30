@@ -74,7 +74,8 @@ MIDDLEWARE_CLASSES = (
     'apps.core.middleware.UserActivityMiddleware',
     'apps.core.middleware.GuestActivityMiddleware',
     'apps.core.middleware.TestMiddleware',
-    'apps.core.middleware.UserSettingsMiddleware',
+    #obsolete
+    #'apps.core.middleware.UserSettingsMiddleware',
     'apps.wh.middleware.WarningsMiddleware',
 )
 
