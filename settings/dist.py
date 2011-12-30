@@ -200,5 +200,5 @@ from apps.wh.settings import *
 from search_settings import *
 from apps.karma.settings import *
 
-import apps.djcelery
-apps.djcelery.setup_loader()
+import djcelery
+djcelery.setup_loader()
