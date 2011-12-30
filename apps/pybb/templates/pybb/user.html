@@ -11,7 +11,7 @@
     </div>
     {% endif %}{% endcomment %}
     <div class="avatar" style="padding-right: 40px;">
-        <img src="{% url url_get_avatar profile.nickname %}" />
+        <img src="{% url url_get_avatar profile.get_username %}" />
     </div>
     <div class="info">
         <div class="label">{% trans "Statistics" %}</div>

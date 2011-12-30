@@ -49,10 +49,10 @@
 				{% spaceless %}
 				{% comment %}
 					{% if r.user.nickname %}
-						<img src='{% url url_get_avatar r.user.nickname %}'><br>
+						<img src='{% url url_get_avatar user.get_username %}'><br>
 						{% get_nickname r.user %}
 					{% else %}
-						<img src='{% url url_get_avatar r.owner.nickname %}'><br>
+						<img src='{% url url_get_avatar owner.get_username %}'><br>
 						{% get_nickname r.owner %}
 					{% endif %}
 				{% endcomment %}
