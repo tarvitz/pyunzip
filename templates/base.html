@@ -81,7 +81,7 @@
 {% block control_content %}
 	{% if user.is_authenticated %}
 	<div class='none' style="margin-top: 5px;"><span class='label' class='logo_user_profile'>Профиль</span></div>
-	<div class="user_profile"><center><b>{% get_nickname user %}</b></center>
+	<div class="user_profile"><center><b>{% if user.nickname %}{% get_nickname user %}{% else %}Soulless inhabit{% endif %}</b></center>
 		<div class="transparency"><!-- wise transparency --></div>
 		<span class='reflects_up'><!-- wise reflects --></span>
 		<span class='reflects_left'></span>
