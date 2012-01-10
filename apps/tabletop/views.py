@@ -22,7 +22,8 @@ from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerErro
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.db.models import Q
-from apps.core.decorators import benchmarking,has_permission
+from apps.core.decorators import benchmarking, has_permission, \
+    lock_with_dev as unlock_for
 from apps.core.forms import ApproveActionForm, action_formset_ng
 from apps.core import benchmark
 from apps.wh.models import Side
@@ -34,6 +35,7 @@ from anyjson import serialize as serialize_json
 
 from datetime import datetime
 
+@unlock_for({'DEVELOPMENT': True})
 @benchmarking
 @csrf_protect
 def index(request):
@@ -62,6 +64,7 @@ def index(request):
         processors=[benchmark])
 
 @benchmarking
+@unlock_for({'DEVELOPMENT': True})
 def show_battle_report(request,id):
     template = get_skin_template(request.user,'battle_report.html')
     battle_report = get_object_or_404(BattleReport,id=id)
@@ -503,6 +506,7 @@ def add_old_battle_report(request,id=None,action=''):
     return direct_to_template(request,template,{'form':form})
 
 #@todo: may be should be MORE CLEAN?
+@unlock_for({'DEVELOPMENT': True})
 @login_required
 @can_act
 def add_battle_report(request, action=None, id=None):
@@ -574,6 +578,7 @@ def xhr_get_codex_revisions(request, id=None):
         response.write('[]')
     return response
 
+@unlock_for({'DEVELOPMENT': True})
 @login_required
 @can_act
 def delete_battle_report(request,id,approve=''):

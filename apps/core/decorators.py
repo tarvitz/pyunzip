@@ -1,6 +1,7 @@
 # coding: utf-8
 #
 from django.http import HttpResponseRedirect, HttpResponse
+from django.conf import settings
 from apps.core.models import Announcement
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_settings
@@ -168,5 +169,18 @@ def check_user_fields(parse_dict):
                 if not parse_dict[key] != getattr(request.user, key):
                     return HttpResponseRedirect(reverse('url_permission_denied'))
                 return func(request, *args, **kwargs)
+        return wrapper
+    return decorator
+
+def lock_with_dev(parse_dict):
+    """ locks view if giving settings aint equal given ones"""
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            for key in parse_dict.keys():
+                have_key = hasattr(settings, key)
+                if not have_key or parse_dict[key] != getattr(settings, key):
+                    return HttpResponseRedirect(
+                        reverse('url_currently_unavailable'))
+            return func(request, *args, **kwargs)
         return wrapper
     return decorator

@@ -81,7 +81,7 @@
 {% block control_content %}
 	{% if user.is_authenticated %}
 	<div class='none' style="margin-top: 5px;"><span class='label' class='logo_user_profile'>Профиль</span></div>
-	<div class="user_profile"><center><b>{% get_nickname user %}</b></center>
+	<div class="user_profile"><center><b>{% if user.nickname %}{% get_nickname user %}{% else %}Soulless inhabit{% endif %}</b></center>
 		<div class="transparency"><!-- wise transparency --></div>
 		<span class='reflects_up'><!-- wise reflects --></span>
 		<span class='reflects_left'></span>
@@ -159,8 +159,10 @@
                         <li class='lvl2'><a href='{% url url_upload_replay %}' title='добавить реп'>добавить</a></li>
 			{% endcomment %}
                         <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url url_all_rosters %}">Ростеры</a></li>
+            {% if global_settings.DEVELOPMENT %}
 			<li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url battle_report_index %}'>Батл репорты</a></li>
 			<li class='lvl2'><a href='{% url url_add_battle_report %}'>добавить</a></li>
+            {% endif %}
 			<li><a rel='twipsy' href='{% url apps.files.views.show_all_images %}' title='Простенькая галерея ;)'>Галерея</a></li>
 			<li class='lvl2'><a href="{% url url_show_best "image" %}">лучшие</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url url_upload_image %}' title='загрузить изображение в галерею'>добавить</a></li>

@@ -26,7 +26,7 @@ class SetRemoteAddrFromForwardedFor(object):
 class TestMiddleware(object):
     def process_request(self, request):
         request.META['test'] = 'thiz iz da \'est'
-    #FIXME: make search replacements!!! 
+    #FIXME: make search replacements!!!
     """
     def process_response(self,request,response):
         if hasattr(request,'session'):
@@ -82,6 +82,7 @@ class GuestActivityMiddleware(object):
                 ip_account.save()
         return None
 
+#obsolete
 class UserSettingsMiddleware(object):
     def process_request(self,request):
         from apps.core.models import Settings
@@ -107,7 +108,7 @@ class ChecksMiddleware(object):
             html = template.render(Context())
             return HttpResponse(html)
         if user.is_authenticated() and not user.is_active:
-               auth.logout(request) 
+               auth.logout(request)
         if user.is_authenticated():
             """
             if not user.skin:
@@ -124,7 +125,7 @@ class ChecksMiddleware(object):
 class BenchmarkingMiddleware(object):
     def process_response(self,request,response):
         if hasattr(requset,'timeit'):
-           pass 
+           pass
         return response
 
 class DevMiddleware(object):

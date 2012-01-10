@@ -1,0 +1,13 @@
+{% extends base_template %}{% load i18n %}
+{% block text_content %}
+    <center>
+        <h3>{% trans "Currently unavailable" %}</h3>
+    </center>
+    <div class='description'>
+    {% blocktrans %}
+        This feature is locked for now and available for developers.
+        Someday it would be opened.
+        Thank you for your patience.
+    {% endblocktrans %}
+    </div>
+{% endblock %}
