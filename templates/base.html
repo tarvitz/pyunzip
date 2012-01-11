@@ -1,9 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 	"http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>{% load newsfilters %}
 {% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf8">
+<!-- wot -->
+<meta name="wot-verification" content="581220ae922fc400475a"/>
 <title>{% block title %}Warhammer 40,000{% endblock%}</title>
 {% block css %}
 <link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"main.css" }}" type="text/css" media="screen">
@@ -44,7 +46,7 @@
 <div id="tabs">
 	<ul>
                 {% if user.is_superuser %}
-                <li><a href="{% url url_superlogin %}">&nbsp;S&nbsp;</a></li> 
+                <li><a href="{% url url_superlogin %}">&nbsp;S&nbsp;</a></li>
                 {% endif %}
                 {% if user.is_staff %}
 		<li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
@@ -239,7 +241,7 @@
 				{% endfor %}
 			  ]</span>
 			  <br>
-			  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by 
+			  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by
 			  <a href="{% url apps.wh.views.profile_by_nick nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
 			{% endspaceless %}
 			</li>
@@ -342,11 +344,11 @@
     miniquote = $('#horizontal_line > div > span');
     $(document).ready(function(){
         setInterval('update_miniquote()', 60*1000);
-    });  
-    
+    });
+
     function update_miniquote(){
         $.getJSON('{% url xhr_get_miniquote %}', function(data){
-            
+
             if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
             miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
                 miniquote.text(data[0].fields['content']);
