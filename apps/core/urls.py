@@ -92,4 +92,7 @@ urlpatterns = patterns('apps.core.views',
     url('^currently/unavailable/$', direct_to_template,
         {'template': 'static/currently_unavailable.html'},
         name='url_currently_unavailable'),
+    url('^mywot581220ae922fc400475a.html$', direct_to_template,
+        {'template': 'static/mywot581220ae922fc400475a.html'},
+        name='wot_verification'),
 )
