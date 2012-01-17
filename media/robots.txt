@@ -1,0 +1,31 @@
+User-agent: Yandex
+Disallow: /admin/
+Disallow: /media/
+Disallow: /xhr/
+Disallow: /google*.html
+Disallow: /yandex*.html
+Disallow: /*.gif$
+Disallow: /*.png$
+Disallow: /*.jpg$
+Disallow: /*.jpeg$
+Disallow: /*?
+Host: wh40k.net 
+
+User-agent: Googlebot
+Disallow: /admin/
+Disallow: /media/
+Disallow: /xhr/
+Disallow: /google*.html
+Disallow: /yandex*.html
+Disallow: /*.gif$
+Disallow: /*.png$
+Disallow: /*.jpg$
+Disallow: /*.jpeg$
+Disallow: /*?
+
+User-agent: *
+Crawl-delay: 30
+Disallow: /admin/
+Disallow: /media/
+Disallow: /xhr/
+

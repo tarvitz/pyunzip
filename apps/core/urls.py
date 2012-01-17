@@ -95,4 +95,6 @@ urlpatterns = patterns('apps.core.views',
     url('^mywot581220ae922fc400475a.html$', direct_to_template,
         {'template': 'static/mywot581220ae922fc400475a.html'},
         name='wot_verification'),
+    url('^robots.txt$', 'robots',
+       name='url_robots'),
 )

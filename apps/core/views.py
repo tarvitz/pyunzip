@@ -736,3 +736,11 @@ def uploader_progress(request):
     else:
         #print "Server Error: You must provide X-Progress-ID header or query param."
         return HttpResponseServerError(_t('Server Error: You must provide X-Progress-ID header or query param.'))
+
+def robots(request):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/plain'
+    content = open(os.path.join(settings.MEDIA_ROOT, 'robots.txt'), 'r').read()
+    response.write(content)
+    return response
+
