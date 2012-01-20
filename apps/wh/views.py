@@ -470,6 +470,8 @@ def onsite_register(request):
             newuser.skin = skin
             newuser.army = army
             #saving before applying some ManyToMany data
+            from apps.core.settings import SETTINGS as ONSITE_SETTINGS
+            newuser.settings = ONSITE_SETTINGS
             newuser.save()
             #rank
             try:
