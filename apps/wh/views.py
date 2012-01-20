@@ -833,7 +833,7 @@ def get_skins_raw(request,id):
         response.write('[failed]')
     return response
 
-def get_user_avatar(request,nickname=''):
+def get_user_avatar(request, nickname=''):
     response = HttpResponse()
     response['Content-Type'] = 'image/png'
     try:

@@ -111,7 +111,7 @@ def send_notification(instance,**kwargs):
             pass
         #print "do notification for %r" % instance
         
-def get_object_or_none(Object,**kwargs):
+def get_object_or_none(Object, **kwargs):
     try:
         obj = Object.objects.get(**kwargs)
         return obj
