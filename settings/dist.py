@@ -38,7 +38,7 @@ USE_I18N = True
 
 from settings_path import rel_path
 
-MEDIA_ROOT=rel_path('media')
+MEDIA_ROOT=get_local('MEDIA_ROOT', rel_path('media'))
 STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
