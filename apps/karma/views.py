@@ -55,9 +55,11 @@ def alter_karma(request,choice=None,nickname=None):
             #set default value to alter
             if choice in 'up': value = 1
             else: value = -1
-
+            k = Karma(user=user, voter=voter,
+                comment=comment, date=now, value=value, url=url)
+            k.save()
+            """
             fraction_ident = check_fraction(user,voter)
-                
             if fraction_ident:
                 k = Karma(user=user,voter=voter,comment=comment,date=now,value=value,url=url)
                 k.save()
@@ -65,7 +67,7 @@ def alter_karma(request,choice=None,nickname=None):
             else:
                 if randint(1,100)>=75: #75
                     #20% chance to alter karma with overside value
-                    if randint(1,100)>=80:  
+                    if randint(1,100)>=80:
                         comment = comment + " [warp's instability]"
                         k = Karma(user=user,voter=voter,comment=comment,date=now,value=value*-1,url=url)
                     else:
@@ -80,6 +82,7 @@ def alter_karma(request,choice=None,nickname=None):
                     k.save()
                     return direct_to_template(request,
                             alter_status_template,{'alter_status':False})
+            """
             return HttpResponseRedirect(referer)
         else:
             return direct_to_template(request,template,{'form':form})
@@ -115,8 +118,8 @@ def show_karma(request,user=None,type='',group=False):
         if not show_self_null:
             karmas = karmas.exclude(value=0)
     if group:
-        pass    
-    _pages_ = get_settings(request.user,'karmas_on_page',50) 
+        pass
+    _pages_ = get_settings(request.user,'karmas_on_page',50)
     #paginator = Paginator(karmas,_pages_)
     #try:
     page = request.GET.get('page',1)
@@ -143,7 +146,7 @@ def show_karmastatus_description(request,id=None,codename=None):
             stat(img)
             img = "images/karma/status/%s.jpg" % (status.codename)
         except OSError:
-            img = "images/karma/status/_none_" 
+            img = "images/karma/status/_none_"
     except:
             return HttpResponseRedirect('/')
     return direct_to_template(request,template,

@@ -71,9 +71,9 @@ class Roster(models.Model):
     actions = [common_delete_action, alter_codex_action]
 
     def show_player(self):
-       if hasattr(self.user,'nickname'): return self.user.nickname
+       if hasattr(self.user,'nickname'): return self.user.get_username
        if self.player: return self.player
-       if self.owner: return self.owner.nickname
+       if self.owner: return self.owner.get_username
     show_player.short_description = _('Player')
 
     def get_title(self):
