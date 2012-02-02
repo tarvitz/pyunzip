@@ -360,5 +360,10 @@
     $('a[rel=twipsy]').twipsy({ live: true, placement: 'below', delayIn: 1000 });
 </script>
 {% endblock %} {# endjs #}
+{% block sidejs %}
+{% if global_settings.YANDEX_METRICA_ENABLED %}
+<!-- Yandex.Metrika counter --><div style="display:none;"><script type="text/javascript">(function(w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter12262753 = new Ya.Metrika({id:12262753, enableAll: true, webvisor:true}); } catch(e) { } }); })(window, "yandex_metrika_callbacks");</script></div><script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script><noscript><div><img src="//mc.yandex.ru/watch/12262753" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+{% endif %}
+{% endblock %}
 </body>
 </html>

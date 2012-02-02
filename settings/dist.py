@@ -203,6 +203,7 @@ INSTALLED_APPS = (
 APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
+YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
 #import settings from another app
 from apps.vote.settings import *
 from apps.wh.settings import *
