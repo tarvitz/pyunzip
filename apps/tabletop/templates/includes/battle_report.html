@@ -5,9 +5,6 @@
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 			<div class='links'>	
-	            {% if perms.tabletop.change_battlereport or perms.tabletop.delete_battlereport %}
-                    <input class='left' type='checkbox' name='items' value='{{ br.id }}'>
-                {% endif %}
 				{% ifequal user br.owner %}
 					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>[x]</a></span>
 					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
@@ -84,5 +81,5 @@
 		<br clear='all'>
 		</div> <!-- msg_footer -->
 	</div> <!-- message -->
-        <br clear='all'>
+    <br clear='all'>
 </center>
