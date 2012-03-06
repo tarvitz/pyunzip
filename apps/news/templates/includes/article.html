@@ -1,7 +1,7 @@
 <div id='news'> {% load newsfilters %} {% load comments %}
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url apps.news.views.news category=n.category|lower %}">
-		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
+		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url apps.wh.views.get_user_avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
 		{% if perms.news.edit_news or user.is_superuser %}
                         <span id='edit_button' class='first'><a id='button' href="{% url url_edit_article n.id %}">Править</a></span>

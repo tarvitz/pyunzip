@@ -198,8 +198,8 @@
 		<ul>
 		{% for article in briefing_news %}
 			<li>
-			<a href="{% url apps.news.views.news category=article.category|lower %}"><img alt='{{ article.category.name }}' title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'></a>
-			<a class='notice' title='{{ article.content|render_filter:article.syntax|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
+			{#<a href="{% url apps.news.views.news category=article.category|lower %}"><img alt='{{ article.category.name }}' title='{{ article.category.name }}' src='/media/images/news/categories/briefings/{{ article.category.name|lower }}.png'></a> #}
+			<a class='notice' rel='twipsy' data-original-title='{{ article.content|render_filter:article.syntax|striptags|safe|newscut:"100" }}'  href='/news/article/{{ article.id }}'>{{ article.title }}</a></li>
 		{% endfor %}
 		</ul>
 	</div>
@@ -296,7 +296,7 @@
 						[{% get_nickname u %}]
 					{% endif %}
 					{% endcomment %}
-					<span class='nicknames'>[<a rel='twipsy' href="{% url apps.wh.views.profile_by_nick nickname=u.nickname %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
+					<span class='nicknames'>[<a rel='twipsy' href="{% url profile_by_nick u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
 				{% endspaceless %}
 			{% endfor %}
 			{% if online_users %}
