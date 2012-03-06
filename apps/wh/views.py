@@ -13,7 +13,7 @@ from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from apps.core.decorators import has_permission
+from apps.core.decorators import has_permission, lock_with_dev
 #from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core import serializers
@@ -445,6 +445,7 @@ def delete_pm(request,pm_id=0, approve='force'):
     except:
         HttpResponseRedirect('/pm/doesnotexist')
 
+@lock_with_dev({'ALLOW_REGISTER': True})
 def onsite_register(request):
     template = get_skin_template(request.user,'accounts/register.html')
     if request.user.username:
