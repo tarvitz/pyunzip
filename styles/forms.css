@@ -65,8 +65,10 @@ form input[type='checkbox']{
     text-align: left;
     width: 80%;
 }
-.forms form li.required label:before{content: "(*)"; color: grey;}
-.forms form li.required label:hover:before{ color: red; }
+.forms form li.required label:before, .bootstrap li.required label:before{
+    content: "(*)"; color: grey; font-size: xx-small; padding-top: 3px; padding-right: 3px;
+ }
+.forms form li.required label:hover:before, .bootstrap li.required label:hover:before{ color: red; }
 .forms label[for$='-clear_id']{
     display: inline;
     font-size: 0.6em;
@@ -101,4 +103,27 @@ form input[type='checkbox']{
     margin: 0px;
     padding: 0px 10px;
     border-radius: 0px !important;
+}
+/*
+div.forms.center{
+    display: block;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+.bootstrap label{
+    float: left;
+    width: 140px;
+    text-align: right;
+    margin-right: 10px;
+    padding-top: 4px;
+}
+.bootstrap input, .bootstrap select, .bootstrap textarea{
+    margin-left: 15px;
+    margin-top: 10px;
+}
+.bootstrap .errorlist{
+    margin-left: 150px;
+    padding: 0px;
+    color: red;
 }

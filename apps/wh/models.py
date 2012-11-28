@@ -370,6 +370,8 @@ UserAdmin.fieldsets += (
         }
      ),
     )
+creation_fields = ('username', 'nickname', 'password1', 'password2')
+UserAdmin.add_fieldsets[0][1]['fields'] = creation_fields
 from django.contrib.comments.admin import CommentsAdmin
 CommentsAdmin.fieldsets += (
     (_('Overload'),

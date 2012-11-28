@@ -1,6 +1,6 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
 	"http://www.w3.org/TR/REC-html40/loose.dtd">
-<html>{% load newsfilters %}
+<html>{% load newsfilters i18n %}
 {% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf8">
@@ -343,18 +343,21 @@
 <script language='javascript' type='text/javascript'>
     miniquote = $('#horizontal_line > div > span');
     $(document).ready(function(){
-        setInterval('update_miniquote()', 60*1000);
+        setInterval(update_miniquote, 60*1000);
+        $('li.required label').attr({'data-original-title': "{% trans 'Required field' %}"});
+        $('li.required label').twipsy({live: true, placement: 'right', delayIn: 500});
     });
 
     function update_miniquote(){
         $.getJSON('{% url xhr_get_miniquote %}', function(data){
-
-            if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
-            miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
-                miniquote.text(data[0].fields['content']);
-                miniquote.fadeIn(isFireFox ?1000 :1500);
-                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
-            });
+            if (data){
+                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
+                miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
+                    miniquote.text(data[0].fields['content']);
+                    miniquote.fadeIn(isFireFox ?1000 :1500);
+                    if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
+                });
+            }//if data
         });
     }
     $('a[rel=twipsy]').twipsy({ live: true, placement: 'below', delayIn: 1000 });

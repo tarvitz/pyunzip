@@ -345,7 +345,7 @@ def user_settings(request):
     #    user_settings = Settings.objects.get(user=request.user)
     #except Settings.DoesNotExist:
     #    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-    _values_ = request.user.settings
+    _values_ = request.user.settings or {}
     form = SettingsForm()
     for k in _values_.keys():
         if k in form.fields:
@@ -358,6 +358,8 @@ def user_settings(request):
             data_store = {}
             for k in FIELD_SETTINGS.keys():
                 data_store[k] = cleaned_data.get(k,FIELD_SETTINGS[k])
+            if not isinstance(request.user.settings, dict):
+                request.user.settings = {}
             request.user.settings.update(data_store)
             request.user.save()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))

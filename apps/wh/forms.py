@@ -282,7 +282,7 @@ class PMForm(RequestForm):
 
 class RegisterForm(forms.Form):
     username = forms.CharField()
-    nickname = forms.CharField(required=False)
+    nickname = forms.CharField(required=True)
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
     email = forms.EmailField()
