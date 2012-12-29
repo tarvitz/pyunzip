@@ -9,8 +9,10 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
     <link href="{{ MEDIA_URL }}pybb/css/style.css" type="text/css" rel="stylesheet">
+    {% comment %}
     <link rel="alternate" type="application/atom+xml" href="{% url django.contrib.syndication.views.feed "posts" %}" title="{% trans "Latest posts on forum" %}" />
     <link rel="alternate" type="application/atom+xml" href="{% url django.contrib.syndication.views.feed "topics" %}" title="{% trans "Latest topics on forum" %}" />
+    {% endcomment %}
     <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
     <script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/jquery.js"></script>
     <!--<script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/rounded_corners.inc.js"></script>-->

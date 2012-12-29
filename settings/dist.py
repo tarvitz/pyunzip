@@ -205,6 +205,7 @@ PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
 YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
 ENABLE_500_TEST=False
+SERVER_EMAIL='noreply@w40k.net'
 #import settings from another app
 # LOGGING
 
