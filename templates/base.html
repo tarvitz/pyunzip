@@ -142,8 +142,8 @@
          <a href='{% url apps.wh.views.onsite_register %}'>Регистрация</a></li>
 			<li class='lvl2'><a href='{% url apps.wh.views.password_recover %}'>востановление пароля</a></li>{% endif %}
 			<li><a rel='twipsy' href="{% url apps.news.views.news %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
-			<span class='feeds'><a href="{% url django.contrib.syndication.views.feed url='news_atom' %}">[atom</a>|
-				<a href="{% url django.contrib.syndication.views.feed url='news' %}">rss]</a></span>
+			<span class='feeds'><a href="{% url feed-news-atom %}">[atom</a>|
+				<a href="{% url feed-news %}">rss]</a></span>
 			</li>
 			<li class='lvl2'><a rel='twipsy' href='{% url apps.news.views.archived_news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
 			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url url_add_article %}'>Добавить</a></li>{% endif %}
