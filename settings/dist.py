@@ -206,6 +206,51 @@ DEVELOPMENT=get_local('DEVELOPMENT', False)
 YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
 ENABLE_500_TEST=False
 #import settings from another app
+# LOGGING
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s',
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'apps.sms': {
+            'handlers': ['console',],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'apps.repspot': {
+            'handlers': ['console', ],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'apps.bands': {
+            'handlers': ['console', ],
+            'level': 'INFO',
+            'propagate': True,
+        }
+    }
+}
+
 from apps.vote.settings import *
 from apps.wh.settings import *
 from search_settings import *
