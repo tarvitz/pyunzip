@@ -338,8 +338,8 @@ def get_all_perms(self):
 #monkey patching
 #User.has_perm = has_perm_overload
 #User.get_all_permissions = get_all_perms
-User.__unicode__ = lambda x: x.nickname #dirty cheat xD
-User.add_to_class('nickname', models.CharField(_('Nickname'), max_length=30, null=False, unique=True))
+User.__unicode__ = lambda x: x.nickname or x.username #dirty cheat xD
+User.add_to_class('nickname', models.CharField(_('Nickname'), max_length=30, null=False, unique=True, default=None))
 User.add_to_class('photo', models.ImageField(_('Photo'),upload_to=os.path.join(settings.MEDIA_ROOT+'photos/'),blank=True))
 User.add_to_class('avatar', models.ImageField(_('Avatar'),upload_to=os.path.join(settings.MEDIA_ROOT+'avatars/'),blank=True))
 User.add_to_class('plain_avatar',models.ImageField(_('Plain Avatar'),upload_to=os.path.join(settings.MEDIA_ROOT+'avatars/'),blank=True))

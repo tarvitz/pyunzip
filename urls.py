@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-from apps.core.feeds import feeds
+from apps.core.feeds import *
 from django.contrib.sites.models import Site
 
 urlpatterns = patterns('',
@@ -34,12 +34,14 @@ urlpatterns = patterns('',
     (r'^you/should/fulfil/your/destiny/$', direct_to_template,
         {'template': 'get_a_working_browser.html',}),
 
-    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
-        {'feed_dict': feeds}),
-    url('^feeds/?P<url>.*/$', 'django.contrib.syndication.views.feed',
-        {'feed_dict': feeds}, name='warmist_feed'),
+#    (r'^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
+#        {'feed_dict': feeds}),
+#    url('^feeds/?P<url>.*/$', 'django.contrib.syndication.views.feed',
+#        {'feed_dict': feeds}, name='warmist_feed'),
    # (r'^search/$', direct_to_template,
    #     {'template': 'search_iframe.html'}),
+    url(r'^feeds/news/$', NewsEntries(), name='feed-news'),
+    url(r'^feeds/news/atom/$', AtomNewsEntries(), name='feed-news-atom'),
     (r'^', include('apps.core.urls')),
     (r'^', include('apps.wh.urls')),
     (r'^', include('apps.files.urls')),

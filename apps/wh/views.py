@@ -793,9 +793,13 @@ def urls_parse(request):
         context_instance=RequestContext(request))
 
 def get_miniquote_raw(request):
-    mq = MiniQuote.objects.order_by('?')[0]
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
+    try:
+        mq = MiniQuote.objects.order_by('?')[0]
+    except IndexError:
+        response.write('false')
+        return response
     response.write(serializers.serialize("json",[mq]))
     
     return response

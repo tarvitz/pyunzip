@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 from apps.news import views
 
 urlpatterns = patterns('apps.news.views', 
-    (r'^$','news'),
+    url(r'^$','news', name='url_index'),
     (r'^news/(?P<approved>(unapproved|approved))/$', 'news'), #this is somekind of brainfuck!
     url(r'^news/$', views.news, name='url_news'),
     (r'^news/$', 'news'),

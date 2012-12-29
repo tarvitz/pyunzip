@@ -746,3 +746,8 @@ def robots(request):
     response.write(content)
     return response
 
+def raise_500(request):
+    # raising 500
+    if settings.ENABLE_500_TEST:
+        a = 10 / 0
+    return HttpResponseRedirect(request.GET.get('HTTP_REFERER', '/'))

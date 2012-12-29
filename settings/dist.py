@@ -5,7 +5,7 @@ import os,sys
 #djcelery.setup_loader()
 
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
 )
 
 def get_local(value, default):
@@ -204,6 +204,7 @@ APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
 YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
+ENABLE_500_TEST=False
 #import settings from another app
 from apps.vote.settings import *
 from apps.wh.settings import *

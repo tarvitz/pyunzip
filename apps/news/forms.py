@@ -7,6 +7,7 @@ from apps.core.forms import RequestForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 from apps.news.models import News
+from django.core.exceptions import ImproperlyConfigured
 import re
 
 class AddNewsForm(forms.Form):
