@@ -100,7 +100,7 @@ class UserSettingsMiddleware(object):
 class ChecksMiddleware(object):
     def process_request(self, request):
         #let ie burn in hell
-        user_agent = request.META['HTTP_USER_AGENT']
+        user_agent = request.META.get('HTTP_USER_AGENT', '')
         user = request.user
         if 'msie 6.0' in user_agent.title().lower()\
         or 'msie 7.0' in user_agent.title().lower():
