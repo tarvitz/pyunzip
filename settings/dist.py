@@ -48,12 +48,20 @@ ADMIN_MEDIA = rel_path('admin_media')
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
+STATIC_ROOT = rel_path('media')
+STATICFILES_DIRS = (
+    rel_path('media'),
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
+)
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -173,8 +181,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.admin',
-    'django.contrib.admindocs',
     'django.contrib.comments',
     'django.contrib.flatpages',
     #
@@ -184,7 +190,7 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    'apps.quotes',
+    #'apps.quotes', # conflicts with grappelli
     'apps.vote',
     'apps.tagging',
     'utils',
@@ -198,6 +204,10 @@ INSTALLED_APPS = (
     'apps.djangosphinx',
     'extwidgets',
     'south',
+    #
+    'grappelli',
+    'django.contrib.admin',
+    'django.contrib.admindocs',
 )
 #settings
 APP_VOTE_ENABLED=True
@@ -206,6 +216,7 @@ DEVELOPMENT=get_local('DEVELOPMENT', False)
 YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
 ENABLE_500_TEST=False
 SERVER_EMAIL='noreply@w40k.net'
+DEV_SERVER=True
 #import settings from another app
 # LOGGING
 
