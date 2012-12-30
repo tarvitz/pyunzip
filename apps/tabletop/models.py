@@ -484,6 +484,7 @@ class Wargear(models.Model):
     class Meta:
         verbose_name = _("Wargear")
         verbose_name_plural = _("Wargears")
+        ordering = ['-id', ]
 
 
 from apps.tabletop.signals import setup_signals
