@@ -226,6 +226,7 @@ YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
 ENABLE_500_TEST=False
 SERVER_EMAIL='noreply@w40k.net'
 DEV_SERVER=True
+GRAPPELLI_ADMIN_TITLE='w40k.net'
 #import settings from another app
 # LOGGING
 
