@@ -144,7 +144,7 @@ class UnitWargearContainerFormset(BaseInlineFormSet):
         links = Wargear.objects.filter(pk__in=links)
         model_unit_pk = self.data.get('model_unit', 0)
         model_unit = get_object_or_None(ModelUnit, pk=model_unit_pk)
-        require = model_unit.mwr_amount
+        require = model_unit.mwr_amount or 0
         requirements = model_unit.requirements
         limit = 0
         for form in self.forms:
