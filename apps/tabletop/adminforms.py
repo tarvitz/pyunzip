@@ -93,7 +93,7 @@ class WargearContainerForm(AddWargearContainerForm):
 class UnitWargearContainerFormset(BaseInlineFormSet):
     def clean(self):
         links = [i.instance.link for i in self.forms]
-        require = self.instance.model_unit.mwr_amount
+        require = self.instance.model_unit.mwr_amount or 0
         requirements = self.instance.model_unit.requirements
         limit = 0
         for form in self.forms:
