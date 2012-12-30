@@ -6,7 +6,9 @@ from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.forms.models import modelformset_factory, BaseInlineFormSet
 from django.utils.safestring import mark_safe
-from apps.tabletop.models import Wargear
+from apps.tabletop.models import Wargear, ModelUnit
+from apps.core.helpers import get_object_or_None
+from django.core.exceptions import ObjectDoesNotExist
 from functools import partial
 
 get = lambda x, y: getattr(x, y) if hasattr(x, y) else None
@@ -112,3 +114,16 @@ class UnitWargearContainerFormset(BaseInlineFormSet):
             errors = [msg, self._errors[0].get('link') or '']
             self._errors[0]['link'] = ErrorList(errors)
         super(UnitWargearContainerFormset, self).clean()
+
+
+class InlineMWRUnitForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InlineMWRUnitForm, self).__init__(*args, **kwargs)
+        model_unit = get_object_or_None(ModelUnit, pk=self.initial.get('model_unit', 0))
+        try:
+            if model_unit:
+                self.fields['wargear'].queryset = Wargear.objects.filter(
+                    model_unit = model_unit
+                )
+        except ObjectDoesNotExist:
+            pass
