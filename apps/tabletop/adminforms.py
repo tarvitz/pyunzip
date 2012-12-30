@@ -72,7 +72,7 @@ class AddWargearContainerForm(forms.ModelForm):
             src = ''
             links = link.blocks.all()
             if self.instance:
-                links = links.exclude(pk=self.instance.link.pk if hasattr(self.instane, 'link') else 0)
+                links = links.exclude(pk=self.instance.link.pk if hasattr(self.instance, 'link') else 0)
             nblocks = unit.wargear_containers.filter(link__in=links)
             if nblocks:
                 dst = link.title
