@@ -7,7 +7,9 @@ from apps.tabletop.models import (
 )
 from apps.tabletop.adminforms import (
     AddWargearContainerForm, WargearContainerForm,
-    UnitWargearContainerFormset
+    UnitContainerForm,
+    UnitWargearContainerFormset,
+    InlineMWRUnitForm
 )
 
 class InlineUnitContainer(admin.StackedInline):
@@ -17,6 +19,7 @@ class InlineUnitContainer(admin.StackedInline):
 
 class InlineMWRUnit(admin.StackedInline):
     model = MWRUnit
+    form = InlineMWRUnitForm
     fk_name = 'model_unit'
     extra = 0
 
@@ -111,6 +114,7 @@ class WargearContainerAdmin(admin.ModelAdmin):
 
 class UnitContainerAdmin(admin.ModelAdmin):
     inlines = [InlineWargearContainer, ]
+    form = UnitContainerForm
     list_display = ('__unicode__', 'amount', 'model_unit', 'pts')
     readonly_fields = ('pts', )
 
