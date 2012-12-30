@@ -56,11 +56,18 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 STATIC_ROOT = rel_path('media')
-STATICFILES_DIRS = (
-    rel_path('media'),
+
+#STATICFILES_DIRS = (
+#    rel_path('media'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+#)
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # List of callables that know how to import templates from various sources.
@@ -184,6 +191,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     'django.contrib.flatpages',
+    'django.contrib.staticfiles',
     #
     'apps.core',
     'apps.wh',

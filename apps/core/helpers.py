@@ -118,6 +118,7 @@ def get_object_or_none(Object, **kwargs):
     except:
         return None
     return None
+get_object_or_None = get_object_or_none
 
 def get_settings(user,settings,default=False):
     if hasattr(user, 'settings'):
