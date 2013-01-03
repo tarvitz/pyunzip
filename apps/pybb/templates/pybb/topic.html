@@ -46,7 +46,7 @@
     {% endif %}
 </div>
 
-{% if not topic.closed %}
+{% if not topic.closed and user.is_authenticated %}
 <form action="{% url pybb_add_post topic.id %}" method="post">
     <fieldset>
         <legend>{% trans "New reply" %}</legend>
