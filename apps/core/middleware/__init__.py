@@ -107,6 +107,11 @@ class ChecksMiddleware(object):
             template = get_template('get_a_working_browser.html')
             html = template.render(Context())
             return HttpResponse(html)
+        if 'ahrefsbot/4.0' in user_agent.title().lower():
+            response = HttpResponse()
+            response['Content-Type'] = 'application/json'
+            response.write('500')
+            return response
         if user.is_authenticated() and not user.is_active:
                auth.logout(request)
         if user.is_authenticated():
