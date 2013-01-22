@@ -29,7 +29,7 @@
             {% include "stars.html" %}
 
             <a href='{{ image.image.url }}' target='_blank'>
-            <img src='{{ image.thumbnail.url }}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
+            <img src='{% if image.thumbnail.url %}{{ image.thumbnail.url }}{% endif %}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
             </a>
             <br>
             {# {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %} #}
