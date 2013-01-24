@@ -28,4 +28,4 @@ Crawl-delay: 30
 Disallow: /admin/
 Disallow: /media/
 Disallow: /xhr/
-
+Disallow: /forum/*
