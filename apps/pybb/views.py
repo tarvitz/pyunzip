@@ -127,6 +127,7 @@ def show_topic_ctx(request, topic_id):
 show_topic = render_to('pybb/topic.html')(show_topic_ctx)
 
 
+@login_required
 def add_post_ctx(request, forum_id, topic_id):
     forum = None
     topic = None
@@ -180,6 +181,7 @@ def add_post_ctx(request, forum_id, topic_id):
             'topic': topic,
             'forum': forum,
             }
+
 add_post = render_to('pybb/add_post.html')(add_post_ctx)
 
 
