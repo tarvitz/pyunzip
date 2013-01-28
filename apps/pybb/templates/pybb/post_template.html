@@ -11,7 +11,7 @@
                     <div class="avatar">
                         <a href="{% url pybb_profile post.user %}">
                         {% comment %}<img src="{{ post.user.pybb_profile.avatar.url }}" />{% endcomment %}
-                        <img src="{% url url_get_avatar post.user.get_username %}"/>
+                        <img src="{% url wh:avatar post.user.get_username %}"/>
                         </a>
                     </div>
                     {# {% endif %} #}
