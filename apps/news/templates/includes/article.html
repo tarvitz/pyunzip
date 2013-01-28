@@ -1,6 +1,6 @@
 <div id='news'> {% load newsfilters %} {% load comments %}
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url news:articles category=n.category|lower %}">
+		<a href="{% url news:news category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url wh:avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
 		{% if perms.news.edit_news or user.is_superuser %}

@@ -11,22 +11,22 @@
 {% for n in news.object_list %}
  <div id='news'>
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url apps.news.views.news category=n.category|lower %}">
+		<a href="{% url news:news category=n.category|lower %}">
 		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
 		{% if perms.news.edit_news or user.is_superuser %}
-			<span id='edit_button'><a id='button' href="{% url apps.news.views.add_article id=n.id %}">Править</a></span>
+			<span id='edit_button'><a id='button' href="{% url news:article-add id=n.id %}">Править</a></span>
 			{% if not n.approved %}
-			<span id="edit_button"><a id='button' href="{% url apps.news.views.article_action id=n.id action='approve' %}">Утвердить</a></span>
+			<span id="edit_button"><a id='button' href="{% url news:article-action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}
-			<span id="edit_button"><a id='button' href='{% url apps.news.views.article_action id=n.id action='unapprove' %}'>Убрать</a></span>
+			<span id="edit_button"><a id='button' href='{% url news:article-action id=n.id action='unapprove' %}'>Убрать</a></span>
 			{% endif %}
 		{% endif %}
 		{% if not n.approved %}
 			<span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-				<a href="{% url apps.news.views.show_article number=n.id %}">{{ n.title }}</a>
+				<a href="{% url news:article number=n.id %}">{{ n.title }}</a>
 			</span>
 		{% else %}
-			<a href='{% url apps.news.views.show_article number=n.id %}'>{{ n.title }}</a>
+			<a href='{% url news:article number=n.id %}'>{{ n.title }}</a>
 		{% endif %}{% endspaceless %}
 	</div>
 	<hr>
@@ -37,7 +37,7 @@
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
- <a href='{% url apps.news.views.show_article number=n.id %}'>читать далее</a>
+ <a href='{% url news:article number=n.id %}'>читать далее</a>
  </div>
  <hr>
  <div id='footer'> (by {{ n.author }}), published {{ n.date }}</div>

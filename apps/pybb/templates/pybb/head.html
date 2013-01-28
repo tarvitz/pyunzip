@@ -20,11 +20,11 @@
             {% if user.is_superuser %}
             <li><a href="{{ "ADMIN_URL"|pybb_setting }}">{% trans "Admincp" %}</a></li>
             {% endif %}
-            <li><a href="{% url apps.wh.views.logout %}">{% trans "Log out" %}</a></li>
+            <li><a href="{% url wh:logout %}">{% trans "Log out" %}</a></li>
             <li>{% trans "Logged in as " %} <a href='{% url pybb_profile user.nickname %}'>{% get_nickname user %}</a></li>
             {% else %}
-            <li><a href="{% url registration_register %}">{% trans "Sign up" %}</a></li>
-            <li><a href="{% url auth_login %}">{% trans "Log in" %}</a></li>
+            <li><a href="{% url wh:register %}">{% trans "Sign up" %}</a></li>
+            <li><a href="{% url wh:login %}">{% trans "Log in" %}</a></li>
             {% endif %}
             {# <li><a href="{% url django.contrib.syndication.views.feed "posts" %}" /><img src="{{ MEDIA_URL }}/pybb/img/feed-icon-small.png" /></a></li> #}
         </ul>
