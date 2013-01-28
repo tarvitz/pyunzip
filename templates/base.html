@@ -242,7 +242,7 @@
 			  ]</span>
 			  <br>
 			  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by
-			  <a href="{% url apps.wh.views.profile_by_nick nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
+			  <a href="{% url wh:profile-by-nick nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
 			{% endspaceless %}
 			</li>
 		{% endfor %}
@@ -296,7 +296,7 @@
 						[{% get_nickname u %}]
 					{% endif %}
 					{% endcomment %}
-					<span class='nicknames'>[<a rel='twipsy' href="{% url profile_by_nick u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
+					<span class='nicknames'>[<a rel='twipsy' href="{% url wh:profile-by-nick u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
 				{% endspaceless %}
 			{% endfor %}
 			{% if online_users %}
