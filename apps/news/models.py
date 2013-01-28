@@ -87,7 +87,7 @@ class ArchivedNews(AbstractNews):
     #    n.save()
     #    self.delete()
     def get_absolute_url(self):
-        return reverse('apps.news.views.show_archived_article',kwargs={'id':self.id})
+        return reverse('news:article-archived',kwargs={'id':self.id})
     class Meta:
         permissions = (
             ('edit_archived_news','Can edit archived news'),
@@ -103,7 +103,7 @@ class News(AbstractNews):
     })
 
     def get_absolute_url(self):
-        return reverse('apps.news.views.show_article',kwargs={'number':self.id})
+        return reverse('news:article',kwargs={'number':self.id})
 
     def archive(self):
         a = ArchivedNews()
