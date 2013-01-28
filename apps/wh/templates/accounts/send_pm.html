@@ -42,9 +42,9 @@
 {% if user.settings.enable_autocomplete %}
 <script language='javascript'>
 $(document).ready(function(){
-    var url = "{% url url_x_get_users_list_null %}";
+    var url = "{% url wh:url_x_get_users_list_null %}"; {# todo: remaster #}
     //var url2 = '';
-    m_user_autocomplete("#id_addressee",url);
+    m_user_autocomplete("#id_addressee", url);
 }); //ready
 </script>
 {% endif %}

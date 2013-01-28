@@ -200,7 +200,7 @@ class Rank(models.Model):
     get_css_class = lambda self: self.type.css_class
     get_css_id = lambda self: self.type.css_id
     def get_absolute_url(self):
-        return reverse('url_show_rank', args=(self.id,))
+        return reverse('wh:rank', args=(self.id,))
 
 class AbstractActivity(models.Model):
     activity_date = models.DateTimeField(_('DateTime activity'),blank=False,null=True)
@@ -387,7 +387,7 @@ CommentsAdmin.fieldsets += (
 # here is a bug?
 class UserExtension(object):
     def get_absolute_url(self):
-        return reverse('profile_by_nick', args=(
+        return reverse('wh:profile-by-nick', args=(
             self.nickname or self.username,))
 
     def __repr__(self):

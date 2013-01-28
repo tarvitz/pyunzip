@@ -33,7 +33,7 @@
 	</div> <!-- msg_avatar -->
 	<div class='msg_text'>
 		<div id='profile_data'>
-			{% if usr.photo %}<b><i><a href='{% url url_user_photo usr.nickname %}'>Фото</a></b></i><br>{% endif %}
+			{% if usr.photo %}<b><i><a href='{% url wh:photo usr.nickname %}'>Фото</a></b></i><br>{% endif %}
 			<b>Имя</b> <span class='notice'>(никнейм)</span>: {% get_nickname usr %}<br>
 			{% spaceless %}
 			{% if usr.first_name or usr.last_name %}
@@ -47,8 +47,8 @@
 			{% if usr.jid and not usr.settings.hide_jid %}<b>jid</b>: {{ usr.jid }}<br>{% endif %}
 			{% if usr.email and not usr.settings.hide_email %}<b>email</b>: {{ usr.email }}<br> {% endif %}
 			<br>
-			<a href='{% url url_author_replays usr.get_username %}'>Реплеи автора</a>: {% get_author_replays_count for usr as rep_count %} {{ rep_count }}<br>
-			<a href='{% url url_user_rosters usr.get_username %}'>Ростеры автора</a><br>
+			<a href='{% url files:replays usr.get_username %}'>Реплеи автора</a>: {% get_author_replays_count for usr as rep_count %} {{ rep_count }}<br>
+			<a href='{% url tabletop:rosters usr.get_username %}'>Ростеры автора</a><br>
 			Количество коментариев: {{ usr.comments_count }}<br>
 			{% if usr.about %}<b>{% get_nickname usr %} о себе</b>: {{ usr.about }}<br>{% endif %}
 		</div> <!-- profile_data -->
@@ -56,8 +56,8 @@
 	</div> <!-- msg_content -->
 	<br clear='all'>
 	<div class='msg_footer' style='text-align: left'>
-		[<a class='act_link' href="{% url url_send_pm_by_nick usr.get_username %}" title='отправить лс'>pm</a>]
-                {% if user == usr %}[<a class='act_link' href='{% url auth_password_change %}' title='сменить пароль'>***</a>]{% endif %}
+		[<a class='act_link' href="{% url wh:pm-send-nick usr.get_username %}" title='отправить лс'>pm</a>]
+                {% if user == usr %}[<a class='act_link' href='{% url wh:password-change %}' title='сменить пароль'>***</a>]{% endif %}
 
                 {% if user.is_staff %}[{{ usr.username }}]{% endif %}
 

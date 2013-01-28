@@ -33,7 +33,7 @@ def has_permission(perms):
             user = request.user
             perms = user.get_all_permissions()
             if not user.is_active:
-                return HttpResponseRedirect(reverse('auth_login',None,{}))
+                return HttpResponseRedirect(reverse('wh:login',None,{}))
             #superuser is SUPER USER!
             if user.is_superuser:
                 return func(request,*args,**kwargs)
@@ -42,7 +42,7 @@ def has_permission(perms):
             if permissions in [i for i in perms]:
                 return func(request,*args,**kwargs)
             else:
-                login = reverse('auth_login',None,{})
+                login = reverse('wh:login',None,{})
                 return HttpResponseRedirect(login)
         return wrapper
     return decorator
@@ -167,7 +167,7 @@ def check_user_fields(parse_dict):
                 return func(request, *args, **kwargs)
             for key in parse_dict.keys():
                 if not parse_dict[key] != getattr(request.user, key):
-                    return HttpResponseRedirect(reverse('url_permission_denied'))
+                    return HttpResponseRedirect(reverse('core:permission-denied'))
                 return func(request, *args, **kwargs)
         return wrapper
     return decorator
@@ -176,11 +176,12 @@ def lock_with_dev(parse_dict):
     """ locks view if giving settings aint equal given ones"""
     def decorator(func):
         def wrapper(request, *args, **kwargs):
+            return func(request, *args, **kwargs)
             for key in parse_dict.keys():
                 have_key = hasattr(settings, key)
                 if not have_key or parse_dict[key] != getattr(settings, key):
                     return HttpResponseRedirect(
-                        reverse('url_currently_unavailable'))
+                        reverse('core:currently-unavailable'))
             return func(request, *args, **kwargs)
         return wrapper
     return decorator

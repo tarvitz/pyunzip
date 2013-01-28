@@ -2,38 +2,37 @@ from django.conf.urls.defaults import *
 from apps.news import views
 
 urlpatterns = patterns('apps.news.views', 
-    url(r'^$','news', name='url_index'),
-    (r'^news/(?P<approved>(unapproved|approved))/$', 'news'), #this is somekind of brainfuck!
-    url(r'^news/$', views.news, name='url_news'),
-    (r'^news/$', 'news'),
-    (r'^news/archived/$','archived_news'),
-    (r'^archived/article/(?P<id>\d+)/$','show_archived_article'),
-    (r'^news/(?P<category>[\w\s]+)/$', 'news'),
+    url(r'^$','news', name='index'),
+    url(r'^news/(?P<approved>(unapproved|approved))/$', 'news', name='news'), #this is somekind of brainfuck!
+    url(r'^news/$', views.news, name='news'),
+    #url(r'^news/$', 'news', name='news'),
+    url(r'^news/archived/$','archived_news', name='archived-news'),
+    url(r'^archived/article/(?P<id>\d+)/$','show_archived_article'),
+    url(r'^news/(?P<category>[\w\s]+)/$', 'news', name='articles'),
     #(r'^news/(?P<page>)/$', 'news' ),
     url(r'^news/article/(?P<number>\d+)/$', 'show_article', {'object_model':'news.news'},
-        name='url_show_article'),
-    (r'^article/(?P<number>\d+)/$', 'show_article', {'object_model':'news.news'}),
+        name='article'),
+    url(r'^article/(?P<number>\d+)/$', 'show_article', {'object_model':'news.news'}),
     #(r'^article/add/$', 'add_article'),
     url(r'^article/add/$', 'action_article',
-        name='url_add_article'),
+        name='article-add'),
+    #url('^meatings/$', 'view_meatings',
+    #    name='view_meatings'),
+    #url('^meatings/(?P<id>\d+)/$', 'view_meating',
+    #    name='view_meatings'),
+    #url('^meatings/add/$', 'add_meating',
+    #    name='add_meating'),
     url(r'^article/edit/(?P<id>\d+)/$', 'action_article',
         {'action': 'edit'},
-        name='url_edit_article'),
-    (r'^article/edit/(?P<id>\d+)/$','add_article', {'edit_flag':'True'}),
-    (r'^article/(?P<id>\d+)/(?P<action>(approve|unapprove|delete))/$', 'article_action'),
+        name='article-edit'),
+    url(r'^article/edit/(?P<id>\d+)/$','add_article', {'edit_flag':'True'},
+        name='article-edit'),
+    url(r'^article/(?P<id>\d+)/(?P<action>(approve|unapprove|delete))/$', 'article_action',
+        name='article-action'),
     url(r'^article/(?P<id>\d+)/delete/$', 'article_action', {'action': 'delete'},
-        name='url_article_delete'),
+        name='article-delete'),
     #moved to apps.core.urls and apps.core.views
     #url('^comment/edit/(?P<id>\d+)/$', 'edit_comment',
-    #    name='url_edit_comment'),
-    url('^comment/(?P<id>\d+)/(?P<flag>(delete|restore))/$', 'del_restore_comment',
-        name='url_del_restore_comment'), #do delete,restore
-    #here is a half-a-fake function, that will be completed via core.views.approve_action, see core.urls :)
-    url('^comment/(?P<id>\d+)/purge/(?P<approve>(approve|force))/$','purge_comment',
-        name='url_purge_comment'),
-    #ajax integration
-    (r'^comment/(?P<id>\d+)/update/$', 'edit_comment_ajax'),
-    (r'^comment/(?P<id>\d+)/get/$', 'get_comment'), #json format reply
-    (r'^comment/(?P<id>\d+)/get/raw/$', 'get_comment', {'raw':True}), #json format reply
-    url(r'^sphinx/news/$', 'sphinx_search_news',name='url_sph_search_news'),
+    #    name='edit_comment'),
+    url(r'^sphinx/news/$', 'sphinx_search_news', name='news-sph'),
 )

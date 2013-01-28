@@ -1,5 +1,6 @@
 {% extends base_template %}
 {% block text_content %}
+<a href='{% url tabletop:codex-add %}' class='button'>добавить</a>
 {% if codexes.object_list %}
     <ul>
     {% for codex in codexes.object_list %}
@@ -8,7 +9,7 @@
         <span class=''>{{ codex.title }}</span>
         <span class=''>{{ codex.revisions }}</span>
         <span class=''>{{ codex.bound }}</span>
-        <a href='{% url url_edit_codex codex.id %}'>[edit]</a>
+        <a href='{% url tabletop:codex-edit codex.id %}'>[edit]</a>
     </li>
     {% endfor %}
     </ul>

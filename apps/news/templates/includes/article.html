@@ -1,22 +1,22 @@
 <div id='news'> {% load newsfilters %} {% load comments %}
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url apps.news.views.news category=n.category|lower %}">
+		<a href="{% url news:articles category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
-		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url apps.wh.views.get_user_avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
+		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url wh:avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
 		{% if perms.news.edit_news or user.is_superuser %}
-                        <span id='edit_button' class='first'><a id='button' href="{% url url_edit_article n.id %}">Править</a></span>
+                        <span id='edit_button' class='first'><a id='button' href="{% url news:article-edit n.id %}">Править</a></span>
 			{% if not n.approved %}
-			<span id="edit_button"><a id='button' href="{% url apps.news.views.article_action id=n.id action='approve' %}">Утвердить</a></span>
+			<span id="edit_button"><a id='button' href="{% url news:article-action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}
-			<span id="edit_button"><a id='button' href='{% url apps.news.views.article_action id=n.id action='unapprove' %}'>Убрать</a></span>
+			<span id="edit_button"><a id='button' href='{% url news:article-action id=n.id action='unapprove' %}'>Убрать</a></span>
 			{% endif %}
-                        <span id='edit_button'><a id='button' href='{% url url_article_delete_approve n.id %}'>Удалить</a></span>
+                        <span id='edit_button'><a id='button' href='{% url news:article-delete n.id %}'>Удалить</a></span>
 		{% endif %}
 		{% if not n.approved %}
                         {% spaceless%}
                         {% if news_general %}
 			<span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-				<a href="{% url apps.news.views.show_article number=n.id %}">{{ n.title }}</a>
+				<a href="{% url news:article number=n.id %}">{{ n.title }}</a>
 			</span>
                         {% else %}
                             <span class='unapproved'>{{ n.title }}</span>
@@ -24,7 +24,7 @@
 		{% else %}
 			{% spaceless %}                        
                         {% if news_general %}
-                        <a href='{% url apps.news.views.show_article number=n.id %}'>{{ n.title }}</a>
+                        <a href='{% url news:article number=n.id %}'>{{ n.title }}</a>
                         {% else %}
                         {{ n.title }}
                         {% endif %}{% endspaceless %}
@@ -45,7 +45,7 @@
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
- {% if news_general %} <a href='{% url apps.news.views.show_article number=n.id %}'>читать далее</a> {% endif %}
+ {% if news_general %} <a href='{% url news:article number=n.id %}'>читать далее</a> {% endif %}
  </div>
  <hr>
  <div id='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>

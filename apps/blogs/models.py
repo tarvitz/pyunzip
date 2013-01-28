@@ -72,11 +72,12 @@ class ArchivedPost(AbstractPost):
     #    n.save()
     #    self.delete()
     def get_absolute_url(self):
-        return reverse('apps.blogs.views.show_archived_post',kwargs={'id':self.id})
+        pass
+        #return reverse('apps.blogs.views.show_archived_post',kwargs={'id':self.id})
 
 class Post(AbstractPost):
     def get_absolute_url(self):
-        return reverse('apps.blogs.views.show_post',kwargs={'id':self.id})
+        return reverse('blog:post',kwargs={'id':self.id})
 
     def archive(self):
         a = ArchivedPost()
@@ -95,7 +96,7 @@ class Post(AbstractPost):
         return a
 
     def get_absolute_url(self):
-            return reverse('apps.blogs.views.show_post',kwargs={'id':self.id})
+            return reverse('blog:post',kwargs={'id':self.id})
 
     class Meta:
         verbose_name = _('Post')

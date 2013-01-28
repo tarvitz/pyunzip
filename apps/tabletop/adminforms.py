@@ -1,4 +1,6 @@
 # coding: utf-8
+import re
+
 from django import forms
 from django.db.utils import IntegrityError
 from django.db.models import Manager

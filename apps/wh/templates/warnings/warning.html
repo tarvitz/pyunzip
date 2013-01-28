@@ -2,9 +2,9 @@
 {% get_warning for warn_user as warn %}
 {% if user.is_superuser or perms.wh.set_warnings %}
 	Предупреждения: <br><span class='warnings'>[
-	<a title='повышает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.get_username "increase" %}">+</a>|
-	<a title='понижает или снимает уровень предупреждения на один пункт' href="{% url alter_warning warn_user.get_username "decrease" %}">−</a>|
-	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url alter_warning_form warn_user.get_username %}">?</a>
+	<a title='повышает уровень предупреждения на один пункт' href="{% url wh:warning-alter warn_user.get_username "increase" %}">+</a>|
+	<a title='понижает или снимает уровень предупреждения на один пункт' href="{% url wh:warning-alter warn_user.get_username "decrease" %}">−</a>|
+	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url wh:warning-alter-form warn_user.get_username %}">?</a>
 	]</span>
 <br>
 {% endif %}
@@ -12,7 +12,7 @@
 {% get_comment_list for warn as coms%} {% get_comment_count for warn as com_count %}
 {% endspaceless %}
 	{% if coms %} 
-		Предупреждания: <a class='warnings' href="{% url show_comments "warning" warn.pk %}"><span title='{{ warn.type }} (Педупреждений: {{ com_count }})' style='{{ warn.style }}'>{{ warn.sign }}</span></a>
+		Предупреждания: <a class='warnings' href="{% url core:comments "warning" warn.pk %}"><span title='{{ warn.type }} (Педупреждений: {{ com_count }})' style='{{ warn.style }}'>{{ warn.sign }}</span></a>
 	{% else %}
 		Предупреждения: <span title='{{ warn.type }}' style='{{ warn.style }}'>{{ warn.sign }}</span>
 	{% endif %}<br>

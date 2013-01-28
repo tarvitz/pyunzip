@@ -21,8 +21,8 @@
                 <input class='left' type='checkbox' value='{{ image.id }}' name='items'>
              {% endif %}
             {% endspaceless %}{% endif %}
-            <a class='edit_link' href='{% url url_edit_image image.id %}' title='удалить'>[править]</a>
-            <a class='del_link' href='{% url url_delete_image image.id 'delete' %}' title='удалить'>[удалить]</a>
+            <a class='edit_link' href='{% url files:image-edit image.id %}' title='удалить'>[править]</a>
+            <a class='del_link' href='{% url files:image-delete image.id 'delete' %}' title='удалить'>[удалить]</a>
         </div>
         {% endif %}
         <center> 

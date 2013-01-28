@@ -55,7 +55,7 @@ def upload_replay(request):
             form.instance.author = request.user
             form.instance.upload_date = datetime.now()            
             form.save()
-            return HttpResponseRedirect(reverse('url_show_replays'))
+            return HttpResponseRedirect(reverse('files:replays'))
         else:
             return direct_to_template(request, template, {'form': form})
     form = UploadReplayModelForm()
@@ -76,7 +76,7 @@ def upload_file(request):
             form.instance.owner = request.user
             form.instance.upload_date = datetime.now()
             form.save()
-            return HttpResponseRedirect(reverse('url_show_files'))
+            return HttpResponseRedirect(reverse('files:files'))
         else:
             return direct_to_template(request, template, {'form': form})
     form = UploadFileModelForm()
@@ -133,7 +133,7 @@ def edit_replay(request, id):
         form = ActionReplayModelForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('url_show_replay',
+            return HttpResponseRedirect(reverse('files:replay',
                 args=(form.instance.pk, )))
         else:
             return direct_to_template(request, template,
@@ -473,7 +473,7 @@ def upload_image(request):
         if form.is_valid():
             form.instance.owner = request.user
             form.save()
-            return HttpResponseRedirect(reverse('url_show_galleries'))
+            return HttpResponseRedirect(reverse('files:galleries'))
         else:
             return direct_to_template(request, template,
                 {'form': form})
@@ -489,7 +489,7 @@ def action_image(request, id, action=None):
         form = ImageModelForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('url_show_image', args=(form.instance.pk,)))
+            return HttpResponseRedirect(reverse('files:image', args=(form.instance.pk,)))
         else:
             return direct_to_template(request, template,
                 {'form': form})
@@ -565,7 +565,7 @@ def show_all_images(request, id=None, action=None):
             #if action == 'delete':
             #    if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
             #        qset.delete()
-            return HttpResponseRedirect(reverse('url_show_galleries'))
+            return HttpResponseRedirect(reverse('files:galleries'))
         else:
             return direct_to_template(request, template,
                 {
@@ -758,7 +758,7 @@ def show_files(request):
         if form.is_valid():
             qset = form.act(form.cleaned_data['action'], form.cleaned_data['items'])
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('url_show_files'))
+            return HttpResponseRedirect(reverse('files:files'))
         else:
             return direct_to_template(request, template,
                 {'files': files, 'page': files, 'form': form},
@@ -892,7 +892,7 @@ def search_replay(request):
     else:
         #fp = request.get_full_path()
         #r_url = reverse('apps.files.views.search_replay')
-        if request.get_full_path() == reverse('apps.files.views.search_replay'):
+        if request.get_full_path() == reverse('files:replay-search'):
             if 'search_q' in request.session:
                 del request.session['search_q']
     

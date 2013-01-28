@@ -14,14 +14,14 @@
 	<div class='msg_headline'>
 		<div class='transparency' id='black'></div>
 		{% ifequal user roster.owner %}
-			<a href='{% url url_edit_roster roster.id %}' class='msg_button'>[править]</a>
+			<a href='{% url tabletop:roster-edit roster.id %}' class='msg_button'>[править]</a>
 		{% else %}
 			{% ifequal user roster.user %}
-				<a href='{% url url_edit_roster roster.id %}' class='msg_button'>[править]</a>
-				<a href='{% url url_spawn_roster roster.id %}' class='msg_button' title='Переписать прямого владельца ростера на себя (данный ростер больше не будет появляться в списке пользователя, который его создал (по секрету - это были не вы, но записан он был на вас)'>[spawn]</a>
+				<a href='{% url tabletop:roster-edit roster.id %}' class='msg_button'>[править]</a>
+				<a href='{% url tabletop:roster-spawn roster.id %}' class='msg_button' title='Переписать прямого владельца ростера на себя (данный ростер больше не будет появляться в списке пользователя, который его создал (по секрету - это были не вы, но записан он был на вас)'>[spawn]</a>
 			{% endifequal %}
 		{% endifequal %}
-		{{ roster.title }}:<a href='{% url url_pts_rosters pts=roster.pts %}'>{{ roster.pts }} pts</a>
+		{{ roster.title }}:<a href='{% url tabletop:rosters-pts pts=roster.pts %}'>{{ roster.pts }} pts</a>
 		
 	</div> <!-- msg_headline -->
 	<div class='msg_content'>
@@ -34,14 +34,14 @@
             <span class='msg_ranks'>статус:
             {% if roster.user.ranks.values %}
                 {% for rank in roster.user.ranks.values %}
-                    <a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+                    <a href="{% url wh:rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
                 {% endfor %}
             {# {% endif %} #}
             </span>
 			{% endif %}{% endspaceless %}
 		{% endif %}
 			{% if roster.user %}
-                            <img src='{% url url_get_avatar nickname=roster.user.get_username %}'>
+                            <img src='{% url wh:avatar nickname=roster.user.get_username %}'>
                         {% endif %}
 		{% if roster.user %}
 			<center>
@@ -88,10 +88,10 @@
 	<div class='msg_footer'>
 		{% spaceless %}
 			{% ifnotequal roster.user roster.owner %}
-				[добавлено: <a href='{% url url_user_rosters roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
+				[добавлено: <a href='{% url tabletop:rosters roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
 			{% endifnotequal %}
 			{% ifequal roster.owner user %}
-				[<a href='{% url url_delete_roster roster.id "approve" %}'>удалить</a>]
+				[<a href='{% url tabletop:roster-delete roster.id "approve" %}'>удалить</a>]
 			{% endifequal %}
 		{% endspaceless %}
 	</div> <!-- msg_footer -->

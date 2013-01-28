@@ -4,23 +4,21 @@
 {% if usr.ranks %}статус:
 {% if usr.ranks.values %}
 	{% for rank in usr.ranks.values %}
-		<a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+		<a href="{% url wh:rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
 	{% endfor %}
 </span>
 {% endif %}
 {% endif %}{% endspaceless %}
 
-<a href="{% url profile_by_nick usr.get_username %}">
-    <img class='avatar' src="{% url apps.wh.views.get_user_avatar nickname=usr.get_username %}">
+<a href="{% url wh:profile-by-nick usr.get_username %}">
+    <img class='avatar' src="{% url wh:avatar nickname=usr.get_username %}">
 </a>
 <center>
 	{% with usr as warn_user %}
 		{% include "warnings/warning.html" %}
 	{% endwith %}
 	{% if usr.settings.show_karma_block %}
-	{% with usr as karma_user %}
-		{% include "karma_power.html" %}
-	{% endwith %}
+        {% include "karma_power.html" with karma_user=usr %}
 	{% endif %}
 </center>
 

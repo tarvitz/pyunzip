@@ -21,8 +21,8 @@
         {% endif %}{% endspaceless %}
         {% if user.is_authenticated %}
         <li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
-        {% else%}<li><a href="{% url apps.wh.views.login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-        {% if not user.is_authenticated %}<li><a href="{% url apps.wh.views.onsite_register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+        {% else%}<li><a href="{% url wh:login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+        {% if not user.is_authenticated %}<li><a href="{% url wh:register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
         <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
     </ul>
 </div><br clear="left">
@@ -35,7 +35,7 @@
 	<span class='reflects_left'></span>
 	{# make it more brilliant #}
 	{% get_raw_nickname 'Saul Tarvitz' %}
-	<img alt='avatar' title='' src="{% url apps.wh.views.get_user_avatar nickname='Saul Tarvitz' %}">
+	<img alt='avatar' title='' src="{% url wh:avatar nickname='Saul Tarvitz' %}">
 	<small>
 		Работаю над ресурсом с окт 2008 по текущий день
 	</small>
@@ -50,7 +50,7 @@
 	<span class='reflects_right'></span>
         {% tag_cloud_for_model blogs.Post as clouds %}
 	{% for cloud in clouds %}
-		<a href="{% url apps.blogs.views.get_posts_via_tag tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
+		<a href="{% url blog:tag tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
 	{% endfor %}
 </div>
 <div class='none'><span class='label'>Записи</span></div>

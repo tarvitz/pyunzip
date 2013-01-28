@@ -55,7 +55,7 @@ STATIC_URL = '/static/'
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-STATIC_ROOT = rel_path('media')
+STATIC_ROOT = rel_path('media/static')
 
 #STATICFILES_DIRS = (
 #    rel_path('media'),
@@ -193,6 +193,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.staticfiles',
     #
+    'apps.jsonapp',
     'apps.core',
     'apps.wh',
     'apps.whadmin',
@@ -213,6 +214,7 @@ INSTALLED_APPS = (
     'apps.djangosphinx',
     'extwidgets',
     'south',
+    'sorl.thumbnail',
     #
     'grappelli',
     'django.contrib.admin',
@@ -227,6 +229,8 @@ ENABLE_500_TEST=False
 SERVER_EMAIL='noreply@w40k.net'
 DEV_SERVER=True
 GRAPPELLI_ADMIN_TITLE='w40k.net'
+USE_OLD_THUMBNAIL_IMAGE_SCHEME=False
+
 #import settings from another app
 # LOGGING
 

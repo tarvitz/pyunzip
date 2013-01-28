@@ -127,7 +127,7 @@ class Announcement(models.Model):
 
     def unsubscribe_link(self):
         """ return link for the announcement unsubscription"""
-        return reverse('apps.core.views.delete_subscription',kwargs={'id':self.id})
+        return reverse('core:unsubscribe',kwargs={'id':self.id})
 
 #obsolete
 class Settings(models.Model):

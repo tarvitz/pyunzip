@@ -109,7 +109,7 @@ class Replay(models.Model):
     owner = lambda self: self.author
     def get_absolute_url(self):
         #return "/replays/%i" % self.id
-        return reverse('apps.files.views.show_replay', kwargs={'number': self.id})
+        return reverse('files:replay', kwargs={'number': self.id})
 
     def __unicode__(self):
         return "Replays" 
@@ -341,7 +341,7 @@ class Image(models.Model):
     
     def get_absolute_url(self):
         #return "/image/%i/" % self.id
-        return reverse('apps.files.views.show_image', kwargs={'number': self.id})
+        return reverse('files:image', kwargs={'number': self.id})
     
     def __unicode__(self):
         return "Images"

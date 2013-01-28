@@ -51,7 +51,7 @@ def index(request):
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('battle_report_index'))
+            return HttpResponseRedirect(reverse('tabletop:battle-report'))
         else:
             return direct_to_template(request, tempalte,
                 {'battlereps': battlereps,
@@ -100,7 +100,7 @@ def index_rosters(request):
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('url_all_rosters'))
+            return HttpResponseRedirect(reverse('tabletop:rosters'))
         else:
             return direct_to_template(request, template,
                 {'rosters': rosters, 'form': form},
@@ -144,7 +144,7 @@ def user_rosters(request,nickname='', pts=''):
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('url_user_rosters'))
+            return HttpResponseRedirect(reverse('tabletop:rosters'))
         else:
             return direct_to_template(request, template,
                 {'rosters': rosters, 'form': form},
@@ -173,7 +173,7 @@ def codex_rosters(request, id, revision):
             qset = form.act(form.cleaned_data['action'],
                 form.cleaned_data['items'])
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('url_user_rosters'))
+            return HttpResponseRedirect(reverse('reverse:rosters'))
         else:
             return direct_to_template(request, template,
                 {'rosters': rosters, 'form': form},
@@ -190,7 +190,7 @@ def search_rosters(request):
     kw_own = dict()
     roster_query = None
     if 'roster_query' in request.session:
-        if reverse('apps.tabletop.views.search_rosters') == request.get_full_path():
+        if reverse('tabletop:rosters-search') == request.get_full_path():
             del request.session['roster_query']
         else:
             roster_query = request.session.get('roster_query',None)
@@ -300,7 +300,7 @@ def delete_roster(request,id=None,action=''):
         form = ApproveActionForm(request.POST)
         if form.is_valid():
             #todo: make this hotfix more flexible
-            referer = reverse('url_user_rosters')
+            referer = reverse('tabletop:rosters')
             #form.cleaned_data['url'] 
     return HttpResponseRedirect(referer)
 
@@ -317,7 +317,7 @@ def action_roster(request, id=None, action=None):
             if not hasattr(form.instance, 'owner'):
                 form.instance.owner = request.user
             form.save()
-            return HttpResponseRedirect(reverse('url_show_roster',
+            return HttpResponseRedirect(reverse('tabletop:roster',
                 args=(form.instance.pk,)))
         else:
             return direct_to_template(request, template, {'form': form})
@@ -523,7 +523,7 @@ def add_battle_report(request, action=None, id=None):
             instance.approved = True
             instance.ip_address = request.META.get('REMOTE_ADDR','127.0.0.1')
             form.save()
-            return HttpResponseRedirect(reverse('battle_report_index'))
+            return HttpResponseRedirect(reverse('tabletop:battle-report'))
         else:
             return direct_to_template(request, template, {'form': form})
     form = AddBattleReportModelForm(instance=br)
@@ -587,12 +587,12 @@ def delete_battle_report(request,id,approve=''):
         request.user.has_perm('tabletop.delete_battlereports'):
         if br:
             br.delete()
-            return HttpResponseRedirect(reverse('battle_report_index'))
+            return HttpResponseRedirect(reverse('tabletop:battle-report'))
         else:
             return HttpResponseRedirect('/report/doest/not/exist')
     else:
         return HttpResponseRedirect('/permission/denied')
-    return HttpResponseRedirect(reverse('battle_report_index'))
+    return HttpResponseRedirect(reverse('tabletop:battle-report'))
 
 @csrf_protect
 @login_required
@@ -613,7 +613,7 @@ def action_codex(request, id=None, action=None):
                 instance.content_type = get_content_type('wh.side')
                 instance.object_id = int(request.POST['side'])
             form.save()
-            return HttpResponseRedirect(reverse('url_show_codex', args=(instance.pk,)))
+            return HttpResponseRedirect(reverse('tabletop:codex', args=(instance.pk,)))
         else:
             return direct_to_template(request, template,
                 {'form': form})

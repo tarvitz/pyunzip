@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+from datetime import datetime, timedelta
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
 from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,RequestForm, \
@@ -28,6 +29,10 @@ from apps.core.helpers import get_settings,paginate,get_object_or_none,can_act,g
     handle_uploaded_file,get_upload_form,get_upload_helper
 from apps.core.handlers import UploadProgressHandler
 from django.shortcuts import get_object_or_404
+from django.core import serializers
+from django.template.defaultfilters import striptags
+# todo: move to core
+from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
 import simplejson
 import logging
 logger = logging.getLogger(__name__)
@@ -127,7 +132,7 @@ def search(request):
         if form.is_valid():
             query = form.cleaned_data['query']
     else:
-        if request.get_full_path() == reverse('apps.core.views.search'):
+        if request.get_full_path() == reverse('core:search'):
             if 'search_q' in session:
                 del session['search_q']
     query = query or session.get('search_q','')
@@ -265,7 +270,7 @@ def sphinx_search(request):
     objs = list()
     query = request.POST.get('query', '') or request.session.get('query', None)
     
-    if request.get_full_path() == reverse('url_sph_search'):
+    if request.get_full_path() == reverse('core:search-search'):
         if query:
             if 'query' in request.session:
                 del request.session['query']
@@ -316,7 +321,7 @@ def sphinx_search_model(request, model):
     page = request.GET.get('page', 1)
     _pages_ = get_settings(request.user, 'objects_on_page', 20)
     #query processing
-    if request.get_full_path() == reverse('url_sph_search_model', args=(model,)):
+    if request.get_full_path() == reverse('core:search-sph-model', args=(model,)):
             if 'query' in request.session:
                 if 'query' in request.session['query']:
                     del request.session['query']
@@ -405,7 +410,7 @@ def view_subscription(request):
             #if action == 'delete':
             #    qset.delete()
             if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('url_view_subscription'))
+            return HttpResponseRedirect(reverse('core:subscription'))
         else:
             return direct_to_template(request, template,
                 {'subscription': subscription, 'form': form})
@@ -751,3 +756,172 @@ def raise_500(request):
     if settings.ENABLE_500_TEST:
         a = 10 / 0
     return HttpResponseRedirect(request.GET.get('HTTP_REFERER', '/'))
+
+@login_required
+#@has_permission('comments.change_comment') #blocks the comment edition
+def edit_comment(request, id=0):
+    template = get_skin_template(request.user, "edit_comment_ng.html")
+    can_edit_comments = request.user.has_perm('news.edit_comments') 
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        return HttpResponseRedirect('/comment/not/found')
+    if request.user != comment.user and not can_edit_comments\
+    and not request.user.is_superuser:
+        return HttpResponseRedirect('/comment/not/found')
+    if request.method == 'POST':
+        form = CommentForm(request.POST,request=request)
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            url = form.cleaned_data['url']
+            _jump = request.GET.get('j',None) 
+            if _jump: url += "#j=%s" % _jump
+            syntax = form.cleaned_data['syntax']
+            c = Comment.objects.get(id=id)
+            c.comment = comment
+            c.syntax = syntax
+            c.save()
+            if url:
+                return HttpResponseRedirect(url)
+            return HttpResponseRedirect('/comment/edit/successfull') #request.META['HTTP_REFERER']
+        else:
+            return render_to_response(template,
+                {'form':form},
+                context_instance=RequestContext(request))
+    form = CommentForm()
+    form.fields['comment'].initial = comment.comment;
+    if request.META.get('HTTP_REFERER',None):
+        referer = "%s%s" % (request.META['HTTP_REFERER'], "#c%i" % int(id) )
+    else: referer = '/'
+    form.fields['url'].initial = referer
+    form.fields['syntax'].initial = comment.syntax
+    return render_to_response(template,
+        {'form':form},
+        context_instance=RequestContext(request))
+
+#TODO: MAKE IT MORE SAFETY!!!
+def get_comment(request, id=0,raw=False):
+    response = HttpResponse()
+    response['Content-Type'] = 'text/javascript'
+    try:
+        #FIXME: Fix this dirty hack :) //fixed via js
+        #from time import sleep
+        #sleep(0.125)
+        comment = Comment.objects.get(id__exact=id)
+        if not raw:
+            comment.comment = striptags(comment.comment)
+            comment.comment = render_filter(comment.comment, comment.syntax) #striptags|spadvfilter|safe
+        response.write(serializers.serialize("json",[comment]))
+        return response
+    except Comment.DoesNotExist:
+        response.write(serializers.serialize("json",[]))
+        return response
+
+@login_required
+def edit_comment_ajax(request, id=0):
+    template = get_skin_template(request.user, 'edit_comment.html')
+    can_edit_comments = request.user.has_perm('news.edit_comments') 
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        error_msg = u"Comment not found"
+        return HttpResponseServerError(error_msg)
+    if request.user != comment.user and not can_edit_comments\
+    and not request.user.is_superuser:
+        error_msg = u"Permission Denied"
+        return HttpResponseServerError(error_msg)
+    if request.method == 'POST':
+        post = request.POST.copy()
+        if post.has_key('comment'):
+            if comment.comment != post['comment']: #prevent db from rewrite data which did changed 
+                comment.comment = post['comment']
+                #comment.submit_date=datetime.now()
+                #DDoS prevention
+                if hasattr(request.user,'useractivity') and not request.user.is_superuser and not request.user.is_staff:
+                    if request.user.useractivity.last_action_time is not None:
+                        if request.user.useractivity.last_action_time > datetime.now()-timedelta(seconds=15):
+                            error_msg = u"timeout"
+                            return HttpResponseServerError(error_msg)
+                request.user.useractivity.last_action_time = datetime.now()
+                request.user.useractivity.save()
+                comment.save()
+            #return HttpResponseRedirect(comment.get_absolute_url())
+            template = Template("[success]")
+            context = Context()
+            html = template.render(context)
+            return HttpResponse(html)
+        else:
+            error_msg = u"Unknow data is submitted"
+            return HttpResponseServerError(error_msg)
+    else:
+        error_msg = u"no POST data was sent"
+        return HttpResponseServerError(error_msg)
+
+
+@login_required
+#@has_permission('news.del_restore_comments')
+def del_restore_comment(request,id=0,flag='delete'):
+    can_del_restore_comments =  request.user.has_perm('news.del_restore_comments') #if smb can edit news
+    can_purge_comments =  request.user.has_perm('news.purge_comments') #if smb can edit news
+    try:
+        referer = request.META['HTTP_REFERER']
+        jump = request.GET.get('j',None)
+        if jump: referer += "#c%s" % jump
+    except KeyError:
+        referer = None
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        return HttpResponseRedirect('/comment/not/found')
+
+    if request.user != comment.user\
+    and not can_del_restore_comments\
+    and not request.user.is_superuser:
+        return HttpResponseRedirect('/comment/not/found')
+    if flag in 'delete':
+        comment.is_removed = True
+        comment.save()
+        if referer:
+            return HttpResponseRedirect(referer)
+        return HttpResponseRedirect('/comment/deleted')
+    if flag in 'restore':
+        comment.is_removed = False
+        comment.save()
+        if referer:
+            return HttpResponseRedirect(referer)
+        return HttpResponseRedirect('/comment/restored')
+    return HttpResponseRedirect('/')
+
+@login_required
+def purge_comment_old(request,id=0):
+    #only superuser and can_purge_comments can delete comments
+    can_purge_comments =  request.user.user_permissions.filter(codename='purge_comments') #if smb can edit news
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        return HttpResponseRedirect('/comment/not/found')
+    if request.user.is_superuser or can_purge_comments:
+            message = _('Do you realy want to PURGE this comment?')
+            return action_approve_simple(request,'/comment/%s/purge' % comment.id, message)
+    return HttpResponseRedirect('/')
+
+@login_required
+def purge_comment(request,id=0,approve='force'):
+    next = ''
+    if request.method == 'POST':
+        form = ApproveActionForm(request.POST)
+        if form.is_valid():
+            next = form.cleaned_data['url'] #from where we get here ;)
+    can_purge_comments = request.user.user_permissions.filter(codename='purge_comments')
+    try:
+        comment = Comment.objects.get(id=id)
+    except Comment.DoesNotExist:
+        return HttpResponseRedirect('/comment/not/found')
+    if request.user.is_superuser or can_purge_comments:
+        comment.delete()
+        if next:
+            return HttpResponseRedirect(next)
+        return HttpResponseRedirect('/comment/purged')
+    else:
+        return HttpResponseRedirect('/comment/not/found')
+

@@ -22,7 +22,7 @@
 	{% endifequal %}
 			<span class='karma_comment'>{% if k.url %}<a href='{{ k.url }}'>{{ k.comment }}</a> {% else %}{{ k.comment }}{% endif %}</span>
 			<span class='karma_date'>({{ k.date|date:"Y/M/d, H:m:s" }})</span>
-			<span class='karma_voter'>[<a href="{% url apps.wh.views.profile_by_nick nickname=k.voter.get_username %}">{% get_nickname k.voter %}</a>]</span>
+			<span class='karma_voter'>[<a href="{% url wh:profile-by-nick nickname=k.voter.get_username %}">{% get_nickname k.voter %}</a>]</span>
 			<br>
 	{% endspaceless %}
 {% endfor %}

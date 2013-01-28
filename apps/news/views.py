@@ -51,7 +51,7 @@ def archived_news(request,year='',month='',day=''):
     news = ArchivedNews.objects.all().order_by('-date')
     _pages_ = get_settings(request.user,'news_on_page',10)
     page = request.GET.get('page',1)
-    news = paginate(news,page,pages=_pages_) 
+    news = paginate(news,page,pages=_pages_)
 
     return render_to_response(template,{'news':news,'page':news},
         context_instance=RequestContext(request,processors=[benchmark]))
@@ -81,9 +81,9 @@ def news(request,approved='approved',category=''):
     can_approve_news = None
     if request.user.is_authenticated():
         can_approve_news = request.user.user_permissions.filter(codename='edit_news')
-    
+
     page = request.GET.get('page',1)
-    
+
     #make an archives
     now = datetime.now()
     td = timedelta(days=365)
@@ -112,7 +112,7 @@ def news(request,approved='approved',category=''):
         'page': news},
         context_instance=RequestContext(request,
             processors=[benchmark]))
-    
+
 
 def search_article(request):
     template = get_skin_template(request.user, "news/search.html")
@@ -169,7 +169,7 @@ def show_article(request, number=1,object_model='news.news'):
         context_instance=RequestContext(request,
             processors=[pages]))
 
-#@semiobsolete, better use action_article 
+#@semiobsolete, better use action_article
 @login_required
 def article_action(request,id=None,action=None):
     if not action or not id:
@@ -209,7 +209,7 @@ def article_action(request,id=None,action=None):
         return HttpResponseRedirect('/permission/denied')
 
 #@obsolete
-@login_required    
+@login_required
 @can_act
 def add_article(request,id=None,edit_flag=False):
     can_edit =  request.user.has_perm('news.edit_news') #if smb can edit news
@@ -237,7 +237,7 @@ def add_article(request,id=None,edit_flag=False):
             if not edit_flag: #adding new article
                 article = News(url=url,title=title,author=author,editor=editor,head_content=head_content,
                     content=content,category=c,date=date,
-                    author_ip=author_ip, approved=approved,syntax=syntax)    
+                    author_ip=author_ip, approved=approved,syntax=syntax)
             else: #editing old article
                 if not can_edit and not request.user.is_staff and not request.user.is_superuser:
                     return HttpResponseRedirect('/')
@@ -278,7 +278,7 @@ def add_article(request,id=None,edit_flag=False):
             else:
                 return HttpResponseRedirect('/article/created/')
             #return HttpResponseRedirect('/article/%s' % str(article.id))
-            
+
         else:
             return render_to_response(template,
                 {'form': form,
@@ -304,10 +304,10 @@ def add_article(request,id=None,edit_flag=False):
             'edit_flag': edit_flag},
             context_instance=RequestContext(request))
 
-#make it 
+#make it
 @login_required
 @can_act
-def action_article(request, id=None, action=None):   
+def action_article(request, id=None, action=None):
     template = get_skin_template(request.user, 'news/action_article.html')
     article_instance = None
     if action: #None means add article, other actions depends on instance existance
@@ -323,14 +323,14 @@ def action_article(request, id=None, action=None):
                 if request.user.has_perm('news.add_news') or request.user.is_superuser:
                     form.instance.approved = True
                 form.save()
-                return HttpResponseRedirect(reverse('url_show_article', 
+                return HttpResponseRedirect(reverse('news:article',
                     args=(form.instance.id, ))
                 )
             elif action == 'edit':
                 form.instance.editor = request.user.nickname
                 form.save()
                 next = form.cleaned_data.get('next', None) or \
-                    reverse('url_show_article', args=(form.instance.id, ))
+                    reverse('news:article', args=(form.instance.id, ))
                 return HttpResponseRedirect(next)
         else:
             return direct_to_template(request, template,
@@ -338,174 +338,6 @@ def action_article(request, id=None, action=None):
     form = ArticleModelForm(instance=article_instance,
         initial={'next': request.META.get('HTTP_REFERER', None)})
     return direct_to_template(request, template, {'form': form})
-
-@login_required
-#@has_permission('comments.change_comment') #blocks the comment edition
-def edit_comment(request, id=0):
-    template = get_skin_template(request.user, "edit_comment_ng.html")
-    can_edit_comments = request.user.has_perm('news.edit_comments') 
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
-    if request.user != comment.user and not can_edit_comments\
-    and not request.user.is_superuser:
-        return HttpResponseRedirect('/comment/not/found')
-    if request.method == 'POST':
-        form = CommentForm(request.POST,request=request)
-        if form.is_valid():
-            comment = form.cleaned_data['comment']
-            url = form.cleaned_data['url']
-            _jump = request.GET.get('j',None) 
-            if _jump: url += "#j=%s" % _jump
-            syntax = form.cleaned_data['syntax']
-            c = Comment.objects.get(id=id)
-            c.comment = comment
-            c.syntax = syntax
-            c.save()
-            if url:
-                return HttpResponseRedirect(url)
-            return HttpResponseRedirect('/comment/edit/successfull') #request.META['HTTP_REFERER']
-        else:
-            return render_to_response(template,
-                {'form':form},
-                context_instance=RequestContext(request))
-    form = CommentForm()
-    form.fields['comment'].initial = comment.comment;
-    if request.META.get('HTTP_REFERER',None):
-        referer = "%s%s" % (request.META['HTTP_REFERER'], "#c%i" % int(id) )
-    else: referer = '/'
-    form.fields['url'].initial = referer
-    form.fields['syntax'].initial = comment.syntax
-    return render_to_response(template,
-        {'form':form},
-        context_instance=RequestContext(request))
-
-#TODO: MAKE IT MORE SAFETY!!!
-def get_comment(request, id=0,raw=False):
-    response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
-    try:
-        #FIXME: Fix this dirty hack :) //fixed via js
-        #from time import sleep
-        #sleep(0.125)
-        comment = Comment.objects.get(id__exact=id)
-        if not raw:
-            comment.comment = striptags(comment.comment)
-            comment.comment = render_filter(comment.comment, comment.syntax) #striptags|spadvfilter|safe
-        response.write(serializers.serialize("json",[comment]))
-        return response
-    except Comment.DoesNotExist:
-        response.write(serializers.serialize("json",[]))
-        return response
-
-@login_required
-def edit_comment_ajax(request, id=0):
-    template = get_skin_template(request.user, 'edit_comment.html')
-    can_edit_comments = request.user.has_perm('news.edit_comments') 
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        error_msg = u"Comment not found"
-        return HttpResponseServerError(error_msg)
-    if request.user != comment.user and not can_edit_comments\
-    and not request.user.is_superuser:
-        error_msg = u"Permission Denied"
-        return HttpResponseServerError(error_msg)
-    if request.method == 'POST':
-        post = request.POST.copy()
-        if post.has_key('comment'):
-            if comment.comment != post['comment']: #prevent db from rewrite data which did changed 
-                comment.comment = post['comment']
-                #comment.submit_date=datetime.now()
-                #DDoS prevention
-                if hasattr(request.user,'useractivity') and not request.user.is_superuser and not request.user.is_staff:
-                    if request.user.useractivity.last_action_time is not None:
-                        if request.user.useractivity.last_action_time > datetime.now()-timedelta(seconds=15):
-                            error_msg = u"timeout"
-                            return HttpResponseServerError(error_msg)
-                request.user.useractivity.last_action_time = datetime.now()
-                request.user.useractivity.save()
-                comment.save()
-            #return HttpResponseRedirect(comment.get_absolute_url())
-            template = Template("[success]")
-            context = Context()
-            html = template.render(context)
-            return HttpResponse(html)
-        else:
-            error_msg = u"Unknow data is submitted"
-            return HttpResponseServerError(error_msg)
-    else:
-        error_msg = u"no POST data was sent"
-        return HttpResponseServerError(error_msg)
-
-
-@login_required
-#@has_permission('news.del_restore_comments')
-def del_restore_comment(request,id=0,flag='delete'):
-    can_del_restore_comments =  request.user.has_perm('news.del_restore_comments') #if smb can edit news
-    can_purge_comments =  request.user.has_perm('news.purge_comments') #if smb can edit news
-    try:
-        referer = request.META['HTTP_REFERER']
-        jump = request.GET.get('j',None)
-        if jump: referer += "#c%s" % jump
-    except KeyError:
-        referer = None
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
-
-    if request.user != comment.user\
-    and not can_del_restore_comments\
-    and not request.user.is_superuser:
-        return HttpResponseRedirect('/comment/not/found')
-    if flag in 'delete':
-        comment.is_removed = True
-        comment.save()
-        if referer:
-            return HttpResponseRedirect(referer)
-        return HttpResponseRedirect('/comment/deleted')
-    if flag in 'restore':
-        comment.is_removed = False
-        comment.save()
-        if referer:
-            return HttpResponseRedirect(referer)
-        return HttpResponseRedirect('/comment/restored')
-    return HttpResponseRedirect('/')
-
-@login_required
-def purge_comment_old(request,id=0):
-    #only superuser and can_purge_comments can delete comments
-    can_purge_comments =  request.user.user_permissions.filter(codename='purge_comments') #if smb can edit news
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
-    if request.user.is_superuser or can_purge_comments:
-            message = _('Do you realy want to PURGE this comment?')
-            return action_approve_simple(request,'/comment/%s/purge' % comment.id, message)
-    return HttpResponseRedirect('/')
-
-@login_required
-def purge_comment(request,id=0,approve='force'):
-    next = ''
-    if request.method == 'POST':
-        form = ApproveActionForm(request.POST)
-        if form.is_valid():
-            next = form.cleaned_data['url'] #from where we get here ;)
-    can_purge_comments = request.user.user_permissions.filter(codename='purge_comments')
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
-    if request.user.is_superuser or can_purge_comments:
-        comment.delete()
-        if next:
-            return HttpResponseRedirect(next)
-        return HttpResponseRedirect('/comment/purged')
-    else:
-        return HttpResponseRedirect('/comment/not/found')
 
 def sphinx_search_news(request):
     template = get_skin_template(request.user, 'includes/sphinx_search_news.html')

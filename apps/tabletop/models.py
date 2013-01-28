@@ -103,7 +103,8 @@ class Roster(models.Model):
         super(Roster,self).save(*args,**kwargs)
 
     def get_absolute_url(self):
-        return reverse('url_show_roster',args=[self.id])
+        return reverse('tabletop:roster',args=[self.id])
+
     class Meta:
         permissions = (
             ('edit_anonymous_rosters','Can edit anonymous rosters'),
@@ -152,8 +153,10 @@ class BattleReport(models.Model):
             self.mission.game.codename,
             self.mission.title
         )
+
     def get_absolute_url(self):
-        return reverse('show_battle_report',args=[self.id,])
+        return reverse('tabletop:battle-report',args=[self.id,])
+
     def get_title(self):
         return self.title
 

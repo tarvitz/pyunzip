@@ -230,7 +230,7 @@ def update_profile(request):
                     'photos/%s' % request.user.id)
                 form.instance.photo = photo
             form.save()
-            return HttpResponseRedirect(reverse('url_profile'))
+            return HttpResponseRedirect(reverse('wh:profile'))
         else:
             return direct_to_template(request, template,
                 {'form': form})

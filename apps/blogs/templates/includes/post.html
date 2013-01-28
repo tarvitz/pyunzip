@@ -1,7 +1,7 @@
 {% load comments %}{% load newsfilters %}
  <div id='news'>
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url apps.wh.views.profile_by_nick nickname=p.author %}"><img id="hdimg" class='right' src="{% url apps.wh.views.get_user_avatar nickname=p.author %}"></a>
+		<a href="{% url wh:profile-by-nick nickname=p.author %}"><img id="hdimg" class='right' src="{% url wh:avatar nickname=p.author %}"></a>
 		{% if not p.approved %}
 			<span class='unapproved'>{# <a href='article/{{ p.id }}'>{{ p.title }}</a>#}
 				{# <a href="{% url apps.news.views.show_article number=p.id %}"> #} {{ p.title }} {#</a> #}
