@@ -1,4 +1,4 @@
-from apps.wh.models import Expression,Fraction,PM, MiniQuote,Settings
+from apps.wh.models import (Expression, Fraction, PM, MiniQuote, Settings)
 from apps.news.models import News
 from apps.files.models import Replay
 from apps.core import get_skin_template
@@ -10,16 +10,17 @@ def session(request):
     return {'session': request.session}
 
 def base_template(request):
-    template = 'base.html'
-    if request.user.is_authenticated():
-        if request.user.skin:
-            templ = "skins/%s/base.html" % (request.user.skin.name.lower())
-            try:
-                get_template(templ)
-                template = templ
-            except:
-                pass
-    return ({'base_template':template})
+    from django.conf import settings
+    template = settings.DEFAULT_TEMPLATE
+    is_auth = request.user.is_authenticated()
+    if is_auth and request.user.skin:
+        templ = "skins/%s/base.html" % (request.user.skin.name.lower())
+        try:
+            get_template(templ)
+            template = templ
+        except:
+            pass
+    return ({'base_template': template})
 
 def server_ip(request):
     return {'self_ipaddress':get_self_ip_address()}
@@ -46,25 +47,34 @@ def expressions(request):
         'expression': expression,
         'miniquote': miniquote,
     }
-    
-def global_referer(request):
+
+
+def global_settings(request):
     from django.conf import settings
     return {
-        'global_referer': request.META.get('HTTP_REFERER','/'),
-        'global_settings': settings,
+        'gs': settings,
+        'global_settings': settings
     }
+
+def global_referer(request):
+    return {
+        'global_referer': request.META.get('HTTP_REFERER','/'),
+    }
+
 def briefing_news(request):
     last_news = get_settings(request.user,'last_news_amount',10)
     bn = News.objects.filter(approved=True).order_by('-date')[:last_news]
     return {
         'briefing_news': bn
     }
+
 def last_replays(request):
     last_replays = get_settings(request.user,'last_replays_amount',10)
     reps = Replay.objects.order_by('-id')[:last_replays]
     return {
         'last_replays': reps
     }
+
 def pm(request):
     if request.user.is_authenticated():
         user = request.user

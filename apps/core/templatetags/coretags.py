@@ -15,7 +15,7 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth.models import AnonymousUser
 from apps.news.templatetags.newsfilters import spadvfilter
 
-from apps.core.helpers import get_settings
+from apps.core.helpers import get_settings, get_content_type_or_None
 
 register = Library()
 #returns 5 last news (:
@@ -637,3 +637,59 @@ def get_warning(parser,token):
     return GetWarningNode(user,context_var)
 register.tag(get_warning)
 
+class GetObjectMetaNode(Node):
+    def __init__(self, var, varname=None):
+        self.var = var
+        self.varname = varname
+
+    def render(self, context):
+        var = self.var.resolve(context, ignore_failures=True)
+        if self.varname:
+            context[self.varname] = var._meta
+        return var._meta if not self.varname else ''
+
+@register.tag(name='get_object_meta')
+def get_object_meta(parser, token):
+    bits = token.contents.split()
+    if len(bits) != 2 and len(bits) != 4: # get_object_meta var as varname
+        raise TemplateSyntaxError("get_object_meta requires two or four arguments")
+    if bits[2] != 'as':
+        raise TemplateSyntaxError("third argument should be as")
+    var = parser.compile_filter(bits[1])
+    varname = None
+    if len(bits) == 4:
+        varname = bits[3]
+    return GetObjectMetaNode(var, varname)
+
+class GetObjectContentTypeNode(Node):
+    def __init__(self, var, varname=None):
+        self.var = var
+        self.varname = varname
+
+    def render(self, context):
+        var = self.var.resolve(context, ignore_failures=True)
+        meta = getattr(var, '_meta', {})
+
+        obj = {
+            'content_type': get_content_type_or_None(var),
+            'id': var.pk,
+            'app': meta.app_label,
+            'model': meta.module_name,
+        }
+
+        if self.varname:
+            context[self.varname] = obj
+        return obj if not self.varname else ''
+
+@register.tag(name='get_content_type')
+def get_content_type(parser, token):
+    bits = token.contents.split()
+    if len(bits) != 2 and len(bits) != 4: # get_object_meta var as varname
+        raise TemplateSyntaxError("get_content_type requires two or four arguments")
+    if bits[2] != 'as':
+        raise TemplateSyntaxError("third argument should be as")
+    var = parser.compile_filter(bits[1])
+    varname = None
+    if len(bits) == 4:
+        varname = bits[3]
+    return GetObjectContentTypeNode(var, varname)

@@ -1,10 +1,10 @@
-<div id='news'> {% load newsfilters %} {% load comments %}
+<div id='news'> {% load newsfilters comments %}
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url news:news category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url wh:avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
 		{% if perms.news.edit_news or user.is_superuser %}
-                        <span id='edit_button' class='first'><a id='button' href="{% url news:article-edit n.id %}">Править</a></span>
+            <span id='edit_button' class='first'><a id='button' href="{% url news:article-edit n.id %}">Править</a></span>
 			{% if not n.approved %}
 			<span id="edit_button"><a id='button' href="{% url news:article-action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}
@@ -22,7 +22,7 @@
                             <span class='unapproved'>{{ n.title }}</span>
                         {% endif %}{% endspaceless %}
 		{% else %}
-			{% spaceless %}                        
+			{% spaceless %}
                         {% if news_general %}
                         <a href='{% url news:article number=n.id %}'>{{ n.title }}</a>
                         {% else %}
@@ -34,9 +34,9 @@
  <div id='spacer'>&nbsp;</div>
  {% if news_general %}
  {% if not n.head_content %}
- 	{{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'> 
+    {{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'>
  {% else %}
-	{{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ... 
+    {{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ...
  {% endif %} <br clear='all'>
  {% endif %}
  {% else %}
@@ -48,17 +48,17 @@
  {% if news_general %} <a href='{% url news:article number=n.id %}'>читать далее</a> {% endif %}
  </div>
  <hr>
- <div id='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
- {% if n.editor %}<div id='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
- {% if n.url %}<div id='footer' class='url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
+ <div class='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
+ {% if n.editor %}<div class='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
+ {% if n.url %}<div class='footer url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
  {% spaceless %}
     {% get_comment_count for n as comments %}
- <div id='footer'>Коментариев: {{ comments }} 
+ <div class='footer'>Коментариев: {{ comments }}
  {% with n as object %}
     {% include "tracker/is_new.html" %}
  {% endwith %}
  </div>
  {% endspaceless %}
- {% if n.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
+ {% if n.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
  </div>
 

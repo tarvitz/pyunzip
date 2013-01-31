@@ -1,0 +1,28 @@
+{% if user.settings.show_quotes and user.settings and expression %}
+<div class='menu block'>
+    <div class='menu tab'>
+        <ul class='nav nav-tabs side-tabs pull-right'>
+            <li><a href='#'>Цитаты</a></li>
+        </ul>
+        <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
+    </div>
+    <div class="menu bar menu_quotes" style='display: {{ usersettings.display_menu_quotes|or:"block" }}'>
+        <div class="transparency"><!-- wise transparency --></div>
+        <span class='reflects_up'></span>
+        <span class='reflects_left'></span>
+            {% spaceless %}{% if expression.original_content %}
+             <b class='expression_content'>&quot;{{ expression.original_content }}&quot;</b>
+                 {% if expression.content %}<br>
+                    <span &quot;{{ expression.content }}&quot;
+                {% endif %}
+            {% if expression.author %}<br><i>({{ expression.author }})</i>{% endif %}
+            {% endif %}
+            {% if expression.content and not expression.original_content %}
+            <b>&quot;{{ expression.content }}&quot;</b>
+            {% if expression.author %}<br><span class='author'><i>({{expression.author }} )</i></span>{% endif %}
+            {% endif %}
+            {% endspaceless %}
+    </div>
+</div>
+{% endif %} {# user.settings.show_quotes #}
+

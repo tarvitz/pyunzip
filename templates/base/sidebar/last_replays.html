@@ -1,0 +1,52 @@
+{% if user.settings.show_last_replays and user.settings %}
+{% if last_replays %}{% load votetags newsfilters %}
+<div class='menu block'>
+    <div class='menu tab'>
+        <ul class='nav nav-tabs side-tabs pull-right'>
+            <li><a href='#'>Реплеи</a></li>
+        </ul>
+        <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
+    </div>   
+    <div class='menu bar last_replays' style='display: {{ usersettings.display_last_replays|or:"block" }}'>
+        <div class="transparency"><!-- wise transparency --></div>
+        <span class='reflects_up'></span>
+        <span class='reflects_down'></span>
+        <span class='reflects_left'></span>
+            <ul>
+            {% for r in last_replays %}
+                <li>
+                  <a href="{% url apps.files.views.all_replays type=r.version.game.short_name|lower version=r.version.name|lower %}">
+                    <img alt='{{ r.version.game.short_name }}' src='/media/images/replays/last/{{ r.version.game.short_name|lower }}_{{ r.version.name|lower}}.png'>
+                  </a>
+                  {% spaceless %}
+                  <span class='spacer' />
+                    <small>
+                        {% comment %} {% ifnotequal r.type "0" %}
+                            <span class='notice'>({{ r.type}}vs{{ r.type }})
+                        {% else %}
+                            (unstd)</span>
+                        {% endifnotequal %}
+                        {% endcomment %}
+                        <span class='notice'>({{ r.get_type }})</span>
+                    </small>
+                  {# improve block and add bind tag #}
+                  {# {% bind r as object %} #}
+                  {# {% include votes.html #}
+                  <span class='stars'>[
+                    {% get_vote_stars for r as stars %}
+                    {% for star in stars %}
+                        <img alt='*' class='star' src='/media/images/stars/mini/{{ star }}.png'>
+                    {% endfor %}
+                  ]</span>
+                  <br>
+                  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by
+                  <a href="{% url wh:profile-by-nick nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
+                {% endspaceless %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+</div>
+{% endif %} {# last replays #}
+{% endif %} {# user.settings.show_last_replays #}
+

@@ -6,69 +6,62 @@
 {% endblock %}
 {% block title %} Галерея {% endblock %}
 {% block text_content %}
-<script language='javascript' type='text/javascript'>
-	<!--
-	function follow_to_gallery(){
-		g_list = document.getElementById('g_list');
-		window.location = "{% url files:galleries %}"+ g_list.value; //.href = glist.value;
-	}
-	-->
-</script>
-{# vote requirements #}
+
 {% if images.object_list %}
-<script type='text/javascript' language='javascript' src='/media/js/stars.js'></script>
-<form class="gallery_form" action='.'>
-	<select name='galleries' id='g_list' onChange="follow_to_gallery();">
-		<option class='even' value='null'>-----</option>
-		{% for g in galleries %} 
-			{% spaceless %}
-			{# {% get_images_count for g as img_count %} #}
-			{# {% if img_count %} #}
-			<option class='{% cycle odd,even %}' value="{{ g.id }}">{{ g.name }} {# [{{ img_count }}] #}</option> {#{% endif %} #}
-			{% endspaceless %}
-		{% endfor %}
-	</select>
-</form>{% if gallery_id %}
-<script language='javascript' type='text/javascript'>
-	g_list = document.getElementById('g_list');
-	g_list.value = {{ gallery_id }}
-</script>{% endif %}
+    <script type='text/javascript' language='javascript' src='/media/js/stars.js'></script>
+    <form class="gallery_form" action='.'>
+        <select name='galleries' id='g_list'>
+            <option class='even' value='null'>-----</option>
+            {% for g in galleries %} 
+                <option class='{% cycle odd,even %}' value="{{ g.id }}"
+                    data-url='{% url files:gallery 0 %}' data-id='{{ g.pk }}'>{{ g.name }}</option>
+            {% endfor %}
+        </select>
+    </form>
 
-{% with "True" as gallery_general %}
+    {% with "True" as gallery_general %}
+        {% if perms.files.delete_image and perms.files.change_image %} 
+        <div class='forms'>
+        <form id='id_images_action_form' action='.' method='post' class='action_form'>
+            {% csrf_token %}
+            {{ form.action.errors }}
+            {{ form.action }}
+            <input type='submit' value='{% trans "submit" %}'> <br clear='all' />
+        {% endif %}
 
-{% if perms.files.delete_image and perms.files.change_image %} 
-<div class='forms'>
-<form id='id_images_action_form' action='.' method='post' class='action_form'>
-{% csrf_token %}
-{{ form.action.errors }}
-{{ form.action }}
-<input type='submit' value='{% trans "submit" %}'> <br clear='all' />
-{% endif %}
-{% for image in images.object_list %}
-    {% include settings.document.image_inc %} 
-{% endfor %}
-<br clear="all">
-{% if perms.files.change_image and perms.files.delete_image %}
-{% endif %}
-</form>
-</div>
-{% include "tracker/tracker_js.html" %}
-<script language='javascript'>
-    $(document).ready(function(){
-        $('.frame').bind('mouseover', function(){
-            $(this).addClass('frame_hover');
-        });
-        $('.frame').bind('mouseout', function(){
-            $(this).removeClass('frame_hover');
-        });
-    });
-</script>
-{% endwith %}
-{% with images as page %}
-{% include settings.document.links %}
-{% endwith %}
+        {% for image in images.object_list %}
+            {% include settings.document.image_inc %} 
+        {% endfor %}
+        <br clear="all">
+
+        {% if perms.files.change_image and perms.files.delete_image %}
+        </form>
+        </div>
+        {% endif %}
+
+        {% include "tracker/tracker_js.html" %}
+        <script language='javascript'>
+            $(document).ready(function(){
+                $('.frame').bind('mouseover', function(){
+                    $(this).addClass('frame_hover');
+                });
+                $('.frame').bind('mouseout', function(){
+                    $(this).removeClass('frame_hover');
+                });
+                $("#g_list").change(function(e){
+                    blk = $(this).find('option:selected');
+                    id = blk.data('id');
+                    url = blk.data('url').replace(0, id);
+                    document.location.href = url;
+                });
+            });
+        </script>
+        {% endwith %}
+
+    {% include settings.document.links with page=images%}
+
 {% else %}
-{% include settings.document.nothing_inc %}
+    {% include settings.document.nothing_inc %}
 {% endif %}
 {% endblock %}
 

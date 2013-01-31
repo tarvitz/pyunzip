@@ -1,9 +1,4 @@
-{% spaceless %}{% load votetags %} {% load comments %} {% load trackertags %}
-	 {% get_vote for image as vote %} 
-	 {% bind image as vote_object %}
-	 {% check_user_voted for image with user as voted %}
-{% endspaceless %}
-
+{% load votetags comments thumbnail trackertags %}
 <div class='frame {% if gallery_general %} frame_float{% endif %}' >
     <div class='transparency tr_black'></div>
     <div class='reflects_up'></div>
@@ -15,41 +10,46 @@
         {% if user == image.owner or user.is_superuser or perms.files.delete_images %}
         <div class='actions'>
             <div class='transparency tr_black'></div>
-        {# <a class='edit_link' href='#'>[edit]</a> #}
+            {# <a class='edit_link' href='#'>[edit]</a> #}
             {% if gallery_general %} {% spaceless %}
-             {% if perms.files.delete_image and perms.files.change_image %}
+            {% if perms.files.delete_image and perms.files.change_image %}
                 <input class='left' type='checkbox' value='{{ image.id }}' name='items'>
-             {% endif %}
+            {% endif %}
             {% endspaceless %}{% endif %}
             <a class='edit_link' href='{% url files:image-edit image.id %}' title='удалить'>[править]</a>
             <a class='del_link' href='{% url files:image-delete image.id 'delete' %}' title='удалить'>[удалить]</a>
         </div>
         {% endif %}
         <center> 
-            {% include "stars.html" %}
+            {# {% include "stars.html" %} #}
 
             <a href='{{ image.image.url }}' target='_blank'>
-            <img src='{% if image.thumbnail.url %}{{ image.thumbnail.url }}{% endif %}' alt='[img]' title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
+            {% thumbnail image.image gs.IMAGE_THUMBNAIL_SIZE as thmb %}
+                <img src='{{ thmb.url }}' alt='{{ image.title }}'
+                    title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
+            {% endthumbnail %}
             </a>
             <br>
-            {# {% if vote %}Рейтинг: <b>{{ vote.rating }}</b><br>{% endif %} #}
+
             название: &quot;<b>{{ image.title }}</b>&quot;<br>
             {% if image.alias %}<small>Алиас: {{ image.alias }}</small><br>{% endif %}
             {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
             <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
-            {# recieving comments for images #}
+
             {% get_comment_count for image as comments %}
-            {% if gallery_general %}{% spaceless %}<small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>&nbsp;
-            {% with image as object %}
-                {% include "tracker/is_new.html" %}
-            {% endwith %}
-</small>{% endspaceless %}{% else %}
-            {% spaceless %}
-            
-            <small>коментариев: <b>{{ comments}}</b>&nbsp;
-            {# {% if isnew %}<span class='new'>[new]</span> {% endif %} #}
-            </small>
-            {% endspaceless %}
+            {% if gallery_general %}
+                {% spaceless %}
+                <small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>&nbsp;
+                {% include "tracker/is_new.html" with object=image %}
+
+                </small>
+                {% endspaceless %}
+            {% else %}
+                {% spaceless %}
+                <small>коментариев: <b>{{ comments}}</b>&nbsp;
+                {# {% if isnew %}<span class='new'>[new]</span> {% endif %} #}
+                </small>
+                {% endspaceless %}
             {% endif %}
         </center>
     </div>

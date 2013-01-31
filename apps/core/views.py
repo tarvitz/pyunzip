@@ -513,7 +513,7 @@ def save_comment(request):
     
     template = get_skin_template(request.user, 'add_comments_site.html')
     if request.method == 'POST':
-        form = CommentForm(request.POST,request=request)
+        form = CommentForm(request.POST, request=request)
         if form.is_valid():
             app_n_model = form.cleaned_data['app_n_model']
             obj_id = form.cleaned_data['obj_id']

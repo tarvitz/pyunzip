@@ -19,7 +19,8 @@
 
 .round_message .msg_headline{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
     border-bottom: 1px dotted darkgrey;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -70,7 +71,8 @@
     padding-top: 5px;
     width: 75px;
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
 }
 .round_message .msg_content .msg_avatar img{
     width: 50px;
@@ -94,7 +96,8 @@
 
 .round_message .msg_footer{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
     padding: 0px;
     border-top: 1px dotted darkgrey;
     text-align: right;
@@ -166,6 +169,7 @@
 	z-index: -1;
 }
 .round_message .msg_content .msg_text .msg_txt{
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
 }
 /*endof css*/
