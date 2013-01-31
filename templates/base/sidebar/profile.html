@@ -49,7 +49,7 @@
                 </li>
                 <li class='lvl2'><a rel='twipsy' href='{% url news:archived-news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
                 {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url news:article-add %}'>Добавить</a></li>{% endif %}
-                <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url tabletop:rosters %}">Ростеры</a></li>
+                <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url tabletop:rosters-index %}">Ростеры</a></li>
                 {% if global_settings.DEVELOPMENT %}
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url tabletop:battle-reports %}'>Батл репорты</a></li>
                 <li class='lvl2'><a href='{% url tabletop:battle-report-add %}'>добавить</a></li>
