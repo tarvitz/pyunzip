@@ -80,7 +80,7 @@ urlpatterns = patterns('apps.core.views',
             'message': _('Do you realy want to unsubscribe this site object?'),
             'action_function': 'apps.core.views.delete_subscription',
             'pk': 'id',
-        }
+        },
     ),
     url(r'^reports/delete/(?P<obj_id>\d+)/approve/$','approve_action',
         {
@@ -90,7 +90,7 @@ urlpatterns = patterns('apps.core.views',
         }
     ),
     url('^unsubscribe/(?P<id>\d+)/(?P<action>(approve|force))/$','delete_subscription',
-        name='url_unsubscribe'),
+        name='unsubscribe'),
     url('^db/css/$','db_css',
         name='css-db'),
     url('^db/css/edit/$','add_edit_css',
