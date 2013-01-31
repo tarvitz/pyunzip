@@ -29,10 +29,10 @@
  <br clear='all'>
  <div id='read'><a href='{{ global_referer }}'>назад</a></div>
  <hr>
- <div id='footer'> (by {% get_raw_nickname article.author %}), published {{ article.date }}</div>
- {% if article.editor %}<div id='footer'>(edited by {% get_raw_nickname  article.editor %})</div>{% endif %}
- {% if article.url %}<div id='footer' class='url'><a href='{{ article.url }}'>оригинал</a></div>{% endif %}
-{% if article.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ article.attachment.attachment.url }}'>{{ article.attachment.attachment.name|namemediacut }}</a> [{{article.attachment.attachment.size|filesizeformat}}]</div>{% endif %} 
+ <div class='footer'> (by {% get_raw_nickname article.author %}), published {{ article.date }}</div>
+ {% if article.editor %}<div class='footer'>(edited by {% get_raw_nickname  article.editor %})</div>{% endif %}
+ {% if article.url %}<div id='footer url'><a href='{{ article.url }}'>оригинал</a></div>{% endif %}
+{% if article.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ article.attachment.attachment.url }}'>{{ article.attachment.attachment.name|namemediacut }}</a> [{{article.attachment.attachment.size|filesizeformat}}]</div>{% endif %} 
  </div>
  {% if comments.object_list %}
  <center>Коментарии</center>
