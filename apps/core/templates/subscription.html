@@ -16,7 +16,7 @@
 		<li>
                         <input type='checkbox' value='{{ sub.id }}' name='items'>
 			<a href='{{ sub.get_real_object.get_absolute_url }}'>{{ sub.get_model }} : {{ sub.get_title }}</a>
-			<a href='{% url url_unsubscribe sub.id "approve" %}' title='отписаться' class='del_link'>[x]</a></li>
+			<a href='{% url core:unsubscribe sub.id "approve" %}' title='отписаться' class='del_link'>[x]</a></li>
 	{% endfor %}
 	</ul>
     </form>
