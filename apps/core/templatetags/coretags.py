@@ -136,11 +136,12 @@ class GetOnlineUsers(Node):
             useractivity__activity_date__gte=time)
         final_users = list()
         for n in xrange(0,len(users)):
-            if users[n].settings.has_key('invisible'):
-                if not users[n].settings['invisible']:
+            if users[n].settings:
+                if users[n].settings.has_key('invisible'):
+                    if not users[n].settings['invisible']:
+                        final_users.append(users[n])
+                else:
                     final_users.append(users[n])
-            else:
-                final_users.append(users[n])
         context[self.varname] = final_users
 
         return ''
