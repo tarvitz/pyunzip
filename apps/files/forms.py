@@ -32,15 +32,17 @@ class UploadFileModelForm(forms.ModelForm):
 
 class UploadImageModelForm(forms.ModelForm):
     required_css_class='required'
+    """
     alias = forms.CharField(widget=AjaxValidateInput(
         request_url='xhr_get_img_alias',
         error_message=_('Such alias is already exists')),
         help_text=_('Fast name to access unit'),
         required=False,
     )
+    """
     class Meta:
         model = ModelImage
-        exclude = ['thumbnail', 'owner']  
+        exclude = ['thumbnail', 'owner', 'alias']
 
 class ImageModelForm(UploadImageModelForm):
     required_css_class='required'

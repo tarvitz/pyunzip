@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends base_template %} {% load coretags %}
 {% block css %}
     {{ block.super }}
     <link rel='stylesheet' media='screen' href='/styles/{{ user.skin.name|getskincss:"news.css" }}'>
@@ -13,7 +13,8 @@
     {% include settings.document.links %}
 {% endif %}
 {% if user.is_authenticated %}
-    {% include settings.document.comments_form %}
+    {% get_content_type article as object %}
+    {% include settings.document.comments_form with object=object gs=gs %}
 {% endif %}
 {% else %}
 <div align='center' class='block_notice'>

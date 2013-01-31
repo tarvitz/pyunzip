@@ -13,55 +13,52 @@
  {{ block.super }}
  <link type="text/css" rel="stylesheet" href="/media/js/syntax/styles/shCoreDefault.css"/>
 {% endblock %}
-{% block tabs %}
-<div id="tabs">
-    <ul>
-        {% spaceless%}{% if user.is_staff %}
-        <li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
-        {% endif %}{% endspaceless %}
-        {% if user.is_authenticated %}
-        <li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
-        {% else%}<li><a href="{% url wh:login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-        {% if not user.is_authenticated %}<li><a href="{% url wh:register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
-        <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
-    </ul>
-</div><br clear="left">
-{% endblock %}
 {% block control_content %}
-<div class='none' style='margin-top: 5px;'><span class='label'>ReView</span></div>
-<div class='user_profile'>
-	<div class='transparency'></div>
-	<span class='reflects_up'></span>
-	<span class='reflects_left'></span>
-	{# make it more brilliant #}
-	{% get_raw_nickname 'Saul Tarvitz' %}
-	<img alt='avatar' title='' src="{% url wh:avatar nickname='Saul Tarvitz' %}">
-	<small>
-		Работаю над ресурсом с окт 2008 по текущий день
-	</small>
-	<br clear='all'>
+
+<div class='menu block'>
+    <div class='menu tab profile'>
+        <ul class='nav nav-tabs side-tabs pull-right'>
+            <li><a href='#'>ReView</a></li>
+        </ul>
+        <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
+    </div>
+    <div class='tab-pane'>
+        <div class='menu bar profile'>
+            <div class='transparency'></div>
+            <span class='reflects_up'></span>
+            <span class='reflects_left'></span>
+            {# make it more brilliant #}
+            {% get_raw_nickname 'Saul Tarvitz' %}
+            <div class='avatar'>
+                <img alt='avatar' title='' src="{% url wh:avatar nickname='Saul Tarvitz' %}">
+            </div>
+            <small>
+                Работаю над ресурсом с окт 2008 по текущий день
+            </small>
+            <br clear='all'>
+        </div>
+    </div>
 </div>
 
-<div class='none'><span class='label'>Облачко</span></div>
-<div class='cloud'>
-	<div class='transparency'></div>
-	<span class='reflects_up'></span>
-	<span class='reflects_left'></span>
-	<span class='reflects_right'></span>
-        {% tag_cloud_for_model blogs.Post as clouds %}
-	{% for cloud in clouds %}
-		<a href="{% url blog:tag tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
-	{% endfor %}
-</div>
-<div class='none'><span class='label'>Записи</span></div>
-<div class='cloud'>
-	<div class='transparency'></div>
-	Архив записей за текущий год
-</div>
-<div class='none'><span class='label'>Архив</span></div>
-<div class='cloud'> <!-- instead of archive -->
-	<div class='transparency'></div>
-	Архив записпей
+<div class='menu block'>
+    <div class='menu tab'>
+        <ul class='nav nav-tabs side-tabs pull-right'>
+            <li><a href='#'>Облачко</a></li>
+        </ul>
+        <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
+    </div>
+    <div class='tab-pane'>
+        <div class='menu bar cloud'>
+            <div class='transparency'></div>
+            <span class='reflects_up'></span>
+            <span class='reflects_left'></span>
+            <span class='reflects_right'></span>
+                {% tag_cloud_for_model blogs.Post as clouds %}
+            {% for cloud in clouds %}
+                <a href="{% url blog:tag tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}
 {% block text_content %}

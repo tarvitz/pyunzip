@@ -52,11 +52,13 @@
 	padding: 0 10px;
 }
 .karma_voter{
-	font-size: xx-small;
+	font-size: 8pt;
+    line-height: initial;
 	padding-left: 3px;
 }
 .karma_date{
-	font-size: xx-small;
+	font-size: 8pt;
+    line-height: initial;
 	padding-left: 3px;
 }
 .karma_comment{

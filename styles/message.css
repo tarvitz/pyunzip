@@ -6,7 +6,8 @@
 }
 .message .msg_headline{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: 13px;
     border-bottom: 1px dotted darkgrey;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -60,7 +61,8 @@
     margin-right: 5px;
     height: 100%;
     color: white;
-    font-size: 0.60em;
+    font-size: 8pt;
+    line-height: initial;
     top: 0;
     left: 0;
     padding-right: 5px;
@@ -94,7 +96,8 @@
 }
 .message .msg_footer{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
     padding: 0px;
     border-top: 1px dotted darkgrey;
 }
@@ -156,7 +159,8 @@
 }
 .quote_content .quote_headline{
 	position: relative;
-	font-size: x-small;
+	font-size: 8pt;
+    line-height: initial;
 	text-align: center;
 	border: 1px solid white;
 	border-bottom: 0px;

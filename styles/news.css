@@ -61,17 +61,20 @@ div #news{
 	text-decoration: none;
 }
 #news #read{
-	font-size: x-small;
+	font-size: 8pt;
+    line-height: initial;
 	text-align: right;
 }
 #news #footer{
 	text-align: right;
-	font-size: x-small;
+	font-size: 8pt;
+    line-height: initial;
 	color: white;
 }
 .footer, .news .footer{
 	text-align: right;
-	font-size: x-small;
+	font-size: 8pt;
+    line-height: initial;
 	color: white;
 }
 #add_form textarea,#add_form input,#add_form select{

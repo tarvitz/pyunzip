@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+	"http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>{% load newsfilters i18n %}
+{% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf8">
+<!-- wot -->
+<meta name="wot-verification" content="581220ae922fc400475a"/>
+<title>{% block title %}Warhammer 40,000{% endblock%}</title>
+{% block css %}
+<link rel='stylesheet' href='/media/bootstrap/css/bootstrap.min.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/media/bootstrap/css/main.css' type='text/css' media='screen'>
+
+<link rel='stylesheet' href='/media/css/markitup/skins/markitup/style.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/media/css/markitup/common.css' type='text/css' media='screen'>
+
+<!--<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"main.css" }}" type="text/css" media="screen"> -->
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"rank.css" }}" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"tags.css" }}" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"karma.css" }}" type="text/css" media="screen">
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"twipsy.css" }}' type='text/css' media='screen'>
+
+{% endblock %}
+{# stylesheet special for overriding base style templates withing one file #}
+<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"override.css" }}' type='text/css' media='screen'>
+{# user css'es #}
+{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url core:css-db %}' type='text/css' media='screen'>{% endif %}
+{% block js %}
+<script type='text/javascript' src='/media/js/core.js'></script>
+<script type='text/javascript' src='/media/js/base.js'></script>
+<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
+<script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
+<script type='text/javascript' src='/media/js/markitup/bb_textile.js'></script>
+<!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
+<script type='text/javascript' src='/media/js/m_effects.js'></script>
+<!--<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>-->
+{% comment %}
+<script language='javascript'>
+	//alert(isOpera);
+</script>
+{% endcomment %}
+{% endblock %}
+{% block head_content %}{% endblock %}
+</head>
+
+<body>
+<div class='container-fluid' id='wrap'>
+    <div id='top-spacer'></div>
+    <div class='menu'>
+        <ul class='nav nav-tabs main-tabs no-margin no-bottom-border pull-right'>
+            {% if user.is_superuser %}
+            <li><a href="{% url wh:superlogin %}">&nbsp;S&nbsp;</a></li>
+            {% endif %}
+            {% if user.is_staff %}
+            <li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
+            {% else%}<li><a href="{% url wh:login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+            {% if not user.is_authenticated %}<li><a href="{% url wh:register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+            <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
+        </ul>
+        <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
+            <li><a href='{% url pybb_index %}'>форум</a></li>
+            <li><a href='{% url blog:index %}'>блог</a></li>
+            <li><a href='{% url news:news %}'>сайт</a></li>
+        </ul>
+    </div>
+    <div class='navbar navbar-inverse no-margin-bottom'>
+        <div class='navbar-inner grey'>
+            <div id='miniquote'>
+                <center><span class='content'>{{ miniquote.content }}</span></center>
+            </div>
+        </div>
+    </div>
+    <!-- navbars end -->
+    <div class='row-fluid'>
+        <div id='main-content' class='content span9-5 offset05'>
+            <div class='transparency'></div>
+            <div class='content'>
+                {% block text_content %}  {% endblock %}
+                {% if timeit %}{% include "timeit.html" %}{% endif %}
+            </div>
+        </div>
+        <div class='bars span2 dis-yellow-marker' id='sidebar'>
+        {# control content #}
+        {% block control_content %}
+            {% include "base/sidebar/profile.html" %}
+            {# {% include "base/sidebar/unauthorized.html" %} merged with profile #}
+            {% include "base/sidebar/search.html" %}
+            {% include "base/sidebar/last_news.html" %}
+            {% include "base/sidebar/last_replays.html" %}
+            {% include "base/sidebar/quotes.html" %}
+            {% include "base/sidebar/online.html" %}
+        {% endblock %}
+        </div>
+    </div>
+    <div id='push'>&nbsp;</div>
+</div> <!-- container fluid -->
+
+<footer id='footer'>
+    <div id='blacklibrary'>
+        <a rel='twipsy' href='http://blacklibrary.ru' title=';)'>dev: Тёмная библиотека</a>
+    </div>
+    <center>
+        <div class='copyright'>This web site is completely unofficial and in no way endorsed by <a href='http://www.games-workshop.com/'>Games Workshop Limited</a>. All logos, names etc. either &reg;, &trade; and/or &copy; <a href='http://www.games-workshop.com/'>Games Workshop Ltd</a> 2000-2011, variably registered in the UK and other countries around the world. Used without permission. No challenge to their status intended. All Rights Reserved to their respective owners.
+        </div>
+    </center>
+</footer>
+</body>
+
+{% block endjs %}
+<script language='javascript' type='text/javascript'>
+    var setTabs = function(src){
+        document.cookie = 'mainTab=' + src;
+    }
+    var updateTabs = function(){
+        kookie = document.cookie.split('; ');
+        match = document.cookie.match(/mainTab=(\w+)/);
+        tabValue = (match) ? match[1] : -1;
+        if (tabValue != -1){
+            $('.tab-content').find('.tab-pane').removeClass('active');
+            $(".tab-content").find('#' + tabValue).addClass('active');
+            $('.nav-tabs').find('li').removeClass('active');
+            blk = $('.nav-tabs').find('[href=#' + tabValue + ']');
+            blk.parents('li').addClass('active');
+        }
+    }
+
+    miniquote = $('#horizontal_line > div > span');
+    $(document).ready(function(){
+        //setInterval(update_miniquote, 60*1000);
+        setInterval(update_bootstrap_miniquote, 60 * 1000);
+
+        $('li.required label').attr({'data-original-title': "{% trans 'Required field' %}"});
+        /*$('li.required label').tooltip({live: true, placement: 'right', delayIn: 500});*/
+        updateTabs();
+        $('.nav-tabs a[data-toggle]').click(function(e){
+            setTabs($(this).attr('href').replace('#', ''));
+        });
+    });
+
+    {% comment %}
+    function update_miniquote(){
+        $.getJSON('{% url json:wh:miniquote %}', function(data){
+            if (data){
+                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
+                miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
+                    miniquote.text(data[0].fields['content']);
+                    miniquote.fadeIn(isFireFox ?1000 :1500);
+                    if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
+                });
+            }//if data
+        });
+    }
+    {% endcomment %}
+    var update_bootstrap_miniquote = function(){
+        $.getJSON('{% url json:wh:miniquote %}', function(data){
+            mquote = $('#miniquote .content');
+            mquote.fadeOut(1500, function(){
+                mquote.text(data[0].fields.content);
+                mquote.fadeIn(1500);
+            });
+        });
+    };
+
+    /*$('a[rel=twipsy]').tooltip({ live: true, placement: 'below', delayIn: 1000 });*/
+    $("a[rel=twipsy]").tooltip({live: true});
+</script>
+{% endblock %} {# endjs #}
+{% block sidejs %}
+{% if global_settings.YANDEX_METRICA_ENABLED %}
+<!-- Yandex.Metrika counter --><div style="display:none;"><script type="text/javascript">(function(w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter12262753 = new Ya.Metrika({id:12262753, enableAll: true, webvisor:true}); } catch(e) { } }); })(window, "yandex_metrika_callbacks");</script></div><script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script><noscript><div><img src="//mc.yandex.ru/watch/12262753" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+{% endif %}
+{% endblock %}
+
+</html>

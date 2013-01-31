@@ -469,7 +469,7 @@ def upload_image(request):
     template = get_skin_template(request.user, 'gallery/upload.html')
     form = UploadImageModelForm()
     if request.method == 'POST':
-        form = UploadImageForm(request.POST)
+        form = UploadImageModelForm(request.POST, request.FILES)
         if form.is_valid():
             form.instance.owner = request.user
             form.save()

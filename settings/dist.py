@@ -103,6 +103,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
+    'apps.core.context_processors.global_settings',
     'apps.core.context_processors.expressions',
     'apps.core.context_processors.briefing_news',
     'apps.core.context_processors.last_replays',
@@ -230,6 +231,9 @@ SERVER_EMAIL='noreply@w40k.net'
 DEV_SERVER=True
 GRAPPELLI_ADMIN_TITLE='w40k.net'
 USE_OLD_THUMBNAIL_IMAGE_SCHEME=False
+DEFAULT_TEMPLATE='base.html'
+DEFAULT_SYNTAX='textile'
+IMAGE_THUMBNAIL_SIZE='200x200'
 
 #import settings from another app
 # LOGGING

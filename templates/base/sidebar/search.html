@@ -1,0 +1,22 @@
+{% if perms.core.can_test %}
+<div class='menu block'>
+    <div class='menu tab'>
+        <ul class='nav nav-tabs side-tabs pull-right'>
+            <li><a href='#'>Поиск</a></li>
+        </ul>
+        <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
+    </div>   
+
+    <div class="menu bar search">
+        <div class='transparency'></div>
+        <span class='reflects_up'></span>
+        <span class='reflects_left'></span>
+            <form id='search_form' action='{% url core:search-sph %}' method='POST'>
+                <input type='text' name='query' id='id_query' class='global_search span10'
+                    placeholder='Ищем?'>
+                <input type='submit' value='поиск' class='btn btn-inverse btn-small'>
+            </form>
+    </div>
+</div>
+{% endif %}
+

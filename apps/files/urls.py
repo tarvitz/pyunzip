@@ -56,7 +56,7 @@ urlpatterns = patterns('apps.files.views',
     #
     url(r'^gallery/$', 'show_all_images',
         name='galleries'),
-    url(r'^gallery/(?P<id>\d+)/$', 'show_all_images'),
+    url(r'^gallery/(?P<id>\d+)/$', 'show_all_images', name='gallery'),
     #(r'^gallery/create/$', 'create_gallery'),
     url(r'^gallery/exists/$', direct_to_template,
         {'template': 'gallery/exists.html'}),

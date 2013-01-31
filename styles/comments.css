@@ -6,7 +6,8 @@
 }
 #message #msg_headline{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
     border-bottom: 1px dotted darkgrey;
     padding-top: 5px;
     padding-bottom: 5px;
@@ -43,7 +44,8 @@
     margin: 0px;
     width: 105px;
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
 }
 #message #msg_content #msg_avatar img{
     padding-bottom: 3px;
@@ -63,7 +65,8 @@
 
 #message #msg_footer{
     color: white;
-    font-size: x-small;
+    font-size: 8pt;
+    line-height: initial;
     padding: 0px;
     border-top: 1px dotted darkgrey;
 }

@@ -401,3 +401,49 @@ def send_network_message(host,port,message):
     except:
         logger.error('Could not send message')
         return False
+
+def get_content_type_new(Object):
+    """
+    works with ModelBase based classes, its instances
+    and with format string 'app_label.model_name', also supports
+    sphinx models and instances modification
+    source taken from warmist helpers source
+    retrieves content_type or raise the common django Exception
+    Examples:
+    get_content_type(User)
+    get_content_type(onsite_user)
+    get_content_type('auth.user')
+    """
+
+    if callable(Object):  # class
+        model = Object._meta.module_name
+        app_label = Object._meta.app_label
+        #model = Object.__name__.lower()
+        #app_label = (x for x in reversed(
+        #    Object.__module__.split('.')) if x not in 'models').next()
+
+    elif hasattr(Object, 'pk'):  # class instance
+        if hasattr(Object, '_sphinx') or hasattr(Object, '_current_object'):
+            model = Object._current_object._meta.module_name
+            app_label = Object._current_object._meta.app_label
+            #app_label = (x for x in reversed(
+            #    Object._current_object.__module__.split('.')) \
+            #if x not in 'models').next()
+            #model = Object._current_object.__class__.__name__.lower()
+        else:
+            app_label = Object._meta.app_label
+            model = Object._meta.module_name
+            #app_label = (x for x in reversed(Object.__module__.split('.')) \
+            #if x not in 'models').next()
+            #model = Object.__class__.__name__.lower()
+    elif isinstance(Object, basestring):
+        app_label, model = Object.split('.')
+    ct = ContentType.objects.get(app_label=app_label, model=model)
+    return ct
+
+
+def get_content_type_or_None(Object):
+    try:
+        return get_content_type_new(Object)
+    except:
+        return None

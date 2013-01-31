@@ -55,7 +55,7 @@ SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
 #duplicates with files.forms need more 'usable' interface for comments
 class CommentForm(forms.Form):
     syntax = forms.ChoiceField(choices=settings.SYNTAX,required=False)
-    comment = forms.CharField(widget=TinyMkWidget())
+    comment = forms.CharField(widget=TinyMkWidget)
     url = forms.CharField(required=False,widget=forms.HiddenInput())
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     subscribe = forms.BooleanField(required=False)

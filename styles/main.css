@@ -500,11 +500,11 @@ div.stars img {
 	text-decoration: none;
 	margin-left: 2px;
 	font-size: 0.55em;
-        font-family: Verdana;
-        color: white !important;
-        padding: 2px 10px;
-        font-weight: normal !important;
-        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
+    font-family: Verdana;
+    color: white !important;
+    padding: 2px 10px;
+    font-weight: normal !important;
+    background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
 
 }
 #button:hover, .a_button:hover{
