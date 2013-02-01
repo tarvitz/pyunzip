@@ -793,7 +793,7 @@ def get_comment(request, id=0,raw=False):
         comment = Comment.objects.get(id__exact=id)
         if not raw:
             comment.comment = striptags(comment.comment)
-            comment.comment = re.sub(r'\n+', '', post_markup_filter(comment.comment))
+            comment.comment = post_markup_filter(comment.comment)
             comment.comment = render_filter(comment.comment, comment.syntax) #striptags|spadvfilter|safe
         response.write(serializers.serialize("json",[comment]))
         return response

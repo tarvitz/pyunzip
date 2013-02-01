@@ -529,6 +529,7 @@ def post_markup_filter(string):
             html = render_to_string('s_comments.html', {'spoiler_text': text})
         elif tag == 'off':
             html = render_to_string('off_comments.html', {'offtopic_text': text})
+        html = re.sub(r'\n+', '', html)
         string = string.replace('(%s)[%s]' % (tag, text), html)
     # quote
     r = re.compile(r'\((?P<user>[\w\d\-\ ]+)\){(?P<quote>.*?)}', re.I|re.L|re.S)
@@ -536,6 +537,7 @@ def post_markup_filter(string):
     for (username, text) in result:
         user = get_object_or_None(User, nickname__iexact=username) or AnonymousUser()
         html = render_to_string('q_comments.html', {'quote_user': user, 'quote_text': text})
+        html = re.sub(r'\n+', '', html)
         string = string.replace('(%s){%s}' % (username, text), html)
     return string
 

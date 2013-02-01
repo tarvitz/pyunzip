@@ -1,6 +1,7 @@
 # coding: utf-8 
 
 import os
+import re
 
 from django.db import models
 from django.db.models import Q
@@ -456,9 +457,17 @@ class UserExtension(object):
         permissions = (
             ('can_test', 'Can test functional')
         )
+
+
 class CommentExtension(object):
+    def render_comment(self):
+        """ renturns comment in render"""
+        from apps.core.helpers import post_markup_filter as pmf, render_filter
+        return render_filter(pmf(self.comment), self.syntax or 'textile')
+
     def get_content(self):
         return self.comment
+
     def get_title(self):
         if len(self.comment)>100:
             return "%s ..." % self.comment[0:100]
