@@ -2,6 +2,7 @@ myMarkupSettings = {
     'bb-code': {
         nameSpace: 'bbcode',
         previewParserPath:	'/comment/preview/?markup=bb-code', // path to your BBCode parser
+        previewAutoRefresh: false,
         markupSet: [
             {name:'Bold', key:'B', openWith:'[b]', closeWith:'[/b]', className: 'bold'},
             {name:'Italic', key:'I', openWith:'[i]', closeWith:'[/i]', className: 'italic',},
@@ -38,6 +39,7 @@ myMarkupSettings = {
     'textile': {
         nameSpace: 'textile',
         previewParserPath:	'/comment/preview/?markup=textile', // path to your Textile parser
+        previewAutoRefresh: false,
         onShiftEnter:		{keepDefault:false, replaceWith:'\n\n'},
         markupSet: [
             {name:'Heading 1', key:'1', openWith:'h1(!(([![Class]!]))!). ', placeHolder:'Your title here...', className: 'h1'},
