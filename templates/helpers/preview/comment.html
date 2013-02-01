@@ -10,7 +10,7 @@
 		<div class="transparency tr_black"></div>
         <span class="msg_comment_date">[{% now "Y/M/d, H:i:s" %}]</span>
 		<span class="msg_user_nickname">
-		<span class="nickname">{{ user.get_nickname }}</span>  комментирует:
+		<span class="nickname">{{ user.nickname|default_if_none:"not me :)" }}</span>  комментирует:
 		</span>
 	</div>
     <div class="msg_content">
