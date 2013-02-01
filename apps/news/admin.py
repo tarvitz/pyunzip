@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from apps.news.models import News,ArchivedNews,Category
+from apps.news.models import News,ArchivedNews,Category, MeatingType, Meating
 #Actions
 def make_approved_action(modeladmin,request,queryset):
     queryset.update(approved=True)
@@ -50,3 +50,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_per_page = 40
 
 admin.site.register(Category,CategoryAdmin)
+admin.site.register(MeatingType)
+admin.site.register(Meating)

@@ -137,3 +137,40 @@ class News(AbstractNews):
             ('purge_comments', 'Can purge comments'),
         )
 
+class MeatingType(models.Model):
+    title = models.CharField(_("Title"), max_length=64)
+    codename = models.CharField(_("Codename"), unique=True, max_length=32)
+    __unicode__ = lambda s: "%s [%s]" % (s.title, s.codename)
+
+    class Meta:
+        verbose_name = _("Meating Type")
+        verbose_name_plural = _("Meating Types")
+
+class Meating(models.Model):
+    title = models.CharField(_("Title"), max_length=256)
+    type = models.ForeignKey(MeatingType, verbose_name=_("Type"), default=1)
+    owner = models.ForeignKey(User, verbose_name=_("Owner"),
+        related_name='meating_owner_set')
+    members = models.ManyToManyField(User, verbose_name=_("Members"),
+        related_name='meating_user_sets')
+    content = models.TextField(_("Content"), max_length=4096)
+    syntax = models.CharField(_('Syntax'),max_length=20, blank=True,
+        null=True, choices=settings.SYNTAX, default='bb-code') #markdown is default
+    created_on = models.DateTimeField(_("Created on"), auto_now_add=True)
+    updated_on = models.DateTimeField(_("Updated on"), auto_now=True)
+    is_approved = models.BooleanField(_('Approved'), default=False)
+    author_ipv4 = models.CharField(_('Author IP address'),
+        max_length=16, blank=True)
+    author_ipv6 = models.CharField(_('Author IP address'),
+        max_length=16, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('news:meating', args=(self.id, ))
+
+    def __unicode__(self):
+        return "%s [%s]" % (self.title, self.type.title)
+
+    class Meta:
+        verbose_name = _("Meating")
+        verbose_name_plural = _("Meatings")
+        ordering = ['created_on', '-id',]

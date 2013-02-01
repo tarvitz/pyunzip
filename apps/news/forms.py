@@ -1,5 +1,5 @@
 # coding: utf-8
-from apps.news.models import Category as NewsCategory
+from apps.news.models import Category as NewsCategory, Meating
 from apps.core import get_safe_message
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -107,3 +107,33 @@ class ArticleForm(forms.Form):
 
 class ApproveActionForm(forms.Form):
      url = forms.CharField(widget=forms.HiddenInput())
+
+class AddMeatingForm(forms.ModelForm):
+    required_css_class = 'required'
+    def __init__(self, *args, **kwargs):
+        if 'request' in kwargs:
+            self.request = kwargs['request']
+            del kwargs['request']
+        super(AddMeatingForm, self).__init__(*args, **kwargs)
+        if self.data:
+            if not hasattr(self, 'request'):
+                raise ImproperlyConfigured("You should pass request as keyword param to proceed")
+
+    def clean_author_ipv4(self):
+        ipv4 = self.cleaned_data['ipv4']
+        if not ipv4:
+            ipv4 = '127.0.0.1'
+        return ipv4
+
+    def save(self, commit=False):
+        self.instance.owner = self.request.user
+        self.instance.author_ipv4 = self.request.META.get('REMOTE_ADDR', '127.0.0.1')
+        if request.user.has_perm('news.add_meating') or\
+            request.user.has_perm('news.change_meating'):
+            self.instance.is_approved = True
+        return super(AddMeatingForm, self).save(commit=commit)
+
+    class Meta:
+        model = Meating
+        exclude = ['created_on', 'updated_on', 'is_approved',
+            'author_ipv4', 'author_ipv6', 'owner', 'members',]
