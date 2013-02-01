@@ -134,7 +134,7 @@
         setInterval(update_bootstrap_miniquote, 60 * 1000);
 
         $('li.required label').attr({'data-original-title': "{% trans 'Required field' %}"});
-        /*$('li.required label').tooltip({live: true, placement: 'right', delayIn: 500});*/
+        $('li.required label').tooltip({live: true, placement: 'right', delay: 500});
         updateTabs();
         $('.nav-tabs a[data-toggle]').click(function(e){
             setTabs($(this).attr('href').replace('#', ''));
@@ -166,7 +166,7 @@
     };
 
     /*$('a[rel=twipsy]').tooltip({ live: true, placement: 'below', delayIn: 1000 });*/
-    $("a[rel=twipsy]").tooltip({live: true});
+    $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
 </script>
 {% endblock %} {# endjs #}
 {% block sidejs %}
