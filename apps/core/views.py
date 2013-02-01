@@ -92,7 +92,7 @@ def approve_action(request,obj_id=None, url='', \
                 action_module_instance = __import__(action_module,{},{},[''],level=0)
                 action_function_instance = getattr(action_module_instance,action_function)
                 #print "action_module: %r\naction_function_instance: %r" % (action_module,action_function_instance)
-                #pk - primary key for following object 
+                #pk - primary key for following object
                 kwargs = {
                         'request': request,
                         pk:obj_id,
@@ -176,7 +176,7 @@ def search(request):
                     except:
                         pass
         """
-        
+
         page_number = request.GET.get('page',1)
         _pages_ = get_settings(request.user,'objects_on_page',30)
         objs = paginate(objs,page_number,pages=_pages_,
@@ -201,7 +201,7 @@ def search(request):
             #objects.append(paginator)
             objects.append(objs)
         qset = Q()
-    
+
     request.session['search_q'] = query
 
     return render_to_response(template,
@@ -210,7 +210,7 @@ def search(request):
         'objects':objects,
         },context_instance=RequestContext(request,processors=[benchmark]))
 
-@benchmarking 
+@benchmarking
 def search_model(request,model):
     template = get_skin_template(request.user, 'search_model.html')
     from django.template.loader import get_template,TemplateDoesNotExist
@@ -241,7 +241,7 @@ def search_model(request,model):
         return HttpResponseRedirect('/search/failed')
     model_idx = [f[1] for f in search_fields].index(model)
     search_keywords = [f[2] for f in search_fields][model_idx]
-     
+
     #print "query:%s " % query
     if not search_keywords: search_keywords = settings.CORE_SEARCH_MAP
     qset = Q()
@@ -271,7 +271,7 @@ def sphinx_search(request):
     pages = get_settings(request.user, 'objects_on_page', 20)
     objs = list()
     query = request.POST.get('query', '') or request.session.get('query', None)
-    
+
     if request.get_full_path() == reverse('core:search-search'):
         if query:
             if 'query' in request.session:
@@ -329,21 +329,21 @@ def sphinx_search_model(request, model):
                     del request.session['query']
                     requrest.session()
     if request.method == 'POST':
-        form = SphinxSearchForm(request.POST)        
+        form = SphinxSearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
         else:
             return direct_to_template(request, template,
                 {'form': form, 'query': query},
                 processors=[benchmark])
-    
+
     form = SphinxSearchForm(initial={'query': query})
     objects = Class.search.query(query)
     objects = paginate(objects, page, pages=_pages_)
     return direct_to_template(request, template,
         {'form': form, 'objects': objects, 'query': query },
         processors=[benchmark])
-    
+
 #IT BLOWS MY MIND ;) sometimes and i can not believe that i've written this block of code
 @login_required
 def user_settings(request):
@@ -373,7 +373,7 @@ def user_settings(request):
         else:
             return direct_to_template(request,template,{'form': form})
     else:
-        
+
         return direct_to_template(request,template,{'form':form})
 
 #sets settings only permitted
@@ -398,7 +398,7 @@ def view_subscription(request):
     subscription = Announcement.objects.filter(Q(users=request.user)|Q(notified_users=request.user)).distinct()
     _pages_ = get_settings(request.user,'objects_on_page',20)
     #easy queryset
-    #formclass = action_formset(subscription, ('delete',)) 
+    #formclass = action_formset(subscription, ('delete',))
     formclass = action_formset_ng(request, subscription, Announcement)
     #paginate
     subscription = paginate(subscription,request.GET.get('page',1),pages=_pages_)
@@ -461,7 +461,7 @@ def show_comments(request,model,object_pk):
     #except (InvalidPage,EmptyPage):
     #    comments = paginator.page(1)
     #    comments.number = 1
-    comments = paginate(comments,page,pages=_pages_) 
+    comments = paginate(comments,page,pages=_pages_)
     return direct_to_template(request,template,{'comments':comments,'page':comments})
 
 @login_required
@@ -477,7 +477,7 @@ def db_css(request):
 
 @login_required
 def add_edit_css(request):
-    template = get_skin_template(request.user,'css_edit.html') 
+    template = get_skin_template(request.user,'css_edit.html')
     css = get_object_or_none(Css,user=request.user)
     form = AddEditCssForm()
     if request.method == 'POST':
@@ -512,7 +512,7 @@ def save_comment(request):
     #obj_id could cause a lot of problems if it would have much bigger blocks
     #of data then simple strings or numbers
     #use it careful until it's overwritten
-    
+
     template = get_skin_template(request.user, 'add_comments_site.html')
     if request.method == 'POST':
         form = CommentForm(request.POST, request=request)
@@ -521,7 +521,7 @@ def save_comment(request):
             obj_id = form.cleaned_data['obj_id']
             #Prevent saving comment for void
             if not validate_object(app_n_model,obj_id):  #app_label.model 13 for example
-                return HttpResponseRedirect('/comment/could/not/be/saved') #replace it with something wise 
+                return HttpResponseRedirect('/comment/could/not/be/saved') #replace it with something wise
 
             ct = get_content_type(app_n_model) #we had already checked up existance of single object
             comment = form.cleaned_data['comment']
@@ -530,7 +530,7 @@ def save_comment(request):
             subscribe = form.cleaned_data['subscribe'] #implement announcement here
             unsubscribe = form.cleaned_data['unsubscribe'] #WTF??? Cleanse this as soon as possible
             #saving comment
-            
+
             c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id)).order_by('-submit_date')
             #print "Comment: ",c
             #exists, updating
@@ -559,13 +559,13 @@ def save_comment(request):
             #saving announcement
             if subscribe:
                 announcement = get_object_or_none(Announcement,object_pk=str(obj_id),content_type=ct)
-                if announcement: 
+                if announcement:
                     announcement.subscribe(request.user)
                 else:
                     announcement = Announcement(object_pk=str(obj_id),content_type=ct)
                     announcement.save()
                     announcement.subscribe(request.user)
-                    
+
             url = form.cleaned_data['url']
             page = 'last'
             #deprecated :)
@@ -576,16 +576,21 @@ def save_comment(request):
             return direct_to_template(request,template,{'form':form})
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
-#TODO: TEST IT right
 @login_required
-def edit_comment(request,id):
+def edit_comment(request, id):
     template = get_skin_template(request.user, 'edit_comment_ng.html')
-    c = get_object_or_none(Comment,id=id)
-    if not c:
-        return HttpResponseRedirect('/comment/not/found')
+    c = get_object_or_404(Comment, id=id)
 
+    url = request.META.get('HTTP_REFERER','/')
+    _jmp = request.GET.get('j','') #We jump :)
+    if _jmp: url += '#c%i' % c.id
+
+    form = CommentForm(
+        request.POST or None, request=request,
+        instance=c, initial={
+        'url': url
+    })
     if request.method == 'POST':
-        form = CommentForm(request.POST, request=request)
         if form.is_valid():
             fields = ('comment','syntax',
                 'hidden_syntax')
@@ -596,28 +601,20 @@ def edit_comment(request,id):
             _jmp = request.GET.get('j','')
             if _jmp: url += '#c%s' % _jmp
             return HttpResponseRedirect(url)
-            
+
         else:
             return direct_to_template(request,template,{'form':form})
-    url = request.META.get('HTTP_REFERER','/')
-    _jmp = request.GET.get('j','') #We jump :)
-    if _jmp: url += '#c%i' % c.id
-
-    form = CommentForm(initial={'comment':c.comment,
-        'syntax':c.syntax,'url':url
-        })
-
-    return direct_to_template(request,template,{'form':form,'comment_id':c.id})
+    return direct_to_template(request, template, {'form':form, 'comment_id':c.id})
 
 @login_required
 @progress_upload_handler
-def upload_file(request,app_n_model,filefield=None): 
+def upload_file(request,app_n_model,filefield=None):
     logger.info('upload_file initialized')
     #print "initial"
     error = None
     progress_id = None
     #print request.GET
-    #pId = request.GET.get('X-Progress-ID',None) 
+    #pId = request.GET.get('X-Progress-ID',None)
     #print "pId: ", pId
     """It seems it's deprecated now """
     #if   'X-Progress-ID' in request.GET:
@@ -650,12 +647,12 @@ def upload_file(request,app_n_model,filefield=None):
         #print "UploadForm initialized"
         #print form.is_valid()
         #getting some data before validation
-        #print form.fields 
+        #print form.fields
         if form.is_valid():
             #print "form is valid, saving file"
             #here we set where we saving
             from apps.core.settings import UPLOAD_SETTINGS
-            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'], 
+            save_to = os.path.join(UPLOAD_SETTINGS[app_n_model]['schema'],
                 str(request.user.id))
             #Should we handle it?
             #filename = handle_uploaded_file(request.FILES[filefield],save_to)
@@ -677,7 +674,7 @@ def upload_file(request,app_n_model,filefield=None):
                 ct = get_content_type(app_n_model)
                 #print "getting ct ", ct
                 if ct:
-                    #print "saving instance" 
+                    #print "saving instance"
                     pk = helper_saver(request, form)
                     instance = ct.model_class().objects.get(pk=pk)
                     setattr(instance,filefield,filename)
@@ -717,7 +714,7 @@ def upload_file(request,app_n_model,filefield=None):
             if status_data:
                 status_data['error'] = error
                 request.session[cache_key] = status_data
-    return HttpResponse('NOT Ok') #<-wtf? 
+    return HttpResponse('NOT Ok') #<-wtf?
 
 def uploader_progress(request):
     """
@@ -763,40 +760,24 @@ def raise_500(request):
 #@has_permission('comments.change_comment') #blocks the comment edition
 def edit_comment(request, id=0):
     template = get_skin_template(request.user, "edit_comment_ng.html")
-    can_edit_comments = request.user.has_perm('news.edit_comments') 
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
+    can_edit_comments = request.user.has_perm('news.edit_comments')
+    comment = get_object_or_404(Comment, id=id)
+
     if request.user != comment.user and not can_edit_comments\
     and not request.user.is_superuser:
         return HttpResponseRedirect('/comment/not/found')
+
+    form = CommentForm(request.POST or None,request=request, instance=comment)
+
     if request.method == 'POST':
-        form = CommentForm(request.POST,request=request)
         if form.is_valid():
-            comment = form.cleaned_data['comment']
+            form.save()
             url = form.cleaned_data['url']
-            _jump = request.GET.get('j',None) 
+            _jump = request.GET.get('j',None)
             if _jump: url += "#j=%s" % _jump
-            syntax = form.cleaned_data['syntax']
-            c = Comment.objects.get(id=id)
-            c.comment = comment
-            c.syntax = syntax
-            c.save()
-            if url:
-                return HttpResponseRedirect(url)
-            return HttpResponseRedirect('/comment/edit/successfull') #request.META['HTTP_REFERER']
-        else:
-            return render_to_response(template,
-                {'form':form},
-                context_instance=RequestContext(request))
-    form = CommentForm()
-    form.fields['comment'].initial = comment.comment;
-    if request.META.get('HTTP_REFERER',None):
-        referer = "%s%s" % (request.META['HTTP_REFERER'], "#c%i" % int(id) )
-    else: referer = '/'
+            return HttpResponseRedirect(url or '/comment/edit/successfull') #request.META['HTTP_REFERER']
+    referer = "%s%s" % (request.META.get('HTTP_REFERER', '/'), "#c%i" % int(id) )
     form.fields['url'].initial = referer
-    form.fields['syntax'].initial = comment.syntax
     return render_to_response(template,
         {'form':form},
         context_instance=RequestContext(request))
@@ -823,7 +804,7 @@ def get_comment(request, id=0,raw=False):
 @login_required
 def edit_comment_ajax(request, id=0):
     template = get_skin_template(request.user, 'edit_comment.html')
-    can_edit_comments = request.user.has_perm('news.edit_comments') 
+    can_edit_comments = request.user.has_perm('news.edit_comments')
     try:
         comment = Comment.objects.get(id=id)
     except Comment.DoesNotExist:
@@ -836,7 +817,7 @@ def edit_comment_ajax(request, id=0):
     if request.method == 'POST':
         post = request.POST.copy()
         if post.has_key('comment'):
-            if comment.comment != post['comment']: #prevent db from rewrite data which did changed 
+            if comment.comment != post['comment']: #prevent db from rewrite data which did changed
                 comment.comment = post['comment']
                 #comment.submit_date=datetime.now()
                 #DDoS prevention

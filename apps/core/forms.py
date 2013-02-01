@@ -2,6 +2,7 @@
 from django import forms
 from django.http import Http404
 from django.db.models.query import QuerySet
+from django.contrib.comments.models import Comment
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from apps.core.settings import SETTINGS as USER_DEFAULT_SETTINGS, SETTINGS_FIELDS as USER_DEFAULT_FIELDS
@@ -53,16 +54,20 @@ class SettingsForm(RequestForm):
 SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
 
 #duplicates with files.forms need more 'usable' interface for comments
-class CommentForm(forms.Form):
-    syntax = forms.ChoiceField(choices=settings.SYNTAX,required=False)
-    comment = forms.CharField(widget=TinyMkWidget)
-    url = forms.CharField(required=False,widget=forms.HiddenInput())
+class CommentForm(forms.ModelForm):
+    syntax = forms.ChoiceField(
+        choices=settings.SYNTAX,required=False, widget=forms.HiddenInput
+    )
+    comment = forms.CharField(widget=forms.Textarea)
+    url = forms.CharField(required=False, widget=forms.HiddenInput)
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
-    subscribe = forms.BooleanField(required=False)
-    unsubscribe = forms.BooleanField(required=False)
+    #subscribe = forms.BooleanField(required=False)
+    #unsubscribe = forms.BooleanField(required=False)
     app_n_model = forms.CharField(required=False,widget=forms.HiddenInput()) #required if we add the comment
     obj_id = forms.CharField(required=False,widget=forms.HiddenInput()) #required the same as above
-    page = forms.RegexField(regex=re.compile(r'\d+|last',re.S|re.U),required=False,widget=forms.HiddenInput())
+    page = forms.RegexField(
+        regex=re.compile(r'\d+|last',re.S|re.U), required=False, widget=forms.HiddenInput()
+    )
 
     def __init__(self,*args,**kwargs):
         
@@ -131,6 +136,14 @@ class CommentForm(forms.Form):
         page = self.cleaned_data.get('page',None)
         if 'last' in page:
             return page
+
+    class Meta:
+        model = Comment
+        fields = (
+            'comment', 'page', 'syntax', 'hidden_syntax',
+            'app_n_model', 'obj_id', 'url'
+        )
+
 
 class SphinxSearchForm(forms.Form):
     query = forms.CharField(required=True)

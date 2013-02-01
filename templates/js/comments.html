@@ -1,0 +1,36 @@
+<script type='text/javascript'>
+/* settings */
+var markItUpParsers = {
+    'bb-code': '{% url news:comment-preview %}?markup=bb-code&template=comment',
+    'textile': '{% url news:comment-preview %}?markup=textile&template=comment',
+}
+
+myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];
+myMarkupSettings['textile']['previewParserPath'] = markItUpParsers['textile'];
+
+var reloadMarkItUp = function(type){
+    setMarkItUp(type);
+    $('#id-comment-form #id_syntax').val(type);
+
+}
+var loadMarkitUp = function(type){
+    var mySettings = myMarkupSettings["{{ syntax|default_if_none:'textile'}}"];
+    settings = {
+        'bb-code': myMarkupSettings['bb-code'],
+        'textile': myMarkupSettings['textile']
+    }
+    if (type in settings){
+        mySettings = settings[type];
+    }
+	$('#id_comment').markItUp(mySettings);
+}
+
+var setMarkItUp = function(type){
+    $('#id_comment').markItUp('remove');
+    loadMarkitUp(type);
+}
+$(document).ready(function(){
+    loadMarkitUp();
+});
+</script>
+

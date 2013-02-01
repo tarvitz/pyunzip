@@ -1,23 +1,13 @@
-{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}{% load kamwhfilters %}
+{% extends base_template %}{% load newsfilters %}{% load kamwhfilters %}
 {% block head_content %}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}' type='text/css' media='screen'>{% endblock %}
 {% block text_content %}
 <center>
-<form id='comment' action='/edit/comment/{{ comment_id }}/' method='post'>
-	{{ form.syntax.errors }}
-	Синтаксис:<br>
-	{{ form.syntax }}<br>
-	{{ form.comment.errors }}
-	Коментарий:<br>
-	{{ form.comment }}<br>
-	{{ form.url }}
-        {{ form.page }}
-	{{ form.hidden_syntax }}
-	<input type='submit' value='Изменить' id='submit'>
+<form action='{% url core:comment-edit form.instance.pk %}' method='post' id='id-comment-form'>
+    {% csrf_token %}
+    {{ form.as_ul }}
+	<input class='btn btn-inverse' type='submit' value='Изменить' id='id_submit'>
 </form>
 </center>
-<script language='javascript'>
-	syntax = $('#id_syntax');
-	syntax.change(filter_syntax,function(){});
-</script>
+{% include "js/comments.html" with syntax=form.instance.syntax %}
 {% endblock %}
