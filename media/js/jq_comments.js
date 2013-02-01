@@ -32,17 +32,18 @@ $(document).ready(function(){ });
 	}
 	 function flip_to_textarea(id){
 		var the_text = $("#text_"+id);
-		$.getJSON("/comment/"+id+"/get/raw/",get_raw_comment);
+		$.getJSON("/comment/"+id+"/get/raw/", get_raw_comment);
 	}
 	
 	function recieve_formatted_comment(id){
 		var txt = $("#text_"+id).val();
-		perform_update("comment",txt,id); //writes the changes
+		perform_update("comment", txt, id); //writes the changes
 		//$.getJSON("/comment/"+id+"/get/", recive_comment); //getting the formatted view of the comment form db
 	}
 	
 	var recive_comment = function(data){
 		jQuery.each(data, function(){
+                $('#text_' + this.pk).markItUp('remove');
 				var text_area = $("#text_"+this.pk);
 				var the_text = $('<div id="text_'+this.pk+'">'+this.fields.comment+'</div>');
 				//alert(this.fields.comment);
@@ -63,12 +64,15 @@ $(document).ready(function(){ });
 		jQuery.each(data, function(){
 			var form = '<form><textarea class="quick_edit" id="text_'+this.pk+'">\
 '+this.fields.comment+'</textarea>\
-<input type="button" id="button_'+this.pk+'" value="Обновить"\
+<input type="button" id="button_'+this.pk+'" value="Обновить" class="btn btn-inverse"\
 onClick="recieve_formatted_comment('+this.pk+')">\
 </form>'; //\
 			var text_area = $(form);
 			the_text = $("#text_"+this.pk);
 			the_text.replaceWith(text_area);
+            syntax = this.fields.syntax || 'textile';
+            myMarkupSettings[syntax].previewInWindow = 'width=600, height=300, resizable=yes, scrollbars=yes';
+            $("#text_" + this.pk).markItUp(myMarkupSettings[syntax]);
 		});
 	}
 //	});
