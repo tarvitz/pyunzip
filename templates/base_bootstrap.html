@@ -167,6 +167,8 @@
 
     /*$('a[rel=twipsy]').tooltip({ live: true, placement: 'below', delayIn: 1000 });*/
     $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
+    $('a[href=#]').click(function(e){ e.preventDefault();});
+
 </script>
 {% endblock %} {# endjs #}
 {% block sidejs %}
