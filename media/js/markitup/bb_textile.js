@@ -59,7 +59,7 @@ myMarkupSettings = {
             {name:'Numeric list', openWith:'(!(# |!|#)!)', className: 'list-numeric'},
             {separator:'---------------' },
             {name:'Picture', replaceWith:'![![Source:!:http://]!]([![Alternative text]!])!', className: 'picture'},
-            {name:'Link', openWith:'"', closeWith:'([![Title]!])":[![Link:!:http://]!]',
+            {name:'Link', openWith:'"', closeWith:'[![Title]!]":[![Link:!:http://]!]',
                 //placeHolder:'Your text to link here...',
                 className: 'link'},
             {separator:'---------------' },
