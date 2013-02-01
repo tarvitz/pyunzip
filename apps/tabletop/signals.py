@@ -24,6 +24,7 @@ def wargear_container_post_save(instance, **kwargs):
 
 def wargear_container_post_delete(instance, **kwargs):
     instance.unit.reload_pts(rebuild=True, commit=True)
+    #pass
 
 def unit_container_pre_save(instance, **kwargs):
     #if instance.pk:

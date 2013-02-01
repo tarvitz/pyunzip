@@ -14,7 +14,7 @@ var reloadMarkItUp = function(type){
 
 }
 var loadMarkitUp = function(type){
-    var mySettings = myMarkupSettings["{{ syntax|default_if_none:'textile'}}"];
+    var mySettings = myMarkupSettings["{{ syntax|default:'textile'}}"];
     settings = {
         'bb-code': myMarkupSettings['bb-code'],
         'textile': myMarkupSettings['textile']

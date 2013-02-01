@@ -22,6 +22,14 @@ MODEL_UNIT_TYPE_CHOICES = (
     ('fast', _('fast')),
     ('heavy support', _('heavy support')),
 )
+MODEL_ARMY_TYPE_CHOICES = (
+    ('infantry', _('infantry')),
+    ('vehicle', _('vehicle')),
+    ('bike', _("bike")),
+    ('jetbike', _("jetbike")),
+    ('flyer', _('flyer')),
+    ('artilery', _("artilery")),
+)
 
 class Codex(models.Model):
     content_type = models.ForeignKey(ContentType,
@@ -350,10 +358,18 @@ class ModelUnit(models.Model):
         choices=MODEL_UNIT_TYPE_CHOICES,
         default='hq', max_length=16
     )
+    unit_type = models.CharField(
+        choices=MODEL_ARMY_TYPE_CHOICES,
+        default='infantry', max_length=32
+    )
+    is_dedicated = models.BooleanField(
+        _("is dedicated"), default=False,
+        help_text=_("marks if transport could be dedicated")
+    )
     #ForeignKey(ModelUnitType, related_name='model_units')
     title = models.CharField(_('title'), max_length=256)
     description = models.CharField(
-        _("description"), max_length=4096
+        _("description"), max_length=4096, blank=True
     )
     army = models.ForeignKey(
         Army, related_name='model_units'
@@ -399,6 +415,12 @@ class MWRUnit(models.Model):
     wargear = models.ForeignKey(
         'tabletop.Wargear', related_name='mwr_requirements'
     )
+
+    threshold = models.PositiveIntegerField(
+        _('threshold'), help_text=_("every threshold number you should "
+        "take an upgrade"),
+        default=0
+    )
     
     def __unicode__(self):
         return ('{unit} {wargear}').format(
@@ -409,6 +431,40 @@ class MWRUnit(models.Model):
     class Meta:
         verbose_name = _('MWRUnit')
         verbose_name_plural = _('MWRUnits')
+        unique_together = (('model_unit', 'wargear'), )
+
+class UnitWargearRequirement(models.Model):
+    # wargear requirement
+    amount = models.PositiveIntegerField(
+        _('amount'), help_text=_("requirement require amount"),
+        default=1
+    )
+    amount_target = models.PositiveIntegerField(
+        _('amount target'), help_text=_('wargear requirement target amount'),
+        default=1
+    )
+    target = models.ForeignKey(
+        'tabletop.Wargear',
+        # for objects retrieve its requirements
+        related_name='unit_wargear_requirements'
+    )
+    require = models.ForeignKey(
+        'tabletop.ModelUnit',
+        # for objects retrieve its dependencies
+        related_name='unit_wargear_require_targets' 
+    )
+    
+    def __unicode__(self):
+        return ("[{amount_target}] {target}->{require} [{amount}]").format(
+            amount_target=self.amount_target,
+            target=self.target.title,
+            require=self.require.title,
+            amount=self.amount
+        )
+
+    class Meta:
+        verbose_name = _("Unit wargear requirement")
+        verbose_name_plural = _("Unit wargear requirements")
 
 
 class WargearRequirement(models.Model):
@@ -431,7 +487,11 @@ class WargearRequirement(models.Model):
         # for objects retrieve its dependencies
         related_name='wargear_require_targets' 
     )
-    
+    threshold = models.PositiveIntegerField(
+        _('threshold'), help_text=_("every threshold number"),
+        default=0
+    )
+
     def __unicode__(self):
         return ("[{amount_target}] {target}->{require} [{amount}]").format(
             amount_target=self.amount_target,
@@ -448,8 +508,11 @@ class Wargear(models.Model):
     title = models.CharField(_('title'), max_length=256)
     short_title = models.CharField(_("short title"), max_length=256, default='unkwn')
     description = models.CharField(_('description'), max_length=4096, blank=True)
-    model_unit = models.ForeignKey(
-        ModelUnit, related_name="wargear"
+    #model_unit = models.ForeignKey(
+    #    ModelUnit, related_name="wargear"
+    #)
+    model_units = models.ManyToManyField(
+        ModelUnit, related_name='wargears'
     )
     pts = models.PositiveIntegerField(
         _("pts"), help_text=_("points cost for one wargear title")
@@ -458,20 +521,37 @@ class Wargear(models.Model):
         _('limit'), help_text=_("limit gear to take on the battlefield"),
         default=1
     )
+    threshold = models.IntegerField(
+        _("threshold"), help_text=_("models amount threshould "
+        "alowed take this wargear upgrade"), default=1
+    )
     is_squad_only = models.BooleanField(
         _('is squad only?'), help_text=_("marks if upgrade allowed for entire squad only"),
+    )
+    unit_amount = models.PositiveIntegerField(
+        _("unit amount"),
+        help_text=_("sets as additional unit model, for example: "
+        "Runthred casts on gretchin unit as additional model, "
+        "not an upgrade"), default=0, blank=True, null=True
     )
     blocks = models.ManyToManyField(
         'self', help_text=_("marks what gear blocks given one"),
         related_name='blocked_by', blank=True
+    )
+    combines = models.ManyToManyField(
+        'self', help_text=_('marks what gear combines with each other '
+            'for example: 2 bsh or 2 rkkt'),
+        blank=True, related_name='combined_with'
     )
     #depends = models.ManyToManyField(
     #    'self', help_text=_("depends on wargear"), blank=True
     #)
 
     def __unicode__(self):
-        return ('{unit} {title}').format(
-            unit=self.model_unit.title,
+        units = ", ".join([i.title for i in self.model_units.all()])
+        units = units if len(units) < 40 else units[:40] + '..'
+        return ('{units} {title}').format(
+            units=units,
             title=self.title
         )
 
