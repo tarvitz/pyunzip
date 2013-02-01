@@ -1,4 +1,4 @@
-<div class='quote_content'>{% load newsfilters %}
+<div class='quote_content'>{% load newsfilters %}{% spaceless %}
 	<div class='quote_headline'>
 		<div class='transparency' id='black'></div>
 		{% if quote_user.nickname %}<a href="{% url wh:profile-by-nick nickname=quote_user.get_username %}">
@@ -15,4 +15,4 @@
 		{% if quote_user.nickname %}<img class='quote_avatar' src='{% url wh:avatar nickname=quote_user.get_username %}'> {% endif %}
 		{{ quote_text|safe }}
 	</div>
-</div>
+{% endspaceless %}</div>

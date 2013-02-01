@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+import re
 from datetime import datetime, timedelta
 from apps.news.forms import  ApproveActionForm
 from apps.core import get_skin_template,benchmark
@@ -32,7 +33,8 @@ from django.shortcuts import get_object_or_404
 from django.core import serializers
 from django.template.defaultfilters import striptags
 # todo: move to core
-from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
+from apps.news.templatetags.newsfilters import spadvfilter,bbfilter
+from apps.core.helpers import render_filter, post_markup_filter
 import simplejson
 import logging
 logger = logging.getLogger(__name__)
@@ -810,6 +812,7 @@ def get_comment(request, id=0,raw=False):
         comment = Comment.objects.get(id__exact=id)
         if not raw:
             comment.comment = striptags(comment.comment)
+            comment.comment = re.sub(r'\n+', '', post_markup_filter(comment.comment))
             comment.comment = render_filter(comment.comment, comment.syntax) #striptags|spadvfilter|safe
         response.write(serializers.serialize("json",[comment]))
         return response
