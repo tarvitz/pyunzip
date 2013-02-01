@@ -242,4 +242,4 @@ span.link,div.link{
 .tr_navy2{ background-color: #2D446D !important;}
 .tr_white{ background-color: white !important; }
 .is_new { color: lightgreen; }
-
+.online_users .nicknames{ font-size: 8pt;}
