@@ -1,5 +1,4 @@
-{# quote #}{% load newsfilters %}
-<div class='quote_content'>
+<div class='quote_content'>{% load newsfilters %}
 	<div class='quote_headline'>
 		<div class='transparency' id='black'></div>
 		{% if quote_user.nickname %}<a href="{% url wh:profile-by-nick nickname=quote_user.get_username %}">
@@ -17,5 +16,3 @@
 		{{ quote_text|safe }}
 	</div>
 </div>
-{#  end of quote #}
-

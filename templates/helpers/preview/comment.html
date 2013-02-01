@@ -1,0 +1,37 @@
+<link rel='stylesheet' href='/media/bootstrap/css/main.css' media='screen' type='text/css'>
+<link rel='stylesheet' href='/styles/message.css' media='screen' type='text/css'>
+<style type='text/css'>
+.message{ width: 99%;}
+</style>
+<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
+
+<div class="message">
+    <div class="msg_headline">
+		<div class="transparency tr_black"></div>
+        <span class="msg_comment_date">[{% now "Y/M/d, H:i:s" %}]</span>
+		<span class="msg_user_nickname">
+		<span class="nickname">{{ user.get_nickname }}</span>  комментирует:
+		</span>
+	</div>
+    <div class="msg_content">
+		<div class='reflects_left'></div>
+		<div class='reflects_down'></div>
+		<div class="msg_avatar">
+			<div class='transparency'></div>
+            {% include "msg/avatar.html" with usr=user %}
+		<br clear='all'>
+		</div> <!-- avatar -->
+		<div class="msg_text">
+			<div class="transparency"></div>
+			<div id="text_0">
+                {{ comment|safe }}
+			</div>
+			{% if user.about %}
+                <small>---<br>{{ user.about }}</small>
+			{% endif %}
+			<br clear="all">
+		</div> <!-- text -->
+    </div> <!-- content -->
+    <br clear="all">
+    <div class="msg_footer"><center>;)</center></div> <!-- footer -->
+</div> <!-- message -->

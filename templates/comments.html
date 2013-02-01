@@ -2,7 +2,7 @@
 {% block css %}
 <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
 {% endblock %}
-{% block js %} 
+{% block js %}
 <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
 {% endblock %}
 
@@ -40,7 +40,7 @@
 		<div class="msg_text">
 			<div class="transparency"></div>
 			<div id="text_{{ c.id }}">
-                                {% markdownit %}
+                {% markdownit %}
 					{{ c.comment|render_filter:c.syntax|safe }}
 				{% endmarkdownit %}
 			</div>
@@ -48,7 +48,7 @@
 			<small>---<br>{{ c.user.about }}</small>
 			{% endif %}
 			<br clear="all">
-		</div> <!-- text --> 
+		</div> <!-- text -->
     </div> <!-- content -->
     <br clear="all">
 	{% if user.skin %} {# todo: get rid of this #}
@@ -93,7 +93,7 @@
 	<div class="msg_footer" class="deleted">
 	{% spaceless %}
     {% if perms.news.edit_comments or user.is_superuser %}
-            <a href="{% url core:comment-edit id=c.id %}">[править]</a> | 
+            <a href="{% url core:comment-edit id=c.id %}">[править]</a> |
     {% endif %}
     {% ifequal user c.user %}
 			{% if c.is_removed %}

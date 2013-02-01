@@ -2,7 +2,7 @@ div #news{
 	color: black;
 	margin: 0 30px;
 	color: white;
-	font-family: helvetica sans-serif Times\ New\ Roman Helvetica;
+	/*font-family: helvetica sans-serif Times\ New\ Roman Helvetica;*/
 }
 #news a{
 	text-decoration: none;

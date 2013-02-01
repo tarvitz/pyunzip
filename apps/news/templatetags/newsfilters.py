@@ -125,7 +125,7 @@ def textile_filter(value):
 
 #takes syntax as arg
 @register.filter(name='render_filter')
-def render_filter(value,arg):
+def render_filter(value, arg):
     #TODO: FIXME: fix this issue
     #if arg == '': #could be None obj passed
     #    return ''

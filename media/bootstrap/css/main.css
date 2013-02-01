@@ -177,6 +177,7 @@ div.copyright{
 .red-marker{ border: 1px solid red; }
 .yellow-marker{ border: 1px solid yellow; }
 .blue-marker{ border: 1px solid blue; }
+.spoiler{ display: none;}
 
 /* old main merge */
 /*New megafeature ;) works as transparency */
@@ -240,4 +241,3 @@ span.link,div.link{
 .tr_navy{ background-color: navy !important; }
 .tr_navy2{ background-color: #2D446D !important;}
 .tr_white{ background-color: white !important; }
-

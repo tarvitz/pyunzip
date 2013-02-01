@@ -35,4 +35,5 @@ urlpatterns = patterns('apps.news.views',
     #url('^comment/edit/(?P<id>\d+)/$', 'edit_comment',
     #    name='edit_comment'),
     url(r'^sphinx/news/$', 'sphinx_search_news', name='news-sph'),
+    url('^comment/preview/$', 'comment_preview', name='comment-preview'),
 )

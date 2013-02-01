@@ -1,8 +1,8 @@
-<div class='spoiler_block'>
-<a href="javascript:void();" class='marker'>[+]</a>&nbsp;<span class='text'>спойлер</span>
-<!-- <a href="javascript:void();" onClick="show_hide('spoiler_{{ spoiler_count }}');">spoiler</a> -->
-<div class='spoiler' style='display: none;'>
-    <div class='transparency tr_spoiler'></div>
+<div class='spoiler_block'>{% spaceless %}
+    <a href="#" onClick='$(this).parent().find(".spoiler").toggle();' class='marker'>(+)</a>
+    <span class='text'> спойлер</span>
+    <div class='spoiler'>
+        <div class='transparency tr_spoiler'></div>
         {{ spoiler_text|safe }}
-</div>
-</div>
+    </div>
+{% endspaceless %}</div>
