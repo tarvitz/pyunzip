@@ -527,8 +527,8 @@ def save_comment(request):
             comment = form.cleaned_data['comment']
             syntax = form.cleaned_data['syntax']
             hidden_syntax = form.cleaned_data['hidden_syntax']
-            subscribe = form.cleaned_data['subscribe'] #implement announcement here
-            unsubscribe = form.cleaned_data['unsubscribe'] #WTF??? Cleanse this as soon as possible
+            subscribe = form.cleaned_data.get('subscribe', None) #implement announcement here
+            unsubscribe = form.cleaned_data.get('unsubscribe', None) #WTF??? Cleanse this as soon as possible
             #saving comment
 
             c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id)).order_by('-submit_date')
