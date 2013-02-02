@@ -42,12 +42,14 @@
         <br clear='all'>
      {% endif %}
  {% else %}
-    <div class='alert warning-block'>
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Внимание!</strong> Статья находится в очереди на премодерацию.
-        После ее просмотра модератором она будет утверждена и добавлена на главную
-        или возвращена с указанием причины возврата.
-    </div>
+    {% if not n.approved %}
+        <div class='alert warning-block'>
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Внимание!</strong> Статья находится в очереди на премодерацию.
+            После ее просмотра модератором она будет утверждена и добавлена на главную
+            или возвращена с указанием причины возврата.
+        </div>
+    {% endif %}
     {#{{ n.head_content|render_filter:n.syntax|safe }}#}
     {# {{ n.content|render_filter:n.syntax|safe }} #}
     {{ n.render_head_content|safe }}
