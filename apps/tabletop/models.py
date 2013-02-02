@@ -41,7 +41,7 @@ class Codex(models.Model):
     title = models.CharField(_('Title'), max_length=128)
     plain_side = models.CharField(_('Plain side'), max_length=128, blank=True) #for sphinx search optimization
     revisions = models.CommaSeparatedIntegerField(_('Revisions'), max_length=64)
-    
+
     def bound(self):
         try:
             return self.content_type.model_class().objects.get(pk=self.object_id)
@@ -50,7 +50,7 @@ class Codex(models.Model):
 
     def __unicode__(self):
         return self.bound().__unicode__()
-    
+
     def save(self, *args, **kwargs):
         #write plain_side for better search withing sphinx
         bound = self.bound()
@@ -82,14 +82,14 @@ class Roster(models.Model):
     pts = models.IntegerField(_('pts')) #we should make A LOT OF CHECK UPS :( within
     syntax = models.CharField(_('Syntax'), max_length=20,blank=True,null=True,choices=settings.SYNTAX)
 
-    is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True) 
+    is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True)
     search = SphinxSearch(weights={'title': 30, 'comments': 30})
     actions = [common_delete_action, alter_codex_action]
 
     def show_player(self):
-       if hasattr(self.user,'nickname'): return self.user.get_username
+       if hasattr(self.user,'nickname'): return self.user.get_username()
        if self.player: return self.player
-       if self.owner: return self.owner.get_username
+       if self.owner: return self.owner.get_username()
     show_player.short_description = _('Player')
 
     def get_title(self):
@@ -138,12 +138,12 @@ class Mission(models.Model):
             return self.title
     class Meta:
         pass
-        
+
 class BattleReport(models.Model):
     title = models.CharField(_('Title'),max_length=100)
     owner = models.ForeignKey(User,related_name=_('Owner'))
     published = models.DateTimeField(_('Published'))
-    #boo :) 
+    #boo :)
     users = models.ManyToManyField(Roster, verbose_name=_('Rosters'))
     winner = models.ForeignKey(Roster,related_name='winner',
         blank=True, null=True)
@@ -182,7 +182,7 @@ class BattleReport(models.Model):
                 return _('[fuzzy] ')
         return self.users.distinct()[0].pts
     general_pts = property(_get_general_pts)
-    
+
     def _get_versus_layout(self):
         """"""
         lst = list()
@@ -198,7 +198,7 @@ class BattleReport(models.Model):
         return lst
         #print self.layout,':',lst
     bool_versus_layout = property(_get_versus_layout)
-    
+
     #def _show_races(self):
     #    races = list()
     #    for r in self.users.distinct():
@@ -392,7 +392,7 @@ class ModelUnit(models.Model):
         _('mwr amount'), help_text=_("must take wargear amount"),
         null=True, blank=True
     )
-    
+
     def __unicode__(self):
         return ('{title} [{pts} - {type}]').format(
             title=self.title, pts=self.pts, type=self.type
@@ -421,7 +421,7 @@ class MWRUnit(models.Model):
         "take an upgrade"),
         default=0
     )
-    
+
     def __unicode__(self):
         return ('{unit} {wargear}').format(
             unit=self.model_unit.__unicode__(),
@@ -451,9 +451,9 @@ class UnitWargearRequirement(models.Model):
     require = models.ForeignKey(
         'tabletop.ModelUnit',
         # for objects retrieve its dependencies
-        related_name='unit_wargear_require_targets' 
+        related_name='unit_wargear_require_targets'
     )
-    
+
     def __unicode__(self):
         return ("[{amount_target}] {target}->{require} [{amount}]").format(
             amount_target=self.amount_target,
@@ -485,7 +485,7 @@ class WargearRequirement(models.Model):
     require = models.ForeignKey(
         'tabletop.Wargear',
         # for objects retrieve its dependencies
-        related_name='wargear_require_targets' 
+        related_name='wargear_require_targets'
     )
     threshold = models.PositiveIntegerField(
         _('threshold'), help_text=_("every threshold number"),
