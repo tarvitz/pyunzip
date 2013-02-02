@@ -149,7 +149,7 @@ def article(request, number=1, object_model='news.news'):
     comments = Comment.objects.filter(content_type=news_type.id, object_pk=str(article.id))
     _pages_ = get_settings(request.user,'comments_on_page',20)
     comments = paginate(comments,page,pages=_pages_)
-    
+
     form = CommentForm(request=request,initial={'app_n_model':'news.news','obj_id': number,'url':
         request.META.get('PATH_INFO',''),'page':request.GET.get('page','')})
     return {
@@ -211,7 +211,7 @@ def add_article(request, id=None, edit_flag=False):
             user.useractivity.last_action_time = datetime.now()
             user.useractivity.save()
             redirect_path = article.get_absolute_url() if article.is_approved else reverse('news:article-created')
-            
+
             return {'redirect': redirect_path}
 
     return {'form': form, 'edit_flag': edit_flag}
@@ -228,6 +228,15 @@ def news_user(request):
 def action_article(request, id=None, action=None):
     instance = None
     instance = get_object_or_404(News, id=id) if action else None
+    approved = getattr(instance, 'approved') if hasattr(instance, 'approved') else False
+
+    if action == 'edit' and instance:
+        can_edit = request.user.has_perm('news.can_edit')
+        owned = instance.owner == request.user
+        if not can_edit:
+            if not owned or approved:
+                raise Http404("hands off!")
+
     form = ArticleModelForm(
         request.POST or None, request=request, instance=instance
     )
