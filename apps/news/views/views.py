@@ -105,9 +105,11 @@ def news(request, approved='approved', category=''):
                 context_instance=RequestContext(request,processors=[benchmark]))
 
     else:
-        news = (
-            News.objects.filter(owner=request.user) | News.objects.filter(approved=True)
-        ).order_by('-date')
+        news = News.objects.filter(approved=True)
+        if request.user.is_approved:
+            news = news | News.objects.filter(owner=request.user)
+
+        news = news.order_by('-date')
     _pages_ = get_settings(request.user,'news_on_page',30)
     news = paginate(news,page,pages=_pages_,
         view='apps.news.views.news')
