@@ -106,7 +106,7 @@ def news(request, approved='approved', category=''):
 
     else:
         news = News.objects.filter(approved=True)
-        if request.user.is_approved:
+        if request.user.is_authenticated():
             news = news | News.objects.filter(owner=request.user)
 
         news = news.order_by('-date')
