@@ -7,14 +7,14 @@ from django.utils.safestring import mark_safe
 
 
 @render_to('helpers/preview/general.html')
-def comment_preview(request):
+def markup_preview(request):
     data = request.POST.get('data', '')
     markup = request.GET.get('markup', None)
     template = request.GET.get('template', None)
 
-    comment = post_markup_filter(data)
-    comment = render_filter(comment, markup or 'textile')
-    data = {'comment': comment}
+    preview = post_markup_filter(data)
+    preview = render_filter(preview, markup or 'textile')
+    data = {'preview': preview}
     if template:
         data.update({
             '_template': os.path.join('helpers/preview', template  + '.html')

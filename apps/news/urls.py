@@ -1,18 +1,20 @@
 from django.conf.urls.defaults import *
+from apps.core.shortcuts import direct_to_template
 from apps.news import views
 
 urlpatterns = patterns('apps.news.views', 
     url(r'^$','news', name='index'),
     url(r'^news/(?P<approved>(unapproved|approved))/$', 'news', name='news'), #this is somekind of brainfuck!
     url(r'^news/$', views.news, name='news'),
+    url(r'^news/user/$', 'news_user', name='news-user'),
     #url(r'^news/$', 'news', name='news'),
     url(r'^news/archived/$','archived_news', name='archived-news'),
     url(r'^archived/article/(?P<id>\d+)/$','show_archived_article', name='article-archived'),
     url(r'^news/(?P<category>[\w\s]+)/$', 'news', name='news'),
     #(r'^news/(?P<page>)/$', 'news' ),
-    url(r'^news/article/(?P<number>\d+)/$', 'show_article', {'object_model':'news.news'},
+    url(r'^news/article/(?P<number>\d+)/$', 'article', {'object_model':'news.news'},
         name='article'),
-    url(r'^article/(?P<number>\d+)/$', 'show_article', {'object_model':'news.news'}),
+    url(r'^article/(?P<number>\d+)/$', 'article', {'object_model':'news.news'}),
     #(r'^article/add/$', 'add_article'),
     url(r'^article/add/$', 'action_article',
         name='article-add'),
@@ -35,5 +37,9 @@ urlpatterns = patterns('apps.news.views',
     #url('^comment/edit/(?P<id>\d+)/$', 'edit_comment',
     #    name='edit_comment'),
     url(r'^sphinx/news/$', 'sphinx_search_news', name='news-sph'),
-    url('^comment/preview/$', 'comment_preview', name='comment-preview'),
+    url('^markup/preview/$', 'markup_preview', name='markup-preview'),
+    # static
+    url(r'article/created/$', direct_to_template,
+        {'template': 'news/article_created.html'},
+        name='article-created'),
 )

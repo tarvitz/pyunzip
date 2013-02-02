@@ -3,8 +3,10 @@
 		<a href="{% url news:news category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url wh:avatar nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
-		{% if perms.news.edit_news or user.is_superuser %}
+		{% if perms.news.edit_news or n.owner == user %}
             <span id='edit_button' class='first'><a id='button' href="{% url news:article-edit n.id %}">Править</a></span>
+        {% endif %}
+        {% if perms.news.edit_news %}
 			{% if not n.approved %}
 			<span id="edit_button"><a id='button' href="{% url news:article-action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}
@@ -13,35 +15,44 @@
                         <span id='edit_button'><a id='button' href='{% url news:article-delete n.id %}'>Удалить</a></span>
 		{% endif %}
 		{% if not n.approved %}
-                        {% spaceless%}
-                        {% if news_general %}
-			<span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-				<a href="{% url news:article number=n.id %}">{{ n.title }}</a>
-			</span>
-                        {% else %}
-                            <span class='unapproved'>{{ n.title }}</span>
-                        {% endif %}{% endspaceless %}
+            {% spaceless%}
+            {% if news_general %}
+                <span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
+                    <a href="{% url news:article number=n.id %}">{{ n.title }}</a>
+                </span>
+            {% else %}
+                <span class='unapproved'>{{ n.title }}</span>
+            {% endif %}{% endspaceless %}
 		{% else %}
 			{% spaceless %}
-                        {% if news_general %}
-                        <a href='{% url news:article number=n.id %}'>{{ n.title }}</a>
-                        {% else %}
-                        {{ n.title }}
-                        {% endif %}{% endspaceless %}
+                {% if news_general %}
+                <a href='{% url news:article number=n.id %}'>{{ n.title }}</a>
+                {% else %}
+                {{ n.title }}
+                {% endif %}{% endspaceless %}
 		{% endif %}{% endspaceless %}
 	</div>
 	<hr>
  <div id='spacer'>&nbsp;</div>
  {% if news_general %}
- {% if not n.head_content %}
-    {{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'>
+     {% if not n.head_content %}
+        {{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'>
+     {% else %}
+        {{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ... {% endif %}
+        <br clear='all'>
+     {% endif %}
  {% else %}
-    {{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ...
- {% endif %} <br clear='all'>
- {% endif %}
- {% else %}
-    {{ n.head_content|render_filter:n.syntax|safe }}
-    {{ n.content|render_filter:n.syntax|safe }}<br clear='all'>
+    <div class='alert warning-block'>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Внимание!</strong> Статья находится в очереди на премодерацию.
+        После ее просмотра модератором она будет утверждена и добавлена на главную
+        или возвращена с указанием причины возврата.
+    </div>
+    {#{{ n.head_content|render_filter:n.syntax|safe }}#}
+    {# {{ n.content|render_filter:n.syntax|safe }} #}
+    {{ n.render_head_content|safe }}
+    {{ n.render_content|safe }}
+    <br clear='all'>
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}

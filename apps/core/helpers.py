@@ -3,6 +3,7 @@
 import os
 from apps.core.forms import CommentForm
 from django.http import HttpResponseRedirect, HttpResponse
+from apps.core import get_skin_template
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import (
     render_to_response, get_object_or_404 as _get_object_or_404,
@@ -21,6 +22,7 @@ from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage,EmptyPage
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
+from django.core.exceptions import ImproperlyConfigured
 from celery.task import task
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import bz2
@@ -473,7 +475,8 @@ def render_to(template, allow_xhr=False, content_type='text/html'):
             if not isinstance(dt, dict):
                 raise ImproperlyConfigured("render_to should take dict instance not %s" % type(dt))
             # overrides
-            tmpl = dt.get('_template', template)
+            tmpl = get_skin_template(request.user, dt.get('_template', template))
+
             content_type = dt.get('_content_type', _content_type)
 
             force_ajax = request.META.get('HTTP_X_FORCE_XHTTPRESPONSE', None)

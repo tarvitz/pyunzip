@@ -397,7 +397,6 @@ class UserExtension(object):
     def __unicode__(self):
         return self.nickname or self.username
 
-    @property
     def get_username(self):
         return self.nickname or self.username
 

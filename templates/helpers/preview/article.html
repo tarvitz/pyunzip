@@ -1,0 +1,29 @@
+<link rel='stylesheet' href='/media/bootstrap/css/main.css' media='screen' type='text/css'>
+<link rel='stylesheet' href='/styles/news.css' media='screen' type='text/css'>
+<link rel='stylesheet' href='/styles/message.css' media='screen' type='text/css'>
+<style type='text/css'>
+.message{ width: 99%;}
+</style>
+<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
+
+<div class='news' id='news'>
+    {{ preview|safe }}
+</div>
+
+<script language='javascript'>
+$('.message .msg_headline .transparency:even').addClass('tr_navy');
+$(document).ready(function(){
+    $('.spoiler_block a').click(function(){
+        $(this).parent().children('.spoiler').toggle(500, function(){
+        p = $(this).parent();
+        if (p.children('.spoiler').css('display') != 'none'){
+            p.attr('class', p.attr('class') + ' spoiler_show');
+            p.children('.marker').html('[-]');
+        }else{
+            p.attr('class', 'spoiler_block');
+            p.children('.marker').html('[+]');
+        }
+        });
+    });
+});
+</script>

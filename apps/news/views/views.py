@@ -23,8 +23,8 @@ from django.contrib.auth.models import User,Permission
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
-from django.shortcuts import render_to_response, get_object_or_404
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError, Http404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.core import serializers
@@ -36,7 +36,8 @@ from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filt
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import get_settings,save_comment,paginate,can_act, handle_uploaded_file
-from apps.core.decorators import benchmarking,update_subscription_new,has_permission,render_to
+from apps.core.decorators import benchmarking, update_subscription_new, has_permission
+from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors
 
 #def get_a_normal_browser(request):
@@ -76,7 +77,7 @@ def show_archived_article(request,id):
 #@permission_required('files.purge_replay') #works
 #@has_permission('can_test_t') #works
 @benchmarking
-def news(request,approved='approved',category=''):
+def news(request, approved='approved', category=''):
     template = get_skin_template(request.user,'news.html')
     can_approve_news = None
     if request.user.is_authenticated():
@@ -88,6 +89,7 @@ def news(request,approved='approved',category=''):
     now = datetime.now()
     td = timedelta(days=365)
     older = now - td
+    # TODO: move archiver to crontab
     all_news = News.objects.all()
     for n in all_news:
         if  older > n.date:
@@ -103,7 +105,9 @@ def news(request,approved='approved',category=''):
                 context_instance=RequestContext(request,processors=[benchmark]))
 
     else:
-        news = News.objects.filter(approved__exact=True).order_by('-date')
+        news = (
+            News.objects.filter(owner=request.user) | News.objects.filter(approved=True)
+        ).order_by('-date')
     _pages_ = get_settings(request.user,'news_on_page',30)
     news = paginate(news,page,pages=_pages_,
         view='apps.news.views.news')
@@ -119,225 +123,121 @@ def search_article(request):
     return render_to_response(template, {'form':''},
     context_instance=RequestContext(request))
 
-@update_subscription_new(app_model='news.news',pk_field='number')
-@user_visit(object_pk='number',ct='news.news')
-def show_article(request, number=1,object_model='news.news'):
-    template = get_skin_template(request.user,'news/article.html')
+@update_subscription_new(app_model='news.news', pk_field='number')
+@user_visit(object_pk='number', ct='news.news')
+@render_to('news/article.html')
+def article(request, number=1, object_model='news.news'):
+    #template = get_skin_template(request.user,'news/article.html')
     page = request.GET.get('page',1)
     can_edit_news = None
     if hasattr(request.user, 'skin'):
         can_edit_news = request.user.has_perm('news.edit_news')
     #Let staff users allow to get the access for the articles,
     #may be dangerous
-    try:
-        if request.user.is_superuser or can_edit_news:
-            article = News.objects.get(id__exact=number)
-        else:
-            article = News.objects.get(id__exact=number,approved=True)
-            #merging head_content and content with each other
-    except News.DoesNotExist:
-            return HttpResponseRedirect('/article/doesnot/exist')
+    if request.user.is_superuser or can_edit_news:
+        article = get_object_or_404(News, id=number)
+    else:
+        article = (
+            get_object_or_None(News, id=number, approved=True) or
+            get_object_or_None(News, id=number, owner=request.user)
+        )
+        if not article:
+            raise Http404("Not found")
     news_type = ContentType.objects.get(app_label='news', model='news')
     comments = Comment.objects.filter(content_type=news_type.id, object_pk=str(article.id))
     _pages_ = get_settings(request.user,'comments_on_page',20)
     comments = paginate(comments,page,pages=_pages_)
-    """
-    #checks for validation and saves a comment
-    if hasattr(request.user,'nickname'):
-        redirect = save_comment(request=request,template=template,
-            vars={'article':article,
-            'comments':comments,'page':comments},ct=news_type,object_pk=article.id,
-            redirect_to=request.META.get('HTTP_REFERER','/'))
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            else:
-                return direct_to_template(request,template,
-                    {'article':article,
-                    'page':comments,
-                    'form':redirect['form']})
-    """
-    #app_n_model breaks functionallity
-    #form = CommentForm(app_n_model='news.news',obj_id=number,request=request)
+    
     form = CommentForm(request=request,initial={'app_n_model':'news.news','obj_id': number,'url':
         request.META.get('PATH_INFO',''),'page':request.GET.get('page','')})
-    return render_to_response(template,
-        {'article': article,
+    return {
+        'article': article,
         'comments': comments,
         'form': form,
-        'page': comments},
-        context_instance=RequestContext(request,
-            processors=[pages]))
+        'page': comments
+    }
 
-#@semiobsolete, better use action_article
 @login_required
-def article_action(request,id=None,action=None):
+def article_action(request, id=None, action=None):
     if not action or not id:
         return HttpResponseRedirect('/')
-    try:
-        referer = request.META['HTTP_REFERER']
-    except KeyError:
-        referer = None
-    can_approve = request.user.user_permissions.filter(codename='edit_news')
-    next = ''
+    referer = request.META.get('HTTP_REFERER', '/')
+
+    can_approve = request.user.has_perm('news.edit_news')
+    redirect_path = ''
     if request.method == 'POST':
         form = ApproveActionForm(request.POST)
         if form.is_valid():
-            next = form.cleaned_data['url']
-    try:
-        article = News.objects.get(id=id)
-    except News.DoesNotExist:
-        return HttpResponseRedirect('/article/doesnot/exist')
-    if request.user.is_superuser or can_approve:
-        if action == 'approve':
-            article.approved = True
-        if action == 'unapprove':
-            article.approved = False
-        if action == 'delete':
-            article.delete()
-        if action != 'delete':
-            article.save()
-        #return HttpResponseRedirect(article.get_absolute_url()) //too simple to uz
-        #we should use more clear way to interact with articles and retrieve
-        #urls via last url state ;)
-        if next:
-            return HttpResponseRedirect(next)
-        if referer:
-            return HttpResponseRedirect(referer)
-        return HttpResponseRedirect('/')
+            redirect_path = form.cleaned_data.get('url', None)
+
+    article = get_object_or_404(News, pk=id)
+
+    if not request.user.is_superuser or not can_approve:
+        raise Http404(':) go away')
+    approved = True if action == 'approve' else False
+    article.approved = approved
+
+    if action == 'delete':
+        article.delete()
     else:
-        return HttpResponseRedirect('/permission/denied')
+        article.save()
+    return redirect(redirect_path or referer)
 
 #@obsolete
 @login_required
 @can_act
-def add_article(request,id=None,edit_flag=False):
+@render_to('news/add.html')
+def add_article(request, id=None, edit_flag=False):
     can_edit =  request.user.has_perm('news.edit_news') #if smb can edit news
-    template = get_skin_template(request.user,'news/add.html')
-    if request.method == 'POST':
-        form = ArticleForm(request.POST, request.FILES, request=request)
-        if form.is_valid():
-            if request.user.is_staff: approved = True
-            else: approved = False
-            url = form.cleaned_data['url']
-            title = form.cleaned_data['title']
-            author = form.cleaned_data['author']
-            editor = form.cleaned_data['editor']
-            head_content = form.cleaned_data['head_content']
-            syntax = form.cleaned_data['syntax']
-            if head_content is None: head_content = ''
-            content = form.cleaned_data['content']
-            #is it dangerous?
-            category = form.cleaned_data['category']
-            #attachment block
-            attachment_data = form.cleaned_data['attachment']
-            c = Category.objects.get(id=category)
-            date = datetime.now()
-            author_ip = request.META['REMOTE_ADDR']
-            if not edit_flag: #adding new article
-                article = News(url=url,title=title,author=author,editor=editor,head_content=head_content,
-                    content=content,category=c,date=date,
-                    author_ip=author_ip, approved=approved,syntax=syntax)
-            else: #editing old article
-                if not can_edit and not request.user.is_staff and not request.user.is_superuser:
-                    return HttpResponseRedirect('/')
-                article = News.objects.get(id=id)
-                article.title = title
-                article.author = author
-                article.url = url
-                article.editor = editor
-                article.head_content = head_content
-                article.content = content
-                article.category = c
-                #article.date = date
-                article.author_ip = author_ip
-                article.approved = True
-                article.syntax = syntax
 
-            if attachment_data:
-                if len(attachment_data.name)>30:
-                    return HttpResponseRedirect('/attchment/name/is/too/long')
-                path = save_file(attachment_data, os.path.join(settings.MEDIA_ROOT, "attachments"))
-                if not path:
-                    return HttpResponseRedirect('/attachment/already/exists')
-                atm = Attachment(attachment=path) #saving the attachment
-                atm.save()
-                article.attachment = atm
-            #set locks to prevent agression spam attacks ;)
+    instance = get_object_or_404(News, pk=id) if edit_flag else None
+
+    form = ArticleModelForm(
+        request.POST, request.FILES, request=request, instance=instance
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            article = form.save(commit=False)
             user = request.user
-            if hasattr(user,'useractivity'):
-                if user.useractivity.last_action_time is not None:
-                    if not user.is_superuser:
-                        if user.useractivity.last_action_time > datetime.now()-timedelta(minutes=2):
-                            return HttpResponseRedirect('/article/add/timeout')
+            has_useractivity = hasattr(user, 'useractivity')
+            last_action_time = getattr(user.useractivity, 'last_action_time') if has_useractivity else None
+            if last_action_time is not None and not user.is_superuser:
+                if last_action_time > datetime.now() - timedelta(minutes=2):
+                    return {'redirect': '/article/add/timeout'}
+            article.owner = request.user
             article.save()
             user.useractivity.last_action_time = datetime.now()
             user.useractivity.save()
-	    if approved:
-	    	return HttpResponseRedirect(article.get_absolute_url())
-            else:
-                return HttpResponseRedirect('/article/created/')
-            #return HttpResponseRedirect('/article/%s' % str(article.id))
+            redirect_path = article.get_absolute_url() if article.is_approved else reverse('news:article-created')
+            
+            return {'redirect': redirect_path}
 
-        else:
-            return render_to_response(template,
-                {'form': form,
-                'edit_flag': edit_flag},
-                context_instance=RequestContext(request))
-    else:
-        #print request.user.is_staff
-        form = ArticleForm()
-        if edit_flag:
-            if not can_edit and not request.user.is_staff and not request.user.is_superuser:
-                return HttpResponseRedirect('/')
-            try:
-                article = News.objects.get(id=id)
-            except News.DoesNotExist:
-                return HttpResponseRedirect('/article/not/found')
-            map = ['title','url','editor','head_content','content','author','syntax']
-            for i in map:
-                form.fields[i].initial = getattr(article,i)
-            form.fields['category'].initial = article.category.id
+    return {'form': form, 'edit_flag': edit_flag}
 
-        return render_to_response(template,
-            {'form': form,
-            'edit_flag': edit_flag},
-            context_instance=RequestContext(request))
+@login_required
+@render_to('news/news_user.html')
+def news_user(request):
+    news = request.user.news.all().order_by('-date', '-id')
+    return {'news': news}
 
-#make it
 @login_required
 @can_act
+@render_to('news/action_article.html')
 def action_article(request, id=None, action=None):
-    template = get_skin_template(request.user, 'news/action_article.html')
-    article_instance = None
-    if action: #None means add article, other actions depends on instance existance
-        article_instance = get_object_or_404(News, id=id)
+    instance = None
+    instance = get_object_or_404(News, id=id) if action else None
+    form = ArticleModelForm(
+        request.POST or None, request=request, instance=instance
+    )
     if request.method == 'POST':
-        form = ArticleModelForm(request.POST, instance=article_instance)
         if form.is_valid():
-            if not action:
-                form.instance.author_ip = request.META.get('REMOTE_ADDR','127.0.0.1')
-                form.instance.date = datetime.now()
-                form.instance.author = form.cleaned_data.get('author', None) or\
-                    request.user.nickname
-                if request.user.has_perm('news.add_news') or request.user.is_superuser:
-                    form.instance.approved = True
-                form.save()
-                return HttpResponseRedirect(reverse('news:article',
-                    args=(form.instance.id, ))
-                )
-            elif action == 'edit':
-                form.instance.editor = request.user.nickname
-                form.save()
-                next = form.cleaned_data.get('next', None) or \
-                    reverse('news:article', args=(form.instance.id, ))
-                return HttpResponseRedirect(next)
-        else:
-            return direct_to_template(request, template,
-                {'form': form})
-    form = ArticleModelForm(instance=article_instance,
-        initial={'next': request.META.get('HTTP_REFERER', None)})
-    return direct_to_template(request, template, {'form': form})
+            article = form.save(commit=False)
+            article.owner = request.user
+            article.save()
+            return {
+                'redirect': reverse('news:article', args=(form.instance.id, ))
+            }
+    return {'form': form}
 
 def sphinx_search_news(request):
     template = get_skin_template(request.user, 'includes/sphinx_search_news.html')

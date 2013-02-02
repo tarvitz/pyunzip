@@ -3,7 +3,7 @@ from apps.news.models import Category as NewsCategory, Meating
 from apps.core import get_safe_message
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from apps.core.forms import RequestForm
+from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 from apps.news.models import News
@@ -15,20 +15,36 @@ class AddNewsForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea())
     approved = forms.BooleanField(required=False)
 
-class ArticleModelForm(forms.ModelForm):
+class ArticleModelForm(RequestModelForm):
     required_css_class = 'required'
     author = forms.CharField(required=False)
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(), required=False)
-    
+
+    def save(self, commit=True):
+        can_edit = self.request.user.has_perm('news.edit_news')
+        ip = self.request.META.get('REMOTE_ADDR', '127.0.0.1')
+        self.instance.author = (
+            self.instance.author or self.request.user.get_username()
+        )
+        if not self.instance.pk:
+            self.instance.author_ip = ip
+            if can_edit:
+                self.instance.approved = True
+        else:
+            self.instance.editor = self.request.user.nickname or self.request.user.username
+        instance = super(ArticleModelForm, self).save(commit=commit)
+        return instance
+
     class Meta:
         model = News
         fields = ['title', 'author','category', 'syntax', 'head_content', 'content', 'url']
         exclude = ['editor', 'approved', 'author_ip', 'is_event', 'date',
-        
+
         ]
         widgets = {
-            'content': TinyMkWidget(attrs={'disable_user_quote': True}),
+            'content': forms.Textarea,
+            'syntax': forms.HiddenInput
         }
 
 class ArticleForm(forms.Form):
@@ -55,7 +71,7 @@ class ArticleForm(forms.Form):
                         self.request = kwargs['request']
                         del kwargs['request']
                 super(ArticleForm, self).__init__(*args, **kwargs)
-    
+
     def clean_head_content(self):
         head_content = self.cleaned_data.get('head_content','')
         if len(head_content)>1000:
@@ -79,7 +95,7 @@ class ArticleForm(forms.Form):
             editor = self.request.user.nickname
             cleaned_data['editor'] = editor
         return cleaned_data
-    
+
     def clean_author(self):
         author = self.cleaned_data['author']
         if not author: return ''

@@ -4,6 +4,6 @@ var isFireFox = (navigator.userAgent.indexOf("Firefox")>=0) ? true: false;
 var isChrome = (navigator.userAgent.indexOf("Chrome")>=0) ? true: false;
 
 var markItUpParsers = {
-    'bb-code': '/comment/preview/?markup=bb-code',
-    'textile': '/comment/preview/?markup=textile',
+    'bb-code': '/markup/preview/?markup=bb-code',
+    'textile': '/markup/preview/?markup=textile',
 }

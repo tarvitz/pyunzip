@@ -12,4 +12,41 @@
 </form>
 </div>
 </center>
+<script type='text/javascript'>
+/* settings */
+var markItUpParsers = {
+    'bb-code': '{% url news:markup-preview %}?markup=bb-code&template=article',
+    'textile': '{% url news:markup-preview %}?markup=textile&template=article',
+}
+
+myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];
+myMarkupSettings['textile']['previewParserPath'] = markItUpParsers['textile'];
+
+var reloadMarkItUp = function(type){
+    setMarkItUp(type);
+    $('#id-form-add #id_syntax').val(type);
+
+}
+var loadMarkitUp = function(type){
+    var mySettings = myMarkupSettings["{{ syntax|default:'textile'}}"];
+    settings = {
+        'bb-code': myMarkupSettings['bb-code'],
+        'textile': myMarkupSettings['textile']
+    }
+    if (type in settings){
+        mySettings = settings[type];
+    }
+	$('#id_content').markItUp(mySettings);
+	$('#id_head_content').markItUp(mySettings);
+}
+
+var setMarkItUp = function(type){
+    $('#id_content').markItUp('remove');
+    $('#id_head_content').markItUp('remove');
+    loadMarkitUp(type);
+}
+$(document).ready(function(){
+    loadMarkitUp();
+});
+</script>
 {% endblock %}

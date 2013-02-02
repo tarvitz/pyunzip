@@ -12,7 +12,7 @@
     {% include settings.document.comments %}
     {% include settings.document.links %}
 {% endif %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and article.approved %}
     {% get_content_type article as object %}
     {% include settings.document.comments_form with object=object gs=gs %}
 {% endif %}

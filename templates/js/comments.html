@@ -1,8 +1,8 @@
 <script type='text/javascript'>
 /* settings */
 var markItUpParsers = {
-    'bb-code': '{% url news:comment-preview %}?markup=bb-code&template=comment',
-    'textile': '{% url news:comment-preview %}?markup=textile&template=comment',
+    'bb-code': '{% url news:markup-preview %}?markup=bb-code&template=comment',
+    'textile': '{% url news:markup-preview %}?markup=textile&template=comment',
 }
 
 myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];

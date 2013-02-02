@@ -29,7 +29,7 @@ a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
     border-top: transparent;
     position: relative;
 }
-#main-content .transparency{
+#main-content .transparency, .transparency{
     position: absolute;
     height: 100%;
     width: 100%;

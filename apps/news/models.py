@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from apps.files.models import Attachment
@@ -11,20 +12,13 @@ from apps.djangosphinx.models import SphinxSearch
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(_('Category'), max_length=100, blank=False, null=False)
-    
+
     def __unicode__(self):
         return self.name
 
     class Meta:
         verbose_name=_('Category')
         verbose_name_plural=_('Categories')
-"""
-class ReportCategory(models.Model):
-    name = models.CharField(_('Category name'), max_length=50)
-
-    def __unicode__(self):
-        return self.name
-"""
 
 class AbstractSubstance(models.Model):
     title = models.CharField(_('Title'), max_length=255,null=False)
@@ -37,35 +31,59 @@ class AbstractSubstance(models.Model):
         abstract = True
 
 class AbstractNews(models.Model):
-    title = models.CharField(_('Title'), max_length=255,null=False)
-    author = models.CharField(_('Author'), max_length=30,null=False)
-    editor = models.CharField(_('Editor'), max_length=30,blank=True)
-    url = models.CharField(_('Original URL'),max_length=200, blank=True)
-    head_content = models.TextField(_('Head content'), blank=True, null=True)
+    title = models.CharField(
+        _('Title'), max_length=255,null=False
+    )
+    author = models.CharField(
+        _('Author'), max_length=30,
+        null=False
+    )
+    editor = models.CharField(
+        _('Editor'), max_length=30, blank=True
+    )
+    url = models.CharField(
+        _('Original URL'), max_length=200, blank=True
+    )
+    head_content = models.TextField(
+        _('Head content'), blank=True, null=True
+    )
     content =  models.TextField(_('Content'), null=False)
-    date = models.DateTimeField(_('DateTime'),null=False)
-    approved = models.BooleanField(_('Approved'),blank=True)
+    date = models.DateTimeField(_('DateTime'), null=False, default=datetime.now)
+    approved = models.BooleanField(_('Approved'), blank=True)
     author_ip = models.CharField(_('Author IP address'), max_length=16, blank=True)
     category = models.ForeignKey(Category)
     is_event = models.BooleanField(_('Is event'))
-    syntax = models.CharField(_('Syntax'),max_length=20,blank=True,null=True,choices=settings.SYNTAX) #markdown is default
-    attachment = models.ForeignKey(Attachment,blank=True,null=True)
-    
+    syntax = models.CharField(
+        _('Syntax'),max_length=20, blank=True, null=True, choices=settings.SYNTAX) #markdown is default
+    attachment = models.ForeignKey(Attachment, blank=True, null=True)
+
+    reason = models.CharField(_('reason'), max_length=1024, blank=True, null=True)
+    owner = models.ForeignKey('auth.User', verbose_name='owner',
+        related_name='%(class)s', default=1
+    )
+
     #wise alias ;) onto head_content
     get_title = lambda self: self.title
     get_content = lambda self: self.content
-    
+
     def __unicode__(self):
         return "News"
 
     def _get_description(self):
         return self.head_content
-    
-    description = property(_get_description)
-    
-    class Meta:
-        abstract = True 
 
+    description = property(_get_description)
+
+    def render(self, field):
+        from apps.core.helpers import post_markup_filter, render_filter
+        out = post_markup_filter(getattr(self, field))
+        return render_filter(out, self.syntax)
+
+    render_content = lambda self: self.render('content')
+    render_head_content = lambda self: self.render('head_content')
+
+    class Meta:
+        abstract = True
 
 
 class ArchivedNews(AbstractNews):
@@ -80,7 +98,7 @@ class ArchivedNews(AbstractNews):
         ordering = ['-id']
     #def get_absolute_url(self):
     #    return reverse('apps.news.views.show_archived_article', kwargs={'number': self.id})
-    
+
     #def unarchive(self):
     #    n = News()
     #    copy_fields(self,n)
@@ -88,6 +106,7 @@ class ArchivedNews(AbstractNews):
     #    self.delete()
     def get_absolute_url(self):
         return reverse('news:article-archived',kwargs={'id':self.id})
+
     class Meta:
         permissions = (
             ('edit_archived_news','Can edit archived news'),
@@ -101,6 +120,7 @@ class News(AbstractNews):
         'head_content': 100,
         'content': 100,
     })
+
 
     def get_absolute_url(self):
         return reverse('news:article',kwargs={'number':self.id})
@@ -120,7 +140,7 @@ class News(AbstractNews):
         self.delete()
 
         return a
-    
+
     def get_content_plain(self):
         if self.head_content:
             return "%s\n%s\n%s" %(self.title,self.head_content,self.content)

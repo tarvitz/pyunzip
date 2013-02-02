@@ -4,7 +4,7 @@
 {% block title %}Добавить статью {% endblock %}
 {% block text_content %}
 <center>
-	<form id='add_form' enctype="multipart/form-data" action='.' method='post'>
+	<form id='id-form-add' enctype="multipart/form-data" action='.' method='post'>
 	 {{ form.title.errors }}
 	 Заголовок: <br>{{ form.title }}<br>
 	 {{ form.author.errors }}
@@ -31,4 +31,5 @@
 	 {{ form.hidden_syntax }}
 	</form>
 </center>
+
 {% endblock %}

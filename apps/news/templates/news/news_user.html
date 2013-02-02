@@ -1,0 +1,27 @@
+{% extends base_template %}
+{% block text_content %}
+{% if news %}
+    <table class='news table'>
+        <tr>
+        <th>ID</th>
+        <th>Дата</th>
+        <th>Название</th>
+        <th>Статус</th>
+        <th>Причина</th>
+        </tr>
+        {% for n in news %}<tr>
+            <td>{{ n.id }}</td>
+            <td>{{ n.date|date:"Y-m-d H:i" }}</td>
+            <td><u><a href='{{ n.get_absolute_url }}'>{{ n.title }}</a></u></td>
+            <td>
+                <label class='label label-{{ n.approved|yesno:"success,important" }}'>
+                    {{ n.approved|yesno:"утвержедна, в очереди" }}
+                </label>
+            </td>
+            <td>{% if not n.approved %}{{ n.reason|default_if_none:"" }}{% else %}&nbsp;{% endif %}</td>
+        {% endfor %}</tr>
+    </table>
+{% else %}
+    <h3>Новостей не найдено</h3>
+{% endif %}
+{% endblock %}
