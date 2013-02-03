@@ -16,7 +16,7 @@ from django.template import RequestContext
 #OBSOLETE
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.tagging.models import TaggedItem,Tag
-from apps.core.helpers import get_settings,save_comment,paginate
+from apps.core.helpers import get_settings, paginate
 from apps.core.decorators import update_subscription_new,benchmarking
 from apps.core import benchmark
 

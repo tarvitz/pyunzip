@@ -36,6 +36,7 @@
 {% endif %}
 {% endwith %}
 
-{% include settings.document.comments_form %}
-
-
+{% if user.is_authenticated %}
+    {% get_content_type p as object %}
+    {% include settings.document.comments_form with object=object%}
+{% endif %}

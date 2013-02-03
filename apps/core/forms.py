@@ -3,6 +3,7 @@ from django import forms
 from django.http import Http404
 from django.db.models.query import QuerySet
 from django.contrib.comments.models import Comment
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from apps.core.settings import SETTINGS as USER_DEFAULT_SETTINGS, SETTINGS_FIELDS as USER_DEFAULT_FIELDS
@@ -10,6 +11,9 @@ from apps.core.settings import SettingsFormOverload
 from django.conf import settings
 from apps.core import get_safe_message
 from apps.core.widgets import TinyMkWidget
+from apps.core.helpers import get_object_or_None
+from django.contrib.contenttypes.models import ContentType
+
 import re
 
 class RequestModelForm(forms.ModelForm):
@@ -56,15 +60,26 @@ SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
 #duplicates with files.forms need more 'usable' interface for comments
 class CommentForm(forms.ModelForm):
     syntax = forms.ChoiceField(
-        choices=settings.SYNTAX,required=False, widget=forms.HiddenInput
+        choices=settings.SYNTAX,required=False, widget=forms.HiddenInput,
+        initial='textile'
     )
     comment = forms.CharField(widget=forms.Textarea)
     url = forms.CharField(required=False, widget=forms.HiddenInput)
-    hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
+    # TODO: clean it up
+    #hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     #subscribe = forms.BooleanField(required=False)
     #unsubscribe = forms.BooleanField(required=False)
-    app_n_model = forms.CharField(required=False,widget=forms.HiddenInput()) #required if we add the comment
-    obj_id = forms.CharField(required=False,widget=forms.HiddenInput()) #required the same as above
+    # fuck it
+    #app_n_model = forms.CharField(widget=forms.HiddenInput()) #required if we add the comment
+    #obj_id = forms.CharField(widget=forms.HiddenInput()) #required the same as above
+    content_type = forms.ModelChoiceField(
+        queryset=ContentType.objects, empty_label=None,
+        widget=forms.HiddenInput)
+    object_pk = forms.CharField(widget=forms.HiddenInput)
+    site = forms.ModelChoiceField(
+        queryset=Site.objects, empty_label=None,
+        widget=forms.HiddenInput, required=False
+    )
     page = forms.RegexField(
         regex=re.compile(r'\d+|last',re.S|re.U), required=False, widget=forms.HiddenInput()
     )
@@ -74,12 +89,6 @@ class CommentForm(forms.ModelForm):
         if 'request' in kwargs:
             self.request = kwargs['request']
             del kwargs['request']
-        #if 'app_n_model' in kwargs['request']:
-        #    self.base_fields['app_n_model'].initial = kwargs['app_n_model']
-        #    del kwargs['request']
-        #if 'obj_id' in kwargs:
-        #    self.base_fields['obj_id'].initial = kwargs['obj_id']
-        #    del kwargs['obj_id']
 
         #overriding url by default if not set
         if hasattr(self,'request'):
@@ -104,23 +113,27 @@ class CommentForm(forms.ModelForm):
         ally = user.ranks.filter(codename='Ally')
         if user.is_superuser or user.is_staff or ally:
             return comment
+        # TODO: cleanup unessecary len word limitation
         #ten words
-        if len(comment.split(' '))<10:
-            raise forms.ValidationError(_('You should write more than 10 words for a comment'))
+        #if len(comment.split(' '))<10:
+        #    raise forms.ValidationError(_('You should write more than 10 words for a comment'))
         
         return comment
 
     def clean_syntax(self):
-        syntax = self.cleaned_data.get('syntax','')
+        syntax = self.cleaned_data.get('syntax', '')
         if syntax:
             syntax_codes = [i[0] for i in settings.SYNTAX]
             if syntax in syntax_codes:
                 return syntax
             else:
-                raise forms.ValidationError(_('You should choose correct syntax mode'))
-        else:
-            return syntax
+                # fallback to default
+                syntax = settings.SYNTAX[0][0]
+                #raise forms.ValidationError(_('You should choose correct syntax mode'))
     
+        return syntax
+
+    """
     def clean_hidden_syntax(self):
         syntax = self.cleaned_data.get('hidden_syntax','')
         if syntax:
@@ -131,17 +144,69 @@ class CommentForm(forms.ModelForm):
                 raise forms.ValidationError(_('Syntax value should be correct'))
         else:
             return syntax
-    
+    """
+
     def clean_page(self):
         page = self.cleaned_data.get('page',None)
         if 'last' in page:
             return page
 
+    def clean_app_n_model(self):
+        app_n_model = self.cleaned_data['app_n_model']
+        if not '.' in app_n_model:
+            raise forms.ValidationError(_("app_n_model has invalid format"))
+        if len(app_n_model.split('.')) > 2:
+            raise forms.ValidationError(_("app_n_model should be written "
+                "in right order: 'app.model'")
+            )
+        return app_n_model
+
+    def clean(self):
+        cd = self.cleaned_data
+        # check site and overrides if it does not set
+        site = self.cleaned_data.get('site') or None
+        if not site:
+            site = Site.objects.order_by('id')[0]
+            self.cleaned_data['site'] = site
+        return cd
+
+    def save(self, commit=True):
+        #self.instance.content_type = self.content_type
+        #self.instance.object_pk = obj_id
+        self.instance.site = self.cleaned_data['site']
+        self.instance.user = self.request.user
+        content_type = self.cleaned_data['content_type']
+        c = Comment.objects.filter(
+            content_type=content_type,
+            object_pk=self.instance.object_pk).order_by('-submit_date')
+
+        from datetime import datetime
+        now = datetime.now()
+
+        instance = None
+        #TODO: make this more flexible
+        if c and not self.instance.pk: #exists
+            c = c[0]
+            if c.user == self.request.user and c.comment != self.instance.comment: #is equal
+                #new comment and not a dublicate
+                c.comment += "\n"+ self.instance.comment
+                #c.submit_date = now
+                ip = self.request.META.get('REMOTE_ADDR','')
+                if ip: c.ip_address = ip
+                if commit:
+                    c.save()
+                return c
+            else:
+                instance = super(CommentForm, self).save(commit)
+                return instance
+        instance = super(CommentForm, self).save(commit)
+        return instance
+
     class Meta:
         model = Comment
         fields = (
-            'comment', 'page', 'syntax', 'hidden_syntax',
-            'app_n_model', 'obj_id', 'url'
+            'comment', 'page', 'syntax',
+            'url', 'site', 'content_type', 'object_pk'
         )
 
 

@@ -59,6 +59,7 @@ def global_settings(request):
 def global_referer(request):
     return {
         'global_referer': request.META.get('HTTP_REFERER','/'),
+        'current_referer': request.META.get('PATH_INFO', '/')
     }
 
 def briefing_news(request):

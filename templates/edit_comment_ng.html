@@ -10,4 +10,10 @@
 </form>
 </center>
 {% include "js/comments.html" with syntax=form.instance.syntax %}
+
+<script type='text/javascript'>
+    $(document).ready(function(){
+        $("label[for=id_comment]").detach().remove();
+    });
+</script>
 {% endblock %}

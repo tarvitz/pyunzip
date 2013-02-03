@@ -8,6 +8,7 @@ from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 from apps.news.models import News
 from django.core.exceptions import ImproperlyConfigured
+from django.contrib.contenttypes.models import ContentType
 import re
 
 class AddNewsForm(forms.Form):

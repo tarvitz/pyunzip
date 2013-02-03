@@ -1,10 +1,15 @@
+{% extends base_template %}
+
+{% block text_content %}
 <center>
 <div class='comment form'>
     <form class='comment-form' action='{% url core:comment-add %}' method='POST' id='id-comment-form'>
         <textarea id='id_comment' name='comment' class='span6' rows='10'></textarea>
         <div class='hide'>
             <input type='hidden' name='content_type' value='{{ object.content_type.pk }}' id='id_content_type'>
-            <input type='hidden' name='object_pk' value='{{ object.id }}' id='id_object_id'>
+            <input type='hidden' name='object_id' value='{{ object.id }}' id='id_object_id'>
+            <input type='hidden' name='obj_id' value='{{ object.id }}' id='id_object_id'>
+            <input type='hidden' name='app_n_model' value='{{ object.app }}.{{ object.model }}' id='app_n_model'>
             <input type='hidden' name='syntax' value='{{ gs.DEFAULT_SYNTAX|default_if_none:"textile" }}' id='id_syntax'>
             <input type='hidden' name='site' id='id_site'>
             <input type='hidden' name='url' id='id_url' value='{{ current_referer }}'>
@@ -15,4 +20,6 @@
     </form>
 </div>
 </center>
+
 {% include "js/comments.html" %}
+{% endblock %}

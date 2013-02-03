@@ -12,8 +12,13 @@
 <center>{% include settings.document.image_inc %}</center>
 <br clear='all'>
 {% with img_comments as comments %}
-{% include settings.document.comments %}
+    {% include settings.document.comments %}
 {% endwith %}
+
 {% include settings.document.links %}
-{% include settings.document.comments_form %}
+
+{% if user.is_authenticated %}
+    {% get_content_type image as object %}
+    {% include settings.document.comments_form with object=object%}
+{% endif %}
 {% endblock %}

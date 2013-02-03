@@ -74,7 +74,7 @@ urlpatterns = patterns('apps.files.views',
     url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/$','action_image',
         name='image-delete-force'),
     url(r'^gallery/image/(?P<number>\d+)/$', 'show_image', {'object_model':'files.image'},
-        name='url_show_image'),
+        name='image'),
     url(r'^image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'},
         name='url_show_image'), #alias
     url(r'^i/(?P<alias>[\w\d_]+)/$', 'show_raw_image', 

@@ -8,7 +8,7 @@ from apps.core.forms import SearchForm,SettingsForm,AddEditCssForm,CommentForm,R
     SphinxSearchForm, action_formset, action_formset_ng
 from apps.core.models import Settings,Announcement,Css
 from apps.core.decorators import benchmarking,progress_upload_handler
-from apps.core.helpers import validate_object
+from apps.core.helpers import validate_object, render_to
 
 from django.utils.translation import ugettext_lazy as _, ugettext as _t
 from django.template import RequestContext,Template,Context
@@ -19,6 +19,7 @@ from django.contrib.comments.models import Comment
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.db.models import Q
+from django.db import transaction
 from apps.news.models import News
 #OBSOLETE
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -506,8 +507,10 @@ def get_ip_address(request):
 
 from apps.tracker.decorators import new_comment
 
+@transaction.commit_on_success
 @new_comment
 @login_required
+@render_to('core/add_comment.html')
 def save_comment(request):
     #obj_id could cause a lot of problems if it would have much bigger blocks
     #of data then simple strings or numbers
@@ -517,53 +520,35 @@ def save_comment(request):
     if request.method == 'POST':
         form = CommentForm(request.POST, request=request)
         if form.is_valid():
-            app_n_model = form.cleaned_data['app_n_model']
-            obj_id = form.cleaned_data['obj_id']
+            comment = form.save()
+            #app_n_model = form.cleaned_data['app_n_model']
+            #obj_id = form.cleaned_data['obj_id']
             #Prevent saving comment for void
-            if not validate_object(app_n_model,obj_id):  #app_label.model 13 for example
-                return HttpResponseRedirect('/comment/could/not/be/saved') #replace it with something wise
+            #if not validate_object(app_n_model,obj_id):  #app_label.model 13 for example
+            #    return HttpResponseRedirect('/comment/could/not/be/saved') #replace it with something wise
 
-            ct = get_content_type(app_n_model) #we had already checked up existance of single object
-            comment = form.cleaned_data['comment']
-            syntax = form.cleaned_data['syntax']
-            hidden_syntax = form.cleaned_data['hidden_syntax']
+            #ct = get_content_type(app_n_model) #we had already checked up existance of single object
+            #comment = form.cleaned_data['comment']
+            #syntax = form.cleaned_data['syntax']
+            #hidden_syntax = form.cleaned_data['hidden_syntax']
+
             subscribe = form.cleaned_data.get('subscribe', None) #implement announcement here
             unsubscribe = form.cleaned_data.get('unsubscribe', None) #WTF??? Cleanse this as soon as possible
             #saving comment
 
-            c = Comment.objects.filter(content_type=ct,object_pk=str(obj_id)).order_by('-submit_date')
-            #print "Comment: ",c
-            #exists, updating
-            from datetime import datetime
-            now = datetime.now()
-            #TODO: make this more flexible
-            if c: #exists
-                c = c[0]
-                if c.user == request.user and c.comment != comment: #is equal
-                    #new comment and not a dublicate
-                    c.comment += "\n"+comment
-                    #c.submit_date = now
-                    ip = request.META.get('REMOTE_ADDR','')
-                    if ip: c.ip_address = ip
-                    c.save()
-                else:
-                    c = Comment(user=request.user,syntax=syntax,submit_date=now,
-                        is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
-                    c.comment = comment
-                    c.save()
-            if not c: #looks not great :)
-                c = Comment(user=request.user,syntax=syntax,submit_date=now,
-                    is_public=True,content_type=ct,object_pk=str(obj_id),site_id=1)
-                c.comment = comment
-                c.save()
             #saving announcement
             if subscribe:
-                announcement = get_object_or_none(Announcement,object_pk=str(obj_id),content_type=ct)
+                announcement = get_object_or_none(
+                    Announcement,
+                    object_pk=comment.object_pk,
+                    content_type=comment.content_type
+                )
                 if announcement:
                     announcement.subscribe(request.user)
                 else:
-                    announcement = Announcement(object_pk=str(obj_id),content_type=ct)
-                    announcement.save()
+                    announcement = Announcement.objects.create(
+                        object_pk=comment.object_pk, content_type=comment.content_type
+                    )
                     announcement.subscribe(request.user)
 
             url = form.cleaned_data['url']
@@ -571,10 +556,10 @@ def save_comment(request):
             #deprecated :)
             #page = request.GET.get('page','') or form.cleaned_data['page']
             if page: url += '?page=%s' % page
-            return HttpResponseRedirect("%s#c%i" % (url,c.id))
+            return {'redirect': "%s#c%i" % (url, comment.id)}
         else:
-            return direct_to_template(request,template,{'form':form})
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+            return {'form':form}
+    return {'redirect': request.META.get('HTTP_REFERER','/')}
 
 @login_required
 def edit_comment(request, id):

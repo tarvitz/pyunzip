@@ -8,7 +8,7 @@ from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from apps.core.helpers import get_settings,save_comment,get_comments,get_content_type,\
+from apps.core.helpers import get_settings, get_comments,get_content_type,\
     get_object_or_none,paginate,can_act
 from django.conf import settings
 from django.shortcuts import render_to_response,get_object_or_404

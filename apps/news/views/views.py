@@ -35,7 +35,7 @@ from os import stat
 from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
-from apps.core.helpers import get_settings,save_comment,paginate,can_act, handle_uploaded_file
+from apps.core.helpers import get_settings, paginate,can_act, handle_uploaded_file
 from apps.core.decorators import benchmarking, update_subscription_new, has_permission
 from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors

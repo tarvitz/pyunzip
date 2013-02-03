@@ -36,7 +36,7 @@ from django.conf import settings
 from datetime import datetime
 from os import mkdir,stat
 from cStringIO import StringIO
-from apps.core.helpers import get_settings,save_comment,paginate
+from apps.core.helpers import get_settings, paginate
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 import zipfile

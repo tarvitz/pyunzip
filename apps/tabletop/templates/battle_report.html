@@ -47,6 +47,7 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-	{% include settings.document.comments_form %}
+    {% get_content_type br as object %}
+	{% include settings.document.comments_form with object=object%}
 {% endif %}
 {% endblock %}

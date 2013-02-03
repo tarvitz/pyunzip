@@ -1,7 +1,7 @@
 # coding: utf-8
 #
 import os
-from apps.core.forms import CommentForm
+#from apps.core.forms import CommentForm
 from django.http import HttpResponseRedirect, HttpResponse
 from apps.core import get_skin_template
 from apps.core.shortcuts import direct_to_template
@@ -16,7 +16,6 @@ from django.contrib.auth.models import User, AnonymousUser
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from apps.core.models import Announcement
 from django.contrib.contenttypes.models import ContentType
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage,EmptyPage
@@ -41,6 +40,7 @@ EMAIL_TEXT = """"""
 #TODO: OVERWRITE IT =\
 #instance is the object passing through the signal
 def send_notification(instance,**kwargs):
+    from apps.core.models import Announcement
     #comment-instance like object
     if hasattr(instance,'content_type') and hasattr(instance,'object_pk'):
         #
@@ -150,6 +150,7 @@ def can_act(func):
         return func(request,*args,**kwargs)
     return wrapper
 
+"""
 #obsolete, moved to views with another level functionallity
 @login_required
 @can_act
@@ -229,6 +230,7 @@ def save_comment(request,template,vars,ct=None,object_pk=None,redirect_to=None):
             return {'success':False,'form':form}
     else:
         return {}
+"""
 
 def send_email(email,content,**kwargs):
    pass
