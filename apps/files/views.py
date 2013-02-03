@@ -23,7 +23,7 @@ from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
-from apps.core.helpers import can_act, handle_uploaded_file
+from apps.core.helpers import can_act, handle_uploaded_file, render_to
 from apps.files.decorators import *
 from apps.core.decorators import update_subscription,update_subscription_new,benchmarking, \
     check_user_fields
@@ -482,20 +482,22 @@ def upload_image(request):
 
 @csrf_protect
 @login_required
+@render_to('gallery/action_image.html')
 def action_image(request, id, action=None):
-    template = get_skin_template(request.user, 'gallery/action_image.html')
     instance = get_object_or_404(GalleryImage, id=id)
+    if action == 'delete':
+        instance.delete()
+        return {'redirect': 'files:galleries'}
+    form = ImageModelForm(request.POST or None, instance=instance)
     if request.method == 'POST':
-        form = ImageModelForm(request.POST, instance=instance)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect(reverse('files:image', args=(form.instance.pk,)))
-        else:
-            return direct_to_template(request, template,
-                {'form': form})
+            return {
+                'redirect': 'files:image',
+                'redirect-args': (form.instance.pk,)
+            }
     form = ImageModelForm(instance=instance)
-    return direct_to_template(request, template,
-        {'form': form})
+    return {'form': form}
 
 @login_required
 @can_act

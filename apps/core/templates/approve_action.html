@@ -15,8 +15,9 @@ input{
  <div align="center">
     <h3>{{ message }}</h3>
      <form id='approve_form' action='{{ url }}' method='POST'>
+        {% csrf_token %}
         {{ form.as_table }}
-        <input type='submit' value='Да, согласен'>
+        <input type='submit' value='Да, согласен' class='btn btn-danger'>
      </form>
  </div>
 {% endblock %}

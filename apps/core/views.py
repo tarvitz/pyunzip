@@ -70,7 +70,7 @@ def action_approve_simple(request,url,message):
 #advance
 @login_required
 @can_act
-def approve_action(request,obj_id=None, url='', \
+def approve_action(request, obj_id=None, url='', \
     message='Do you want to "execute" this action?', action_function='',
         action_type=None,pk='id',ident=''):
     if obj_id is None:
