@@ -29,7 +29,10 @@ a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
     border-top: transparent;
     position: relative;
 }
-#main-content .transparency, .transparency{
+/*
+#main-content .transparency,
+*/
+.transparency{
     position: absolute;
     height: 100%;
     width: 100%;
@@ -39,6 +42,12 @@ a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
     top: 0px;
     left: 0px;
     z-index: -1;
+}
+.transparency.heavy{
+    opacity: 0.85;
+}
+.transparency.black{
+    background-color: black;
 }
 #main-content .content{
     margin-top: 20px;
@@ -157,6 +166,7 @@ div.copyright{
 .no-margin-bottom{ margin-bottom: 0px; }
 .no-bottom-border{ border-bottom: none; }
 .no-padding{ padding: 0px; }
+.no-background{ background-color: transparent; background-image: none;}
 
 .row-fluid .span9-5 {
   width: 78.46808510638297%;

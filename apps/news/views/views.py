@@ -2,7 +2,9 @@
 # ^^, coding: utf-8 ^^,
 import os
 from apps.news.models import News,Category,ArchivedNews, Meating
-from apps.news.forms import ArticleForm, ArticleModelForm, AddMeatingForm
+from apps.news.forms import (
+    ArticleForm, ArticleModelForm, AddMeatingForm, ArticleStatusForm
+)
 from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.files.models import Attachment
 from apps.files.helpers import save_uploaded_file as save_file
@@ -290,3 +292,17 @@ def add_meating(request):
             form.save_m2m()
             return HttpResponseRedirect(reverse('news:index'))
     return direct_to_template(request, template, {'form': form})
+
+@has_permission('news.can_edit')
+@render_to('news/article.html')
+def article_status_set(request, pk):
+    article = get_object_or_404(News, pk=pk)
+    form = ArticleStatusForm(request.POST or None, instance=article)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {
+                'redirect': 'news:article',
+                'redirect-args': (form.instance.pk, )
+            }
+    return {'form': form}

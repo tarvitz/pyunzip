@@ -48,6 +48,14 @@ class ArticleModelForm(RequestModelForm):
             'syntax': forms.HiddenInput
         }
 
+class ArticleStatusForm(forms.ModelForm):
+    class Meta:
+        model = News
+        fields = ('status', 'reason', 'approved')
+        widgets = {
+            'reason': forms.Textarea(attrs={'cols': '10', 'rows': 5})
+        }
+
 class ArticleForm(forms.Form):
     required_css_class='required'
     categories = NewsCategory.objects.all()

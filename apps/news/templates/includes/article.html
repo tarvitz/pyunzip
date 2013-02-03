@@ -8,11 +8,12 @@
         {% endif %}
         {% if perms.news.edit_news %}
 			{% if not n.approved %}
+            <span id='edit_button'><a id='button' href='#status-article-{{ n.id }}' data-toggle='modal'>Статус</a></span>
 			<span id="edit_button"><a id='button' href="{% url news:article-action id=n.id action='approve' %}">Утвердить</a></span>
 			{% else %}
 			<span id="edit_button"><a id='button' href='{% url news:article-action id=n.id action='unapprove' %}'>Убрать</a></span>
 			{% endif %}
-                        <span id='edit_button'><a id='button' href='{% url news:article-delete n.id %}'>Удалить</a></span>
+            <span id='edit_button'><a id='button' href='{% url news:article-delete n.id %}'>Удалить</a></span>
 		{% endif %}
 		{% if not n.approved %}
             {% spaceless%}
@@ -75,3 +76,28 @@
  {% if n.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
  </div>
 
+{% if not n.approved %}
+{% get_form 'apps.news.forms.ArticleStatusForm' as form no_request n %}
+<div class='modal fade in hide no-background' id='status-article-{{ n.id }}'>
+    <div class='transparency heavy black'></div>
+    <div class='modal-header'>
+        <a class='close' href='#' data-dismiss='modal'>x</a>
+        <h3>Статус</h3>
+    </div>
+    <div class='modal-body'>
+        <form class='form-horizontal' method='POST' action='{% url news:article-status-set n.pk %}'>
+            {% csrf_token %}
+            {% include "forms/bootstrap_horizontal.html" with form=form %}
+            <div class='control-group'>
+                <label class='control-label' for='id_submit'>&nbsp;</label>
+                <div class='controls'>
+                    <input type='submit' value='Сохранить' class='btn btn-success'>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class='modal-footer no-background'>
+        <a class='btn btn-inverse' data-dismiss='modal'>Закрыть</a>
+    </div>
+</div>
+{% endif %}

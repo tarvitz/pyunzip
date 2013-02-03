@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends base_template %}{% load i18n %}
 {% block text_content %}
 {% if news %}
     <table class='news table'>
@@ -14,9 +14,11 @@
             <td>{{ n.date|date:"Y-m-d H:i" }}</td>
             <td><u><a href='{{ n.get_absolute_url }}'>{{ n.title }}</a></u></td>
             <td>
-                <label class='label label-{{ n.approved|yesno:"success,important" }}'>
-                    {{ n.approved|yesno:"утвержедна, в очереди" }}
+                <label class='label label-{{ n.get_status_label }}'>
+                    {% trans  n.status %}
                 </label>
+                {% if n.status == 'rejected' %}
+                {% endif %}
             </td>
             <td>{% if not n.approved %}{{ n.reason|default_if_none:"" }}{% else %}&nbsp;{% endif %}</td>
         {% endfor %}</tr>

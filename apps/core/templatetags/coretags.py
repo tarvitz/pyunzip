@@ -694,3 +694,42 @@ def get_content_type(parser, token):
     if len(bits) == 4:
         varname = bits[3]
     return GetObjectContentTypeNode(var, varname)
+
+class GetFormNode(Node):
+    def __init__(self, init, varname, use_request, instance=None):
+        self.init = init[1:-1]
+        self.varname = varname
+        self.use_request = use_request
+        self.instance = instance
+
+    def render(self, context):
+        instance = self.instance.resolve(context, ignore_failures=True)
+        app = self.init[:self.init.rindex('.')]
+        _form = self.init[self.init.rindex('.')+1:]
+        module = __import__(app, 0, 0, -1)
+        form_class = getattr(module, _form)
+        context[self.varname] = form_class(request=context['request'], instance=instance) \
+            if self.use_request else form_class(instance=instance)
+        return ''
+
+@register.tag
+def get_form(parser, tokens):
+    bits = tokens.contents.split()
+    if len(bits) < 4 and len(bits) > 7 : #get_form 'apps.' for varname [use request]
+        raise TemplateSyntaxError(
+               "get_form  'app.model.Form' for form [use_request] instance")
+    if bits[2] != 'as':
+        raise TemplateSyntaxError, "the second argument must be 'as'"
+    init = bits[1]
+    varname = bits[3]
+
+    use_request = bits[4] if len(bits) > 4 else ""
+
+    if 'no_request' in use_request:
+        use_request = False
+
+    instance = bool(bits[5] if len(bits) > 5 else None)
+    if instance:
+        instance = parser.compile_filter(bits[5])
+    return GetFormNode(init, varname, use_request, instance)
+

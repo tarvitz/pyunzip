@@ -9,6 +9,14 @@ from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from apps.djangosphinx.models import SphinxSearch
+
+NEWS_STATUSES = (
+    ('approved', _("approved")),
+    ('rejected', _("rejeceted")),
+    ('queued', _("queued")),
+    ('revision', _('revision')),
+)
+
 # Create your models here.
 class Category(models.Model):
     name = models.CharField(_('Category'), max_length=100, blank=False, null=False)
@@ -61,6 +69,9 @@ class AbstractNews(models.Model):
     owner = models.ForeignKey('auth.User', verbose_name='owner',
         related_name='%(class)s', default=1
     )
+    status = models.CharField(
+        choices=NEWS_STATUSES, default='queued', max_length=32
+    )
 
     #wise alias ;) onto head_content
     get_title = lambda self: self.title
@@ -73,6 +84,17 @@ class AbstractNews(models.Model):
         return self.head_content
 
     description = property(_get_description)
+
+    def get_status_label(self, framework='bootstrap'):
+        if self.status == 'rejected':
+            return 'important'
+        elif self.status == 'queued':
+            return 'info'
+        elif self.status == 'approved':
+            return 'success'
+        elif self.status == 'revision':
+            return 'warning'
+        return 'inverse'
 
     def render(self, field):
         from apps.core.helpers import post_markup_filter, render_filter
@@ -194,3 +216,6 @@ class Meating(models.Model):
         verbose_name = _("Meating")
         verbose_name_plural = _("Meatings")
         ordering = ['created_on', '-id',]
+
+from signals import setup_signals
+setup_signals()

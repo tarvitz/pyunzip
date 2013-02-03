@@ -101,6 +101,7 @@ ROOT_URLCONF = 'urls'
 TEMPLATE_CONTEXT_PROCESSORS = (
     #deprecated
     #'django.core.context_processors.auth',
+    'django.core.context_processors.request',
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
