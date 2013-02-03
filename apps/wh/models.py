@@ -345,7 +345,7 @@ User.add_to_class('photo', models.ImageField(_('Photo'),upload_to=os.path.join(s
 User.add_to_class('avatar', models.ImageField(_('Avatar'),upload_to=os.path.join(settings.MEDIA_ROOT+'avatars/'),blank=True))
 User.add_to_class('plain_avatar',models.ImageField(_('Plain Avatar'),upload_to=os.path.join(settings.MEDIA_ROOT+'avatars/'),blank=True))
 User.add_to_class('gender', models.CharField(_('Gender'), default='n', max_length=1, choices=[('m',_('male')),('f',_('female')),('n',_('not identified'))]))
-User.add_to_class('jid', models.CharField(_('Jabber ID'), max_length=255, blank=True,null=True))
+User.add_to_class('jid', models.CharField(_('Jabber ID'), max_length=255, blank=True, null=True))
 User.add_to_class('uin', models.IntegerField(_('UIN (icq number)'), max_length=12, blank=True,null=True))
 User.add_to_class('about', models.CharField(_('About myself'),max_length=512, blank=True))
 User.add_to_class('skin', models.ForeignKey(Skin, null=True, blank=True))

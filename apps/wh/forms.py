@@ -126,11 +126,12 @@ class UpdateProfileModelForm(RequestModelForm):
     
     def clean_jid(self):
         jid = self.cleaned_data['jid']
-        from apps.core.helpers import get_object_or_none
-        u = self.request.user
-	user = get_object_or_none(User,jid__iexact=jid)
-        if user and user != u:
-            raise forms.ValidationError(_('User with such JID already exists'))
+        if jid:
+            from apps.core.helpers import get_object_or_none
+            u = self.request.user
+            user = get_object_or_none(User, jid__iexact=jid)
+            if user and user != u:
+                raise forms.ValidationError(_('User with such JID already exists'))
         return "".join(jid).lower()
 
 #obsolete
