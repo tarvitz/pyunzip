@@ -11,12 +11,12 @@ class Migration(SchemaMigration):
         # Adding field 'News.status'
         db.add_column('news_news', 'status',
                       self.gf('django.db.models.fields.CharField')(default='queued', max_length=32),
-                      keep_default=False)
+                      keep_default=True)
 
         # Adding field 'ArchivedNews.status'
         db.add_column('news_archivednews', 'status',
                       self.gf('django.db.models.fields.CharField')(default='queued', max_length=32),
-                      keep_default=False)
+                      keep_default=True)
 
 
     def backwards(self, orm):

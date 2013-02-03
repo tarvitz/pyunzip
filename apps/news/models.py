@@ -70,7 +70,9 @@ class AbstractNews(models.Model):
         related_name='%(class)s', default=1
     )
     status = models.CharField(
-        choices=NEWS_STATUSES, default='queued', max_length=32
+        choices=NEWS_STATUSES,
+        default='queued',
+        max_length=32,
     )
 
     #wise alias ;) onto head_content
