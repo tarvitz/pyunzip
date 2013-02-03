@@ -8,6 +8,7 @@
 </div>
 
 <form method="post">
+    {% csrf_token %}
     <fieldset>
         <legend>{% trans "New private message" %}</legend>
         {{ form.as_p }}

@@ -10,6 +10,7 @@
 {% if images.object_list %}
     <script type='text/javascript' language='javascript' src='/media/js/stars.js'></script>
     <form class="gallery_form" action='.'>
+        {% csrf_token %}
         <select name='galleries' id='g_list'>
             <option class='even' value='null'>-----</option>
             {% for g in galleries %} 

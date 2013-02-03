@@ -4,6 +4,7 @@
 {% block text_content %}
 {{ message }}
 <form method='post' action='.'>
+    {% csrf_token %}
 	{{ form.name.errors }}
 	<label for='name'>Имя галлереи</label><br>
 	{{ form.name }}<br>

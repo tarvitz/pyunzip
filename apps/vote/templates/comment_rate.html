@@ -9,6 +9,7 @@
 	<center>
 	<div id='id_comment_rate'>
 		<form action='.' method='post'>	
+        {% csrf_token %}
 		{{ form.comment.errors }}
 		{% trans form.comment.label %}<br>
 		{{ form.comment }}<br>

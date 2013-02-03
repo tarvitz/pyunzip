@@ -9,6 +9,7 @@
 {% block text_content %}
 <div align="center">
 <form id='search_form' action='.' method='POST'>
+{% csrf_token %}
 {{ form.query.errors }}
 <label for='query'>Ищем: </label>
 {{ form.query }}

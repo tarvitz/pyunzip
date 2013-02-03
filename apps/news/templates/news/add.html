@@ -5,6 +5,7 @@
 {% block text_content %}
 <center>
 	<form id='id-form-add' enctype="multipart/form-data" action='.' method='post'>
+    {% csrf_token %}
 	 {{ form.title.errors }}
 	 Заголовок: <br>{{ form.title }}<br>
 	 {{ form.author.errors }}

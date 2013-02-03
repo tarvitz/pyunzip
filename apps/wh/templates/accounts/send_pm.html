@@ -26,6 +26,7 @@
 <center>
 <div class="send">
 <form  method='post' action=".">
+    {% csrf_token %}
 	{{ form.title.errors }}
 	Заголовок<br>
 	{{ form.title }}<br>

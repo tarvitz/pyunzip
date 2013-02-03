@@ -3,6 +3,7 @@
 {% block text_content %}
 {% if sid %}
 <form action='.' method='post'>
+{% csrf_token %}
 {{ form.username.errors }}
 имя логина: <br>{{ form.username }}<br>
 {{ form.email.errors }}

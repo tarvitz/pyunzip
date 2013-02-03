@@ -10,6 +10,7 @@
 <h1>{% trans "Editing the post" %}</h1>
 
 <form method="post">
+    {% csrf_token %}
     <fieldset>
         <legend>{% trans "Editing the post" %}</legend>
             {{ form.as_p }}

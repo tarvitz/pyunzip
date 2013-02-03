@@ -6,6 +6,7 @@
 	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}' type='text/css' media='screen'>
 {% endblock %}
 <form id='search_form' action='.' method='POST'>
+{% csrf_token %}
 {{ form.query.errors }}
 <label for='query'>Ищем: </label>
 {{ form.query }}

@@ -7,8 +7,9 @@
 <center>
 <div class='forms'>
 <form id='id_add_article' method='POST' action='.'>
- {{ form.as_ul }}
- <input type='submit' value='{% trans "submit" %}'>
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type='submit' value='{% trans "submit" %}'>
 </form>
 </div>
 </center>

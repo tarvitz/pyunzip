@@ -34,6 +34,7 @@
 </div>
 
 <form action='.' method='post'>
+{% csrf_token %}
 {{ form.post.errors }}
 	Сообщение: <br>
 	{{ form.post }}<br>

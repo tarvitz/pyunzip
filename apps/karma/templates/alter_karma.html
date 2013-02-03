@@ -9,6 +9,7 @@
 </div>
 <center>
 <form class='karma_comment_form' action='.' method='POST'>	
+    {% csrf_token %}
 	{{ form.comment.errors }}
 	<label for='id_comment'>Коментарий:</label><br>
 	{{ form.comment }}<br>

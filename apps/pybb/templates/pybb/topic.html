@@ -22,7 +22,7 @@
 
 {% pybb_pagination %}
 
-<div class="controls">
+fdiv class="controls">
     {% if moderator %}
     {% if topic.sticky %}
     <a href="{% url pybb_unstick_topic topic.id %}">{% trans "Unstick topic" %}</a>
@@ -48,6 +48,7 @@
 
 {% if not topic.closed and user.is_authenticated %}
 <form action="{% url pybb_add_post topic.id %}" method="post">
+    {% csrf_token %}
     <fieldset>
         <legend>{% trans "New reply" %}</legend>
         {{ form.as_p }}

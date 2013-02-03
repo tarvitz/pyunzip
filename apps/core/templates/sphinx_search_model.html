@@ -11,6 +11,7 @@
 
 <div style='margin-left: 2em;'>
 <form id='id_sph_search' method='post' action='.'>
+    {% csrf_token %}
     {{ form.as_ul }}
     <input type='submit' value="{% trans "search" %}">
 </form>

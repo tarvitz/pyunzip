@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% block css %}
+f% block css %}
     {{ block.super }}
     <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
     <style type='text/css'>
@@ -12,6 +12,7 @@
 <center>
 <div class='forms'>
     <form action='.' method='post' id='id_approve_delete_form'>
+        {% csrf_token %}
         {{ form.as_ul }}
         <input type='submit' value='submit'>
     </form>

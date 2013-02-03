@@ -7,6 +7,7 @@
 <center>
 <div id='settings_form'>
 	<form name='settings' action='.' method='POST'>
+        {% csrf_token %}
 		Редактировать собственные: <u><a href='{% url core:css-edit %}'>стили</a></u>
 		<ul>
 			{{ form.as_ul }}

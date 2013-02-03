@@ -8,6 +8,7 @@
 	<center>
 	<div id='id_add_edit_css'>
 		<form method='post' action='.'>
+            {% csrf_token %}
 			{{ form.css.errors }}
 			<label for='css'>CSS:</label><br>
 			{{ form.css }}<br>
