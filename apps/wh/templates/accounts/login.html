@@ -16,6 +16,7 @@
 {% endif %}
 
 <form action='.' method='POST'>
+    {% csrf_token %}
 	<label for='username'>Имя пользователя:</label><br>
 	 <input type='text' name='username'><br>
 	<label for='password'>Пароль:</label><br>
