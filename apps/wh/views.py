@@ -21,7 +21,7 @@ from django.core import serializers
 from django.core.mail import send_mail
 from django.forms.util import ErrorList
 from apps.wh.forms import UploadAvatarForm, UpdateProfileForm, UpdateProfileModelForm, \
-    PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm
+    PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm, LoginForm
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
 from cStringIO import StringIO
@@ -36,7 +36,7 @@ from django.template.defaultfilters import striptags
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import get_settings, get_object_or_none, paginate, can_act, \
-    handle_uploaded_file
+    handle_uploaded_file, render_to
 import os
 
 #decorators
@@ -51,42 +51,18 @@ def superuser_required(func,*args,**kwargs):
 
 #endofdecorators
 
+@render_to('accounts/login.html')
 def login(request):
-    redirect = request.GET.get('next','')
-    referer = request.GET.get('referer','')
-    #print "redirect: %s" % redirect
+    referer = request.GET.get('next', '/')
+    form = LoginForm(request.POST or None)
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        #print "%s:%s" % (username,password)
-        redirect = request.POST['next']
-        referer = request.POST.get('referer','')
-        #print redirect
-        user = auth.authenticate(username=username,password=password)
-        if hasattr(user,'is_authenticated'):
-            if user.is_authenticated():
-                if not user.is_active:
-                    return HttpResponseRedirect('/banned/')
-        if user is not None and user.is_active:
-            auth.login(request,user)
-            if not redirect:
-                if referer:
-                    return HttpResponseRedirect(referer)
-                else:
-                    return HttpResponseRedirect('/')
-                #return render_to_response('accounts/logged_in.html', {},
-                #    context_instance=RequestContext(request))
-            else:
-                return HttpResponseRedirect(redirect)
-        else:
-            form = {'errors': True,
-                'username': username,
-                'referer': referer}
-            return render_to_response('accounts/login.html',
-                {'form':form})
-    referer = request.META.get('HTTP_REFERER','')
-    return render_to_response('accounts/login.html', {'next': redirect,'referer':referer},
-        context_instance=RequestContext(request))
+        referer = request.POST.get('next', referer)
+        if form.is_valid():
+            auth.login(request, form.cleaned_data['user'])
+            if referer:
+                return {'redirect': referer}
+            return {'redirect': '/'}
+    return {'form': form}
 
 #KIND A HACK o_O
 @superuser_required

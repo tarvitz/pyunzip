@@ -5,10 +5,10 @@ body{
 	background-color: black;
 }
 a,a:link,a:hover,a:visited{ color: grey }
+#headline, #content{ width: 440px;}
 #headline{
 	margin: 200px 0 0 0;
 	border: 1px solid lightblue;
-	width: 300px;
 	/*background: white url('/media/images/hl_reflect.png') repeat-x top;*/
     color: white;
 	_background: #6A5665;
@@ -16,7 +16,6 @@ a,a:link,a:hover,a:visited{ color: grey }
 }
 #content{
 	border: 1px solid lightblue;
-	width: 300px;
     position: relative;
     color: white;
 }
@@ -61,3 +60,14 @@ a,a:link,a:hover,a:visited{ color: grey }
 	background-position: top right;
 }
 
+li{
+    list-style-type: none;
+}
+label{
+    float: left;
+    text-align: right;
+    width: 150px;
+}
+input{ margin-left: 15px; margin-top: 5px;}
+input[type=submit]{ margin-top: 10px;}
+ul.errorlist{ margin-left: 125px; color: red;}

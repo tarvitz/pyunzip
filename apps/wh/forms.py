@@ -9,6 +9,7 @@ from apps.wh.models import Side,RegisterSid, Skin, Army
 from apps.core import get_safe_message
 from apps.core.forms import RequestModelForm
 from django.contrib.auth.models import User
+from django.contrib import auth
 import re
 #from apps.core.forms import RequestForm
 
@@ -409,3 +410,31 @@ class PasswordRecoverForm(RequestForm):
                         self._errors['login'] = ErrorList([msg])
                 return cleaned_data
 
+class LoginForm(forms.ModelForm):
+    username = forms.CharField(
+        label=_('username'), required=True
+    )
+    password = forms.CharField(
+        label=_('password'), widget=forms.PasswordInput(),
+        required=True
+    )
+    next = forms.CharField(widget=forms.HiddenInput(), required=False)
+
+    def clean(self):
+        username = self.cleaned_data.get('username')
+        password = self.cleaned_data.get('password')
+        if all((username, password)):
+            user = auth.authenticate(username=username, password=password)
+            if not user:
+                msg = _("No user or password match")
+                self._errors['username'] = ErrorList([msg])
+            else:
+                self.cleaned_data['user'] = user
+                if not user.is_active:
+                    msg = _("You have been banned ;)")
+                    self._errors['username'] = ErrorList([msg])
+        return self.cleaned_data
+
+    class Meta:
+        model = User
+        fields = ['username', 'password']

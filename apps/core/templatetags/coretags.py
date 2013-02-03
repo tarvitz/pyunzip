@@ -703,7 +703,7 @@ class GetFormNode(Node):
         self.instance = instance
 
     def render(self, context):
-        instance = self.instance.resolve(context, ignore_failures=True)
+        instance = self.instance.resolve(context, ignore_failures=True) if self.instance else None
         app = self.init[:self.init.rindex('.')]
         _form = self.init[self.init.rindex('.')+1:]
         module = __import__(app, 0, 0, -1)
@@ -732,4 +732,3 @@ def get_form(parser, tokens):
     if instance:
         instance = parser.compile_filter(bits[5])
     return GetFormNode(init, varname, use_request, instance)
-

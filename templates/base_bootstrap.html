@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-	"http://www.w3.org/TR/REC-html40/loose.dtd">
+<!DOCTYPE html>
 <html>{% load newsfilters i18n %}
 {% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
 <head>
@@ -112,6 +111,27 @@
     </center>
 </footer>
 </body>
+<!-- modals -->
+{% if not user.is_authenticate %}
+<div class='modal hide fade in no-background' id='login-modal'>
+    <div class='transparency heavy black'></div>
+    <div class='modal-header'>
+        <a class='close' href='#' data-dismiss='modal'>x</a>
+        <h3>Войти</h3>
+    </div>
+    <div class='modal-body'>
+        {% get_form 'apps.wh.forms.LoginForm' as form %}
+        <form class='form-horizontal' action='{% url wh:login %}' method='POST'>
+            {% csrf_token %}
+            {% include "forms/bootstrap_horizontal.html" with form=form use_submit="Yes" submit_value="Войти" %}
+        </form>
+    </div>
+    <div class='modal-footer no-background'>
+        <a class='btn btn-inverse' class='close' data-dismiss='modal'>Закрыть</a>
+    </div>
+</div>
+{% endif %}
+<!-- end of modals -->
 
 {% block endjs %}
 <script language='javascript' type='text/javascript'>

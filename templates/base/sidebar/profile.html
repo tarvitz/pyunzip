@@ -40,7 +40,7 @@
             <span class='reflects_left'></span>
             <ul>
                 {% if not user.is_authenticated %}
-                    <li><a href="{% url wh:login %}">Логин</a> |
+                    <li><a data-href="{% url wh:login %}" href='#login-modal' data-toggle='modal'>Логин</a> |
                         <a href='{% url wh:register %}'>Регистрация</a>
                     </li>
                 <li class='lvl2'><a href='{% url wh:password-recover %}'>востановление пароля</a></li>{% endif %}
