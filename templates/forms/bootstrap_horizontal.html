@@ -1,0 +1,20 @@
+{% for field in form.visible_fields %}
+<div class="control-group">
+    {% if field.errors %}{{ field.errors }}{% endif %}
+    <label class="control-label" for="id_{{ field.name }}">{{ field.label }}</label>
+    <div class="controls">
+        {{ field }}
+    </div>
+</div>
+{% endfor %}
+
+{% if form.hidden_fields %}
+    <div class='hide'>
+    {% for field in form.hidden_fields %}
+        {{ field }}
+        {% if field.errors %}{{ field.errors }}{% endif %}
+    {% endfor %}
+    </div>
+{% endif %}
+
+{% if form.media %}{{ form.media }}{% endif %}
