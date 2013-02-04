@@ -36,12 +36,8 @@
 	<hr>
  <div id='spacer'>&nbsp;</div>
  {% if news_general %}
-     {% if not n.head_content %}
-        {{ n.content|newscut:"500"|render_filter:n.syntax|safe }}<br clear='all'>
-     {% else %}
-        {{ n.head_content|render_filter:n.syntax|safe }}{% if n.content %} ... {% endif %}
+        {{ n.render_head_content|safe }}
         <br clear='all'>
-     {% endif %}
  {% else %}
     {% if not n.approved %}
         <div class='alert warning-block'>
@@ -51,9 +47,6 @@
             или возвращена с указанием причины возврата.
         </div>
     {% endif %}
-    {#{{ n.head_content|render_filter:n.syntax|safe }}#}
-    {# {{ n.content|render_filter:n.syntax|safe }} #}
-    {{ n.render_head_content|safe }}
     {{ n.render_content|safe }}
     <br clear='all'>
  {% endif %}

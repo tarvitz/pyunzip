@@ -2,7 +2,7 @@
 // markItUp!
 // By Jay Salvat - http://markitup.jaysalvat.com/
 // ------------------------------------------------------------------*/
-textarea.markItUpEditor{ width: 690px !important;}
+textarea.markItUpEditor{ width: 640px !important;}
 .message .msg_text .markItUp{ width: 600px !important; }
 .message .msg_text textarea.markItUpEditor{ width: 590px !important; }
 .markItUp .bold a {

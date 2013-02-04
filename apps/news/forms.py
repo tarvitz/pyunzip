@@ -39,7 +39,7 @@ class ArticleModelForm(RequestModelForm):
 
     class Meta:
         model = News
-        fields = ['title', 'author','category', 'syntax', 'head_content', 'content', 'url']
+        fields = ['title', 'author','category', 'syntax', 'content', 'url']
         exclude = ['editor', 'approved', 'author_ip', 'is_event', 'date',
 
         ]
@@ -66,7 +66,7 @@ class ArticleForm(forms.Form):
     author = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=False)
     editor = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=False)
     url = forms.URLField(required=False)
-    head_content = forms.CharField(widget=forms.Textarea(),required=False)
+    #head_content = forms.CharField(widget=forms.Textarea(),required=False)
     content = forms.CharField(widget=TinyMkWidget(attrs={'disable_syntax':False,
         'disable_user_quote': True}))
     category = forms.ChoiceField(choices=CATEGORIES)
@@ -81,11 +81,11 @@ class ArticleForm(forms.Form):
                         del kwargs['request']
                 super(ArticleForm, self).__init__(*args, **kwargs)
 
-    def clean_head_content(self):
-        head_content = self.cleaned_data.get('head_content','')
-        if len(head_content)>1000:
-            raise forms.ValidationError(_("You can not use more than 1000 symbols within headline news editing, please shortage the head of the news"))
-        return get_safe_message(head_content)
+    #def clean_head_content(self):
+    #    head_content = self.cleaned_data.get('head_content','')
+    #    if len(head_content)>1000:
+    #        raise forms.ValidationError(_("You can not use more than 1000 symbols within headline news editing, please shortage the head of the news"))
+    #    return get_safe_message(head_content)
 
     def clean_content(self):
         content = self.cleaned_data.get('content','')

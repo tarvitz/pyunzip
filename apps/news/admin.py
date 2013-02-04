@@ -12,8 +12,8 @@ def revert_approved(modeladmin, request, queryset):
 revert_approved.short_description = _('Revert approved flag')
 #AdminModels
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('date','category','title', 'author', 'local_content','approved','author_ip','attachment')
-    search_fields = [ 'approved','title', 'author', 'head_content','content']
+    list_display = ('date','category','title', 'author', 'approved','author_ip','attachment')
+    search_fields = [ 'approved','title', 'author', 'content']
     list_filter = ['approved','category', 'author', 'author_ip' ]
     actions = [make_approved_action,revert_approved]
     fieldsets = (
@@ -21,7 +21,8 @@ class NewsAdmin(admin.ModelAdmin):
             {
                 'fields':(
                     'title','author',
-                    'editor','head_content',
+                    'editor',
+                    #'head_content',
                     'content','date',
                     'author_ip','category',
                     'url','approved',
@@ -36,10 +37,10 @@ class NewsAdmin(admin.ModelAdmin):
             }
         )
     )
-    def local_content(self,obj):
-        if obj.head_content:
-            return obj.head_content+obj.content[0:70] + " ..."
-    local_content.short_description = _('content')
+    #def local_content(self,obj):
+    #    if obj.head_content:
+    #        return obj.head_content+obj.content[0:70] + " ..."
+    #local_content.short_description = _('content')
 
 admin.site.register(News,NewsAdmin)
 admin.site.register(ArchivedNews)

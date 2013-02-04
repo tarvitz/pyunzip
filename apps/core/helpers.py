@@ -631,6 +631,7 @@ def post_markup_filter(string):
         html = render_to_string('q_comments.html', {'quote_user': user, 'quote_text': text})
         html = re.sub(r'\n+', '', html)
         string = string.replace('(%s){%s}' % (username, text), html)
+    string = string.replace('(cut)', '')
     return string
 
 def unescape(string):

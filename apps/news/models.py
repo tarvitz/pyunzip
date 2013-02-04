@@ -52,9 +52,10 @@ class AbstractNews(models.Model):
     url = models.CharField(
         _('Original URL'), max_length=200, blank=True
     )
-    head_content = models.TextField(
-        _('Head content'), blank=True, null=True
-    )
+    # replace with cut
+    #head_content = models.TextField(
+    #    _('Head content'), blank=True, null=True
+    #)
     content =  models.TextField(_('Content'), null=False)
     date = models.DateTimeField(_('DateTime'), null=False, default=datetime.now)
     approved = models.BooleanField(_('Approved'), blank=True)
@@ -86,6 +87,15 @@ class AbstractNews(models.Model):
         return self.head_content
 
     description = property(_get_description)
+
+    def get_head(self):
+        if '(cut)' in self.content:
+            return self.content[:self.content.index('(cut)')]
+        return self.content
+
+    @property
+    def head_content(self):
+        return self.get_head()
 
     def get_status_label(self, framework='bootstrap'):
         if self.status == 'rejected':
