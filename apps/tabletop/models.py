@@ -1,3 +1,4 @@
+# coding: utf-8
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 from apps.files.models import Attachment
@@ -141,7 +142,7 @@ class Mission(models.Model):
 
 class BattleReport(models.Model):
     title = models.CharField(_('Title'),max_length=100)
-    owner = models.ForeignKey(User,related_name=_('Owner'))
+    owner = models.ForeignKey(User, related_name='battlereport')
     published = models.DateTimeField(_('Published'))
     #boo :)
     users = models.ManyToManyField(Roster, verbose_name=_('Rosters'))
