@@ -22,7 +22,7 @@
 
 {% pybb_pagination %}
 
-fdiv class="controls">
+<div class="controls">
     {% if moderator %}
     {% if topic.sticky %}
     <a href="{% url pybb_unstick_topic topic.id %}">{% trans "Unstick topic" %}</a>
