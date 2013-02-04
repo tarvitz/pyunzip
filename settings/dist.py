@@ -1,6 +1,7 @@
 #
 # Django settings for WarMist project.
 import os,sys
+from settings_path import rel_path
 #from apps import djcelery
 #djcelery.setup_loader()
 
@@ -39,7 +40,6 @@ LOCALE_PATHS = (
 # to load the internationalization machinery.
 USE_I18N = True
 
-from settings_path import rel_path
 
 MEDIA_ROOT=get_local('MEDIA_ROOT', rel_path('media'))
 STYLES_ROOT = rel_path('styles')
