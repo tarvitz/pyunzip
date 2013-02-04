@@ -15,15 +15,7 @@
 <form action='.' method='POST'>
     {% csrf_token %}
     {{ form.as_ul }}
-    {% comment %}
-	<label for='username'>Имя пользователя:</label><br>
-	 <input type='text' name='username'><br>
-	<label for='password'>Пароль:</label><br>
-	 <input type='password' name='password'></label><br>
-    {% endcomment %}
 	<center><input type="submit" value="Войти"></center>
-	<!--<input type='hidden' name='next' value="{{ next|escape }}">
-	<input type='hidden' name='referer' value="{{ referer|escape }}">-->
 </form>
 </div>
 </center>

@@ -115,3 +115,78 @@ onClick="recieve_formatted_comment('+this.pk+')">\
 	}
 
    //	});
+ 
+var postAjax = function(params){
+    url = params.url;
+    data = params.data;
+
+    $.ajax(url, {
+        dataType: params.dataType || 'json',
+        data: data,
+        type: "POST",
+        crossDomain: params.crossDomain || false,
+        success: function(response, state, jqXHR){
+            if (params.success) params.success(response, state);
+        },
+        error: function(response, state, jqXHR){
+            if (params.failure) params.failure(response, state);
+        },
+        beforeSend: function(xhrResponse, settings){
+            xhrResponse.setRequestHeader('X-Force-XHttpResponse', 'on');
+        },
+    });
+}
+
+var updateFormErrors = function(form, errors){
+    $('ul.errors').detach().remove();
+    for (el in errors){
+        
+        blk = $(form).find("#id_" + el);
+        ul = $("<ul class='errors'></ul>");
+        for (i=0; i < errors[el].length; i++){
+            li = $("<li>" + errors[el][i] + "</li>");
+            li.appendTo(ul);
+        }
+        ul.insertBefore(blk);
+		blk.addClass('errors');
+    }
+}
+
+var postFormAjax = function(p){
+    form = p.form;
+    data = p.data || form.serialize();
+
+    postAjax({
+        url: p.url || form.attr('action'),
+        data: data,
+        success: function(response, code){
+            var _form = (typeof response.form == 'undefined') ? {} : response.form;
+            if (_form.errors){
+                updateFormErrors(form, _form.errors);
+            }
+            else {
+                // do something
+                var message = noty({
+                    text: p.successMsg || "Сохранено ;)",
+                    type: "success",
+                    dismissQueue: true,
+                    timeout: (typeof p.notyTimeout == 'undefined') ? 2000 : p.notyTimeout
+                });
+                if (p.reloadPage || false ){
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, p.reloadTimeout || 2500);
+                }
+                if (p.success) p.success(response);
+            }
+        },
+        failure: function(response, code){
+            noty({
+                text: p.failreMsg || "Что-то пошло не так",
+                type: "error",
+                dismissQueue: true
+            });
+        }
+    }); //end postAjax
+}
+

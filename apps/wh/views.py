@@ -51,7 +51,7 @@ def superuser_required(func,*args,**kwargs):
 
 #endofdecorators
 
-@render_to('accounts/login.html')
+@render_to('accounts/login.html', allow_xhr=True)
 def login(request):
     referer = request.GET.get('next', '/')
     form = LoginForm(request.POST or None)

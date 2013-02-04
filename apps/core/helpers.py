@@ -1,6 +1,7 @@
 # coding: utf-8
 #
 import os
+from datetime import datetime, timedelta, date, time
 #from apps.core.forms import CommentForm
 from django.http import HttpResponseRedirect, HttpResponse
 from apps.core import get_skin_template
@@ -25,6 +26,7 @@ from django.core.mail import send_mail
 from django.core.exceptions import ImproperlyConfigured
 from celery.task import task
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
+import simplejson as json
 import bz2
 import re
 import logging
@@ -467,6 +469,90 @@ def make_http_response(**kw):
         response.write(kw['content'])
     return response
 
+def model_json_encoder(obj, **kwargs):
+    from django.db.models.base import ModelState
+    from django.db.models import Model
+    from django.db.models.query import QuerySet
+    from decimal import Decimal
+    from django.db.models.fields.files import ImageFieldFile
+    from django import forms
+    from django.utils.functional import Promise
+    is_human = kwargs.get('parse_humanday', False)
+    if isinstance(obj, QuerySet):
+        return list(obj)
+    elif isinstance(obj, Model):
+        dt = obj.__dict__
+        #obsolete better use partial
+        fields = ['_content_type_cache', '_author_cache', '_state']
+        for key in fields:
+            if key in dt:
+                del dt[key]
+        #normailize caches
+        disable_cache = kwargs['disable_cache'] \
+            if 'disable_cache' in kwargs else False
+
+        # disable cache if disable_cache given
+        for key in dt.keys():
+            if '_cache' in key and key.startswith('_'):
+                if not disable_cache:
+                    dt[key[1:]] = dt[key]
+                    #delete cache
+                    del dt[key]
+            if disable_cache and '_cache' in key:
+                del dt[key]
+
+        #delete restriction fields
+        if kwargs.get('fields_restrict'):
+            for f in kwargs.get('fields_restrict'):
+                if f in dt:
+                    del dt[f]
+        #make week more humanic
+        if is_human and 'week' in dt:
+            dt['week'] = unicode(humanday(dt['week']))
+        return dt
+    elif isinstance(obj, ModelState):
+        return 'state'
+    elif isinstance(obj, datetime):
+        return [
+            obj.year, obj.month, obj.day,
+            obj.hour, obj.minute, obj.second,
+            obj.isocalendar()[1]
+        ]
+    elif isinstance(obj, date):
+        return [obj.year, obj.month, obj.day]
+    elif isinstance(obj, time):
+        return obj.strftime("%H:%M")
+    elif isinstance(obj, ImageFieldFile):
+        return obj.url if hasattr(obj, 'url') else ''
+    elif isinstance(obj, forms.ModelForm) or isinstance(obj, forms.Form):
+        _form = {
+            'data': obj.data if hasattr(obj, 'data') else None,
+            'instance': obj.instance if hasattr(obj, 'instance') else None,
+        }
+        if obj.errors:
+            _form.update({'errors': obj.errors})
+        return _form
+    elif isinstance(obj, Promise):
+        return unicode(obj)
+    #elif isinstance(obj, Decimal):
+    #    return float(obj)
+    return obj
+
+
+def get_model_instance_json(Obj, id):
+    instance = get_object_or_None(Obj, id=id)
+    response = make_http_response(content_type='text/javascript')
+    if not instance:
+        response.write(json.dumps({
+            'success': False,
+            'error': unicode(_("Not found")),
+        }, default=model_json_encoder))
+        return response
+    response.write(json.dumps({
+        'success': True,
+        'instance': instance,
+    }, default=model_json_encoder))
+    return response
 
 
 def render_to(template, allow_xhr=False, content_type='text/html'):

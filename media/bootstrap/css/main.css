@@ -143,6 +143,11 @@ div.copyright{
 #blacklibrary { text-align: center; line-height: 14px; font-size: 8pt;}
 #blacklibrary a{ color: black;}
 
+.modal ul.errors{margin: 0px;}
+.modal ul.errors > li{
+    list-style-type: none;
+    color: red;
+}
 /* footer */
 #wrap{
     min-height: 100%;

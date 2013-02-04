@@ -35,6 +35,15 @@
 <script type='text/javascript' src='/media/js/markitup/bb_textile.js'></script>
 <!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
 <script type='text/javascript' src='/media/js/m_effects.js'></script>
+<!-- noty -->
+<script type="text/javascript" src="/media/js/noty/jquery.noty.js"></script>
+
+<script type="text/javascript" src="/media/js/noty/layouts/top.js"></script>
+<script type="text/javascript" src="/media/js/noty/layouts/topLeft.js"></script>
+<script type="text/javascript" src="/media/js/noty/layouts/topRight.js"></script>
+<script type="text/javascript" src="/media/js/noty/themes/default.js"></script>
+<script type="text/javascript" src="/media/js/noty/themes/warmist.js"></script>
+<!-- You can add more layouts if you want -->
 <script type='text/javascript' src='/media/js/jq_base.js'></script>
 <!--<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>-->
 {% comment %}
@@ -123,7 +132,7 @@
         {% get_form 'apps.wh.forms.LoginForm' as form %}
         <form class='form-horizontal' action='{% url wh:login %}' method='POST'>
             {% csrf_token %}
-            {% include "forms/bootstrap_horizontal.html" with form=form use_submit="Yes" submit_value="Войти" %}
+            {% include "forms/bootstrap_horizontal.html" with form=form use_submit="Yes" submit_value="Войти" submit_class_btn="btn btn-success postAjax" %}
         </form>
     </div>
     <div class='modal-footer no-background'>
@@ -191,6 +200,19 @@
     /*$('a[rel=twipsy]').tooltip({ live: true, placement: 'below', delayIn: 1000 });*/
     $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
     $('a[href=#]').click(function(e){ e.preventDefault();});
+
+    $('#login-modal .postAjax').click(function(e){
+        form = $(this).parents('form');
+        $(form).find('ul.errors').detach().remove();
+        postFormAjax({
+            form: form,
+            successMsg: "Успешно авторизован ;)",
+            reloadPage: true
+            reloadTimeout: 2000
+        });
+        return false;
+    });
+    $('#login-modal form').submit(function(e){ return false;});
 
 </script>
 {% endblock %} {# endjs #}
