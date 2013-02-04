@@ -1,4 +1,4 @@
-# coding: utf8
+# coding: utf-8
 from django.utils.translation import ugettext_lazy as _, ugettext as _tr
 from apps.core.forms import ActionApproveForm
 from django.http import HttpResponse, HttpResponseRedirect, Http404

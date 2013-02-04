@@ -268,8 +268,10 @@ class AddRosterModelForm(RequestModelForm):
         codex = cleaned_data.get('codex', None)
         if not codex or not revision: return cleaned_data
         if not str(revision) in codex.revisions.split(','):
-            msg = _('There is no such revision in "%s", try to pass %s as valid values' %
-                (codex.__unicode__(), codex.revisions))
+            msg = _('There is no such revision in "%(unicode)s", try to pass %(revisions)s as valid values') % {
+                'unicode': codex.__unicode__(),
+                'revisions': codex.revisions
+            }
             self._errors['revision'] = ErrorList([msg])
             del cleaned_data['revision']
         return cleaned_data
