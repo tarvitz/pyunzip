@@ -748,19 +748,19 @@ msgstr ""
 
 #: apps/news/models.py:14
 msgid "approved"
-msgstr ""
+msgstr "утверждено"
 
 #: apps/news/models.py:15
 msgid "rejeceted"
-msgstr ""
+msgstr "отклонена"
 
 #: apps/news/models.py:16
 msgid "queued"
-msgstr ""
+msgstr "в очереди"
 
 #: apps/news/models.py:17
 msgid "revision"
-msgstr ""
+msgstr "в доработку"
 
 #: apps/news/models.py:22 apps/news/models.py:28 apps/pybb/models.py:45
 #: apps/pybb/models.py:67
