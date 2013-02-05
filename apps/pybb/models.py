@@ -164,7 +164,6 @@ class RenderableItem(models.Model):
             self.body_html = mypostmarkup.markup(self.body, auto_urls=False)
         elif self.markup == 'markdown':
             self.body_html = unicode(Markdown(self.body, safe_mode='escape'))
-            print self.body_html
         else:
             raise Exception('Invalid markup property: %s' % self.markup)
         self.body_text = strip_tags(self.body_html)
