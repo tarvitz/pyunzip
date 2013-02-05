@@ -258,3 +258,4 @@ span.link,div.link{
 .tr_white{ background-color: white !important; }
 .is_new { color: lightgreen; }
 .online_users .nicknames{ font-size: 8pt;}
+.warnings a{padding-left: 2px; padding-right: 2px;}
