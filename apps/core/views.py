@@ -11,6 +11,7 @@ from apps.core.decorators import benchmarking,progress_upload_handler
 from apps.core.helpers import validate_object, render_to
 
 from django.utils.translation import ugettext_lazy as _, ugettext as _t
+from django.views.decorators.csrf import csrf_exempt
 from django.template import RequestContext,Template,Context
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
 from django.shortcuts import render_to_response
@@ -787,6 +788,7 @@ def get_comment(request, id=0,raw=False):
         response.write(serializers.serialize("json",[]))
         return response
 
+@csrf_exempt
 @login_required
 def edit_comment_ajax(request, id=0):
     template = get_skin_template(request.user, 'edit_comment.html')
