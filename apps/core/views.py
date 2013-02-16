@@ -752,7 +752,8 @@ def edit_comment(request, id=0):
     and not request.user.is_superuser:
         return HttpResponseRedirect('/comment/not/found')
 
-    form = CommentForm(request.POST or None,request=request, instance=comment)
+    form = CommentForm(
+        request.POST or None, request=request, instance=comment)
 
     if request.method == 'POST':
         if form.is_valid():

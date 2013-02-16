@@ -174,7 +174,8 @@ class CommentForm(forms.ModelForm):
         #self.instance.content_type = self.content_type
         #self.instance.object_pk = obj_id
         self.instance.site = self.cleaned_data['site']
-        self.instance.user = self.request.user
+        if not self.instance.pk:
+            self.instance.user = self.request.user
         content_type = self.cleaned_data['content_type']
         c = Comment.objects.filter(
             content_type=content_type,
@@ -191,7 +192,7 @@ class CommentForm(forms.ModelForm):
                 #new comment and not a dublicate
                 c.comment += "\n"+ self.instance.comment
                 #c.submit_date = now
-                ip = self.request.META.get('REMOTE_ADDR','')
+                ip = self.request.META.get('REMOTE_ADDR', '')
                 if ip: c.ip_address = ip
                 if commit:
                     c.save()
