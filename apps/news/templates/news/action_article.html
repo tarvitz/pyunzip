@@ -6,13 +6,14 @@
 {% block text_content %}
 <center>
 <div class='forms'>
-<form id='id_add_article' method='POST' action='.'>
+<form id='id-form-add' method='POST' action='.'>
     {% csrf_token %}
     {{ form.as_ul }}
     <input type='submit' value='{% trans "submit" %}'>
 </form>
 </div>
 </center>
+
 <script type='text/javascript'>
 /* settings */
 var markItUpParsers = {
