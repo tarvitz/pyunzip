@@ -14,6 +14,8 @@ from apps.pybb.models import Category, Forum, Topic, AnonymousPost, Post, Profil
 from apps.pybb.forms import AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm
 from apps.pybb import settings as pybb_settings
 from apps.pybb.anonymous_post import handle_anonymous_post, load_anonymous_post, delete_anonymous_post
+from django.views.decorators.csrf import csrf_exempt
+
 
 def index_ctx(request):
     quick = {'posts': Post.objects.count(),
@@ -258,6 +260,7 @@ def unstick_topic(request, topic_id):
     return HttpResponseRedirect(topic.get_absolute_url())
 
 
+@csrf_exempt
 @login_required
 def delete_post_ctx(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
