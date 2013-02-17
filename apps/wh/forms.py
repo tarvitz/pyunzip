@@ -410,6 +410,14 @@ class PasswordRecoverForm(RequestForm):
                         self._errors['login'] = ErrorList([msg])
                 return cleaned_data
 
+
+class SuperUserLoginForm(forms.ModelForm):
+    username = forms.CharField(label=_('username'))
+    class Meta:
+        model = User
+        fields = []
+
+
 class LoginForm(forms.ModelForm):
     username = forms.CharField(
         label=_('username'), required=True

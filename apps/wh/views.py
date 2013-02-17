@@ -20,8 +20,12 @@ from django.core import serializers
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.mail import send_mail
 from django.forms.util import ErrorList
-from apps.wh.forms import UploadAvatarForm, UpdateProfileForm, UpdateProfileModelForm, \
-    PMForm, RegisterForm, AddWishForm,PasswordChangeForm, PasswordRecoverForm, LoginForm
+from apps.wh.forms import (
+    UploadAvatarForm, UpdateProfileForm,
+    UpdateProfileModelForm, PMForm, RegisterForm, AddWishForm,
+    PasswordChangeForm, PasswordRecoverForm, LoginForm,
+    SuperUserLoginForm
+)
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
 from cStringIO import StringIO
@@ -35,8 +39,9 @@ from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
-from apps.core.helpers import get_settings, get_object_or_none, paginate, can_act, \
-    handle_uploaded_file, render_to
+from apps.core.helpers import (
+    get_settings, get_object_or_none, paginate, can_act,
+    handle_uploaded_file, render_to, get_object_or_None)
 import os
 
 #decorators
@@ -68,20 +73,23 @@ def login(request):
 @superuser_required
 def sulogin(request):
     referer = request.META.get('HTTP_REFERER', '/')
+    form = SuperUserLoginForm(request.POST or None)
     if request.method == 'POST':
         username = request.POST['username']
-        try:
-            user = User.objects.get(username=username)
-            superuser = auth.authenticate(username='banned',password='banned')
-            setattr(user,'backend',superuser.backend)
-            auth.login(request,user)
-            return HttpResponseRedirect('/')
-        except User.DoesNotExist:
-            return render_to_response('accounts/login', {'errors': True,
-                'next':referer,'referer':referer},
-                context_instance=RequestContext(request))
-    return render_to_response('accounts/login.html', {'next': referer,'referer':referer},
-    context_instance=RequestContext(request))
+        user = get_object_or_None(User, username=username)
+        if user:
+            user.backend = 'django.contrib.auth.backends.ModelBackend'
+            auth.login(request, user)
+            return HttpResponseRedirect(request.GET.get('next') or '/')
+        else:
+            raise Http404("no such user")
+    return render_to_response(
+        'accounts/login.html', {
+            'next': referer,'referer':referer,
+            'form': form
+        },
+        context_instance=RequestContext(request)
+    )
 
 def logout(request):
     if hasattr(request.user,'useractivity'):
