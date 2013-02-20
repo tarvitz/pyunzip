@@ -34,6 +34,7 @@ from datetime import datetime,timedelta
 from hashlib import sha1
 from random import randint, random
 from django.template import Template,Context
+from django.http import Http404
 #filters
 from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
