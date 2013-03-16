@@ -10,7 +10,7 @@
 <form id='upload_form'
     {# data-target="upload_frame" #}
     enctype="multipart/form-data"
-    action='{% url files:image-upload %}' {#{% url url_progress_uploader app_n_model='files.image' %}'#} method='POST'>
+    action='{% url "files:image-upload" %}' {#{% url url_progress_uploader app_n_model='files.image' %}'#} method='POST'>
      {% csrf_token %}
      {{ form.as_ul }}
      <input type='submit' value='{% trans "submit" %}'>
@@ -21,7 +21,7 @@
 {% comment %}
 <script language='javascript'>
     var app_n_model = 'files.image';
-    var progress_url_global = "{% url url_upload_progress %}";
+    var progress_url_global = "{% url "url_upload_progress" %}";
     var action_field = "{% url url_progress_uploader app_n_model='files.image' %}";
 </script>
 <!--<script language='javascript' src='/media/js/jq_progress_upload.js'></script> -->

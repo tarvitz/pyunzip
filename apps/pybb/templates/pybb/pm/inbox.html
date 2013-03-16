@@ -8,9 +8,9 @@
 <ul>
     {% for msg in messages %}
     <li>
-        <a href="{% url pybb_show_pm msg.id %}" {% if not msg.read %}class="selected"{% endif %}>{{ msg.subject }}</a>
+        <a href="{% url "pybb_show_pm" msg.id %}" {% if not msg.read %}class="selected"{% endif %}>{{ msg.subject }}</a>
         {% trans "from" %}
-        <span class="author"><a href="{% url pybb_profile msg.src_user.nickname %}">{% get_nickname msg.src_user %}</a></span>
+        <span class="author"><a href="{% url "pybb_profile" msg.src_user.nickname %}">{% get_nickname msg.src_user %}</a></span>
 
         <span class="date">@ {% pybb_time msg.created %}</span>
     </li>

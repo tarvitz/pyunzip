@@ -49,7 +49,7 @@ $(document).ready(function(){
         
         text = sr.value;
         r = document.getElementById('id_rosters_choice');
-        url = '{% url json:tabletop:rosters-search %}' + text;
+        url = '{% url "json:tabletop:rosters-search" %}' + text;
         $.getJSON(url, function(data){
             //cleanse old data
             for (var count = r.length - 1; count>-1; count--) r[count] = null;

@@ -11,7 +11,7 @@
 {% for n in news.object_list %}
  <div id='news'>
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url news:news category=n.category|lower %}">
+		<a href="{% url "news:news" category=n.category|lower %}">
 		<img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png"></a>
 		{% comment %}{% if perms.news.edit_news or user.is_superuser %}
 			<span id='edit_button'><a id='button' href="{% url apps.news.views.add_article id=n.id %}">Править</a></span>
@@ -23,10 +23,10 @@
 		{% endif %} {% endcomment %}
 		{% if not n.approved %}
 			<span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-				<a href="{% url news:article-archived id=n.id %}">{{ n.title }}</a>
+				<a href="{% url "news:article-archived" id=n.id %}">{{ n.title }}</a>
 			</span>
 		{% else %}
-			<a href='{% url news:article-archived id=n.id %}'>{{ n.title }}</a>&nbsp;
+			<a href='{% url "news:article-archived" id=n.id %}'>{{ n.title }}</a>&nbsp;
 			{% if user.is_superuser or perms.news.edit_archived_article %}
 			<a href='/admin/news/archivednews/{{ n.id }}'>[edit]</a> {% endif %}
 		{% endif %}{% endspaceless %}
@@ -39,7 +39,7 @@
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
- <a href='{% url news:article number=n.id %}'>читать далее</a>
+ <a href='{% url "news:article" number=n.id %}'>читать далее</a>
  </div>
  <hr>
  <div class='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>

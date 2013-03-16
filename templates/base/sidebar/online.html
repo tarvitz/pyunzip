@@ -21,7 +21,7 @@
                                 [{% get_nickname u %}]
                             {% endif %}
                             {% endcomment %}
-                            <span class='nicknames'>[<a rel='twipsy' href="{% url wh:profile-by-nick u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
+                            <span class='nicknames'>[<a rel='twipsy' href="{% url "wh:profile-by-nick" u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
                         {% endspaceless %}
                     {% endfor %}
                     {% if online_users %}

@@ -18,7 +18,7 @@
 {# stylesheet special for overriding base style templates withing one file #}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"override.css" }}' type='text/css' media='screen'>
 {# user css'es #}
-{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url core:css-db %}' type='text/css' media='screen'>{% endif %}
+{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url "core:css-db" %}' type='text/css' media='screen'>{% endif %}
 {% block js %}
 <script type='text/javascript' src='/media/js/core.js'></script>
 <script type='text/javascript' src='/media/js/base.js'></script>
@@ -37,9 +37,9 @@
 <body>
 <div id="initial_line">
 	<ul>
-		<li><a title='WarMist web ресурс' href="{% url news:news %}">сайт</a></li>
-		<li><a title='Блог разработчиков' href="{% url blog:index %}">блог</a></li>
-		<li><a title='Форум' href="{% url pybb_index %}">форум</a></li>
+		<li><a title='WarMist web ресурс' href="{% url "news:news" %}">сайт</a></li>
+		<li><a title='Блог разработчиков' href="{% url "blog:index" %}">блог</a></li>
+		<li><a title='Форум' href="{% url "pybb_index" %}">форум</a></li>
                 {% if self_ipaddress %}<li>{{ self_ipaddress }}</li>{% endif %}
 	</ul>
 </div>
@@ -47,15 +47,15 @@
 <div id="tabs">
 	<ul>
                 {% if user.is_superuser %}
-                <li><a href="{% url wh:superlogin %}">&nbsp;S&nbsp;</a></li>
+                <li><a href="{% url "wh:superlogin" %}">&nbsp;S&nbsp;</a></li>
                 {% endif %}
                 {% if user.is_staff %}
 		<li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
 		{% endif %}
 		{% if user.is_authenticated %}
 		<li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
-		{% else%}<li><a href="{% url wh:login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-		{% if not user.is_authenticated %}<li><a href="{% url wh:register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+		{% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+		{% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
 		<li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
 	</ul>
 </div><br clear="left">
@@ -88,17 +88,17 @@
 		<div class="transparency"><!-- wise transparency --></div>
 		<span class='reflects_up'><!-- wise reflects --></span>
 		<span class='reflects_left'></span>
-		<img alt="avatar" title="avatar" src='{% url wh:avatar nickname=user.get_username %}'>
+		<img alt="avatar" title="avatar" src='{% url "wh:avatar" nickname=user.get_username %}'>
 		<ul>
-			<li><a rel='twipsy' href='{% url wh:pm-view %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
-			<li><a rel='twipsy' href="{% url wh:profile %}" title='Просмотр своего профиля'>Профиль</a></li>
-			<li class='lvl2'><a rel='twipsy' href='{% url wh:profile-update %}' title='Настройки профиля'>Править</a></li>
-			<li class='lvl2'><a rel='twipsy' href='{% url core:settings %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
-			<li class='lvl2'><a rel='twipsy' href='{% url core:subscription %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
-			<li><a rel='twipsy' href='{% url wh:users %}' title='Обитатели ресурса'>Участники</a></li>
-			<li><a rel='twipsy' href='{% url karma:self %}' title='Сила вашей положительности или отрицательности в глазах других обитателей ресурса'>Карма</a>
-			<li><a rel='twipsy' href='{% url tabletop:rosters %}' title='Ваши расписки армий по настолке'>Ростеры</a>
-			    <a rel='twipsy' href='{% url tabletop:roster-add %}'>[+]</a></li>
+			<li><a rel='twipsy' href='{% url "wh:pm-view" %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
+			<li><a rel='twipsy' href="{% url "wh:profile" %}" title='Просмотр своего профиля'>Профиль</a></li>
+			<li class='lvl2'><a rel='twipsy' href='{% url "wh:profile-update" %}' title='Настройки профиля'>Править</a></li>
+			<li class='lvl2'><a rel='twipsy' href='{% url "core:settings" %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
+			<li class='lvl2'><a rel='twipsy' href='{% url "core:subscription" %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
+			<li><a rel='twipsy' href='{% url "wh:users" %}' title='Обитатели ресурса'>Участники</a></li>
+			<li><a rel='twipsy' href='{% url "karma:self" %}' title='Сила вашей положительности или отрицательности в глазах других обитателей ресурса'>Карма</a>
+			<li><a rel='twipsy' href='{% url "tabletop:rosters" %}' title='Ваши расписки армий по настолке'>Ростеры</a>
+			    <a rel='twipsy' href='{% url "tabletop:roster-add" %}'>[+]</a></li>
 		</ul><br clear='all'>
 	</div>{% endif %}
         {% if l4d2 %}
@@ -139,15 +139,15 @@
 	<span class='reflects_left'></span>
 		<ul>
 			{% if not user.is_authenticated %}
-                        <li><a href="{% url wh:login %}">Логин</a> |
-         <a href='{% url wh:register %}'>Регистрация</a></li>
-			<li class='lvl2'><a href='{% url wh:password-recover %}'>востановление пароля</a></li>{% endif %}
-			<li><a rel='twipsy' href="{% url news:news %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
-			<span class='feeds'><a href="{% url feed-news-atom %}">[atom</a>|
-				<a href="{% url feed-news %}">rss]</a></span>
+                        <li><a href="{% url "wh:login" %}">Логин</a> |
+         <a href='{% url "wh:register" %}'>Регистрация</a></li>
+			<li class='lvl2'><a href='{% url "wh:password-recover" %}'>востановление пароля</a></li>{% endif %}
+			<li><a rel='twipsy' href="{% url "news:news" %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
+			<span class='feeds'><a href="{% url "feed-news-atom" %}">[atom</a>|
+				<a href="{% url "feed-news" %}">rss]</a></span>
 			</li>
-			<li class='lvl2'><a rel='twipsy' href='{% url news:archived-news %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
-			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url news:article-add %}'>Добавить</a></li>{% endif %}
+			<li class='lvl2'><a rel='twipsy' href='{% url "news:archived-news" %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url "news:article-add" %}'>Добавить</a></li>{% endif %}
 			{# <li><a href="/rules" title='Кодекс моральный и этический для данного ресурса'>Правила</a></li> #}
 			{% comment %}<li><a href="{% url apps.quotes.views.index %}" title='Наш личный башорг'>Цитатник</a>&nbsp;[<a title='лучшие' href="{% url apps.quotes.views.best %}">топ</a>]</li>
 			{# <li class='lvl2'><a href='{% url apps.quotes.views.search %}'>поиск</a></li> #}
@@ -161,16 +161,16 @@
 			{# <li class='lvl2'><a href="{% url apps.files.views.search_replay %}" title='Немного более улучшенный поиск по реплеям, чем основной'>поиск</a></li> #}
                         <li class='lvl2'><a href='{% url url_upload_replay %}' title='добавить реп'>добавить</a></li>
 			{% endcomment %}
-                        <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url tabletop:rosters-index %}">Ростеры</a></li>
+                        <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
             {% if global_settings.DEVELOPMENT %}
-			<li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url tabletop:battle-reports %}'>Батл репорты</a></li>
-			<li class='lvl2'><a href='{% url tabletop:battle-report-add %}'>добавить</a></li>
+			<li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
+			<li class='lvl2'><a href='{% url "tabletop:battle-report-add" %}'>добавить</a></li>
             {% endif %}
-			<li><a rel='twipsy' href='{% url files:galleries %}' title='Простенькая галерея ;)'>Галерея</a></li>
+			<li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
 			<li class='lvl2'><a href="{% url vote:best "image" %}">лучшие</a></li>
-			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url files:image-upload %}' title='загрузить изображение в галерею'>добавить</a></li>
+			{% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url "files:image-upload" %}' title='загрузить изображение в галерею'>добавить</a></li>
             {% if user.is_staff %}
-			<li><a rel='twipsy' href="{% url files:files-index %}" title='Небольшое хранилище файлов'>Файлы</a></li>
+			<li><a rel='twipsy' href="{% url "files:files-index" %}" title='Небольшое хранилище файлов'>Файлы</a></li>
             {% endif %}
 			{% comment %}<li><a href='{% url apps.wh.views.view_wish_list %}'>Пожелания</a></li>
 			<li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
@@ -182,7 +182,7 @@
 	<div class='transparency'></div>
 	<span class='reflects_up'></span>
 	<span class='reflects_left'></span>
-		<form id='search_form' action='{% url core:search-sph %}' method='POST'>
+		<form id='search_form' action='{% url "core:search-sph" %}' method='POST'>
 			<label for='query'>Ищем? </label>
 			<input type='text' name='query' id='id_query' class='global_search'>
 			<input type='submit' value='поиск' class='button'>
@@ -243,7 +243,7 @@
 			  ]</span>
 			  <br>
 			  <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by
-			  <a href="{% url wh:profile-by-nick nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
+			  <a href="{% url "wh:profile-by-nick" nickname=r.author.get_username %}">{% get_nickname r.author %}</a></span>
 			{% endspaceless %}
 			</li>
 		{% endfor %}
@@ -297,7 +297,7 @@
 						[{% get_nickname u %}]
 					{% endif %}
 					{% endcomment %}
-					<span class='nicknames'>[<a rel='twipsy' href="{% url wh:profile-by-nick u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
+					<span class='nicknames'>[<a rel='twipsy' href="{% url "wh:profile-by-nick" u.get_username %}" title='thinks: "{{ u.about }}"'>{% get_nickname u %}</a>]</span>
 				{% endspaceless %}
 			{% endfor %}
 			{% if online_users %}
@@ -350,7 +350,7 @@
     });
 
     function update_miniquote(){
-        $.getJSON('{% url json:wh:miniquote %}', function(data){
+        $.getJSON('{% url "json:wh:miniquote" %}', function(data){
             if (data){
                 if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
                 miniquote.fadeOut(isFireFox ? 'normal':1500, function(){

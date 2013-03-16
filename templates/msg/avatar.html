@@ -4,14 +4,14 @@
 {% if usr.ranks %}статус:
 {% if usr.ranks.values %}
 	{% for rank in usr.ranks.values %}
-		<a href="{% url wh:rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+		<a href="{% url "wh:rank" codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
 	{% endfor %}
 </span>
 {% endif %}
 {% endif %}{% endspaceless %}
 
-<a href="{% url wh:profile-by-nick usr.get_username %}">
-    <img class='avatar' src="{% url wh:avatar nickname=usr.get_username %}">
+<a href="{% url "wh:profile-by-nick" usr.get_username %}">
+    <img class='avatar' src="{% url "wh:avatar" nickname=usr.get_username %}">
 </a>
 <center>
 	{% with usr as warn_user %}

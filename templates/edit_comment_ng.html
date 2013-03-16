@@ -3,7 +3,7 @@
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}' type='text/css' media='screen'>{% endblock %}
 {% block text_content %}
 <center>
-<form action='{% url core:comment-edit form.instance.pk %}' method='post' id='id-comment-form'>
+<form action='{% url "core:comment-edit" form.instance.pk %}' method='post' id='id-comment-form'>
     {% csrf_token %}
     {{ form.as_ul }}
 	<input class='btn btn-inverse' type='submit' value='Изменить' id='id_submit'>

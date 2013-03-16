@@ -30,7 +30,7 @@
             {# make it more brilliant #}
             {% get_raw_nickname 'Saul Tarvitz' %}
             <div class='avatar'>
-                <img alt='avatar' title='' src="{% url wh:avatar nickname='Saul Tarvitz' %}">
+                <img alt='avatar' title='' src="{% url "wh:avatar" nickname='Saul Tarvitz' %}">
             </div>
             <small>
                 Работаю над ресурсом с окт 2008 по текущий день
@@ -55,7 +55,7 @@
             <span class='reflects_right'></span>
                 {% tag_cloud_for_model blogs.Post as clouds %}
             {% for cloud in clouds %}
-                <a href="{% url blog:tag tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
+                <a href="{% url "blog:tag" tag_id=cloud.id %}"><font size={{ cloud.font_size }}>{{ cloud.name }}</font></a>
             {% endfor %}
         </div>
     </div>

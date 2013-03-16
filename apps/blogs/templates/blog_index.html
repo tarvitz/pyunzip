@@ -8,7 +8,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feeds/devblog">
 <link rel="alternate" type="application/rss+xml" title="ATOM" href="/feeds/devblog_atom">
 {% endblock %}
-{% block headline %}{% spaceless %}<a href="{% url blog:index %}">Добавлять, исправлять, улучшать</a>
+{% block headline %}{% spaceless %}<a href="{% url "blog:index" %}">Добавлять, исправлять, улучшать</a>
  {% if user.is_superuser or perms.post.add_post %}
 	&nbsp;<a title='добавить пост ;)' href='/admin/blogs/post/add'>[+]</a>
  {% endif %}

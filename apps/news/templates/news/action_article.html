@@ -17,8 +17,8 @@
 <script type='text/javascript'>
 /* settings */
 var markItUpParsers = {
-    'bb-code': '{% url news:markup-preview %}?markup=bb-code&template=article',
-    'textile': '{% url news:markup-preview %}?markup=textile&template=article',
+    'bb-code': '{% url "news:markup-preview" %}?markup=bb-code&template=article',
+    'textile': '{% url "news:markup-preview" %}?markup=textile&template=article',
 }
 
 myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];

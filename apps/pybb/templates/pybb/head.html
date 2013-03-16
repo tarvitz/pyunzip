@@ -4,27 +4,27 @@
 <div class="head_box">
     <div class="head main-box">
         <div class="logo">
-            <a href="{% url pybb_index %}">WarMist Форум{# {{ "HEADER"|pybb_setting }} #}</a>
+            <a href="{% url "pybb_index" %}">WarMist Форум{# {{ "HEADER"|pybb_setting }} #}</a>
         </div>
         <ul class="navigation">
             <li><a href="/">{% trans "Home" %}</a></li>
 			<li><a href="#" onclick="$('.search_box').toggle(); return false;"/>{% trans "Search" %}</a></li>
-            <li><a href="{% url pybb_users %}">{% trans "Users" %}</a></li>
+            <li><a href="{% url "pybb_users" %}">{% trans "Users" %}</a></li>
             {% if user.is_authenticated %}
-            <li><a href="{% url pybb_edit_profile %}">{% trans "My profile" %}</a></li>
+            <li><a href="{% url "pybb_edit_profile" %}">{% trans "My profile" %}</a></li>
             {% with user.pybb_profile.unread_pm_count as count %}
             <li class="{% if count %}unread-pm{% endif %}">
-                <a href="{% url pybb_pm_inbox %}">{% trans "PM" %}{% if count %}({{ count }}){% endif %}</a>
+                <a href="{% url "pybb_pm_inbox" %}">{% trans "PM" %}{% if count %}({{ count }}){% endif %}</a>
             </li>
             {% endwith %}
             {% if user.is_superuser %}
             <li><a href="{{ "ADMIN_URL"|pybb_setting }}">{% trans "Admincp" %}</a></li>
             {% endif %}
-            <li><a href="{% url wh:logout %}">{% trans "Log out" %}</a></li>
-            <li>{% trans "Logged in as " %} <a href='{% url pybb_profile user.nickname %}'>{% get_nickname user %}</a></li>
+            <li><a href="{% url "wh:logout" %}">{% trans "Log out" %}</a></li>
+            <li>{% trans "Logged in as " %} <a href='{% url "pybb_profile" user.nickname %}'>{% get_nickname user %}</a></li>
             {% else %}
-            <li><a href="{% url wh:register %}">{% trans "Sign up" %}</a></li>
-            <li><a href="{% url wh:login %}">{% trans "Log in" %}</a></li>
+            <li><a href="{% url "wh:register" %}">{% trans "Sign up" %}</a></li>
+            <li><a href="{% url "wh:login" %}">{% trans "Log in" %}</a></li>
             {% endif %}
             {# <li><a href="{% url django.contrib.syndication.views.feed "posts" %}" /><img src="{{ MEDIA_URL }}/pybb/img/feed-icon-small.png" /></a></li> #}
         </ul>

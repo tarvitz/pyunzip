@@ -15,11 +15,11 @@
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 
-			<a href='{% url wh:profile-by-nick user.get_username %}'>{% if user.nickname %}{% get_nickname user %}{% else %}Soulless inhabit{% endif %}</a>
+			<a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{% get_nickname user %}{% else %}Soulless inhabit{% endif %}</a>
 		</div><!-- msg_headline -->
 		<div class='msg_content'>
 			<div class='msg_avatar'>
-				<img src='{% url wh:avatar user.get_username %}'>
+				<img src='{% url "wh:avatar" user.get_username %}'>
 			</div> <!-- msg_avatar -->
 			<div class='msg_text'>
 				<div class='transparency'></div>
@@ -44,8 +44,8 @@
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
 			<div class='links'>	
-				<span class='first'><a href='{% url wh:profile-by-nick user.get_username %}'>profile</a></span>
-				<span><a href='{% url wh:pm-send-nick user.get_username %}'>pm</a></span>
+				<span class='first'><a href='{% url "wh:profile-by-nick" user.get_username %}'>profile</a></span>
+				<span><a href='{% url "wh:pm-send-nick" user.get_username %}'>pm</a></span>
 				<span>{{ user.army.side.name }}</span>
 				<span>{% if not user.settings.invisible %}{% get_online user %}{% else %}offline{% endif %}</span>
 				{% if not user.settings.hide_jid %} <span><a href='xmpp://{{ user.jid }}'>{{ user.jid }}</a></span>{% endif %}

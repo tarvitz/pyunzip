@@ -9,13 +9,13 @@
                 <td class="info" width="15%">
                     {# {% if post.user.pybb_profile.avatar %} #}
                     <div class="avatar">
-                        <a href="{% url pybb_profile post.user %}">
+                        <a href="{% url "pybb_profile" post.user %}">
                         {% comment %}<img src="{{ post.user.pybb_profile.avatar.url }}" />{% endcomment %}
-                        <img src="{% url wh:avatar post.user.get_username %}"/>
+                        <img src="{% url "wh:avatar" post.user.get_username %}"/>
                         </a>
                     </div>
                     {# {% endif %} #}
-                    <div class="author"><a href="{% url pybb_profile post.user.nickname %}">{% get_nickname post.user %}</a></div>
+                    <div class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{% get_nickname post.user %}</a></div>
                     {% if user.is_superuser %}
                     <!--<div class="updated">{{ post.user_ip }}</div>-->
                     {% endif %}
@@ -25,16 +25,16 @@
                     </div>
                     {% if user.is_authenticated %}
                     <div class="pm-link">
-                        <a href="{% url pybb_create_pm %}?recipient={{ post.user.nickname }}">{% trans "Send PM" %}</a>
+                        <a href="{% url "pybb_create_pm" %}?recipient={{ post.user.nickname }}">{% trans "Send PM" %}</a>
                     </div>
                     {% endif %}
                     <div class="post-controls">
                         {% if moderator or post|pybb_posted_by:user %}
-                        <a href="{% url pybb_edit_post post.id %}">{% trans "Edit" %}</a>
+                        <a href="{% url "pybb_edit_post" post.id %}">{% trans "Edit" %}</a>
                         {% endif %}
                         {% if moderator or post|pybb_equal_to:last_post %}
                         {% if moderator or post.user|pybb_equal_to:user %}
-                        / <a href="{% url pybb_delete_post post.id %}">{% trans "Delete" %}</a>
+                        / <a href="{% url "pybb_delete_post" post.id %}">{% trans "Delete" %}</a>
                         {% endif %}
                         {% endif %}
                     </div>
@@ -53,7 +53,7 @@
                     {% endif %}
 
                     <div class="post-related">
-                        <a href="{% url pybb_add_post topic.id %}?quote_id={{ post.id }}">{% trans "quote" %}</a>
+                        <a href="{% url "pybb_add_post" topic.id %}?quote_id={{ post.id }}">{% trans "quote" %}</a>
                     </div>
 
                 </td>

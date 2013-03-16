@@ -20,7 +20,7 @@ li.quote_list{
 	<li>
 		<a href="{% url apps.wh.views.profile_by_nick nickname=rate.user.get_username %}">{% get_nickname rate.user %}</a>: {{ rate.rate }}
 		{% ifequal user rate.user %}
-			<a href="{% url url_comment_rate rate.id %}" title='добавить небольшой коментарий к рейту'>[+]</a>
+			<a href="{% url "url_comment_rate" rate.id %}" title='добавить небольшой коментарий к рейту'>[+]</a>
 		{% endifequal %}
 		{% spaceless %}
 			{% if rate.comment %}

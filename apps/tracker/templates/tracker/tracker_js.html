@@ -6,7 +6,7 @@ $(document).ready(function(){
         parts = id.replace(/id_new_/,'').split('_');
         app_n_model = parts[0];
         pk = parts[1];
-        url = "{% url json:tracker:mark-read %}" + app_n_model + "/" + pk;
+        url = "{% url "json:tracker:mark-read" %}" + app_n_model + "/" + pk;
         state = mark_read(url);
         if (state){
             $(this).fadeOut(1000);

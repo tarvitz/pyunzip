@@ -11,7 +11,7 @@
     </div>
     {% endif %}{% endcomment %}
     <div class="avatar" style="padding-right: 40px;">
-        <img src="{% url wh:avatar profile.get_username %}" />
+        <img src="{% url "wh:avatar" profile.get_username %}" />
     </div>
     <div class="info">
         <div class="label">{% trans "Statistics" %}</div>
@@ -44,7 +44,7 @@
     <div class="clear"></div>
     {% if user.is_authenticated %}
     <div class="pm-link">
-        <a href="{% url pybb_create_pm %}?recipient={{ profile.nickname }}">{% trans "Send PM" %}</a>
+        <a href="{% url "pybb_create_pm" %}?recipient={{ profile.nickname }}">{% trans "Send PM" %}</a>
     </div>
     {% endif %}
 </div>

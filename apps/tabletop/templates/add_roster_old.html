@@ -56,7 +56,7 @@
 {% if user.settings.enable_autocomplete %}
 <script language='javascript'>
     $(document).ready(function(){
-      var url = "{% url url_x_get_users_list_null %}";
+      var url = "{% url "url_x_get_users_list_null" %}";
       m_user_autocomplete("#id_player",url);
    });//ready
 </script>

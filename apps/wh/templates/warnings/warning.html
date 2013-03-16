@@ -4,7 +4,7 @@
 	Предупреждения: <br><span class='warnings'>
 	[<a title='повышает уровень предупреждения на один пункт' href="{% url wh:warning-alter warn_user.get_username "increase" %}">+</a>|
 	<a title='понижает или снимает уровень предупреждения на один пункт' href="{% url wh:warning-alter warn_user.get_username "decrease" %}">−</a>|
-	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url wh:warning-alter-form warn_user.get_username %}">?</a>]
+	<a title='выставляет уровень предупреждения с коментарием о нарушении' href="{% url "wh:warning-alter-form" warn_user.get_username %}">?</a>]
 	</span>
 <br>
 {% endif %}

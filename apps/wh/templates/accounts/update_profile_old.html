@@ -120,7 +120,7 @@ input#submit{
                 {% endfor %}
              {% endif %}
             </span>
-		<img src='{% url url_get_avatar user.nickname %}'>
+		<img src='{% url "url_get_avatar" user.nickname %}'>
 	    {# make sentences below as external include file and paste it everywhere #}	
 		<center>
 			{% with user as warn_user %}

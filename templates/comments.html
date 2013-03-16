@@ -16,7 +16,7 @@
     <div class="msg_headline">
 		<div class="transparency tr_black"></div>
 		{% if not block_edit_comments %}{% ifequal c.user user %}
-			<a href="{% url core:comment-edit id=c.id %}?j=y" class="msg_button">[править]</a>
+			<a href="{% url "core:comment-edit" id=c.id %}?j=y" class="msg_button">[править]</a>
 		{% endifequal %}{% endif %}
                 {% if user.is_authenticated %}
                     <a href='#id_comment' class='msg_button' onClick='insertQuoteUser("{{ c.user.nickname }}");'>[цитировать]</a>
@@ -59,7 +59,7 @@
 		{% ifnotequal user c.user %}
 			{% if user.is_superuser or perms.news.edit_comments %}
 				<a href="javascript:void(0);" onClick='flip_to_textarea({{ c.id }})'>[быстрая правка]</a> |
-				<a href="{% url core:comment-edit id=c.id %}">[править]</a>
+				<a href="{% url "core:comment-edit" id=c.id %}">[править]</a>
 			{% endif %}
 			{% if user.is_superuser or perms.news.del_restore_comments %}
 				{% if not c.is_removed %}
@@ -71,7 +71,7 @@
 			{% endif %}
 		{% else %}
 			<a href="javascript:void(0);" onClick='flip_to_textarea({{ c.id }})'>[быстрая правка]</a> |
-			<a href="{% url core:comment-edit id=c.id %}">[править]</a>
+			<a href="{% url "core:comment-edit" id=c.id %}">[править]</a>
 			{% if not c.is_removed %}
 			    | <a href='{% url core:comment-del-restore id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
 			{% endif %}
@@ -95,7 +95,7 @@
 	<div class="msg_footer" class="deleted">
 	{% spaceless %}
     {% if perms.news.edit_comments or user.is_superuser %}
-            <a href="{% url core:comment-edit id=c.id %}">[править]</a> |
+            <a href="{% url "core:comment-edit" id=c.id %}">[править]</a> |
     {% endif %}
     {% ifequal user c.user %}
 			{% if c.is_removed %}

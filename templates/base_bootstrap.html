@@ -24,7 +24,7 @@
 {# stylesheet special for overriding base style templates withing one file #}
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"override.css" }}' type='text/css' media='screen'>
 {# user css'es #}
-{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url core:css-db %}' type='text/css' media='screen'>{% endif %}
+{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url "core:css-db" %}' type='text/css' media='screen'>{% endif %}
 {% block js %}
 <script type='text/javascript' src='/media/js/core.js'></script>
 <script type='text/javascript' src='/media/js/base.js'></script>
@@ -62,21 +62,21 @@
     <div class='menu'>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border pull-right'>
             {% if user.is_superuser %}
-            <li><a href="{% url wh:superlogin %}">&nbsp;S&nbsp;</a></li>
+            <li><a href="{% url "wh:superlogin" %}">&nbsp;S&nbsp;</a></li>
             {% endif %}
             {% if user.is_staff %}
             <li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
             {% endif %}
             {% if user.is_authenticated %}
             <li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
-            {% else%}<li><a href="{% url wh:login %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-            {% if not user.is_authenticated %}<li><a href="{% url wh:register %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
+            {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+            {% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
             <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
         </ul>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
-            <li><a href='{% url pybb_index %}'>форум</a></li>
-            <li><a href='{% url blog:index %}'>блог</a></li>
-            <li><a href='{% url news:news %}'>сайт</a></li>
+            <li><a href='{% url "pybb_index" %}'>форум</a></li>
+            <li><a href='{% url "blog:index" %}'>блог</a></li>
+            <li><a href='{% url "news:news" %}'>сайт</a></li>
         </ul>
     </div>
     <div class='navbar navbar-inverse no-margin-bottom'>
@@ -131,7 +131,7 @@
     </div>
     <div class='modal-body'>
         {% get_form 'apps.wh.forms.LoginForm' as form %}
-        <form class='form-horizontal' action='{% url wh:login %}' method='POST'>
+        <form class='form-horizontal' action='{% url "wh:login" %}' method='POST'>
             {% csrf_token %}
             {% include "forms/bootstrap_horizontal.html" with form=form use_submit="Yes" submit_value="Войти" submit_class_btn="btn btn-success postAjax" %}
         </form>
@@ -176,7 +176,7 @@
 
     {% comment %}
     function update_miniquote(){
-        $.getJSON('{% url json:wh:miniquote %}', function(data){
+        $.getJSON('{% url "json:wh:miniquote" %}', function(data){
             if (data){
                 if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
                 miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
@@ -189,7 +189,7 @@
     }
     {% endcomment %}
     var update_bootstrap_miniquote = function(){
-        $.getJSON('{% url json:wh:miniquote %}', function(data){
+        $.getJSON('{% url "json:wh:miniquote" %}', function(data){
             mquote = $('#miniquote .content');
             mquote.fadeOut(1500, function(){
                 mquote.text(data[0].fields.content);

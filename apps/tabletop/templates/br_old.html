@@ -12,7 +12,7 @@
 			<div class='msg_content'>
 			<div class='msg_avatar'>
 				{% spaceless %}
-						<img src='{% url url_get_avatar br.winner.show_player %}'><br>
+						<img src='{% url "url_get_avatar" br.winner.show_player %}'><br>
 						{% spaceless %}
 						{% if br.winner.user %}
 							{% get_nickname br.winner.user %}

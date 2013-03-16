@@ -1,6 +1,6 @@
 <center>
 <div class='comment form'>
-    <form class='comment-form' action='{% url core:comment-add %}' method='POST' id='id-comment-form'>
+    <form class='comment-form' action='{% url "core:comment-add" %}' method='POST' id='id-comment-form'>
         {% csrf_token %}
         <textarea id='id_comment' name='comment' class='span6' rows='10'></textarea>
         <div class='hide'>

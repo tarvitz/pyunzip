@@ -15,7 +15,7 @@
             <option class='even' value='null'>-----</option>
             {% for g in galleries %} 
                 <option class='{% cycle odd,even %}' value="{{ g.id }}"
-                    data-url='{% url files:gallery 0 %}' data-id='{{ g.pk }}'>{{ g.name }}</option>
+                    data-url='{% url "files:gallery" 0 %}' data-id='{{ g.pk }}'>{{ g.name }}</option>
             {% endfor %}
         </select>
     </form>

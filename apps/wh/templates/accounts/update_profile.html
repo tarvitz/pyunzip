@@ -14,7 +14,7 @@
 </div>
 </center>
 <script language='javascript'>
-    var _xhr_get_armies = "{% url json:wh:armies %}";
+    var _xhr_get_armies = "{% url "json:wh:armies" %}";
     var _user_army_side_id = {{ user.army.side.id }};
     var _user_army_id = {{ user.army.id }};
 </script>

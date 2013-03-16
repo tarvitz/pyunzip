@@ -12,10 +12,10 @@
 					{% spaceless %}
 					{% if r.is_orphan %}
 						{% ifequal user r.owner %}
-							<span class='first'><a href='{% url tabletop:roster-unorphan r.id %}' class='restore_link'>вернуть</a></span>
+							<span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
 						{% else %}
 						{% if perms.tabletop.undelete_rosters or user.is_superuser %}
-							<span class='first'><a href='{% url tabletop:roster-unorphan r.id %}' class='restore_link'>вернуть</a></span>
+							<span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
 						{% else %}
 							<span class='first notice'>удалён</span>
 						{% endif %}
@@ -23,22 +23,22 @@
 					{% else %}
 						<span class='first'><a href='{% url tabletop:roster-delete r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}{% endspaceless %}
-					<span><a href="{% url tabletop:roster-edit r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
 				{% if perms.tabletop.edit_user_rosters or user.is_superuser %}
 					{% spaceless %}
 					{% if r.is_orphan %}
-						<span class='first'><a href="{% url tabletop:roster-unorphan r.id %}" title='' class='restore_link'>вернуть</a></span>
+						<span class='first'><a href="{% url "tabletop:roster-unorphan" r.id %}" title='' class='restore_link'>вернуть</a></span>
 					{% else %}
 						<span class='first'><a href='{% url tabletop:roster-delete r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}
 					{% endspaceless  %}
-					<span><a href="{% url tabletop:roster-edit r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
 					{% if r.is_orphan %}<span class='first'>удалён</span>{% endif %}
 				{% endif %}
 				{% ifequal user r.user %}
-					<span><a href='{% url tabletop:roster-spawn r.id %}' title='забрать данный ростер себе' class='spawn'>spawn</a></span>
+					<span><a href='{% url "tabletop:roster-spawn" r.id %}' title='забрать данный ростер себе' class='spawn'>spawn</a></span>
 				{% endifequal %}
 				{% endifequal %}
 			</div>
@@ -49,16 +49,16 @@
 				{% spaceless %}
 				{% comment %}
 					{% if r.user.nickname %}
-						<img src='{% url url_get_avatar user.get_username %}'><br>
+						<img src='{% url "url_get_avatar" user.get_username %}'><br>
 						{% get_nickname r.user %}
 					{% else %}
-						<img src='{% url url_get_avatar owner.get_username %}'><br>
+						<img src='{% url "url_get_avatar" owner.get_username %}'><br>
 						{% get_nickname r.owner %}
 					{% endif %}
 				{% endcomment %}
-					<img src='{% url wh:avatar r.show_player %}'><br>
+					<img src='{% url "wh:avatar" r.show_player %}'><br>
 					{% if r.user %}
-						<a href='{% url tabletop:rosters r.user.get_username %}'>{% get_nickname r.user %}</a>
+						<a href='{% url "tabletop:rosters" r.user.get_username %}'>{% get_nickname r.user %}</a>
 					{% else %}
 						{% get_raw_nickname r.show_player %}
 					{% endif %}
@@ -102,10 +102,10 @@
 		<div class='msg_footer'>
 			<div class='transparency_black'></div>
 			<div class='links'>	
-                                <span><a href='{% url tabletop:rosters-codex r.codex.id r.revision %}' {% spaceless %}
+                                <span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}' {% spaceless %}
                                     title='{{ r.revision }}-я редакция кодекса'
                                 {% endspaceless %}>{{ r.codex }} [{{ r.revision }}]</a></span>
-				<span><a href='{% url tabletop:rosters-pts r.pts %}'>{{ r.pts }} pts</a></span>
+				<span><a href='{% url "tabletop:rosters-pts" r.pts %}'>{{ r.pts }} pts</a></span>
 			</div>
 			<br clear='all'>
 		</div> <!-- msg_footer -->

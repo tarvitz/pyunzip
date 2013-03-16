@@ -11,7 +11,7 @@
         <div class='transparency'></div>
         <span class='reflects_up'></span>
         <span class='reflects_left'></span>
-            <form id='search_form' action='{% url core:search-sph %}' method='POST'>
+            <form id='search_form' action='{% url "core:search-sph" %}' method='POST'>
                 <input type='text' name='query' id='id_query' class='global_search span10'
                     placeholder='Ищем?'>
                 <input type='submit' value='поиск' class='btn btn-inverse btn-small'>

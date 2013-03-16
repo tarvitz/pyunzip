@@ -7,11 +7,11 @@
 			<div class='links'>	
 				{% ifequal user br.owner %}
 					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>[x]</a></span>
-					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+					<span><a href="{% url "url_edit_battle_report" br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
 				{% if perms.tabletop.delete_battlereport or user.is_superuser %}
 					<span class='first'><a href='{% url url_delete_battle_report br.id 'approve' %}' title='удалить' class='del_link'>[x]</a></span>
-					<span><a href="{% url url_edit_battle_report br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+					<span><a href="{% url "url_edit_battle_report" br.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% endif %}
 				{% endifequal %}
 			</div>
@@ -21,7 +21,7 @@
 			<div class='msg_avatar'>
 				{% spaceless %}
 						{% if br.winner %}
-                                                <img src='{% url url_get_avatar br.winner.show_player %}'><br>
+                                                <img src='{% url "url_get_avatar" br.winner.show_player %}'><br>
 							{% get_raw_nickname br.winner.show_player %}
                                                 {% else %}
                                                 <img src='/media/avatars/none.png'>
