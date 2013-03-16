@@ -87,15 +87,6 @@ def news(request, approved='approved', category=''):
 
     page = request.GET.get('page',1)
 
-    #make an archives
-    now = datetime.now()
-    td = timedelta(days=365)
-    older = now - td
-    # TODO: move archiver to crontab
-    all_news = News.objects.all()
-    for n in all_news:
-        if  older > n.date:
-            n.archive()
     #TODO: DELETE duplicated code
     if request.user.is_superuser or can_approve_news:
         news = News.objects.all().order_by('-date').filter(category__name__icontains=category)
