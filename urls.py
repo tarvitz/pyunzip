@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
-from django.views.generic.simple import direct_to_template,redirect_to
+from apps.core.helpers import direct_to_template
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin

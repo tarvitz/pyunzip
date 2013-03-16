@@ -246,7 +246,7 @@ class Post(RenderableItem):
 
 class Profile(models.Model):
     user = AutoOneToOneField(User, related_name='pybb_profile', verbose_name=_('User'))
-    site = models.URLField(_('Site'), verify_exists=False, blank=True, default='')
+    site = models.URLField(_('Site'), blank=True, default='')
     jabber = models.CharField(_('Jabber'), max_length=80, blank=True, default='')
     icq = models.CharField(_('ICQ'), max_length=12, blank=True, default='')
     msn = models.CharField(_('MSN'), max_length=80, blank=True, default='')

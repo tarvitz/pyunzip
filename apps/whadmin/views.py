@@ -2,7 +2,8 @@
 # coding: utf-8
 #
 from django.http import HttpResponse,HttpResponseRedirect
-from django.views.generic.simple import direct_to_template
+#from django.views.generic.simple import direct_to_template
+from apps.core.helpers import direct_to_template
 from apps.core import get_skin_template
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage,EmptyPage
