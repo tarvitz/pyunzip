@@ -1,9 +1,17 @@
 # coding: utf-8
-from settings import *
-from settings import INSTALLED_APPS
+from settings.dist import *
+from settings.local import *
+from settings.dist import INSTALLED_APPS
 
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': '_wh.sqlite',
+    }, 
+}
 
 removable = ['south', ]
 for app in removable:
@@ -25,5 +33,3 @@ def _to_uni(value):
             return '<unprintable %s object>' % type(value).__name__
 import traceback
 traceback._some_str = _to_uni
-
-
