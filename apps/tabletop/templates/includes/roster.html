@@ -21,7 +21,7 @@
 						{% endif %}
 						{% endifequal %}
 					{% else %}
-						<span class='first'><a href='{% url tabletop:roster-delete r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
+						<span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}{% endspaceless %}
 					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
 				{% else %}
@@ -30,7 +30,7 @@
 					{% if r.is_orphan %}
 						<span class='first'><a href="{% url "tabletop:roster-unorphan" r.id %}" title='' class='restore_link'>вернуть</a></span>
 					{% else %}
-						<span class='first'><a href='{% url tabletop:roster-delete r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
+						<span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
 					{% endif %}
 					{% endspaceless  %}
 					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
@@ -85,7 +85,7 @@
 						</div>
                                         {% else %}
                                                 <div class='msg_txt' id='id_roster_{{ r.id }}'>
-                                                    Ростер: <a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url json:tabletop:roster r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
+                                                    Ростер: <a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url "json:tabletop:roster" r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
                                                     <span class='roster'></span>
                                                 </div>
 					{% endifequal %}

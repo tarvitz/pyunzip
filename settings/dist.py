@@ -227,6 +227,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 )
 #settings
+ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', )
 APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
