@@ -624,7 +624,11 @@ def post_markup_filter(string):
         html = re.sub(r'\n+', '', html)
         string = string.replace('(%s)[%s]' % (tag, text), html)
     # quote
-    r = re.compile(r'\((?P<user>[\w\d\-\ ]+)\){(?P<quote>.*?)}', re.I|re.L|re.S|re.U)
+    r = re.compile(
+        r'\((?P<user>[\w\d\-\ ]+)\){(?P<quote>.*?)}',
+        re.UNICODE|re.MULTILINE|re.DOTALL|re.IGNORECASE
+    )
+
     result = r.findall(string)
     for (username, text) in result:
         user = get_object_or_None(User, nickname__iexact=username) or AnonymousUser()
