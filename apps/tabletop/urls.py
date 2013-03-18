@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 
 urlpatterns = patterns('apps.tabletop.views',
     url('^report/add/$','add_battle_report',

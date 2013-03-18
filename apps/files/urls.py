@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 from django.utils.translation import ugettext_lazy as _
 

@@ -3,6 +3,7 @@ from settings.dist import *
 from settings.local import *
 from settings.dist import INSTALLED_APPS
 
+DEBUG=True
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
 
