@@ -63,19 +63,19 @@
 			{% endif %}
 			{% if user.is_superuser or perms.news.del_restore_comments %}
 				{% if not c.is_removed %}
-					| <a href='{% url core:comment-del-restore id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
+					| <a href='{% url "core:comment-del-restore" id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
 				{% endif %}
 			{% endif %}
 			{% if user.is_superuser or perms.news.purge_comments %}
-				| <a href='{% url core:comment-purge id=c.id approve='approve' %}'>[уничтожить]</a>
+				| <a href='{% url "core:comment-purge" id=c.id approve='approve' %}'>[уничтожить]</a>
 			{% endif %}
 		{% else %}
 			<a href="javascript:void(0);" onClick='flip_to_textarea({{ c.id }})'>[быстрая правка]</a> |
 			<a href="{% url "core:comment-edit" id=c.id %}">[править]</a>
 			{% if not c.is_removed %}
-			    | <a href='{% url core:comment-del-restore id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
+			    | <a href='{% url "core:comment-del-restore" id=c.id flag='delete' %}?j={{ c.id }}'>[скрыть]</a>
 			{% endif %}
-			| <a href='{% url core:comment-purge id=c.id approve='approve' %}'>[уничтожить]</a>
+			| <a href='{% url "core:comment-purge" id=c.id approve='approve' %}'>[уничтожить]</a>
 		{% endifnotequal %}
 		{% endspaceless %}
 		{% endif %} {# if not block_edit_comments #}
@@ -99,15 +99,15 @@
     {% endif %}
     {% ifequal user c.user %}
 			{% if c.is_removed %}
-				<a href="{% url core:comment-del-restore id=c.id flag='restore' %}?j={{ c.id }}">[показать]</a> |
+				<a href="{% url "core:comment-del-restore" id=c.id flag='restore' %}?j={{ c.id }}">[показать]</a> |
 			{% endif %}
-            <a href="{% url core:comment-purge id=c.id approve='approve' %}">[уничтожить]</a>
+            <a href="{% url "core:comment-purge" id=c.id approve='approve' %}">[уничтожить]</a>
         {% else %}
         {% if perms.news.del_restore_comments or user.is_superuser %}
-				<a href="{% url core:comment-del-restore id=c.id flag='restore'%}?j={{ c.id }}">[показать]</a> |
+				<a href="{% url "core:comment-del-restore" id=c.id flag='restore'%}?j={{ c.id }}">[показать]</a> |
         {% endif %}
         {% if perms.news.purge_comments or user.is_superuser %}
-            <a href="{% url core:comment-purge id=c.id approve='approve' %}">[уничтожить]</a>
+            <a href="{% url "core:comment-purge" id=c.id approve='approve' %}">[уничтожить]</a>
         {% endif %}
     {% endifequal %}
     {% endspaceless %}
