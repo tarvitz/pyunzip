@@ -91,7 +91,7 @@
 				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
 			{% endifnotequal %}
 			{% ifequal roster.owner user %}
-				[<a href='{% url tabletop:roster-delete roster.id "approve" %}'>удалить</a>]
+				[<a href='{% url "tabletop:roster-delete" roster.id "approve" %}'>удалить</a>]
 			{% endifequal %}
 		{% endspaceless %}
 	</div> <!-- msg_footer -->
