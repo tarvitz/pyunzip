@@ -1,4 +1,5 @@
-from django.conf.urls.defaults import *
+#from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.conf import settings
 from apps.core.helpers import direct_to_template
 from django.shortcuts import redirect
