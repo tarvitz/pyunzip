@@ -2,7 +2,7 @@
     <div class='menu tab'>
         <ul class='nav nav-tabs side-tabs pull-right'>
             {% if user.is_authenticated %}
-            <li><a href='#profile' data-toggle='tab'>Профиль</a></li>
+            <li><a href='#profile' data-toggle='tab' data-owner='{{ user.nickname|default_if_none:"None" }}'>Профиль</a></li>
             {% endif %}
             <li class='active'><a href='#common' data-toggle='tab'>Общее</a></li>
         </ul>

@@ -729,7 +729,7 @@ def edit_rank(request,codename=None,id=None):
         error_msg = u"no POST data is sent"
         return HttpResponseServerError(error_msg)
 
-def get_rank(request,codename=None,id=None,raw=True):
+def get_rank(request, codename=None, id=None, raw=True):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
     try:
@@ -777,7 +777,7 @@ def urls_parse(request):
 
 def get_miniquote_raw(request):
     response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
+    response['Content-Type'] = 'application/json'
     try:
         mq = MiniQuote.objects.order_by('?')[0]
     except IndexError:
@@ -789,7 +789,7 @@ def get_miniquote_raw(request):
 
 def xhr_get_armies(request, id=None):
     response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
+    response['Content-Type'] = 'application/json'
     if not id:
         response.write("[]")
         return response
@@ -800,7 +800,7 @@ def xhr_get_armies(request, id=None):
 #deprecated, cleanse as soon as possible
 def get_armies_raw(request,id):
     response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
+    response['Content-Type'] = 'application/json'
     try:
         armies = Army.objects.filter(side__id__exact=int(id))
         response.write(serializers.serialize("json",armies))
@@ -810,7 +810,7 @@ def get_armies_raw(request,id):
 
 def get_skins_raw(request,id):
     response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
+    response['Content-Type'] = 'application/json'
     try:
         side = Side.objects.get(id=id)
         #skins = Skin.objects.filter(Q(name__iexact='default')|Q(fraction__id__exact=side.fraction.id)).order_by('id')
