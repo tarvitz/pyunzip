@@ -93,19 +93,17 @@ def sulogin(request):
     )
 
 def logout(request):
-    if hasattr(request.user,'useractivity'):
+    if hasattr(request.user, 'useractivity'):
         request.user.useractivity.is_logout = True #do not display users whom logged out
         request.user.useractivity.save()
     auth.logout(request)
     return HttpResponseRedirect('/')
-    #return render_to_response('accounts/logout.html',{},
-    #    context_instance=RequestContext(request))
 
 #Поиск по имени рега
 #Переписать все это нахуй, стремно как-то выглядит
 #upd: 06.10.2010 - внатуре, сижу ржу над топорностью, надо бы переписать и вправду
 @login_required
-def profile(request,account_name='self'):
+def profile(request, account_name='self'):
     template = get_skin_template(request.user,'accounts/profile.html')
     if account_name == 'self':
         from apps.files.models import Gallery
@@ -856,8 +854,12 @@ def get_user_photo(request,nickname):
         return response
     else:
         reponse = HttpResponse()
-        response['Content-Type'] = 'text/plain'
-        response.write('no photo ;)')
+        response['Content-Type'] = 'image/jpg'
+        response.write(
+            open(os.path.join(
+                settings.MEDIA_ROOT, 'images/null-photo.jpg')
+            ).read()
+        )
         return response
 
 def get_race_icon(request,race):
