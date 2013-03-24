@@ -620,26 +620,22 @@ def manage_wish(request,wish_id,filter=''):
             return HttpRedirect('/feedback/wishes')
     else:
         return HttpRedirect('/feedback/wishes')
+
 @login_required
 def change_password(request):
-    template = get_skin_template(request.user,'accounts/change_password.html')
+    template = get_skin_template(request.user, 'accounts/change_password.html')
+    form = PasswordChangeForm(request.POST or None, request=request)
     if request.method == 'POST':
-        form = PasswordChangeForm(request.POST,request=request)
         if form.is_valid():
             user = request.user
             password = form.cleaned_data['password1']
             user.set_password(password)
             user.save()
             return HttpResponseRedirect('/accounts/password/changed/successful')
-        else:
-            return render_to_response(template,
-                {'form': form },
-                context_instance=RequestContext(request))
-    else:
-        form = PasswordChangeForm(request=request)
-        return render_to_response(template,
-            {'form': form},
-            context_instance=RequestContext(request))
+
+    return render_to_response(template,
+        {'form': form},
+        context_instance=RequestContext(request))
 
 def password_recover(request):
     template = get_skin_template(request.user,'accounts/password_recovery.html')

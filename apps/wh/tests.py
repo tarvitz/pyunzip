@@ -92,7 +92,23 @@ class JustTest(TestCase):
         self.assertContains(response, 'Permission denied')
 
     def test_password_change(self):
-        pass
+        logged = self.client.login(username='user', password='123456')
+        self.assertEqual(logged, True)
+
+        url = reverse('wh:password-change')
+        new_password = '654321'
+        post = {
+            'password1': new_password,
+            'password2': new_password,
+            'old_password': '123456'
+        }
+
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.client.logout()
+        logged = self.client.login(username='user', password=new_password)
+        self.assertEqual(logged, True)
+
 
     def test_password_recover(self):
         pass
