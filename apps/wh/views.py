@@ -4,6 +4,7 @@
 from django.conf import settings
 from apps.wh.models import Side,Army,PM,RegisterSid, WishList, Skin,Rank, User, \
     Rank,MiniQuote
+from apps.core.models import UserSID
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse,HttpResponseServerError
 from django.template import RequestContext
@@ -14,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission, lock_with_dev
+from apps.wh.decorators import prevent_bruteforce
 #from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, InvalidPage
 from django.core import serializers
@@ -24,7 +26,8 @@ from apps.wh.forms import (
     UploadAvatarForm, UpdateProfileForm,
     UpdateProfileModelForm, PMForm, RegisterForm, AddWishForm,
     PasswordChangeForm, PasswordRecoverForm, LoginForm,
-    SuperUserLoginForm
+    SuperUserLoginForm,
+    PasswordRestoreForm, PasswordRestoreInitiateForm
 )
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
@@ -42,7 +45,8 @@ from django.template.defaultfilters import striptags
 from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import (
     get_settings, get_object_or_none, paginate, can_act,
-    handle_uploaded_file, render_to, get_object_or_None)
+    handle_uploaded_file, render_to, get_object_or_None,
+)
 import os
 
 #decorators
@@ -141,12 +145,12 @@ def profile_by_nick(request, nickname ='self'):
             return HttpResponseRedirect('/user/does/not/exist')
     except    User.DoesNotExist:
             return HttpResponseRedirect('/user/does/not/exist')
-    
-    if hasattr(user,'user_permissions'): 
+
+    if hasattr(user,'user_permissions'):
         permissions = user.user_permissions.all()
     else:
         permissions = dict()
-        
+
     return render_to_response(template,
         {'usr': user,
         'userperms': permissions,
@@ -286,7 +290,7 @@ def update_profile_old(request):
                 from math import trunc
                 army_img = os.path.join(settings.MEDIA_ROOT,'images/armies/%s/%s_16x16.png' % (u.army.side.name.lower(), u.army.name.lower()))
                 #TODO MAKE A REVERTION
-                #print army_img 
+                #print army_img
             u.save()
             #return HttpResponseRedirect('/accounts/update/profile/successfull')
             return HttpResponseRedirect('/accounts/update/profile/') #flip it back
@@ -412,12 +416,12 @@ def delete_pm(request,pm_id=0, approve='force'):
         if pm.sender == user:
             if pm.dba:
                 pm.delete()
-            else: 
+            else:
                 pm.dbs = True
                 pm.save()
             return HttpResponseRedirect('/pm/deleted')
         elif pm.addressee == user:
-            if pm.dbs: 
+            if pm.dbs:
                 pm.delete()
             else:
                 pm.dba = True
@@ -461,7 +465,7 @@ def onsite_register(request):
             try:
                 newuser_rank = Rank.objects.get(codename='users')
             except Rank.DoesNotExist:
-               newuser_rank = Rank.objects.order_by('id')[0] 
+               newuser_rank = Rank.objects.order_by('id')[0]
             newuser.ranks.add(newuser_rank)
             newuser.save()
             try:
@@ -497,7 +501,7 @@ def onsite_register(request):
             {'form': form,
             'sid': sid},
             context_instance=RequestContext(request))
-    
+
 def get_math_image(request,sid=''):
     import ImageFont, ImageDraw
     #for joke sake
@@ -542,7 +546,7 @@ def view_wish_list(request):
     try:
         page = request.GET.get('p',1)
     except:
-        page = 1 
+        page = 1
     if request.user.is_superuser: wishes = WishList.objects.filter()
     else: wishes = WishList.objects.filter(published=True)
     _pages_ = get_settings(request.user,'objects_on_page',30)
@@ -637,10 +641,10 @@ def change_password(request):
         {'form': form},
         context_instance=RequestContext(request))
 
+@render_to('accounts/password_recovery.html')
 def password_recover(request):
-    template = get_skin_template(request.user,'accounts/password_recovery.html')
+    form = PasswordRecoverForm(request.POST or None, request=request)
     if request.method == 'POST':
-        form = PasswordRecoverForm(request.POST, request=request)
         if form.is_valid():
             from hashlib import sha1
             from random import random
@@ -649,29 +653,23 @@ def password_recover(request):
             email = form.cleaned_data['email']
             user = User.objects.get(username__exact=u)
             user.set_password(new_pass)
-            text_content = """
-Your login name is %s and 
-your password have changed to %s
-Please keep your password with safty, don't declare it to anyone
-even to administration of the resourse.
-Remember, that administration never request your password from you.
-
-Thank you for using our service.""" % (request.user.username,new_pass)
+            text_content = (
+                "Your login name is %s and your "
+                "password have changed to %s "
+                "Please keep your password with safty, "
+                "don't declare it to anyone "
+                "even to administration of the resourse."
+                "Remember, that administration never request "
+                "your password from you."
+                "Thank you for using our service."
+            ) % (request.user.username, new_pass)
             send_mail('Password Changed', text_content, settings.FROM_EMAIL,
                 [email], fail_silently=False,
                 auth_user=settings.EMAIL_HOST_USER,
                 auth_password=settings.EMAIL_HOST_PASSWORD)
             user.save()
-            return HttpResponseRedirect('/accounts/password/changed/successful')
-        else:
-            return render_to_response(template,
-                {'form': form},
-                context_instance=RequestContext(request))
-    else:
-        form = PasswordRecoverForm()
-        return render_to_response(template,
-            {'form': form},
-            context_instance=RequestContext(request))
+            return {'redirect': '/accounts/password/changed/successful'}
+    return {'form': form}
 
 def show_rank(request,id=None,codename=None):
     if id is None and codename is None:
@@ -688,7 +686,7 @@ def show_rank(request,id=None,codename=None):
             stat(img)
             img = "images/ranks/%s/%s.jpg" % (rank.type.type.lower(), rank.codename)
         except OSError:
-            img = "images/ranks/_none_.jpg" 
+            img = "images/ranks/_none_.jpg"
     except:
         return HttpResponseRedirect('/')
     return render_to_response(template,
@@ -742,7 +740,7 @@ def get_rank(request, codename=None, id=None, raw=True):
         msg_error = u"no rank"
         return HttpResponseServerError(msg_error)
 
-#@has_permission('wh.can_test')                
+#@has_permission('wh.can_test')
 #x means ajaX
 @login_required
 def x_get_users_list(request,nick_part=''):
@@ -780,7 +778,7 @@ def get_miniquote_raw(request):
         response.write('false')
         return response
     response.write(serializers.serialize("json",[mq]))
-    
+
     return response
 
 def xhr_get_armies(request, id=None):
@@ -955,7 +953,7 @@ def alter_warning(request,nickname,type):
                 warning_type = WarningType.objects.get(level=int(old_warning.level)+type_offset,is_general=True)
             except WarningType.DoesNotExist:
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-        
+
         new_warning.type = warning_type
         new_warning.save()
     else:
@@ -1006,7 +1004,7 @@ def alter_warning_form(request,nickname):
                 c = Comment(content_type=ct,object_pk=str(warning.pk),user=request.user,
                     comment=comment,submit_date=datetime.now(),is_public=True,site_id=1)
                 c.save()
-            return HttpResponseRedirect(referer)   
+            return HttpResponseRedirect(referer)
         else:
             return direct_to_template(request,template,{'form':form})
     else:
@@ -1021,3 +1019,65 @@ def alter_warning_form(request,nickname):
         form.fields['next'].initial = request.META.get('HTTP_REFERER','/')
     return direct_to_template(request,template,{'form':form})
 
+@render_to('accounts/password_restore_initiate.html')
+def password_restore_initiate(request):
+    form = PasswordRestoreInitiateForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            users = form.cleaned_data['users']
+            sids = UserSID.objects.filter(user__in=users, expired=True)
+
+            sids = []
+            if not sids:
+                for user in users:
+                    sid = UserSID.objects.create(user)
+                    sids.append(sid)
+            else:
+                for user in users:
+                    sid = UserSID.objects.filter(
+                        user=request.user).order_by('-id')[0]
+                    sids.append(sid)
+
+            for sid in sids:
+                msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
+                    'link': settings.DOMAIN + "%s" % reverse(
+                    'wh:password-restore', args=(sid.sid, ))
+                }
+                send_mail(
+                    subject=unicode(_('Your password requested to change')),
+                    message=unicode(msg),
+                    from_email=settings.FROM_EMAIL,
+                    recipient_list=[sid.user.email]
+                )
+            return {'redirect': 'core:password-restore-initiated'}
+    return {'form': form}
+
+
+@prevent_bruteforce
+@render_to('accounts/password_restore.html')
+def password_restore(request, sid):
+    instance = get_object_or_None(UserSID, sid=sid, expired=False)
+    if not instance:
+        request.session['brute_force_iter'] \
+            = request.session.get('brute_force_iter', 0) + 1
+        raise Http404("not found")
+
+    form = PasswordRestoreForm(
+        request.POST or None, instance=instance, request=request
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {'redirect': 'core:password-restored'}
+    return {'form': form}
+
+
+@login_required
+@render_to('accounts/password_change.html')
+def password_change(request):
+    form = PasswordChangeForm(request.POST or None, instance=request.user)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {'redirect': 'wh:password-changed'}
+    return {'form': form}

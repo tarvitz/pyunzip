@@ -277,3 +277,23 @@ class ActionForm(forms.Form):
 class ActionApproveForm(ActionForm):
     approve = forms.BooleanField(label=_('Approve'), required=True,
         help_text=_('Yes, i approve'))   
+
+class BruteForceCheck(object):
+    """ depents on RequestModelForm """
+    def __init__(self, *args, **kwargs):
+        super(PasswordRestoreForm, self).__init__(*args, **kwargs)
+        if all(self.data or (None, )):
+            if not hasattr(self, 'request'):
+                raise ImproperlyConfigured("You should add request")
+
+    def save(self, commit=True):
+        super(BruteForceCheck, self).save(commit)
+        if 'brute_force_iter' in self.request.session:
+            del self.request.session['brute_force_iter']
+            self.request.session.save()
+
+    def is_valid(self, *args, **kwargs):
+        super(PasswordRestoreForm, self).is_valid(*args, **kwargs)
+        if not self.is_valid():
+            self.request['brute_force_iter'] = \
+                self.request.get('brute_force_iter', 0) + 1

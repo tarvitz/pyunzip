@@ -91,7 +91,7 @@
         <div id='main-content' class='content span9-5 offset05'>
             <div class='transparency'></div>
             <div class='content'>
-                {% block text_content %}  {% endblock %}
+                {% block content %}{% block text_content %}  {% endblock %}{% endblock %}
                 {% if timeit %}{% include "timeit.html" %}{% endif %}
             </div>
         </div>

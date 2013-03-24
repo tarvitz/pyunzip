@@ -233,6 +233,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 )
 #settings
+DOMAIN='w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', )
 APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
@@ -246,6 +247,7 @@ USE_OLD_THUMBNAIL_IMAGE_SCHEME=False
 DEFAULT_TEMPLATE='base.html'
 DEFAULT_SYNTAX='textile'
 IMAGE_THUMBNAIL_SIZE='200x200'
+BRUTEFORCE_ITER=10
 
 #import settings from another app
 # LOGGING

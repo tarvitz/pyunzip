@@ -11,6 +11,9 @@ from django.contrib.contenttypes import generic
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from apps.core.actions import common_delete_action
+from datetime import datetime, timedelta
+
+from apps.core.managers import UserSIDManager
 
 """
 class SettingsManager(models.Manager):
@@ -176,6 +179,33 @@ class Settings(models.Model):
     class Meta:
         verbose_name = _("Settings")
         verbose_name_plural = _("Settings")
+
+class UserSID(models.Model):
+    user = models.ForeignKey(User, related_name='user_sid_set')
+    sid = models.CharField(_("SID"), unique=True, max_length=512)
+    # additional fields ?
+    expired_date = models.DateTimeField(
+        _("Expires"), default=datetime.now() + timedelta(weeks=1)
+    )
+    expired = models.BooleanField(
+        _("expired?"), default=False
+    )
+    created_on = models.DateTimeField(
+        _("created on"), default=datetime.now,
+        auto_now=True
+    )
+    updated_on = models.DateTimeField(
+        _('updated on'), default=datetime.now,
+        auto_now_add=True
+    )
+    objects = UserSIDManager()
+
+    def __unicode__(self):
+        return "%s [%s]" % (self.user.username, self.sid)
+
+    class Meta:
+        verbose_name = _("UserSID")
+        verbose_name_plural = _("UserSIDs")
 
 #makes a bug ?
 from apps.core import signals

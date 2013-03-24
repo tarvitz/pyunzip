@@ -3,4 +3,5 @@
 #from settings_net import *
 from dist import *
 from local import *
+from messages import *
 #from settings_quotes import *
