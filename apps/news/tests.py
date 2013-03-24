@@ -5,6 +5,8 @@ from apps.news.models import Category, News
 from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
+from apps.core.helpers import get_object_or_None
+
 
 class JustTest(TestCase):
     fixtures = [
@@ -27,6 +29,30 @@ class JustTest(TestCase):
         self.urls_302 = [
 
         ]
+        self.urls_params = [
+            reverse('news:news', args=('testing',)),
+            reverse('news:article', args=(1,)),
+        ]
+
+    def test_urls_params(self):
+        messages = []
+        for user in ('user', 'admin', None):
+            if user:
+                self.client.login(username=user, password='123456')
+            else:
+                self.client.logout()
+            for url in self.urls_params:
+                response = self.client.get(url)
+                try:
+                    self.assertEqual(response.status_code, 200)
+                except AssertionError as err:
+                    messages.append({'url': url, 'user': user, 'err': err})
+        if messages:
+            for msg in messages:
+                print "Got error in (%s): %s, with %s" % (
+                    msg['user'], msg['url'], msg['err']
+                )
+            raise AssertionError
 
     def test_urls_anonymous(self):
         self.client.logout()
@@ -99,6 +125,7 @@ class JustTest(TestCase):
         response = self.client.post(
             reverse('news:article-add'), post, follow=True
         )
+        self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
         self.assertNotEqual(count + 1, new_count)
 
@@ -124,6 +151,7 @@ class JustTest(TestCase):
             reverse('news:article-add'), post, follow=True
         )
 
+        self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
         self.assertEqual(count + 1, new_count)
         article = News.objects.order_by('-id')[0]
@@ -154,6 +182,7 @@ class JustTest(TestCase):
         response = self.client.post(
             reverse('news:article-add'), post, follow=True
         )
+        self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
         self.assertEqual(count + 1, new_count)
         article = News.objects.order_by('-id')[0]
@@ -181,6 +210,7 @@ class JustTest(TestCase):
             'syntax': 'textile', 'url': '',
         }
         response = self.client.post(reverse('news:article-add'), post, follow=True)
+        self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
         article = News.objects.order_by('-id')[0]
         self.assertEqual(count + 1, new_count)
@@ -196,6 +226,7 @@ class JustTest(TestCase):
         response = self.client.get(
             reverse('news:article-action', args=(article.id, 'unapprove'))
         )
+        self.assertEqual(response.status_code, 404)
         article = News.objects.get(pk=article.pk)
         self.assertNotEqual(article.approved, False)
 
@@ -212,8 +243,9 @@ class JustTest(TestCase):
             # blank means poster user
             'category': category.id, 'content': u'Новость 2',
             'syntax': 'textile', 'url': '',
-            }
+        }
         response = self.client.post(reverse('news:article-add'), post, follow=True)
+        self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
         article = News.objects.order_by('-id')[0]
         self.assertEqual(count + 1, new_count)
@@ -231,6 +263,7 @@ class JustTest(TestCase):
             reverse('news:article-action', args=(article.id, 'unapprove')),
             follow=True
         )
+        self.assertEqual(response.status_code, 200)
         article = News.objects.get(pk=article.pk)
         self.assertEqual(article.approved, False)
 
@@ -257,6 +290,7 @@ class JustTest(TestCase):
 
         # user can not edit news not of his own
         response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
         for (key, value) in edit.items():
             self.assertNotEqual(getattr(article, key), value)
 
@@ -264,6 +298,7 @@ class JustTest(TestCase):
         logged_in = self.client.login(username='admin', password='123456')
         self.assertEqual(logged_in, True)
         response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
         article = News.objects.get(pk=article.pk)
         for (key, value) in edit.items():
             self.assertEqual(getattr(article, key), value)
@@ -294,3 +329,32 @@ class JustTest(TestCase):
         article = News.objects.get(pk=article.pk)
         for (key, value) in edit.items():
             self.assertEqual(getattr(article, key), value)
+
+    def test_article_delete(self):
+        # only admin can delete articles
+        article = {
+            'title': 'deletion',
+            'content': 'to delete',
+            'syntax': 'textile',
+            'author': 'admin',
+            'editor': '',
+            'category_id': 1,
+            'approved': True,
+            'owner_id': 1,
+        }
+
+        n = News.objects.create(**article)
+        # testing deletion with user, no access to delete
+        self.client.login(username='user', password='123456')
+        url = reverse('news:article-delete', args=(n.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 404)
+        exists = get_object_or_None(News, pk=n.id)
+        self.assertNotEqual(exists, None)
+
+        # deleting by admin
+        self.client.login(username='admin', password='123456')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        exists = get_object_or_None(News, pk=n.id)
+        self.assertEqual(exists, None)
