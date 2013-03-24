@@ -1,9 +1,11 @@
 # coding: utf-8
 #from django.utils import unittest
+import os
 from django.test import TestCase
 from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
+from django.conf import settings
 from apps.core.helpers import get_object_or_None
 
 
@@ -114,7 +116,52 @@ class JustTest(TestCase):
         pass
 
     def test_profile_update(self):
-        pass
+        avatar_name = 'avatar.jpg'
+        avatar = open('tests/fixtures/avatar.jpg')
+        edit = {
+            'first_name': 'edited',
+            'last_name': 'editor',
+            'gender': 'm',  # (f)emale, (n)ot identified
+            'nickname': 'real_tester',
+            'jid': 'tester@jabber.org',
+            'uin': 123412,
+            'about': 'Duty is our salvation',
+            'tz': 3.0
+        }
+        post = {
+            'skin': 1,
+            'side': 1,
+            'army': 1,
+            'avatar': avatar,
+        }
+        post.update(edit)
+
+        logged = self.client.login(username='user', password='123456')
+        self.assertEqual(logged, True)
+        url = reverse('wh:profile-update')
+        response = self.client.post(url, post, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        messages = []
+
+        user = User.objects.get(username='user')
+        for (key, value) in edit.items():
+            try:
+                self.assertEqual(getattr(user, key), value)
+            except AssertionError as err:
+                messages.append({'err': err})
+        if messages:
+            for msg in messages:
+                print "Can not edit user got: %(err)s" % msg
+            raise AssertionError
+
+        self.assertEqual(user.skin.id, post['skin'])
+        self.assertEqual(user.army.id, post['army'])
+        self.assertEqual(
+            'avatars/%s/%s' % (user.pk, avatar_name),
+            user.avatar.name
+        )
+        os.lstat(user.avatar.path)
 
     def test_profile_get_avatar_and_photo(self):
         avatar_url = reverse('wh:avatar', args=('user', ))
