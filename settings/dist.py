@@ -248,6 +248,7 @@ DEFAULT_TEMPLATE='base.html'
 DEFAULT_SYNTAX='textile'
 IMAGE_THUMBNAIL_SIZE='200x200'
 BRUTEFORCE_ITER=10
+SEND_MESSAGES=True
 
 #import settings from another app
 # LOGGING

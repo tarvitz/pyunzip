@@ -663,10 +663,11 @@ def password_recover(request):
                 "your password from you."
                 "Thank you for using our service."
             ) % (request.user.username, new_pass)
-            send_mail('Password Changed', text_content, settings.FROM_EMAIL,
-                [email], fail_silently=False,
-                auth_user=settings.EMAIL_HOST_USER,
-                auth_password=settings.EMAIL_HOST_PASSWORD)
+            if settings.SEND_MESSAGES:
+                send_mail('Password Changed', text_content, settings.FROM_EMAIL,
+                    [email], fail_silently=False,
+                    auth_user=settings.EMAIL_HOST_USER,
+                    auth_password=settings.EMAIL_HOST_PASSWORD)
             user.save()
             return {'redirect': '/accounts/password/changed/successful'}
     return {'form': form}
@@ -1043,12 +1044,13 @@ def password_restore_initiate(request):
                     'link': settings.DOMAIN + "%s" % reverse(
                     'wh:password-restore', args=(sid.sid, ))
                 }
-                send_mail(
-                    subject=unicode(_('Your password requested to change')),
-                    message=unicode(msg),
-                    from_email=settings.FROM_EMAIL,
-                    recipient_list=[sid.user.email]
-                )
+                if settings.SEND_MESSAGES:
+                    send_mail(
+                        subject=unicode(_('Your password requested to change')),
+                        message=unicode(msg),
+                        from_email=settings.FROM_EMAIL,
+                        recipient_list=[sid.user.email]
+                    )
             return {'redirect': 'core:password-restore-initiated'}
     return {'form': form}
 
@@ -1072,12 +1074,12 @@ def password_restore(request, sid):
     return {'form': form}
 
 
-@login_required
-@render_to('accounts/password_change.html')
-def password_change(request):
-    form = PasswordChangeForm(request.POST or None, instance=request.user)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return {'redirect': 'wh:password-changed'}
-    return {'form': form}
+#@login_required
+#@render_to('accounts/password_change.html')
+#def password_change(request):
+#    form = PasswordChangeForm(request.POST or None, instance=request.user)
+#    if request.method == 'POST':
+#        if form.is_valid():
+#            form.save()
+#            return {'redirect': 'wh:password-changed'}
+#    return {'form': form}

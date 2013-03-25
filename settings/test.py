@@ -1,11 +1,14 @@
 # coding: utf-8
 from settings.dist import *
 from settings.local import *
+from settings.messages import *
 from settings.dist import INSTALLED_APPS
 
 DEBUG=True
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
+
+SEND_MESSAGES=False
 
 DATABASES = {
     'default': {

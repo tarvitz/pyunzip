@@ -3,6 +3,8 @@
 import os
 from django.test import TestCase
 from django.contrib.auth.models import User
+from apps.wh.models import Side
+from apps.core.models import UserSID
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -113,7 +115,29 @@ class JustTest(TestCase):
 
 
     def test_password_recover(self):
-        pass
+        # user@blacklibrary.ru == user
+        init_url = reverse('wh:password-restore-initiate')
+
+        count = UserSID.objects.count()
+        post = {
+            'email': 'user@blacklibrary.ru'
+        }
+        response = self.client.post(init_url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        new_count = UserSID.objects.count()
+        users_amount = UserSID.objects.filter(user__email='user@blacklibrary.ru').count()
+        self.assertEqual(count + users_amount, new_count)
+        sid = UserSID.objects.filter(user__email='user@blacklibrary.ru')[0]
+        post_url = reverse('wh:password-restore', args=(sid.sid, ))
+        update = {
+            'password': 'new_pass',
+            'password2': 'new_pass'
+        }
+        response = self.client.post(post_url, update, follow=True)
+        self.assertEqual(response.status_code, 200)
+        logged = self.client.login(username=sid.user.username, password='new_pass')
+        self.assertEqual(logged, True)
+        #   self.client.post(url, post, follow=True)
 
     def test_profile_update(self):
         avatar_name = 'avatar.jpg'
@@ -174,7 +198,19 @@ class JustTest(TestCase):
         self.assertIn('image', response.get('Content-Type'))
 
     def test_race_icon(self):
-        pass
+        messages = []
+        for side in Side.objects.all():
+            url = reverse('wh:race-icon', args=(side.name, ))
+            response = self.client.get(url, follow=True)
+            self.assertEqual(response.status_code, 200)
+            try:
+                self.assertEqual(response.get('Content-Type'), 'image/png')
+            except AssertionError as err:
+                messages.append({'err': err})
+        if messages:
+            for msg in messages:
+                print "Race icon failed: %(err)s" % err
+            raise AssertionError
 
     def test_user_side_icon(self):
         pass

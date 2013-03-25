@@ -500,7 +500,7 @@ class PasswordRestoreForm(RequestModelForm, BruteForceCheck):
         model = UserSID
         exclude = ('expired_date', 'expired', 'sid', 'user')
 
-
+"""
 class PasswordChangeForm(forms.ModelForm):
     old_password = forms.CharField(
         label=_("Old password"), widget=forms.PasswordInput()
@@ -542,3 +542,4 @@ class PasswordChangeForm(forms.ModelForm):
     class Meta:
         model = User
         fields = []
+"""
