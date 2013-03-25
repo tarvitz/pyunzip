@@ -441,7 +441,7 @@ def onsite_register(request):
     rsids = RegisterSid.objects.all()
     now = datetime.now()
     for rsid in rsids:
-        if rsid.expired<now: rsid.delete()
+        if rsid.expired < now: rsid.delete()
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -478,7 +478,7 @@ def onsite_register(request):
         else:
             #register denied
             rsids_byip = RegisterSid.objects.filter(ip=request.META['REMOTE_ADDR']).count()
-            if rsids_byip>5:
+            if rsids_byip > 5:
                 msg = _('You\'ve exceeded limit of registration, please wait 10 minutes and try again, thank you')
                 form._errors['answ'] = ErrorList([msg])
                 return render_to_response(template,
@@ -502,7 +502,7 @@ def onsite_register(request):
             'sid': sid},
             context_instance=RequestContext(request))
 
-def get_math_image(request,sid=''):
+def get_math_image(request, sid=''):
     import ImageFont, ImageDraw
     #for joke sake
     if not sid:

@@ -1,9 +1,10 @@
 # coding: utf-8
 #from django.utils import unittest
 import os
+import re
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.wh.models import Side
+from apps.wh.models import Side, RegisterSid
 from apps.core.models import UserSID
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
@@ -235,7 +236,45 @@ class JustTest(TestCase):
         pass
 
     def test_register(self):
-        pass
+        post = {
+            'username': 'test_user',
+            'email': 'test@blacklibrary.ru',
+            'nickname': 'test_nickname',
+            'password1': '123456',
+            'password2': '123456',
+            'answ': 1
+        }
+        url = reverse('wh:register')
+        initial = self.client.get(url, follow=True)
+
+        self.assertEqual(RegisterSid.objects.count(), 0)
+        # little bit lazzy searching for sid,
+        # don't need to fetch beautifulsoup or something like
+        # xml2 to do this, sorry about that :)
+        sid_tag = re.findall(r'<input id="id_sid".*?>', initial.content)
+        self.assertEqual(len(sid_tag), 1)
+        tag = sid_tag[0]
+        sid = re.findall(r'value="([\w\d]+)"', tag)
+        self.assertEqual(len(sid), 1)
+        sid = sid[0]
+
+        math_image_url = reverse('wh:math-image', args=(sid, ))
+        initiate = self.client.get(math_image_url, follow=True)
+        self.assertEqual(initiate.status_code, 200)
+        self.assertEqual(initiate.get('Content-Type'), 'image/png')
+
+        sid = get_object_or_None(RegisterSid, sid=sid)
+        self.assertNotEqual(sid, None)
+        post.update({
+            'answ': sid.value,
+            'sid': sid.sid
+        })
+
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        open('file.html', 'w').write(response.content)
+        logged = self.client.login(username='test_user', password='123456')
+        self.assertEqual(logged, True)
 
     def test_rank_view(self):
         pass
