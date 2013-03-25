@@ -7,7 +7,7 @@ from apps.wh.models import Side
 from apps.core.models import UserSID
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
-from django.conf import settings
+#from django.conf import settings
 from apps.core.helpers import get_object_or_None
 
 
@@ -113,7 +113,6 @@ class JustTest(TestCase):
         logged = self.client.login(username='user', password=new_password)
         self.assertEqual(logged, True)
 
-
     def test_password_recover(self):
         # user@blacklibrary.ru == user
         init_url = reverse('wh:password-restore-initiate')
@@ -209,7 +208,7 @@ class JustTest(TestCase):
                 messages.append({'err': err})
         if messages:
             for msg in messages:
-                print "Race icon failed: %(err)s" % err
+                print "Race icon failed: %(err)s" % msg
             raise AssertionError
 
     def test_user_side_icon(self):
