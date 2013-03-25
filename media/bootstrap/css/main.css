@@ -260,7 +260,6 @@ span.link,div.link{
 .online_users .nicknames{ font-size: 8pt;}
 .warnings a{padding-left: 2px; padding-right: 2px;}
 form{
-    margin-left: 25px;
 }
 form > li{
     list-style-type: none
