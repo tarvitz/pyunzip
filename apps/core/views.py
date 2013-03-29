@@ -556,6 +556,7 @@ def save_comment(request):
             page = 'last'
             #deprecated :)
             #page = request.GET.get('page','') or form.cleaned_data['page']
+            url = url or '/'
             if page: url += '?page=%s' % page
             return {'redirect': "%s#c%i" % (url, comment.id)}
         else:
