@@ -264,3 +264,9 @@ form{
 form > li{
     list-style-type: none
 }
+img.purity-seal{
+    position: absolute;
+    height: 240px;
+    right: 0;
+    margin-top: -45px;
+}
