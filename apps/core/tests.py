@@ -16,6 +16,7 @@ class CodeTest(TestCase):
     ]
     def setUp(self):
         pass
+
     def tearDown(self):
         pass
 
@@ -40,6 +41,8 @@ class CodeTest(TestCase):
     def test_urls(self):
         prefix='core'
         urls = [
+            'password-restored',
+            'password-restore-initiated',
             'css-db',
             'css-edit',
             'ip-get-address',
@@ -47,20 +50,27 @@ class CodeTest(TestCase):
             'currently-unavailable',
             'wot_verification',
             'url_robots',
+            'subscription',
         ]
         messages = []
-        for url in urls:
-            _url = reverse('%s:%s' % (prefix, url))
-            try:
-                self.client.get(_url, follow=True)
-            except AssertionError as err:
-                messages.append({
-                    'err': err,
-                    'url': _url
-                })
+        for user in ['user', 'admin', None]:
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+            for url in urls:
+                _url = reverse('%s:%s' % (prefix, url))
+                try:
+                    response = self.client.get(_url, follow=True)
+                    self.assertEqual(response.status_code, 200)
+                except AssertionError as err:
+                    messages.append({
+                        'err': err,
+                        'url': _url,
+                        'user': user
+                    })
         if messages:
             for msg in messages:
-                print "Could not get url %(url)s, got %(err)s" % msg
+                print "Could not get url %(user)s in %(url)s, got %(err)s" % msg
             raise AssertionError
 
     def test_post_markup_unicode(self):
@@ -209,4 +219,13 @@ class CodeTest(TestCase):
         pass
 
     def test_css_edit(self):
+        pass
+
+    def test_unsubscribe(self):
+        pass
+
+    def test_settings(self):
+        pass
+
+    def test_settings_store(self):
         pass
