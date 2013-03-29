@@ -98,3 +98,33 @@ class CodeTest(TestCase):
             for msg in messages:
                 print "Got error saving with %(key)s, %(err)s" % msg
             raise AssertionError
+
+    def test_posting_comment_twice(self):
+        # deny of twice posting, just ignore second one
+        logged = self.client.login(username='user', password='123456')
+        self.assertEqual(logged, True)
+
+        url = reverse('core:comment-add')
+        n = News.objects.all()[0]
+        ct = ContentType.objects.get(
+            app_label=n._meta.app_label,
+            model=n._meta.module_name
+        )
+
+        post = {
+            'content_type': ct.pk,
+            'object_pk': str(n.pk),
+            'syntax': 'textile',
+            'comment': 'The faith without deeds is worthless'
+        }
+        count = Comment.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(count + 1, Comment.objects.count())
+        # do not create another object just ignore
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count + 1, Comment.objects.count())
+        comment = Comment.objects.all()[0]
+        self.assertEqual(comment.comment, post['comment'])

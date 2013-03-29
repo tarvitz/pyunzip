@@ -177,7 +177,7 @@ class CommentForm(forms.ModelForm):
         if not self.instance.pk:
             self.instance.user = self.request.user
         content_type = self.cleaned_data['content_type']
-        c = Comment.objects.filter(
+        comment = Comment.objects.filter(
             content_type=content_type,
             object_pk=self.instance.object_pk).order_by('-submit_date')
 
@@ -186,20 +186,20 @@ class CommentForm(forms.ModelForm):
 
         instance = None
         #TODO: make this more flexible
-        if c and not self.instance.pk: #exists
-            c = c[0]
-            if c.user == self.request.user and c.comment != self.instance.comment: #is equal
+        if comment and not self.instance.pk: #exists
+            comment = comment[0]
+            if comment.user == self.request.user and comment.comment != self.instance.comment: #is equal
                 #new comment and not a dublicate
-                c.comment += "\n"+ self.instance.comment
-                #c.submit_date = now
+                comment.comment += "\n"+ self.instance.comment
+                #comment.submit_date = now
                 ip = self.request.META.get('REMOTE_ADDR', '')
-                if ip: c.ip_address = ip
+                if ip: comment.ip_address = ip
                 if commit:
-                    c.save()
-                return c
+                    comment.save()
+                return comment
             else:
-                instance = super(CommentForm, self).save(commit)
-                return instance
+                #instance = super(CommentForm, self).save(commit)
+                return comment
         instance = super(CommentForm, self).save(commit)
         return instance
 
