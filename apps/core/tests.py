@@ -37,6 +37,32 @@ class CodeTest(TestCase):
         return messages
 
     """ testing helpers module """
+    def test_urls(self):
+        prefix='core'
+        urls = [
+            'css-db',
+            'css-edit',
+            'ip-get-address',
+            'permission-denied',
+            'currently-unavailable',
+            'wot_verification',
+            'url_robots',
+        ]
+        messages = []
+        for url in urls:
+            _url = reverse('%s:%s' % (prefix, url))
+            try:
+                self.client.get(_url, follow=True)
+            except AssertionError as err:
+                messages.append({
+                    'err': err,
+                    'url': _url
+                })
+        if messages:
+            for msg in messages:
+                print "Could not get url %(url)s, got %(err)s" % msg
+            raise AssertionError
+
     def test_post_markup_unicode(self):
         quote_source = u"(Пользователь){цитата}"
         quote = post_markup_filter(quote_source)
@@ -157,3 +183,30 @@ class CodeTest(TestCase):
         last_comment = Comment.objects.order_by('-submit_date')[0]
         self.assertEqual(last_comment.comment, post['comment'])
         self.assertEqual(last_comment.user.username, 'user')
+
+    def test_admin_edit_comment(self):
+        pass
+
+    def test_admin_purge_comment(self):
+        pass
+
+    def test_admin_hide_comment(self):
+        pass
+
+    def test_admin_quick_edit_comment(self):
+        pass
+
+    def test_self_quick_edit_comment(self):
+        pass
+
+    def test_self_hide_comment(self):
+        pass
+
+    def test_self_purge_comment(self):
+        pass
+
+    def test_self_edit_comment(self):
+        pass
+
+    def test_css_edit(self):
+        pass
