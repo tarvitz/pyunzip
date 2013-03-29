@@ -695,6 +695,7 @@ def show_rank(request,id=None,codename=None):
         'img': img},
         context_instance=RequestContext(request))
 
+"""
 #implement unification method to edit simple text fields within ONE function
 @login_required
 @can_act
@@ -723,6 +724,7 @@ def edit_rank(request,codename=None,id=None):
     else:
         error_msg = u"no POST data is sent"
         return HttpResponseServerError(error_msg)
+"""
 
 def get_rank(request, codename=None, id=None, raw=True):
     response = HttpResponse()

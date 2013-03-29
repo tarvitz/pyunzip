@@ -4,7 +4,7 @@ import os
 import re
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.wh.models import Side, RegisterSid
+from apps.wh.models import Side, RegisterSid, Rank
 from apps.core.models import UserSID
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
@@ -15,6 +15,7 @@ from apps.core.helpers import get_object_or_None
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
+        'tests/fixtures/load_ranks.json',
     ]
 
     def setUp(self):

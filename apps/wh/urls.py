@@ -73,7 +73,7 @@ urlpatterns = patterns('apps.wh.views',
     url(r'^ranks/(?P<id>\d+)/$', 'show_rank', name='ranks'),
     url('^ranks/(?P<codename>[\w\s]+)/$', 'show_rank',
         name='rank'),
-    url(r'^ranks/(?P<codename>[\w\s]+)/update/$', 'edit_rank', name='rank-edit'),
+    #url(r'^ranks/(?P<codename>[\w\s]+)/update/$', 'edit_rank', name='rank-edit'),
     url(r'^ranks/(?P<codename>[\w\s]+)/get/$', 'get_rank', name='rank-get'),
     url(r'^ranks/(?P<codename>[\w\s]+)/get/formatted/$', 'get_rank', {'raw':False}, name='rank-get-raw'), #todo: move to json
     url('^warnings/(?P<nickname>[\w\s]+)/(?P<type>(increase|decrease))/$', 'alter_warning',
