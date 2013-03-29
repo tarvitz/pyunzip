@@ -122,9 +122,38 @@ class CodeTest(TestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(count + 1, Comment.objects.count())
+
         # do not create another object just ignore
+        for i in range(10):
+            response = self.client.post(url, post, follow=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(count + 1, Comment.objects.count())
+            comment = Comment.objects.all()[0]
+            self.assertEqual(comment.comment, post['comment'])
+        # but we can append another data
+        post.update({'comment': 'Faith is internal'})
+
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(count + 1, Comment.objects.count())
-        comment = Comment.objects.all()[0]
-        self.assertEqual(comment.comment, post['comment'])
+        comment = Comment.objects.order_by('-submit_date')[0]
+        # test for information append, not overwrite!
+        self.assertIn(post['comment'], comment.comment)
+        self.assertNotEqual(comment, comment.comment)
+
+        # admin can post the same comment
+        logged = self.client.login(username='admin', password='123456')
+        self.assertEqual(logged, True)
+        count = Comment.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count + 1, Comment.objects.count())
+        # than user can post new comment with the same text, it's not
+        # restricted
+        self.client.login(username='user', password='123456')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count + 2, Comment.objects.count())
+        last_comment = Comment.objects.order_by('-submit_date')[0]
+        self.assertEqual(last_comment.comment, post['comment'])
+        self.assertEqual(last_comment.user.username, 'user')
