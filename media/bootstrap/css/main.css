@@ -270,3 +270,6 @@ img.purity-seal{
     right: 0;
     margin-top: -45px;
 }
+.purity-seal.bottom{
+    z-index: -1;
+}
