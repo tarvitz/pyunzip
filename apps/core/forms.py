@@ -198,8 +198,10 @@ class CommentForm(forms.ModelForm):
                     comment.save()
                 return comment
             else:
-                #instance = super(CommentForm, self).save(commit)
-                return comment
+                if comment.user == self.request.user:
+                    return comment
+                instance = super(CommentForm, self).save(commit)
+                return instance
         instance = super(CommentForm, self).save(commit)
         return instance
 
