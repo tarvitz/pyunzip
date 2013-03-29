@@ -46,6 +46,7 @@ from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import (
     get_settings, get_object_or_none, paginate, can_act,
     handle_uploaded_file, render_to, get_object_or_None,
+    safe_ret
 )
 import os
 
@@ -919,7 +920,7 @@ def favicon(request):
 def alter_warning(request,nickname,type):
     """alter_warning could increase or decrease warning level of the user """
     from apps.wh.models import Warning,WarningType
-    user = get_object_or_404(User,nickname__iexact=nickname)
+    user = get_object_or_404(User, nickname__iexact=nickname)
     warnings = Warning.objects.filter(user__nickname__iexact=nickname)
     if type in 'increase': type_offset = 1
     if type in 'decrease': type_offset = -1
@@ -950,10 +951,16 @@ def alter_warning(request,nickname,type):
             old_warning.delete()
             return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
         try:
-            warning_type = WarningType.objects.get(side=user.army.side,level=int(old_warning.level)+type_offset)
+            warning_type = WarningType.objects.get(
+                side=safe_ret(user, 'army.side'),
+                level=int(old_warning.level) + type_offset
+            )
         except WarningType.DoesNotExist:
             try:
-                warning_type = WarningType.objects.get(level=int(old_warning.level)+type_offset,is_general=True)
+                warning_type = WarningType.objects.get(
+                    level=int(old_warning.level)+type_offset,
+                    is_general=True
+                )
             except WarningType.DoesNotExist:
                 return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
 
@@ -966,7 +973,10 @@ def alter_warning(request,nickname,type):
         #there is no warnings
         try:
             #common_warning contains warning message for each side
-            warning_type = WarningType.objects.get(side=user.army.side,level=1)
+            warning_type = WarningType.objects.get(
+                side=safe_ret(user, 'army.side'),
+                level=1
+            )
         except WarningType.DoesNotExist:
             #we fail, so we search for general warning, JUST FOR ALL
             warning_type = WarningType.objects.get(level=1,is_general=True)
@@ -992,20 +1002,29 @@ def alter_warning_form(request,nickname):
             nickname = form.cleaned_data['nickname']
             referer = form.cleaned_data['next']
             try:
-                warning_type = WarningType.objects.get(side=warn_user.army.side,level=level)
+                warning_type = WarningType.objects.get(
+                    side=safe_ret(warn_user, 'army.side'),
+                    level=level
+                )
             except WarningType.DoesNotExist:
                 #it's a little bit dangerous
                 warning_type = WarningType.objects.get(is_general=True,level=level)
             expired = datetime.now()+timedelta(days=level*7)
-            warning = Warning(type=warning_type,user=warn_user,level=level,expired=expired,style='color: red;')
+            warning = Warning(
+                type=warning_type,
+                user=warn_user, level=level,
+                expired=expired, style='color: red;'
+            )
             warning.save()
             if comment:
                 #saving comment for warning alteration
                 from django.contrib.contenttypes.models import ContentType
                 from django.contrib.comments.models import Comment
                 ct = ContentType.objects.get(app_label='wh',model='warning')
-                c = Comment(content_type=ct,object_pk=str(warning.pk),user=request.user,
-                    comment=comment,submit_date=datetime.now(),is_public=True,site_id=1)
+                c = Comment(
+                    content_type=ct, object_pk=str(warning.pk), user=request.user,
+                    comment=comment, submit_date=datetime.now(), is_public=True, site_id=1
+                )
                 c.save()
             return HttpResponseRedirect(referer)
         else:

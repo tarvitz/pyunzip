@@ -40,6 +40,23 @@ Please visit this page to figure out that have been done there.
 """
 EMAIL_TEXT = """"""
 
+# safe method get obj.attr.attr1 and so on
+# safe_ret(cell, 'room.pk')
+# safe_ret(cell, 'room.base.pk')
+safe_ret = (
+    lambda x, y: reduce(
+        lambda el, attr: (
+            getattr(el, attr)() if callable(getattr(el, attr)) else getattr(el, attr)
+        )
+        if hasattr(el, attr) else None,
+        [x, ] + y.split('.')
+    )
+)
+
+get_int_or_zero = lambda x: int(x) if (
+    x.isdigit() if isinstance(x, basestring) else x
+) else 0
+
 #TODO: OVERWRITE IT =\
 #instance is the object passing through the signal
 def send_notification(instance,**kwargs):

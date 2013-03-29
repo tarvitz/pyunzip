@@ -278,16 +278,68 @@ class JustTest(TestCase):
         self.assertEqual(logged, True)
 
     def test_rank_view(self):
-        pass
+        rank = Rank.objects.all()[0]
+        url = reverse('wh:ranks', args=(rank.id, ))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
 
-    def test_rank_edit(self):
-        pass
+    def test_warning_increase_deacrease(self):
+        logged = self.client.login(username='admin', password='123456')
+        self.assertEqual(logged, True)
+        increase_url = reverse('wh:warning-alter', args=('user', 'increase'))
+        response = self.client.get(increase_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        u = User.objects.get(username='user')
+        count = u.warning_set.filter(level=1).count()
+        self.assertEqual(count, 1)
+        # only admins can cast warnings
+        deacrease_url = reverse('wh:warning-alter', args=('user', 'decrease'))
+        response = self.client.get(deacrease_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        count = u.warning_set.count()
+        self.assertEqual(count, 0)
+        # could not alter warning for user which is not exists
+        increase_url = reverse('wh:warning-alter', args=('not_existing_user', 'increase'))
+        response = self.client.get(increase_url)
+        self.assertEqual(response.status_code, 404)
 
     def test_warning_alter(self):
-        pass
+        logged = self.client.login(username='admin', password='123456')
+        self.assertEqual(logged, True)
+        url = reverse('wh:warning-alter-form', args=('user', ))
+        edit = {
+            'level': 5
+        }
+        post = {
+            'nickname': 'user',
+            'comment': 'just deal with it'
+        }
+        post.update(edit)
+        response = self.client.post(url, post, follow=True)
 
-    def test_warning_increase_decrease(self):
-        pass
+        self.assertEqual(response.status_code, 200)
+        u = User.objects.get(username='user')
+        self.assertEqual(u.warning_set.filter(level=1).count(), 0)
+        warning = u.warning_set.filter(level=5)
+        self.assertNotEqual(len(warning), 0)
+        warning = warning[0]
+
+        messages = []
+        for (key, value) in edit.items():
+            try:
+                self.assertEqual(getattr(warning, key), value)
+            except AssertionError as err:
+                messages.append({
+                    'err': err,
+                    'key': key
+                })
+        if messages:
+            for msg in messages:
+                print "Got error assigning: %(key) with %(err)s" % msg
+            raise AssertionError
+        comment = warning.comments.filter(comment__iexact=post['comment'])
+        self.assertEqual(comment.count(), 1)
+        self.assertEqual(comment[0].comment, post['comment'])
 
     def test_miniquote_get_raw(self):
         url = reverse('wh:miniquote-get-raw')

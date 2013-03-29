@@ -11,6 +11,7 @@ from django.contrib.auth.models import User,Group
 from django.contrib.comments.models import Comment
 #breaks model using via another apps
 #from django.contrib.auth.admin import UserAdmin
+from django.contrib.contenttypes import generic
 from apps.core.models import Settings as UserSettings
 from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
@@ -253,6 +254,7 @@ class WarningType(models.Model):
     level = models.IntegerField(_('Level'))
     side = models.ManyToManyField(Side,blank=True)
     is_general = models.BooleanField(_('Is general'),blank=True)
+
     class Meta:
         #abstract = True
         pass
@@ -266,6 +268,9 @@ class Warning(models.Model):
     user = models.ForeignKey(User,primary_key=True)
     #despite expired the should use OneToOne field relationship
     expired = models.DateTimeField(_('Expired'))
+    comments = generic.GenericRelation(
+        'comments.Comment', object_id_field='object_pk'
+    )
     
     def _get_sign(self):
         return settings.SIGN_CHOICES[int(self.level)-1][1]
