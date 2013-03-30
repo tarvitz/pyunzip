@@ -273,3 +273,6 @@ img.purity-seal{
 .purity-seal.bottom{
     z-index: -1;
 }
+.message img.purity-seal{
+    margin-top: 0px;
+}
