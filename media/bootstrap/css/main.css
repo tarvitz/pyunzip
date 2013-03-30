@@ -264,3 +264,16 @@ form{
 form > li{
     list-style-type: none
 }
+img.purity-seal{
+    position: absolute;
+    height: 240px;
+    right: 0;
+    margin-top: -45px;
+}
+.purity-seal.bottom{
+    z-index: -1;
+}
+.message img.purity-seal{
+    margin-top: 0px;
+}
+.hide{ display: none; }
