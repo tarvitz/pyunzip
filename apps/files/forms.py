@@ -413,6 +413,7 @@ class UploadFileForm(RequestModelForm):
 
     def save(self, commit=True):
         self.instance.owner = self.request.user
+        self.instance.plain_type = self.files['file'].content_type
         super(UploadFileForm, self).save(commit=commit)
 
     class Meta:
