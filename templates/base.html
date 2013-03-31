@@ -32,7 +32,6 @@
 <script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
 <script type='text/javascript' src='/media/js/jquery.tmpl.min.js'></script>
 <script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
-<script src='/media/js/plugin.scrollbar-min.js' type='text/javascript' async></script>
 <script type='text/javascript' src='/media/js/markitup/bb_textile.js'></script>
 <!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
 <script type='text/javascript' src='/media/js/m_effects.js'></script>
@@ -174,7 +173,6 @@
         $('.nav-tabs a[data-toggle]').click(function(e){
             setTabs($(this).attr('href').replace('#', ''));
         });
-        $(".markItUpEditor").scrollbar();
     });
 
     {% comment %}
@@ -217,7 +215,6 @@
         return false;
     });
     $('#login-modal form').submit(function(e){ return false;});
-
 </script>
 {% endblock %} {# endjs #}
 {% block sidejs %}
