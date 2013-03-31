@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-03-31 20:26+0400\n"
+"POT-Creation-Date: 2013-04-01 01:40+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -122,7 +122,7 @@ msgstr "Да, я подтверждаю"
 msgid "WarMist no-replay notification"
 msgstr ""
 
-#: apps/core/helpers.py:567
+#: apps/core/helpers.py:574
 msgid "Not found"
 msgstr "Не найден"
 
@@ -783,7 +783,7 @@ msgstr "Ни одного файла не загружено"
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
-#: apps/files/templates/files/user_files.html:76 templates/base.html:230
+#: apps/files/templates/files/user_files.html:76 templates/base.html:233
 #: templates/test_upload.html:46
 msgid "Yes"
 msgstr "Да"
@@ -793,11 +793,12 @@ msgid "No"
 msgstr "Нет"
 
 #: apps/files/templates/files/user_files.html:93 templates/test_upload.html:63
+#: templates/js/locale.ru.html:8
 msgid "Do you want to proceed uploading the file?"
 msgstr "Вы действительно хотите загрузить этот файл?"
 
 #: apps/files/templates/files/user_files.html:117
-#: templates/test_upload.html:87
+#: templates/test_upload.html:87 templates/js/locale.ru.html:9
 msgid "error while uploading file"
 msgstr "произошла ошибка при загрузке файла"
 
@@ -2669,44 +2670,45 @@ msgid ""
 "    Your password restore link: %(link)s\n"
 msgstr ""
 
-#: templates/base.html:174
+#: templates/base.html:177
 msgid "Required field"
 msgstr "Обязательное поле"
 
-#: templates/base.html:225
-#, fuzzy
+#: templates/base.html:228
 msgid "Do you really want to approve this action?"
-msgstr "Вы действительно хотите удалить этот реплей?"
+msgstr "Вы действительно хотите выполнить это действие?"
 
-#: templates/base.html:231
+#: templates/base.html:234
 msgid "no"
-msgstr ""
+msgstr "нет"
 
 #: templates/accounts/password_change.html:3
-#, fuzzy
 msgid "Password change"
-msgstr "Пароли не совпадают"
+msgstr "Смена пароля"
 
 #: templates/accounts/password_changed.html:3
 msgid "Your password was changed successfully"
-msgstr ""
+msgstr "Ваш пароль был успешно изменен"
 
 #: templates/accounts/password_restore.html:7
-#, fuzzy
 msgid "Change password"
 msgstr "Сменить пароль"
 
 #: templates/accounts/password_restore_initiate.html:3
 msgid "Password recover initiate procedure"
-msgstr ""
+msgstr "Процедура восстановления пароля"
 
 #: templates/accounts/password_restore_initiate.html:7
 msgid "Initiate"
-msgstr ""
+msgstr "Начать"
 
 #: templates/admin/wh/profile/change_form.html:5
 msgid "It is better to manage profile in special form despite using amin one"
 msgstr ""
+
+#: templates/js/locale.ru.html:10
+msgid "downloaded successfull"
+msgstr "успешно загружено"
 
 #: templates/static/currently_unavailable.html:4
 msgid "Currently unavailable"
@@ -2727,11 +2729,11 @@ msgstr ""
 
 #: templates/static/password_restore_initiated.html:3
 msgid "Email have been sent, please follow instructions"
-msgstr ""
+msgstr "Инструкции были высланы на ваш e-мейл"
 
 #: templates/static/password_restored.html:3
 msgid "Your password restored"
-msgstr ""
+msgstr "Ваш пароль восстановлен"
 
 #: templates/static/permission_denied.html:5
 msgid "Permission denied"
@@ -2739,7 +2741,7 @@ msgstr "Отказано в доступе"
 
 #: utils/translations.py:4
 msgid "Misc"
-msgstr ""
+msgstr "Другое"
 
 #~ msgid ""
 #~ "You can not use more than 1000 symbols within headline news editing, "
