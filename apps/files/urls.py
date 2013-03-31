@@ -96,5 +96,6 @@ urlpatterns = patterns('apps.files.views',
     url(r'^files/upload/new/$', 'file_upload', name='file-upload'),
     url(r'^test/files/upload/$', 'test_file_upload', name='test-file-upload'),
     url(r'^users/files/$', 'files', name='files'),
+    url(r'^users/files/(?P<pk>\d+)/delete/$', 'file_delete', name='file-delete')
 )
 

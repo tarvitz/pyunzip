@@ -20,7 +20,7 @@ from apps.files.forms import UploadReplayForm,\
     ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm, \
     UploadFileForm
 from apps.core.forms import CommentForm, action_formset, action_formset_ng
-from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
+from apps.files.models import Replay, Gallery, Version, Game, File, Attachment, UserFile
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
 from apps.core.helpers import (
@@ -1002,4 +1002,13 @@ def files(request, nickname=''):
     user_files = paginate(user_files, page, pages=settings.OBJECTS_ON_PAGE)
     return {
         'files': user_files
+    }
+
+@login_required
+@render_to('files/user_files.html')
+def file_delete(request, pk, nickname=''):
+    user_file = get_object_or_404(UserFile, pk=pk)
+    user_file.delete()
+    return {
+        'redirect': 'files:files'
     }

@@ -376,6 +376,21 @@ class UserFile(models.Model):
             os.path.join(settings.MEDIA_URL, self.file.name),
             self.file.name
         )
+    def get_delete_url(self):
+        return reverse('files:file-delete', args=(self.pk,))
+
+    def get_file_size(self):
+        try:
+            return self.file.size
+        except OSError:
+            return 0
+
+    def delete(self, *args, **kwargs):
+        try:
+            os.unlink(self.file.path)
+        except OSError:
+            pass
+        super(UserFile, self).delete(*args, **kwargs)
 
     def __unicode__(self):
         return self.title or "User %s file" % (self.owner.id, )

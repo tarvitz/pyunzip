@@ -21,12 +21,16 @@
             <th>{% trans "Type" %}</th>
             <th>{% trans "File" %}</th>
             <th>{% trans "Link" %}</th>
+            <th>{% trans "Size" %}</th>
+            <th>{% trans "Actions" %}</th>
         </tr>
     {% for file in files.object_list %}
         <tr>
             <td>{{ file.plain_type }}</td>
             <td>{{ file.file.name }}</td>
             <td>{{ file.get_file_link|safe }}</td>
+            <td>{{ file.get_file_size|filesizeformat }}</td>
+            <td><a href='{{ file.get_delete_url }}' class='btn btn-danger'>{% trans "delete" %}</a></td>
         </tr>
     {% endfor %}
     </table>
