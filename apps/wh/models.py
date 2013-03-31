@@ -392,6 +392,11 @@ CommentsAdmin.fieldsets += (
 
 # here is a bug?
 class UserExtension(object):
+    #properties
+    @property
+    def files(self):
+        return self.user_file_set
+
     def get_absolute_url(self):
         return reverse('wh:profile-by-nick', args=(
             self.nickname or self.username,))

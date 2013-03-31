@@ -29,6 +29,9 @@
                     <li><a rel='twipsy' href='{% url "tabletop:rosters" %}' title='Ваши расписки армий по настолке'>Ростеры</a>
                         <a rel='twipsy' href='{% url "tabletop:roster-add" %}'>[+]</a></li>
                     <li><a rel='twipsy' href='{% url "news:news-user" %}'>Мои новости</a></li>
+                    {% if gs.EXPEREMENTAL %}
+                    <li><a rel='twipsy' href='{% url "files:files" %}'>Мои файлы</a></li>
+                    {% endif %}
                 </ul>
         </div>
         {% endif %}
