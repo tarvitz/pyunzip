@@ -219,6 +219,41 @@
         return false;
     });
     $('#login-modal form').submit(function(e){ return false;});
+    $('.noty.confirm').click(function(e){
+        var self = this;
+        var text = $(self).data('text') || "{% trans 'Do you really want to approve this action?' %}";
+        var type = $(self).data('type') || "confirm";
+        var layout = $(self).data('layout') || 'center';
+        var yes_btn_class = $(self).data('yes-btn-class') || "btn";
+        var no_btn_class = $(self).data('no-btn-class') || "btn";
+        var yesBtn = $(self).data('yes-btn') || "{% trans 'Yes' %}";
+        var noBtn = $(self).data('no-btn') || "{% trans 'no' %}";
+
+        noty({
+            text: text,
+            type: type,
+            layout: layout,
+            dismissQueue: true,
+            buttons: [
+                {
+                    addClass: yes_btn_class,
+                    text: yesBtn,
+                    onClick: function($noty){
+                        document.location.href = $(self).attr('href');
+                        $noty.close();
+                    }
+                },
+                {
+                    addClass: no_btn_class,
+                    text: noBtn,
+                    onClick: function($noty){
+                        $noty.close();
+                    }
+                }
+            ]
+        });
+        return false;
+    });
 </script>
 {% endblock %} {# endjs #}
 {% block sidejs %}
