@@ -27,6 +27,7 @@
 {# user css'es #}
 {% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url "core:css-db" %}' type='text/css' media='screen'>{% endif %}
 {% block js %}
+{% include "js/locale.ru.html" %}
 <script type='text/javascript' src='/media/js/core.js'></script>
 <script type='text/javascript' src='/media/js/base.js'></script>
 <script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
@@ -149,6 +150,8 @@
 <!-- end of modals -->
 
 {% block endjs %}
+{% include "jtmpl/core.html" %}
+
 <script language='javascript' type='text/javascript'>
     var setTabs = function(src){
         document.cookie = 'mainTab=' + src;
@@ -255,6 +258,7 @@
         return false;
     });
 </script>
+
 {% endblock %} {# endjs #}
 {% block sidejs %}
 {% if global_settings.YANDEX_METRICA_ENABLED %}

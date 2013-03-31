@@ -94,7 +94,7 @@ urlpatterns = patterns('apps.files.views',
     #(r'^test/make_fake_files/images/$', 'make_fake_files', {'model':'files.image','field':'image'}),
     #(r'^test/make_fake_files/thumbnails/$', 'make_fake_files', {'model':'files.image','field':'thumbnail'}),
     url(r'^files/upload/new/$', 'file_upload', name='file-upload'),
-    url(r'^test/files/upload/$', 'test_file_upload', name='test-file-upload'),
+    #url(r'^test/files/upload/$', 'test_file_upload', name='test-file-upload'),
     url(r'^users/files/$', 'files', name='files'),
     url(r'^users/files/(?P<pk>\d+)/delete/$', 'file_delete', name='file-delete')
 )

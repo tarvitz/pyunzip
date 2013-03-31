@@ -72,7 +72,83 @@ myMarkupSettings = {
             dropMenu :[
                 {name:'BBcode', call: 'reloadMarkItUp("bb-code")'},
                 {name:'Textile', call: 'reloadMarkItUp("textile")'}
-            ]}
+            ]},
+            {separator:"---------------"},
+            {
+                name:"Upload file", className: 'upload-file',
+                beforeInsert: function(h){
+                    tmpl = $.template('#uploadFileTemplate');
+                    blk = $.tmpl(tmpl, {}).insertBefore($(h.textarea));
+                    $(blk).find('#id_file').click(); /* invoke click on filefield */
+
+                    csrf = document.cookie.match(/csrftoken=([\w\d]+)/);
+                    csrf = (csrf.length) ? csrf[1] : "";
+                    textarea = $(h.textarea);
+
+                    $(blk).find('input').html5_upload({
+                        url: JS.urls['files:file-upload'],
+                        sendBoundary: function(event){
+                            return true;
+                            // window.FormData || $.browser.mozilla;
+                        },
+                        extraFields: {
+                            'csrfmiddlewaretoken': csrf
+                        },
+                        fieldName: "file",
+                        onStart: function(event, total){
+                            //return true;
+                            $('#progress-bar').removeClass('hide').addClass('active');
+                            result = confirm(JS.locale.upload_file_message);
+                            if (!result){
+                                $('#progress-bar').addClass('hide').removeClass('active');
+                            }
+                            return result;
+                        },
+                        onProgress: function(event, progress, name, number, total) {
+                            console.log([progress, number, name, total]);
+                        },
+                        setName: function(text) {
+                            $("#progress_report_name").text(text);
+                        },
+                        setStatus: function(text) {
+                            $("#progress_report_status").text(text);
+                        },
+                        setProgress: function(val) {
+                            $('#progress-bar .bar').css('width', Math.ceil(val*100) + "%");
+                        },
+                        onFinishOne: function(event, response, name, number, total) {
+                            $('#progress-bar').addClass('hide').removeClass('active');
+                            noty({
+                                text: JS.locale.download_success,
+                                type: "success",
+                                dismissQueue: true,
+                                timeout: 4000
+                            });
+                            json = JSON.parse(response);
+
+                            if (json.file){
+                                isImage = (json.mime_type.match(/image/)) ? true : false;
+                                klass = (isImage) ? "user image" : "user file";
+                                content = (isImage) ?
+                                    "!(__klass__)__url__!\n" :
+                                    "\"(__klass__)the link\":__url__\n";
+
+                                var txt = content.replace('__klass__', klass).replace('__url__', json.file.url);
+                                textarea.val(textarea.val() + txt);
+                            }
+
+                        },
+                        onError: function(event, name, error) {
+                            noty({
+                                text: JS.locale.upload_file_error + ": " + name,
+                                type: 'error',
+                                dismissQueue: true
+                            });
+                            $('#progress-bar').removeClass('active').addClass('hide');
+                        }
+                    }); /* end of html5 upload */
+                }
+            }
 
         ]
     } //end textile

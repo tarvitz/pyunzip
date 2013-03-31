@@ -970,6 +970,8 @@ def file_upload(request):
             form.save()
             return {
                 'success': True,
+                'file': form.instance.file,
+                'mime_type': form.instance.plain_type
             }
     return {
         'success': False,

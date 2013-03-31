@@ -1,0 +1,14 @@
+{% load i18n %}
+<script type='text/javascript'>
+var JS = {
+    urls: {
+        'files:file-upload': '{% url "files:file-upload" %}',
+    },
+    locale: {
+        upload_file_message: "{% trans 'Do you want to proceed uploading the file?' %}",
+        upload_file_error: '{% trans "error while uploading file" %}',
+        download_success: '{% trans "downloaded successfull" %}'
+    }
+}
+</script>
+

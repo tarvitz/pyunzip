@@ -492,10 +492,11 @@ def model_json_encoder(obj, **kwargs):
     from django.db.models import Model
     from django.db.models.query import QuerySet
     from decimal import Decimal
-    from django.db.models.fields.files import ImageFieldFile
+    from django.db.models.fields.files import ImageFieldFile, FieldFile
     from django import forms
     from django.utils.functional import Promise
     is_human = kwargs.get('parse_humanday', False)
+
     if isinstance(obj, QuerySet):
         return list(obj)
     elif isinstance(obj, Model):
@@ -542,6 +543,12 @@ def model_json_encoder(obj, **kwargs):
         return obj.strftime("%H:%M")
     elif isinstance(obj, ImageFieldFile):
         return obj.url if hasattr(obj, 'url') else ''
+    elif isinstance(obj, FieldFile):
+        return {
+            'url': obj.url,
+            'name': obj.name,
+            'size': obj.size,
+        }
     elif isinstance(obj, forms.ModelForm) or isinstance(obj, forms.Form):
         _form = {
             'data': obj.data if hasattr(obj, 'data') else None,
