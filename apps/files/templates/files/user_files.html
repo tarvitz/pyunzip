@@ -1,0 +1,119 @@
+{% extends base_template %}{% load i18n %}
+{% block content %}
+<form>
+<fieldset>
+{% csrf_token %}
+<span class='btn btn-inverse btn-small fileinput-button'>
+    <i class='icon-plus icon-white'></i>
+    {% trans "Upload files" %}
+    <input type="file" multiple="multiple" id="upload_field" name='file'/>
+</span>
+<div class="progress hide" id='progress-bar' style='width: 300px'>
+  <div class="bar" style="width: 0%;"></div>
+</div>
+</fieldset
+{% trans "Upload files" %}>
+</form>
+
+{% if files.object_list %}
+    <table class='table striped'>
+        <tr>
+            <th>{% trans "Type" %}</th>
+            <th>{% trans "File" %}</th>
+            <th>{% trans "Link" %}</th>
+        </tr>
+    {% for file in files.object_list %}
+        <tr>
+            <td>{{ file.plain_type }}</td>
+            <td>{{ file.file.name }}</td>
+            <td>{{ file.get_file_link|safe }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% include "pages.html" with page=files %}
+{% else %}
+    <h3>{% trans "No files uploaded" %}</h3>
+{% endif %}
+
+<!-- uploader -->
+<script type="text/javascript">
+    $(function() {
+        csrf = document.cookie.match(/csrftoken=([\w\d]+)/);
+        csrf = (csrf.length) ? csrf[1] : "";
+        $("#upload_field").html5_upload({
+            url: '{% url "files:file-upload" %}',
+            sendBoundary: function(event){
+                return true;
+                // window.FormData || $.browser.mozilla;
+            },
+            extraFields: {
+                'csrfmiddlewaretoken': csrf
+            },
+            fieldName: "file",
+            onStart: function(event, total) {
+                //return true;
+                $('#progress-bar').removeClass('hide').addClass('active');
+                /*
+                start = false;
+                
+                noty({
+                    text: "{% trans "You are trying to upload the file. Do you want to proceed" %}",
+                    type: "confirm",
+                    dismissQueue: true,
+                    layout: 'center',
+                    buttons: [
+                        {
+                            addClass: 'btn btn-small',
+                            text: "{% trans "Yes" %}",
+                            onClick: function($noty){
+                                start = true;
+                                $noty.close();
+                            }
+                            
+                        },
+                        {
+                            addClass: 'btn btn-small',
+                            text: "{% trans "No" %}",
+                            onClick: function($noty){
+                                $noty.close();
+                            }
+                        }
+                    ]
+                });*/
+                //return start;
+                return confirm("{% trans 'Do you want to proceed uploading the file?' %}");
+            },
+            onProgress: function(event, progress, name, number, total) {
+                console.log([progress, number, name, total]);
+            },
+            setName: function(text) {
+                $("#progress_report_name").text(text);
+            },
+            setStatus: function(text) {
+                $("#progress_report_status").text(text);
+            },
+            setProgress: function(val) {
+                $('#progress-bar .bar').css('width', Math.ceil(val*100) + "%");
+            },
+            onFinishOne: function(event, response, name, number, total) {
+                $('#progress-bar').addClass('hide').removeClass('active');
+                noty({
+                    text: "downloaded successfull, reload the page",
+                    type: "success",
+                    dismissQueue: true
+                });
+            },
+            onError: function(event, name, error) {
+                noty({
+                    text: '{% trans "error while uploading file" %} ' + name,
+                    type: 'error',
+                    dismissQueue: true
+                });
+                $('#progress-bar').removeClass('active').addClass('hide');
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}

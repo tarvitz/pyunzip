@@ -358,5 +358,31 @@ class File(IncomeFile):
         verbose_name = _('File')
         verbose_name_plural = _('Files')
 
+class UserFile(models.Model):
+    title = models.CharField(_('title'), max_length=256, blank=True, null=True)
+    file = models.FileField(
+        _('file'), upload_to=lambda s, fn: "user/%s/files/%s" % (str(s.owner.id), fn)
+    )
+    owner = models.ForeignKey(User, related_name='user_file_set')
+    plain_type = models.CharField(
+        _("plain type"), help_text=_("plain type for "),
+        max_length=256, default='octet/stream',
+        blank=True, null=True
+    )
+    actions = [common_delete_action, ]
+
+    def get_file_link(self):
+        return "<a href='%s'>%s</a>" % (
+            os.path.join(settings.MEDIA_URL, self.file.name),
+            self.file.name
+        )
+
+    def __unicode__(self):
+        return self.title or "User %s file" % (self.owner.id, )
+
+    class Meta:
+        verbose_name = _("User file")
+        verbose_name_plural = _("User files")
+
 from apps.files.signals import setup_signals
 setup_signals()

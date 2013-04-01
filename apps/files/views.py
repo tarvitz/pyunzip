@@ -1,5 +1,4 @@
 # Create your views here.
-
 from django.shortcuts import render_to_response
 from apps.core.shortcuts import direct_to_template
 from django.template import RequestContext
@@ -18,12 +17,15 @@ from django.http import HttpResponse,HttpResponseRedirect, Http404
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
-    ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm
+    ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm, \
+    UploadFileForm
 from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment
 from apps.files.models import Image as GalleryImage
 from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
-from apps.core.helpers import can_act, handle_uploaded_file, render_to
+from apps.core.helpers import (
+    can_act, handle_uploaded_file, render_to, render_to_json, get_int_or_zero
+)
 from apps.files.decorators import *
 from apps.core.decorators import update_subscription,update_subscription_new,benchmarking, \
     check_user_fields
@@ -955,3 +957,49 @@ def xhr_get_img_alias(request, alias):
     out = serialize_json({'alias': image.alias})
     response.write(out)
     return response
+
+@render_to_json(content_type='application/json')
+def file_upload(request):
+    form = UploadFileForm(
+        request.POST or None,
+        request.FILES or None,
+        request=request
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {
+                'success': True,
+            }
+    return {
+        'success': False,
+        'form': form
+    }
+
+@render_to('test_upload.html')
+def test_file_upload(request):
+    form = UploadFileForm(
+        request.POST or None,
+        request.FILES or None,
+        request=request
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {
+                'success': True,
+            }
+    return {
+        'form': form
+    }
+
+@login_required
+@render_to('files/user_files.html')
+def files(request, nickname=''):
+    user_files = request.user.files.all()
+    page = get_int_or_zero(request.GET.get('page', 1))
+
+    user_files = paginate(user_files, page, pages=settings.OBJECTS_ON_PAGE)
+    return {
+        'files': user_files
+    }

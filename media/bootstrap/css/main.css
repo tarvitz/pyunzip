@@ -51,7 +51,7 @@ a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
 }
 #main-content .content{
     margin-top: 20px;
-    padding-bottom: 20px;
+    padding: 0px 20px 20px 20px;
 }
 #sidebar div.menu.block{
     margin-top: 15px;

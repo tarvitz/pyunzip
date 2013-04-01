@@ -3,6 +3,7 @@
 import os
 from datetime import datetime, timedelta, date, time
 #from apps.core.forms import CommentForm
+from functools import partial
 from django.http import HttpResponseRedirect, HttpResponse
 from apps.core import get_skin_template
 from apps.core.shortcuts import direct_to_template
@@ -544,7 +545,8 @@ def model_json_encoder(obj, **kwargs):
     elif isinstance(obj, forms.ModelForm) or isinstance(obj, forms.Form):
         _form = {
             'data': obj.data if hasattr(obj, 'data') else None,
-            'instance': obj.instance if hasattr(obj, 'instance') else None,
+            # may catch Does not exists
+            #'instance': obj.instance if hasattr(obj, 'instance') else None,
         }
         if obj.errors:
             _form.update({'errors': obj.errors})
@@ -571,6 +573,16 @@ def get_model_instance_json(Obj, id):
     }, default=model_json_encoder))
     return response
 
+def render_to_json(content_type='application/json', is_mongo=False):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            dt = func(request, *args, **kwargs)
+            response = make_http_response(content_type=content_type)
+            encoder = partial(model_json_encoder, is_mongo=is_mongo)
+            response.write(json.dumps(dt, default=encoder))
+            return response
+        return wrapper
+    return decorator
 
 def render_to(template, allow_xhr=False, content_type='text/html'):
     _content_type = content_type

@@ -3,12 +3,12 @@ from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from apps.files.models import Version, Gallery, File, Image as ModelImage, \
-    Replay, Game
+    Replay, Game, UserFile
 from apps.core import get_safe_message
 from apps.files.helpers import is_zip_file
 from PIL import Image
 from cStringIO import StringIO
-from apps.core.forms import RequestForm
+from apps.core.forms import RequestForm, RequestModelForm
 from apps.core.widgets import TinyMkWidget
 from django.conf import settings
 from extwidgets.widgets import AjaxValidateInput
@@ -404,3 +404,17 @@ class SimpleFilesActionForm(forms.Form):
     #files = forms.ModelMultipleChoiceField(queryset=File.objects)
 
 
+class UploadFileForm(RequestModelForm):
+    def clean(self):
+        if not self.request.user.is_authenticated():
+            msg = _("Not authorized")
+            self._errors['file'] = ErrorList([msg])
+        return self.cleaned_data
+
+    def save(self, commit=True):
+        self.instance.owner = self.request.user
+        super(UploadFileForm, self).save(commit=commit)
+
+    class Meta:
+        model = UserFile
+        fields = ('file', 'title')
