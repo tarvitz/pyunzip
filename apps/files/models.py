@@ -370,12 +370,19 @@ class UserFile(models.Model):
         blank=True, null=True
     )
     actions = [common_delete_action, ]
+    size = models.PositiveIntegerField(_('size'), help_text=_('file size'), default=0)
 
     def get_file_link(self):
+        link = os.path.join(settings.MEDIA_URL, self.file.name)
         return "<a href='%s'>%s</a>" % (
-            os.path.join(settings.MEDIA_URL, self.file.name),
-            self.file.name
+            link, link
         )
+
+    def get_file_name(self):
+        if '/' in self.file.name:
+            return self.file.name[self.file.name.rindex('/') + 1:]
+        return self.file.name
+
     def get_delete_url(self):
         return reverse('files:file-delete', args=(self.pk,))
 

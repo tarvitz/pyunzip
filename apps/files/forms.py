@@ -12,6 +12,8 @@ from apps.core.forms import RequestForm, RequestModelForm
 from apps.core.widgets import TinyMkWidget
 from django.conf import settings
 from extwidgets.widgets import AjaxValidateInput
+from django.db.models import Sum
+from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 
@@ -409,11 +411,23 @@ class UploadFileForm(RequestModelForm):
         if not self.request.user.is_authenticated():
             msg = _("Not authorized")
             self._errors['file'] = ErrorList([msg])
+            return self.cleaned_data
+        size = self.request.user.files.all().aggregate(Sum('size'))
+        size = size.items()[0][1] or 0
+        size += self.files['file'].size
+        if size > settings.USER_FILES_LIMIT:
+            msg = _(
+                "You are exceeded the limits, "
+                "please visit your files page and delete the old ones"
+            )
+            self._errors['file'] = ErrorList([msg])
+            return self.cleaned_data
         return self.cleaned_data
 
     def save(self, commit=True):
         self.instance.owner = self.request.user
         self.instance.plain_type = self.files['file'].content_type
+        self.instance.size = self.files['file'].size
         super(UploadFileForm, self).save(commit=commit)
 
     class Meta:

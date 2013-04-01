@@ -118,15 +118,15 @@ myMarkupSettings = {
                         },
                         onFinishOne: function(event, response, name, number, total) {
                             $('#progress-bar').addClass('hide').removeClass('active');
-                            noty({
-                                text: JS.locale.download_success,
-                                type: "success",
-                                dismissQueue: true,
-                                timeout: 4000
-                            });
                             json = JSON.parse(response);
 
-                            if (json.file){
+                            if (json.file && !json.form){
+                                noty({
+                                    text: JS.locale.download_success,
+                                    type: "success",
+                                    dismissQueue: true,
+                                    timeout: 4000
+                                });
                                 isImage = (json.mime_type.match(/image/)) ? true : false;
                                 klass = (isImage) ? "user image" : "user file";
                                 content = (isImage) ?
@@ -135,6 +135,17 @@ myMarkupSettings = {
 
                                 var txt = content.replace('__klass__', klass).replace('__url__', json.file.url);
                                 textarea.val(textarea.val() + txt);
+                            } else if (json.form){
+                                message = '';
+                                for (el in json.form.errors){
+                                    message += json.form.errors[el].join(", ");
+                                }
+                                noty({
+                                    text: message,
+                                    type: "information",
+                                    layout: 'center',
+                                    dismissQueue: true
+                                });
                             }
 
                         },

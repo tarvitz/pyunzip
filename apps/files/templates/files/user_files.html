@@ -27,7 +27,7 @@
     {% for file in files.object_list %}
         <tr>
             <td>{{ file.plain_type }}</td>
-            <td>{{ file.file.name }}</td>
+            <td>{{ file.get_file_name }}</td>
             <td>{{ file.get_file_link|safe }}</td>
             <td>{{ file.get_file_size|filesizeformat }}</td>
             <td>
