@@ -58,7 +58,6 @@ myMarkupSettings = {
             {name:'Bulleted list', openWith:'(!(* |!|*)!)', className: 'list-bullet'},
             {name:'Numeric list', openWith:'(!(# |!|#)!)', className: 'list-numeric'},
             {separator:'---------------' },
-            {name:'Picture', replaceWith:'![![Source:!:http://]!]([![Alternative text]!])!', className: 'picture'},
             {name:'Link', openWith:'"', closeWith:'[![Title]!]":[![Link:!:http://]!]',
                 //placeHolder:'Your text to link here...',
                 className: 'link'},
@@ -74,7 +73,10 @@ myMarkupSettings = {
                 {name:'Textile', call: 'reloadMarkItUp("textile")'}
             ]},
             {separator:"---------------"},
-            {
+            {name: "Picture", className: 'picture',
+            dropMenu: [
+                {name:'Picture', replaceWith:'![![Source:!:http://]!]([![Alternative text]!])!', className: 'picture'},
+                {
                 name:"Upload file", className: 'upload-file',
                 beforeInsert: function(h){
                     $("#upload-file").detach().remove();
@@ -162,6 +164,7 @@ myMarkupSettings = {
                     }); /* end of html5 upload */
                 }
             }
+            ]}
 
         ]
     } //end textile

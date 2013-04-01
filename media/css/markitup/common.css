@@ -2,29 +2,30 @@
 // markItUp!
 // By Jay Salvat - http://markitup.jaysalvat.com/
 // ------------------------------------------------------------------*/
-textarea.markItUpEditor{ width: 100% !important; }
+textarea.markItUpEditor{ /*width: 100% !important;*/ }
+.comment.form textarea.markItUpEditor{ width: 100%; }
 .message .msg_text .markItUp{ width: 100% !important; }
-.message .msg_text textarea.markItUpEditor{ width: 100% !important;}
+.message .msg_text textarea.markItUpEditor{ width: 92.80% !important}
 .markItUp .bold a {
-	background-image:url(images/bold.png); 
+	background-image:url(images/bold.png);
 }
 .markItUp .italic a {
-	background-image:url(images/italic.png); 
+	background-image:url(images/italic.png);
 }
 .markItUp .underline a {
-	background-image:url(images/underline.png); 
+	background-image:url(images/underline.png);
 }
 .markItUp .stroke a {
-	background-image:url(images/stroke.png); 
+	background-image:url(images/stroke.png);
 }
 .markItUp .list-bullet a {
-	background-image:url(images/list-bullet.png); 
+	background-image:url(images/list-bullet.png);
 }
 .markItUp .list-numeric a {
-	background-image:url(images/list-numeric.png); 
+	background-image:url(images/list-numeric.png);
 }
 .markItUp .list-item a {
-	background-image:url(images/list-item.png); 
+	background-image:url(images/list-item.png);
 }
 
 .markItUp .picture a {
@@ -45,7 +46,7 @@ textarea.markItUpEditor{ width: 100% !important; }
 }
 
 .markItUp .preview a {
-	background-image:url(images/preview.png); 
+	background-image:url(images/preview.png);
 }
 .markItUp .markup a {
 	background-image:url(images/link.png);
