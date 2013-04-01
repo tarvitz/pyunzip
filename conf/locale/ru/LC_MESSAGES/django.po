@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-01 04:23+0400\n"
+"POT-Creation-Date: 2013-04-01 16:55+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -590,7 +590,8 @@ msgstr "Не авторизован"
 msgid ""
 "You are exceeded the limits, please visit your files page and delete the old "
 "ones"
-msgstr "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
+msgstr ""
+"Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
 "странице управления файлами"
 
 #: apps/files/models.py:21 apps/files/models.py:95 apps/files/models.py:358
@@ -821,7 +822,12 @@ msgstr "Нет"
 msgid "Do you want to proceed uploading the file?"
 msgstr "Вы действительно хотите загрузить этот файл?"
 
-#: apps/files/templates/files/user_files.html:121
+#: apps/files/templates/files/user_files.html:116
+#, fuzzy
+msgid "downloaded successfull, reload the page"
+msgstr "успешно загружено"
+
+#: apps/files/templates/files/user_files.html:135
 #: templates/test_upload.html:87 templates/js/locale.ru.html:9
 msgid "error while uploading file"
 msgstr "произошла ошибка при загрузке файла"
@@ -2653,8 +2659,9 @@ msgstr "Такого пользователя нет"
 msgid ""
 "You've exceeded limit of registration, please wait 10 minutes and try again, "
 "thank you"
-msgstr "Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 минут и"
-" попробуйте снова"
+msgstr ""
+"Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 минут "
+"и попробуйте снова"
 
 #: apps/wh/views.py:1070
 msgid "Your password requested to change"
@@ -2734,6 +2741,10 @@ msgstr ""
 #: templates/js/locale.ru.html:10
 msgid "downloaded successfull"
 msgstr "успешно загружено"
+
+#: templates/js/locale.ru.html:11
+msgid "please enter how your link would be called"
+msgstr "пожалуйста, введите имя для вашей ссылки"
 
 #: templates/static/currently_unavailable.html:4
 msgid "Currently unavailable"

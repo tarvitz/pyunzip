@@ -135,9 +135,13 @@ myMarkupSettings = {
                                 klass = (isImage) ? "user image" : "user file";
                                 content = (isImage) ?
                                     "!(__klass__)__url__!\n" :
-                                    "\"(__klass__)the link\":__url__\n";
+                                    "\"(__klass__)__the__link__\":__url__\n";
 
                                 var txt = content.replace('__klass__', klass).replace('__url__', json.file.url);
+                                if (txt.match(/__the__link__/)){
+                                    link_name = prompt(JS.locale.enter_link_text) || "the link";
+                                    txt = txt.replace('__the__link__', link_name);
+                                }
                                 textarea.val(textarea.val() + txt);
                             } else if (json.form){
                                 message = '';
