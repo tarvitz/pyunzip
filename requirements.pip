@@ -1,4 +1,6 @@
-Django==1.4
+BeautifulSoup==3.2.1
+Django==1.5.1
+PIL==1.1.7
 South==0.7.6
 amqp==1.0.6
 anyjson==0.3.3
@@ -8,7 +10,11 @@ django-celery==2.3.3
 django-extwidgets==0.1
 django-grappelli==2.4.3
 django-picklefield==0.3.0
+ipython==0.13.1
 kombu==2.5.4
+psycopg2==2.4.6
 python-dateutil==1.5
+simplejson==3.0.7
 six==1.2.0
+sorl-thumbnail==11.12
 wsgiref==0.1.2
