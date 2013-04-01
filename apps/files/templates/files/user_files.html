@@ -16,6 +16,10 @@
 </form>
 
 {% if files.object_list %}
+    <div class='information'>
+        <span class='limit'>{% trans "Your limit" %} {{ gs.USER_FILES_LIMIT|filesizeformat }}</span> |
+        <span class='used'>{% trans "You used" context "You used file space" %}: {{ space_used|filesizeformat }}</span>
+    </div>
     <table class='table striped'>
         <tr>
             <th>{% trans "Type" %}</th>
@@ -64,7 +68,7 @@
                 $('#progress-bar').removeClass('hide').addClass('active');
                 /*
                 start = false;
-                
+
                 noty({
                     text: "{% trans "You are trying to upload the file. Do you want to proceed" %}",
                     type: "confirm",
@@ -78,7 +82,7 @@
                                 start = true;
                                 $noty.close();
                             }
-                            
+
                         },
                         {
                             addClass: 'btn btn-small',
@@ -106,11 +110,25 @@
             },
             onFinishOne: function(event, response, name, number, total) {
                 $('#progress-bar').addClass('hide').removeClass('active');
-                noty({
-                    text: "downloaded successfull, reload the page",
-                    type: "success",
-                    dismissQueue: true
-                });
+                js = JSON.parse(response);
+                if (!js.form){
+                    noty({
+                        text: "{% trans 'downloaded successfull, reload the page' %}",
+                        type: "success",
+                        dismissQueue: true
+                    });
+                } else if (js.form){
+                    message = '';
+                    for (el in js.form.errors){
+                        message += js.form.errors[el].join(", ");
+                    }
+                    noty({
+                        text: message,
+                        type: "information",
+                        layout: 'center',
+                        dismissQueue: true
+                    });
+                }
             },
             onError: function(event, name, error) {
                 noty({

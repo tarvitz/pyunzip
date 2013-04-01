@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-01 01:40+0400\n"
+"POT-Creation-Date: 2013-04-01 04:23+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -87,13 +87,13 @@ msgstr "Посты"
 msgid "core"
 msgstr "ядро"
 
-#: apps/core/actions.py:17 apps/files/actions.py:7 apps/files/forms.py:403
-#: apps/files/templates/files/user_files.html:37
+#: apps/core/actions.py:17 apps/files/actions.py:7 apps/files/forms.py:405
+#: apps/files/templates/files/user_files.html:41
 #: apps/pybb/templates/pybb/edit_profile.html:31
 msgid "delete"
 msgstr "удалить"
 
-#: apps/core/forms.py:105 apps/files/forms.py:385
+#: apps/core/forms.py:105 apps/files/forms.py:387
 msgid "You should write something"
 msgstr "Вы должны что-нибудь написать"
 
@@ -448,7 +448,7 @@ msgstr "Дополнительный"
 msgid "Stuff"
 msgstr "Стафф"
 
-#: apps/files/forms.py:91 apps/files/forms.py:111
+#: apps/files/forms.py:93 apps/files/forms.py:113
 msgid ""
 "You should use the same number of players as the number you've passed via "
 "type or layout"
@@ -456,58 +456,58 @@ msgstr ""
 "Вы должны ввести тоже количество игроков что и количество, которое вы ввели "
 "в типе или схеме"
 
-#: apps/files/forms.py:95
+#: apps/files/forms.py:97
 msgid ""
 "You can choose only team1 or team2 as no more team are exist in this type"
 msgstr ""
 "Вы можете использовать только команда1 или комманда2, так как других команд "
 "не присутствуют в указанном типе"
 
-#: apps/files/forms.py:99 apps/files/forms.py:119
+#: apps/files/forms.py:101 apps/files/forms.py:121
 #, python-format
 msgid "You can not pass more than '%i' races, less is available"
 msgstr "Вы не можете ввести более '%i' рас, менее возможно"
 
-#: apps/files/forms.py:104
+#: apps/files/forms.py:106
 msgid "Required"
 msgstr "Обязательное поле"
 
-#: apps/files/forms.py:115
+#: apps/files/forms.py:117
 #, python-format
 msgid "You can not choose team which is about '%i' number"
 msgstr "Вы не можете выбрать команду чей номер '%i'"
 
-#: apps/files/forms.py:155
+#: apps/files/forms.py:157
 msgid "set"
 msgstr "сет"
 
-#: apps/files/forms.py:156
+#: apps/files/forms.py:158
 msgid "non standard"
 msgstr "не стандартный"
 
-#: apps/files/forms.py:201
+#: apps/files/forms.py:203
 #, python-format
 msgid "You should type exact %i nicks separated with commas arranged by team."
 msgstr ""
 "Вы должны указать точное число %i ников, разделенных запятой упорядоченных "
 "по команде"
 
-#: apps/files/forms.py:207
+#: apps/files/forms.py:209
 msgid "You should choose team 1 or team 2 as winners"
 msgstr "Вы должны выбрать команду 1 или команду 2 в качестве победителя"
 
-#: apps/files/forms.py:212
+#: apps/files/forms.py:214
 msgid "This field should be filled with layout"
 msgstr "Данное пое должно быть заполнено схемой"
 
-#: apps/files/forms.py:217
+#: apps/files/forms.py:219
 msgid ""
 "You should choose team which is lesser one you've chosen, for example team 1"
 msgstr ""
 "Вы должны выбрать команду чей номер меньше выбранного вами, например команда "
 "1"
 
-#: apps/files/forms.py:226
+#: apps/files/forms.py:228
 msgid ""
 "The number of nicks is greater than the number of players. The should be "
 "equal"
@@ -515,22 +515,22 @@ msgstr ""
 "Количество ников больше чем количество игроков. Количество ников должно "
 "совпадать с количеством игроков"
 
-#: apps/files/forms.py:231
+#: apps/files/forms.py:233
 msgid ""
 "The number of players is greater then the number of nicks. The should be "
 "equal"
 msgstr "Количество игроков больше чем количество ников. Они должны совпадать"
 
-#: apps/files/forms.py:244
+#: apps/files/forms.py:246
 msgid "Field should contain string with number of player separated with vs"
 msgstr ""
 "Поле должно содержать строку с количеством игроков, разделенных через vs"
 
-#: apps/files/forms.py:248
+#: apps/files/forms.py:250
 msgid "It seems string value or null stands before or after 'vs' delimiter"
 msgstr "Кажется строковое значение или null стоит перед vs разделителем"
 
-#: apps/files/forms.py:250
+#: apps/files/forms.py:252
 #, python-format
 msgid ""
 "The game does not support more than 8 players, and your amount of them "
@@ -538,24 +538,24 @@ msgid ""
 msgstr ""
 "Игра не поддерживает более 8 игрков, количество указанное вами равно: %i"
 
-#: apps/files/forms.py:268
+#: apps/files/forms.py:270
 msgid ""
 "The field should be at least includes one race, for example space marines"
 msgstr "Поле должно включать как минимум одну расу, например космодесант"
 
-#: apps/files/forms.py:297
+#: apps/files/forms.py:299
 msgid "Replay field should be set"
 msgstr "Поле реплея должно быть установлено"
 
-#: apps/files/forms.py:354
+#: apps/files/forms.py:356
 msgid "Uploaded file should not be larger than 1Mb size"
 msgstr "Загружаемый файл не должен превышать размер в 1 Мегабайт"
 
-#: apps/files/forms.py:361
+#: apps/files/forms.py:363
 msgid "Jpeg, gif, png, jpg image only"
 msgstr "Только jpeg, gif, png, jpg изрбражения"
 
-#: apps/files/forms.py:366
+#: apps/files/forms.py:368
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -563,32 +563,38 @@ msgstr ""
 "Зашруженный вами файл был поврежден или не является изображением. Загрузите "
 "правильное изображение"
 
-#: apps/files/forms.py:369
+#: apps/files/forms.py:371
 msgid "Uploaded image should not be larger than 2048x1024 pixels"
 msgstr ""
 "Загружаемое изображение не должно быть более 2048x1024 пикселей по размеру"
 
-#: apps/files/forms.py:375
+#: apps/files/forms.py:377
 msgid "Field should't be clean, if you have no gallery yet, please create one"
 msgstr ""
 "Поле не должно быть пустым, если у вас нет галереи еще, пожалуйста, создайте "
 "её"
 
-#: apps/files/forms.py:390
+#: apps/files/forms.py:392
 msgid "You should write more than 10 words for a comment"
 msgstr "Вы должны написать как минимум 10 слов для комментария"
 
-#: apps/files/forms.py:399
+#: apps/files/forms.py:401
 msgid "The length of gallery name was exceeded"
 msgstr "Длина имени галереи превышена"
 
-#: apps/files/forms.py:410
-#, fuzzy
+#: apps/files/forms.py:412
 msgid "Not authorized"
-msgstr "автор"
+msgstr "Не авторизован"
+
+#: apps/files/forms.py:420
+msgid ""
+"You are exceeded the limits, please visit your files page and delete the old "
+"ones"
+msgstr "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
+"странице управления файлами"
 
 #: apps/files/models.py:21 apps/files/models.py:95 apps/files/models.py:358
-#: apps/files/templates/files/user_files.html:22
+#: apps/files/templates/files/user_files.html:26
 msgid "File"
 msgstr "Файл"
 
@@ -649,7 +655,7 @@ msgid "Team"
 msgstr "Команда"
 
 #: apps/files/models.py:88 apps/files/models.py:263
-#: apps/files/templates/files/user_files.html:21 apps/news/models.py:205
+#: apps/files/templates/files/user_files.html:25 apps/news/models.py:205
 #: apps/wh/models.py:173
 msgid "Type"
 msgstr "Тип"
@@ -743,12 +749,21 @@ msgstr ""
 msgid "plain type for "
 msgstr ""
 
-#: apps/files/models.py:399
+#: apps/files/models.py:373
+msgid "size"
+msgstr ""
+
+#: apps/files/models.py:373
+#, fuzzy
+msgid "file size"
+msgstr "файлы"
+
+#: apps/files/models.py:406
 #, fuzzy
 msgid "User file"
 msgstr "IP пользователя"
 
-#: apps/files/models.py:400
+#: apps/files/models.py:407
 #, fuzzy
 msgid "User files"
 msgstr "файлы"
@@ -759,45 +774,54 @@ msgstr "файлы"
 msgid "Upload files"
 msgstr "Загрузить файлы"
 
-#: apps/files/templates/files/user_files.html:23
+#: apps/files/templates/files/user_files.html:20
+msgid "Your limit"
+msgstr ""
+
+#: apps/files/templates/files/user_files.html:21
+msgctxt "You used file space"
+msgid "You used"
+msgstr ""
+
+#: apps/files/templates/files/user_files.html:27
 msgid "Link"
 msgstr "Ссылка"
 
-#: apps/files/templates/files/user_files.html:24
+#: apps/files/templates/files/user_files.html:28
 msgid "Size"
 msgstr "Размер"
 
-#: apps/files/templates/files/user_files.html:25
+#: apps/files/templates/files/user_files.html:29
 msgid "Actions"
 msgstr "Действия"
 
-#: apps/files/templates/files/user_files.html:35
+#: apps/files/templates/files/user_files.html:39
 msgid "Do you want to delete this file?"
 msgstr "Вы действительно хотите удалить этот файл?"
 
-#: apps/files/templates/files/user_files.html:44
+#: apps/files/templates/files/user_files.html:48
 msgid "No files uploaded"
 msgstr "Ни одного файла не загружено"
 
-#: apps/files/templates/files/user_files.html:69 templates/test_upload.html:39
+#: apps/files/templates/files/user_files.html:73 templates/test_upload.html:39
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
-#: apps/files/templates/files/user_files.html:76 templates/base.html:233
+#: apps/files/templates/files/user_files.html:80 templates/base.html:233
 #: templates/test_upload.html:46
 msgid "Yes"
 msgstr "Да"
 
-#: apps/files/templates/files/user_files.html:85 templates/test_upload.html:55
+#: apps/files/templates/files/user_files.html:89 templates/test_upload.html:55
 msgid "No"
 msgstr "Нет"
 
-#: apps/files/templates/files/user_files.html:93 templates/test_upload.html:63
+#: apps/files/templates/files/user_files.html:97 templates/test_upload.html:63
 #: templates/js/locale.ru.html:8
 msgid "Do you want to proceed uploading the file?"
 msgstr "Вы действительно хотите загрузить этот файл?"
 
-#: apps/files/templates/files/user_files.html:117
+#: apps/files/templates/files/user_files.html:121
 #: templates/test_upload.html:87 templates/js/locale.ru.html:9
 msgid "error while uploading file"
 msgstr "произошла ошибка при загрузке файла"
@@ -2629,11 +2653,12 @@ msgstr "Такого пользователя нет"
 msgid ""
 "You've exceeded limit of registration, please wait 10 minutes and try again, "
 "thank you"
-msgstr ""
+msgstr "Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 минут и"
+" попробуйте снова"
 
 #: apps/wh/views.py:1070
 msgid "Your password requested to change"
-msgstr ""
+msgstr "Поступил запрос на изменение вашего пароля"
 
 #: settings/dist.py:34
 msgid "English"

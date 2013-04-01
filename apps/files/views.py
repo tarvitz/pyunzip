@@ -3,7 +3,7 @@ from django.shortcuts import render_to_response
 from apps.core.shortcuts import direct_to_template
 from django.template import RequestContext
 from django.contrib import auth
-from django.db.models import get_model,Q
+from django.db.models import get_model,Q, Sum
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
@@ -1002,8 +1002,12 @@ def files(request, nickname=''):
     page = get_int_or_zero(request.GET.get('page', 1))
 
     user_files = paginate(user_files, page, pages=settings.OBJECTS_ON_PAGE)
+    space_used = request.user.files.aggregate(Sum('size'))
+    space_used = space_used.items()[0][1] or 0
+
     return {
-        'files': user_files
+        'files': user_files,
+        'space_used': space_used
     }
 
 @login_required
