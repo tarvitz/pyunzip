@@ -27,7 +27,7 @@
                     <li><a rel='twipsy' href='{% url "wh:users" %}' title='Обитатели ресурса'>Участники</a></li>
                     <li><a rel='twipsy' href='{% url "karma:self" %}' title='Сила вашей положительности или отрицательности в глазах других обитателей ресурса'>Карма</a>
                     <li><a rel='twipsy' href='{% url "tabletop:rosters" %}' title='Ваши расписки армий по настолке'>Ростеры</a>
-                        <a rel='twipsy' href='{% url "tabletop:roster-add" %}'>[+]</a></li>
+                        <a rel='twipsy' href='{% url "tabletop:roster-add" %}' data-title='Добавить ростер'>[<i class='icon-plus icon-white'></i>]</a></li>
                     <li><a rel='twipsy' href='{% url "news:news-user" %}'>Мои новости</a></li>
                     {% if gs.EXPEREMENTAL %}
                     <li><a rel='twipsy' href='{% url "files:files" %}'>Мои файлы</a></li>

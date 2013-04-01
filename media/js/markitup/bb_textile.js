@@ -77,6 +77,7 @@ myMarkupSettings = {
             {
                 name:"Upload file", className: 'upload-file',
                 beforeInsert: function(h){
+                    $("#upload-file").detach().remove();
                     tmpl = $.template('#uploadFileTemplate');
                     blk = $.tmpl(tmpl, {}).insertBefore($(h.textarea));
                     $(blk).find('#id_file').click(); /* invoke click on filefield */
@@ -119,6 +120,7 @@ myMarkupSettings = {
                         onFinishOne: function(event, response, name, number, total) {
                             $('#progress-bar').addClass('hide').removeClass('active');
                             json = JSON.parse(response);
+                            $('#progress-bar .bar').css('width', "0%");
 
                             if (json.file && !json.form){
                                 noty({
