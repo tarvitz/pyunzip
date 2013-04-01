@@ -34,7 +34,7 @@ LANGUAGES = (
     ('en', _('English')),
 )
 LOCALE_PATHS = (
-    rel_path('conf/locale')
+    rel_path('conf/locale'),
 )
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
