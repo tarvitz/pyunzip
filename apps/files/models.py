@@ -375,7 +375,8 @@ class UserFile(models.Model):
     def get_file_link(self):
         link = os.path.join(settings.MEDIA_URL, self.file.name)
         return "<a href='%s'>%s</a>" % (
-            link, link
+            link,
+            link[:40] + ".." if len(link) > 40 else link
         )
 
     def get_file_name(self):
