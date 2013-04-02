@@ -374,14 +374,17 @@ class UserFile(models.Model):
 
     def get_file_link(self):
         link = os.path.join(settings.MEDIA_URL, self.file.name)
+        name = link[:40] + " ..." if len(link) > 40 else link
         return "<a href='%s'>%s</a>" % (
             link,
-            link[:40] + ".." if len(link) > 40 else link
+            name
         )
 
     def get_file_name(self):
         if '/' in self.file.name:
-            return self.file.name[self.file.name.rindex('/') + 1:]
+            name = self.file.name[self.file.name.rindex('/') + 1:]
+            name = name[:40] + " ..." if len(name) > 40 else name
+            return name
         return self.file.name
 
     def get_delete_url(self):
