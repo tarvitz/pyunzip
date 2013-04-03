@@ -746,6 +746,7 @@ def show_raw_image(request, alias, thumbnail=False):
     response.write(f)
     return response
 
+"""
 @csrf_protect
 @login_required
 @check_user_fields({'is_staff': True})
@@ -773,6 +774,7 @@ def show_files(request):
         'form': formclass},
         context_instance=RequestContext(request,
             processors=[pages]))
+"""
 
 def make_fake_files(request,model='',field=''):
     model = get_model(*model.split('.'))
