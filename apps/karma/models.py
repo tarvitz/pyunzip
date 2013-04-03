@@ -12,7 +12,7 @@ from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Karma(models.Model):
-    comment = models.CharField(_('Comment'),max_length=100,blank=True)
+    comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
     date = models.DateTimeField(_('Date'))
     user = models.ForeignKey(User,related_name='owner')
