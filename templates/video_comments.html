@@ -1,5 +1,5 @@
 <video class="video-js vjs-default-skin" controls preload="none" width="640" height="320"
   poster="/media/images/video-preview.png"
   data-setup="{}">
-  <source src="{{ video_text }}" type='{{ video_type|default_if_none:"video/mp4" }}' />
+  <source src="{{ video_text|safe }}" type='{{ video_type|default:"video/mp4" }}' />
 </video>
