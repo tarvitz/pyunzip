@@ -651,12 +651,14 @@ def post_markup_filter(string):
     r = re.compile(r'\((?P<tag>\w+)\)\[(?P<text>.*?)\]', re.M|re.I|re.S)
     result = r.findall(string)
     for (tag, text) in result:
-        if tag not in ('spoiler', 'off'):
+        if tag not in ('spoiler', 'off', 'video'):
             continue
         if tag == 'spoiler':
             html = render_to_string('s_comments.html', {'spoiler_text': text})
         elif tag == 'off':
             html = render_to_string('off_comments.html', {'offtopic_text': text})
+        elif tag == 'video':
+            html = render_to_string('video_comments.html', {'video_text': text})
         html = re.sub(r'\n+', '', html)
         string = string.replace('(%s)[%s]' % (tag, text), html)
     # quote
