@@ -658,7 +658,14 @@ def post_markup_filter(string):
         elif tag == 'off':
             html = render_to_string('off_comments.html', {'offtopic_text': text})
         elif tag == 'video':
-            html = render_to_string('video_comments.html', {'video_text': text})
+            ident = text[text.rindex('/') + 1:text.rindex('.')]
+            html = render_to_string(
+                'video_comments.html',
+                {
+                    'video_text': text,
+                    'ident': ident
+                }
+            )
         html = re.sub(r'\n+', '', html)
         string = string.replace('(%s)[%s]' % (tag, text), html)
     # quote
