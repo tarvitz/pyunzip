@@ -659,6 +659,7 @@ def post_markup_filter(string):
             html = render_to_string('off_comments.html', {'offtopic_text': text})
         elif tag == 'video':
             ident = text[text.rindex('/') + 1:text.rindex('.')]
+            ident = re.sub(r'\s+', '_', ident)
             html = render_to_string(
                 'video_comments.html',
                 {
