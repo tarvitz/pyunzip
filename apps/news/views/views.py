@@ -243,7 +243,7 @@ def action_article(request, id=None, action=None):
                 app_label=article._meta.app_label,
                 model=article._meta.module_name
             )
-            announcement = Announcement.objects.create(
+            announcement = Announcement.objects.get_or_create(
                 content_type=ct,
                 object_pk=article.id,
             )
