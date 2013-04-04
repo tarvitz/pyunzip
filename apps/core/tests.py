@@ -220,7 +220,6 @@ class CodeTest(TestCase):
         url = reverse('core:comment-edit', args=(comment.id, ))
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
-        open('file.html', 'w').write(response.content)
         comment = Comment.objects.get(id=comment.id)
         self.assertEqual(comment.comment, post['comment'])
 
@@ -311,7 +310,6 @@ class CodeTest(TestCase):
         }
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
-        open('file.html', 'w').write(response.content)
         comment = Comment.objects.get(id=comment.id)
         self.assertEqual(comment.comment, post['comment'])
 
