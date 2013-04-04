@@ -5,6 +5,7 @@ from apps.core.helpers import (
 ) 
 from django.core.urlresolvers import reverse
 from apps.news.models import News
+from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 
@@ -36,6 +37,20 @@ class CodeTest(TestCase):
                     'value': value
                 })
         return messages
+
+    def create_comment(self):
+        n = News.objects.all()[0]
+        ct = ContentType.objects.get(
+            app_label=n._meta.app_label,
+            model=n._meta.module_name
+        )
+        user = User.objects.get(username='user')
+        comment = Comment(
+            user=user, comment='user comment',
+            content_type=ct, object_pk=n.id, site_id=1
+        )
+        comment.save()
+        return comment
 
     """ testing helpers module """
     def test_urls(self):
@@ -195,28 +210,110 @@ class CodeTest(TestCase):
         self.assertEqual(last_comment.user.username, 'user')
 
     def test_admin_edit_comment(self):
-        pass
+        self.client.login(username='admin', password='123456')
+        comment = self.create_comment()
+        post = {
+            'comment': 'Admin edit and on',
+            'content_type': comment.content_type.pk,
+            'object_pk': comment.object_pk
+        }
+        url = reverse('core:comment-edit', args=(comment.id, ))
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        open('file.html', 'w').write(response.content)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.comment, post['comment'])
+
 
     def test_admin_purge_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='admin', password='123456')
+        url = reverse('core:comment-purge', args=(comment.id, 'approve'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.filter(id=comment.id)
+        self.assertEqual(len(comment), 0)
+
 
     def test_admin_hide_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='admin', password='123456')
+        url = reverse('core:comment-del-restore', args=(comment.id, 'delete'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.is_removed, True)
+        url = reverse('core:comment-del-restore', args=(comment.id, 'restore'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.is_removed, False)
 
     def test_admin_quick_edit_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='admin', password='123456')
+        url = reverse('core:comment-edit-ajax', args=(comment.id, ))
+        post = {
+            'comment': 'new comment edit',
+            'content_type': comment.content_type.pk,
+            'object_pk': comment.object_pk
+        }
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.comment, post['comment'])
 
     def test_self_quick_edit_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='admin', password='123456')
+        url = reverse('core:comment-edit-ajax', args=(comment.id, ))
+        post = {
+            'comment': 'new comment edit',
+            'content_type': comment.content_type.pk,
+            'object_pk': comment.object_pk
+        }
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.comment, post['comment'])
 
     def test_self_hide_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='user', password='123456')
+        url = reverse('core:comment-del-restore', args=(comment.id, 'delete'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.is_removed, True)
+        url = reverse('core:comment-del-restore', args=(comment.id, 'restore'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.is_removed, False)
 
     def test_self_purge_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='admin', password='123456')
+        url = reverse('core:comment-purge', args=(comment.id, 'approve'))
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        comment = Comment.objects.filter(id=comment.id)
+        self.assertEqual(len(comment), 0)
 
     def test_self_edit_comment(self):
-        pass
+        comment = self.create_comment()
+        self.client.login(username='user', password='123456')
+        url = reverse('core:comment-edit', args=(comment.id, ))
+        post = {
+            'comment': 'new comment 111',
+            'content_type': comment.content_type.pk,
+            'object_pk': comment.object_pk
+        }
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        open('file.html', 'w').write(response.content)
+        comment = Comment.objects.get(id=comment.id)
+        self.assertEqual(comment.comment, post['comment'])
 
     def test_css_edit(self):
         pass
