@@ -19,7 +19,9 @@ class CheckForUpdates(Node):
             context[self.varname] = False 
             return ''
         ct = get_content_type(obj) #breaks content_type retrieving 
-        exists = get_object_or_none(SeenObject, content_type=ct, object_pk=obj.pk,user=user)   
+        exists = get_object_or_none(
+            SeenObject, content_type=ct, object_pk=obj.pk,user=user
+        )
         if exists:
             context[self.varname] = False
         else:

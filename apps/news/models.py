@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes import generic
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
 from utils.models import copy_fields
@@ -75,6 +76,9 @@ class AbstractNews(models.Model):
         default='queued',
         max_length=32,
     )
+    seen_objects = generic.GenericRelation(
+        'tracker.SeenObject', object_id_field='object_pk'
+    )
 
     #wise alias ;) onto head_content
     get_title = lambda self: self.title
@@ -92,6 +96,9 @@ class AbstractNews(models.Model):
         if '(cut)' in self.content:
             return self.content[:self.content.index('(cut)')]
         return self.content
+
+    def get_seen_users(self):
+        return [i.user for i in self.seen_objects.all()]
 
     @property
     def head_content(self):

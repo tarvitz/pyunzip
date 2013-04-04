@@ -2,23 +2,25 @@
 #
 from apps.tracker.models import SeenObject
 from django.contrib.contenttypes.models import ContentType
-from apps.core.helpers import get_content_type,get_content_type_or_none
+from apps.core.helpers import get_content_type,get_content_type_or_none, get_object_or_None
 
 def new_comment(func):
     def wrapper(*args,**kwargs):
         request = args[0]
         if request.method == 'POST':
-            app_n_model = request.POST.get('app_n_model','')
-            obj_id = request.POST.get('obj_id','')
-            if app_n_model and obj_id:
-                ct = get_content_type_or_none(app_n_model)
+            content_type_id = request.POST.get('content_type', '')
+            object_pk = request.POST.get('object_pk', '')
+            if all((content_type_id, object_pk)):
+                ct = get_object_or_None(ContentType, id=content_type_id)
                 try:
-                    obj = ct.model_class().objects.get(pk=str(obj_id))
+                    obj = ct.model_class().objects.get(pk=str(object_pk))
                 except:
                     return func(*args,**kwargs)
-                SeenObject.objects.filter(content_type=ct,object_pk=str(obj_id)).delete()
-                so = SeenObject(content_type=ct,object_pk=str(obj_id),user=request.user)
-                so.save()
+                SeenObject.objects.filter(
+                    content_type=ct, object_pk=str(object_pk)
+                ).exclude(user=request.user).delete()
+                #so = SeenObject(content_type=ct,object_pk=str(object_pk),user=request.user)
+                #so.save()
                 return func(*args,**kwargs)
         else:
             return func(*args,**kwargs)
