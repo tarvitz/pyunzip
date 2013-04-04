@@ -11,6 +11,7 @@ from apps.files.helpers import save_uploaded_file as save_file
 from apps.core import make_links_from_pages as make_links
 from apps.core import pages, get_skin_template
 from apps.core.views import action_approve_simple
+from apps.core.models import Announcement
 #deprecated
 #from django.views.generic.simple import direct_to_template
 #overriding
@@ -184,7 +185,6 @@ def article_action(request, id=None, action=None):
 @render_to('news/add.html')
 def add_article(request, id=None, edit_flag=False):
     can_edit =  request.user.has_perm('news.edit_news') #if smb can edit news
-
     instance = get_object_or_404(News, pk=id) if edit_flag else None
 
     form = ArticleModelForm(
@@ -238,6 +238,18 @@ def action_article(request, id=None, action=None):
             article = form.save(commit=False)
             article.owner = request.user
             article.save()
+            # creating announcement
+            ct = ContentType.objects.get(
+                app_label=article._meta.app_label,
+                model=article._meta.module_name
+            )
+            announcement = Announcement.objects.create(
+                content_type=ct,
+                object_pk=article.id,
+            )
+            announcement.notified_users.add(request.user)
+            announcement.save()
+
             return {
                 'redirect': reverse('news:article', args=(form.instance.id, ))
             }

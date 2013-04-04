@@ -5,6 +5,8 @@ from apps.news.models import Category, News
 from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
+from apps.core.models import Announcement
+from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_object_or_None
 
 
@@ -146,10 +148,11 @@ class JustTest(TestCase):
             'syntax': 'textile',
             'url': '',
         }
-
+        url = reverse('news:article-add')
         response = self.client.post(
-            reverse('news:article-add'), post, follow=True
+            url, post, follow=True
         )
+        #print "\ntesting: %s\n" % url
 
         self.assertEqual(response.status_code, 200)
         new_count = News.objects.count()
@@ -163,6 +166,16 @@ class JustTest(TestCase):
         for (key, value) in post.items():
             self.assertEqual(getattr(article, key), value)
         self.assertEqual(article.approved, False)
+
+        ct = ContentType.objects.get(
+            app_label=article._meta.app_label,
+            model=article._meta.module_name
+        )
+
+        announcement = Announcement.objects.filter(
+            object_pk=article.pk, content_type=ct
+        )
+        self.assertEqual(len(announcement), 1)
 
     def test_news_post_super_user(self):
         """ superuser posts article with approval """
