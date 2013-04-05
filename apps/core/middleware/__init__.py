@@ -44,6 +44,9 @@ class TestMiddleware(object):
 
 class UserActivityMiddleware(object):
     def process_request(self, request):
+        if request.user.is_autheticated():
+            request.META['HTTP_USER_NICKNAME'] = request.user.nickname or "None"
+
         u = request.user
         #if registered user ;)
         if u.is_authenticated():
