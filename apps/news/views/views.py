@@ -246,7 +246,7 @@ def action_article(request, id=None, action=None):
             announcement = Announcement.objects.get_or_create(
                 content_type=ct,
                 object_pk=article.id,
-            )
+            )[0]
             announcement.notified_users.add(request.user)
             announcement.save()
 
