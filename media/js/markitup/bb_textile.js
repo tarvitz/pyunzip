@@ -73,6 +73,10 @@ myMarkupSettings = {
                 {name:'Textile', call: 'reloadMarkItUp("textile")'}
             ]},
             {separator:"---------------"},
+            {name: "Spoiler", className: 'spoiler', openWith:'(spoiler)[]', closeWith: ']'},
+            {name: "Offtopic", className: 'off', openWith:'(off)[', closeWith: ']'},
+            {name: "Video", className: 'video', openWith:'(video)[]', closeWith: ']'},
+            {separator:"---------------"},
             {name: "Picture", className: 'picture',
             dropMenu: [
                 {name:'Picture', replaceWith:'![![Source:!:http://]!]([![Alternative text]!])!', className: 'picture'},

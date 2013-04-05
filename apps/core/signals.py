@@ -10,7 +10,8 @@ def announcement_saved(instance, **kwargs):
 #comment object has user attr that contains user object, passing it as
 #current user to prevent self-mail-messaging
 def comment_saved(instance, **kwargs):
-    send_notification(instance,kwargs={'user_field':'user','content_field':'get_content'})
+    #send_notification(instance,kwargs={'user_field':'user','content_field':'get_content'})
+    pass
 
 def setup_signals():
     #post_save.connect(announcement_saved,sender=Announcement)
