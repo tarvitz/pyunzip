@@ -9,7 +9,7 @@ from django.contrib import auth
 from datetime import datetime
 from datetime import timedelta
 from apps.core.settings import SETTINGS,ANONYMOUS_SETTINGS
-from apps.core.helpers import get_object_or_none
+from apps.core.helpers import get_object_or_none, safe_ret
 from apps.core.decorators import null
 
 class SetRemoteAddrFromForwardedFor(object):
@@ -44,6 +44,9 @@ class TestMiddleware(object):
 
 class UserActivityMiddleware(object):
     def process_request(self, request):
+        #if request.user.is_autheticated():
+        request.META['HTTP_USER_NICKNAME'] = safe_ret(request, 'user.nickname') or "None"
+
         u = request.user
         #if registered user ;)
         if u.is_authenticated():
