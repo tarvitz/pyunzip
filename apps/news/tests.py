@@ -132,9 +132,8 @@ class JustTest(TestCase):
         self.assertNotEqual(count + 1, new_count)
 
     def test_news_post_user(self):
-        """
-        user posts article without approval
-        """
+        # user posts article without approval
+
         self.client.login(username='user', password='123456')
         user = User.objects.get(username='user')
 
@@ -178,7 +177,8 @@ class JustTest(TestCase):
         self.assertEqual(len(announcement), 1)
 
     def test_news_post_super_user(self):
-        """ superuser posts article with approval """
+        # superuser posts article with approval
+
         username = 'admin'
         self.client.login(username=username, password='123456')
         user = User.objects.get(username=username)
@@ -209,9 +209,8 @@ class JustTest(TestCase):
         self.assertEqual(article.approved, True)
 
     def test_news_user_actions(self):
-        """
-        user can not approve or disapprove articles
-        """
+        # user can not approve or disapprove articles
+
         username = 'user'
         self.client.login(username=username, password='123456')
         count = News.objects.count()
@@ -244,9 +243,8 @@ class JustTest(TestCase):
         self.assertNotEqual(article.approved, False)
 
     def test_admin_user_actions(self):
-        """
-        admin can approve or disapprove articles
-        """
+        # admin can approve or disapprove articles
+
         username = 'admin'
         self.client.login(username=username, password='123456')
         count = News.objects.count()
@@ -371,3 +369,32 @@ class JustTest(TestCase):
         self.assertEqual(response.status_code, 200)
         exists = get_object_or_None(News, pk=n.id)
         self.assertEqual(exists, None)
+
+
+    def test_article_set_status(self):
+        post = {
+            'status': 'revision',
+            'resend': False,
+            'reason': "please make it nice"
+        }
+        # nobody except admin could set news status
+        # testing anonymous
+        n = News.objects.filter(approved=False)[0]
+        url = reverse('news:article-status-set', args=(n.id, ))
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "login required")
+        # checking for user
+        logged = self.client.login(username='user', password='123456')
+        self.assertEqual(logged, True)
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        n = News.objects.get(id=n.id)
+        self.assertNotEqual(n.reason, post['reason'])
+        # checking for admin
+        logged = self.client.login(username='admin', password='123456')
+        self.assertEqual(logged, True)
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        n = News.objects.get(id=n.id)
+        self.assertEqual(n.reason, post['reason'])

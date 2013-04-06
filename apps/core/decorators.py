@@ -9,6 +9,8 @@ from apps.core import get_skin_template
 from django.core.urlresolvers import reverse
 from django.template import TemplateSyntaxError
 from apps.core.handlers import UploadProgressHandler
+from django.utils.translation import ugettext_lazy as _
+import simplejson as json
 
 """
 def can_post_articles(func, *args, **kwargs):
@@ -185,3 +187,12 @@ def lock_with_dev(parse_dict):
             return func(request, *args, **kwargs)
         return wrapper
     return decorator
+
+def login_required_json(func):
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated():
+            response = HttpResponse()
+            response['Content-Type'] = 'application/json'
+            response.write(json.dumps({'error': unicode(_("Login required"))}))
+        return func(request, *args, **kwargs)
+    return wrapper

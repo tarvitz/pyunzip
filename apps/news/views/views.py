@@ -39,7 +39,10 @@ from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filt
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import get_settings, paginate,can_act, handle_uploaded_file
-from apps.core.decorators import benchmarking, update_subscription_new, has_permission
+from apps.core.decorators import (
+    benchmarking, update_subscription_new, has_permission,
+    login_required_json
+)
 from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors
 
@@ -297,6 +300,7 @@ def add_meating(request):
     return direct_to_template(request, template, {'form': form})
 
 @has_permission('news.can_edit')
+@login_required_json
 @render_to('news/article.html')
 def article_status_set(request, pk):
     article = get_object_or_404(News, pk=pk)

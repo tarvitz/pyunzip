@@ -51,7 +51,8 @@ class ArticleModelForm(RequestModelForm):
 class ArticleStatusForm(forms.ModelForm):
     resend = forms.BooleanField(
         initial=True, label=_("send notification"),
-        help_text=_('sends notification to user email')
+        help_text=_('sends notification to user email'),
+        required=False
     )
     class Meta:
         model = News
