@@ -201,6 +201,9 @@ div.copyright{
     background-image: -ms-linear-gradient(top, #888, #666);
     color: #fefefe;
 }
+.pagination.pagination-inverse ul > li.active a{
+    color: #ddd;
+}
 /* helpers */
 .red-marker{ border: 1px solid red; }
 .yellow-marker{ border: 1px solid yellow; }

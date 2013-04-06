@@ -30,7 +30,7 @@
         {% endif %}
         {% for num in page.page_range %}
             {% if page.number == num %}
-            <li class='active disabled'><a href='#'>{{ num }}</a></li>
+            <li class='active'><a href='#'>{{ num }}</a></li>
             {% else %}
             <li><a href='?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}'>{{ num }}</a></li>
             {% endif %}
