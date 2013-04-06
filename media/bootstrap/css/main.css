@@ -202,7 +202,7 @@ div.copyright{
     color: #fefefe;
 }
 .pagination.pagination-inverse ul > li.active a{
-    color: #ddd;
+    color: #999;
 }
 /* helpers */
 .red-marker{ border: 1px solid red; }
