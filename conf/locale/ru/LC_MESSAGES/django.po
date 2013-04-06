@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-06 19:55+0400\n"
+"POT-Creation-Date: 2013-04-06 23:01+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "content"
 msgstr "контент"
 
-#: apps/blogs/models.py:26 apps/files/models.py:285 apps/news/models.py:33
+#: apps/blogs/models.py:26 apps/files/models.py:286 apps/news/models.py:33
 #: apps/news/models.py:44 apps/news/models.py:206 apps/news/models.py:215
 #: apps/tabletop/models.py:42 apps/tabletop/models.py:72
 #: apps/tabletop/models.py:125 apps/tabletop/models.py:135
@@ -29,7 +29,7 @@ msgstr "контент"
 msgid "Title"
 msgstr "Заголовок"
 
-#: apps/blogs/models.py:27 apps/files/models.py:122 apps/news/models.py:34
+#: apps/blogs/models.py:27 apps/files/models.py:123 apps/news/models.py:34
 #: apps/news/models.py:47 apps/pybb/models.py:301 apps/wh/models.py:64
 msgid "Author"
 msgstr "Автор"
@@ -57,7 +57,7 @@ msgstr "Утверждено"
 msgid "Author IP address"
 msgstr "IP адрес автора"
 
-#: apps/blogs/models.py:42 apps/files/models.py:101 apps/karma/models.py:54
+#: apps/blogs/models.py:42 apps/files/models.py:102 apps/karma/models.py:54
 #: apps/news/models.py:37 apps/news/models.py:67 apps/news/models.py:222
 #: apps/tabletop/models.py:84 apps/tabletop/models.py:156
 #: apps/tabletop/templates/add_old_battle_report.html:37
@@ -92,6 +92,11 @@ msgstr "ядро"
 #: apps/pybb/templates/pybb/edit_profile.html:31
 msgid "delete"
 msgstr "удалить"
+
+#: apps/core/decorators.py:196
+#, fuzzy
+msgid "Login required"
+msgstr "Обязательное поле"
 
 #: apps/core/forms.py:105 apps/files/forms.py:387
 msgid "You should write something"
@@ -594,177 +599,177 @@ msgstr ""
 "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
 "странице управления файлами"
 
-#: apps/files/models.py:21 apps/files/models.py:95 apps/files/models.py:358
+#: apps/files/models.py:22 apps/files/models.py:96 apps/files/models.py:366
 #: apps/files/templates/files/user_files.html:26
 msgid "File"
 msgstr "Файл"
 
-#: apps/files/models.py:22 apps/karma/models.py:51 apps/pybb/models.py:70
+#: apps/files/models.py:23 apps/karma/models.py:51 apps/pybb/models.py:70
 #: apps/wh/models.py:160 apps/wh/models.py:187 apps/wh/models.py:253
 #: apps/wh/models.py:293
 msgid "Description"
 msgstr "Описание"
 
-#: apps/files/models.py:24 apps/files/models.py:87
+#: apps/files/models.py:25 apps/files/models.py:88
 msgid "Upload date"
 msgstr "Дата загрузки"
 
-#: apps/files/models.py:29 apps/files/models.py:253
+#: apps/files/models.py:30 apps/files/models.py:254
 msgid "Replay"
 msgstr "Реплей"
 
-#: apps/files/models.py:31
+#: apps/files/models.py:32
 msgid "Uploaded date"
 msgstr "Дата загрузки"
 
-#: apps/files/models.py:38 apps/files/models.py:85 apps/files/models.py:264
+#: apps/files/models.py:39 apps/files/models.py:86 apps/files/models.py:265
 #: apps/pybb/models.py:40 apps/pybb/models.py:68 apps/wh/models.py:145
 #: apps/wh/models.py:159
 msgid "Name"
 msgstr "Имя"
 
-#: apps/files/models.py:39 apps/wh/models.py:184
+#: apps/files/models.py:40 apps/wh/models.py:184
 msgid "Short name"
 msgstr "Короткое имя"
 
-#: apps/files/models.py:45
+#: apps/files/models.py:46
 msgid "Addon name"
 msgstr "Имя аддона"
 
-#: apps/files/models.py:46
+#: apps/files/models.py:47
 msgid "Patch version"
 msgstr "Версия патча"
 
-#: apps/files/models.py:47
+#: apps/files/models.py:48
 msgid "Release Number"
 msgstr "Номер релиза"
 
-#: apps/files/models.py:58
+#: apps/files/models.py:59
 msgid "Addon version"
 msgstr "Версия аддона"
 
-#: apps/files/models.py:59
+#: apps/files/models.py:60
 msgid "Addon versions"
 msgstr "Версии аддонов"
 
-#: apps/files/models.py:62
+#: apps/files/models.py:63
 msgid "Attachment"
 msgstr "Аттачмент"
 
-#: apps/files/models.py:84
+#: apps/files/models.py:85
 msgid "Team"
 msgstr "Команда"
 
-#: apps/files/models.py:88 apps/files/models.py:263
+#: apps/files/models.py:89 apps/files/models.py:264
 #: apps/files/templates/files/user_files.html:25 apps/news/models.py:216
 #: apps/wh/models.py:173
 msgid "Type"
 msgstr "Тип"
 
-#: apps/files/models.py:89
+#: apps/files/models.py:90
 msgid "Non Std layout"
 msgstr "Не стандартная схема"
 
-#: apps/files/models.py:90
+#: apps/files/models.py:91
 msgid "Teams"
 msgstr "Команды"
 
-#: apps/files/models.py:91
+#: apps/files/models.py:92
 msgid "Races"
 msgstr "Расы"
 
-#: apps/files/models.py:92
+#: apps/files/models.py:93
 #: apps/tabletop/templates/add_old_battle_report.html:22
 msgid "Winner"
 msgstr "Победитель"
 
-#: apps/files/models.py:99 apps/files/models.py:291 apps/tabletop/models.py:78
-#: apps/tabletop/templates/add_roster_old.html:47
+#: apps/files/models.py:100 apps/files/models.py:292
+#: apps/tabletop/models.py:78 apps/tabletop/templates/add_roster_old.html:47
 msgid "Comments"
 msgstr "Комментарии"
 
-#: apps/files/models.py:100
+#: apps/files/models.py:101
 msgid "is set"
 msgstr "сет"
 
-#: apps/files/models.py:254
+#: apps/files/models.py:255
 msgid "Replays"
 msgstr "Реплеи"
 
-#: apps/files/models.py:274
+#: apps/files/models.py:275
 msgid "Gallery"
 msgstr "Галерея"
 
-#: apps/files/models.py:275
+#: apps/files/models.py:276
 msgid "Galleries"
 msgstr "Галереи"
 
-#: apps/files/models.py:286
+#: apps/files/models.py:287
 msgid "Alias"
 msgstr "Алиас"
 
-#: apps/files/models.py:289
+#: apps/files/models.py:290
 msgid "Fast name to access unit"
 msgstr "Имя для быстрого доступа к юниту"
 
-#: apps/files/models.py:293 apps/files/models.py:307
+#: apps/files/models.py:294 apps/files/models.py:312
 msgid "Image"
 msgstr "Изображение"
 
-#: apps/files/models.py:295
+#: apps/files/models.py:296
 msgid "Thumbnail"
 msgstr "Эскиз"
 
-#: apps/files/models.py:308
+#: apps/files/models.py:313
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:351 apps/news/models.py:54
+#: apps/files/models.py:359 apps/news/models.py:54
 msgid "Original URL"
 msgstr "URL оригинала"
 
-#: apps/files/models.py:355
+#: apps/files/models.py:363
 msgid "owner"
 msgstr "владелец"
 
-#: apps/files/models.py:359
+#: apps/files/models.py:367
 msgid "Files"
 msgstr "Файлы"
 
-#: apps/files/models.py:362 apps/tabletop/models.py:222
+#: apps/files/models.py:370 apps/tabletop/models.py:222
 #: apps/tabletop/models.py:234 apps/tabletop/models.py:371
 #: apps/tabletop/models.py:509
 msgid "title"
 msgstr ""
 
-#: apps/files/models.py:364
+#: apps/files/models.py:372
 #, fuzzy
 msgid "file"
 msgstr "файлы"
 
-#: apps/files/models.py:368
+#: apps/files/models.py:376
 msgid "plain type"
 msgstr ""
 
-#: apps/files/models.py:368
+#: apps/files/models.py:376
 msgid "plain type for "
 msgstr ""
 
-#: apps/files/models.py:373
+#: apps/files/models.py:381
 msgid "size"
 msgstr ""
 
-#: apps/files/models.py:373
+#: apps/files/models.py:381
 #, fuzzy
 msgid "file size"
 msgstr "файлы"
 
-#: apps/files/models.py:410
+#: apps/files/models.py:418
 #, fuzzy
 msgid "User file"
 msgstr "IP пользователя"
 
-#: apps/files/models.py:411
+#: apps/files/models.py:419
 #, fuzzy
 msgid "User files"
 msgstr "файлы"
@@ -897,27 +902,35 @@ msgstr "Подтвержденные новости"
 msgid "Revert approved flag"
 msgstr "Поменять флаг подтвержденности"
 
-#: apps/news/forms.py:53
+#: apps/news/forms.py:25
+msgid "approved?"
+msgstr "утверждено?"
+
+#: apps/news/forms.py:26
+msgid "marks if the article would be approved"
+msgstr "помечает статью как утвержденную по умолчанию"
+
+#: apps/news/forms.py:65
 msgid "send notification"
-msgstr ""
+msgstr "отослать оповещение"
 
-#: apps/news/forms.py:54
+#: apps/news/forms.py:66
 msgid "sends notification to user email"
-msgstr ""
+msgstr "отсылает оповещение через email"
 
-#: apps/news/forms.py:98
+#: apps/news/forms.py:111
 msgid "You can not use more then 20000 symbols while you post article"
 msgstr "Вы не можете использовать более 20.000 символов на статью =)"
 
-#: apps/news/forms.py:119
+#: apps/news/forms.py:132
 msgid "You can only use symbols spaces and \"-\" sign"
 msgstr "Вы можете использовать только пробелы и знак \"-\" (минус)"
 
-#: apps/news/forms.py:132
+#: apps/news/forms.py:145
 msgid "Unknow type of file"
 msgstr "Неизвестный тип файла"
 
-#: apps/news/forms.py:134
+#: apps/news/forms.py:147
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
@@ -2275,7 +2288,7 @@ msgstr ""
 msgid "Object ID"
 msgstr ""
 
-#: apps/tracker/templates/tracker/is_new.html:12
+#: apps/tracker/templates/tracker/is_new.html:5
 #, fuzzy
 msgctxt "new comments marker"
 msgid "new"
