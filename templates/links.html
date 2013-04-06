@@ -1,16 +1,5 @@
-{% load kamwhfilters %}
-{% comment %}{% if links|list_gte:"1" %}
-<div align='center'>
-      {% for num in links %}
-      {% if not num %} ...  {# literally output dots #}
-      {% else %}<a href="?page={{ num }}" id="pages_links">{{ num }}</a>
-         {% endif %}
-     {% endfor %}
-</div>
-{% endif %}
-{% endcomment %}
-{% load vurl %}
-<center>
+{% load kamwhfilters vurl %}
+{% comment %}<center>
 <div class="pager">
 Страницы:
 {#{% if page.has_next %}{#<a href="{% url "apps.quotes.views.index" page.next_page_number %}">{{ page.next_page_number }}</a>{% endif %}#}
@@ -28,5 +17,29 @@
         {% endifequal %}
     {% endif %}
 {% endfor %}
+</div>
+</center>
+{% endcomment %}
+<center>
+<div class='pagination pagination-mini pagination-inverse no-margin'>
+    <ul>
+        {% if page.has_previous %}
+        <li><a href="{{ page.previous_page_number }}">«</a></li>
+        {% else %}
+        <li class='disabled'><a href='#'>«</a></li>
+        {% endif %}
+        {% for num in page.page_range %}
+            {% if page.number == num %}
+            <li class='disabled'><a href='#'>{{ num }}</a></li>
+            {% else %}
+            <li><a href='?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}'>{{ num }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if page.has_next %}
+        <li><a href="{{ page.next_page_number }}">»</a></li>
+        {% else %}
+        <li class='disabled'><a href='#'>»</a></li>
+        {% endif %}
+    </ul>
 </div>
 </center>

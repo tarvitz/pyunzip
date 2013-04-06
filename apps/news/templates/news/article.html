@@ -9,6 +9,7 @@
     {% include "includes/article.html" %}
 {% endwith %}
 {% if comments.object_list %}
+    {% include settings.document.links %}
     {% include settings.document.comments %}
     {% include settings.document.links %}
 {% endif %}
