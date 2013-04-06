@@ -21,6 +21,18 @@ class ArticleModelForm(RequestModelForm):
     author = forms.CharField(required=False)
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(), required=False)
+    approved = forms.BooleanField(
+        initial=False, required=False, label=_("approved?"),
+        help_text=_("marks if the article would be approved")
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(ArticleModelForm, self).__init__(*args, **kwargs)
+        if not self.request.user.has_perm('news.edit_news'):
+            if 'approved' in self.base_fields:
+                del self.base_fields['approved']
+            if 'approved' in self.fields:
+                del self.fields['approved']
 
     def save(self, commit=True):
         can_edit = self.request.user.has_perm('news.edit_news')
@@ -30,8 +42,8 @@ class ArticleModelForm(RequestModelForm):
         )
         if not self.instance.pk:
             self.instance.author_ip = ip
-            if can_edit:
-                self.instance.approved = True
+            #if can_edit:
+            #    self.instance.approved = True
         else:
             self.instance.editor = self.request.user.nickname or self.request.user.username
         instance = super(ArticleModelForm, self).save(commit=commit)
@@ -39,8 +51,8 @@ class ArticleModelForm(RequestModelForm):
 
     class Meta:
         model = News
-        fields = ['title', 'author','category', 'syntax', 'content', 'url']
-        exclude = ['editor', 'approved', 'author_ip', 'is_event', 'date',
+        fields = ['title', 'author', 'category', 'syntax', 'content', 'approved', 'url']
+        exclude = ['editor', 'author_ip', 'is_event', 'date',
 
         ]
         widgets = {

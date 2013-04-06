@@ -191,6 +191,7 @@ class JustTest(TestCase):
             'content': u'Новость 2',
             'syntax': 'textile',
             'url': '',
+            'approved': True
         }
         response = self.client.post(
             reverse('news:article-add'), post, follow=True
@@ -204,9 +205,48 @@ class JustTest(TestCase):
             'category': category,
             'author': user.username
         })
+        messages = []
         for (key, value) in post.items():
-            self.assertEqual(getattr(article, key), value)
+            try:
+                self.assertEqual(getattr(article, key), value)
+            except AssertionError as err:
+                messages.append({'err': err, 'key': key})
+        if messages:
+            for msg in messages:
+                print "Got assertion error in %(key)s with %(err)s" % msg
+            raise AssertionError
         self.assertEqual(article.approved, True)
+
+        # testing for if not approved
+        post.update({
+            'approved': False,
+            'category': category.id,
+            'author': ''
+        })
+        news_count = News.objects.count()
+        response = self.client.post(
+            reverse('news:article-add'), post, follow=True
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(news_count + 1, News.objects.count())
+        article = News.objects.order_by('-id')[0]
+        messages = []
+
+        post.update({
+            'approved': False,
+            'category': category,
+            'author': user.username
+        })
+        for (key, value) in post.items():
+            try:
+                self.assertEqual(getattr(article, key), value)
+            except AssertionError as err:
+                messages.append({'err': err, 'key': key})
+        if messages:
+            for msg in messages:
+                print "Got assertion error in %(key)s with %(err)s" % msg
+            raise AssertionError
+        self.assertEqual(article.approved, False)
 
     def test_news_user_actions(self):
         # user can not approve or disapprove articles
