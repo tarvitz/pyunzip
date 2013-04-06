@@ -6,7 +6,9 @@ from anyjson import serialize as serialize_json
 from apps.core.helpers import get_content_type
 from apps.tracker.models import SeenObject
 from django.contrib.contenttypes.models import ContentType
+from apps.core.decorators import login_required_json
 
+@login_required_json
 def xhr_mark_read(request, app_n_model, id):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'

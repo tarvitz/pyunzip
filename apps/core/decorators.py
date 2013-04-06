@@ -194,5 +194,6 @@ def login_required_json(func):
             response = HttpResponse()
             response['Content-Type'] = 'application/json'
             response.write(json.dumps({'error': unicode(_("Login required"))}))
+            return response
         return func(request, *args, **kwargs)
     return wrapper
