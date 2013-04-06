@@ -21,3 +21,10 @@ PASSWORD_RESTORE_REQUEST_MESSAGE = _("""
 
     Your password restore link: %(link)s
 """)
+ARICLE_REJECTED_NOTIFICATION = _("""
+    Article you wrote had been rejected with reason: %(reason)s
+    Please fix the errors, mistakes and anything that reason says to
+    get the article posted on title page.
+
+    Thank you :)
+""")

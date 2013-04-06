@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-01 16:55+0400\n"
+"POT-Creation-Date: 2013-04-06 17:16+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -20,8 +20,8 @@ msgstr ""
 msgid "content"
 msgstr "контент"
 
-#: apps/blogs/models.py:26 apps/files/models.py:285 apps/news/models.py:32
-#: apps/news/models.py:43 apps/news/models.py:195 apps/news/models.py:204
+#: apps/blogs/models.py:26 apps/files/models.py:285 apps/news/models.py:33
+#: apps/news/models.py:44 apps/news/models.py:202 apps/news/models.py:211
 #: apps/tabletop/models.py:42 apps/tabletop/models.py:72
 #: apps/tabletop/models.py:125 apps/tabletop/models.py:135
 #: apps/tabletop/models.py:144 apps/tabletop/templates/add_roster_old.html:23
@@ -29,8 +29,8 @@ msgstr "контент"
 msgid "Title"
 msgstr "Заголовок"
 
-#: apps/blogs/models.py:27 apps/files/models.py:122 apps/news/models.py:33
-#: apps/news/models.py:46 apps/pybb/models.py:301 apps/wh/models.py:64
+#: apps/blogs/models.py:27 apps/files/models.py:122 apps/news/models.py:34
+#: apps/news/models.py:47 apps/pybb/models.py:301 apps/wh/models.py:64
 msgid "Author"
 msgstr "Автор"
 
@@ -38,27 +38,27 @@ msgstr "Автор"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/blogs/models.py:31 apps/news/models.py:34 apps/news/models.py:59
-#: apps/news/models.py:210 apps/wh/admin.py:18 apps/wh/models.py:57
+#: apps/blogs/models.py:31 apps/news/models.py:35 apps/news/models.py:60
+#: apps/news/models.py:217 apps/wh/admin.py:18 apps/wh/models.py:57
 msgid "Content"
 msgstr "Содержимое"
 
-#: apps/blogs/models.py:32 apps/news/models.py:60
+#: apps/blogs/models.py:32 apps/news/models.py:61
 msgid "DateTime"
 msgstr "ДатаВремя"
 
-#: apps/blogs/models.py:34 apps/news/models.py:61 apps/news/models.py:215
+#: apps/blogs/models.py:34 apps/news/models.py:62 apps/news/models.py:222
 #: apps/tabletop/models.py:154 apps/wh/models.py:150
 msgid "Approved"
 msgstr "Утверждено"
 
-#: apps/blogs/models.py:35 apps/news/models.py:62 apps/news/models.py:216
-#: apps/news/models.py:218
+#: apps/blogs/models.py:35 apps/news/models.py:63 apps/news/models.py:223
+#: apps/news/models.py:225
 msgid "Author IP address"
 msgstr "IP адрес автора"
 
 #: apps/blogs/models.py:42 apps/files/models.py:101 apps/karma/models.py:54
-#: apps/news/models.py:36 apps/news/models.py:66 apps/news/models.py:211
+#: apps/news/models.py:37 apps/news/models.py:67 apps/news/models.py:218
 #: apps/tabletop/models.py:84 apps/tabletop/models.py:156
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44 apps/wh/models.py:126
@@ -656,7 +656,7 @@ msgid "Team"
 msgstr "Команда"
 
 #: apps/files/models.py:88 apps/files/models.py:263
-#: apps/files/templates/files/user_files.html:25 apps/news/models.py:205
+#: apps/files/templates/files/user_files.html:25 apps/news/models.py:212
 #: apps/wh/models.py:173
 msgid "Type"
 msgstr "Тип"
@@ -719,7 +719,7 @@ msgstr "Эскиз"
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:351 apps/news/models.py:53
+#: apps/files/models.py:351 apps/news/models.py:54
 msgid "Original URL"
 msgstr "URL оригинала"
 
@@ -759,12 +759,12 @@ msgstr ""
 msgid "file size"
 msgstr "файлы"
 
-#: apps/files/models.py:406
+#: apps/files/models.py:410
 #, fuzzy
 msgid "User file"
 msgstr "IP пользователя"
 
-#: apps/files/models.py:407
+#: apps/files/models.py:411
 #, fuzzy
 msgid "User files"
 msgstr "файлы"
@@ -808,7 +808,7 @@ msgstr "Ни одного файла не загружено"
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
-#: apps/files/templates/files/user_files.html:80 templates/base.html:233
+#: apps/files/templates/files/user_files.html:80 templates/base.html:235
 #: templates/test_upload.html:46
 msgid "Yes"
 msgstr "Да"
@@ -856,7 +856,7 @@ msgstr "Дата"
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/karma/models.py:47 apps/news/models.py:196 apps/tabletop/models.py:126
+#: apps/karma/models.py:47 apps/news/models.py:203 apps/tabletop/models.py:126
 #: apps/wh/models.py:22 apps/wh/models.py:185 apps/wh/models.py:252
 msgid "Codename"
 msgstr "Кодовое имя"
@@ -913,97 +913,101 @@ msgstr "Неизвестный тип файла"
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
-#: apps/news/models.py:14
+#: apps/news/models.py:15
 msgid "approved"
 msgstr "утверждено"
 
-#: apps/news/models.py:15
+#: apps/news/models.py:16
 msgid "rejeceted"
 msgstr "отклонена"
 
-#: apps/news/models.py:16
+#: apps/news/models.py:17
 msgid "queued"
 msgstr "в очереди"
 
-#: apps/news/models.py:17
+#: apps/news/models.py:18
 msgid "revision"
 msgstr "в доработку"
 
-#: apps/news/models.py:22 apps/news/models.py:28 apps/pybb/models.py:45
+#: apps/news/models.py:23 apps/news/models.py:29 apps/pybb/models.py:45
 #: apps/pybb/models.py:67
 msgid "Category"
 msgstr "Категория"
 
-#: apps/news/models.py:29 apps/pybb/models.py:46
+#: apps/news/models.py:30 apps/pybb/models.py:46
 msgid "Categories"
 msgstr "Категории"
 
-#: apps/news/models.py:35 apps/tabletop/models.py:155 apps/wh/models.py:209
+#: apps/news/models.py:36 apps/tabletop/models.py:155 apps/wh/models.py:209
 msgid "IP address"
 msgstr "IP адрес"
 
-#: apps/news/models.py:50
+#: apps/news/models.py:51
 msgid "Editor"
 msgstr "Редактор"
 
-#: apps/news/models.py:64
+#: apps/news/models.py:65
 msgid "Is event"
 msgstr "событие?"
 
-#: apps/news/models.py:69
+#: apps/news/models.py:70
 msgid "reason"
 msgstr "причина"
 
-#: apps/news/models.py:130
+#: apps/news/models.py:137
 msgid "Archived Article"
 msgstr "Архивная статья"
 
-#: apps/news/models.py:131
+#: apps/news/models.py:138
 msgid "Archived News"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:148 apps/news/models.py:149
+#: apps/news/models.py:155 apps/news/models.py:156
 msgid "Archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:185
+#: apps/news/models.py:192
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:186
+#: apps/news/models.py:193
 msgid "News"
 msgstr "Новости"
 
-#: apps/news/models.py:200
+#: apps/news/models.py:207
 msgid "Meating Type"
 msgstr ""
 
-#: apps/news/models.py:201
+#: apps/news/models.py:208
 msgid "Meating Types"
 msgstr ""
 
-#: apps/news/models.py:206
+#: apps/news/models.py:213
 msgid "Owner"
 msgstr "Владелец"
 
-#: apps/news/models.py:208
+#: apps/news/models.py:215
 msgid "Members"
 msgstr "Участники"
 
-#: apps/news/models.py:213
+#: apps/news/models.py:220
 msgid "Created on"
 msgstr "Создано"
 
-#: apps/news/models.py:214
+#: apps/news/models.py:221
 msgid "Updated on"
 msgstr "Обновлено"
 
-#: apps/news/models.py:228
+#: apps/news/models.py:235
 msgid "Meating"
 msgstr ""
 
-#: apps/news/models.py:229
+#: apps/news/models.py:236
 msgid "Meatings"
+msgstr ""
+
+#: apps/news/signals.py:14
+msgid "Your article changed status"
 msgstr ""
 
 #: apps/news/templates/add_meating.html:11
@@ -2255,6 +2259,12 @@ msgstr ""
 msgid "Object ID"
 msgstr ""
 
+#: apps/tracker/templates/tracker/is_new.html:12
+#, fuzzy
+msgctxt "new comments marker"
+msgid "new"
+msgstr "новости"
+
 #: apps/vote/__init__.py:3
 msgid "votes"
 msgstr "оценки"
@@ -2702,15 +2712,34 @@ msgid ""
 "    Your password restore link: %(link)s\n"
 msgstr ""
 
-#: templates/base.html:177
+#: settings/messages.py:24
+#, python-format
+msgid ""
+"\n"
+"    Article you wrote had been rejected with reason: %(reason)s\n"
+"    Please fix the errors, mistakes and anything that reason says to\n"
+"    get the article posted on title page.\n"
+"\n"
+"    Thank you :)\n"
+msgstr ""
+"\n"
+"   Статья, которую вы написали была отклонена по причине: \n"
+"   '%(reason)s'\n"
+"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан отказ\n"
+"   для того, чтобы данную статью опубликовали на главной странице.\n"
+"   \n"
+"   Спасибо :)"
+
+
+#: templates/base.html:179
 msgid "Required field"
 msgstr "Обязательное поле"
 
-#: templates/base.html:228
+#: templates/base.html:230
 msgid "Do you really want to approve this action?"
 msgstr "Вы действительно хотите выполнить это действие?"
 
-#: templates/base.html:234
+#: templates/base.html:236
 msgid "no"
 msgstr "нет"
 
