@@ -260,6 +260,7 @@ class JustTest(TestCase):
             # blank means poster user
             'category': category.id, 'content': u'Новость 2',
             'syntax': 'textile', 'url': '',
+            'approved': True
         }
         response = self.client.post(reverse('news:article-add'), post, follow=True)
         self.assertEqual(response.status_code, 200)
