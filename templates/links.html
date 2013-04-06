@@ -24,19 +24,19 @@
 <div class='pagination pagination-mini pagination-inverse no-margin'>
     <ul>
         {% if page.has_previous %}
-        <li><a href="{{ page.previous_page_number }}">«</a></li>
+        <li><a href="?page={{ page.previous_page_number }}">«</a></li>
         {% else %}
         <li class='disabled'><a href='#'>«</a></li>
         {% endif %}
         {% for num in page.page_range %}
             {% if page.number == num %}
-            <li class='disabled'><a href='#'>{{ num }}</a></li>
+            <li class='active disabled'><a href='#'>{{ num }}</a></li>
             {% else %}
             <li><a href='?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}'>{{ num }}</a></li>
             {% endif %}
         {% endfor %}
         {% if page.has_next %}
-        <li><a href="{{ page.next_page_number }}">»</a></li>
+        <li><a href="?page={{ page.next_page_number }}">»</a></li>
         {% else %}
         <li class='disabled'><a href='#'>»</a></li>
         {% endif %}
