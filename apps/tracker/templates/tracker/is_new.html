@@ -1,11 +1,4 @@
 {% load trackertags i18n %}
-{% comment %}
-{% spaceless %}
-{% check_for_updates object isnew user %} {% endspaceless %}
-{% if isnew %}
-    <span class='is_new' id="id_new_{% get_app_n_model for object %}_{{ object.id }}">[new]</span>
-{% endif %}
-{% endcomment %}
 {% if user.is_authenticated %}
     {% if not user in object.get_seen_users %}
         <span class='is_new' id='id_new_{% get_app_n_model for object %}_{{ object.id }}'>

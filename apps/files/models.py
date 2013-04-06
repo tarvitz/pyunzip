@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes import generic
 #from apps.bincase.fields import BinCaseField as BinCaseFileField
 from cStringIO import StringIO
 from apps.files.helpers import ZipPack
@@ -298,6 +299,10 @@ class Image(models.Model):
         'title': 40,
         'comments': 30,
     })
+    seen_objects = generic.GenericRelation(
+        'tracker.SeenObject', object_id_field='object_pk'
+    )
+
     actions = [common_delete_action, ]
     class Meta:
         permissions = (
@@ -309,6 +314,9 @@ class Image(models.Model):
         
     get_title = lambda self: self.title
      
+    def get_seen_users(self):
+        return [i.user for i in self.seen_objects.all()]
+
     def generate_thumbnail(self,size=(200,200)):
         if not self.image:
             return
