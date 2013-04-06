@@ -1024,7 +1024,7 @@ msgstr ""
 
 #: apps/news/signals.py:17
 msgid "Your article changed status"
-msgstr ""
+msgstr "Статус вашей статьи был изменен"
 
 #: apps/news/templates/add_meating.html:11
 msgid "Add meating"
