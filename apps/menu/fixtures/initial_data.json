@@ -5,7 +5,7 @@
     "fields": {
         "url": "http://w40k.net/forum/topic/25/?page=1#post-84",
         "is_hidden": false,
-        "attrs": "data-title=\"'w40k.net \u043c\u0430\u043d\u0438\u0444\u0435\u0441\u0442,<br>\u0437\u0430\u0445\u043e\u0434\u0438 \u0447\u0438\u0442\u0430\u0439\" rel=\"twipsy\" data-placement='bottom' data-delay='300' data-html='true'",
+        "attrs": "data-title=\"w40k.net \u043c\u0430\u043d\u0438\u0444\u0435\u0441\u0442,<br>\u0437\u0430\u0445\u043e\u0434\u0438 \u0447\u0438\u0442\u0430\u0439\" rel=\"twipsy\" data-placement='bottom' data-delay='300' data-html='true'",
         "order": 0,
         "title": "edictum"
     }
