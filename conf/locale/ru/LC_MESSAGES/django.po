@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-06 17:16+0400\n"
+"POT-Creation-Date: 2013-04-06 19:55+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -21,7 +21,7 @@ msgid "content"
 msgstr "контент"
 
 #: apps/blogs/models.py:26 apps/files/models.py:285 apps/news/models.py:33
-#: apps/news/models.py:44 apps/news/models.py:202 apps/news/models.py:211
+#: apps/news/models.py:44 apps/news/models.py:206 apps/news/models.py:215
 #: apps/tabletop/models.py:42 apps/tabletop/models.py:72
 #: apps/tabletop/models.py:125 apps/tabletop/models.py:135
 #: apps/tabletop/models.py:144 apps/tabletop/templates/add_roster_old.html:23
@@ -39,7 +39,7 @@ msgid "URL"
 msgstr "УРЛ"
 
 #: apps/blogs/models.py:31 apps/news/models.py:35 apps/news/models.py:60
-#: apps/news/models.py:217 apps/wh/admin.py:18 apps/wh/models.py:57
+#: apps/news/models.py:221 apps/wh/admin.py:18 apps/wh/models.py:57
 msgid "Content"
 msgstr "Содержимое"
 
@@ -47,18 +47,18 @@ msgstr "Содержимое"
 msgid "DateTime"
 msgstr "ДатаВремя"
 
-#: apps/blogs/models.py:34 apps/news/models.py:62 apps/news/models.py:222
+#: apps/blogs/models.py:34 apps/news/models.py:62 apps/news/models.py:226
 #: apps/tabletop/models.py:154 apps/wh/models.py:150
 msgid "Approved"
 msgstr "Утверждено"
 
-#: apps/blogs/models.py:35 apps/news/models.py:63 apps/news/models.py:223
-#: apps/news/models.py:225
+#: apps/blogs/models.py:35 apps/news/models.py:63 apps/news/models.py:227
+#: apps/news/models.py:229
 msgid "Author IP address"
 msgstr "IP адрес автора"
 
 #: apps/blogs/models.py:42 apps/files/models.py:101 apps/karma/models.py:54
-#: apps/news/models.py:37 apps/news/models.py:67 apps/news/models.py:218
+#: apps/news/models.py:37 apps/news/models.py:67 apps/news/models.py:222
 #: apps/tabletop/models.py:84 apps/tabletop/models.py:156
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44 apps/wh/models.py:126
@@ -656,7 +656,7 @@ msgid "Team"
 msgstr "Команда"
 
 #: apps/files/models.py:88 apps/files/models.py:263
-#: apps/files/templates/files/user_files.html:25 apps/news/models.py:212
+#: apps/files/templates/files/user_files.html:25 apps/news/models.py:216
 #: apps/wh/models.py:173
 msgid "Type"
 msgstr "Тип"
@@ -856,7 +856,7 @@ msgstr "Дата"
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/karma/models.py:47 apps/news/models.py:203 apps/tabletop/models.py:126
+#: apps/karma/models.py:47 apps/news/models.py:207 apps/tabletop/models.py:126
 #: apps/wh/models.py:22 apps/wh/models.py:185 apps/wh/models.py:252
 msgid "Codename"
 msgstr "Кодовое имя"
@@ -897,19 +897,27 @@ msgstr "Подтвержденные новости"
 msgid "Revert approved flag"
 msgstr "Поменять флаг подтвержденности"
 
-#: apps/news/forms.py:94
+#: apps/news/forms.py:53
+msgid "send notification"
+msgstr ""
+
+#: apps/news/forms.py:54
+msgid "sends notification to user email"
+msgstr ""
+
+#: apps/news/forms.py:98
 msgid "You can not use more then 20000 symbols while you post article"
 msgstr "Вы не можете использовать более 20.000 символов на статью =)"
 
-#: apps/news/forms.py:115
+#: apps/news/forms.py:119
 msgid "You can only use symbols spaces and \"-\" sign"
 msgstr "Вы можете использовать только пробелы и знак \"-\" (минус)"
 
-#: apps/news/forms.py:128
+#: apps/news/forms.py:132
 msgid "Unknow type of file"
 msgstr "Неизвестный тип файла"
 
-#: apps/news/forms.py:130
+#: apps/news/forms.py:134
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
@@ -954,59 +962,67 @@ msgstr "событие?"
 msgid "reason"
 msgstr "причина"
 
-#: apps/news/models.py:137
+#: apps/news/models.py:80
+msgid "resend"
+msgstr "отправить"
+
+#: apps/news/models.py:80
+msgid "marks if news notification should resend"
+msgstr "да, если нужно отослать оповещение"
+
+#: apps/news/models.py:141
 msgid "Archived Article"
 msgstr "Архивная статья"
 
-#: apps/news/models.py:138
+#: apps/news/models.py:142
 msgid "Archived News"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:155 apps/news/models.py:156
+#: apps/news/models.py:159 apps/news/models.py:160
 msgid "Archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:192
+#: apps/news/models.py:196
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:193
+#: apps/news/models.py:197
 msgid "News"
 msgstr "Новости"
 
-#: apps/news/models.py:207
+#: apps/news/models.py:211
 msgid "Meating Type"
 msgstr ""
 
-#: apps/news/models.py:208
+#: apps/news/models.py:212
 msgid "Meating Types"
 msgstr ""
 
-#: apps/news/models.py:213
+#: apps/news/models.py:217
 msgid "Owner"
 msgstr "Владелец"
 
-#: apps/news/models.py:215
+#: apps/news/models.py:219
 msgid "Members"
 msgstr "Участники"
 
-#: apps/news/models.py:220
+#: apps/news/models.py:224
 msgid "Created on"
 msgstr "Создано"
 
-#: apps/news/models.py:221
+#: apps/news/models.py:225
 msgid "Updated on"
 msgstr "Обновлено"
 
-#: apps/news/models.py:235
+#: apps/news/models.py:239
 msgid "Meating"
 msgstr ""
 
-#: apps/news/models.py:236
+#: apps/news/models.py:240
 msgid "Meatings"
 msgstr ""
 
-#: apps/news/signals.py:14
+#: apps/news/signals.py:17
 msgid "Your article changed status"
 msgstr ""
 
@@ -2725,11 +2741,11 @@ msgstr ""
 "\n"
 "   Статья, которую вы написали была отклонена по причине: \n"
 "   '%(reason)s'\n"
-"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан отказ\n"
+"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан "
+"отказ\n"
 "   для того, чтобы данную статью опубликовали на главной странице.\n"
 "   \n"
 "   Спасибо :)\n"
-
 
 #: templates/base.html:179
 msgid "Required field"

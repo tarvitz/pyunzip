@@ -76,6 +76,10 @@ class AbstractNews(models.Model):
         default='queued',
         max_length=32,
     )
+    resend = models.BooleanField(
+        _('resend'), help_text=_("marks if news notification should resend"),
+        default=False
+    )
     seen_objects = generic.GenericRelation(
         'tracker.SeenObject', object_id_field='object_pk'
     )

@@ -49,9 +49,13 @@ class ArticleModelForm(RequestModelForm):
         }
 
 class ArticleStatusForm(forms.ModelForm):
+    resend = forms.BooleanField(
+        initial=True, label=_("send notification"),
+        help_text=_('sends notification to user email')
+    )
     class Meta:
         model = News
-        fields = ('status', 'reason', 'approved')
+        fields = ('status', 'reason', 'approved', 'resend')
         widgets = {
             'reason': forms.Textarea(attrs={'cols': '10', 'rows': 5})
         }

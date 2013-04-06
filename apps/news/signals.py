@@ -8,7 +8,7 @@ from django.conf import settings
 def pre_save_news(instance, **kwargs):
     if instance.approved:
         instance.status = 'approved'
-    elif instance.status == 'rejected':
+    elif instance.status == 'revision' and instance.resend:
         if settings.SEND_MESSAGES and instance.owner.email:
             kw = {
                 'reason': instance.reason
@@ -20,6 +20,7 @@ def pre_save_news(instance, **kwargs):
                 recipient_list=[instance.owner.email, ],
                 fail_silently=True
             )
+            instance.resend = False
     return instance
 
 def setup_signals():
