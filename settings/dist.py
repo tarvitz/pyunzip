@@ -117,6 +117,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.core.context_processors.global_referer',
     'apps.core.context_processors.base_template',
     'apps.core.context_processors.session',
+    'apps.menu.context_processors.menu',
     'apps.farseer.context_processors.steam_discounts',
 )
 TEMPLATE_DIRS = (
@@ -222,6 +223,7 @@ INSTALLED_APPS = (
     'apps.tracker',
     'apps.farseer',
     'apps.pybb',
+    'apps.menu',
     'djcelery',
     'apps.djangosphinx',
     'extwidgets',

@@ -81,10 +81,14 @@
             <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
         </ul>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
+            {% for menu in hmenu %}
+            <li><a href='{{ menu.get_url }}' {{ menu.attrs|safe }}>{{ menu.title }}</a></li>
+            {% endfor %}
+            {% comment %}
             <li><a href='http://w40k.net/forum/topic/25/?page=1#post-84' data-title='w40k.net манифест,<br>заходи читай' rel='twipsy' data-placement='bottom' data-delay='300' data-html='true'>edictum</a></li>
             <li><a href='{% url "pybb_index" %}'>форум</a></li>
             <li><a href='{% url "blog:index" %}'>блог</a></li>
-            <li><a href='{% url "news:news" %}'>сайт</a></li>
+            <li><a href='{% url "news:news" %}'>сайт</a></li>{% endcomment %}
         </ul>
     </div>
     <div class='navbar navbar-inverse no-margin-bottom'>
