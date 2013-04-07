@@ -1,10 +1,10 @@
-# coding: utf-8 
+# coding: utf-8
 
 import os
 import re
 
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User,Group
@@ -40,10 +40,10 @@ class Side(models.Model):
 class Army(models.Model):
     name = models.CharField(_('Army'), max_length=100, null=False)
     side = models.ForeignKey(Side)
-    
+
     def __unicode__(self):
         return "[%s]:%s" % (self.side.name, self.name)
-    
+
     @property
     def get_side_name(self):
         return self.side.name.replace(' ','_').lower()
@@ -55,7 +55,7 @@ class Army(models.Model):
 
 class MiniQuote(models.Model):
     content = models.CharField(_('Content'),max_length=255)
-    
+
     class Meta:
         verbose_name = _('Mini Quote')
         verbose_name_plural = _('Mini Quotes')
@@ -68,7 +68,7 @@ class Expression(models.Model):
 
     def show_original_content(self):
         num = 50
-        if self.original_content: 
+        if self.original_content:
             if len(self.original_content)>num: return self.original_content[0:num] + " ..."
             else: return self.original_content[0:num]
         return ''
@@ -109,7 +109,7 @@ class Profile(models.Model):
     army = models.ForeignKey(Army)
     gender = models.CharField(_('Gender'),blank=True,default='n',max_length=1,choices=[('m','male'),('f','female'),('n','not identified')])
     jid = models.CharField(_('Jabber ID'),blank=True,max_length=255)
-    uin = models.IntegerField(_('UIN (icq number'), max_length=12, blank=True)    
+    uin = models.IntegerField(_('UIN (icq number'), max_length=12, blank=True)
     def __unicode__(self):
         if self.nickname: return self.nickname
         return ''
@@ -126,7 +126,7 @@ class PM(models.Model):
     syntax = models.CharField(_('Syntax'),max_length=50,choices=settings.SYNTAX,blank=True,null=True)
     #TODO: Do we need files in PM ?
     #file = models.ForeignKey(_____)
-    
+
     class Meta:
         verbose_name = _('Private Message')
         verbose_name_plural = _('Private Messages')
@@ -236,7 +236,7 @@ class Settings(models.Model):
 #    skin = models.ForeignKey(Skin)
     class Meta:
         abstract = True
-    
+
     #def _get_links_template(self):
     #    return settings.LINKS_TEMPLATE
     #links_template = property(_get_links_template)
@@ -271,7 +271,7 @@ class Warning(models.Model):
     comments = generic.GenericRelation(
         'comments.Comment', object_id_field='object_pk'
     )
-    
+
     def _get_sign(self):
         return settings.SIGN_CHOICES[int(self.level)-1][1]
 
@@ -369,7 +369,7 @@ from django.contrib.auth.admin import UserAdmin
 UserAdmin.raw_id_fields += ('ranks',)
 UserAdmin.fieldsets += (
      (_('Profile'),
-        
+
         {
             'fields': ('nickname','photo','avatar','plain_avatar','army','gender','jid','uin','about', 'skin', 'ranks','tz'),
         #'list_display': ('nickname','photo', 'avatar', 'army', 'gender', 'jid', 'uin', 'about', 'skin')
@@ -403,7 +403,7 @@ class UserExtension(object):
 
     def __repr__(self):
         return '<User: %s>' % (self.nickname or self.username)
-   
+
     def __unicode__(self):
         return self.nickname or self.username
 
@@ -451,7 +451,8 @@ class UserExtension(object):
         else: count = 0
         return count
     karma_value = property(_get_karma_value)
-    
+    """
+
     def get_magnitude(self):
         if self.is_superuser: return 0
 	if not self.ranks:
