@@ -17,9 +17,9 @@
 	{% with usr as warn_user %}
 		{% include "warnings/warning.html" %}
 	{% endwith %}
-	{% if usr.settings.show_karma_block %}
-        {% include "karma_power.html" with karma_user=usr %}
-	{% endif %}
+	{% comment %}{% if usr.settings.show_karma_block %}{% endcomment %}
+    {% include "karma_power.html" with karma_user=usr %}
+	{% comment %}{% endif %}{% endcomment %}
 </center>
 
 {% if not usr.settings.invisible %}
