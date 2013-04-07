@@ -432,18 +432,29 @@ class UserExtension(object):
     def _get_fraction(self):
         return self.army.side.fraction.title
     fraction = property(_get_fraction)
-    
+
     def _get_comments_count(self):
         count = Comment.objects.filter(user=self).count()
         return count
     comments_count = property(_get_comments_count)
 
-    def _get_replays_count(self):   
+    def _get_replays_count(self):
         from apps.files.models import Replay
         count = Replay.objects.filter(author=self).count()
         return count
     replays_count = property(_get_replays_count)
 
+    def get_karma_value(self):
+        amount = self.karma_owner_set.aggregate(Sum('value'))
+        amount = amount.items()[0][1] or 0
+        return amount
+
+    @property
+    def karma(self):
+        return self.get_karma_value()
+
+    #obsolete
+    """
     def _get_karma_value(self):
         from apps.karma.models import Karma
         raw = Karma.objects.filter(user=self)

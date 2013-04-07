@@ -5,10 +5,10 @@
 
 {% if karma_status %}<a href="{% url "karma:status" codename=karma_status.codename %}">{{ karma_status.status }}</a><br> {% endif %}
 {% if user.comments_count|gt:settings.gsettings.KARMA_COMMENTS_COUNT %}<span class='karma_positive'><a href="{% url "karma:alter" choice='up' nickname=karma_user.get_username %}">+</a></span>&nbsp; {% endif %}
-{% if karma|gte:"0" %}
-<span class='karma_positive'><a  href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma }} &gt;</a></span>
+{% if karma_user.karma >= 0 %}
+<span class='karma_positive'><a  href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma_user.karma }} &gt;</a></span>
 {% else %}
-<span class='karma_negative'><a href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma }} &gt;</a></span>
+<span class='karma_negative'><a href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma_user.karma }} &gt;</a></span>
 {% endif %}
 {% if user.comments_count|gt:settings.gsettings.KARMA_COMMENTS_COUNT %}&nbsp;<span class='karma_negative'><a href="{% url "karma:alter" choice='down' nickname=karma_user.get_username %}">-</a></span> {% endif %}
 </div>

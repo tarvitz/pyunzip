@@ -15,8 +15,8 @@ class Karma(models.Model):
     comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
     date = models.DateTimeField(_('Date'))
-    user = models.ForeignKey(User,related_name='owner')
-    voter = models.ForeignKey(User,related_name='voter')
+    user = models.ForeignKey(User,related_name='karma_owner_set')
+    voter = models.ForeignKey(User,related_name='karma_voter_voter')
     url = models.URLField(_('URL'),blank=True,null=True)
 
     def get_karma(self):
@@ -26,12 +26,14 @@ class Karma(models.Model):
             karma += k.value
         return karma
     karma = property(get_karma)
+
     def get_karma_value(self):
         if self.value>0:
             return '+%i' % self.value
         else:
             return '%i' % self.value
     karma_value = property(get_karma_value)
+
     def show_user(self):
         return self.user.nickname
     show_user.short_description = _('User')
