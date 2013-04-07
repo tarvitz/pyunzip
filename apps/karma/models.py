@@ -16,7 +16,7 @@ class Karma(models.Model):
     value = models.IntegerField(_('Power'))
     date = models.DateTimeField(_('Date'))
     user = models.ForeignKey(User,related_name='karma_owner_set')
-    voter = models.ForeignKey(User,related_name='karma_voter_voter')
+    voter = models.ForeignKey(User,related_name='karma_voter_set')
     url = models.URLField(_('URL'),blank=True,null=True)
 
     def get_karma(self):

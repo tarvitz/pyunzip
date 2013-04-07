@@ -13,6 +13,7 @@ from django.contrib.comments.models import Comment
 #from django.contrib.auth.admin import UserAdmin
 from django.contrib.contenttypes import generic
 from apps.core.models import Settings as UserSettings
+from apps.core.helpers import safe_ret
 from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
 from apps.core.decorators import null
@@ -452,6 +453,30 @@ class UserExtension(object):
     @property
     def karma(self):
         return self.get_karma_value()
+
+    def get_karma_status(self):
+        # returns a karma status instance
+        from apps.karma.models import KarmaStatus
+        config = self.settings or {}
+        is_humor = config.get('karma_humor', False)
+        qset = Q(is_general=True)
+        order_by = ['-value', ] if self.karma > 0 else ['value', ]
+        kw = dict()
+
+        if self.karma > 0:
+            kw.update({'value__lte': int(self.karma)})
+        else:
+            kw.update({'value__gte': int(self.karma)})
+
+        if is_humor:
+            order_by += ['is_humor', ]
+        if safe_ret(self, 'army.side'):
+            qset = qset | Q(side=self.army.side)
+        status = KarmaStatus.objects.order_by(
+            *order_by).filter(
+            Q(**kw) & qset
+        )
+        return status[0] if len(status) else None
 
     #obsolete
     """

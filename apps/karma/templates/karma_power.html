@@ -1,10 +1,11 @@
 {% load karmatags %}
 {% get_karma_power for karma_user as karma %} {# shit #}
 <div class='karma'>
-{% get_karma_status with user for karma_user as karma_status %}
-
-{% if karma_status %}<a href="{% url "karma:status" codename=karma_status.codename %}">{{ karma_status.status }}</a><br> {% endif %}
-
+{% with karma_user.get_karma_status as status %}
+    {% if status %}
+        <a href='{% url "karma:status" codename=status.codename %}'>{{ status.status }}</a><br>
+    {% endif %}
+{% endwith %}
 {% spaceless %}
 {% if user.comments_count > gs.KARMA_COMMENTS_COUNT %}
     <span class='karma_positive'>
