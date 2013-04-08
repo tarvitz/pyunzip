@@ -27,7 +27,7 @@ def amount_comments_required(amount):
         def wrapper(*args,**kwargs):
             request = args[0]
             count = request.user.comments_count
-            if count>=amount:
+            if count >= amount:
                 return func(*args,**kwargs)
             else:
                 return HttpResponseRedirect('/user/power/insufficient/')

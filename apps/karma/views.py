@@ -1,42 +1,37 @@
 # Create your views here.
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from apps.core.decorators import null_function
 from django.utils.translation import ugettext_lazy as _
 from apps.core.shortcuts import direct_to_template
+from django.shortcuts import get_object_or_404
 from apps.core import get_skin_template
-from apps.karma.models import Karma,KarmaStatus
+from apps.karma.models import Karma, KarmaStatus
+from apps.karma.forms import AlterKarmaForm, KarmaModelForm
 from django.contrib.auth.models import User
-from apps.karma.forms import AlterKarmaForm
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.core.paginator import EmptyPage,InvalidPage
+from django.core.paginator import EmptyPage, InvalidPage
 from datetime import datetime
-from apps.karma.decorators import day_expired,amount_comments_required,twenty_comments_required
+from apps.karma.decorators import (
+    day_expired, amount_comments_required,
+    twenty_comments_required
+)
 from random import randint
 from apps.karma.helpers import check_fraction
-from apps.core.helpers import get_settings,paginate
+from apps.core.helpers import get_settings, paginate
 from django.conf import settings
-from apps.core.helpers import can_act
+from apps.core.helpers import can_act, render_to
 
-@null_function
-def up(request):
-    pass
-    #referer = request.META.get('HTTP_REFERER','/')
-    #return HttpResponseRedirect(referer)
 
-@null_function
-def down(request):
-    pass
-    #referer = request.META.get('HTTP_REFERER','/')
-    #return HttpResponseRedirect(referer)
-
+#old and deprecated
 #@twenty_comments_required
+@login_required
 @amount_comments_required(settings.KARMA_COMMENTS_COUNT)
 @day_expired
 @can_act
-def alter_karma(request,choice=None,nickname=None):
+def alter_karma(request, choice=None, nickname=None):
     #choice may be up|down
-    template = get_skin_template(request,'alter_karma.html')
-    alter_status_template = get_skin_template(request,'alter_status.html')
+    template = get_skin_template(request, 'alter_karma.html')
+    alter_status_template = get_skin_template(request, 'alter_status.html')
     if request.method == 'POST':
         form = AlterKarmaForm(request.POST)
         if form.is_valid():
@@ -59,45 +54,69 @@ def alter_karma(request,choice=None,nickname=None):
                 comment=comment, date=now, value=value, url=url)
             k.save()
             """
-            fraction_ident = check_fraction(user,voter)
+            fraction_ident = check_fraction(user, voter)
             if fraction_ident:
-                k = Karma(user=user,voter=voter,comment=comment,date=now,value=value,url=url)
+                k = Karma(user=user, voter=voter, comment=comment, date=now, value=value, url=url)
                 k.save()
             #dangers of warp ;) 75% to fail karma's alter
             else:
-                if randint(1,100)>=75: #75
+                if randint(1, 100)>=75: #75
                     #20% chance to alter karma with overside value
-                    if randint(1,100)>=80:
+                    if randint(1, 100)>=80:
                         comment = comment + " [warp's instability]"
-                        k = Karma(user=user,voter=voter,comment=comment,date=now,value=value*-1,url=url)
+                        k = Karma(user=user, voter=voter, comment=comment, date=now, value=value*-1, url=url)
                     else:
-                        k = Karma(user=user,voter=voter,comment=comment,date=now,value=value,url=url)
+                        k = Karma(user=user, voter=voter, comment=comment, date=now, value=value, url=url)
                     k.save()
                     return HttpResponseRedirect(referer)
                     #bad idea ? :)
-                    #direct_to_template(request,alter_status_template,{'alter_status':True})
+                    #direct_to_template(request, alter_status_template,{'alter_status':True})
                 else:
                     #failed! ;)
-                    k = Karma(user=user,voter=voter,comment=comment,date=now,value=0,url=url)
+                    k = Karma(user=user, voter=voter, comment=comment, date=now, value=0, url=url)
                     k.save()
                     return direct_to_template(request,
                             alter_status_template,{'alter_status':False})
             """
             return HttpResponseRedirect(referer)
         else:
-            return direct_to_template(request,template,{'form':form})
+            return direct_to_template(request, template, {'form':form})
     else:
         form = AlterKarmaForm()
         form.fields['hidden_nickname'].initial = nickname
-        referer = request.META.get('HTTP_REFERER','/')
+        referer = request.META.get('HTTP_REFERER', '/')
         form.fields['referer'].initial = referer
         #MAY BE there is more simple and clear way to capture URL where we got karma ups/downs
-        url = referer.replace('://','')
+        url = referer.replace('://', '')
         form.fields['url'].initial = url[url.index('/'):]
-        return direct_to_template(request,template,{'form':form})
+        return direct_to_template(request, template, {'form':form})
 
-def show_karma(request,user=None,type='',group=False):
-    template = get_skin_template(request.user,'karma.html')
+@login_required
+@amount_comments_required(settings.KARMA_COMMENTS_COUNT)
+@day_expired
+@can_act
+@render_to('alter_karma.html')
+def karma_alter(request, choice, nickname):
+    user = get_object_or_404(User, nickname__iexact=nickname)
+    url = request.META.get('HTTP_REFERER', '/')
+    form = KarmaModelForm(
+        request.POST or None, request=request,
+        initial={
+            'user': user.id,  # backward compatiblity
+            'alter': choice,
+            'url': url
+        }
+    )
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return {'redirect': form.instance.url or '/'}
+    return {
+        'form': form
+    }
+
+def show_karma(request, user=None, type='', group=False):
+    template = get_skin_template(request.user, 'karma.html')
     if not user:
         karmas = Karma.objects.filter(user=request.user)
     else:
@@ -109,8 +128,8 @@ def show_karma(request,user=None,type='',group=False):
     elif 'zero' in type:
         karmas = karmas.filter(value=0)
     #settings
-    show_null = get_settings(request.user,'show_null_karma',True)
-    show_self_null = get_settings(request.user,'show_self_null_karma',True)
+    show_null = get_settings(request.user, 'show_null_karma', True)
+    show_self_null = get_settings(request.user, 'show_self_null_karma', True)
     if user is not None:
         if not show_null:
             karmas = karmas.exclude(value=0)
@@ -119,28 +138,28 @@ def show_karma(request,user=None,type='',group=False):
             karmas = karmas.exclude(value=0)
     if group:
         pass
-    _pages_ = get_settings(request.user,'karmas_on_page',50)
-    #paginator = Paginator(karmas,_pages_)
+    _pages_ = get_settings(request.user, 'karmas_on_page', 50)
+    #paginator = Paginator(karmas, _pages_)
     #try:
-    page = request.GET.get('page',1)
+    page = request.GET.get('page', 1)
     #    karmas = paginator.page(page)
     #    karmas.number = int(page)
-    #except (InvalidPage,EmptyPage):
+    #except (InvalidPage, EmptyPage):
     #    karmas = paginator.page(1)
     #    karmas.number = 1
-    karmas = paginate(karmas,page,pages=_pages_)
-    return direct_to_template(request,template,{'karmas':karmas,'page':karmas})
+    karmas = paginate(karmas, page, pages=_pages_)
+    return direct_to_template(request, template,{'karmas':karmas, 'page':karmas})
 
-def show_karmastatus_description(request,id=None,codename=None):
+def show_karmastatus_description(request, id=None, codename=None):
     if id is None and codename is None:
         return HttpResponseRedirect('/')
-    template = get_skin_template(request.user,'karma/description.html')
+    template = get_skin_template(request.user, 'karma/description.html')
     try:
         if codename:
             status = KarmaStatus.objects.get(codename__iexact=codename)
         elif id:
             status = KarmaStatus.objects.get(id=id)
-        img = "%s/images/karma/status/%s.jpg" % (settings.MEDIA_ROOT,status.codename)
+        img = "%s/images/karma/status/%s.jpg" % (settings.MEDIA_ROOT, status.codename)
         from os import stat
         try:
             stat(img)
@@ -149,6 +168,6 @@ def show_karmastatus_description(request,id=None,codename=None):
             img = "images/karma/status/_none_"
     except:
             return HttpResponseRedirect('/')
-    return direct_to_template(request,template,
+    return direct_to_template(request, template,
         {'status':status,
         'img': img})

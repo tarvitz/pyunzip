@@ -10,13 +10,15 @@
 <center>
 <form class='karma_comment_form' action='.' method='POST'>	
     {% csrf_token %}
+    {{ form.as_ul }}
+    {% comment %}
 	{{ form.comment.errors }}
 	<label for='id_comment'>Коментарий:</label><br>
 	{{ form.comment }}<br>
 	{{ form.hidden_nickname }}
 	{{ form.referer }}
-	{{ form.url }}
-	<input type='submit' value='Отправить'>
+	{{ form.url }}{% endcomment %}
+	<input class='btn btn-inverse' type='submit' value='Отправить'>
 </form>
 </center>
 {% endblock %}

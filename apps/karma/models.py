@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 class Karma(models.Model):
     comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
-    date = models.DateTimeField(_('Date'))
+    date = models.DateTimeField(_('Date'), auto_now=True)
     user = models.ForeignKey(User,related_name='karma_owner_set')
     voter = models.ForeignKey(User,related_name='karma_voter_set')
     url = models.URLField(_('URL'),blank=True,null=True)
