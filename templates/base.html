@@ -69,16 +69,16 @@
     <div class='menu'>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border pull-right'>
             {% if user.is_superuser %}
-            <li><a href="{% url "wh:superlogin" %}">&nbsp;S&nbsp;</a></li>
+            <li><a href="{% url "wh:superlogin" %}">&nbsp;<img width='16px' src='/media/icons/white/old_man.png'>&nbsp;</a></li>
             {% endif %}
             {% if user.is_staff %}
-            <li><a href="/admin" title='administration'>&nbsp;☣&nbsp;</a></li>
+            <li><a href="/admin" title='administration'>&nbsp;<img width='16px' src='/media/icons/white/cogwheel.png'>&nbsp;</a></li>
             {% endif %}
             {% if user.is_authenticated %}
-            <li><a href="/logout/" title="logout">&nbsp;☒&nbsp;</a></li>
-            {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;☑&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-            {% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;♨&nbsp;</a></li>{% endif %}
-            <li><a href="/faq/" title="FAQ">&nbsp;?&nbsp;</a></li>
+            <li><a href="/logout/" title="logout">&nbsp;<img width='16px' src='/media/icons/white/circle_remove.png'>&nbsp;</a></li>
+            {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;<img width='16px' src='/media/icons/white/user.png'>&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+            {% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
+            <li><a href="/faq/" title="FAQ">&nbsp;<img width='16px' src='/media/icons/white/circle_question_mark.png'>&nbsp;</a></li>
         </ul>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
             {% for menu in hmenu %}
