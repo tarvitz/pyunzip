@@ -46,6 +46,25 @@ $(document).ready(function(){
         $(block).modal('show');
         return false;
     });
+    $('[rel=popover]').hover(function(e){
+        var self = this;
+        content = $(this).attr('data-content');
+        if (!content.length){
+            $.getJSON( $(this).attr('data-href'), function(json){
+                if (isInstance(json, {})){
+                    $(self).attr({'data-content': json.description});
+                    $(self).popover('show');
+                }
+            });
+        } else {
+            $(this).popover();
+        }
+    }, function(e){
+    });
+    $("[rel=popover]").click(function(e){
+        $(this).popover('show');
+        return false;
+    });
 });
 </script>
 

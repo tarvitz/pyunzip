@@ -152,6 +152,11 @@ div.copyright{
     height: 75px;
     width: 100%;
 }
+.popover{ background-color: initial; }
+.popover .arrow{ background-color: initial;}
+.popover.right .arrow::after{border-right-color: initial /*#888;*/}
+.popover .popover-inner .popover-title{ background-color: initial; /*#888;*/}
+.popover .popover-inner .popover-content{ background-color: initial; /*#888;*/}
 /* footer */
 #wrap{
     min-height: 100%;

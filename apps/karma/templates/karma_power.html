@@ -1,9 +1,17 @@
-{% load karmatags %}
+{% load karmatags i18n %}
 {% get_karma_power for karma_user as karma %} {# shit #}
 <div class='karma'>
 {% with karma_user.get_karma_status as status %}
     {% if status %}
-        <a href='{% url "karma:status" codename=status.codename %}'>{{ status.status }}</a><br>
+        <a  rel='popover'
+            data-placement='bottom'
+            data-trigger='hover'
+            data-delay=300
+            data-html='true'
+            data-title='{% trans "karma" %}'
+            data-content=""
+            data-href='{% url "json:karma:status" codename=status.codename %}'
+            href='{% url "karma:status" codename=status.codename %}'>{{ status.status }}</a><br>
     {% endif %}
 {% endwith %}
 {% spaceless %}
@@ -18,7 +26,7 @@
 {% endif %}
 {% if karma_user.karma >= 0 %}
     <span class='karma_positive'>
-        <a  href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma_user.karma }} &gt;</a>
+        <a href="{% url "karma:karma" user=karma_user.get_username %}">&lt; {{ karma_user.karma }} &gt;</a>
     </span>
 {% else %}
     <span class='karma_negative'>

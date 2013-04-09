@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^', include('apps.files.urls.json', namespace='files')),
     url(r'^', include('apps.tabletop.urls.json', namespace='tabletop')),
     url(r'^', include('apps.tracker.urls.json', namespace='tracker')),
+    url(r'^karma/', include('apps.karma.urls.json', namespace='karma')),
 )
