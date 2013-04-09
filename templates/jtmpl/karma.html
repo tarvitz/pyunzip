@@ -53,18 +53,17 @@ $(document).ready(function(){
             $.getJSON( $(this).attr('data-href'), function(json){
                 if (isInstance(json, {})){
                     $(self).attr({'data-content': json.description});
-                    $(self).popover('show');
+                    $(self).popover();
                 }
             });
         } else {
-            $(this).popover();
+            //$(this).popover();
         }
     }, function(e){
     });
+
     $("[rel=popover]").click(function(e){
-        $(this).popover('show');
         return false;
     });
 });
 </script>
-
