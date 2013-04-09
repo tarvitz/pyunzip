@@ -1,11 +1,11 @@
 {% load i18n coretags %}
 <script type='text/html' id='karmaAlterTemplate'>
-    <div class='modal hide fade in no-background' id='karma-alter-${ user_id }-${ alter }'>
+    <div class='modal hide fade in no-background' id='karma-alter-${ user }-${ alter }'>
         <div class='transparency black'></div>
         <form class='' action='${ action }' method='POST'>
         <div class='modal-header'>
             <a href='#' data-dismiss='modal' class='close'>x</a>
-            <h3>{% trans "Alter karma for user" %} ${ user }</h3>
+            <h3>{% trans "Alter karma for user" %} ${ user_nickname }</h3>
         </div>
         <div class='modal-body'>
             {% csrf_token %}
@@ -19,3 +19,33 @@
         </form>
     </div>
 </script>
+
+<script type='text/javascript'>
+$(document).ready(function(){
+    $('.karma-modal').click(function(e){
+        console.log('fuck you');
+        t = $.template('#karmaAlterTemplate');
+        user = $(this).data('user');
+        user_id = $(this).data('user-id');
+        alter = $(this).data('alter') || 'up';
+        block = "#karma-alter-" + user_id + "-" + alter;
+        btnAlter = (alter == 'up') ? 'btn-success': 'btn-danger';
+        data = {
+            'url': "{{ current_referer }}",
+            'alter': alter,
+            'user_nickname': user,
+            'user': user_id,
+            'action': $(this).attr('href'),
+            'btnAlter': btnAlter
+        }
+        if (!$(block).length){
+            blk = $.tmpl(t, data);
+            blk.appendTo('body');
+            parseJSONFormFields(data, $(block).find('form'));
+        }
+        $(block).modal('show');
+        return false;
+    });
+});
+</script>
+
