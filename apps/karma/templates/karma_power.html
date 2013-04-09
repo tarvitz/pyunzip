@@ -9,7 +9,11 @@
 {% spaceless %}
 {% if user.comments_count > gs.KARMA_COMMENTS_COUNT %}
     <span class='karma_positive'>
-        <a href="{% url "karma:alter" choice='up' nickname=karma_user.get_username %}">+</a>
+        <a href="{% url "karma:alter" choice='up' nickname=karma_user.get_username %}"
+            data-toggle='modal' data-target='#karma-alter-{{ karma_user.id }}'
+            data-user='{{ karma_user.nickname }}' data-user-id='{{ karma_user.id }}'
+            data-alter='up'
+            class='karma-modal'>+</a>
     </span>&nbsp;
 {% endif %}
 {% if karma_user.karma >= 0 %}
@@ -22,7 +26,11 @@
     </span>
 {% endif %}
 {% if user.comments_count > gs.KARMA_COMMENTS_COUNT %}&nbsp;<span class='karma_negative'>
-    <a href="{% url "karma:alter" choice='down' nickname=karma_user.get_username %}">-</a></span>
+    <a  href="{% url "karma:alter" choice='down' nickname=karma_user.get_username %}"
+        data-toggle='modal' data-target='#karma-alter-{{ karma_user.id }}'
+        data-user='{{ karma_user.nickname }}' data-user-id='{{ karma_user.id }}'
+        data-alter='down'
+        class='karma-modal'>-</a></span>
 {% endif %}
 {% endspaceless %}
 </div>

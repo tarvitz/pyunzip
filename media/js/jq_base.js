@@ -190,3 +190,25 @@ var postFormAjax = function(p){
     }); //end postAjax
 }
 
+function isInstance(x, Obj){
+    return Object.prototype.toString.call(x) === Object.prototype.toString.call(Obj);
+}
+
+var parseJSONFormFields = function(data, form){
+    $.each(data, function(index, value){
+        if (isInstance(value, [])){
+            $.each(value, function(idx, val){
+                if (!isInstance(value, [])){
+                    container = "#id_" + index + ' option[value=' + val + ']';
+                    $(form).find(container).attr({selected: true});
+                }
+            });//each value given array
+        } else {
+            if ($(form).find('#id_' + index).is('select')){
+                $(form).find('#id_' + index).find('option[value='+value+']').attr({selected: true});
+            } else {
+                form.find('#id_' + index).attr({value: value});
+            }// if given
+        } // if isarray
+    });// each
+}

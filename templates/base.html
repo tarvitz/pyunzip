@@ -157,6 +157,7 @@
 
 {% block endjs %}
 {% include "jtmpl/core.html" %}
+{% include "jtmpl/karma.html" %}
 
 <script language='javascript' type='text/javascript'>
     var setTabs = function(src){
@@ -272,4 +273,30 @@
 {% endif %}
 {% endblock %}
 
+<script type='text/javascript'>
+    $('.karma-modal').click(function(e){
+        console.log('fuck you');
+        t = $.template('#karmaAlterTemplate');
+        user = $(this).data('user');
+        user_id = $(this).data('user-id');
+        alter = $(this).data('alter') || 'up';
+        block = "#karma-alter-" + user_id + "-" + alter;
+        btnAlter = (alter == 'up') ? 'btn-success': 'btn-danger';
+        data = {
+            'url': "{{ current_referer }}",
+            'alter': alter,
+            'user': user,
+            'user_id': user_id,
+            'action': $(this).attr('href'),
+            'btnAlter': btnAlter
+        }
+        if (!$(block).length){
+            blk = $.tmpl(t, data);
+            blk.appendTo('body');
+            parseJSONFormFields(data, $(block).find('form'));
+        }
+        $(block).modal('show');
+        return false;
+    });
+</script>
 </html>
