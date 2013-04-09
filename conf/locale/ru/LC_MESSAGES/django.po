@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-09 04:54+0400\n"
+"POT-Creation-Date: 2013-04-09 19:38+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -815,7 +815,7 @@ msgstr "Ни одного файла не загружено"
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
-#: apps/files/templates/files/user_files.html:80 templates/base.html:241
+#: apps/files/templates/files/user_files.html:80 templates/base.html:242
 #: templates/test_upload.html:46
 msgid "Yes"
 msgstr "Да"
@@ -913,6 +913,10 @@ msgstr "Кармический статус"
 #: apps/karma/models.py:65
 msgid "Karma Statuses"
 msgstr "Кармические статусы"
+
+#: apps/karma/templates/karma_power.html:11
+msgid "karma"
+msgstr "карма"
 
 #: apps/menu/admin.py:28
 msgid "path"
@@ -2825,15 +2829,15 @@ msgstr ""
 "   \n"
 "   Спасибо :)\n"
 
-#: templates/base.html:185
+#: templates/base.html:186
 msgid "Required field"
 msgstr "Обязательное поле"
 
-#: templates/base.html:236
+#: templates/base.html:237
 msgid "Do you really want to approve this action?"
 msgstr "Вы действительно хотите выполнить это действие?"
 
-#: templates/base.html:242
+#: templates/base.html:243
 msgid "no"
 msgstr "нет"
 
@@ -2869,15 +2873,15 @@ msgstr "успешно загружено"
 msgid "please enter how your link would be called"
 msgstr "пожалуйста, введите имя для вашей ссылки"
 
-#: templates/jtmpl/karma.html:7
+#: templates/jtmpl/karma.html:8
 msgid "Alter karma for user"
 msgstr "Изменить карму пользователя"
 
-#: templates/jtmpl/karma.html:15
+#: templates/jtmpl/karma.html:16
 msgid "Alter"
 msgstr "Изменить"
 
-#: templates/jtmpl/karma.html:16
+#: templates/jtmpl/karma.html:17
 msgid "Close"
 msgstr "Закрыть"
 
