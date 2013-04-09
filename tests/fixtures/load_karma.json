@@ -1,0 +1,14 @@
+[
+{
+    "pk": 1, 
+    "model": "karma.karma", 
+    "fields": {
+        "comment": "\u0442\u0443\u0442!", 
+        "voter": 1, 
+        "url": "/news/article/4/", 
+        "value": -5, 
+        "user": 6, 
+        "date": "2013-04-08T01:48:58.795"
+    }
+}
+]

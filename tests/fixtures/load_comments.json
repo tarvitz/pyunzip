@@ -1,0 +1,154 @@
+[
+{
+    "pk": 17, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0410 \u0432\u043e\u0442 \u0445\u0435\u0440!\n\u0422\u0435\u0441\u0442\u0438\u0440\u0443\u0435\u043c \u0442\u0435\u0441\u0442!\n\u0425\u0443\u044f\u043a!\n(spoiler)[test]!\n\n\u0420\u0410\u0417\u0420 \u0417!", 
+        "user_url": "", 
+        "submit_date": "2013-02-03T04:43:52.440", 
+        "ip_address": "127.0.0.1", 
+        "object_pk": "4", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 18, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "13dasd", 
+        "user_url": "", 
+        "submit_date": "2013-02-03T05:05:49.481", 
+        "ip_address": null, 
+        "object_pk": "2", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 43, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 19, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0421\u043e\u0443 \u043c\u0430\u0447!", 
+        "user_url": "", 
+        "submit_date": "2013-02-03T05:17:23.555", 
+        "ip_address": null, 
+        "object_pk": "1", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 40, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 20, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u044f \u0442\u043e\u0436\u0435 \u043d\u0435 \u0432\u0438\u0434\u0435\u043b!\r\n\r\n\u044f \u0442\u043e\u0436\u0435", 
+        "user_url": "", 
+        "submit_date": "2013-02-16T19:17:35.356", 
+        "ip_address": null, 
+        "object_pk": "4", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 6, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 21, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "1 2 3 4 5 6 7 8 9 0 1 2 3\n\u0411\u043e\u043b\u0435\u0435 \u0443\u043c\u043d\u0430\u044f \u0444\u0440\u0430\u0437\u0430", 
+        "user_url": "", 
+        "submit_date": "2013-03-29T06:42:04.935", 
+        "ip_address": "127.0.0.1", 
+        "object_pk": "2", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 22, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "xep\n!(user image)/media/user/1/files/foxyrest.jpg!\r\n\"(user file)the link\":/media/user/1/files/debian-binary\r\n\n\"(user file)the link\":/media/user/1/files/import_example.csv\r\n\"(user file)the link\":/media/user/1/files/control.tar.gz\r\n\n\"(user file)testing\":/media/user/1/files/import_example.csv.1\r\n\n\"(user file)black mesa torrent\":/media/user/1/files/Black_Mesa.7635889.TPB.torrent\r\n", 
+        "user_url": "", 
+        "submit_date": "2013-03-29T06:45:23.653", 
+        "ip_address": "127.0.0.1", 
+        "object_pk": "4", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 23, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "dadasda", 
+        "user_url": "", 
+        "submit_date": "2013-04-04T18:07:58.666", 
+        "ip_address": null, 
+        "object_pk": "4", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 6, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+},
+{
+    "pk": 24, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0413\u0430\u0432 \u0433\u0430\u0432!", 
+        "user_url": "", 
+        "submit_date": "2013-04-04T18:08:23.490", 
+        "ip_address": null, 
+        "object_pk": "4", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 7, 
+        "content_type": 34, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": ""
+    }
+}
+]
