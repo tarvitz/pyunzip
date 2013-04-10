@@ -9,6 +9,7 @@ from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import model_json_encoder
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 import simplejson as json
 
@@ -48,6 +49,8 @@ class JustTest(TestCase):
     def test_alter_karma(self):
         # anonymous can not alter karma
         u = User.objects.get(username='user')
+        admin = User.objects.get(username='admin')
+        # checking anonymous
         post = {
             'comment': 'up',
             'alter': 'up',
@@ -83,6 +86,23 @@ class JustTest(TestCase):
             )
             self.assertNotEqual(comment.id, None)
 
+        # check can not alter karma for yourself
+        logged = self.client.login(username='admin', password='123456')
+        url = reverse('karma:alter', args=('up', 'admin'))
+        self.assertEqual(logged, True)
+        post = {
+            'user': admin.id,
+            'alter': 'up',
+            'url': '/news/',
+            'comment': 'up'
+        }
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, unicode(_("You can not alter karma for yourself")))
+        # check for another user
+        post.update({
+            'user': u.id
+        })
         response = self.client.post(url, post, follow=True)
 
         self.assertEqual(response.status_code, 200)

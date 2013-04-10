@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-09 19:38+0400\n"
+"POT-Creation-Date: 2013-04-10 16:51+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -864,6 +864,10 @@ msgstr ""
 #, fuzzy
 msgid "No such user exists"
 msgstr "Такого пользователя с данным email'ом нет"
+
+#: apps/karma/forms.py:39 apps/karma/tests.py:101
+msgid "You can not alter karma for yourself"
+msgstr "Нельзя менять карму самим себе"
 
 #: apps/karma/models.py:15 apps/tabletop/models.py:153
 #: apps/tabletop/templates/add_old_battle_report.html:40
