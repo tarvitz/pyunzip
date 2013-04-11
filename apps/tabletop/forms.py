@@ -255,7 +255,7 @@ class AddRosterModelForm(RequestModelForm):
     codex = forms.ModelChoiceField(
         queryset=Codex.objects, required=True, empty_label=None,
         widget=forms.Select(attrs={'class': 'span5 chosen'}),
-        label=_('codex')
+        label=_('Codex')
 
     )
     class Meta:
