@@ -1,6 +1,9 @@
 # coding: utf-8
 from django.db import models
-from django.utils.translation import ugettext_lazy as _, ugettext as tr
+from django.utils.translation import (
+    ugettext_lazy as _, ugettext as tr,
+    pgettext_lazy
+)
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
 from utils.models import copy_fields
@@ -39,9 +42,9 @@ class Codex(models.Model):
     object_id = models.PositiveIntegerField()
     content_object = generic.GenericForeignKey(ct_field="content type",
         fk_field="object_id")
-    title = models.CharField(_('Title'), max_length=128)
-    plain_side = models.CharField(_('Plain side'), max_length=128, blank=True) #for sphinx search optimization
-    revisions = models.CommaSeparatedIntegerField(_('Revisions'), max_length=64)
+    title = models.CharField(_('title'), max_length=128)
+    plain_side = models.CharField(_('plain side'), max_length=128, blank=True) #for sphinx search optimization
+    revisions = models.CommaSeparatedIntegerField(_('revisions'), max_length=64)
 
     def bound(self):
         try:
@@ -69,18 +72,25 @@ class Roster(models.Model):
             raise ValidationError, tr('should be with range of 0 to 100')
         return value
     owner = models.ForeignKey(User,related_name='roster_owner')
-    title = models.CharField(_('Title'),max_length=100)
+    title = models.CharField(_('title'),max_length=100)
     user = models.ForeignKey(User,blank=True,null=True,related_name='user')
-    player = models.CharField(_('Player'),blank=True,max_length=32)
-    roster = models.TextField(_('Roster'),max_length=4096)
+    player = models.CharField(_('player'),blank=True,max_length=32)
+    roster = models.TextField(_('roster'),max_length=4096)
     #may cause an errors as CharField was moved to TextField without database
     #changes
-    comments = models.TextField(_('Comments'),max_length=10240,blank=True,null=True)
+    comments = models.TextField(_('comments'),max_length=10240,blank=True,null=True)
     #race = models.ForeignKey(Side,related_name='race',blank=True,null=True)
-    codex = models.ForeignKey(Codex, blank=True, null=True, default=1)
-    custom_codex = models.CharField(_('Custom Codex'),max_length=50,blank=True,null=True)
-    revision = models.IntegerField(_('Revision'), validators=[valid_revision,])
-    pts = models.IntegerField(_('pts')) #we should make A LOT OF CHECK UPS :( within
+    codex = models.ForeignKey(
+        Codex, blank=True, null=True, default=1,
+        verbose_name=_("codex")
+    )
+    custom_codex = models.CharField(_('custom Codex'),max_length=50,blank=True,null=True)
+    revision = models.IntegerField(
+        pgettext_lazy('revision', 'codex revision'), validators=[valid_revision,],
+        help_text=_("revision means how new your codex is (bigger is newer)")
+    )
+    pts = models.IntegerField(
+        _('pts'), help_text=_("amount of codex points")) #we should make A LOT OF CHECK UPS :( within
     syntax = models.CharField(_('Syntax'), max_length=20,blank=True,null=True,choices=settings.SYNTAX)
 
     is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True)

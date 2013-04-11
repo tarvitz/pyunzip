@@ -289,6 +289,19 @@ form{
 form > li{
     list-style-type: none
 }
+form .help-text{
+    font-color: #ccc;
+    font-size: 10pt;
+}
+form ul.errors{ margin: 0px;}
+form ul.errors > li{
+    list-style-type: none;
+    color: red;
+    font-size: 10pt;
+}
+.form-horizontal .control-label{
+    padding-top: 8px;
+}
 img.purity-seal{
     position: absolute;
     height: 240px;
@@ -307,4 +320,11 @@ img.purity-seal{
     margin-left: 10px;
     margin-top: 10px;
     width: 300px;
+}
+/* plugins */
+.chzn-results{
+    color: #000;
+}
+.chzn-container > a:hover{
+    text-shadow: none;
 }

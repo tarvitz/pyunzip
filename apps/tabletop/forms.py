@@ -21,7 +21,7 @@ class AddCodexModelForm(forms.ModelForm):
     side = forms.ModelChoiceField(queryset=Side.objects)
     army = forms.ModelChoiceField(queryset=Army.objects.none(),
         required=False)
-    
+
     class Meta:
         model = Codex
         fields = ['title', 'side', 'army', 'revisions', ]
@@ -38,7 +38,7 @@ class AddCodexModelForm(forms.ModelForm):
                 if POST['army']:
                     self.base_fields['army'].queryset = Army.objects.filter(pk=POST['army'])
         super(AddCodexModelForm, self).__init__(*args, **kwargs)
-    
+
     def save(self, *args, **kwargs):
         super(AddCodexModelForm, self).save(*args, **kwargs)
 
@@ -53,7 +53,7 @@ class AddBattleReportForm(RequestForm):
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True}))
     next = forms.CharField(required=False,widget=forms.HiddenInput()) # could it be dangerous ?
-    
+
     def clean_rosters(self):
         rosters_raw = self.cleaned_data['rosters']
         rosters = [int(i) for i in rosters_raw.split(',')]
@@ -68,7 +68,7 @@ class AddBattleReportForm(RequestForm):
                 raise forms.ValidationError(_('You can not write battlereports which has rosters that differ with pts field'))
         #returns int list
         return rosters
-    
+
     def clean_winner(self):
         winner_id = self.cleaned_data['winner']
         winner = get_object_or_none(Roster,id=winner_id)
@@ -76,7 +76,7 @@ class AddBattleReportForm(RequestForm):
             return winner
         else:
             raise forms.ValidationError(_('There\'s no roster with such id'))
-    
+
     def clean_mission(self):
         mission_id = self.cleaned_data['mission']
         mission = get_object_or_none(Mission,id=mission_id)
@@ -120,14 +120,14 @@ class AddBattleReportModelForm(RequestModelForm):
     layout = forms.RegexField(regex=re.compile(r'^[\d+vs]+',re.M),required=True,
         help_text=_('Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
     comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,
-        'disable_syntax': True})) 
-  
+        'disable_syntax': True}))
+
     class Meta:
         model = BattleReport
         fields = ('title', 'layout','mission', 'syntax', 'search_rosters',
             'rosters_choice', 'users', 'winner', 'comment')
         exclude = ['owner', 'published', 'approved', 'ip_address',]
-   
+
     def __init__(self, *args, **kwargs):
         if 'instance' in kwargs:
             instance = kwargs['instance']
@@ -138,7 +138,7 @@ class AddBattleReportModelForm(RequestModelForm):
                         instance.users.all()))
                     self.base_fields['winner'].queryset = Roster.objects.filter(pk__in=(
                         instance.users.all()))
-        
+
         #checking up for valid value existance
         if args:
             if 'users' in args[0]:
@@ -149,7 +149,7 @@ class AddBattleReportModelForm(RequestModelForm):
                 if plain_winner:
                     self.base_fields['winner'].queryset = Roster.objects.filter(id=plain_winner)
         super(AddBattleReportModelForm, self).__init__(*args, **kwargs)
-    
+
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -169,16 +169,16 @@ class AddBattleReportModelForm(RequestModelForm):
         if l > 10:
             raise forms.ValidationError(_('10 players is absolute maximum, do not try to add layout with more players, it\'s strickly forbidden'))
         return layout
-   
+
 class DeepSearchRosterForm(RequestForm):
     player = forms.CharField(required=False)
     race = forms.CharField(required=False)
     pts = forms.CharField(required=False)
     title = forms.CharField(required=False)
-    
+
     def clean_player(self):
         player = self.cleaned_data.get('player',None)
-        
+
         if not player: return
         r = re.compile('[\w\s-]+')
         player = r.match(player).group()
@@ -202,8 +202,8 @@ class DeepSearchRosterForm(RequestForm):
 
 class AddRosterForm(RequestForm):
     RACE_CHOICES =  [(i.id,i.name)for i in Side.objects.all().exclude(name__iexact='none').order_by('id')]
-    RACE_CHOICES.insert(0,(0,'------'))
-    title = forms.CharField()
+    RACE_CHOICES.insert(0, (0,'------'))
+    title = forms.CharField(label=_("Title"))
     player = forms.RegexField(regex=re.compile(r'^[\w\s-]+$',re.U),required=False)
     roster = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True,'rows':20,'cols':'60'}))
     race = forms.ChoiceField(choices=RACE_CHOICES,initial=(0,'------'))
@@ -227,7 +227,7 @@ class AddRosterForm(RequestForm):
             self._errors['custom_race'] = ErrorList([msg])
             del cleaned_data['custom_race']
         return cleaned_data
-    
+
     def clean_referer(self):
         referer = self.cleaned_data.get('referer',None)
         if not referer:
@@ -252,16 +252,33 @@ class AddRosterForm(RequestForm):
 
 class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
-    codex = forms.ModelChoiceField(queryset=Codex.objects, required=True)
+    codex = forms.ModelChoiceField(
+        queryset=Codex.objects, required=True, empty_label=None,
+        widget=forms.Select(attrs={'class': 'span5 chosen'}),
+        label=_('codex')
+
+    )
     class Meta:
         model = Roster
         exclude = ['owner', 'user', 'is_orphan', 'plain_side']
         widgets = {
-            'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
-            'roster': TinyMkWidget(attrs={'disable_user_quote': True})
+            #'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
+            #'roster': TinyMkWidget(attrs={'disable_user_quote': True})
+            'title': forms.TextInput(attrs={'class': 'span5'}),
+            'pts': forms.TextInput(attrs={'class': 'span5'}),
+            'revision': forms.Select(attrs={'class': 'span5 chosen'}),
+            'roster': forms.Textarea(attrs={'class': 'markitup textile'})
         }
-        fields = ['title', 'player', 'pts', 'syntax', 'codex', 'custom_codex', 'revision', 'roster', 'comments' ]
-    
+        fields = [
+            'title',
+            #'player',
+            'pts',
+            #'syntax',
+            'codex',
+            #'custom_codex',
+            'revision', 'roster',
+        ]
+
     def clean(self):
         cleaned_data = self.cleaned_data
         revision = cleaned_data.get('revision', None)
@@ -282,7 +299,7 @@ class AddRosterModelForm(RequestModelForm):
             return pts
         else:
             raise forms.ValidationError(_('The common pts should be greater than 500'))
-    
+
     def clean_player(self):
         player = self.cleaned_data.get('player',None)
         if len(player)>64:

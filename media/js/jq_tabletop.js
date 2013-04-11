@@ -21,7 +21,7 @@ var get_roster = function(url, id){
 	}// if is blank
 }
 
-var updateRevision = function(){
+var _updateRevision = function(){
     url = _xhr_get_codex_revisions + codex.options[codex.selectedIndex].value;
     $.getJSON(url, function(data){
         revlist = data.revlist;
@@ -33,5 +33,11 @@ var updateRevision = function(){
         }else{
             $(p).insertBefore("#"+revision.id);
         }
+    });
+}
+
+var getRevision = function(d){
+    $.getJSON(d.url, function(json){
+        if (d.success) d.success(json);
     });
 }

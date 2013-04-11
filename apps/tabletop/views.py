@@ -9,7 +9,7 @@ from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 #from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import get_settings, get_comments,get_content_type,\
-    get_object_or_none,paginate,can_act
+    get_object_or_none,paginate,can_act, render_to
 from django.conf import settings
 from django.shortcuts import render_to_response,get_object_or_404
 from apps.core import pages, get_skin_template
@@ -304,25 +304,34 @@ def delete_roster(request,id=None,action=''):
             #form.cleaned_data['url'] 
     return HttpResponseRedirect(referer)
 
+
 @login_required
+@render_to('add_roster.html', allow_xhr=True)
 def action_roster(request, id=None, action=None):
     instance = None
     if id:
         instance = get_object_or_404(Roster, id=id)
-    template = get_skin_template(request.user, 'add_roster.html')
+
+    form = AddRosterModelForm(
+        request.POST or None, instance=instance, request=request
+    )
+
     if request.method == 'POST':
-        form = AddRosterModelForm(request.POST, instance=instance, request=request)
+        #form = AddRosterModelForm(request.POST, instance=instance, request=request)
         if form.is_valid():
             #do not let overriding owner
             if not hasattr(form.instance, 'owner'):
                 form.instance.owner = request.user
             form.save()
-            return HttpResponseRedirect(reverse('tabletop:roster',
-                args=(form.instance.pk,)))
-        else:
-            return direct_to_template(request, template, {'form': form})
-    form = AddRosterModelForm(instance=instance, request=request)
-    return direct_to_template(request, template, {'form': form})
+            return {
+                'redirect': 'tabletop:roster',
+                'redirect-args': (form.instance.pk,)
+            }
+
+    return {
+        'form': form
+    }
+
 
 @login_required
 def action_roster_old(request,id=None,action=''):

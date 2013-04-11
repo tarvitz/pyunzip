@@ -89,7 +89,9 @@
                                                     <span class='roster'></span>
                                                 </div>
 					{% endifequal %}
+                    {% if r.comments %}
 					<div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
+                    {% endif %}
 					{% load comments %}
 					{% get_comment_count for r as comments_count %}
 					{% if comments_count %}

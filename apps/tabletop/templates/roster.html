@@ -78,9 +78,11 @@
 				</div>
 			</div>
 			</center> <!-- before roster_info -->
+            {% if roster.comments %}
 			<div class='comment'>
 				{{ roster.comments|render_filter:roster.syntax|safe }}
 			</div>
+            {% endif %}
 		<br clear='all'>
 		</div> <!-- msg_text -->
 	</div> <!-- msg_content -->
