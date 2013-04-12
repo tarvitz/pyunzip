@@ -43,16 +43,54 @@ class AddCodexModelForm(forms.ModelForm):
         super(AddCodexModelForm, self).save(*args, **kwargs)
 
 class AddBattleReportForm(RequestForm):
-    title = forms.CharField()
-    rosters = forms.RegexField(regex=re.compile('(\d+)(,)'))
-    winner = forms.IntegerField()
-    _mission_choices = [(i.id,'%s:%s' % (i.game.codename,i.title)) for i in Mission.objects.all()]
-    mission = forms.ChoiceField(choices=_mission_choices)
-    layout = forms.RegexField(regex=re.compile('^\d{1}vs\d{1}$'))
-    syntax = forms.ChoiceField(choices=settings.SYNTAX)
-    hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
-    comment = forms.CharField(widget=TinyMkWidget(attrs={'disable_user_quote':True}))
-    next = forms.CharField(required=False,widget=forms.HiddenInput()) # could it be dangerous ?
+    title = forms.RegexField(
+        regex=re.compile('^[\w\d\ \-\_\.]+$'),
+        widget=forms.TextInput(attrs={'class': 'span8'})
+    )
+    rosters = forms.ModelMultipleChoiceField(
+        queryset=Roster.objects,
+        widget=forms.SelectMultiple(
+            attrs={'class': 'span8', 'data-class': 'ajax-chosen'}
+        )
+    )
+    winners = forms.ModelMultipleChoiceField(
+        queryset=Roster.objects,
+        widget=forms.SelectMultiple(
+            attrs={'class': 'span8', 'data-class': 'chosen'}
+        )
+    )
+    #_mission_choices = [(i.id,'%s:%s' % (i.game.codename, i.title)) for i in Mission.objects.all()]
+    mission = forms.ModelChoiceField(
+        queryset=Mission.objects,
+        widget=forms.Select(
+            attrs={'class': 'span8', 'data-class': 'chosen'}
+        )
+    )
+    layout = forms.RegexField(
+        regex=re.compile('^\d{1}vs\d{1}$'),
+        widget=forms.TextInput(
+            attrs={'class': 'span8'}
+        )
+    )
+    #syntax = forms.ChoiceField(choices=settings.SYNTAX)
+    #hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
+    comment = forms.CharField(
+        widget=forms.Textarea(
+            attrs={'class': 'textile'}
+        )
+    )
+    next = forms.CharField(required=False, widget=forms.HiddenInput()) # could it be dangerous ?
+
+    def __init__(self, *args, **kwargs):
+        super(AddBattleReportForm, self).__init__(*args, **kwargs)
+        if not all((self.data or [None,])):
+            # data not posted
+            none_rosters = Roster.objects.none()
+            self.base_fields['rosters'].queryset = none_rosters
+            self.fields['rosters'].queryset = none_rosters
+            self.base_fields['winners'].queryset = none_rosters
+            self.fields['winners'].queryset = none_rosters
+            pass
 
     def clean_rosters(self):
         rosters_raw = self.cleaned_data['rosters']

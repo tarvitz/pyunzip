@@ -42,9 +42,9 @@ class InlineWargearContainer(admin.StackedInline):
     extra = 0
 
 class BattleReportAdmin(admin.ModelAdmin):
-	list_display = ('title','winner','layout' ,'approved','ip_address')
-	search_fields = [ 'approved','title', 'winner']
-	list_filter = ['approved','layout', 'ip_address' ]
+	list_display = ('title', 'layout', 'approved', 'ip_address')
+	search_fields = [ 'approved', 'title', 'winner']
+	list_filter = ['approved', 'layout', 'ip_address' ]
 	
     #def mission_content(self,obj):
     #    if hasattr(obj,'mission'):

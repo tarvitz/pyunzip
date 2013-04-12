@@ -151,21 +151,24 @@ class Mission(models.Model):
         pass
 
 class BattleReport(models.Model):
-    title = models.CharField(_('Title'),max_length=100)
-    owner = models.ForeignKey(User, related_name='battlereport')
-    published = models.DateTimeField(_('Published'))
+    title = models.CharField(_('title'), max_length=100)
+    owner = models.ForeignKey(User, related_name='battle_report_set')
+    published = models.DateTimeField(
+        _('published'), auto_now=True
+    )
     #boo :)
-    users = models.ManyToManyField(Roster, verbose_name=_('Rosters'))
-    winner = models.ForeignKey(Roster,related_name='winner',
-        blank=True, null=True)
-    mission = models.ForeignKey(Mission)
-    layout = models.CharField(_('Layout'),max_length=30)
-    comment = models.TextField(_('Comment'),max_length=10240)
-    approved = models.BooleanField(_('Approved'),default=False,blank=True)
-    ip_address = models.IPAddressField(_('IP address'),blank=True,null=True)
-    syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX)
+    users = models.ManyToManyField(Roster, verbose_name=_('rosters'))
+    winners = models.ForeignKey(Roster, related_name='winner',
+        blank=True, null=True, verbose_name=_('winners'))
+    mission = models.ForeignKey(Mission, verbose_name=_("mission"))
+    layout = models.CharField(_('layout'),max_length=30)
+    comment = models.TextField(_('comment'),max_length=10240)
+    approved = models.BooleanField(_('approved'), default=False, blank=True)
+    ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
+    syntax = models.CharField(_('syntax'), max_length=20, choices=settings.SYNTAX)
     search = SphinxSearch(weights={'title': 30, 'comment': 30})
     actions = [common_delete_action, ]
+
     def __unicode__(self):
         return "%s [%s:%s]" % (
             self.title,
@@ -193,6 +196,9 @@ class BattleReport(models.Model):
                 return _('[fuzzy] ')
         return self.users.distinct()[0].pts
     general_pts = property(_get_general_pts)
+
+    def get_pts(self):
+        return self.general_pts
 
     def _get_versus_layout(self):
         """"""

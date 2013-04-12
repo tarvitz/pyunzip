@@ -30,6 +30,9 @@
                         <a rel='twipsy' href='{% url "tabletop:roster-add" %}' data-title='Добавить ростер'>[<i class='icon-plus icon-white'></i>]</a></li>
                     <li><a rel='twipsy' href='{% url "news:news-user" %}'>Мои новости</a></li>
                     <li><a rel='twipsy' href='{% url "files:files" %}'>Мои файлы</a></li>
+                    {% if gs.EXPERIMENTAL %}
+                    <li><a rel='twipsy' href='{% url "tabletop:battle-reports" %}'>Мои репорты</a></li>
+                    {% endif %}
                 </ul>
         </div>
         {% endif %}

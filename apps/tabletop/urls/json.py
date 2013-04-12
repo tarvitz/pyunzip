@@ -13,3 +13,8 @@ urlpatterns = patterns(
     url('^get/codex/revisions/(?P<id>\d+)/$', 'xhr_get_codex_revisions',
         name='codex-revisions'),
 )
+
+urlpatterns += patterns(
+    'apps.tabletop.views.json',
+    url('^roster/search/$', 'roster_search', name='roster-search')
+)

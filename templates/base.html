@@ -34,6 +34,7 @@
 <script type='text/javascript' src='/media/js/base.js'></script>
 <script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
 <script type='text/javascript' src='/media/js/chosen.min.js'></script>
+<script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
 <script type='text/javascript' src='/media/js/video.js' async></script>
 <script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
 <script type='text/javascript' src='/media/js/jq_defaults.js'></script>
@@ -190,6 +191,8 @@
         $('.nav-tabs a[data-toggle]').click(function(e){
             setTabs($(this).attr('href').replace('#', ''));
         });
+
+        $("select.chosen").chosen();
     });
 
     {% comment %}
@@ -232,7 +235,6 @@
         return false;
     });
     $('#login-modal form').submit(function(e){ return false;});
-    $('select.chosen').chosen();
 
     markupSettings = myMarkupSettings['textile'];
     markupSettings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
