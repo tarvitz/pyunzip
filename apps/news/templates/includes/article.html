@@ -1,4 +1,4 @@
-<div id='news'> {% load newsfilters comments %}
+<div id='news'> {% load newsfilters comments i18n %}
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url "news:news" category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
