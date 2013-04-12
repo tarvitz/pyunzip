@@ -1,0 +1,109 @@
+{% extends base_template %}
+{% load i18n %}
+{% block content %}
+    <a class='btn btn-inverse add-report' href='{% url "tabletop:roster-add" %}'>{% trans "Add report" %}</a>
+    <div class='report' data-class='hide-flow'>
+        <form class='form-horizontal' action='' method='POST'>
+            {% include "forms/bootstrap_horizontal.html" with form=form %}
+        </form>
+    </div>
+    {% if reports.objects_list %}
+        <table class='table striped'>
+            <tr>
+                <th>{% trans "Title" %}</th>
+                <th>{% trans "Pts" %}</th>
+                <th>{% trans "Published" context "published date" %}</th>
+            </tr>
+            {% for report in reports.object_list %}
+            <tr>
+                <td><a href='{{ report.get_absolute_url }}'>{{ report.title }}</a></td>
+                <td>{{ report.get_pts }}</td>
+                <td>{{ report.published }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% include "pages.html" with page=reports %}
+    {% else %}
+        <h3>{% trans "No reports found ;)" %}</h3>
+    {% endif %}
+
+<script type='text/javascript'>
+    var searchRosters = function(){
+        url = "{% url 'json:tabletop:roster-search' %}";
+        blk = $("#id_rosters_chzn .search-field input");
+        results = $("#id_rosters_chzn .chzn-results");
+        url += '?q=' + blk.val();
+        $.getJSON(url, function(json){
+            if (json){
+                $("#id_rosters option").detach().remove();
+                $(results).find('.chzn-results > li').detach().remove();
+                json.rosters.map(function(roster){
+                    option = $("<option>").attr({
+                        'value': roster.id
+                    }).text(roster.title);
+                    option.appendTo($('#id_rosters'));
+                    last_id = $("#id_rosters_chzn .chzn-results > li:last").attr('id');
+                    last_id = (typeof last_id != 'undefined') ? last_id.match(/_(\d+)$/)[1] | 0 : -1;
+                    last_id += 1;
+                    li = $("<li>").attr({
+                        'class': '',
+                        'id': 'id_rosters_chzn_o_' + last_id
+                    }).text(roster.title);
+                    li.appendTo(results);
+                    //'<li id="id_rosters_chzn_o_0" class="result-selected" style="">Новый тестовый ростер [Saul Tarvitz:Space Marines:555] [5]</li>'
+                });
+                //$("#id_rosters").trigger('liszt:updated');
+            }
+        });
+    }
+
+    $(document).ready(function(){
+        $('[data-class="chosen"]').chosen();
+        //chosen bug :( should be before 'hiding the block'
+        //$('.report').addClass('hide-flow');
+        var settings = myMarkupSettings['textile'];
+        settings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
+        $('#id_comment').markItUp(settings);
+        $(".add-report").click(function(e){
+            $('.report').toggleClass('hide-flow');
+            return false;
+        });
+
+        /*search_input = $("#id_rosters_chzn .search-field input");
+        search_input.keypress(function(e){
+            var timeout = false;
+            if ($(this).val().length > 3){
+                searchRosters();
+            }
+        });*/
+        $('#id_rosters').ajaxChosen({
+            type: 'GET',
+            url: '{% url 'json:tabletop:roster-search' %}',
+            dataType: 'json',
+            jsonTermKey: 'q',
+            keepTypingMsg: '{% trans "Please, keep typing ..." %}',
+            lookingForMsg: "{% trans 'Searching for' %}"
+
+
+        }, function(data){
+            var results = [];
+
+            data.rosters.map(function(roster){
+                results.push({ value: roster.id, text: roster.title +  });
+            });
+            return results;
+        });
+
+        $("#id_rosters").chosen().change(function(e){
+            $("#id_winners option").detach().remove();
+            $.each($("#id_rosters option"), function(idx, opt){
+                option = $("<option>").attr({'value': $(opt).val()}).text($(opt).text());
+                $(option).appendTo($("#id_winners"));
+            });
+            $("#id_winners").trigger('liszt:updated');
+            return e;
+        });
+    });
+</script>
+
+{% endblock %}
