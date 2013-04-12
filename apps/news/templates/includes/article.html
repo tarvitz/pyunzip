@@ -13,7 +13,10 @@
 			{% else %}
 			<span id="edit_button"><a id='button' href='{% url "news:article-action" id=n.id action='unapprove' %}'>Убрать</a></span>
 			{% endif %}
-            <span id='edit_button'><a id='button' href='{% url "news:article-delete" n.id %}'>Удалить</a></span>
+            <span id='edit_button'>
+                <a id='button' data-text='{% trans "Do you want to delete this article?" %}'
+                    data-yes-btn-class='btn btn-danger'
+                    href='#' class='noty confirm' data-href='{% url "news:article-delete" n.id %}'>Удалить</a></span>
 		{% endif %}
 		{% if not n.approved %}
             {% spaceless%}
