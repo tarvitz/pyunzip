@@ -157,9 +157,12 @@ class BattleReport(models.Model):
         _('published'), auto_now=True
     )
     #boo :)
-    users = models.ManyToManyField(Roster, verbose_name=_('rosters'))
-    winners = models.ForeignKey(Roster, related_name='winner',
-        blank=True, null=True, verbose_name=_('winners'))
+    rosters = models.ManyToManyField(Roster, verbose_name=_('rosters'))
+    winners = models.ManyToManyField(
+        Roster,
+        blank=True, null=True, verbose_name=_('winners'),
+        related_name='breport_winners_sets'
+    )
     mission = models.ForeignKey(Mission, verbose_name=_("mission"))
     layout = models.CharField(_('layout'),max_length=30)
     comment = models.TextField(_('comment'),max_length=10240)
@@ -185,16 +188,17 @@ class BattleReport(models.Model):
     def delete(self,*args,**kwargs):
         """ deletes battlereport instance with rosters which already had been deleted
         (orphans)"""
-        for r in self.users.distinct():
+        for r in self.rosters.distinct():
             if r.is_orphan: r.delete()
         super(BattleReport,self).delete(*args,**kwargs)
 
     def _get_general_pts(self):
-        pts = self.users.distinct()[0].pts
-        for r in self.users.all():
+        pts = self.rosters.distinct()
+        pts = pts[0] if len(pts) else None
+        for r in self.rosters.all():
             if r.pts != pts:
                 return _('[fuzzy] ')
-        return self.users.distinct()[0].pts
+        return pts
     general_pts = property(_get_general_pts)
 
     def get_pts(self):
@@ -224,8 +228,8 @@ class BattleReport(models.Model):
     #races = property(_show_races)
 
     def clean_rosters(self):
-        for r in self.users.distinct():
-            self.users.remove(r)
+        for r in self.rosters.distinct():
+            self.rosters.remove(r)
         self.save()
 
     class Meta:

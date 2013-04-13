@@ -1,0 +1,9 @@
+[
+{
+    "pk": "Warhammer 40000", 
+    "model": "tabletop.game", 
+    "fields": {
+        "codename": "wh40k"
+    }
+}
+]

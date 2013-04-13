@@ -57,7 +57,7 @@
                 <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
                 {% if global_settings.DEVELOPMENT %}
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
-                <li class='lvl2'><a href='{% url "tabletop:battle-report-add" %}'>добавить</a></li>
+                <li class='lvl2'><a href='{% url "tabletop:report-add" %}'>добавить</a></li>
                 {% endif %}
                 <li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
                 <li class='lvl2'><a href="{% url "vote:best" "image" %}">лучшие</a></li>

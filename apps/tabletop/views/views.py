@@ -46,7 +46,7 @@ from datetime import datetime
 def reports(request):
     reports = request.user.battle_report_set.all()
     page = get_int_or_zero(request.GET.get('page')) or 1
-    reports = paginate(reports, page ,pages=settings.OBJECTS_ON_PAGE)
+    reports = paginate(reports, page, pages=settings.OBJECTS_ON_PAGE)
     form = AddBattleReportForm()
     return {
         'reports': reports,
@@ -555,6 +555,18 @@ def add_battle_report(request, action=None, id=None):
             return direct_to_template(request, template, {'form': form})
     form = AddBattleReportModelForm(instance=br)
     return direct_to_template(request, template, {'form': form})
+
+@login_required
+@render_to('reports.html', allow_xhr=True)
+def report_add(request):
+    form = AddBattleReportForm(request.POST or None, request=request)
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            form.save_m2m()
+            return {'redirect': 'tabletop:battle-reports'}
+    return {'form': form}
 
 @login_required
 def xhr_rosters(request, search):

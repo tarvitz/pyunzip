@@ -1,8 +1,10 @@
 from django.conf.urls import *
 
 urlpatterns = patterns('apps.tabletop.views',
-    url('^report/add/$', 'add_battle_report',
-        name='battle-report-add'),
+    #url('^report/add/$', 'add_battle_report',
+    #    name='battle-report-add'),
+    url('^report/add/$', 'report_add',
+        name='report-add'),
     #url('^new/report/add/$', 'add_new_battle_report',
     #    name='url_add_new_battle_report'),
     #url('^reports/$', 'index',

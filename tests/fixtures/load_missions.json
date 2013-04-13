@@ -1,0 +1,18 @@
+[
+{
+    "pk": 1, 
+    "model": "tabletop.mission", 
+    "fields": {
+        "game": "Warhammer 40000", 
+        "title": "Ground control"
+    }
+},
+{
+    "pk": 2, 
+    "model": "tabletop.mission", 
+    "fields": {
+        "game": "Warhammer 40000", 
+        "title": "Skirmish"
+    }
+}
+]

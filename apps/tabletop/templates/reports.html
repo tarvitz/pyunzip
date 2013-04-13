@@ -3,31 +3,53 @@
 {% block content %}
     <a class='btn btn-inverse add-report' href='{% url "tabletop:roster-add" %}'>{% trans "Add report" %}</a>
     <div class='report' data-class='hide-flow'>
-        <form class='form-horizontal' action='' method='POST'>
+        <form class='f  orm-horizontal' action='{% url "tabletop:report-add" %}' method='POST' id='add-report-form'>
+            {% csrf_token %}
             {% include "forms/bootstrap_horizontal.html" with form=form %}
+            <div class='control-group'>
+                <div class='controls'><label for='id_submit'></label>
+                    <input type='submit' class='btn btn-inverse' value='{% trans "Submit" %}'>
+                </div>
+            </div>
         </form>
     </div>
-    {% if reports.objects_list %}
+
+    {% if reports.object_list %}
         <table class='table striped'>
             <tr>
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Pts" %}</th>
                 <th>{% trans "Published" context "published date" %}</th>
+                <th>{% trans "Approved" context "approved report" %}</th>
             </tr>
             {% for report in reports.object_list %}
             <tr>
                 <td><a href='{{ report.get_absolute_url }}'>{{ report.title }}</a></td>
                 <td>{{ report.get_pts }}</td>
                 <td>{{ report.published }}</td>
+                <td>{{ report.approved }}</td>
             </tr>
             {% endfor %}
         </table>
-        {% include "pages.html" with page=reports %}
+        {% include "links.html" with page=reports %}
     {% else %}
         <h3>{% trans "No reports found ;)" %}</h3>
     {% endif %}
 
 <script type='text/javascript'>
+    var postReportForm = function(form){
+        data = form.serialize();
+        form.find('input, select').attr({'disabled': 'disabled'});
+        postFormAjax({
+            form: form,
+            data: data,
+            successMsg: "{% trans 'Added successfull' %}",
+            success: function(json){
+                form.find('input, select').removeAttr('disabled');
+            }
+        })
+    }
+
     var searchRosters = function(){
         url = "{% url 'json:tabletop:roster-search' %}";
         blk = $("#id_rosters_chzn .search-field input");
@@ -60,7 +82,7 @@
     $(document).ready(function(){
         $('[data-class="chosen"]').chosen();
         //chosen bug :( should be before 'hiding the block'
-        //$('.report').addClass('hide-flow');
+        $('.report').addClass('hide-flow');
         var settings = myMarkupSettings['textile'];
         settings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
         $('#id_comment').markItUp(settings);
@@ -102,6 +124,14 @@
             });
             $("#id_winners").trigger('liszt:updated');
             return e;
+        });
+        $("#add-report-form #id_submit").click(function(e){
+            postReportForm($(this).parents('form'));
+            return false;
+        });
+        $('#add-report-form').submit(function(e){
+            postReportForm($(this));
+            return false;
         });
     });
 </script>
