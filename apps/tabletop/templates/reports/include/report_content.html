@@ -1,0 +1,115 @@
+{% load newsfilters i18n coretags %}
+<a class="btn btn-inverse btn-mini show-info pull-right"
+   data-toggle='button'
+   href="#" data-href="#rosters-info">
+   {% trans "show info" %}
+</a>
+
+<div class='rosters hide info' id="rosters-info">
+    {% for roster in report.rosters.all %}
+    <div class='round message'>
+        <div class='message-headline'>
+            <div class='transparency black'></div>
+            <span class='title center'>
+                {% if roster in report.winners.all %}
+                <a href="#"  data-original-title="{% trans 'Winner' %}"
+                   rel='tooltip' data-delay='300'>
+                    <i class="icon-white icon-star pull-left"></i>
+                </a>
+                {% endif %}
+                <a href="{{ roster.get_absolute_url }}">
+                    {{ roster.title }} [{{ roster.pts }} {% trans "pts" context "roster points" %}]
+                </a>
+            </span>
+        </div>
+        <div class='message-body'>
+            <div class='avatar'>
+                <img src='{% url "wh:avatar" roster.owner.nickname %}'>
+                <a href="{% url "wh:profile-by-nick" roster.owner.nickname %}">
+                    {{ roster.owner.get_nickname|safe }}
+                </a>
+            </div>
+            <div class='text'>
+                <div class='transparency'></div>
+                <div class='reflects left'></div>
+                <div class='reflects right'></div>
+                {{ roster.roster|safe }}
+            </div>
+        </div>
+        <div class='message-footer'>
+            <div class='transparency black'></div>
+            <div class='links'>
+                <span>{{ roster.codex }}</span>
+                <span>{{ roster.pts }} {% trans "pts" context "roster points" %}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <hr class='center' width='35%;'>
+</div>
+
+<div class='battle report'>
+    <div class='round message center'>
+        <div class='message-headline'><div class='transparency black'></div>
+            <div class='links'>
+            {% if not report.approved %}
+                <span class='edit link'>
+                    <a class='approve link'
+                       href="{% url "tabletop:report-approve" report.id %}">{% trans "approve" %}</a>
+                </span>
+            {% else %}
+                <span>
+                    <a class="disapprove link"
+                       href="{% url "tabletop:report-disapprove" report.id %}">{% trans "disapprove" %}
+                    </a>
+                </span>
+            {% endif %}
+            </div>
+            <span class='title center'>{{ report.title }}</span>
+        </div>
+        <div class='message-body'>
+            <div class='avatar'>
+                <img src='{% url "wh:avatar" report.owner.nickname %}'>
+                {{ report.owner.get_nickname|safe }}
+            </div>
+            <div class='text'><div class='transparency'></div>
+                <div class='reflects left'></div>
+                <div class='reflects right'></div>
+                {{ report.render_comment|safe }}
+            </div>
+        </div>
+        <div class='message-footer'>
+            <div class='transparency black'></div>
+            <div class='links'>
+                <span>{{ report.layout }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='space'></div>
+
+{% if comments.object_list %}
+    {% include settings.document.links with page=comments %}
+    {% include settings.document.comments %}
+    {% include settings.document.links with page=comments %}
+{% endif %}
+{% if user.is_authenticated %}
+    {% get_content_type report as object %}
+    {% include settings.document.comments_form with object=object gs=gs %}
+{% endif %}
+
+<script type="text/javascript">
+    $(".show-info").click(function(e){
+        block = $(this).attr('data-href') || $(this).attr('href');
+        $(block).toggleClass('hide');
+        icon = $(this).find('i.icon-white');
+        if ($(icon).hasClass('icon-plus')){
+            $(icon).removeClass('icon-plus');
+            $(icon).addClass('icon-minus');
+        } else {
+            $(icon).removeClass('icon-minus');
+            $(icon).addClass('icon-plus');
+        }
+    });
+</script>

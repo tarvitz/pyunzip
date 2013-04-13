@@ -500,6 +500,7 @@ def model_json_encoder(obj, **kwargs):
     if isinstance(obj, QuerySet):
         return list(obj)
     elif isinstance(obj, Model):
+        obj.__dict__.update({'unicode': obj.__unicode__()})
         dt = obj.__dict__
         #obsolete better use partial
         fields = ['_content_type_cache', '_author_cache', '_state']

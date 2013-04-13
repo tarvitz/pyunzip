@@ -8,6 +8,9 @@
         {% if field.help_text %}
         <span class='help-text'>({{ field.help_text }})</span>
         {% endif %}
+    {% if forloop.last and submit %}
+        <input type='submit' class='{{ submit_class }}' value='{{ submit }}'>
+    {% endif %}
     </div>
 </div>
 {% endfor %}
@@ -22,7 +25,7 @@
 {% endif %}
 {% if use_submit %}
 <div class="control-group">
-    <label class="control-label" for="id_submi">&nbsp;{{ field.label }}</label>
+    <label class="control-label" for="id_submit">&nbsp;{{ field.label }}</label>
     <div class="controls {{ submit_class }}">
         <input type='submit' class='{{ submit_class_btn|default:"btn btn-success" }}'
             value="{{ submit_value|default:"Отправить" }}">

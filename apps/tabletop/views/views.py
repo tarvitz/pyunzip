@@ -33,6 +33,7 @@ from apps.core.forms import ApproveActionForm, action_formset_ng
 from apps.core import benchmark
 from apps.wh.models import Side
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.comments.models import Comment
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
@@ -51,6 +52,57 @@ def reports(request):
     return {
         'reports': reports,
         'form': form
+    }
+
+@benchmarking
+@render_to('reports/reports.html')
+def battle_reports(request):
+    page = get_int_or_zero(request.GET.get('page', 1)) or 1
+    reports = paginate(
+        BattleReport.objects.all(), page, pages=settings.OBJECTS_ON_PAGE
+    )
+    return {
+        'reports': reports
+    }
+
+@render_to('reports/report.html')
+def report(request, pk):
+    can_edit = False
+    if request.user.is_authenticated():
+        can_edit = request.user.has_perm('tabletop.edit_battle_report')
+    kw = {'pk': pk}
+    #if not can_edit:
+    #    kw.update({'approved': True})
+    report = get_object_or_404(BattleReport, **kw)
+    # make more generic ? :)
+    ct = ContentType.objects.get(
+        app_label=report._meta.app_label, model=report._meta.module_name
+    )
+    comments = Comment.objects.filter(content_type=ct, object_pk=str(report.pk))
+    comments_on_page = settings.OBJECTS_ON_PAGE
+    page = get_int_or_zero(request.GET.get('page', 1)) or 1
+    if request.user.is_authenticated():
+        comments_on_page = request.user.settings.get(
+            'comments_on_page', settings.OBJECTS_ON_PAGE
+        )
+    comments = paginate(
+        comments, page,
+        pages=comments_on_page or settings.OBJECTS_ON_PAGE
+    )
+    return {'report': report, 'comments': comments}
+
+@login_required
+@render_to('reports/report.html')
+def report_approve(request, pk, approved=True):
+    can_edit = request.user.has_perm('tabletop.edit_battle_report')
+    if not can_edit:
+        raise Http404("hands off")
+    report = get_object_or_404(BattleReport, pk=pk)
+    report.approved = approved
+    report.save()
+    return {
+        'redirect': 'tabletop:report',
+        'redirect-args': (report.id, )
     }
 
 @unlock_for({'DEVELOPMENT': True})

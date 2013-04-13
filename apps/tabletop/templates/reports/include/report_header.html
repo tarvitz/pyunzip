@@ -1,0 +1,17 @@
+{% load i18n %}
+<div class='battle report header'>
+    <div class='title'>
+        {% if not is_header %}
+            {{ report.title }}
+        {% else %}
+            <a href="{{ report.get_absolute_url }}">{{ report.title }}</a>
+        {%  endif %}</div>
+    <div class='content'>
+        {{ report.get_head_content }}
+    </div>
+    {% if is_header %}
+    <div class='follow'>
+        ...
+    </div>
+    {%  endif %}
+</div>

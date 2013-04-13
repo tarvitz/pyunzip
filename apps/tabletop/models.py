@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.db.models import Min
 from django.utils.translation import (
     ugettext_lazy as _, ugettext as tr,
     pgettext_lazy
@@ -17,6 +18,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
+from apps.core.helpers import render_filter
 from apps.tabletop.actions import alter_codex_action
 
 MODEL_UNIT_TYPE_CHOICES = (
@@ -180,7 +182,8 @@ class BattleReport(models.Model):
         )
 
     def get_absolute_url(self):
-        return reverse('tabletop:battle-report',args=[self.id,])
+        return reverse('tabletop:report', args=(self.id,))
+        #return reverse('tabletop:battle-report',args=[self.id,])
 
     def get_title(self):
         return self.title
@@ -192,6 +195,13 @@ class BattleReport(models.Model):
             if r.is_orphan: r.delete()
         super(BattleReport,self).delete(*args,**kwargs)
 
+    def get_approved_label(self):
+        return 'success' if self.approved else 'none'
+
+    def get_players(self):
+        owners = [i.owner.pk for i in self.rosters.all()]
+        return User.objects.filter(pk__in=owners).distinct()
+
     def _get_general_pts(self):
         pts = self.rosters.distinct()
         pts = pts[0] if len(pts) else None
@@ -202,7 +212,12 @@ class BattleReport(models.Model):
     general_pts = property(_get_general_pts)
 
     def get_pts(self):
-        return self.general_pts
+        return self.rosters.all().aggregate(Min('pts')).items()[0][1]
+
+    def get_head_content(self):
+        if '(cut)' in self.comment:
+            return self.comment[:self.comment.index('(cut)')]
+        return self.comment
 
     def _get_versus_layout(self):
         """"""
@@ -226,6 +241,9 @@ class BattleReport(models.Model):
     #        races.append(r.race)
     #    return races
     #races = property(_show_races)
+
+    def render_comment(self):
+        return render_filter(self.comment, self.syntax or 'textile')
 
     def clean_rosters(self):
         for r in self.rosters.distinct():
