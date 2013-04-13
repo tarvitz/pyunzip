@@ -23,7 +23,10 @@ from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError
+from django.http import (
+    HttpResponse, HttpResponseRedirect, HttpResponseServerError,
+    Http404
+)
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import RequestContext
 from django.db.models import Q
@@ -81,13 +84,13 @@ def report(request, pk):
     comments = Comment.objects.filter(content_type=ct, object_pk=str(report.pk))
     comments_on_page = settings.OBJECTS_ON_PAGE
     page = get_int_or_zero(request.GET.get('page', 1)) or 1
-    if request.user.is_authenticated():
-        comments_on_page = request.user.settings.get(
-            'comments_on_page', settings.OBJECTS_ON_PAGE
-        )
+    #if request.user.is_authenticated():
+    #    comments_on_page = request.user.settings.get(
+    #        'comments_on_page', settings.OBJECTS_ON_PAGE
+    #    )
     comments = paginate(
         comments, page,
-        pages=comments_on_page or settings.OBJECTS_ON_PAGE
+        pages=comments_on_page
     )
     return {'report': report, 'comments': comments}
 
