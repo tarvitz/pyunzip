@@ -18,7 +18,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
-from apps.core.helpers import render_filter
+from apps.core.helpers import render_filter, post_markup_filter
 from apps.tabletop.actions import alter_codex_action
 from django.contrib.contenttypes import generic
 
@@ -127,6 +127,10 @@ class Roster(models.Model):
 
     def get_absolute_url(self):
         return reverse('tabletop:roster',args=[self.id])
+
+    def render_roster(self):
+        roster = post_markup_filter(self.roster)
+        return render_filter(roster, self.syntax or 'textile')
 
     class Meta:
         permissions = (
@@ -255,7 +259,8 @@ class BattleReport(models.Model):
     #races = property(_show_races)
 
     def render_comment(self):
-        return render_filter(self.comment, self.syntax or 'textile')
+        comment = post_markup_filter(self.comment)
+        return render_filter(comment, self.syntax or 'textile')
 
     def clean_rosters(self):
         for r in self.rosters.distinct():

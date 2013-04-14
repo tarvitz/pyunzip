@@ -147,6 +147,13 @@ class AddBattleReportForm(RequestModelForm):
                 self._errors['layout'] = ErrorList([msg])
                 del cleaned_data['layout']
 
+        if winners and layout:
+            teams = [int(i) for i in layout.split('vs')]
+            if len(winners or [])> max(teams):
+                self._errors['winners'] = _(
+                    "You can not add more winners than %(amount)s"
+                ) % {'amount': max(teams)}
+
         return cleaned_data
 
     def save(self, commit=True):

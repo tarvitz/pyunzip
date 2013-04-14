@@ -253,3 +253,31 @@ class JustTest(TestCase):
         self.assertEqual(response.status_code, 200)
         report = BattleReport.objects.get(id=report.id)
         self.assertEqual(report.approved, False)
+
+    def test_battle_report_clean_winners(self):
+        logged = self.client.login(username='admin', password='123456')
+        self.assertEqual(logged, True)
+
+        url = reverse('tabletop:report-add')
+        roster1, roster2 = list(Roster.objects.filter(pts=1000)[:2])
+        mission = Mission.objects.all()[0]
+        post = {
+            'title': u'Батл репорт, фейловый',
+            'mission': mission.id,
+            'rosters': [roster1.id, roster2.id],
+            'winners': [roster1.id, roster2.id],
+            'layout': '1vs1',
+            'comment': u'Первый ростер победил :D'
+        }
+        count = BattleReport.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        open('file.html', 'w').write(response.content)
+        amount = 1
+        self.assertContains(
+            response,
+            unicode(
+                _("You can not add more winners than %(amount)s") %
+                {'amount': amount}
+            )
+        )
