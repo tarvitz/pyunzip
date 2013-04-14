@@ -157,7 +157,8 @@ class AddBattleReportForm(RequestModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        self.instance.owner = self.request.user
+        if not self.instance.pk:
+            self.instance.owner = self.request.user
         instance = super(AddBattleReportForm, self).save(commit)
         return instance
 
