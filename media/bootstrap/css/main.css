@@ -339,7 +339,7 @@ img.purity-seal{
     margin-top: 0px;
 }
 .hide{ display: none; }
-.hide-flow{ position: absolute; margin-left: -10000px}
+.hide-flow{ display: none; /*position: absolute; margin-left: -10000px*/}
 .textarea.progress{
     position: absolute;
     margin-left: 10px;
