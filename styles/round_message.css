@@ -88,11 +88,11 @@
 .round_message .msg_content .msg_text,
 .round.message .message-body .text{
     border-left: 1px dotted darkgrey;
-    padding-left: 5px;
+    padding-left: 10px;
     padding-right: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
-    text-indent: 8px;
+    /*text-indent: 8px;*/
     margin-left: 80px; /*<- WHAT THE FUCK IS IT? O_O*/
     color: white;
 }
