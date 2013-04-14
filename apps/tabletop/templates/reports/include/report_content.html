@@ -6,6 +6,7 @@
 </a>
 
 <div class='rosters hide info' id="rosters-info">
+    <a class="btn btn-inverse btn-mini show-winners" data-toggle='button'>{% trans "Show winners" %}</a>
     {% for roster in report.rosters.all %}
     <div class='round message'>
         <div class='message-headline'>
@@ -14,7 +15,7 @@
                 {% if roster in report.winners.all %}
                 <a href="#"  data-original-title="{% trans 'Winner' %}"
                    rel='tooltip' data-delay='300'>
-                    <i class="icon-white icon-star pull-left"></i>
+                    <i class="icon-white icon-star pull-left winner hide"></i>
                 </a>
                 {% endif %}
                 <a href="{{ roster.get_absolute_url }}">
@@ -144,5 +145,8 @@
         }
         $(".battle.report").find('.avatar').toggleClass('hide');
 
+    });
+    $(".show-winners").click(function(e){
+        $('i.winner').toggleClass('hide');
     });
 </script>
