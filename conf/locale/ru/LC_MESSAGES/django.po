@@ -1845,7 +1845,7 @@ msgstr "Вы обязаны выбрать ростер победителя"
 
 #: apps/tabletop/forms.py:146
 msgid "Number of players and layout must exact by the amount of whole players"
-msgstr "Количество игроков и "
+msgstr "Количество участников и формат должны совпадать с общим количеством участников"
 
 #: apps/tabletop/forms.py:163
 msgid "Search rosters"
