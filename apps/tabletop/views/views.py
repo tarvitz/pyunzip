@@ -15,6 +15,7 @@ from apps.core.helpers import (
     get_object_or_none, paginate, can_act, render_to,
     safe_ret, get_int_or_zero
 )
+from apps.tracker.decorators import mark_read
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from apps.core import pages, get_skin_template
@@ -61,25 +62,32 @@ def reports(request):
 @render_to('reports/reports.html')
 def battle_reports(request):
     page = get_int_or_zero(request.GET.get('page', 1)) or 1
+    can_edit = request.user.has_perm('tabletop.edit_battle_report')
+    kw = {}
+    if not can_edit:
+        kw.update({'approved': True})
     reports = paginate(
-        BattleReport.objects.all(), page, pages=settings.OBJECTS_ON_PAGE
+        BattleReport.objects.filter(**kw), page, pages=settings.OBJECTS_ON_PAGE
     )
     return {
         'reports': reports
     }
 
+
 @render_to('reports/report.html')
+@mark_read(object_pk='pk', app='tabletop', module='BattleReport')
 def report(request, pk):
     can_edit = False
     if request.user.is_authenticated():
         can_edit = request.user.has_perm('tabletop.edit_battle_report')
     kw = {'pk': pk}
-    #if not can_edit:
-    #    kw.update({'approved': True})
+    if not can_edit:
+        kw.update({'approved': True})
     report = get_object_or_404(BattleReport, **kw)
     # make more generic ? :)
     ct = ContentType.objects.get(
-        app_label=report._meta.app_label, model=report._meta.module_name
+        app_label=report._meta.app_label,
+        model=report._meta.module_name
     )
     comments = Comment.objects.filter(content_type=ct, object_pk=str(report.pk))
     comments_on_page = settings.OBJECTS_ON_PAGE

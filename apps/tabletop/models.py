@@ -20,6 +20,8 @@ from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
 from apps.core.helpers import render_filter
 from apps.tabletop.actions import alter_codex_action
+from django.contrib.contenttypes import generic
+
 
 MODEL_UNIT_TYPE_CHOICES = (
     ('hq', _("hq")),
@@ -171,7 +173,11 @@ class BattleReport(models.Model):
     approved = models.BooleanField(_('approved'), default=False, blank=True)
     ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
     syntax = models.CharField(_('syntax'), max_length=20, choices=settings.SYNTAX)
+    seen_objects = generic.GenericRelation(
+        'tracker.SeenObject', object_id_field='object_pk'
+    )
     search = SphinxSearch(weights={'title': 30, 'comment': 30})
+
     actions = [common_delete_action, ]
 
     def __unicode__(self):
@@ -185,6 +191,9 @@ class BattleReport(models.Model):
         return reverse('tabletop:report', args=(self.id,))
         #return reverse('tabletop:battle-report',args=[self.id,])
 
+    def get_seen_users(self):
+        return [i.user for i in self.seen_objects.all()]
+
     def get_title(self):
         return self.title
 
@@ -196,7 +205,7 @@ class BattleReport(models.Model):
         super(BattleReport,self).delete(*args,**kwargs)
 
     def get_approved_label(self):
-        return 'success' if self.approved else 'none'
+        return 'success' if self.approved else 'inverse'
 
     def get_players(self):
         owners = [i.owner.pk for i in self.rosters.all()]
@@ -216,8 +225,11 @@ class BattleReport(models.Model):
 
     def get_head_content(self):
         if '(cut)' in self.comment:
-            return self.comment[:self.comment.index('(cut)')]
-        return self.comment
+            return render_filter(
+                self.comment[:self.comment.index('(cut)')],
+                self.syntax or 'textile'
+            )
+        return render_filter(self.comment, self.syntax or 'textile')
 
     def _get_versus_layout(self):
         """"""

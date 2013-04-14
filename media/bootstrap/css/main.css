@@ -320,12 +320,12 @@ form ul.errors > li{
     padding-top: 8px;
 
 }
-.modal .form-horizontal label{
+/*.modal .form-horizontal label{
     width: 70px;
 }
 .modal .form-horizontal .controls{
     margin-left: 80px;
-}
+}*/
 img.purity-seal{
     position: absolute;
     height: 240px;
@@ -354,3 +354,5 @@ img.purity-seal{
     text-shadow: none;
 }
 .space{ margin-top: 10px;}
+.title.approved{}
+.title.disapproved, .title.disapproved a{ color: red;}

@@ -1,17 +1,56 @@
-{% load i18n %}
-<div class='battle report header'>
-    <div class='title'>
-        {% if not is_header %}
-            {{ report.title }}
-        {% else %}
-            <a href="{{ report.get_absolute_url }}">{{ report.title }}</a>
-        {%  endif %}</div>
-    <div class='content'>
-        {{ report.get_head_content }}
+{% load i18n comments %}
+
+<div class='battle report' id="battle-{{ report.id }}">
+    <div class='round message center'>
+        <div class='message-headline'><div class='transparency black'></div>
+            <div class='links'>
+                {% if perms.tabletop.edit_battle_report %}
+                    <span class='edit link'>
+                    <a href="{% url "tabletop:report-edit" report.id %}"
+                       class='edit link'>{% trans "edit" %}</a>
+                </span>
+                {% endif %}
+                {% if perms.tabletop.edit_battle_report %}
+                    {% if not report.approved %}
+                        <span class='edit link'>
+                        <a class='approve link'
+                           href="{% url "tabletop:report-approve" report.id %}">{% trans "approve" %}</a>
+                    </span>
+                    {% else %}
+                        <span>
+                        <a class="disapprove link"
+                           href="{% url "tabletop:report-disapprove" report.id %}">{% trans "disapprove" %}
+                        </a>
+                    </span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <span class='title center {{ report.approved|yesno:"approved, disapproved" }}'>
+                <a href="{{ report.get_absolute_url }}">{{ report.title }}</a>
+            </span>
+        </div>
+        <div class='message-body'>
+            <div class='avatar'>
+                <img src='{% url "wh:avatar" report.owner.nickname %}'>
+                {{ report.owner.get_nickname|safe }}
+            </div>
+            <div class='text'><div class='transparency'></div>
+                <div class='reflects left'></div>
+                <div class='reflects right'></div>
+                {{ report.get_head_content|safe }}
+                <span class='txt info pull-right' style='text-align: right;'>
+                    {% get_comment_count for report as comments %}
+                    <span class='txt'>{% trans "Comments count" %}: {{ comments }}</span>
+                    {% include 'tracker/is_new.html' with object=report %}<br>
+                    <a href="{{ report.get_absolute_url }}">{% trans "read report" %}</a>
+                </span>
+            </div>
+        </div>
+        <div class='message-footer'>
+            <div class='transparency black'></div>
+            <div class='links'>
+                <span>{{ report.layout }}</span>
+            </div>
+        </div>
     </div>
-    {% if is_header %}
-    <div class='follow'>
-        ...
-    </div>
-    {%  endif %}
 </div>

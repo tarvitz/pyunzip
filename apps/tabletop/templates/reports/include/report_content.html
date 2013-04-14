@@ -59,17 +59,19 @@
                        class='edit link'>{% trans "edit" %}</a>
                 </span>
             {% endif %}
-            {% if not report.approved %}
-                <span class='edit link'>
-                    <a class='approve link'
-                       href="{% url "tabletop:report-approve" report.id %}">{% trans "approve" %}</a>
-                </span>
-            {% else %}
-                <span>
-                    <a class="disapprove link"
-                       href="{% url "tabletop:report-disapprove" report.id %}">{% trans "disapprove" %}
-                    </a>
-                </span>
+            {% if perms.tabletop.edit_battle_report %}
+                {% if not report.approved %}
+                    <span class='edit link'>
+                        <a class='approve link'
+                           href="{% url "tabletop:report-approve" report.id %}">{% trans "approve" %}</a>
+                    </span>
+                {% else %}
+                    <span>
+                        <a class="disapprove link"
+                           href="{% url "tabletop:report-disapprove" report.id %}">{% trans "disapprove" %}
+                        </a>
+                    </span>
+                {% endif %}
             {% endif %}
             </div>
             <span class='pull-left'>

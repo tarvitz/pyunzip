@@ -2,7 +2,10 @@
 from apps.core import get_safe_message
 from apps.core.helpers import get_object_or_none
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import (
+    ugettext_lazy as _,
+    pgettext_lazy
+)
 from django.conf import settings
 from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
@@ -45,10 +48,12 @@ class AddCodexModelForm(forms.ModelForm):
 class AddBattleReportForm(RequestModelForm):
     title = forms.CharField(
         #regex=re.compile('^[\w\d\ \-\_\.]+$'),
+        label=pgettext_lazy("Title", "battle report title"),
         help_text=_("battle report title, please be more creative"),
         widget=forms.TextInput(attrs={'class': 'span8'})
     )
     rosters = forms.ModelMultipleChoiceField(
+        label=_("Rosters"),
         queryset=Roster.objects,
         help_text=_("user rosters participating in the battle you want to describe"),
         widget=forms.SelectMultiple(
@@ -56,6 +61,7 @@ class AddBattleReportForm(RequestModelForm):
         )
     )
     winners = forms.ModelMultipleChoiceField(
+        label=_("Winners"),
         queryset=Roster.objects,
         help_text=_("winner or winners, should be at least one"),
         widget=forms.SelectMultiple(
@@ -64,6 +70,7 @@ class AddBattleReportForm(RequestModelForm):
     )
     #_mission_choices = [(i.id,'%s:%s' % (i.game.codename, i.title)) for i in Mission.objects.all()]
     mission = forms.ModelChoiceField(
+        label=_("Mission"),
         queryset=Mission.objects,
         help_text=_('mission you played'),
         widget=forms.Select(
@@ -72,6 +79,7 @@ class AddBattleReportForm(RequestModelForm):
     )
     layout = forms.RegexField(
         regex=re.compile('^\d{1}vs\d{1}$'),
+        label=_("Layout"),
         help_text=_('how much players participated in the game, 1vs1, 2vs2 and so on'),
         widget=forms.TextInput(
             attrs={'class': 'span8'}
@@ -80,6 +88,7 @@ class AddBattleReportForm(RequestModelForm):
     #syntax = forms.ChoiceField(choices=settings.SYNTAX)
     #hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     comment = forms.CharField(
+        label=pgettext_lazy("Content", "battle report content"),
         widget=forms.Textarea(
             attrs={'class': 'textile'}
         )

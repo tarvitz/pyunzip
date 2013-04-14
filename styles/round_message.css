@@ -190,7 +190,7 @@
 	z-index: -1;
 }
 .round_message .msg_content .msg_text .msg_txt,
-.round.message .message-content .text .txt{
+.round.message .message-body .text .txt{
     font-size: 8pt;
     line-height: initial;
 }

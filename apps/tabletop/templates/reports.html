@@ -41,7 +41,7 @@
                     {% endfor %}
                 </td>
                 <td>
-                    <label class='label label-{{ report.get_approve_label }}'>
+                    <label class='label label-{{ report.get_approved_label }}'>
                         {% if report.approved %}{% trans "approved" %}
                         {% else %}{% trans "not approved" %}
                         {% endif %}
@@ -66,6 +66,9 @@
             successMsg: "{% trans 'Added successfull' %}",
             success: function(json){
                 form.find('input, select').removeAttr('disabled');
+                setTimeout(function(){
+                    document.location.reload()
+                }, 3000);
             }
         })
     }
