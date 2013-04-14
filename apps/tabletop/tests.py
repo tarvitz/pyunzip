@@ -228,11 +228,17 @@ class JustTest(TestCase):
             report.approved = False
             report.save()
             response = self.client.get(approve_url, follow=True)
-            self.assertEqual(response.status_code, 404)
+            if user:
+                self.assertEqual(response.status_code, 404)
+            else:
+                self.assertEqual(response.status_code, 200)
             report = BattleReport.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
             response = self.client.get(disapprove_url, follow=True)
-            self.assertEqual(response.status_code, 404)
+            if user:
+                self.assertEqual(response.status_code, 404)
+            else:
+                self.assertEqual(response.status_code, 200)
             report = BattleReport.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
         # admin can approve
