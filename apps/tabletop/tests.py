@@ -43,6 +43,27 @@ class JustTest(TestCase):
     def tearDown(self):
         pass
 
+    def check_changes(self, instance, keywords, check, check_in=None):
+        messages = []
+        check_in = check_in or self.assertIn
+        for (key, value) in keywords.items():
+            try:
+                if isinstance(value, list):
+                    for item in value:
+                        check_in(item, getattr(instance, key).all())
+                else:
+                    check(getattr(instance, key), value)
+            except AssertionError as err:
+                messages.append({
+                    'err': err,
+                    'key': key
+                })
+        if messages:
+            for msg in messages:
+                msg = "Got %(err)s in %(key)s" % msg
+                print msg
+            raise AssertionError
+
     def test_urls(self):
         # test void urls
         for user in ('user', 'admin', None):
@@ -63,7 +84,7 @@ class JustTest(TestCase):
                     })
             if messages:
                 for msg in messages:
-                    print "Got %(err)s in %(url)s" % msg
+                    print u"Got %(err)s in %(url)s" % msg
                 raise AssertionError
 
     def test_roster_add(self):
@@ -146,3 +167,83 @@ class JustTest(TestCase):
             for msg in messages:
                 print "Got %(err)s in %(key)s" % msg
             raise AssertionError
+
+    def test_battle_report_edit(self):
+        self.test_battle_report_add()
+        report = BattleReport.objects.all()[0]
+        admin = User.objects.get(username='admin')
+        report.owner = admin
+        report.save()
+
+        url = reverse('tabletop:report-edit', args=(report.id, ))
+        roster1, roster2 = list(Roster.objects.filter(pts=1000)[:2])
+        mission = Mission.objects.all()[0]
+        post = {
+            'title': u'Батл репорт редактирование',
+            'comment': u'Первый ростер победил :D подредактирован',
+            'mission': mission.id,
+            'rosters': [roster1.id, roster2.id],
+            'winners': [roster2.id],
+            'layout': '1vs1',
+        }
+        edit = deepcopy(post)
+        delete = ['layout', 'mission', 'rosters', 'winners']
+        for d in delete:
+            del edit[d]
+
+        for user in ('user', None):
+            if user:
+                self.client.login(username=user, password='123456')
+            else:
+                self.client.logout()
+            response = self.client.post(url, post, follow=True)
+            if user:
+                self.assertEqual(response.status_code, 404)
+            else:  # anonymous got redirect for login
+                self.assertEqual(response.status_code, 200)
+            report = BattleReport.objects.get(id=report.id)
+            self.check_changes(report, edit, check=self.assertNotEqual)
+
+        edit.update({
+            'rosters': [roster1, roster2],
+            'winners': [roster2]
+        })
+        self.client.login(username='admin', password='123456')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        report = BattleReport.objects.get(id=report.id)
+        self.check_changes(report, edit, check=self.assertEqual)
+
+    def test_battle_report_approve_disapprove(self):
+        # only admin can approve/disapprove
+        self.test_battle_report_add()
+        report = BattleReport.objects.all()[0]
+        approve_url = reverse('tabletop:report-approve', args=(report.id,))
+        disapprove_url = reverse('tabletop:report-disapprove', args=(report.id, ))
+        for user in ('user', None):
+            if user:
+                self.client.login(username=user, password='123456')
+            else:
+                self.client.logout()
+            report.approved = False
+            report.save()
+            response = self.client.get(approve_url, follow=True)
+            self.assertEqual(response.status_code, 404)
+            report = BattleReport.objects.get(id=report.id)
+            self.assertEqual(report.approved, False)
+            response = self.client.get(disapprove_url, follow=True)
+            self.assertEqual(response.status_code, 404)
+            report = BattleReport.objects.get(id=report.id)
+            self.assertEqual(report.approved, False)
+        # admin can approve
+        self.client.login(username='admin', password='123456')
+        report.approved = False
+        report.save()
+        response = self.client.get(approve_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        report = BattleReport.objects.get(id=report.id)
+        self.assertEqual(report.approved, True)
+        response = self.client.get(disapprove_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        report = BattleReport.objects.get(id=report.id)
+        self.assertEqual(report.approved, False)
