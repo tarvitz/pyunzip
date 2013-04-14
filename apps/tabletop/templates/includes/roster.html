@@ -80,7 +80,8 @@
 					{% ifequal roster_flag "True" %}
 						<div class='msg_txt'>Ростер:<br>
 							<span class='roster'>
-								{{ r.roster|render_filter:r.syntax|safe }}
+								{# {{ r.roster|render_filter:r.syntax|safe }} #}
+                                {{ r.render_roster|safe }}
 							</span>
 						</div>
                                         {% else %}

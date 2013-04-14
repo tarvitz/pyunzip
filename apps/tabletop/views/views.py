@@ -662,13 +662,17 @@ def xhr_rosters(request, search):
     return response
 
 def xhr_get_roster(request, id):
-    from apps.news.templatetags.newsfilters import render_filter, bbfilter
+    from apps.news.templatetags.newsfilters import  bbfilter
+    from apps.core.helpers import post_markup_filter, render_filter
     from django.utils.safestring import mark_safe
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
     roster = get_object_or_none(Roster, id=id)
     if roster:
-        roster.roster = render_filter(roster.roster, roster.syntax)
+        roster.roster = render_filter(
+            post_markup_filter(roster.roster),
+            roster.syntax or 'textile'
+        )
         response.write(serializers.serialize("json", [roster]))
     else:
         response.write("[]")
