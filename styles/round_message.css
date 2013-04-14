@@ -86,7 +86,7 @@
     border: 1px dotted grey;
 }
 .round_message .msg_content .msg_text,
-.round.message .message-body .text{
+.round.message .message-body > .text{
     border-left: 1px dotted darkgrey;
     padding-left: 10px;
     padding-right: 5px;
@@ -97,7 +97,7 @@
     color: white;
 }
 .msg_content .msg_text .transparency,
-.message-body .text .transparency{
+.message-body > .text .transparency{
     border-radius: 0px;
     -moz-border-radius: 0px;
     -webkit-border-radius: 0px;
@@ -196,7 +196,7 @@
 }
 .round.message .message-footer{ clear:both; }
 /*.round.message .message-body{ clear:both;}*/
-.round.message .message-body .text::after{ content: ""; clear: both; display: block;}
+.round.message .message-body > .text::after{ content: ""; clear: both; display: block;}
 .round.message .message-footer::after{content: ""; clear: both; display: block;}
 #rosters-info .round.message{
     margin-left: auto;
