@@ -52,6 +52,12 @@
     <div class='round message center'>
         <div class='message-headline'><div class='transparency black'></div>
             <div class='links'>
+            {% if perms.tabletop.edit_battle_report %}
+                <span class='edit link'>
+                    <a href="{% url "tabletop:report-edit" report.id %}"
+                       class='edit link'>{% trans "edit" %}</a>
+                </span>
+            {% endif %}
             {% if not report.approved %}
                 <span class='edit link'>
                     <a class='approve link'

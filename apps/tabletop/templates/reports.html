@@ -6,14 +6,21 @@
         {% trans "Add" %}
     </a>
 
+
     <div class='report'>
-        <form class='form-horizontal'
-              action='{% url "tabletop:report-add" %}' method='POST' id='add-report-form'>
+        <form class='form-horizontal' {% spaceless %}
+              {% if not form.instance.pk %}
+              action='{% url "tabletop:report-add" %}'
+              {% else %}
+              action='{% url "tabletop:report-edit" form.instance.pk %}'
+              {% endif %} {% endspaceless %}method='POST' id='add-report-form'>
             {% csrf_token %}
             {% trans "Save" as submit %}
             {% include "forms/bootstrap_horizontal.html" with form=form submit=submit submit_class='btn btn-success' %}
         </form>
     </div>
+
+    {% if not form.instance.pk %}
     {% if reports.object_list %}
         <table class='table striped'>
             <tr>
@@ -48,7 +55,7 @@
     {% else %}
         <h3>{% trans "No reports found ;)" %}</h3>
     {% endif %}
-
+    {% endif %}
 <script type='text/javascript'>
     var postReportForm = function(form){
         data = form.serialize();
@@ -69,7 +76,9 @@
             placeholder_text: "{% trans "Select some options" %}"
         });
         //chosen bug :( should be before 'hiding the block'
+        {% if not form.instance.pk %}
         setTimeout(function(){$('.report').addClass('hide-flow');}, 10);
+        {% endif %}
         var settings = myMarkupSettings['textile'];
         settings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
         $('#id_comment').markItUp(settings);

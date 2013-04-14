@@ -613,8 +613,17 @@ def add_battle_report(request, action=None, id=None):
 
 @login_required
 @render_to('reports.html', allow_xhr=True)
-def report_add(request):
-    form = AddBattleReportForm(request.POST or None, request=request)
+def report_add(request, pk=None):
+    instance = None
+    can_edit = request.user.has_perm('tabletop.edit_battle_report')
+
+    if pk:
+        instance = get_object_or_404(BattleReport, pk=pk)
+        if not can_edit and request.user != instance.owner:
+            raise Http404("hands off")
+    form = AddBattleReportForm(
+        request.POST or None,
+        instance=instance, request=request)
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)

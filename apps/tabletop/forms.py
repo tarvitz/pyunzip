@@ -88,7 +88,7 @@ class AddBattleReportForm(RequestModelForm):
 
     def __init__(self, *args, **kwargs):
         super(AddBattleReportForm, self).__init__(*args, **kwargs)
-        if not all((self.data or [None,])):
+        if not all((self.data or [None,])) and not self.instance.pk:
             # data not posted
             none_rosters = Roster.objects.none()
             self.base_fields['rosters'].queryset = none_rosters
