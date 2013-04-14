@@ -67,7 +67,7 @@
             success: function(json){
                 form.find('input, select').removeAttr('disabled');
                 setTimeout(function(){
-                    document.location.reload()
+                    document.location.href = "{% url 'tabletop:battle-reports-self' %}";
                 }, 3000);
             }
         })
