@@ -15,7 +15,7 @@
 	<a id='rosters_button' href="#">ростеры игроков</a>
 	<div id='roster_{{ br.id }}'>
 	{# here should be an implementation of user roster cards #}
-	{% for roster  in br.users.distinct %}
+	{% for roster  in br.rosters.distinct %}
 		{% with roster as r %}	
 			{% with "True" as roster_flag %}
 				{% include settings.document.roster_inc %}
@@ -47,7 +47,9 @@
 {% endif %}
 
 {% if user.is_authenticated %}
+    {% if br %}
     {% get_content_type br as object %}
 	{% include settings.document.comments_form with object=object%}
+    {% endif %}
 {% endif %}
 {% endblock %}

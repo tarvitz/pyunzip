@@ -421,7 +421,21 @@ class UserExtension(object):
         #make here color implementation
         return self.nickname or self.username
 
-    get_nickname = property(_get_nickname)
+    def get_nickname(self):
+        if self.ranks.all():
+            rank = self.ranks.order_by('-magnitude')[0]
+            span = (
+                "<span class='%(class)s' id='%(id)s' "
+                "style='%(style)s'>%(nickname)s</span>" % {
+                    'class': rank.type.css_class,
+                    'id': rank.type.css_id,
+                    'style': rank.type.style,
+                    'nickname': self.nickname or self.username
+                }
+            )
+            return span
+        return self.nickname or self.username
+
     def _get_ranks_groups(self):
         tuple = list()
         for rank in self.ranks.distinct():

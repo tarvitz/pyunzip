@@ -74,7 +74,8 @@
                                 Издание: <div class='revision'> {{ roster.revision }}</div>
 				{% if not roster.user %}Имя игрока: <div class='player'>{{ roster.player }}</div> {% endif %}
 				Ростер:<div class='roster'>
-					{{ roster.roster|render_filter:roster.syntax|safe }}
+					{# {{ roster.roster|render_filter:roster.syntax|safe }}#}
+                    {{ roster.render_roster|safe }}
 				</div>
 			</div>
 			</center> <!-- before roster_info -->
@@ -92,9 +93,11 @@
 			{% ifnotequal roster.user roster.owner %}
 				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
 			{% endifnotequal %}
-			{% ifequal roster.owner user %}
+			{% if perms.tabletop.edit_roster %}
+            {% ifequal roster.owner user %}
 				[<a href='{% url "tabletop:roster-delete" roster.id "approve" %}'>удалить</a>]
 			{% endifequal %}
+            {% endif %}
 		{% endspaceless %}
 	</div> <!-- msg_footer -->
 </div> <!-- message -->

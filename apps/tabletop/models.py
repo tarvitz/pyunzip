@@ -1,5 +1,6 @@
 # coding: utf-8
 from django.db import models
+from django.db.models import Min
 from django.utils.translation import (
     ugettext_lazy as _, ugettext as tr,
     pgettext_lazy
@@ -17,7 +18,10 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
+from apps.core.helpers import render_filter, post_markup_filter
 from apps.tabletop.actions import alter_codex_action
+from django.contrib.contenttypes import generic
+
 
 MODEL_UNIT_TYPE_CHOICES = (
     ('hq', _("hq")),
@@ -33,6 +37,12 @@ MODEL_ARMY_TYPE_CHOICES = (
     ('jetbike', _("jetbike")),
     ('flyer', _('flyer')),
     ('artilery', _("artilery")),
+)
+
+DEPLOYMENT_CHOICES = (
+    ('dow', _("Dawn of War")),
+    ('ha', _("Hammer and Anvil")),
+    ('vs', _("Vanguard Strike")),
 )
 
 class Codex(models.Model):
@@ -124,6 +134,10 @@ class Roster(models.Model):
     def get_absolute_url(self):
         return reverse('tabletop:roster',args=[self.id])
 
+    def render_roster(self):
+        roster = post_markup_filter(self.roster)
+        return render_filter(roster, self.syntax or 'textile')
+
     class Meta:
         permissions = (
             ('edit_anonymous_rosters','Can edit anonymous rosters'),
@@ -157,16 +171,27 @@ class BattleReport(models.Model):
         _('published'), auto_now=True
     )
     #boo :)
-    users = models.ManyToManyField(Roster, verbose_name=_('rosters'))
-    winners = models.ForeignKey(Roster, related_name='winner',
-        blank=True, null=True, verbose_name=_('winners'))
+    rosters = models.ManyToManyField(Roster, verbose_name=_('rosters'))
+    winners = models.ManyToManyField(
+        Roster,
+        blank=True, null=True, verbose_name=_('winners'),
+        related_name='breport_winners_sets'
+    )
     mission = models.ForeignKey(Mission, verbose_name=_("mission"))
-    layout = models.CharField(_('layout'),max_length=30)
+    layout = models.CharField(_('layout'), max_length=30)
+    deployment = models.CharField(
+        _('deployment'), choices=DEPLOYMENT_CHOICES, max_length=128,
+        default='dow'
+    )
     comment = models.TextField(_('comment'),max_length=10240)
     approved = models.BooleanField(_('approved'), default=False, blank=True)
     ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
     syntax = models.CharField(_('syntax'), max_length=20, choices=settings.SYNTAX)
+    seen_objects = generic.GenericRelation(
+        'tracker.SeenObject', object_id_field='object_pk'
+    )
     search = SphinxSearch(weights={'title': 30, 'comment': 30})
+
     actions = [common_delete_action, ]
 
     def __unicode__(self):
@@ -177,28 +202,57 @@ class BattleReport(models.Model):
         )
 
     def get_absolute_url(self):
-        return reverse('tabletop:battle-report',args=[self.id,])
+        return reverse('tabletop:report', args=(self.id,))
+        #return reverse('tabletop:battle-report',args=[self.id,])
+
+    def get_seen_users(self):
+        return [i.user for i in self.seen_objects.all()]
 
     def get_title(self):
         return self.title
 
+    def get_deployment(self):
+        d = {}
+        [d.update({i[0]: i[1]}) for i in DEPLOYMENT_CHOICES]
+        return d[self.deployment]
+
     def delete(self,*args,**kwargs):
         """ deletes battlereport instance with rosters which already had been deleted
         (orphans)"""
-        for r in self.users.distinct():
+        for r in self.rosters.distinct():
             if r.is_orphan: r.delete()
         super(BattleReport,self).delete(*args,**kwargs)
 
+    def get_approved_label(self):
+        return 'success' if self.approved else 'inverse'
+
+    def get_players(self):
+        owners = [i.owner.pk for i in self.rosters.all()]
+        return User.objects.filter(pk__in=owners).distinct()
+
     def _get_general_pts(self):
-        pts = self.users.distinct()[0].pts
-        for r in self.users.all():
+        pts = self.rosters.distinct()
+        pts = pts[0] if len(pts) else None
+        for r in self.rosters.all():
             if r.pts != pts:
                 return _('[fuzzy] ')
-        return self.users.distinct()[0].pts
+        return pts
     general_pts = property(_get_general_pts)
 
     def get_pts(self):
-        return self.general_pts
+        return self.rosters.all().aggregate(Min('pts')).items()[0][1]
+
+    def get_head_content(self):
+        if '(cut)' in self.comment:
+            return  post_markup_filter(
+                render_filter(
+                    self.comment[:self.comment.index('(cut)')],
+                    self.syntax or 'textile'
+                )
+            )
+        return post_markup_filter(
+            render_filter(self.comment, self.syntax or 'textile')
+        )
 
     def _get_versus_layout(self):
         """"""
@@ -223,9 +277,13 @@ class BattleReport(models.Model):
     #    return races
     #races = property(_show_races)
 
+    def render_comment(self):
+        comment = post_markup_filter(self.comment)
+        return render_filter(comment, self.syntax or 'textile')
+
     def clean_rosters(self):
-        for r in self.users.distinct():
-            self.users.remove(r)
+        for r in self.rosters.distinct():
+            self.rosters.remove(r)
         self.save()
 
     class Meta:

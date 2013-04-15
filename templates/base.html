@@ -138,6 +138,7 @@
 </footer>
 </body>
 <!-- modals -->
+{% block modals %}
 {% if not user.is_authenticate %}
 <div class='modal hide fade in no-background' id='login-modal'>
     <div class='transparency heavy black'></div>
@@ -158,6 +159,7 @@
 </div>
 {% endif %}
 <!-- end of modals -->
+{% endblock %} {# modals #}
 
 {% block endjs %}
 {% include "jtmpl/core.html" %}

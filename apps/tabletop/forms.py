@@ -2,7 +2,10 @@
 from apps.core import get_safe_message
 from apps.core.helpers import get_object_or_none
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import (
+    ugettext_lazy as _,
+    pgettext_lazy
+)
 from django.conf import settings
 from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
@@ -42,32 +45,42 @@ class AddCodexModelForm(forms.ModelForm):
     def save(self, *args, **kwargs):
         super(AddCodexModelForm, self).save(*args, **kwargs)
 
-class AddBattleReportForm(RequestForm):
-    title = forms.RegexField(
-        regex=re.compile('^[\w\d\ \-\_\.]+$'),
+class AddBattleReportForm(RequestModelForm):
+    title = forms.CharField(
+        #regex=re.compile('^[\w\d\ \-\_\.]+$'),
+        label=pgettext_lazy("Title", "battle report title"),
+        help_text=_("battle report title, please be more creative"),
         widget=forms.TextInput(attrs={'class': 'span8'})
     )
     rosters = forms.ModelMultipleChoiceField(
+        label=_("Rosters"),
         queryset=Roster.objects,
+        help_text=_("user rosters participating in the battle you want to describe"),
         widget=forms.SelectMultiple(
             attrs={'class': 'span8', 'data-class': 'ajax-chosen'}
         )
     )
     winners = forms.ModelMultipleChoiceField(
+        label=_("Winners"),
         queryset=Roster.objects,
+        help_text=_("winner or winners, should be at least one"),
         widget=forms.SelectMultiple(
             attrs={'class': 'span8', 'data-class': 'chosen'}
         )
     )
     #_mission_choices = [(i.id,'%s:%s' % (i.game.codename, i.title)) for i in Mission.objects.all()]
     mission = forms.ModelChoiceField(
+        label=_("Mission"),
         queryset=Mission.objects,
+        help_text=_('mission you played'),
         widget=forms.Select(
             attrs={'class': 'span8', 'data-class': 'chosen'}
         )
     )
     layout = forms.RegexField(
         regex=re.compile('^\d{1}vs\d{1}$'),
+        label=_("Layout"),
+        help_text=_('how much players participated in the game, 1vs1, 2vs2 and so on'),
         widget=forms.TextInput(
             attrs={'class': 'span8'}
         )
@@ -75,6 +88,7 @@ class AddBattleReportForm(RequestForm):
     #syntax = forms.ChoiceField(choices=settings.SYNTAX)
     #hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)
     comment = forms.CharField(
+        label=pgettext_lazy("Content", "battle report content"),
         widget=forms.Textarea(
             attrs={'class': 'textile'}
         )
@@ -83,7 +97,7 @@ class AddBattleReportForm(RequestForm):
 
     def __init__(self, *args, **kwargs):
         super(AddBattleReportForm, self).__init__(*args, **kwargs)
-        if not all((self.data or [None,])):
+        if not all((self.data or [None,])) and not self.instance.pk:
             # data not posted
             none_rosters = Roster.objects.none()
             self.base_fields['rosters'].queryset = none_rosters
@@ -91,48 +105,41 @@ class AddBattleReportForm(RequestForm):
             self.base_fields['winners'].queryset = none_rosters
             self.fields['winners'].queryset = none_rosters
             pass
+        else:
+            self.base_fields['rosters'].queryset = Roster.objects
+            self.fields['rosters'].queryset = Roster.objects
+            self.base_fields['winners'].queryset = Roster.objects
+            self.fields['winners'].queryset = Roster.objects
 
     def clean_rosters(self):
-        rosters_raw = self.cleaned_data['rosters']
-        rosters = [int(i) for i in rosters_raw.split(',')]
-        r = list()
+        rosters = self.cleaned_data['rosters']
+        if not rosters:
+            return rosters
+
+        general_pts = rosters[0].pts
         for i in rosters:
-            r.append(get_object_or_none(Roster,id=int(i)))
-            if not r[len(r)-1]:
-                raise forms.ValidationError(_('There\'s no roster with "%i" id' % int(i)))
-        general_pts = r[0].pts
-        for i in r:
             if i.pts != general_pts:
-                raise forms.ValidationError(_('You can not write battlereports which has rosters that differ with pts field'))
+                raise forms.ValidationError(
+                    _(
+                        'You can not write battle reports which has '
+                        'rosters that differ with pts field'
+                    )
+                )
         #returns int list
         return rosters
 
-    def clean_winner(self):
-        winner_id = self.cleaned_data['winner']
-        winner = get_object_or_none(Roster,id=winner_id)
-        if winner:
-            return winner
-        else:
-            raise forms.ValidationError(_('There\'s no roster with such id'))
-
-    def clean_mission(self):
-        mission_id = self.cleaned_data['mission']
-        mission = get_object_or_none(Mission,id=mission_id)
-        if mission:
-            return mission
-        else:
-            raise forms.ValidationError(_('There\'s no mission with such id'))
-
     def clean(self):
         cleaned_data = self.cleaned_data
-        rosters = self.cleaned_data.get('rosters',None)
-        winner = self.cleaned_data.get('winner',None)
-        layout = self.cleaned_data.get('layout',None)
-        if rosters and winner:
-            if not winner.id in rosters:
-                msg = _('You must choose winner\'s roster id within rosters\' ids you passed')
-                self._errors['winner'] = ErrorList([msg])
-                del cleaned_data['winner']
+        rosters = self.cleaned_data.get('rosters', None)
+        winners = self.cleaned_data.get('winners', None)
+        layout = self.cleaned_data.get('layout', None)
+        if rosters and winners:
+            for winner in winners:
+                if not winner in rosters:
+                    msg = _('You must choose winner\'s roster id within rosters\' ids you passed')
+                    self._errors['winners'] = ErrorList([msg])
+                    del cleaned_data['winners']
+
         if rosters and layout:
             s = sum([int(i) for i in layout.split('vs')])
             if len(rosters) != s:
@@ -140,7 +147,27 @@ class AddBattleReportForm(RequestForm):
                 self._errors['layout'] = ErrorList([msg])
                 del cleaned_data['layout']
 
+        if winners and layout:
+            teams = [int(i) for i in layout.split('vs')]
+            if len(winners or [])> max(teams):
+                self._errors['winners'] = _(
+                    "You can not add more winners than %(amount)s"
+                ) % {'amount': max(teams)}
+
         return cleaned_data
+
+    def save(self, commit=True):
+        if not self.instance.pk:
+            self.instance.owner = self.request.user
+        instance = super(AddBattleReportForm, self).save(commit)
+        return instance
+
+    class Meta:
+        model = BattleReport
+        fields = ('title', 'mission', 'rosters', 'winners', 'layout', 'deployment', 'comment')
+        widgets = {
+            'deployment': forms.Select(attrs={'data-class': 'chosen'})
+        }
 
 class AddBattleReportModelForm(RequestModelForm):
     required_css_class='required'

@@ -90,4 +90,17 @@ def user_visit(obj=None,object_pk=None,ct=None):
         return wrapper
     return fnc
 
-
+def mark_read(object_pk, app, module):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            pk = kwargs[object_pk]
+            content_type = ContentType.objects.get(app_label=app, model=module.lower())
+            if request.user.is_authenticated():
+                so = SeenObject.objects.get_or_create(
+                    content_type=content_type,
+                    object_pk=str(pk),
+                    user=request.user
+                )
+            return func(request, *args, **kwargs)
+        return wrapper
+    return decorator

@@ -1,81 +1,103 @@
 {% extends base_template %}
 {% load i18n %}
 {% block content %}
-    <a class='btn btn-inverse add-report' href='{% url "tabletop:roster-add" %}'>{% trans "Add report" %}</a>
-    <div class='report' data-class='hide-flow'>
-        <form class='form-horizontal' action='' method='POST'>
-            {% include "forms/bootstrap_horizontal.html" with form=form %}
+    <a class='btn btn-inverse add-report pull-right' style='margin-bottom: 10px;' href='{% url "tabletop:roster-add" %}'>
+        <i class="icon-plus icon-white"></i>
+        {% trans "Add" %}
+    </a>
+
+
+    <div class='report'>
+        <form class='form-horizontal' {% spaceless %}
+              {% if not form.instance.pk %}
+              action='{% url "tabletop:report-add" %}'
+              {% else %}
+              action='{% url "tabletop:report-edit" form.instance.pk %}'
+              {% endif %} {% endspaceless %}method='POST' id='add-report-form'>
+            {% csrf_token %}
+            {% trans "Save" as submit %}
+            {% include "forms/bootstrap_horizontal.html" with form=form submit=submit submit_class='btn btn-success' %}
         </form>
     </div>
-    {% if reports.objects_list %}
+
+    {% if not form.instance.pk %}
+    {% if reports.object_list %}
         <table class='table striped'>
             <tr>
                 <th>{% trans "Title" %}</th>
                 <th>{% trans "Pts" %}</th>
                 <th>{% trans "Published" context "published date" %}</th>
+                <th>{% trans "Players" context "battle report players" %}</th>
+                <th>{% trans "Approved" context "approved report" %}</th>
             </tr>
             {% for report in reports.object_list %}
             <tr>
                 <td><a href='{{ report.get_absolute_url }}'>{{ report.title }}</a></td>
                 <td>{{ report.get_pts }}</td>
                 <td>{{ report.published }}</td>
+                <td>
+                    {% for player in report.get_players %}
+                        <a href='{% url "wh:profile-by-nick" player.nickname %}'>{{ player.get_nickname|safe }}</a>{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                </td>
+                <td>
+                    <label class='label label-{{ report.get_approved_label }}'>
+                        {% if report.approved %}{% trans "approved" %}
+                        {% else %}{% trans "not approved" %}
+                        {% endif %}
+                    </label>
+                </td>
+
             </tr>
             {% endfor %}
         </table>
-        {% include "pages.html" with page=reports %}
+        {% include "links.html" with page=reports %}
     {% else %}
         <h3>{% trans "No reports found ;)" %}</h3>
     {% endif %}
-
+    {% endif %}
 <script type='text/javascript'>
-    var searchRosters = function(){
-        url = "{% url 'json:tabletop:roster-search' %}";
-        blk = $("#id_rosters_chzn .search-field input");
-        results = $("#id_rosters_chzn .chzn-results");
-        url += '?q=' + blk.val();
-        $.getJSON(url, function(json){
-            if (json){
-                $("#id_rosters option").detach().remove();
-                $(results).find('.chzn-results > li').detach().remove();
-                json.rosters.map(function(roster){
-                    option = $("<option>").attr({
-                        'value': roster.id
-                    }).text(roster.title);
-                    option.appendTo($('#id_rosters'));
-                    last_id = $("#id_rosters_chzn .chzn-results > li:last").attr('id');
-                    last_id = (typeof last_id != 'undefined') ? last_id.match(/_(\d+)$/)[1] | 0 : -1;
-                    last_id += 1;
-                    li = $("<li>").attr({
-                        'class': '',
-                        'id': 'id_rosters_chzn_o_' + last_id
-                    }).text(roster.title);
-                    li.appendTo(results);
-                    //'<li id="id_rosters_chzn_o_0" class="result-selected" style="">Новый тестовый ростер [Saul Tarvitz:Space Marines:555] [5]</li>'
-                });
-                //$("#id_rosters").trigger('liszt:updated');
+    var postReportForm = function(form){
+        data = form.serialize();
+        form.find('input, select').attr({'disabled': 'disabled'});
+        postFormAjax({
+            form: form,
+            data: data,
+            successMsg: "{% trans 'Added successfull' %}",
+            success: function(json){
+                form.find('input, select').removeAttr('disabled');
+                setTimeout(function(){
+                    document.location.href = "{% url 'tabletop:battle-reports-self' %}";
+                }, 3000);
             }
-        });
+        })
     }
 
     $(document).ready(function(){
-        $('[data-class="chosen"]').chosen();
+        $('[data-class="chosen"]').chosen({
+            no_results_text: "{% trans 'No results matched' %}",
+            placeholder_text: "{% trans "Select some options" %}"
+        });
         //chosen bug :( should be before 'hiding the block'
-        //$('.report').addClass('hide-flow');
+        {% if not form.instance.pk %}
+        setTimeout(function(){$('.report').addClass('hide-flow');}, 10);
+        {% endif %}
         var settings = myMarkupSettings['textile'];
         settings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
         $('#id_comment').markItUp(settings);
         $(".add-report").click(function(e){
+            icon = $(this).find('i.icon-white');
+            if($(icon).hasClass('icon-plus')){
+                $(icon).removeClass('icon-plus');
+                $(icon).addClass('icon-minus');
+            } else {
+                $(icon).removeClass('icon-minus');
+                $(icon).addClass('icon-plus');
+            }
             $('.report').toggleClass('hide-flow');
             return false;
         });
 
-        /*search_input = $("#id_rosters_chzn .search-field input");
-        search_input.keypress(function(e){
-            var timeout = false;
-            if ($(this).val().length > 3){
-                searchRosters();
-            }
-        });*/
         $('#id_rosters').ajaxChosen({
             type: 'GET',
             url: '{% url 'json:tabletop:roster-search' %}',
@@ -84,15 +106,14 @@
             keepTypingMsg: '{% trans "Please, keep typing ..." %}',
             lookingForMsg: "{% trans 'Searching for' %}"
 
-
         }, function(data){
             var results = [];
 
             data.rosters.map(function(roster){
-                results.push({ value: roster.id, text: roster.title });
+                results.push({ value: roster.id, text: roster.unicode });
             });
             return results;
-        });
+        }, {placeholder_text: "{% trans "Search some rosters" %}"});
 
         $("#id_rosters").chosen().change(function(e){
             $("#id_winners option").detach().remove();
@@ -103,7 +124,14 @@
             $("#id_winners").trigger('liszt:updated');
             return e;
         });
+        $("#add-report-form #id_submit").click(function(e){
+            postReportForm($(this).parents('form'));
+            return false;
+        });
+        $('#add-report-form').submit(function(e){
+            postReportForm($(this));
+            return false;
+        });
     });
 </script>
-
 {% endblock %}

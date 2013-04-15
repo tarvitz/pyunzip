@@ -5,6 +5,7 @@ body, html{
 a{ color: darkgrey; text-decoration: none; }
 a:visited{color: #D0D0D0;}
 a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
+hr.center{ margin-left: auto; margin-right: auto;}
 
 .navbar-inner.grey{
     background-image: -webkit-linear-gradient(top, #888, #666);
@@ -38,7 +39,7 @@ a:hover{ color:#FAEBD7; text-shadow: 1px 1px black; text-decoration: none;}
     width: 100%;
     background-color: #666;
     opacity: 0.55;
-    filter: alpha(opacity=55); 
+    filter: alpha(opacity=55);
     top: 0px;
     left: 0px;
     z-index: -1;
@@ -221,7 +222,8 @@ div.copyright{
 
 /* old main merge */
 /*New megafeature ;) works as transparency */
-.reflects_up,.reflects_down,.reflects_left,.reflects_right{
+.reflects_up,.reflects_down,.reflects_left,.reflects_right,
+.reflects.up,.reflects.down,.reflects.left,.reflects.right{
 	position: absolute;
 	height: 100%;
 	width: 100%;
@@ -232,16 +234,16 @@ div.copyright{
 	z-index: -1;
 }
 /*overriding the image */
-.reflects_down{
+.reflects_down, .reflects.down{
 	background-image: url('/styles/images/down_reflect.png');
 	background-position: bottom left;
 }
-.reflects_left{
+.reflects_left, .reflects.left{
 	background-image: url('/styles/images/left_reflect.png');
 	background-repeat: repeat-y;
 	background-position: top left;
 }
-.reflects_right{
+.reflects_right,.reflects.right{
 	background-image: url('/styles/images/right_reflect.png');
 	background-repeat: repeat-y;
 	background-position: top right;
@@ -250,9 +252,24 @@ div.copyright{
 	color: grey;
     font-family: Verdana;
 }
-.del_link:hover{ color : red; }
-.edit_link:hover{ color: gold; }
-.restore_link:hover,.act_link:hover{ color: lightgreen }
+.del_link:hover,
+.del.link:hover,
+.disapprove.link:hover{
+    color : red;
+}
+.edit_link:hover,
+.edit.link:hover{
+    color: gold;
+}
+
+.restore_link:hover,
+.act_link:hover,
+restore.link:hover,
+.act.link:hover,
+.approve.link:hover{
+    color: lightgreen;
+}
+
 span.link,div.link{
     font-size: 8pt;
 	color: grey;
@@ -303,6 +320,12 @@ form ul.errors > li{
     padding-top: 8px;
 
 }
+/*.modal .form-horizontal label{
+    width: 70px;
+}
+.modal .form-horizontal .controls{
+    margin-left: 80px;
+}*/
 img.purity-seal{
     position: absolute;
     height: 240px;
@@ -316,7 +339,7 @@ img.purity-seal{
     margin-top: 0px;
 }
 .hide{ display: none; }
-.hide-flow{ position: absolute; margin-left: -10000px}
+.hide-flow{ display: none; /*position: absolute; margin-left: -10000px*/}
 .textarea.progress{
     position: absolute;
     margin-left: 10px;
@@ -330,3 +353,6 @@ img.purity-seal{
 .chzn-container > a:hover{
     text-shadow: none;
 }
+.space{ margin-top: 10px;}
+.title.approved{}
+.title.disapproved, .title.disapproved a{ color: red;}

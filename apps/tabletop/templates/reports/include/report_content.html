@@ -1,0 +1,155 @@
+{% load newsfilters i18n coretags %}
+<a class="btn btn-inverse btn-mini show-info pull-right"
+   data-toggle='button'
+   href="#" data-href="#rosters-info">
+   {% trans "show info" %}
+</a>
+
+<div class='rosters hide info' id="rosters-info">
+    <a class="btn btn-inverse btn-mini show-winners" data-toggle='button'>{% trans "Show winners" %}</a>
+    {% for roster in report.rosters.all %}
+    <div class='round message'>
+        <div class='message-headline'>
+            <div class='transparency black'></div>
+            <span class='title center'>
+                {% if roster in report.winners.all %}
+                <a href="#"  data-original-title="{% trans 'Winner' %}"
+                   rel='tooltip' data-delay='300'>
+                    <i class="icon-white icon-star pull-left winner hide"></i>
+                </a>
+                {% endif %}
+                <a href="{{ roster.get_absolute_url }}">
+                    {{ roster.title }} [{{ roster.pts }} {% trans "pts" context "roster points" %}]
+                </a>
+            </span>
+        </div>
+        <div class='message-body'>
+            <div class='avatar'>
+                <img src='{% url "wh:avatar" roster.owner.nickname %}'>
+                <a href="{% url "wh:profile-by-nick" roster.owner.nickname %}">
+                    {{ roster.owner.get_nickname|safe }}
+                </a>
+            </div>
+            <div class='text'>
+                <div class='transparency'></div>
+                <div class='reflects left'></div>
+                <div class='reflects right'></div>
+                {{ roster.render_roster|safe }}
+            </div>
+        </div>
+        <div class='message-footer'>
+            <div class='transparency black'></div>
+            <div class='links'>
+                <span>{{ roster.codex }}</span>
+                <span>{{ roster.pts }} {% trans "pts" context "roster points" %}</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    <hr class='center' width='35%;'>
+</div>
+
+<div class='battle report' id="battle-{{ report.id }}">
+    <div class='round message center'>
+        <div class='message-headline'><div class='transparency black'></div>
+            <div class='links'>
+            {% if perms.tabletop.edit_battle_report %}
+                <span class='edit link'>
+                    <a href="{% url "tabletop:report-edit" report.id %}"
+                       class='edit link'>{% trans "edit" %}</a>
+                </span>
+            {% endif %}
+            {% if perms.tabletop.edit_battle_report %}
+                {% if not report.approved %}
+                    <span class='edit link'>
+                        <a class='approve link'
+                           href="{% url "tabletop:report-approve" report.id %}">{% trans "approve" %}</a>
+                    </span>
+                {% else %}
+                    <span>
+                        <a class="disapprove link"
+                           href="{% url "tabletop:report-disapprove" report.id %}">{% trans "disapprove" %}
+                        </a>
+                    </span>
+                {% endif %}
+            {% endif %}
+            </div>
+            <span class='pull-left'>
+                <a class="collapse-avatar" href="#"
+                   data-title="{% trans "Hides avatar block" %}"
+                   data-delay='300' rel='tooltip'>
+                    <i class="icon-white icon-chevron-left no-margin"></i>
+                </a>
+            </span>
+            <span class='title center'>{{ report.title }}</span>
+        </div>
+        <div class='message-body'>
+            <div class='avatar'>
+                <img src='{% url "wh:avatar" report.owner.nickname %}'>
+                {{ report.owner.get_nickname|safe }}
+            </div>
+            <div class='text'><div class='transparency'></div>
+                <div class='reflects left'></div>
+                <div class='reflects right'></div>
+                {{ report.render_comment|safe }}
+            </div>
+        </div>
+        <div class='message-footer'>
+            <div class='transparency black'></div>
+            <div class='links'>
+                <span>{{ report.layout }}</span>
+                <span>{{ report.get_deployment }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='space'></div>
+
+{% if comments.object_list %}
+    {% include settings.document.links with page=comments %}
+    {% include settings.document.comments %}
+    {% include settings.document.links with page=comments %}
+{% endif %}
+{% if user.is_authenticated %}
+    {% get_content_type report as object %}
+    {% include settings.document.comments_form with object=object gs=gs %}
+{% endif %}
+
+<script type="text/javascript">
+    $(".show-info").click(function(e){
+        block = $(this).attr('data-href') || $(this).attr('href');
+        $(block).toggleClass('hide');
+        icon = $(this).find('i.icon-white');
+        if ($(icon).hasClass('icon-plus')){
+            $(icon).removeClass('icon-plus');
+            $(icon).addClass('icon-minus');
+        } else {
+            $(icon).removeClass('icon-minus');
+            $(icon).addClass('icon-plus');
+        }
+    });
+    var width = $(".battle.report").find('.text').css('margin-left');
+    var border = $('.battle.report').find('.text').css('border-left');
+    $('.collapse-avatar').click(function(e){
+        icon = $(this).find('i.icon-white');
+        if ($(icon).hasClass('icon-chevron-left')){
+            $(icon).removeClass('icon-chevron-left');
+            $(icon).addClass('icon-chevron-right');
+            $('.battle.report').find('.text').css({
+                'margin-left': '0px', 'border-left': '0px'
+            });
+        } else {
+            $(icon).addClass('icon-chevron-left');
+            $(icon).removeClass('icon-chevron-right');
+            $('.battle.report').find('.text').css({
+                'margin-left': width, 'border-left': border
+            });
+        }
+        $(".battle.report").find('.avatar').toggleClass('hide');
+
+    });
+    $(".show-winners").click(function(e){
+        $('i.winner').toggleClass('hide');
+    });
+</script>

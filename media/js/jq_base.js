@@ -163,6 +163,7 @@ var postFormAjax = function(p){
             var _form = (typeof response.form == 'undefined') ? {} : response.form;
             if (_form.errors){
                 updateFormErrors(form, _form.errors);
+                $(form).find("input, select").removeAttr('disabled');
             }
             else {
                 // do something
