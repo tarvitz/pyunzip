@@ -165,6 +165,9 @@ class AddBattleReportForm(RequestModelForm):
     class Meta:
         model = BattleReport
         fields = ('title', 'mission', 'rosters', 'winners', 'layout', 'deployment', 'comment')
+        widgets = {
+            'deployment': forms.Select(attrs={'data-class': 'chosen'})
+        }
 
 class AddBattleReportModelForm(RequestModelForm):
     required_css_class='required'
