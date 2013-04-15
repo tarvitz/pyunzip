@@ -250,7 +250,9 @@ class BattleReport(models.Model):
                     self.syntax or 'textile'
                 )
             )
-        return render_filter(self.comment, self.syntax or 'textile')
+        return post_markup_filter(
+            render_filter(self.comment, self.syntax or 'textile')
+        )
 
     def _get_versus_layout(self):
         """"""
