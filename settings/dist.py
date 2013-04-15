@@ -90,6 +90,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'apps.core.middleware.ChecksMiddleware',
     'apps.core.middleware.UserActivityMiddleware',
     'apps.core.middleware.GuestActivityMiddleware',
@@ -277,3 +278,10 @@ CELERY_REDIS_HOST = "redis"
 CELERY_REDIS_PORT = 6379
 CELERY_REDIS_DB = 0
 BROKER_URL = "redis://redis:6379/0"
+
+DEBUG=True
+if DEBUG:
+    INTERNAL_IPS = ('127.0.0.1',)
+    INSTALLED_APPS += (
+        'debug_toolbar',
+    )
