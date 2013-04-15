@@ -246,7 +246,7 @@ class BattleReport(models.Model):
         if '(cut)' in self.comment:
             return  post_markup_filter(
                 render_filter(
-                    self.comment[:self.comment.index('(cut)')]
+                    self.comment[:self.comment.index('(cut)')],
                     self.syntax or 'textile'
                 )
             )
