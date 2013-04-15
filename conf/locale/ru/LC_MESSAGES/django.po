@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-14 17:11+0400\n"
+"POT-Creation-Date: 2013-04-15 16:17+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -22,8 +22,8 @@ msgstr "контент"
 
 #: apps/blogs/models.py:26 apps/files/models.py:286 apps/menu/models.py:40
 #: apps/news/models.py:33 apps/news/models.py:44 apps/news/models.py:206
-#: apps/news/models.py:215 apps/tabletop/forms.py:260
-#: apps/tabletop/models.py:139 apps/tabletop/models.py:149
+#: apps/news/models.py:215 apps/tabletop/forms.py:268
+#: apps/tabletop/models.py:149 apps/tabletop/models.py:159
 #: apps/tabletop/templates/add_roster_old.html:23
 #: apps/tabletop/templates/reports.html:27 apps/wh/models.py:24
 #: apps/wh/models.py:121
@@ -61,7 +61,7 @@ msgstr "IP адрес автора"
 
 #: apps/blogs/models.py:42 apps/files/models.py:102 apps/karma/models.py:56
 #: apps/news/models.py:37 apps/news/models.py:67 apps/news/models.py:222
-#: apps/tabletop/models.py:98
+#: apps/tabletop/models.py:104
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44 apps/wh/models.py:127
 #: apps/wh/models.py:193 apps/wh/models.py:365
@@ -145,7 +145,7 @@ msgstr "Каскадные таблицы стилей"
 msgid "CSSes"
 msgstr "CSSки"
 
-#: apps/core/models.py:43 apps/tabletop/models.py:44
+#: apps/core/models.py:43 apps/tabletop/models.py:50
 #: apps/tagging/models.py:477 apps/tracker/models.py:13 apps/vote/models.py:13
 msgid "content type"
 msgstr "контент тип"
@@ -739,10 +739,10 @@ msgstr "владелец"
 msgid "Files"
 msgstr "Файлы"
 
-#: apps/files/models.py:370 apps/menu/models.py:6 apps/tabletop/models.py:49
-#: apps/tabletop/models.py:79 apps/tabletop/models.py:158
-#: apps/tabletop/models.py:272 apps/tabletop/models.py:284
-#: apps/tabletop/models.py:421 apps/tabletop/models.py:559
+#: apps/files/models.py:370 apps/menu/models.py:6 apps/tabletop/models.py:55
+#: apps/tabletop/models.py:85 apps/tabletop/models.py:168
+#: apps/tabletop/models.py:287 apps/tabletop/models.py:299
+#: apps/tabletop/models.py:436 apps/tabletop/models.py:574
 msgid "title"
 msgstr ""
 
@@ -891,7 +891,7 @@ msgstr "Дата"
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/karma/models.py:49 apps/news/models.py:207 apps/tabletop/models.py:140
+#: apps/karma/models.py:49 apps/news/models.py:207 apps/tabletop/models.py:150
 #: apps/wh/models.py:23 apps/wh/models.py:186 apps/wh/models.py:253
 msgid "Codename"
 msgstr "Кодовое имя"
@@ -1013,7 +1013,7 @@ msgstr "Неизвестный тип файла"
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
-#: apps/news/models.py:15 apps/tabletop/models.py:173
+#: apps/news/models.py:15 apps/tabletop/models.py:187
 #: apps/tabletop/templates/reports.html:45
 msgid "approved"
 msgstr "утверждено"
@@ -1791,7 +1791,7 @@ msgstr "Заголовок"
 msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
-#: apps/tabletop/forms.py:56 apps/tabletop/forms.py:172
+#: apps/tabletop/forms.py:56 apps/tabletop/forms.py:180
 msgid "Rosters"
 msgstr "Ростеры"
 
@@ -1845,78 +1845,85 @@ msgstr "Вы обязаны выбрать ростер победителя"
 
 #: apps/tabletop/forms.py:146
 msgid "Number of players and layout must exact by the amount of whole players"
-msgstr "Количество участников и формат должны совпадать с общим количеством участников"
+msgstr ""
+"Количество участников и формат должны совпадать с общим количеством "
+"участников"
 
-#: apps/tabletop/forms.py:163
+#: apps/tabletop/forms.py:154 apps/tabletop/tests.py:280
+#, python-format
+msgid "You can not add more winners than %(amount)s"
+msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
+
+#: apps/tabletop/forms.py:171
 msgid "Search rosters"
 msgstr "Поиск ростеров"
 
-#: apps/tabletop/forms.py:164
+#: apps/tabletop/forms.py:172
 msgid "If you do not see rosters you need below you may search them"
 msgstr ""
 
-#: apps/tabletop/forms.py:167
+#: apps/tabletop/forms.py:175
 msgid "You can add this rosters to battle report"
 msgstr ""
 
-#: apps/tabletop/forms.py:168
+#: apps/tabletop/forms.py:176
 msgid "Available rosters"
 msgstr ""
 
-#: apps/tabletop/forms.py:175
+#: apps/tabletop/forms.py:183
 msgid "Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc."
 msgstr ""
 
-#: apps/tabletop/forms.py:215
+#: apps/tabletop/forms.py:223
 msgid ""
 "You should set right layout, for example 2vs2, 3vs1, number of players "
 "should be equal to number of rosters you've passed"
 msgstr ""
 
-#: apps/tabletop/forms.py:224
+#: apps/tabletop/forms.py:232
 msgid ""
 "10 players is absolute maximum, do not try to add layout with more players, "
 "it's strickly forbidden"
 msgstr ""
 
-#: apps/tabletop/forms.py:250
+#: apps/tabletop/forms.py:258
 msgid "Where is no such rosters which have more than 20k points"
 msgstr ""
 
-#: apps/tabletop/forms.py:255
+#: apps/tabletop/forms.py:263
 msgid "You should pass only int values through \"pts\" field"
 msgstr ""
 
-#: apps/tabletop/forms.py:276
+#: apps/tabletop/forms.py:284
 msgid "Race field should contain exact value"
 msgstr ""
 
-#: apps/tabletop/forms.py:280
+#: apps/tabletop/forms.py:288
 msgid ""
 "You should to select one race from the race select field or type custom_race "
 "by your own"
 msgstr ""
 
-#: apps/tabletop/forms.py:295 apps/tabletop/forms.py:360
+#: apps/tabletop/forms.py:303 apps/tabletop/forms.py:368
 msgid "You can not pass player's name that contains more than 64 symbols"
 msgstr ""
 
-#: apps/tabletop/forms.py:305 apps/tabletop/forms.py:355
+#: apps/tabletop/forms.py:313 apps/tabletop/forms.py:363
 msgid "The common pts should be greater than 500"
 msgstr ""
 
-#: apps/tabletop/forms.py:312
+#: apps/tabletop/forms.py:320
 msgid "Codex"
 msgstr "Кодекс"
 
-#: apps/tabletop/forms.py:342
+#: apps/tabletop/forms.py:350
 #, python-format
 msgid ""
 "There is no such revision in \"%(unicode)s\", try to pass %(revisions)s as "
 "valid values"
 msgstr ""
 
-#: apps/tabletop/forms.py:368
+#: apps/tabletop/forms.py:376
 msgid "Revision"
 msgstr ""
 
@@ -1964,319 +1971,329 @@ msgstr ""
 msgid "artilery"
 msgstr ""
 
-#: apps/tabletop/models.py:50
+#: apps/tabletop/models.py:43
+msgid "Dawn of War"
+msgstr ""
+
+#: apps/tabletop/models.py:44
+msgid "Hammer and Anvil"
+msgstr ""
+
+#: apps/tabletop/models.py:45
+msgid "Vanguard strike"
+msgstr ""
+
+#: apps/tabletop/models.py:56
 msgid "plain side"
 msgstr ""
 
-#: apps/tabletop/models.py:51
+#: apps/tabletop/models.py:57
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:81
+#: apps/tabletop/models.py:87
 msgid "player"
 msgstr "автор"
 
-#: apps/tabletop/models.py:82
+#: apps/tabletop/models.py:88
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:85
+#: apps/tabletop/models.py:91
 msgid "comments"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:89
+#: apps/tabletop/models.py:95
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:91
+#: apps/tabletop/models.py:97
 msgid "custom Codex"
 msgstr ""
 
-#: apps/tabletop/models.py:93
+#: apps/tabletop/models.py:99
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:94
+#: apps/tabletop/models.py:100
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:97 apps/tabletop/models.py:295
-#: apps/tabletop/models.py:331 apps/tabletop/models.py:372
-#: apps/tabletop/models.py:431 apps/tabletop/models.py:569
+#: apps/tabletop/models.py:103 apps/tabletop/models.py:310
+#: apps/tabletop/models.py:346 apps/tabletop/models.py:387
+#: apps/tabletop/models.py:446 apps/tabletop/models.py:584
 #: apps/tabletop/templates/add_roster_old.html:26
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:97
+#: apps/tabletop/models.py:103
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:100
+#: apps/tabletop/models.py:106
 msgid "Orphan"
 msgstr ""
 
-#: apps/tabletop/models.py:108 apps/tabletop/templates/add_roster_old.html:30
+#: apps/tabletop/models.py:114 apps/tabletop/templates/add_roster_old.html:30
 msgid "Player"
 msgstr ""
 
-#: apps/tabletop/models.py:161
+#: apps/tabletop/models.py:171
 msgid "published"
 msgstr ""
 
-#: apps/tabletop/models.py:164
+#: apps/tabletop/models.py:174
 #, fuzzy
 msgid "rosters"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:167
-#, fuzzy
+#: apps/tabletop/models.py:177
 msgid "winners"
-msgstr "Победитель"
+msgstr "Победители"
 
-#: apps/tabletop/models.py:170
-#, fuzzy
+#: apps/tabletop/models.py:180
 msgid "mission"
-msgstr "в доработку"
+msgstr "миссия"
 
-#: apps/tabletop/models.py:171
-#, fuzzy
+#: apps/tabletop/models.py:181
 msgid "layout"
-msgstr "Не стандартная схема"
+msgstr "формат"
 
-#: apps/tabletop/models.py:172
-#, fuzzy
+#: apps/tabletop/models.py:183
+msgid "deployment"
+msgstr "расстановка"
+
+#: apps/tabletop/models.py:186
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:174
-#, fuzzy
+#: apps/tabletop/models.py:188
 msgid "ip address"
 msgstr "IP адрес"
 
-#: apps/tabletop/models.py:175
-#, fuzzy
+#: apps/tabletop/models.py:189
 msgid "syntax"
-msgstr "Синтаксис"
+msgstr "синтаксис"
 
-#: apps/tabletop/models.py:219
+#: apps/tabletop/models.py:233
 msgid "[fuzzy] "
-msgstr ""
+msgstr "[плавающий]"
 
-#: apps/tabletop/models.py:276 apps/wh/models.py:42 apps/wh/models.py:53
+#: apps/tabletop/models.py:291 apps/wh/models.py:42 apps/wh/models.py:53
 msgid "Army"
-msgstr ""
+msgstr "Армия"
 
-#: apps/tabletop/models.py:277 apps/wh/admin.py:42 apps/wh/models.py:54
+#: apps/tabletop/models.py:292 apps/wh/admin.py:42 apps/wh/models.py:54
 msgid "Armies"
-msgstr ""
+msgstr "Армии"
 
-#: apps/tabletop/models.py:289 apps/tabletop/models.py:423
-#: apps/tabletop/models.py:561
+#: apps/tabletop/models.py:304 apps/tabletop/models.py:438
+#: apps/tabletop/models.py:576
 msgid "description"
-msgstr ""
+msgstr "описание"
 
-#: apps/tabletop/models.py:295
+#: apps/tabletop/models.py:310
 msgid "roster points cache"
-msgstr ""
+msgstr "количество очков ростера"
 
-#: apps/tabletop/models.py:323
+#: apps/tabletop/models.py:338
 msgid "Auto roster"
-msgstr ""
+msgstr "Авто ростер"
 
-#: apps/tabletop/models.py:324
+#: apps/tabletop/models.py:339
 msgid "Auto rosters"
-msgstr ""
+msgstr "Авто ростеры"
 
-#: apps/tabletop/models.py:328 apps/tabletop/models.py:366
-#: apps/tabletop/models.py:490 apps/tabletop/models.py:524
+#: apps/tabletop/models.py:343 apps/tabletop/models.py:381
+#: apps/tabletop/models.py:505 apps/tabletop/models.py:539
 msgid "amount"
-msgstr ""
+msgstr "количество"
 
-#: apps/tabletop/models.py:328
+#: apps/tabletop/models.py:343
 msgid "wargear amount"
-msgstr ""
+msgstr "количество варгира"
 
-#: apps/tabletop/models.py:331
+#: apps/tabletop/models.py:346
 msgid "points cache for wargear"
 msgstr ""
 
-#: apps/tabletop/models.py:360
+#: apps/tabletop/models.py:375
 msgid "Wargear container"
 msgstr ""
 
-#: apps/tabletop/models.py:361
+#: apps/tabletop/models.py:376
 msgid "Wargear containers"
 msgstr ""
 
-#: apps/tabletop/models.py:366 apps/tabletop/models.py:583
+#: apps/tabletop/models.py:381 apps/tabletop/models.py:598
 msgid "unit amount"
 msgstr ""
 
-#: apps/tabletop/models.py:372
+#: apps/tabletop/models.py:387
 msgid "points cache for unit"
 msgstr ""
 
-#: apps/tabletop/models.py:377
+#: apps/tabletop/models.py:392
 msgid "unit_containers"
 msgstr ""
 
-#: apps/tabletop/models.py:400
+#: apps/tabletop/models.py:415
 msgid "Unit container"
 msgstr ""
 
-#: apps/tabletop/models.py:401
+#: apps/tabletop/models.py:416
 msgid "Unit containers"
 msgstr ""
 
-#: apps/tabletop/models.py:417
+#: apps/tabletop/models.py:432
 msgid "is dedicated"
 msgstr ""
 
-#: apps/tabletop/models.py:418
+#: apps/tabletop/models.py:433
 msgid "marks if transport could be dedicated"
 msgstr ""
 
-#: apps/tabletop/models.py:429
+#: apps/tabletop/models.py:444
 msgid "is unique?"
 msgstr ""
 
-#: apps/tabletop/models.py:429
+#: apps/tabletop/models.py:444
 msgid "marks if its unique"
 msgstr ""
 
-#: apps/tabletop/models.py:431
+#: apps/tabletop/models.py:446
 msgid "points per model unit"
 msgstr ""
 
-#: apps/tabletop/models.py:435
+#: apps/tabletop/models.py:450
 msgid "min"
 msgstr ""
 
-#: apps/tabletop/models.py:435
+#: apps/tabletop/models.py:450
 msgid "minumal models allowed be taken within squad"
 msgstr ""
 
-#: apps/tabletop/models.py:439
+#: apps/tabletop/models.py:454
 msgid "max"
 msgstr ""
 
-#: apps/tabletop/models.py:439
+#: apps/tabletop/models.py:454
 msgid "maximum models allowed be taken within squad"
 msgstr ""
 
-#: apps/tabletop/models.py:443
+#: apps/tabletop/models.py:458
 msgid "mwr amount"
 msgstr ""
 
-#: apps/tabletop/models.py:443
+#: apps/tabletop/models.py:458
 msgid "must take wargear amount"
 msgstr ""
 
-#: apps/tabletop/models.py:453
+#: apps/tabletop/models.py:468
 msgid "Model unit"
 msgstr ""
 
-#: apps/tabletop/models.py:454
+#: apps/tabletop/models.py:469
 msgid "Model units"
 msgstr ""
 
-#: apps/tabletop/models.py:471 apps/tabletop/models.py:542
-#: apps/tabletop/models.py:576
+#: apps/tabletop/models.py:486 apps/tabletop/models.py:557
+#: apps/tabletop/models.py:591
 msgid "threshold"
 msgstr ""
 
-#: apps/tabletop/models.py:471
+#: apps/tabletop/models.py:486
 msgid "every threshold number you should take an upgrade"
 msgstr ""
 
-#: apps/tabletop/models.py:483
+#: apps/tabletop/models.py:498
 msgid "MWRUnit"
 msgstr ""
 
-#: apps/tabletop/models.py:484
+#: apps/tabletop/models.py:499
 msgid "MWRUnits"
 msgstr ""
 
-#: apps/tabletop/models.py:490 apps/tabletop/models.py:524
+#: apps/tabletop/models.py:505 apps/tabletop/models.py:539
 msgid "requirement require amount"
 msgstr ""
 
-#: apps/tabletop/models.py:494 apps/tabletop/models.py:528
+#: apps/tabletop/models.py:509 apps/tabletop/models.py:543
 msgid "amount target"
 msgstr ""
 
-#: apps/tabletop/models.py:494 apps/tabletop/models.py:528
+#: apps/tabletop/models.py:509 apps/tabletop/models.py:543
 msgid "wargear requirement target amount"
 msgstr ""
 
-#: apps/tabletop/models.py:517
+#: apps/tabletop/models.py:532
 msgid "Unit wargear requirement"
 msgstr ""
 
-#: apps/tabletop/models.py:518
+#: apps/tabletop/models.py:533
 msgid "Unit wargear requirements"
 msgstr ""
 
-#: apps/tabletop/models.py:542
+#: apps/tabletop/models.py:557
 msgid "every threshold number"
 msgstr ""
 
-#: apps/tabletop/models.py:555
+#: apps/tabletop/models.py:570
 msgid "Wargear requirement"
 msgstr ""
 
-#: apps/tabletop/models.py:556
+#: apps/tabletop/models.py:571
 msgid "Wargear requirements"
 msgstr ""
 
-#: apps/tabletop/models.py:560
+#: apps/tabletop/models.py:575
 msgid "short title"
 msgstr ""
 
-#: apps/tabletop/models.py:569
+#: apps/tabletop/models.py:584
 msgid "points cost for one wargear title"
 msgstr ""
 
-#: apps/tabletop/models.py:572
+#: apps/tabletop/models.py:587
 msgid "limit"
 msgstr ""
 
-#: apps/tabletop/models.py:572
+#: apps/tabletop/models.py:587
 msgid "limit gear to take on the battlefield"
 msgstr ""
 
-#: apps/tabletop/models.py:576
+#: apps/tabletop/models.py:591
 msgid "models amount threshould alowed take this wargear upgrade"
 msgstr ""
 
-#: apps/tabletop/models.py:580
+#: apps/tabletop/models.py:595
 msgid "is squad only?"
 msgstr ""
 
-#: apps/tabletop/models.py:580
+#: apps/tabletop/models.py:595
 msgid "marks if upgrade allowed for entire squad only"
 msgstr ""
 
-#: apps/tabletop/models.py:584
+#: apps/tabletop/models.py:599
 msgid ""
 "sets as additional unit model, for example: Runthred casts on gretchin unit "
 "as additional model, not an upgrade"
 msgstr ""
 
-#: apps/tabletop/models.py:589
+#: apps/tabletop/models.py:604
 msgid "marks what gear blocks given one"
 msgstr ""
 
-#: apps/tabletop/models.py:593
+#: apps/tabletop/models.py:608
 msgid "marks what gear combines with each other for example: 2 bsh or 2 rkkt"
 msgstr ""
 
-#: apps/tabletop/models.py:619
+#: apps/tabletop/models.py:634
 msgid "Wargear"
 msgstr ""
 
-#: apps/tabletop/models.py:620
+#: apps/tabletop/models.py:635
 msgid "Wargears"
 msgstr ""
 

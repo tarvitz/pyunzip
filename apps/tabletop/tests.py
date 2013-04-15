@@ -125,6 +125,7 @@ class JustTest(TestCase):
             'rosters': [roster1.id, roster2.id],
             'winners': [roster1.id],
             'layout': '1vs1',
+            'deployment': 'dow',
             'comment': u'Первый ростер победил :D'
         }
         count = BattleReport.objects.count()
@@ -185,9 +186,10 @@ class JustTest(TestCase):
             'rosters': [roster1.id, roster2.id],
             'winners': [roster2.id],
             'layout': '1vs1',
+            'deployment': 'ha'
         }
         edit = deepcopy(post)
-        delete = ['layout', 'mission', 'rosters', 'winners']
+        delete = ['layout', 'mission', 'rosters', 'winners',]
         for d in delete:
             del edit[d]
 
@@ -267,6 +269,7 @@ class JustTest(TestCase):
             'rosters': [roster1.id, roster2.id],
             'winners': [roster1.id, roster2.id],
             'layout': '1vs1',
+            'deployment': 'dow',
             'comment': u'Первый ростер победил :D'
         }
         count = BattleReport.objects.count()

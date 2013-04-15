@@ -39,6 +39,12 @@ MODEL_ARMY_TYPE_CHOICES = (
     ('artilery', _("artilery")),
 )
 
+DEPLOYMENT_CHOICES = (
+    ('dow', _("Dawn of War")),
+    ('ha', _("Hammer and Anvil")),
+    ('vs', _("Vanguard strike")),
+)
+
 class Codex(models.Model):
     content_type = models.ForeignKey(ContentType,
         verbose_name=_('content type'),
@@ -172,7 +178,11 @@ class BattleReport(models.Model):
         related_name='breport_winners_sets'
     )
     mission = models.ForeignKey(Mission, verbose_name=_("mission"))
-    layout = models.CharField(_('layout'),max_length=30)
+    layout = models.CharField(_('layout'), max_length=30)
+    deployment = models.CharField(
+        _('deployment'), choices=DEPLOYMENT_CHOICES, max_length=128,
+        default='dow'
+    )
     comment = models.TextField(_('comment'),max_length=10240)
     approved = models.BooleanField(_('approved'), default=False, blank=True)
     ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
