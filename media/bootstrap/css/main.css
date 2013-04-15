@@ -338,6 +338,11 @@ img.purity-seal{
 .message img.purity-seal{
     margin-top: 0px;
 }
+.round.message img.purity-seal{
+    margin-top: -45px;
+    height: 90px;
+}
+
 .hide{ display: none; }
 .hide-flow{ display: none; /*position: absolute; margin-left: -10000px*/}
 .textarea.progress{
