@@ -30,9 +30,7 @@
                         <a rel='twipsy' href='{% url "tabletop:roster-add" %}' data-title='Добавить ростер'>[<i class='icon-plus icon-white'></i>]</a></li>
                     <li><a rel='twipsy' href='{% url "news:news-user" %}'>Мои новости</a></li>
                     <li><a rel='twipsy' href='{% url "files:files" %}'>Мои файлы</a></li>
-                    {% if gs.EXPERIMENTAL %}
                     <li><a rel='twipsy' href='{% url "tabletop:battle-reports-self" %}'>Мои репорты</a></li>
-                    {% endif %}
                 </ul>
         </div>
         {% endif %}
@@ -55,10 +53,7 @@
                 <li class='lvl2'><a rel='twipsy' href='{% url "news:archived-news" %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
                 {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url "news:article-add" %}'>Добавить</a></li>{% endif %}
                 <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
-                {% if global_settings.DEVELOPMENT %}
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
-                <li class='lvl2'><a href='{% url "tabletop:report-add" %}'>добавить</a></li>
-                {% endif %}
                 <li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
                 <li class='lvl2'><a href="{% url "vote:best" "image" %}">лучшие</a></li>
                 {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url "files:image-upload" %}' title='загрузить изображение в галерею'>добавить</a></li>
