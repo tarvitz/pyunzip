@@ -19,13 +19,13 @@
 .markItUpContainer  {
 	/*border:1px solid #3C769D;*/
 	/*background:#FFF url(images/bg-container.png) repeat-x top left;*/
-	padding:5px 5px 2px 5px;
+	padding:5px 5px 2px 0px;
 	font:11px Verdana, Arial, Helvetica, sans-serif;
     position: relative;
 }
 .markItUpEditor {
 	font:12px 'Courier New', Courier, monospace;
-	padding: 5px 5px 5px 35px;
+	padding: 5px 5px 5px 40px;
 	border:3px solid #666; /*#3C769D;*/
     border-top: none;
     border-top-right-radius: 0;
