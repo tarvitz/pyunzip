@@ -244,11 +244,11 @@ class BattleReport(models.Model):
 
     def get_head_content(self):
         if '(cut)' in self.comment:
-            return render_filter(
-                post_markup_filter(
+            return  post_markup_filter(
+                render_filter(
                     self.comment[:self.comment.index('(cut)')]
-                ),
-                self.syntax or 'textile'
+                    self.syntax or 'textile'
+                )
             )
         return render_filter(self.comment, self.syntax or 'textile')
 
