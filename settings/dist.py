@@ -4,6 +4,7 @@ import os,sys
 from settings_path import rel_path
 #from apps import djcelery
 #djcelery.setup_loader()
+DEBUG=False
 
 ADMINS = (
     ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
@@ -90,7 +91,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'apps.core.middleware.ChecksMiddleware',
     'apps.core.middleware.UserActivityMiddleware',
     'apps.core.middleware.GuestActivityMiddleware',
@@ -284,4 +284,7 @@ if DEBUG:
     INTERNAL_IPS = ('127.0.0.1',)
     INSTALLED_APPS += (
         'debug_toolbar',
+    )
+    MIDDLEWARE_CLASSES += (
+        'debug_toolbar.middleware.DebugToolbarMiddleware',
     )
