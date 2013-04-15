@@ -1,4 +1,4 @@
-#
+# coding: utf-8
 # Django settings for WarMist project.
 import os,sys
 from settings_path import rel_path
@@ -257,6 +257,8 @@ USER_FILES_LIMIT=100*1024*1024
 
 #import settings from another app
 # LOGGING
+#CELERY
+
 
 from apps.vote.settings import *
 from apps.wh.settings import *
@@ -265,3 +267,13 @@ from apps.karma.settings import *
 
 import djcelery
 djcelery.setup_loader()
+# Celery settings
+# Time after task will be expired, 5 hours
+CELERY_TASK_RESULT_EXPIRES = 18000
+# Send notifications for admins if troubles would happen
+CELERND_TASK_ERROR_EMAILS = True
+CELERY_RESULT_BACKEND = "redis"
+CELERY_REDIS_HOST = "redis"
+CELERY_REDIS_PORT = 6379
+CELERY_REDIS_DB = 0
+BROKER_URL = "redis://redis:6379/0"
