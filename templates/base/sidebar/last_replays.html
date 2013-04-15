@@ -1,3 +1,4 @@
+{% comment %}
 {% if user.settings.show_last_replays and user.settings %}
 {% if last_replays %}{% load votetags newsfilters %}
 <div class='menu block'>
@@ -21,12 +22,6 @@
                   {% spaceless %}
                   <span class='spacer' />
                     <small>
-                        {% comment %} {% ifnotequal r.type "0" %}
-                            <span class='notice'>({{ r.type}}vs{{ r.type }})
-                        {% else %}
-                            (unstd)</span>
-                        {% endifnotequal %}
-                        {% endcomment %}
                         <span class='notice'>({{ r.get_type }})</span>
                     </small>
                   {# improve block and add bind tag #}
@@ -49,4 +44,4 @@
 </div>
 {% endif %} {# last replays #}
 {% endif %} {# user.settings.show_last_replays #}
-
+{% endcomment %}
