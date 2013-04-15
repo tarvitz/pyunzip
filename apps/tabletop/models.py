@@ -42,7 +42,7 @@ MODEL_ARMY_TYPE_CHOICES = (
 DEPLOYMENT_CHOICES = (
     ('dow', _("Dawn of War")),
     ('ha', _("Hammer and Anvil")),
-    ('vs', _("Vanguard strike")),
+    ('vs', _("Vanguard Strike")),
 )
 
 class Codex(models.Model):
