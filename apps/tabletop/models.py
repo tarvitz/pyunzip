@@ -211,6 +211,11 @@ class BattleReport(models.Model):
     def get_title(self):
         return self.title
 
+    def get_deployment(self):
+        d = {}
+        [d.update({i[0]: i[1]} for i in DEPLOYMENT_CHOICES]
+        return d[self.deployment]
+
     def delete(self,*args,**kwargs):
         """ deletes battlereport instance with rosters which already had been deleted
         (orphans)"""
