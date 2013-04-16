@@ -278,9 +278,9 @@ CELERY_REDIS_HOST = "redis"
 CELERY_REDIS_PORT = 6379
 CELERY_REDIS_DB = 0
 BROKER_URL = "redis://redis:6379/0"
-
+DEBUG_TOOLBAR=False
 DEBUG=True
-if DEBUG:
+if DEBUG and DEBUG_TOOLBAR:
     INTERNAL_IPS = ('127.0.0.1',)
     INSTALLED_APPS += (
         'debug_toolbar',

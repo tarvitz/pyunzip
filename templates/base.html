@@ -15,6 +15,8 @@
 <link rel='stylesheet' href='/media/css/jquery.fileupload-ui.css' type='text/css' media='screen' async>
 <link rel='stylesheet' href='/media/css/video-js.css' type='text/css' media='screen' async>
 <link rel='stylesheet' href='/media/css/chosen.css' type='text/css' media='screen'>
+{#<link rel='stylesheet' href='/media/css/bootstrap-image-gallery.min.css' type='text/css' media='screen' async>#}
+<link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
 
 <!--<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"main.css" }}" type="text/css" media="screen"> -->
 <link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
@@ -37,6 +39,8 @@
 <script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
 <script type='text/javascript' src='/media/js/video.js' async></script>
 <script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
+{# <script type='text/javascript' src='/media/js/bootstrap-image-gallery.min.js' async></script> #}
+<script type='text/javascript' src='/media/colorbox/jquery.colorbox-min.js' async></script>
 <script type='text/javascript' src='/media/js/jq_defaults.js'></script>
 <script type='text/javascript' src='/media/js/jquery.tmpl.min.js'></script>
 <script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
@@ -237,6 +241,10 @@
         return false;
     });
     $('#login-modal form').submit(function(e){ return false;});
+    $.each($('a.user.image'), function(idx, img){
+        $(img).attr({'rel': 'gal'});
+    });
+    $("a.user.image").colorbox({rel: "gal"});
 
     markupSettings = myMarkupSettings['textile'];
     markupSettings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';

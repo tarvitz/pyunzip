@@ -361,3 +361,4 @@ img.purity-seal{
 .space{ margin-top: 10px;}
 .title.approved{}
 .title.disapproved, .title.disapproved a{ color: red;}
+.thumbnail.inline{ display: inline; }

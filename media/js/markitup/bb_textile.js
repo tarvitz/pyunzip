@@ -138,13 +138,21 @@ myMarkupSettings = {
                                 isImage = (json.mime_type.match(/image/)) ? true : false;
                                 klass = (isImage) ? "user image" : "user file";
                                 content = (isImage) ?
-                                    "!(__klass__)__url__!\n" :
+                                    //"!(__klass__)__url__!\n" :
+                                    "\"(__klass__)!(__thmb_klass__)__thumb__!\":__url__" :
                                     "\"(__klass__)__the__link__\":__url__\n";
 
                                 var txt = content.replace('__klass__', klass).replace('__url__', json.file.url);
+
                                 if (txt.match(/__the__link__/)){
                                     link_name = prompt(JS.locale.enter_link_text) || "the link";
                                     txt = txt.replace('__the__link__', link_name);
+                                }
+                                if (txt.match(/__thumb__/)){
+                                    txt = txt.replace('__thumb__', json.thumbnail.url);
+                                }
+                                if (txt.match(/__thmb_klass__/)){
+                                    txt = txt.replace('__thmb_klass__', 'thumbnail inline');
                                 }
                                 textarea.val(textarea.val() + txt);
                             } else if (json.form){
