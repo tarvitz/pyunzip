@@ -495,6 +495,8 @@ def model_json_encoder(obj, **kwargs):
     from django.db.models.fields.files import ImageFieldFile, FieldFile
     from django import forms
     from django.utils.functional import Promise
+    from sorl.thumbnail.images import ImageFile as SorlImageFile
+
     is_human = kwargs.get('parse_humanday', False)
 
     if isinstance(obj, QuerySet):
@@ -546,6 +548,14 @@ def model_json_encoder(obj, **kwargs):
         return obj.url if hasattr(obj, 'url') else ''
     elif isinstance(obj, FieldFile):
         return {
+            'url': obj.url,
+            'name': obj.name,
+            'size': obj.size,
+        }
+    elif isinstance(obj, SorlImageFile):
+        return {
+            'key': obj.key,
+            'ratio': obj.ratio,
             'url': obj.url,
             'name': obj.name,
             'size': obj.size,

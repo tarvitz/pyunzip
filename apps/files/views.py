@@ -973,6 +973,7 @@ def file_upload(request):
             return {
                 'success': True,
                 'file': form.instance.file,
+                'thumbnail': form.cleaned_data.get('thumbnail', {}),
                 'mime_type': form.instance.plain_type
             }
     return {

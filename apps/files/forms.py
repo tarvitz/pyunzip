@@ -14,6 +14,7 @@ from django.conf import settings
 from extwidgets.widgets import AjaxValidateInput
 from django.db.models import Sum
 from django.conf import settings
+from sorl.thumbnail import get_thumbnail
 import logging
 logger = logging.getLogger(__name__)
 
@@ -428,7 +429,11 @@ class UploadFileForm(RequestModelForm):
         self.instance.owner = self.request.user
         self.instance.plain_type = self.files['file'].content_type
         self.instance.size = self.files['file'].size
-        super(UploadFileForm, self).save(commit=commit)
+        instance = super(UploadFileForm, self).save(commit=commit)
+        if 'image' in instance.plain_type:
+            thumb = get_thumbnail(instance.file, settings.IMAGE_THUMBNAIL_SIZE, quality=95)
+            self.cleaned_data['thumbnail'] = thumb
+        return instance
 
     class Meta:
         model = UserFile

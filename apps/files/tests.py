@@ -121,7 +121,7 @@ class JustTest(TestCase):
         )
         self.assertEqual(os.path.exists(user_file.file.path), False)
 
-    def test_serialize_usefile(self):
+    def test_serialize_userfile(self):
         self.client.login(username='user', password='123456')
         post = {
             'title': 'avatar',
@@ -141,8 +141,10 @@ class JustTest(TestCase):
         self.assertIn('avatar.png', js['file']['url'])
         self.assertEqual(count + 1, new_count)
         user_file = UserFile.objects.filter(owner__username='user')[0]
-        js = json.dumps(user_file, default=model_json_encoder)
-        self.assertIn(user_file.file.name, js)
+        js_file = json.dumps(user_file, default=model_json_encoder)
+        self.assertIn(user_file.file.name, js_file)
+        self.assertNotEqual(js['thumbnail'], {})
+        self.assertIn('url', js['thumbnail'].keys())
         self.unlink_files.append(user_file.file.path)
 
     def test_big_file_uploading(self):
