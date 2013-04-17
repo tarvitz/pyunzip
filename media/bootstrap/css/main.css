@@ -132,6 +132,10 @@ hr.center{ margin-left: auto; margin-right: auto;}
     max-width: 60px;
     margin: 3px 10px;
 }
+.menu ul > li .top.bar.avatar{
+    max-width: 16px;
+    max-height: 16px;
+}
 .menu.bar.profile ul li{
     list-style-type: none;
 }

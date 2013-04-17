@@ -15,9 +15,9 @@
                 <div class="transparency"><!-- wise transparency --></div>
                 <span class='reflects_up'><!-- wise reflects --></span>
                 <span class='reflects_left'></span>
-                <div class='avatar'>
+                <!--<div class='avatar'>
                     <img alt="avatar" title="avatar" src='{% url "wh:avatar" nickname=user.get_username %}'>
-                </div>
+                </div>-->
                 <ul>
                     {# <li><a rel='twipsy' href='{% url "wh:pm-view" %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li> #}
                     <li><a rel='twipsy' href="{% url "wh:profile" %}" title='Просмотр своего профиля'>Профиль</a></li>
