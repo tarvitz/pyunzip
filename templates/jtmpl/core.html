@@ -1,3 +1,4 @@
+{% load i18n %}
 <script type='text/html' id='uploadFileTemplate'>
 <div id='upload-file'>
     <div class="progress hide textarea" id='progress-bar'>
@@ -7,4 +8,22 @@
         <input type='file' name='file' id='id_file'>
     </span>
 </div>
+</script>
+
+<script type='text/html' id='showImageLinkHelpTemplate'>
+    <div class='modal hide fade in no-background' id='${ id }'>
+        <div class='modal-header'>
+            <div class='close' href='#' data-toggle='dismiss'>x</div>
+            <h3>
+                {% verbatim %}
+                {{if help}}${ help }{{else}}{% endverbatim %}
+                {% trans "Help" %}{% verbatim %}{{/if}}{% endverbatim %}</h3>
+        </div>
+        <div class='modal-body'>
+            ${ content }
+        </div>
+        <div class='modal-footer no-background'>
+            <a class='btn btn-inverse' data-dismiss='modal' href='#'>{% trans "Close" %}</a>
+        </div>
+    </div>
 </script>

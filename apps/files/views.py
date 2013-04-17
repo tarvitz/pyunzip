@@ -1004,12 +1004,19 @@ def files(request, nickname=''):
     user_files = request.user.files.all()
     page = get_int_or_zero(request.GET.get('page', 1))
 
+    pictures = paginate(
+        user_files.filter(plain_type__icontains='image'),
+        page,
+        pages=settings.OBJECTS_ON_PAGE
+    )
     user_files = paginate(user_files, page, pages=settings.OBJECTS_ON_PAGE)
+
     space_used = request.user.files.aggregate(Sum('size'))
     space_used = space_used.items()[0][1] or 0
 
     return {
         'files': user_files,
+        'pictures': pictures,
         'space_used': space_used
     }
 

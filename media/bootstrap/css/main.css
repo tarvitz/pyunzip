@@ -44,6 +44,10 @@ hr.center{ margin-left: auto; margin-right: auto;}
     left: 0px;
     z-index: -1;
 }
+.transparency.black{
+    background-color: #000;
+}
+
 .transparency.heavy{
     opacity: 0.85;
 }
@@ -362,3 +366,30 @@ img.purity-seal{
 .title.approved{}
 .title.disapproved, .title.disapproved a{ color: red;}
 .thumbnail.inline{ display: inline; }
+.tabbable.tabbable-inverse{
+
+}
+
+.tabbable.tabbable-inverse .nav-tabs > li:first-child{
+    margin-left: 10px;
+
+}
+
+.tabbable.tabbable-inverse .nav-tabs > .active > a,
+.tabbable.tabbable-inverse .nav-tabs > .active > a:hover{
+   background-color: #363636;
+   background-image: -webkit-linear-gradient(top, #444, #222);
+   opacity: 0.5;
+   color: #fff;
+}
+.tabbable.tabbable-inverse .nav-tabs > li > a:hover{
+   background-image: -webkit-linear-gradient(top, #444, #222);
+}
+.table.noth tr > th{
+    border-top: 0px;
+}
+.block.info{
+    position: relative;
+    padding: 10px;
+    border: 1px solid #ccc;
+}
