@@ -1001,7 +1001,7 @@ def test_file_upload(request):
 @login_required
 @render_to('files/user_files.html')
 def files(request, nickname=''):
-    user_files = request.user.files.all()
+    user_files = request.user.files.all().order_by('-id')
     page = get_int_or_zero(request.GET.get('page', 1))
 
     pictures = paginate(
