@@ -366,6 +366,9 @@ img.purity-seal{
 .title.approved{}
 .title.disapproved, .title.disapproved a{ color: red;}
 .thumbnail.inline{ display: inline; }
+a.user.image:hover .thumbnail{
+    border: 1px solid #0088cc;
+}
 .tabbable.tabbable-inverse{
 
 }
