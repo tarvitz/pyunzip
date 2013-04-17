@@ -19,7 +19,7 @@
                     <img alt="avatar" title="avatar" src='{% url "wh:avatar" nickname=user.get_username %}'>
                 </div>
                 <ul>
-                    <li><a rel='twipsy' href='{% url "wh:pm-view" %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
+                    {# <li><a rel='twipsy' href='{% url "wh:pm-view" %}' title='Личные сообщения'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li> #}
                     <li><a rel='twipsy' href="{% url "wh:profile" %}" title='Просмотр своего профиля'>Профиль</a></li>
                     <li class='lvl2'><a rel='twipsy' href='{% url "wh:profile-update" %}' title='Настройки профиля'>Править</a></li>
                     <li class='lvl2'><a rel='twipsy' href='{% url "core:settings" %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
