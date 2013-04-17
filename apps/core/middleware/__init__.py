@@ -119,18 +119,18 @@ class ChecksMiddleware(object):
             return response
         if user.is_authenticated() and not user.is_active:
                auth.logout(request)
+        """
         if user.is_authenticated():
-            """
-            if not user.skin:
-                user.skin = Skin.objects.get(name__iexact='default')
-                #user.skin = Skin.objects.order_by('id')[0]
-                user.save()
-            """
+            #if not user.skin:
+            #    user.skin = Skin.objects.get(name__iexact='default')
+            #    #user.skin = Skin.objects.order_by('id')[0]
+            #    user.save()
             if not user.army:
 	    	army = get_object_or_none(Army,name__iexact='none')
 		if army:
 			user.army = army
 			user.save()
+        """
 
 class BenchmarkingMiddleware(object):
     def process_response(self,request,response):

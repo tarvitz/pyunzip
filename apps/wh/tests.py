@@ -10,6 +10,7 @@ from apps.core.models import UserSID
 from django.core.urlresolvers import reverse
 #from django.conf import settings
 from apps.core.helpers import get_object_or_None
+from copy import deepcopy
 
 
 class JustTest(TestCase):
@@ -54,6 +55,21 @@ class JustTest(TestCase):
 
     def tearDown(self):
         pass
+
+    def check_state(self, instance, data, check=lambda x: x):
+        messages = []
+        for (key, value) in data.items():
+            try:
+                check(getattr(instance, key), value)
+            except AssertionError as err:
+                messages.append({
+                    'err': err,
+                    'key': key
+                })
+        if messages:
+            for msg in messages:
+                print "Got %(err)s in %(key)s" % msg
+            raise AssertionError
 
     def test_login(self):
         login = {
@@ -273,9 +289,16 @@ class JustTest(TestCase):
 
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
-        open('file.html', 'w').write(response.content)
         logged = self.client.login(username='test_user', password='123456')
         self.assertEqual(logged, True)
+        user = User.objects.get(username='test_user')
+        edit = deepcopy(post)
+        fields = ['answ', 'sid', 'password1', 'password2']
+        for f in fields:
+            del edit[f]
+        self.check_state(user, edit, check=self.assertEqual)
+        self.assertNotEqual(user.army, None)
+        self.assertNotEqual(user.skin, None)
 
     def test_rank_view(self):
         rank = Rank.objects.all()[0]
