@@ -46,6 +46,7 @@ from anyjson import serialize as serialize_json
 from datetime import datetime
 
 
+@login_required
 @benchmarking
 @render_to('reports.html')
 def reports(request):

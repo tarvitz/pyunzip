@@ -133,8 +133,8 @@ class ChecksMiddleware(object):
         """
 
 class BenchmarkingMiddleware(object):
-    def process_response(self,request,response):
-        if hasattr(requset,'timeit'):
+    def process_response(self, request, response):
+        if hasattr(requset, 'timeit'):
            pass
         return response
 

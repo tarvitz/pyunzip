@@ -178,11 +178,12 @@ class JustTest(TestCase):
 
     def test_news_post_super_user(self):
         # superuser posts article with approval
-
         username = 'admin'
-        self.client.login(username=username, password='123456')
+        logged = self.client.login(username=username, password='123456')
+        self.assertEqual(logged, True)
         user = User.objects.get(username=username)
         category = Category.objects.get()
+
         count = News.objects.count()
         post = {
             'title': u'Заголовок',

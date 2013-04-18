@@ -100,6 +100,15 @@ MIDDLEWARE_CLASSES = (
     'apps.wh.middleware.WarningsMiddleware',
 )
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '127.0.0.1:11211',
+        ]
+    }
+}
+
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -114,12 +123,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.core.context_processors.briefing_news',
     'apps.core.context_processors.last_replays',
     'apps.core.context_processors.pm',
-    'apps.core.context_processors.user_settings',
+    #'apps.core.context_processors.user_settings',
     'apps.core.context_processors.global_referer',
     'apps.core.context_processors.base_template',
     'apps.core.context_processors.session',
     'apps.menu.context_processors.menu',
-    'apps.farseer.context_processors.steam_discounts',
 )
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -255,11 +263,24 @@ SEND_MESSAGES=True
 OBJECTS_ON_PAGE=20
 EXPEREMENTAL=False
 USER_FILES_LIMIT=100*1024*1024
-
-#import settings from another app
-# LOGGING
-#CELERY
-
+# TEMPLATES INCLUES
+DOCUMENT = {
+    'links': 'links.html',
+    'pages': 'pages.html',
+    'comments': 'comments.html',
+    'comments_form': 'add_comment.html',
+    'replay_inc': 'replays/includes/replay.html',
+    'replays_inc': 'replays/includes/replays.html',
+    'search_inc': 'includes/search.html',
+    'news_inc': 'includes/news.html',
+    'rosters_inc': 'includes/rosters.html',
+    'roster_inc': 'includes/roster.html',
+    'battle_report_inc': 'includes/battle_report.html',  # obsolete
+    'nothing_inc': 'nothing.html',
+    'article_inc': 'includes/article.html',
+    'image_inc': 'gallery/includes/image.html',
+    'sph_search_inc': 'includes/sphinx_search.html'
+}
 
 from apps.vote.settings import *
 from apps.wh.settings import *
@@ -278,13 +299,27 @@ CELERY_REDIS_HOST = "redis"
 CELERY_REDIS_PORT = 6379
 CELERY_REDIS_DB = 0
 BROKER_URL = "redis://redis:6379/0"
+
 DEBUG_TOOLBAR=False
 DEBUG=True
 if DEBUG and DEBUG_TOOLBAR:
     INTERNAL_IPS = ('127.0.0.1',)
     INSTALLED_APPS += (
         'debug_toolbar',
+        'debug_toolbar_extra',
     )
     MIDDLEWARE_CLASSES += (
         'debug_toolbar.middleware.DebugToolbarMiddleware',
+    )
+    DEBUG_TOOLBAR_PANELS = (
+        'debug_toolbar.panels.version.VersionDebugPanel',
+        'debug_toolbar.panels.timer.TimerDebugPanel',
+        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
+        'debug_toolbar.panels.headers.HeaderDebugPanel',
+        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
+        'debug_toolbar.panels.template.TemplateDebugPanel',
+        'debug_toolbar.panels.sql.SQLDebugPanel',
+        'debug_toolbar.panels.signals.SignalDebugPanel',
+        'debug_toolbar.panels.logger.LoggingPanel',
+        'debug_toolbar_extra.panels.PrintTemplateNamePanel',
     )

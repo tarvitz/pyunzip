@@ -24,6 +24,7 @@ class JustTest(TestCase):
         'tests/fixtures/load_missions.json',
         'tests/fixtures/load_codexes.json',
         'tests/fixtures/load_rosters.json',
+        'tests/fixtures/load_battle_reports.json'
     ]
 
     def setUp(self):
@@ -31,10 +32,11 @@ class JustTest(TestCase):
         self.urls_void = [
             reverse('tabletop:roster', args=(1, )),
             reverse('tabletop:roster', args=(2, )),
-            reverse('tabletop:roster', args=(3, ))
+            reverse('tabletop:roster', args=(3, )),
+            reverse('tabletop:battle-reports-self')
         ]
         self.urls_registered = [
-
+            reverse('tabletop:report', args=(1, )),
         ]
         self.urls_params = [
         ]

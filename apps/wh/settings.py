@@ -2,11 +2,12 @@
 # SOME SKIN SETTINGS ARE HERE
 from django.utils.translation import ugettext_lazy as _
 
-map = ['LINKS_TEMPLATE','COMMENTS_TEMPLATE','REPLAY_INC_TEMPLATE','COMMENTS_FORM_TEMPLATE',
-    'REPLAYS_INC_TEMPLATE','SEARCH_INC_TEMPLATE','NEWS_INC_TEMPLATE','ARTICLE_INC',
-    'ROSTERS_INC_TEMPLATE','ROSTER_INC_TEMPLATE','BATTLE_REPORT_INC',
-    'NOTHING_INC','IMAGE_INC_TEMPLATE', 'SPH_SEARCH_INC']
+#map = ['LINKS_TEMPLATE','COMMENTS_TEMPLATE','REPLAY_INC_TEMPLATE','COMMENTS_FORM_TEMPLATE',
+#    'REPLAYS_INC_TEMPLATE','SEARCH_INC_TEMPLATE','NEWS_INC_TEMPLATE','ARTICLE_INC',
+#    'ROSTERS_INC_TEMPLATE','ROSTER_INC_TEMPLATE','BATTLE_REPORT_INC',
+#    'NOTHING_INC','IMAGE_INC_TEMPLATE', 'SPH_SEARCH_INC']
 
+"""
 LINKS_TEMPLATE = 'links.html'
 COMMENTS_TEMPLATE = 'comments.html'
 REPLAY_INC_TEMPLATE = 'replays/includes/replay.html'
@@ -21,6 +22,7 @@ NOTHING_INC = 'nothing.html'
 ARTICLE_INC = "includes/article.html"
 IMAGE_INC_TEMPLATE = 'gallery/includes/image.html'
 SPH_SEARCH_INC = 'includes/sphinx_search.html'
+"""
 
 #syntaxes enabled on site
 #SYNTAX=(('markdown','markdown'),('bb-code','bb-code'),('textile','textile'),('creole', 'wiki'),)

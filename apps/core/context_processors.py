@@ -53,7 +53,8 @@ def global_settings(request):
     from django.conf import settings
     return {
         'gs': settings,
-        'global_settings': settings
+        'global_settings': settings,
+        'settings': {'document': settings.DOCUMENT}
     }
 
 def global_referer(request):
@@ -96,12 +97,13 @@ def pm(request):
 
 #OBSOLETE
 def user_settings(request):
+    """
     _settings_ = Settings()
     #settings some applies
     from apps.wh import settings as wh_settings
     user = request.user
-    setattr(_settings_,'document',dict())
-    setattr(_settings_,'gsettings',dict())
+    setattr(_settings_, 'document',dict())
+    setattr(_settings_, 'gsettings',dict())
     for m in wh_settings.map:
         value = get_skin_template(user,getattr(wh_settings,m))
         key = m.replace('_TEMPLATE','').lower()
@@ -109,7 +111,11 @@ def user_settings(request):
         #migrating to settings.document.value with templates
         #ten minutes after: done xD
         _settings_.document[key] = value
-    skin = get_skin_template(request.user, "base.html")
+    skin = (
+        get_skin_template(request.user, "base.html")
+        if user.is_authenticated() else "base.html"
+    )
+    """
     """
     links = get_skin_template(request.user, "links.html")
     comments = get_skin_template(request.user, "comments.html")
@@ -120,15 +126,8 @@ def user_settings(request):
     #usersettings = {}
     #if hasattr(request,'usersettings'): usersettings = request.usersettings
     from django.conf import settings
-    _settings_.gsettings['KARMA_COMMENTS_COUNT'] = settings.KARMA_COMMENTS_COUNT
-    settings = {
-            'settings': _settings_,
-            #'usersettings': usersettings,
-            #'skin': skin,
-            #'document_links': links,
-            #'document_comments': comments,
-            #'document_comments_form': comments_form,
-            #'document_replay_inc': replay_inc,
-            #'document_replays_inc': replays_inc,
-        }
+    #_settings_.gsettings['KARMA_COMMENTS_COUNT'] = settings.KARMA_COMMENTS_COUNT
+    #settings = {
+    #        'settings': settings, #_settings_,
+    #}
     return settings
