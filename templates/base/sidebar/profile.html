@@ -45,6 +45,7 @@
                         <a href='{% url "wh:register" %}'>Регистрация</a>
                     </li>
                 <li class='lvl2'><a href='{% url "wh:password-restore-initiate" %}'>востановление пароля</a></li>{% endif %}
+                <li><a rel='twipsy' href='{% url "wh:users" %}' title='Обитатели ресурса'>Участники</a></li>
                 <li><a rel='twipsy' href="{% url "news:news" %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
                 <span class='feeds'><a href="{% url "feed-news-atom" %}">[atom</a>|
                     <a href="{% url "feed-news" %}">rss]</a></span>
