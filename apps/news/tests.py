@@ -1,6 +1,8 @@
 # coding: utf-8
 #from django.utils import unittest
 from django.test import TestCase
+import unittest
+from django.test.client import RequestFactory, Client
 from apps.news.models import Category, News
 from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
@@ -8,7 +10,9 @@ from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_object_or_None
+from django.db import connections
 
+from datetime import datetime
 
 class JustTest(TestCase):
     fixtures = [
@@ -412,7 +416,6 @@ class JustTest(TestCase):
         exists = get_object_or_None(News, pk=n.id)
         self.assertEqual(exists, None)
 
-
     def test_article_set_status(self):
         post = {
             'status': 'revision',
@@ -440,3 +443,43 @@ class JustTest(TestCase):
         self.assertEqual(response.status_code, 200)
         n = News.objects.get(id=n.id)
         self.assertEqual(n.reason, post['reason'])
+
+
+class BenchmarkTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_news_categories.json',
+        'tests/fixtures/load_news.json',
+    ]
+    def setUp(self):
+        #self.request = RequestFactory()
+        #self.client = Client()
+        from apps.news import views
+        self.views = views
+        print "Run benchmarking tests for news"
+
+    def tearDown(self):
+        print "End of benchmarking tests for news"
+
+    def test_news(self):
+        for user in ['user', 'admin', None]:
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+            else:
+                self.client.logout()
+            results = []
+            for i in xrange(1, 10):
+                n = datetime.now()
+                url = reverse('news:news')
+                response = self.client.get(url)
+                offset = datetime.now() - n
+                results.append(offset.total_seconds())
+            minimum = min(results)
+            maximum = max(results)
+            avg = sum(results) / len(results)
+            msg = {
+                'time': offset, 'url': url, 'user': user or 'Anonymous',
+                'min': minimum, 'max': maximum, 'avg': avg
+            }
+            print "Benchmarking %(user)s %(url)s: min: %(min)s, max: %(max)s, avg: %(avg)s" % msg
