@@ -509,8 +509,8 @@ def get_ip_address(request):
 from apps.tracker.decorators import new_comment
 
 @transaction.commit_on_success
-@new_comment
 @login_required
+@new_comment
 @render_to('core/add_comment.html')
 def save_comment(request):
     #obj_id could cause a lot of problems if it would have much bigger blocks
