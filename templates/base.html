@@ -247,7 +247,7 @@
     $.each($('a.user.image'), function(idx, img){
         $(img).attr({'rel': 'gal'});
     });
-    $("a.user.image").colorbox({rel: "gal"});
+    $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
 
     markupSettings = myMarkupSettings['textile'];
     markupSettings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
