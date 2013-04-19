@@ -30,15 +30,20 @@ from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerErro
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
+from django.db.models import Q
 from django.core import serializers
 from django.core.urlresolvers import reverse
+from django.views.decorators.cache import cache_page
 from datetime import datetime,timedelta
 from os import stat
 #filters
 from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
 from django.template.defaultfilters import striptags
 from apps.tracker.decorators import user_visit
-from apps.core.helpers import get_settings, paginate,can_act, handle_uploaded_file
+from apps.core.helpers import (
+    get_settings, paginate,can_act, handle_uploaded_file, render_to,
+    get_int_or_zero
+)
 from apps.core.decorators import (
     benchmarking, update_subscription_new, has_permission,
     login_required_json
@@ -82,40 +87,31 @@ def show_archived_article(request,id):
 
 #@permission_required('files.purge_replay') #works
 #@has_permission('can_test_t') #works
+#@cache_page(60*5)
 @benchmarking
+@render_to('news.html')
 def news(request, approved='approved', category=''):
-    template = get_skin_template(request.user,'news.html')
     can_approve_news = None
     if request.user.is_authenticated():
-        can_approve_news = request.user.user_permissions.filter(codename='edit_news')
+        can_approve_news = request.user.has_perm('news.edit_news')
 
-    page = request.GET.get('page',1)
+    page = get_int_or_zero(request.GET.get('page')) or 1
+    qset = Q()
+    if category:
+        qset = qset | Q(category__name__icontains=category)
+    if not can_approve_news:
+        qset = qset | Q(approved=True)
+    news = News.objects.filter(qset).order_by('-date')
+    _pages_ = get_settings(request.user, 'news_on_page', 30)
+    news = paginate(
+        news, page, pages=_pages_,
+        view='apps.news.views.news'
+    )
+    return {
+        'news': news,
+        'page': news
 
-    #TODO: DELETE duplicated code
-    if request.user.is_superuser or can_approve_news:
-        news = News.objects.all().order_by('-date').filter(category__name__icontains=category)
-        if  approved == 'unapproved':
-            news = News.objects.filter(approved__exact=False).order_by('-date')
-            _pages_ = get_settings(request.user,'news_on_page',30)
-            news = paginate(news,page,pages=_pages_)
-            return render_to_response(template,{'news':news,'page':news},
-                context_instance=RequestContext(request,processors=[benchmark]))
-
-    else:
-        news = News.objects.filter(approved=True)
-        if request.user.is_authenticated():
-            news = news | News.objects.filter(owner=request.user)
-
-        news = news.order_by('-date')
-    _pages_ = get_settings(request.user,'news_on_page',30)
-    news = paginate(news,page,pages=_pages_,
-        view='apps.news.views.news')
-    return render_to_response(template,
-        {'news': news,
-        'page': news},
-        context_instance=RequestContext(request,
-            processors=[benchmark]))
-
+    }
 
 def search_article(request):
     template = get_skin_template(request.user, "news/search.html")

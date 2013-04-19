@@ -25,7 +25,7 @@ def base_template(request):
 def server_ip(request):
     return {'self_ipaddress':get_self_ip_address()}
 
-# old and ugly
+# old and ugly, disabled
 def expressions(request):
     #random
     try:

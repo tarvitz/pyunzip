@@ -25,7 +25,7 @@
         {% if topic|pybb_has_unreads:user %}<span class="unread"></span>{% endif %}
         {% pybb_link topic %}
         &rarr;
-        <span class="author"><a href="{% url "pybb_profile" topic.user.nickname %}">{% get_nickname topic.user %}</a></span>
+        <span class="author"><a href="{% url "pybb_profile" topic.user.nickname %}">{{ topic.user.get_nickname }}</a></span>
         &rarr;
         <span class="updated">{% pybb_time topic.created %}</span>
         </li>
@@ -37,7 +37,7 @@
         {% if post.topic|pybb_has_unreads:user %}<span class="unread"></span>{% endif %}
         <a href="{{ post.get_absolute_url }}">{{ post.topic }}</a>
         &rarr;
-        <span class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{% get_nickname post.user %}</a></span>
+        <span class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{{ post.user.get_nickname }}</a></span>
         &rarr;
         <span class="updated">{% pybb_time post.created %}</span>
         </li>
