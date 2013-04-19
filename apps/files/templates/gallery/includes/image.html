@@ -23,7 +23,7 @@
         <center> 
             {# {% include "stars.html" %} #}
 
-            <a href='{{ image.image.url }}' target='_blank'>
+            <a href='{{ image.image.url }}' target='_blank' class='user image' rel='gal'>
             {% thumbnail image.image gs.IMAGE_THUMBNAIL_SIZE as thmb %}
                 <img src='{{ thmb.url }}' alt='{{ image.title }}'
                     title='&quot;{{ image.title }}&quot; размер {{ image.image.size|filesizeformat }}'/>
