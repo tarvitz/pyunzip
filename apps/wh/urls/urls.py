@@ -80,7 +80,7 @@ urlpatterns = patterns('apps.wh.views',
         name='warning-alter'),
     url('^warnings/alter/(?P<nickname>[\w\s]+)/$', 'alter_warning_form',
         name='warning-alter-form'),
-    url(r'^miniquote/get/raw', 'get_miniquote_raw', name='miniquote-get-raw'), # todo: move to json
+    #url(r'^miniquote/get/raw', 'get_miniquote_raw', name='miniquote-get-raw'), # todo: move to json
     url(r'^favicon.ico$', 'favicon', name='favicon'),
 )
 

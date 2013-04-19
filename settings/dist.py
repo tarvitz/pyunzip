@@ -119,7 +119,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'apps.core.context_processors.global_settings',
-    'apps.core.context_processors.expressions',
+    #'apps.core.context_processors.expressions',
     'apps.core.context_processors.briefing_news',
     'apps.core.context_processors.last_replays',
     'apps.core.context_processors.pm',
