@@ -74,15 +74,24 @@
                             </a>
                             {{ file.get_file_name }}
                         </td>
-                        <td>
+                        <td style='line-height: 23px;'>
                             <a  data-id='thumb-{{ file.id }}'
                                 data-help='{% trans "Inserts thumbnail with link to image" %}'
                                 data-content='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
-                                class='show-help' href='#'>{% trans "Thumbnail and image" %}</a><br>
+                                class='show-help' href='#'>{% trans "Thumbnail and image" %}</a>
+                                <button data-clipboard-text='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
+                                   class='clip-copy btn btn-inverse btn-mini pull-right' data-delay='300'
+                                   rel='tooltip' href='#'
+                                   data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
+                                <br>
                             <a  data-help='{% trans "Inserts only image" %}' data-id='img-{{ file.id }}'
                                 data-content='!(user image){{ file.file.url }}!' href='#' class='show-help'>
                                 {% trans "Image" %}
                             </a>
+                            <button data-clipboard-text='"!(user image){{ file.file.url }}!"'
+                                    class='clip-copy btn btn-inverse btn-mini pull-right' data-delay='300'
+                                    rel='tooltip' href='#'
+                                    data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
                         </td>
                         <td>{{ file.get_file_size|filesizeformat }}</td>
                         <td>
@@ -106,7 +115,27 @@
 
 <!-- uploader -->
 <script type="text/javascript">
+ZeroClipboard.setDefaults( { moviePath: '/media/swf/ZeroClipboard.swf' } );
+var clip = new ZeroClipboard();
+
 $(document).ready(function(){
+    clip.on('complete', function(client, args){
+        noty({
+            text: "{% trans 'Copied to clipboard' %}" /*+ args.text*/,
+            type: 'success',
+            dismissQueue: true,
+            timeout: 3000
+        });
+    });
+    clip.on('wrongflash', function(clieng, args){
+        noty({
+            text: "{% trans 'Sorry, your flash version is pretty old, please update to enable fast copying' %}",
+            type: "information",
+            dismissQueue: true,
+            timeout: 5000
+        });
+    });
+
     $('.show-help').click(function(e){
         t = $.template('#showImageLinkHelpTemplate');
         modal = "#modal-" + $(this).data('id');
@@ -119,6 +148,13 @@ $(document).ready(function(){
         }
         $(modal).modal('show');
         return false;
+    });
+    $(".clip-copy").hover(function(e){
+        var self = this;
+        data = $(this).data('clipboard-text');
+        clip.setCurrent(this);
+        clip.reposition();
+        clip.setText(data);
     });
 });
 
