@@ -10,6 +10,7 @@ from django.core.urlresolvers import reverse
 from django.template import TemplateSyntaxError
 from apps.core.handlers import UploadProgressHandler
 from django.utils.translation import ugettext_lazy as _
+from datetime import datetime
 import simplejson as json
 
 """
@@ -122,8 +123,21 @@ def benchmarking(func):
     def wrapper(*args,**kwargs):
         request = args[0]
         from datetime import datetime
-        setattr(request,'_now_',datetime.now())
-        return func(*args,**kwargs)
+        n = datetime.now()
+        setattr(request, '_now_',datetime.now())
+        result = func(*args,**kwargs)
+        offset = datetime.now() - n
+        return result
+    return wrapper
+
+def benchmark(func):
+    def wrapper(request, *args, **kwargs):
+        n = datetime.now()
+        result = func(request, *args, **kwargs)
+        offset = datetime.now() - n
+        if isinstance(result, dict):
+            result.update({'timeit': offset})
+        return result
     return wrapper
 
 #overriding of vanilla render_to

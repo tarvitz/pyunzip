@@ -46,7 +46,7 @@ from apps.core.helpers import (
 )
 from apps.core.decorators import (
     benchmarking, update_subscription_new, has_permission,
-    login_required_json
+    login_required_json, benchmark as timeit
 )
 from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors
@@ -88,8 +88,9 @@ def show_archived_article(request,id):
 #@permission_required('files.purge_replay') #works
 #@has_permission('can_test_t') #works
 #@cache_page(60*5)
-@benchmarking
+#@benchmarking
 @render_to('news.html')
+@timeit
 def news(request, approved='approved', category=''):
     can_approve_news = None
     if request.user.is_authenticated():
