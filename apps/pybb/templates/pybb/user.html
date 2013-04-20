@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% get_nickname profile %}</h1>
+<h1>{{ profile.get_nickname }}</h1>
 <div class="userinfo">
     {% comment %} {% if profile.pybb_profile.avatar %}
     <div class="avatar">

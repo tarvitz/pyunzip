@@ -365,7 +365,7 @@ class JustTest(TestCase):
         self.assertEqual(comment[0].comment, post['comment'])
 
     def test_miniquote_get_raw(self):
-        url = reverse('wh:miniquote-get-raw')
+        url = reverse('json:wh:miniquote')
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'application/json')

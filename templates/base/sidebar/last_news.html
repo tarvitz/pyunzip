@@ -1,4 +1,4 @@
-{% if user.settings.show_last_news and user.settings %}
+{% comment %}{% if user.settings.show_last_news and user.settings %}
 {% if briefing_news %} {% load newsfilters %}
 <div class='menu block'>
     <div class='menu tab'>
@@ -21,4 +21,4 @@
     </div>
 </div>
 {% endif %} {# if briefing news #}
-{% endif %} {# if user.settings.show_last_news #}
+{% endif %} {# if user.settings.show_last_news #} {% endcomment %}

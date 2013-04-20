@@ -36,7 +36,7 @@
                             </a>
                         </div>
                         {# {% endif %} #}
-                        <div class="author"><a href="{% url "profile_by_nick" post_user.nickname %}">{% get_nickname post_user %}</a></div>
+                        <div class="author"><a href="{% url "profile_by_nick" post_user.nickname %}">{{ post_user.get_nickname }}</a></div>
                         {% if user.is_superuser %}
                         <!--<div class="updated">{{ post_user_ip }}</div>-->
                         {% endif %}

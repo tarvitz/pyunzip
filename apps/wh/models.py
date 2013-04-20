@@ -18,6 +18,7 @@ from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
 from apps.core.decorators import null
 from apps.djangosphinx.models import SphinxSearch
+from django.core.cache import get_cache, cache
 
 class Universe(models.Model):
     codename = models.CharField(_('Codename'),max_length=100,unique=True,primary_key=True)
@@ -420,44 +421,50 @@ class UserExtension(object):
                 (self.nickname or self.username)
         #make here color implementation
         return self.nickname or self.username
-
+    
     def get_nickname(self):
-        if self.ranks.all():
-            rank = self.ranks.order_by('-magnitude')[0]
-            span = (
-                "<span class='%(class)s' id='%(id)s' "
-                "style='%(style)s'>%(nickname)s</span>" % {
-                    'class': rank.type.css_class,
-                    'id': rank.type.css_id,
-                    'style': rank.type.style,
-                    'nickname': self.nickname or self.username
-                }
-            )
-            return span
-        return self.nickname or self.username
+        nickname = cache.get('nick:%s' % self.username)
+        if not nickname:
+            if self.ranks.all():
+                rank = self.ranks.order_by('-magnitude')[0]
+                span = (
+                    "<span class='%(class)s' id='%(id)s' "
+                    "style='%(style)s'>%(nickname)s</span>" % {
+                        'class': rank.type.css_class,
+                        'id': rank.type.css_id,
+                        'style': rank.type.style,
+                        'nickname': self.nickname or self.username
+                    }
+                )
+                cache.set('nick:%s' % self.username, span)
+                return span
+            cache.set('nick:%s' % self.username, self.nickname or self.username)
+            return self.nickname or self.username
+        return nickname
 
-    def _get_ranks_groups(self):
+    def get_ranks_groups(self):
         tuple = list()
         for rank in self.ranks.distinct():
             if rank.type.group:
                 tuple.append(rank.type.group)
         return tuple
 
-    get_ranks_groups = property(_get_ranks_groups)
-    def _get_fraction(self):
+    #get_ranks_groups = property(_get_ranks_groups)
+    def get_fraction(self):
         return self.army.side.fraction.title
-    fraction = property(_get_fraction)
+    #fraction = property(_get_fraction)
 
-    def _get_comments_count(self):
-        count = Comment.objects.filter(user=self).count()
-        return count
-    comments_count = property(_get_comments_count)
+    def get_comments_count(self):
+        return Comment.objects.filter(user=self).count()
+    #comments_count = property(_get_comments_count)
 
-    def _get_replays_count(self):
-        from apps.files.models import Replay
-        count = Replay.objects.filter(author=self).count()
-        return count
-    replays_count = property(_get_replays_count)
+    def get_replays_count(self):
+        #from apps.files.models import Replay
+        #count = Replay.objects.filter(author=self).count()
+        #return count
+        return self.replay_set.count()
+
+    #replays_count = property(_get_replays_count)
 
     def get_karma_value(self):
         amount = self.karma_owner_set.aggregate(Sum('value'))

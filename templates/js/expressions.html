@@ -1,0 +1,13 @@
+<script type='text/javascript'>
+var reloadExpression = function(){
+    url = "{% url "json:wh:expression" %}";
+    $.getJSON(url, function(json){
+        $("#expression .content").text(json.expression.content);
+        $("#expression .author").text(json.expression.author);
+    });
+}
+$(document).ready(function(e){
+    reloadExpression();
+    setTimeout(reloadExpression, 60000);
+});
+</script>

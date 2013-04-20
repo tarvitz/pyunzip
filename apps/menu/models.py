@@ -91,3 +91,6 @@ class VMenuItem(models.Model):
         verbose_name = _("Vertical Menu")
         verbose_name_plural = _("Vertical Menus")
         ordering = ['is_url', 'order', 'id']
+
+from apps.menu.signals import setup_signals
+setup_signals()

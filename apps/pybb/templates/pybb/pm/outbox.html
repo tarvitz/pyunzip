@@ -9,7 +9,7 @@
     {% for msg in messages %}
     <li>
         <a href="{% url "pybb_show_pm" msg.id %}">{{ msg.subject }}</a> {% trans "to" %}
-        <span class="author"><a href="{% url "pybb_profile" msg.dst_user.nickname %}">{% get_nickname msg.dst_user %}</a></span>
+        <span class="author"><a href="{% url "pybb_profile" msg.dst_user.nickname %}">{{ msg.dst_user.get_nickname }}</a></span>
         <span class="date">@ {% pybb_time msg.created %}</span>
     </li>
     {% endfor %}

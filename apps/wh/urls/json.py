@@ -1,12 +1,15 @@
 from django.conf.urls import patterns, include, url
-from apps.core.shortcuts import direct_to_template
 
 urlpatterns = patterns(
-    'apps.wh.views',
-    url('^get/miniquote/$', 'get_miniquote_raw',
+    'apps.wh.views.json',
+    # old migrated
+    url('^miniquote/$', 'miniquote',
         name='miniquote'),
-    url(r'^get/armies/$', 'xhr_get_armies',
+    url(r'^armies/$', 'army',
         name='armies'),
-    url(r'^get/armies/(?P<id>\d+)/$', 'xhr_get_armies',
+    url(r'^armies/(?P<id>\d+)/$', 'army',
         name='armies'),
+    #
+    url(r'^expression/$', 'expression',
+        name='expression'),
 )

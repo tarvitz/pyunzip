@@ -31,8 +31,8 @@
 					{% endif %}{% endspaceless %}
 					<div class='msg_txt'>С нами с {{ user.date_joined|date:"d M Y" }} года</div>
 					{% if user.about %}<div class='msg_txt'>Мыслит: &quot;<i>{{ user.about }}</i>&quot;</div>{% endif %}
-					{% if user.comments_count %}<div class='msg_txt'>Коментов: <i>{{ user.comments_count }}</i></div>{% endif %}
-					{% if user.replays_count %}<div class='msg_txt'>Реплеев: <i>{{ user.replays_count }}</i></div>{% endif %}
+					<div class='msg_txt'>Комментов: <i>{{ user.get_comments_count }}</i></div>
+					{# {% if user.replays_count %}<div class='msg_txt'>Реплеев: <i>{{ user.replays_count }}</i></div>{% endif %} #}
 					{% if user.karma_value %}<div class='msg_txt'>Кармическая сила: <i>{% spaceless %}
 							{% if user.karma_value|gt:"0" %}<span class='karma_pos'>{% else %}
 							<span class='karma_neg'>{% endif %}{{ user.karma_value }}</span>
