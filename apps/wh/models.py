@@ -436,9 +436,9 @@ class UserExtension(object):
                         'nickname': self.nickname or self.username
                     }
                 )
-                cache.set('nick:%s' % self.username, span)       
+                cache.set('nick:%s' % self.username, span)
                 return span
-            cache.set('nick:%s' % self.username, span)
+            cache.set('nick:%s' % self.username, self.nickname or self.username)
             return self.nickname or self.username
         return nickname
 
