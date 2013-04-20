@@ -15,7 +15,7 @@
                         </a>
                     </div>
                     {# {% endif %} #}
-                    <div class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{{ post.user.get_nickname }}</a></div>
+                    <div class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{{ post.user.get_nickname|safe }}</a></div>
                     {% if user.is_superuser %}
                     <!--<div class="updated">{{ post.user_ip }}</div>-->
                     {% endif %}

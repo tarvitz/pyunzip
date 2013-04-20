@@ -21,7 +21,7 @@
             <li><a href="{{ "ADMIN_URL"|pybb_setting }}">{% trans "Admincp" %}</a></li>
             {% endif %}
             <li><a href="{% url "wh:logout" %}">{% trans "Log out" %}</a></li>
-            <li>{% trans "Logged in as " %} <a href='{% url "pybb_profile" user.nickname %}'>{{ user.get_nickname }}</a></li>
+            <li>{% trans "Logged in as " %} <a href='{% url "pybb_profile" user.nickname %}'>{{ user.get_nickname|safe }}</a></li>
             {% else %}
             <li><a href="{% url "wh:register" %}">{% trans "Sign up" %}</a></li>
             <li><a href="{% url "wh:login" %}">{% trans "Log in" %}</a></li>
