@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from apps.news.models import News
 from django.core.mail import send_mail
 from django.conf import settings
+from django.core.cache import cache
 
 def pre_save_news(instance, **kwargs):
     if instance.approved:
@@ -21,6 +22,11 @@ def pre_save_news(instance, **kwargs):
                 fail_silently=True
             )
             instance.resend = False
+    return instance
+
+def news_post_save(instance, **kwargs):
+    cache.delete('news:all:admin')
+    cache.delete('news:all:everyone')
     return instance
 
 def setup_signals():

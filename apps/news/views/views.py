@@ -50,6 +50,7 @@ from apps.core.decorators import (
 )
 from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors
+from django.core.cache import cache
 
 #def get_a_normal_browser(request):
 #    agent = request.META['HTTP_USER_AGENT']
@@ -98,11 +99,16 @@ def news(request, approved='approved', category=''):
 
     page = get_int_or_zero(request.GET.get('page')) or 1
     qset = Q()
+    cache_key = 'admin' if can_approve_news else 'everyone'
+
     if category:
         qset = qset | Q(category__name__icontains=category)
     if not can_approve_news:
         qset = qset | Q(approved=True)
-    news = News.objects.filter(qset).order_by('-date')
+    news = cache.get('news:all:%s' % cache_key)
+    if not news:
+        news = News.objects.filter(qset).order_by('-date')
+        cache.set('news:all:%s' % cache_key, news)
     _pages_ = get_settings(request.user, 'news_on_page', 30)
     news = paginate(
         news, page, pages=_pages_,
