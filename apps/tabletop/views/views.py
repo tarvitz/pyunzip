@@ -89,6 +89,9 @@ def report(request, pk):
     if not report:
         report = get_object_or_404(BattleReport, **kw)
         cache.set('tabletop:report:%s' % report.pk, report)
+    else:
+        if not can_edit and not report.approved:
+            raise Http404("Not allowed")
     # make more generic ? :)
     ct = ContentType.objects.get(
         app_label=report._meta.app_label,
