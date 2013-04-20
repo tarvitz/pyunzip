@@ -1,6 +1,6 @@
 # coding: utf-8
 # Django settings for WarMist project.
-import os,sys
+import os, sys
 from settings_path import rel_path
 #from apps import djcelery
 #djcelery.setup_loader()
