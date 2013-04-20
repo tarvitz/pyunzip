@@ -42,6 +42,7 @@ from django.contrib.comments.models import Comment
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
 from anyjson import serialize as serialize_json
+from django.core.cache import cache
 
 from datetime import datetime
 
@@ -84,7 +85,10 @@ def report(request, pk):
     kw = {'pk': pk}
     if not can_edit:
         kw.update({'approved': True})
-    report = get_object_or_404(BattleReport, **kw)
+    report = cache.get('tabletop:report:%s' % pk)
+    if not report:
+        report = get_object_or_404(BattleReport, **kw)
+        cache.set('tabletop:report:%s' % report.pk, report)
     # make more generic ? :)
     ct = ContentType.objects.get(
         app_label=report._meta.app_label,

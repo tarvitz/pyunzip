@@ -6,10 +6,13 @@ from django.db.models.signals import post_save, pre_save, post_delete
 from django.db.models import F
 
 from django.contrib.auth.models import User
-from apps.tabletop.models import WargearContainer, UnitContainer, Wargear
+from apps.tabletop.models import (
+    WargearContainer, UnitContainer, Wargear, BattleReport
+)
 from apps.core.helpers import get_object_or_None
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.core.cache import cache
 
 def wargear_container_pre_save(instance, **kwargs):
     if instance.link.is_squad_only:
@@ -48,6 +51,9 @@ def wargear_pre_save(instance, **kwargs):
     instance = instance.generate_short_title()
     return instance
 
+def battle_report_post_save(instance, **kwargs):
+    cache.delete('tabletop:report:%s' % instance.pk)
+    return instance
 
 def setup_signals():
     # pre saves
@@ -59,3 +65,4 @@ def setup_signals():
     post_save.connect(unit_container_post_save, sender=UnitContainer)
     # post deletes
     post_delete.connect(wargear_container_post_delete, sender=WargearContainer)
+    post_save.connect(battle_report_post_save, sender=BattleReport)
