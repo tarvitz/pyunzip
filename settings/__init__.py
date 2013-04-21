@@ -4,4 +4,5 @@
 from dist import *
 from local import *
 from messages import *
+from initials import *
 #from settings_quotes import *

@@ -237,7 +237,12 @@ def action_article(request, id=None, action=None):
                 raise Http404("hands off!")
 
     form = ArticleModelForm(
-        request.POST or None, request=request, instance=instance
+        request.POST or None,
+        request=request,
+        instance=instance,
+        initial={
+            'content': settings.INITIAL_ARTICLE_CONTENT
+        }
     )
     if request.method == 'POST':
         if form.is_valid():
