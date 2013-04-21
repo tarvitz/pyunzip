@@ -3073,7 +3073,7 @@ msgid ""
 msgstr ""
 "Текст заголовка\n"
 "(cut)\n"
-"Остальное содержание\n"
+"Остальное содержание"
 
 #: settings/messages.py:3
 #, python-format
