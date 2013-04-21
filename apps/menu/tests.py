@@ -79,6 +79,6 @@ class CacheTest(TestCase):
         self.assertEqual(cache.get('hmenu:all'), None)
         self.client.get('/')
         self.assertListEqual(
-            list(cache.get('hmenu:all')),
+            list(cache.get('hmenu:all') or []),
             list(HMenuItem.objects.all())
         )
