@@ -645,6 +645,10 @@ def report_add(request, pk=None):
             instance = form.save(commit=False)
             instance.save()
             form.save_m2m()
+            # reloading wins/defeats
+            instance.save()
+            #for roster in instance.rosters.all():
+            #    roster.reload_wins_defeats(save=True)
             return {'redirect': 'tabletop:battle-reports'}
     return {'form': form}
 

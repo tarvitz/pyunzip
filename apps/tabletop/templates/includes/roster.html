@@ -74,6 +74,7 @@
 						{% endifnotequal %}
 					{% endspaceless %}
 					<div class='msg_txt'>Автор: <i>{% if r.user %}{% get_nickname r.user %}{% else %}{{ r.show_player }}{% endif %}</i></div>
+                    <div class='msg_txt'>Побед/поражений: </i>: {{ r.wins }}/{{ r.defeats }}</div>
 					<div class='msg_txt'>Кодекс: <i>{{ r.codex }}</i></div>
 					<div class='msg_txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>
 					<div class='msg_txt'>Очки: <i>{{ r.pts }} pts</i></div>

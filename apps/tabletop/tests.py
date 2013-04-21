@@ -278,7 +278,6 @@ class JustTest(TestCase):
         count = BattleReport.objects.count()
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
-        open('file.html', 'w').write(response.content)
         amount = 1
         self.assertContains(
             response,
@@ -288,6 +287,34 @@ class JustTest(TestCase):
             )
         )
 
+    def test_roster_win_defeats(self):
+        report = BattleReport.objects.filter(layout='1vs1')[0]
+        logged = self.client.login(username='user', password='123456')
+        self.assertEqual(logged, True)
+
+        mission = report.mission
+        winner = report.winners.all()[0]
+        winner = winner.reload_wins_defeats()
+        self.assertNotEqual(winner.wins, 0)
+        # posting new report
+        rosters = [i.pk for i in report.rosters.all()]
+        post = {
+            'title': u'Новый репорт',
+            'mission': mission.id,
+            'rosters': rosters,
+            'winners': [winner.id, ],
+            'layout': '1vs1',
+            'deployment': 'dow',
+            'comment': u'Новый победный реп'
+        }
+        count = BattleReport.objects.count()
+        url = reverse('tabletop:report-add')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count + 1, BattleReport.objects.count())
+        wins = winner.wins
+        winner = Roster.objects.get(pk=winner.pk)
+        self.assertEqual(winner.wins, wins + 1)
 
 class CacheTest(TestCase):
     fixtures = [

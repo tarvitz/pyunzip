@@ -41,8 +41,8 @@
 			{% endif %}{% endspaceless %}
 		{% endif %}
 			{% if roster.user %}
-                            <img src='{% url "wh:avatar" nickname=roster.user.get_username %}'>
-                        {% endif %}
+                <img src='{% url "wh:avatar" nickname=roster.user.get_username %}'>
+            {% endif %}
 		{% if roster.user %}
 			<center>
             {% with roster.user as warn_user %}
