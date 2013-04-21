@@ -101,6 +101,15 @@ class AbstractNews(models.Model):
             return self.content[:self.content.index('(cut)')]
         return self.content
 
+    def get_comments(self):
+        ct = ContentType.objects.get(app_label='news', model='news')
+        return Comment.objects.filter(
+            content_type=ct, object_pk=str(self.pk)
+        )
+
+    def get_comments_count(self):
+        return self.get_comments().count()
+
     def get_seen_users(self):
         return [i.user for i in self.seen_objects.all()]
 

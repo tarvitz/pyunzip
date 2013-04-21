@@ -21,6 +21,7 @@ from optparse import OptionParser
 from apps.thirdpaty import sleekxmpp
 from apps.farseer.decorators import su_required
 import logging
+from apps.core.helpers import get_object_or_None
 logger = logging.getLogger(__name__)
 
 HELP_TEXT = """
@@ -42,7 +43,7 @@ HELP_JABBER = """
 # by default. To ensure that Unicode is handled properly
 # throughout SleekXMPP, we will set the default encoding
 # ourselves to UTF-8.
-until = lambda s,e: s[:s.rindex(e)] 
+until = lambda s,e: s[:s.rindex(e)]
 if sys.version_info < (3, 0):
     reload(sys)
     sys.setdefaultencoding('utf8')
@@ -65,7 +66,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
         self.boundjid.resource = RESOURCE
         #may cause disconnects
         #self.set_jid("%s/%s" % (JID,RESOURCE))
-        
+
         #thread.start_new_thread(self.net_listen,())
         # The session_start event will be triggered when
         # the bot establishes its connection with the server
@@ -79,14 +80,14 @@ class SeerBot(sleekxmpp.ClientXMPP):
         # MUC messages and error messages.
         self.add_event_handler("message", self.message)
         self.sockobj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    
+
     def msg_url_preprocess(self,scheme):
         pass
-        
-    #============ Network ================ 
+
+    #============ Network ================
     #
     #=====================================
-    
+
     def net_listen(self):
         self.ip = 'localhost'
         self.port = 40001
@@ -100,7 +101,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
             self.disconnect()
             sys.exit(-1)
             return
-        
+
         while True:
             connection, address = self.sockobj.accept()
             logger.info("(%s:%s) connected" % address)
@@ -115,13 +116,13 @@ class SeerBot(sleekxmpp.ClientXMPP):
                     connection.send('recieved: '+data)
                     self.process_net_msg(connection,data)
                 connection.close()
-    
+
     def process_net_msg(self,connection,data):
         if ' ' in data:
             command = data[:data.index(' ')]
         else:
             command = data
-        
+
         data = str(data).strip('\r').strip('\n')
         logger.info('data: %r',data)
         if 'help' in command:
@@ -148,13 +149,13 @@ class SeerBot(sleekxmpp.ClientXMPP):
         else:
             pass
         return
-    
+
     def process(self,threaded=False):
         #fork process with reading data
         #self.net_listen()
         thread.start_new_thread(self.net_listen,()) #socket network command interface
         super(sleekxmpp.ClientXMPP,self).process(threaded) #bot thread
-        
+
     def start(self, event):
         """
         Process the session_start event.
@@ -170,11 +171,11 @@ class SeerBot(sleekxmpp.ClientXMPP):
         """
         self.getRoster()
         self.sendPresence()
-        
+
     #================== Messages block ===================
     #
     #=====================================================
-    
+
     @su_required
     def send_get_roster(self,msg):
         #msg.reply("Get Roster initiated").send()
@@ -183,8 +184,8 @@ class SeerBot(sleekxmpp.ClientXMPP):
             message += r+'\n'
         m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':message}
         self.send_message(**m)
-    
-    @su_required    
+
+    @su_required
     def send_get_subscribed(self,msg):
         #roster = msg.stream.roster
         roster_list = ''
@@ -194,15 +195,15 @@ class SeerBot(sleekxmpp.ClientXMPP):
         m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':roster_list}
         self.send_message(**m)
         #msg.reply(roster_list).send()
-        
+
     def send_authorized_message(self,mtype,mbody):
         """ Sends Authorized users message """
         m = {'mfrom':self.boundjid._full,'mtype':mtype,'mbody':mbody}
         auth_list = [r for r in self.roster.keys() if self.roster[r]['subscription'] in ('to','both')]
         for user in auth_list:
             m.update({'mto':user})
-            self.send_message(**m)  
-    
+            self.send_message(**m)
+
     def message(self, msg):
         """
         Process incoming message stanzas. Be aware that this also
@@ -218,22 +219,32 @@ class SeerBot(sleekxmpp.ClientXMPP):
         if '!help' in msg['body']:
             m = {'mtype':'chat', 'mto': msg['from'],'mfrom':msg['to'],'mbody':HELP_JABBER}
             self.send_message(**m)
-            
+
         elif '!get_roster' in msg['body']:
             self.send_get_roster(msg)
-                
+
         elif '!get_subscribed' in msg['body']:
             self.send_get_subscribed(msg)
-            
+
         elif "!get_last_news" in msg['body']:
             from apps.news.models import News
-            n = News.objects.all()
-            if n: n=n[0]
-            m = {'mto':msg['from'],'mfrom':msg['to'],'mtype':'chat','mbody':"%s" % (n.get_content_plain())}
-            self.send_message(**m)   
+            n = list(News.objects.order_by('-date')[:10])
+            message = "\n".join(
+                '{title}\n{content} [{comments}]\n'.format(
+                    title=n.title,
+                    content=n.get_head(),
+                    comments=n.get_comments_count(),
+            )
+            msg = {
+                'mto': msg['from'],
+                'mfrom': msg['to'],
+                'mtype':'chat',
+                'mbody': message
+            }
+            self.send_message(**msg)
         #elif "!test" in msg['body']:
         #    self.send_authorized_message('chat', 'test message')
-            
+
         elif '!whoami' in msg['body']:
             from django.contrib.auth.models import User
             m = {'mto':msg['from'],'mfrom':self.JID,'mtype':'chat'}
@@ -241,7 +252,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
             if '/' in jid: jid = until(jid,'/')
             u = User.objects.filter(jid=jid)
             if u:
-                m.update({'mbody':'Registered user'})
+                m.update({'mbody':'Registered user: %s' % u.nickname})
             else:
                 m.update({'mbody':'Unregistered user'})
             self.send_message(**m)

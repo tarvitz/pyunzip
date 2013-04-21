@@ -34,7 +34,7 @@ class Command(BaseCommand):
         xmpp.registerPlugin('xep_0004') # Data Forms
         xmpp.registerPlugin('xep_0060') # PubSub
         xmpp.registerPlugin('xep_0199') # XMPP Ping
-        if xmpp.connect((server,port)):
+        if xmpp.connect((server, port)):
             xmpp.process(threaded=True)
             logger.info("connection complete")
         else:
