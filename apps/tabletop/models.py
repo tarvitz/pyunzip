@@ -104,6 +104,9 @@ class Roster(models.Model):
     syntax = models.CharField(_('Syntax'), max_length=20,blank=True,null=True,choices=settings.SYNTAX)
 
     is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True)
+    wins = models.PositiveIntegerField(_('wins'), default=0, blank=True)
+    defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
+
     search = SphinxSearch(weights={'title': 30, 'comments': 30})
     actions = [common_delete_action, alter_codex_action]
 
@@ -112,6 +115,23 @@ class Roster(models.Model):
        if self.player: return self.player
        if self.owner: return self.owner.get_username()
     show_player.short_description = _('Player')
+
+    @property
+    def won_reports(self):
+        return self.breport_winners_sets
+
+    @property
+    def all_reports(self):
+        return self.battlereport_set
+
+    def reload_wins_defeats(self, save=True):
+        common = self.all_reports.count()
+        winned = self.won_reports.count()
+        self.wins = winned
+        self.defeats = common - winned
+        if save:
+            self.save()
+        return self
 
     def get_title(self):
         return self.title
