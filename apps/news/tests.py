@@ -14,6 +14,9 @@ from django.db import connections
 from django.core.cache import cache
 from django.conf import settings
 from django.db.models import Q
+from django.template.loader import get_template
+from django.template import Context, Template
+from apps.core.helpers import paginate
 
 from datetime import datetime
 
@@ -452,7 +455,7 @@ class BenchmarkTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
         'tests/fixtures/load_news_categories.json',
-        'tests/fixtures/load_news.json',
+        'tests/fixtures/production/load_news.json',
     ]
     def setUp(self):
         #self.request = RequestFactory()
@@ -486,6 +489,94 @@ class BenchmarkTest(TestCase):
                 'min': minimum, 'max': maximum, 'avg': avg
             }
             print "Benchmarking %(user)s %(url)s: min: %(min)s, max: %(max)s, avg: %(avg)s" % msg
+
+
+class BenchmarkTemplatesTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_news_categories.json',
+        'tests/fixtures/production/load_news.json'
+    ]
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def benchmark_run(self, run=lambda x: x, runs=10):
+        results = []
+        for i in xrange(runs):
+            n = datetime.now()
+            run()
+            offset = datetime.now() - n
+            results.append(offset.total_seconds())
+
+        print "Got: min: %(min)s, max: %(max)s, avg: %(avg)s" % {
+            'min': min(results),
+            'max': max(results),
+            'avg': sum(results) / len(results)
+        }
+
+    def benchmark(self, template, context={}, runs=10):
+        results = []
+        wr = True
+        for i in xrange(runs):
+            n = datetime.now()
+            if isinstance(template, basestring):
+                tmpl = Template(template)
+            else:
+                tmpl = template
+            html = tmpl.render(Context(context))
+            #if wr:
+            #    open('file.html', 'w').write(html.encode('utf-8'))
+            #    wr = False
+            offset = datetime.now() - n
+            results.append(offset.total_seconds())
+        rmin = min(results)
+        rmax = max(results)
+        avg = sum(results) / len(results)
+        print "Got follow timings:\nmin: %(min)s,\nmax: %(max)s,\navg: %(avg)s" % {
+            'min': rmin,
+            'max': rmax,
+            'avg': avg
+        }
+
+    def test_news_page_plain(self):
+        print "Testing news page without render, only with context processors and stuff"
+        template = get_template('news.html')
+        url = reverse('wh:login')  #  without anything worthless
+        response = self.client.get(url)
+        context = response.context[0]
+
+        for user in ('admin', 'user', None):
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+            else:
+                self.client.logout()
+            print "Testing for '%s': " % user or 'Anonymous'
+            self.benchmark(template, context)
+
+    def test_news_page_full(self):
+        print "Testing news page with news render, only news fetched"
+        from apps.news.views import news
+        url = reverse('wh:login')
+        template = get_template('news.html')
+        for user in ('admin', 'user', None):
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+            else:
+                self.client.logout()
+            print "Testing for '%s': " % user or 'Anonymous'
+            context = self.client.get(url).context
+            news = News.objects.all()
+            news = paginate(news, 1, pages=20)
+            context = context[0]
+            context['news'] = news
+            context['page'] = news
+            self.benchmark(template, context)
 
 
 class CacheTest(TestCase):

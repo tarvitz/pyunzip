@@ -176,6 +176,7 @@
 {% include "js/expressions.html" %}
 
 <script language='javascript' type='text/javascript'>
+    var current_referer = "{{ current_referer }}";
     var setTabs = function(src){
         document.cookie = 'mainTab=' + src;
     }

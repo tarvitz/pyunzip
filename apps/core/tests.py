@@ -9,6 +9,11 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 
+from django.template import Context, Template
+from django.template.loader import get_template
+from datetime import datetime
+from django.shortcuts import RequestContext
+
 class CodeTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -324,3 +329,59 @@ class CodeTest(TestCase):
 
     def test_settings_store(self):
         pass
+
+class BenchmarkTemplatesTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json'
+    ]
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def benchmark(self, template, context={}):
+        results = []
+        for i in xrange(1000):
+            n = datetime.now()
+            if isinstance(template, basestring):
+                tmpl = Template(template)
+            else:
+                tmpl = template
+            html = tmpl.render(Context(context))
+            offset = datetime.now() - n
+            results.append(offset.total_seconds())
+        rmin = min(results)
+        rmax = max(results)
+        avg = sum(results) / len(results)
+        print "Got follow timings:\nmin: %(min)s,\nmax: %(max)s,\navg: %(avg)s" % {
+            'min': rmin,
+            'max': rmax,
+            'avg': avg
+        }
+    def test_benchmark_get_form_tag(self):
+        template = """
+        {% get_form 'apps.core.forms.CommentForm' as form %}
+        <form class='' method='POST'>
+        {% csrf_token %}
+        {{ form.as_ul }}
+        </form>
+        """
+        self.benchmark(template)
+
+    def test_index_page(self):
+        for user in ('admin', 'user', None):
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+            else:
+                self.client.logout()
+            template = get_template('base.html')
+            out = template.render(Context(self.client.request().context))
+            self.assertIn('/forum/', out)
+            self.assertIn('var current_referer = "/";', out)
+            print "Testing for '%s': " % user or "Anonymous"
+            self.benchmark(
+                template,
+                self.client.request().context
+            )

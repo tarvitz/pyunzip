@@ -1,9 +1,51 @@
 [
 {
-    "pk": 1, 
-    "model": "news.category", 
+    "pk": 1,
+    "model": "news.category",
     "fields": {
         "name": "testing"
+    }
+},
+{
+    "pk": 2,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
+    }
+},
+{
+    "pk": 3,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
+    }
+},
+{
+    "pk": 4,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
+    }
+},
+{
+    "pk": 5,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
+    }
+},
+{
+    "pk": 6,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
+    }
+},
+{
+    "pk": 7,
+    "model": "news.category",
+    "fields": {
+        "name": "w40k"
     }
 }
 ]
