@@ -4,6 +4,16 @@ from settings.local import *
 from settings.messages import *
 from settings.dist import INSTALLED_APPS
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '127.0.0.1:11211',
+        ],
+        'KEY_PREFIX': 'tests'
+    }
+}
+
 DEBUG=False
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)

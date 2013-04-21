@@ -11,6 +11,7 @@ from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.core.cache import cache
 from copy import deepcopy
 import simplejson as json
 
@@ -286,3 +287,40 @@ class JustTest(TestCase):
                 {'amount': amount}
             )
         )
+
+
+class CacheTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_games.json',
+        'tests/fixtures/load_missions.json',
+        'tests/fixtures/load_codexes.json',
+        'tests/fixtures/load_rosters.json',
+        'tests/fixtures/load_battle_reports.json'
+    ]
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def get_battle_report_cache(self, report):
+        return cache.get('tabletop:report:%s' % report.pk)
+
+    def del_battle_report_cache(self, report):
+        cache.delete('tabletop:report:%s' % report.pk)
+
+    def test_cache_key_prefix(self):
+        self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
+
+    def test_battle_report_cache(self):
+        report = BattleReport.objects.all()[0]
+        # fixture should caches it
+        self.assertEqual(self.get_battle_report_cache(report), report)
+        self.del_battle_report_cache(report)
+        self.assertEqual(self.get_battle_report_cache(report), None)
+        report.save()
+        self.assertEqual(self.get_battle_report_cache(report), report)
+        report.delete()
+        self.assertEqual(self.get_battle_report_cache(report), None)
