@@ -228,13 +228,14 @@ class SeerBot(sleekxmpp.ClientXMPP):
 
         elif "!get_last_news" in msg['body']:
             from apps.news.models import News
-            n = list(News.objects.order_by('-date')[:10])
-            message = "\n".join(
-                '{title}\n{content} [{comments}]\n'.format(
+            news = list(News.objects.order_by('-date')[:10])
+            message = ""
+            for n in news:
+                message += '{title}\n{content} [{comments}]\n\n'.format(
                     title=n.title,
                     content=n.get_head(),
                     comments=n.get_comments_count(),
-            )
+                )
             msg = {
                 'mto': msg['from'],
                 'mfrom': msg['to'],
@@ -250,7 +251,7 @@ class SeerBot(sleekxmpp.ClientXMPP):
             m = {'mto':msg['from'],'mfrom':self.JID,'mtype':'chat'}
             jid = msg['from']._jid #<-- nya?
             if '/' in jid: jid = until(jid,'/')
-            u = User.objects.filter(jid=jid)
+            u = get_object_or_None(User, jid__iexact=jid)
             if u:
                 m.update({'mbody':'Registered user: %s' % u.nickname})
             else:
