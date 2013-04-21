@@ -236,13 +236,14 @@ def action_article(request, id=None, action=None):
             if not owned or approved:
                 raise Http404("hands off!")
 
+    initial = {
+        'content': settings.INITIAL_ARTICLE_CONTENT
+    } if not instance else {}
     form = ArticleModelForm(
         request.POST or None,
         request=request,
         instance=instance,
-        initial={
-            'content': settings.INITIAL_ARTICLE_CONTENT
-        }
+        initial=initial
     )
     if request.method == 'POST':
         if form.is_valid():
