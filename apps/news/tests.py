@@ -124,7 +124,7 @@ class JustTest(TestCase):
 
     def test_news_post_anonymous(self):
         self.client.logout()
-        category = Category.objects.get()
+        category = Category.objects.all()[0]
         count = News.objects.count()
         post = {
             'title': u'Заголовок',
@@ -147,7 +147,7 @@ class JustTest(TestCase):
         self.client.login(username='user', password='123456')
         user = User.objects.get(username='user')
 
-        category = Category.objects.get()
+        category = Category.objects.all()[0]
         count = News.objects.count()
         post = {
             'title': u'Заголовок',
@@ -192,7 +192,7 @@ class JustTest(TestCase):
         logged = self.client.login(username=username, password='123456')
         self.assertEqual(logged, True)
         user = User.objects.get(username=username)
-        category = Category.objects.get()
+        category = Category.objects.all()[0]
 
         count = News.objects.count()
         post = {
@@ -265,7 +265,7 @@ class JustTest(TestCase):
         username = 'user'
         self.client.login(username=username, password='123456')
         count = News.objects.count()
-        category = Category.objects.get()
+        category = Category.objects.all()[0]
         post = {
             'title': u'Заголовок', 'author': '',
             # blank means poster user
@@ -300,7 +300,7 @@ class JustTest(TestCase):
         username = 'admin'
         self.client.login(username=username, password='123456')
         count = News.objects.count()
-        category = Category.objects.get()
+        category = Category.objects.all()[0]
         post = {
             'title': u'Заголовок', 'author': '',
             # blank means poster user
