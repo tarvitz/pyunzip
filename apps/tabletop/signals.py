@@ -61,12 +61,12 @@ def wargear_pre_save(instance, **kwargs):
 
 @receiver(post_save, sender=BattleReport)
 def on_battle_report_change(instance, **kwargs):
-    cache.set('tabletop:report:%s' % instance.pk, instance)
+    #cache.set('tabletop:report:%s' % instance.pk, instance)
     return instance
 
 @receiver(pre_delete, sender=BattleReport)
 def on_battle_report_delete(instance, **kwargs):
-    cache.delete('tabletop:report:%s' % instance.pk)
+    #cache.delete('tabletop:report:%s' % instance.pk)
     return instance
 
 def setup_signals():
