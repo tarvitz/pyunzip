@@ -4,7 +4,8 @@ from settings.local import *
 from settings.messages import *
 from settings.dist import INSTALLED_APPS
 
-DEBUG=False
+DEBUG=True
+DEV_SERVER=True
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
 USER_FILES_LIMIT=1.2*1024*1024
