@@ -6,6 +6,15 @@ from settings.dist import INSTALLED_APPS
 
 DEBUG=True
 DEV_SERVER=True
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': [
+            '127.0.0.1:11211',
+        ],
+        'KEY_PREFIX': 'tests'
+    }
+}
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
 USER_FILES_LIMIT=1.2*1024*1024

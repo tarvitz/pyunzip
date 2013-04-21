@@ -4,19 +4,21 @@ import os
 import re
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.wh.models import Side, RegisterSid, Rank
+from apps.wh.models import Side, RegisterSid, Rank, RankType
 from apps.core.models import UserSID
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
 #from django.conf import settings
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
+from django.core.cache import cache
 
 
 class JustTest(TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_rank_types.json',
         'tests/fixtures/load_ranks.json',
+        'tests/fixtures/load_users.json'
     ]
 
     def setUp(self):
@@ -375,3 +377,46 @@ class JustTest(TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'image/vnd.microsoft.icon')
+
+
+class CacheTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_rank_types.json',
+        'tests/fixtures/load_ranks.json',
+        'tests/fixtures/load_users.json',
+    ]
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def cache_delete_nickname(self, user):
+        cache.delete('nick:%s' % user.username)
+
+    def cache_get_nickname(self, user):
+        return cache.get('nick:%s' % user.username)
+
+    def test_user_change_get_nickname_test(self):
+        user = User.objects.get(username='user')
+        logged = self.client.login(username='user', password='123456')
+        nickname = user.get_nickname(no_cache=True)
+        self.assertNotEqual(nickname, '')
+        self.cache_delete_nickname(user)
+        self.assertEqual(logged, True)
+
+        rank_type = RankType.objects.get(id=1)
+        ranks = user.ranks.filter(pk__in=rank_type.rank_set.all())
+        self.assertNotEqual(ranks.count(), 0)
+        self.cache_delete_nickname(user)
+        self.assertEqual(self.cache_get_nickname(user), None)
+        # trying to fetch it via changing type
+        rank_type = RankType.objects.get(pk=rank_type.pk)
+        rank_type.save()
+        self.assertEqual(self.cache_get_nickname(user), nickname)
+        # trying to fetch it via user change
+        self.cache_delete_nickname(user)
+        user = User.objects.get(pk=user.pk)
+        user.save()
+        self.assertEqual(self.cache_get_nickname(user), nickname)

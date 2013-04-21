@@ -55,7 +55,9 @@
         "nickname": "user",
         "about": "",
         "settings": null,
-        "ranks": [],
+        "ranks": [
+            1
+        ],
         "gender": "n",
         "plain_avatar": "",
         "avatar": ""
@@ -86,7 +88,9 @@
         "nickname": "admin",
         "about": "",
         "settings": null,
-        "ranks": [],
+        "ranks": [
+            1
+        ],
         "gender": "n",
         "plain_avatar": "",
         "avatar": ""

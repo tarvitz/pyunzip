@@ -422,8 +422,11 @@ class UserExtension(object):
         #make here color implementation
         return self.nickname or self.username
     
-    def get_nickname(self):
-        nickname = cache.get('nick:%s' % self.username)
+    def get_nickname(self, no_cache=False):
+        nickname = (
+            cache.get('nick:%s' % self.username)
+            if not no_cache else None
+        )
         if not nickname:
             if self.ranks.all():
                 rank = self.ranks.order_by('-magnitude')[0]
@@ -436,9 +439,11 @@ class UserExtension(object):
                         'nickname': self.nickname or self.username
                     }
                 )
-                cache.set('nick:%s' % self.username, span)
+                if not no_cache:
+                    cache.set('nick:%s' % self.username, span)
                 return span
-            cache.set('nick:%s' % self.username, self.nickname or self.username)
+            if not no_cache:
+                cache.set('nick:%s' % self.username, self.nickname or self.username)
             return self.nickname or self.username
         return nickname
 

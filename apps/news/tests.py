@@ -4,13 +4,16 @@ from django.test import TestCase
 import unittest
 from django.test.client import RequestFactory, Client
 from apps.news.models import Category, News
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_object_or_None
 from django.db import connections
+from django.core.cache import cache
+from django.conf import settings
+from django.db.models import Q
 
 from datetime import datetime
 
@@ -483,3 +486,61 @@ class BenchmarkTest(TestCase):
                 'min': minimum, 'max': maximum, 'avg': avg
             }
             print "Benchmarking %(user)s %(url)s: min: %(min)s, max: %(max)s, avg: %(avg)s" % msg
+
+
+class CacheTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_news_categories.json',
+        'tests/fixtures/load_news.json',
+    ]
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+    def test_cache_key_prefix(self):
+        self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
+
+    def test_news_cache(self):
+        keys = ['admin', 'everyone', 'everyone']
+        users = ['admin', 'user', None]
+        messages = []
+
+        for (key, user) in zip(keys, users):
+            cache.delete('news:all:%s' % key)
+            if user:
+                logged = self.client.login(username=user, password='123456')
+                self.assertEqual(logged, True)
+                u = User.objects.get(username=user)
+            else:
+                self.client.logout()
+                u = AnonymousUser()
+            try:
+                cache_key = 'news:all:%s' % key
+                self.assertEqual(cache.get('news:all:%s' % key), None)
+                self.client.get('/')
+                caches = list(cache.get(cache_key).order_by('-date'))
+                qset = Q()
+                if not u.has_perm('news.can_edit'):
+                    qset = Q(approved=True)
+
+                news = list(News.objects.filter(qset).order_by('-date'))
+
+                self.assertListEqual(
+                    caches or [],
+                    news or [None, ]
+                )
+                print "%s passes" % user
+            except AssertionError as err:
+                messages.append({
+                    'user': user,
+                    'err': err,
+                    'key': key
+                })
+        if messages:
+            for msg in messages:
+                print "Got %(err)s with '%(user)s' in %(key)s" % msg
+            raise AssertionError

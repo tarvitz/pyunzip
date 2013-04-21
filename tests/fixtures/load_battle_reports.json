@@ -1,0 +1,71 @@
+[
+{
+    "pk": 1, 
+    "model": "tabletop.battlereport", 
+    "fields": {
+        "comment": "\u0422\u0443\u0442 \u043a\u043e\u043c\u043c\u0435\u043d\u0442", 
+        "layout": "1vs1", 
+        "title": "\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439 \u0431\u0430\u0442\u043b\u0440\u0435\u043f\u043e\u0440\u0442", 
+        "rosters": [
+            2, 
+            1
+        ], 
+        "published": "2013-04-13T05:02:31.022", 
+        "mission": 1, 
+        "syntax": "", 
+        "winners": [
+            2
+        ], 
+        "deployment": "dow", 
+        "owner": 1, 
+        "ip_address": null, 
+        "approved": true
+    }
+},
+{
+    "pk": 3, 
+    "model": "tabletop.battlereport", 
+    "fields": {
+        "comment": "\u0432\u0444\u0432\u044b\u0444\u044b", 
+        "layout": "1vs1", 
+        "title": "\u0442\u0435\u0441\u0442", 
+        "rosters": [
+            2, 
+            1
+        ], 
+        "published": "2013-04-14T03:50:21.304", 
+        "mission": 2, 
+        "syntax": "", 
+        "winners": [
+            2
+        ], 
+        "deployment": "dow", 
+        "owner": 1, 
+        "ip_address": null, 
+        "approved": true
+    }
+},
+{
+    "pk": 4, 
+    "model": "tabletop.battlereport", 
+    "fields": {
+        "comment": "\u0422\u0443\u0442 \u043c\u043d\u043e\u0433\u043e \u0442\u0435\u043a\u0441\u0442\u0430\r\n(cut)\r\n\r\n\u0434\u0430\u0434\u0430\u0434\u0430\u0434\r\n\r\n\r\n*\u043c\u043d\u043e\u0433\u043e*\r\n\r\n\u0440\u0430\u0437\u043d\u043e\u0433\u043e\r\n\r\n\r\n\u0442\u0435\u043a\u0441\u0442\u0430\r\n1. 1\r\n2. 2.\r\n3. 31231\r\n4. 13 1\u0432\u0444\u044b\u0432\r\n\r\n\r\n\u0432\u0444\u044b\u0432\r\n\r\n\u0444\u0432\r\n\u0444\u044b\u0432\r\n\u0444\u044b\r\n\u0432\u0444\r\n\u0432\r\n\u0444\u0432\r\n\u0444\u0432\u0444\u044b\u0432", 
+        "layout": "1vs1", 
+        "title": "\u0442\u0435\u0441\u0442", 
+        "rosters": [
+            2, 
+            1
+        ], 
+        "published": "2013-04-14T16:22:57.646", 
+        "mission": 2, 
+        "syntax": "", 
+        "winners": [
+            2
+        ], 
+        "deployment": "dow", 
+        "owner": 1, 
+        "ip_address": null, 
+        "approved": true
+    }
+}
+]

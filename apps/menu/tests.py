@@ -2,14 +2,17 @@
 #from django.utils import unittest
 import os
 from django.test import TestCase
-from apps.tracker.models import SeenObject
-from apps.core.helpers import model_json_encoder
-from apps.news.models import News
+from apps.menu.models import HMenuItem, VMenuItem
 from django.contrib.auth.models import User
+from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
+from apps.core.helpers import model_json_encoder
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.core.cache import cache
+from copy import deepcopy
 import simplejson as json
 
 from apps.core.helpers import get_object_or_None
@@ -17,9 +20,7 @@ from apps.core.helpers import get_object_or_None
 
 class JustTest(TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_news_categories.json',
-        'tests/fixtures/load_news.json'
+        'tests/fixtures/load_menus.json',
     ]
 
     def setUp(self):
@@ -35,33 +36,49 @@ class JustTest(TestCase):
     def tearDown(self):
         pass
 
-    def print_form_errors(self, form):
-        if 'errors' in form:
-            for (key, items) in form['errors'].items():
-                print "%(key)s: %(items)s" % {
-                    'key': key,
-                    'items': ", ".join(items)
-                }
-
-    def no_test_urls_params(self):
+    def check_changes(self, instance, keywords, check, check_in=None):
         messages = []
-        for user in ('user', 'admin', None):
-            if user:
-                self.client.login(username=user, password='123456')
-            else:
-                self.client.logout()
-            for url in self.urls_params:
-                response = self.client.get(url)
-                try:
-                    self.assertEqual(response.status_code, 200)
-                except AssertionError as err:
-                    messages.append({'url': url, 'user': user, 'err': err})
+        check_in = check_in or self.assertIn
+        for (key, value) in keywords.items():
+            try:
+                if isinstance(value, list):
+                    for item in value:
+                        check_in(item, getattr(instance, key).all())
+                else:
+                    check(getattr(instance, key), value)
+            except AssertionError as err:
+                messages.append({
+                    'err': err,
+                    'key': key
+                })
         if messages:
             for msg in messages:
-                print "Got error in (%s): %s, with %s" % (
-                    msg['user'], msg['url'], msg['err']
-                )
+                msg = "Got %(err)s in %(key)s" % msg
+                print msg
             raise AssertionError
 
-    def test_hmenu(self):
+
+class CacheTest(TestCase):
+    fixtures = [
+        'tests/fixtures/load_menus.json',
+    ]
+
+    def setUp(self):
         pass
+
+    def tearDown(self):
+        pass
+
+    def get_hmenu_all(self, report):
+        return cache.get('hmenu:all')
+
+    def test_cache_key_prefix(self):
+        self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
+
+    def test_hmenu_cache_all(self):
+        self.assertEqual(cache.get('hmenu:all'), None)
+        self.client.get('/')
+        self.assertListEqual(
+            list(cache.get('hmenu:all') or []),
+            list(HMenuItem.objects.all())
+        )
