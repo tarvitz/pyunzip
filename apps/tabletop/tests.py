@@ -310,9 +310,17 @@ class JustTest(TestCase):
         count = BattleReport.objects.count()
         url = reverse('tabletop:report-add')
         response = self.client.post(url, post, follow=True)
+        report = BattleReport.objects.all()[0]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(count + 1, BattleReport.objects.count())
         wins = winner.wins
+        winner = Roster.objects.get(pk=winner.pk)
+        self.assertEqual(report.approved, False)
+        self.assertEqual(winner.wins, wins)
+        approve_url = reverse('tabletop:report-approve', args=(report.pk, ))
+        self.client.login(username='admin', password='123456')
+        response = self.client.get(approve_url, follow=True)
+        self.assertEqual(response.status_code, 200)
         winner = Roster.objects.get(pk=winner.pk)
         self.assertEqual(winner.wins, wins + 1)
 

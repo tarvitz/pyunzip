@@ -62,8 +62,9 @@ def wargear_pre_save(instance, **kwargs):
 @receiver(post_save, sender=BattleReport)
 def on_battle_report_change(instance, **kwargs):
     #cache.set('tabletop:report:%s' % instance.pk, instance)
-    for roster in instance.rosters.all():
-        roster.reload_wins_defeats()
+    if instance.approved:
+        for roster in instance.rosters.all():
+            roster.reload_wins_defeats()
     return instance
 
 @receiver(pre_delete, sender=BattleReport)
