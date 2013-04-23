@@ -15,9 +15,9 @@ def day_expired(func,*args,**kwargs):
             k = k[0]
             now = datetime.now()
             if k.date+timedelta(hours=24) < now:
-                return func(*args,**kwargs)
+                return func(*args, **kwargs)
             else:
-                return HttpResponseRedirect('/timeout')
+                return HttpResponseRedirect('/timeout/')
         else:
             return func(*args,**kwargs)
     return wrapper
