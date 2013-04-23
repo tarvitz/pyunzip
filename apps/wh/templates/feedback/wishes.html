@@ -1,7 +1,7 @@
 {% extends base_template %}{% load newsfilters %}
 {% block title %} Пожелания {% endblock %}
 {% block head_content %}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"feedback.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/feedback.css' type='text/css' media='screen'>
 {% endblock %}
 {% block text_content %}
 {% for wish in wishes.object_list %}

@@ -2,9 +2,9 @@
 {% load votetags %}
 {% block css %}
 {{ block.super }}
-<link rel='stylesheet' media='screen' type='text/css' href='/styles/{{ user.skin.name|getskincss:"message.css" }}'>
-<link rel='stylesheet' media='screen' type='text/css' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}'>
-<link rel='stylesheet' media='screen' type='text/css' href='/styles/{{ user.skin.name|getskincss:"images.css" }}'>
+<link rel='stylesheet' media='screen' type='text/css' href='/styles/message.css'>
+<link rel='stylesheet' media='screen' type='text/css' href='/styles/replay.css'>
+<link rel='stylesheet' media='screen' type='text/css' href='/styles/images.css'>
 {% endblock %}
 
 {% block text_content %}

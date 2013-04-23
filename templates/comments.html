@@ -23,7 +23,7 @@
                 {% endif %}
 		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>
 		<span class="msg_user_nickname">{% spaceless %}
-		<span class="nickname">{% get_nickname c.user %}</span>  комментирует:
+		<span class="nickname">{{ c.user.get_nickname|safe }}</span>  комментирует:
 		{% endspaceless %}
 		</span>
 	</div>

@@ -1,8 +1,8 @@
 {% extends base_template %}
-{% load kamwhfilters %}{% load i18n %}{% load comments %}
+{% load kamwhfilters %}{% load i18n %}{% load comments coretags %}
 {% block css %}
 	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/message.css' media='screen' type='text/css'>
 {% endblock %}
 {% block text_content %}
 {% if usr.errors %}
@@ -34,7 +34,7 @@
 	<div class='msg_text'>
 		<div id='profile_data'>
 			{% if usr.photo %}<b><i><a href='{% url "wh:photo" usr.nickname %}'>Фото</a></b></i><br>{% endif %}
-			<b>Имя</b> <span class='notice'>(никнейм)</span>: {% get_nickname usr %}<br>
+			<b>Имя</b> <span class='notice'>(никнейм)</span>: {{ usr.get_nickname|safe }}<br>
 			{% spaceless %}
 			{% if usr.first_name or usr.last_name %}
 			<b>Реальное имя</b>: {{ usr.first_name }} {{ usr.last_name }}<br>
@@ -50,7 +50,7 @@
 			<a href='{% url "files:replays" usr.get_username %}'>Реплеи автора</a>: {% get_author_replays_count for usr as rep_count %} {{ rep_count }}<br>
 			<a href='{% url "tabletop:rosters" usr.get_username %}'>Ростеры автора</a><br>
 			Количество коментариев: {{ usr.comments_count }}<br>
-			{% if usr.about %}<b>{% get_nickname usr %} о себе</b>: {{ usr.about }}<br>{% endif %}
+			{% if usr.about %}<b>{{ usr.get_nickname|safe }} о себе</b>: {{ usr.about }}<br>{% endif %}
 		</div> <!-- profile_data -->
 	</div> <!-- msg_text -->
 	</div> <!-- msg_content -->

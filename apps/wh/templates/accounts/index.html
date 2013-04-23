@@ -1,9 +1,9 @@
-{% extends base_template %}
+{% extends base_template %} {% load coretags %}
 {% block title %}Пользователи{% endblock %}
 {% block css %}
 	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"profileng.css" }}' media='screen' type='text/css'>
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/profileng.css' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/round_message.css' media='screen' type='text/css'>
 {% endblock %}
 {% block text_content %}
 
@@ -15,7 +15,7 @@
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 
-			<a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{% get_nickname user %}{% else %}Soulless inhabit{% endif %}</a>
+			<a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{{ user.get_nickname|safe }}{% else %}Soulless inhabit{% endif %}</a>
 		</div><!-- msg_headline -->
 		<div class='msg_content'>
 			<div class='msg_avatar'>
@@ -34,7 +34,7 @@
 					<div class='msg_txt'>Комментов: <i>{{ user.get_comments_count }}</i></div>
 					{# {% if user.replays_count %}<div class='msg_txt'>Реплеев: <i>{{ user.replays_count }}</i></div>{% endif %} #}
 					{% if user.karma_value %}<div class='msg_txt'>Кармическая сила: <i>{% spaceless %}
-							{% if user.karma_value|gt:"0" %}<span class='karma_pos'>{% else %}
+							{% if user.karma_value > 0 %}<span class='karma_pos'>{% else %}
 							<span class='karma_neg'>{% endif %}{{ user.karma_value }}</span>
 					{% endspaceless%}</i></div>{% endif %}
 					<div style='clear: both;'></div>

@@ -13,14 +13,22 @@ def base_template(request):
     from django.conf import settings
     template = settings.DEFAULT_TEMPLATE
     is_auth = request.user.is_authenticated()
+    skin_css_path = None
     if is_auth and request.user.skin:
         templ = "skins/%s/base.html" % (request.user.skin.name.lower())
+        skin_css_path = "%(root)s/%(skin)s/main.css" % {
+            'root': settings.STYLES_ROOT,
+            'skin': request.user.skin.name.lower()
+        }
         try:
             get_template(templ)
             template = templ
         except:
             pass
-    return ({'base_template': template})
+    return ({
+        'base_template': template,
+        'skin_css_path': skin_css_path
+    })
 
 def server_ip(request):
     return {'self_ipaddress':get_self_ip_address()}

@@ -2,7 +2,7 @@
 {% block text_content %}
 {% block css %}
 	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/round_message.css' type='text/css' media='screen'>
 {% endblock %}
 <form id='search_form' action='.' method='POST'>
 {{ form.query.errors }}

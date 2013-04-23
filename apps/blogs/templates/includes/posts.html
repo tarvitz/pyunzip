@@ -1,4 +1,4 @@
-{% load comments %}{% load newsfilters %}
+{% load comments %}{% load newsfilters coretags %}
 {% for p in posts.object_list %}
  <div id='news'>
 	<div align="center" class='headline'>{% spaceless %}
@@ -25,7 +25,6 @@
  <div class='footer'>{{ p.date|date:"H:m:s от Y-m-d" }}</div>
  {% if p.url %}<div class='footer' class='url'><a href='{{ p.url }}'>оригинал</a></div>{% endif %}
  {% get_comment_count for p as comments %}{% if comments %}<div class='footer'><a href="{% url "blog:post" id=p.id %}">Коментариев: {{ comments }}</a></div> {% endif %}
- {% if p.attachment %}<div class='footer'>Прикрепленный файл: <a href='{{ p.attachment.attachment.url }}'>{{ p.attachment.attachment.name|namemediacut }}</a> [{{ p.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
  {% if p.tags %}<div class='footer'>тэги: {{ p.tags }}</div>{% endif %}
  </div>
  

@@ -22,7 +22,7 @@
                 {% spaceless %}
                         {% if br.winners.all %}
                             <img src='{% url "wh:avatar" br.winners.all.0.owner.nickname %}'><br>
-                            {% get_raw_nickname br.winners.all.0.show_player %}
+                            {{  br.winners.all.0.show_player }}
                         {% else %}
                             <img src='/media/avatars/none.png'>
                         {% endif %}
@@ -35,9 +35,9 @@
                     {% spaceless %}
                     <div class='msg_txt'>{% if br.winner %}Победитель:
                     {% if br.winners.all %}
-                        {% get_nickname br.winners.all.0.user %}
+                        {{ br.winners.all.0.user.get_nickname|safe }}
                     {% else %}
-                        {% get_raw_nickname br.winners.all.0.show_player %}
+                        {{ br.winners.all.0.show_player }}
                     {% endif %}
                     {% else %}
                         Ничья

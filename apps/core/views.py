@@ -763,7 +763,7 @@ def edit_comment(request, id=0):
             url = form.cleaned_data['url']
             _jump = request.GET.get('j',None)
             if _jump: url += "#j=%s" % _jump
-            return HttpResponseRedirect(url or '/comment/edit/successfull') #request.META['HTTP_REFERER']
+            return HttpResponseRedirect(url or '/') #request.META['HTTP_REFERER']
     referer = "%s%s" % (request.META.get('HTTP_REFERER', '/'), "#c%i" % int(id) )
     form.fields['url'].initial = referer
     return render_to_response(template,
@@ -850,19 +850,19 @@ def del_restore_comment(request,id=0,flag='delete'):
     if request.user != comment.user\
     and not can_del_restore_comments\
     and not request.user.is_superuser:
-        return HttpResponseRedirect('/comment/not/found')
+        raise Http404("not found")
     if flag in 'delete':
         comment.is_removed = True
         comment.save()
         if referer:
             return HttpResponseRedirect(referer)
-        return HttpResponseRedirect('/comment/deleted')
+        return HttpResponseRedirect('/')
     if flag in 'restore':
         comment.is_removed = False
         comment.save()
         if referer:
             return HttpResponseRedirect(referer)
-        return HttpResponseRedirect('/comment/restored')
+        return HttpResponseRedirect('/')
     return HttpResponseRedirect('/')
 
 @login_required
@@ -894,7 +894,7 @@ def purge_comment(request,id=0,approve='force'):
         comment.delete()
         if next:
             return HttpResponseRedirect(next)
-        return HttpResponseRedirect('/comment/purged')
+        return HttpResponseRedirect('/')
     else:
         return HttpResponseRedirect('/comment/not/found')
 

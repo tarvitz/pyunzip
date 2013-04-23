@@ -6,7 +6,7 @@
 {% else %}
 <b>Тип игры:</b> {{ obj.type }}vs{{ obj.type }}<br>
 <b>Игроки:</b> {{ obj.player_teams }}<br>
-<b>Загружено:</b> {% get_nickname obj.author %}<br>
+<b>Загружено:</b> {{ obj.author.get_nickname|safe }}<br>
 <b>Размер реплея:</b> {{ obj.replay.size|filesizeformat }}<br>
 {% endifequal %}
 <b>Комментарий</b>: {{ obj.comments }}<br>

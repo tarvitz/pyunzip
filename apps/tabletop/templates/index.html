@@ -1,8 +1,8 @@
 {% extends base_template %}
 {% block css %}
 	{{ block.super }}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css" }}' media='screen' type='text/css'>
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css" }}' media='screen' type='text/css'>
+<link rel='stylesheet' href='/styles/round_message.css' media='screen' type='text/css'>
+<link rel='stylesheet' href='/styles/forms.css' media='screen' type='text/css'>
 {% endblock %}
 {% block text_content %} {% load i18n %}
 	{% if battlereps.object_list %}

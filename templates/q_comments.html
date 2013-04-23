@@ -2,7 +2,7 @@
 	<div class='quote_headline'>
 		<div class='transparency' id='black'></div>
 		{% if quote_user.nickname %}<a href="{% url "wh:profile-by-nick" nickname=quote_user.get_username %}">
-			{% get_nickname quote_user %} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
+			{{ quote_user.get_nickname|safe }} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
 		{% else %}
 			{{ quote_user }} писал(а): 
 		{% endif %}

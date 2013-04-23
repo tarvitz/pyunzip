@@ -1,4 +1,4 @@
-{% load comments %}
+{% load comments coretags %}
 {% get_warning for warn_user as warn %}
 {% if user.is_superuser or perms.wh.set_warnings %}
 	Предупреждения: <br><span class='warnings'>

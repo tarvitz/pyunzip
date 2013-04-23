@@ -6,7 +6,7 @@
         </ul>
         <ul class='nav nav-tabs side-tabs no-margin no-bottom-border'><li>&nbsp;</li></ul>
     </div>
-    <div class="menu bar menu_quotes" style='display: {{ usersettings.display_menu_quotes|or:"block" }}'>
+    <div class="menu bar menu_quotes" style='display: {{ usersettings.display_menu_quotes|yesno:"block,hide" }}'>
         <div class="transparency"><!-- wise transparency --></div>
         <span class='reflects_up'></span>
         <span class='reflects_left'></span>

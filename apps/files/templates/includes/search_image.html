@@ -2,9 +2,9 @@
 {% block text_content %}
 {% block css %}
 	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}' type='text/css' media='screen'>
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"gallery.css" }}' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/replay.css' type='text/css' media='screen'>
+	<link rel='stylesheet' href='/styles/gallery.css' type='text/css' media='screen'>
 {% endblock %}
 <form id='search_form' action='.' method='POST'>
 {% csrf_token %}

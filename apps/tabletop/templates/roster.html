@@ -1,8 +1,8 @@
-{% extends base_template %} {% load newsfilters %}
+{% extends base_template %} {% load newsfilters coretags %}
 {% block css %}
 {{ block.super }}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/tabletop.css' type='text/css' media='screen'>
 {% endblock %}
 {% block js %}
 {{ block.super }}
@@ -28,7 +28,7 @@
 		<div class='transparency'></div>
 		<div class='msg_avatar'>
 		{% if roster.user %}
-			<div align='center' class='nickname'>{% get_nickname roster.user %}</div>
+			<div align='center' class='nickname'>{{ roster.user.get_nickname|safe }}</div>
 		{% spaceless %}
 		    <div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ c.user.date_joined|timesince }}</div>
             <span class='msg_ranks'>статус:
@@ -91,7 +91,7 @@
 	<div class='msg_footer'>
 		{% spaceless %}
 			{% ifnotequal roster.user roster.owner %}
-				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{% get_nickname roster.owner %}</a>]
+				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{{ roster.owner.get_nickname }}</a>]
 			{% endifnotequal %}
 			{% if perms.tabletop.edit_roster %}
             {% ifequal roster.owner user %}

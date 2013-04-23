@@ -1,7 +1,7 @@
 {% extends base_template %}
-{% load kamwhfilters %} {% load newsfilters %}
+{% load kamwhfilters %} {% load newsfilters coretags %}
 {% block head_content %}
-<link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
+<link rel="stylesheet" type="text/css" href="/styles/message.css" media="screen">
 <script language="javascript" type="text/javascript" src="/media/js/jquery.js"></script>
 <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
 {% endblock %}
@@ -31,7 +31,7 @@
 		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:m:s" }}]</span>
 		<span class="msg_user_nickname">{% spaceless %}
 		<a href='{{ c.get_absolute_url }}'>
-		<span class="nickname">{% get_nickname c.user %}</span>  комментирует:</a>
+		<span class="nickname"{{ c.user.get_nickname|safe }}</span>  комментирует:</a>
 		{% endspaceless %}
 		</span>
 	</div>

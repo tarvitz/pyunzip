@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>{% load newsfilters i18n %}
+<html>{% load newsfilters i18n cache coretags %}
 {% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf8">
@@ -18,18 +18,17 @@
 {#<link rel='stylesheet' href='/media/css/bootstrap-image-gallery.min.css' type='text/css' media='screen' async>#}
 <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
 
-<!--<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"main.css" }}" type="text/css" media="screen"> -->
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
-<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"rank.css" }}" type="text/css" media="screen">
-<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"tags.css" }}" type="text/css" media="screen">
-<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"karma.css" }}" type="text/css" media="screen">
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"twipsy.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
+<link rel="stylesheet" href="/styles/rank.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/tags.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/styles/karma.css" type="text/css" media="screen">
 
 {% endblock %}
 {# stylesheet special for overriding base style templates withing one file #}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"override.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/override.css' type='text/css' media='screen'>
 {# user css'es #}
-{% if user.settings.enable_dbcss %}<link rel='stylesheet' href='{% url "core:css-db" %}' type='text/css' media='screen'>{% endif %}
+
+{% if skin_css_path %}<link rel='stylesheet' href='{{ skin_css_path }}' type='text/css' media='screen'>{% endif %}
 {% block js %}
 {% include "js/locale.ru.html" %}
 <script type='text/javascript' src='/media/js/core.js'></script>
@@ -98,7 +97,6 @@
             <li><a href='{{ menu.get_url }}' {{ menu.attrs|safe }}>{{ menu.title }}</a></li>
             {% endfor %}
             {% comment %}
-            <li><a href='http://w40k.net/forum/topic/25/?page=1#post-84' data-title='w40k.net манифест,<br>заходи читай' rel='twipsy' data-placement='bottom' data-delay='300' data-html='true'>edictum</a></li>
             <li><a href='{% url "pybb_index" %}'>форум</a></li>
             <li><a href='{% url "blog:index" %}'>блог</a></li>
             <li><a href='{% url "news:news" %}'>сайт</a></li>{% endcomment %}

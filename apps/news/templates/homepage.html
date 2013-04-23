@@ -3,7 +3,7 @@
 {% block head_content %}
 
 {# <link rel='stylesheet' href='/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}news.css' type='text/css' media='screen'> #}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"news.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/news.css' type='text/css' media='screen'>
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feeds/news">
 <link rel="alternate" type="application/rss+xml" title="ATOM" href="/feeds/news_atom">
 {% endblock %}

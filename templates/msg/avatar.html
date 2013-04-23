@@ -1,4 +1,4 @@
-{% spaceless %}
+{% load coretags %}{% spaceless %}
 <div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ usr.date_joined|timesince }}</div>
 <span class='msg_ranks'>
 {% if usr.ranks %}статус:

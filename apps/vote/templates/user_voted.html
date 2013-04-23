@@ -9,7 +9,7 @@ li.quote_list{
 	list-style-image: url("/styles/images/lists/quote.png");
 }
 </style>
-<link rel='stylesheet' media='screen' type='text/css' href='/styles/{{ user.skin.name|getskincss:"vote.css" }}'>
+<link rel='stylesheet' media='screen' type='text/css' href='/styles/vote.css'>
 {% endblock %}
 {% block text_content %}
 {% if rates.object_list %}
@@ -18,7 +18,7 @@ li.quote_list{
 <ul>
 {% for rate in rates.object_list %}
 	<li>
-		<a href="{% url apps.wh.views.profile_by_nick nickname=rate.user.get_username %}">{% get_nickname rate.user %}</a>: {{ rate.rate }}
+		<a href="{% url apps.wh.views.profile_by_nick nickname=rate.user.get_username %}">{{ rate.user.get_nickname|safe }}</a>: {{ rate.rate }}
 		{% ifequal user rate.user %}
 			<a href="{% url "url_comment_rate" rate.id %}" title='добавить небольшой коментарий к рейту'>[+]</a>
 		{% endifequal %}

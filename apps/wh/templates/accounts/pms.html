@@ -3,7 +3,7 @@
 {% block title %}Приватные сообщения{% endblock %}
 {% block css %}
 {{ block.super }}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
 {% endblock %}
 {% block text_content %}
 
@@ -20,9 +20,9 @@
 		{% for p in pms.object_list %}
 			{% if not p.is_read %}
 			<li><a href='/pm/{{ p.id }}'>{{ p.title }}</a>,
-			{% if outcome %} для {% get_nickname p.addressee %}
+			{% if outcome %} для {{ p.addressee.get_nickname|safe }}
 			{%else %} от 
-				<a href="{% url apps.wh.views.profile_by_nick nickname=p.sender.get_username %}">{% get_nickname p.sender %}</a>
+				<a href="{% url apps.wh.views.profile_by_nick nickname=p.sender.get_username %}">{{ p.sender.get_nickname|safe }}</a>
 			{% endif %} 
 			(<small>{{ p.sent }}</small>)&nbsp;<a href='/pm/{{ p.id }}/delete' id='button'>Удалить</a></li>
 			{% endif %}
@@ -47,8 +47,8 @@
 		{% if p.is_read %}
 		<li><a href='/pm/{{ p.id }}'>{{ p.title }}</a>,
 		{% if outcome %} для 
-			<a href="{% url apps.wh.views.profile_by_nick nickname=p.addressee.nickname %}">{% get_nickname p.addressee %}</a>
-		{%else %} от {% get_nickname p.sender %}
+			<a href="{% url apps.wh.views.profile_by_nick nickname=p.addressee.nickname %}">{{ p.addressee.get_nickname|safe }}</a>
+		{%else %} от {{ p.sender.get_nickname|safe }}
 		{% endif %}
 		(<small> {{ p.sent }}</small>)&nbsp;<a href='/pm/{{ p.id }}/delete' id='button'>Удалить</a></li>
 		{% endif %}

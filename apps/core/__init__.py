@@ -4,13 +4,13 @@ import re
 
 from django.utils.translation import ugettext_lazy as _
 from django.template import add_to_builtins
-from django.template.loader import get_template,TemplateDoesNotExist
+from django.template.loader import get_template, TemplateDoesNotExist
 from datetime import datetime
 import os
 
 module_name = _('core')
 
-USERPERMS = (('can_test','Can test functional'),)
+USERPERMS = (('can_test', 'Can test functional'),)
 IMG_MAP = ('jpeg','jpg', 'gif', 'png' )
 
 def make_links_from_pages(pages, url_scheme=''):
@@ -29,12 +29,14 @@ def benchmark(request):
         }
     else:
         return {}
+
 def pages(request):
 	page = request.GET.get('page','1')
 	if not page.isdigit(): page = 1
 	return {
 		'page': int(page)
 	}
+
 def get_skin_template(user,template):
     if hasattr(user,'username'): #.is_authenticated(): #breaks karma
         if hasattr(user,'skin'):
@@ -76,5 +78,5 @@ def get_safe_message(message):
 		message = message.replace(line,'')
 	return message
 
-add_to_builtins('apps.core.templatetags.kamwhfilters')
-add_to_builtins('apps.core.templatetags.coretags')
+#add_to_builtins('apps.core.templatetags.kamwhfilters')
+#add_to_builtins('apps.core.templatetags.coretags')

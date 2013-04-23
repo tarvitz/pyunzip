@@ -1,7 +1,7 @@
 {% extends base_template %} {% load coretags %}
 {% block css %}
     {{ block.super }}
-    <link rel='stylesheet' media='screen' href='/styles/{{ user.skin.name|getskincss:"news.css" }}'>
+    <link rel='stylesheet' media='screen' href='/styles/news.css'>
 {% endblock %}
 {% block text_content %}
 {% if article %}

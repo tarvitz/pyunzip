@@ -58,9 +58,9 @@
 				{% endcomment %}
 					<img src='{% url "wh:avatar" r.show_player %}'><br>
 					{% if r.user %}
-						<a href='{% url "tabletop:rosters" r.user.get_username %}'>{% get_nickname r.user %}</a>
+						<a href='{% url "tabletop:rosters" r.user.get_username %}'>{{ r.user.get_nickname|safe }}</a>
 					{% else %}
-						{% get_raw_nickname r.show_player %}
+						{{ r.show_player }}
 					{% endif %}
 				{% endspaceless %}
 			</div> <!-- msg_avatar -->
@@ -70,10 +70,10 @@
 				<div class='reflects_right'></div>
 					{% spaceless %}
 						{% ifnotequal r.owner r.user %}
-							<div class='msg_txt'>Владелец: {% get_nickname r.owner %}</div>
+							<div class='msg_txt'>Владелец: {{ r.owner.get_nickname|safe }}</div>
 						{% endifnotequal %}
 					{% endspaceless %}
-					<div class='msg_txt'>Автор: <i>{% if r.user %}{% get_nickname r.user %}{% else %}{{ r.show_player }}{% endif %}</i></div>
+					<div class='msg_txt'>Автор: <i>{% if r.user %}{{ r.user.get_nickname }}{% else %}{{ r.show_player }}{% endif %}</i></div>
                     <div class='msg_txt'>Побед/поражений: </i>: {{ r.wins }}/{{ r.defeats }}</div>
 					<div class='msg_txt'>Кодекс: <i>{{ r.codex }}</i></div>
 					<div class='msg_txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>

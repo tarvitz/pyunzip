@@ -1,7 +1,7 @@
 {% extends base_template  %} {% load i18n %}
 {% block css %}
 	{{ block.super }}
-	<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css" }}' media='screen' type='text/css'>
+	<link rel='stylesheet' href='/styles/tabletop.css' media='screen' type='text/css'>
 	{% if user.settings.enable_autocomplete %}<link rel='stylesheet' type='text/css' href='/styles/{{ user.skin.name|getskincss:"self-jquery-ui.css" }}' media='screen'>{% endif %}
 {% endblock %}
 {% block js %}

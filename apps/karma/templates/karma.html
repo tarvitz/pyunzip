@@ -1,7 +1,7 @@
 {% extends base_template %}
 {% block css %}
 {{ block.super }}
-<link rel="stylesheet" href="/styles/{{ user.skin.name|getskincss:"karma.css" }}" type='text/css' media='screen'>
+<link rel="stylesheet" href="/styles/karma.css" type='text/css' media='screen'>
 {% endblock %}
 {% block text_content %}
 <center><span class='attention_green'><b>К</b></span>арма</center>
@@ -11,18 +11,18 @@
 <div class='transparency_black'></div>
 {% for k in karmas.object_list %}
 	{% spaceless %}
-	{% ifequal k.karma_value "0" %} {# lost in warp #}
+	{% if k.karma_value == 0 %} {# lost in warp #}
 			<span class='karma_alter_failed' title='Ваша кармическая сила осталась непоколебима, ваши недоброжелатели негодуют, психосила затеряна в варпе'>{{ k.karma_value }}</span></span>
 	{% else %}
-		{% if k.karma_value|gt:"0" %} {# positive #}
+		{% if k.karma_value > 0 %} {# positive #}
 			<span class='karma_alter_positive' title='Ваша кармическая сила увеличилась, скорее всего вы на правильном пути'>{{ k.karma_value }}</span>
 		{% else %} {# negative #}
 			<span class='karma_alter_negative' title='Ваша кармическая сила увядает, скорее всего ваши действия неправильны'>{{ k.karma_value }}</span>
 		{% endif %}
-	{% endifequal %}
+	{% endif %}
 			<span class='karma_comment'>{% if k.url %}<a href='{{ k.url }}'>{{ k.comment }}</a> {% else %}{{ k.comment }}{% endif %}</span>
 			<span class='karma_date'>({{ k.date|date:"Y/M/d, H:m:s" }})</span>
-			<span class='karma_voter'>[<a href="{% url "wh:profile-by-nick" nickname=k.voter.get_username %}">{% get_nickname k.voter %}</a>]</span>
+			<span class='karma_voter'>[<a href="{% url "wh:profile-by-nick" nickname=k.voter.get_username %}">{{ k.voter.get_nickname|safe }}</a>]</span>
 			<br>
 	{% endspaceless %}
 {% endfor %}

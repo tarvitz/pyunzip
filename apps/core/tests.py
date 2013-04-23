@@ -14,11 +14,12 @@ from django.template.loader import get_template
 from datetime import datetime
 from django.shortcuts import RequestContext
 
-class CodeTest(TestCase):
+class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
         'tests/fixtures/load_news_categories.json',
-        'tests/fixtures/load_news.json'
+        'tests/fixtures/load_news.json',
+        #'tests/fixtures/load_comments.json',
     ]
     def setUp(self):
         pass
@@ -216,6 +217,8 @@ class CodeTest(TestCase):
 
     def test_admin_edit_comment(self):
         self.client.login(username='admin', password='123456')
+        user = User.objects.get(username='admin')
+        self.assertEqual(user.has_perm('news.edit_comments'), True)
         comment = self.create_comment()
         post = {
             'comment': 'Admin edit and on',
