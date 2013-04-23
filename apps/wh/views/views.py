@@ -739,7 +739,7 @@ def favicon(request):
             file_name = 'images/armies/%s/title_16x16.png' % (request.user.army.side.name.lower())
             #file_path = os.path.join(settings.MEDIA_ROOT,file_name)
             _file = open(os.path.join(settings.MEDIA_ROOT, file_name), 'rb')
-        except OSError:
+        except:
             _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
     else:
         _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
