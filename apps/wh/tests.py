@@ -206,13 +206,9 @@ class JustTest(TestCase):
         )
         os.lstat(user.avatar.path)
 
-    def test_profile_get_avatar_and_photo(self):
+    def test_profile_get_avatar(self):
         avatar_url = reverse('wh:avatar', args=('user', ))
-        photo_url = reverse('wh:photo', args=('user', ))
         response = self.client.get(avatar_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('image', response.get('Content-Type'))
-        response = self.client.get(photo_url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn('image', response.get('Content-Type'))
 

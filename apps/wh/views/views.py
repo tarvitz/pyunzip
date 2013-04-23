@@ -1,57 +1,51 @@
 # Create your views here.
 # ^^, coding: utf-8 ^^,
-#from settings import MEDIA_ROOT,FROM_EMAIL
 from django.conf import settings
-from apps.wh.models import Side,Army,PM,RegisterSid, WishList, Skin,Rank, User, \
-    Rank
+from apps.wh.models import (
+    Side, Army, PM, RegisterSid, Skin, Rank, User
+)
 from apps.core.models import UserSID
 from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse,HttpResponseServerError
 from django.template import RequestContext
 from django.shortcuts import render_to_response,get_object_or_404
 from django.contrib import auth
-from django.utils import simplejson
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission, lock_with_dev
 from apps.wh.decorators import prevent_bruteforce
-#from django.contrib.auth.models import User
-from django.core.paginator import EmptyPage, InvalidPage
+
 from django.core import serializers
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.mail import send_mail
 from django.forms.util import ErrorList
 from apps.wh.forms import (
-    UploadAvatarForm, UpdateProfileForm,
-    UpdateProfileModelForm, PMForm, RegisterForm, AddWishForm,
+    UpdateProfileModelForm, PMForm, RegisterForm,
     PasswordChangeForm, PasswordRecoverForm, LoginForm,
     SuperUserLoginForm,
     PasswordRestoreForm, PasswordRestoreInitiateForm
 )
-from apps.core import make_links_from_pages as make_links
+
 from apps.core import pages, get_skin_template
-from cStringIO import StringIO
+
 import Image
 from datetime import datetime,timedelta
 from hashlib import sha1
 from random import randint, random
-from django.template import Template,Context
+
 from django.http import Http404
-#filters
 from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
-#from django.views.generic.simple import direct_to_template
+
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import redirect
 from apps.core.helpers import (
     get_settings, get_object_or_none, paginate, can_act,
     handle_uploaded_file, render_to, get_object_or_None,
-    safe_ret
+    safe_ret, get_int_or_zero
 )
 import os
 
-#decorators
 def superuser_required(func,*args,**kwargs):
     def wrapper(*args, **kwargs):
         request = args[0]
@@ -60,8 +54,6 @@ def superuser_required(func,*args,**kwargs):
         else:
             return HttpResponseRedirect('/permission/denied')
     return wrapper
-
-#endofdecorators
 
 @render_to('accounts/login.html', allow_xhr=True)
 def login(request):
@@ -163,46 +155,15 @@ def profile_by_nick(request, nickname ='self'):
 @login_required
 def users(request):
     template = get_skin_template(request.user,'accounts/index.html')
-    page = request.GET.get('page',1)
+    page = get_int_or_zero(request.GET.get('page')) or 1
     users = User.objects.filter(is_active=True).order_by('date_joined')
-    _pages_ = get_settings(request.user,'objects_on_page',30)
-    #paginator = Paginator(users, _pages_)
-    #try:
-    #    users = paginator.page(page)
-    #    paginator.number = int(page)
-    #except (InvalidPage ,EmptyPage):
-    #    users = paginator.page(1)
-    #    paginator.number = page(1)
+    _pages_ = get_settings(request.user, 'objects_on_page', 30)
     users = paginate(users,page,pages=_pages_)
     return render_to_response(template,
         {'users':users,
         'page':users},
         context_instance=RequestContext(request))
 
-#CLEANUP:
-@login_required
-def upload_avatar(request):
-    template = get_skin_template(request.user,'test/upload_avatar.html')
-    if request.method == 'POST':
-        form = UploadAvatarForm(request.POST, request.FILES)
-        if form.is_valid():
-            #avatar_data = request.FILES['avatar']
-            avatar_data = form.cleaned_data['avatar']
-            file = ''
-            for i in avatar_data.chunks():
-                file += i
-            avatar = Image.open(StringIO(file))
-            #print "%s/temp/avatar_%s.jpg" % (MEDIA_ROOT,request.user.id)
-            avatar.save("%s/temp/avatar_%s.jpg" % (MEDIA_ROOT,request.user.id))
-            return HttpResponseRedirect('/upload/successfull')
-        else:
-            return render_to_response(template,
-                {'form': form,},
-                context_instance=RequestContext(request))
-    form = UploadAvatarForm()
-    return render_to_response(template,
-        {'form': form},
-        context_instance=RequestContext(request))
 
 @login_required
 def update_profile(request):
@@ -226,109 +187,6 @@ def update_profile(request):
     form = UpdateProfileModelForm(instance=request.user, request=request)
     return direct_to_template(request, template, {'form': form})
 
-@login_required
-def update_profile_old(request):
-    template = get_skin_template(request.user, 'accounts/update_profile_old.html')
-    sides = Side.objects.all().order_by('id')
-    armies = Army.objects.all()
-    sides_list = []
-    jlist = []
-    for side in sides:
-        for army in armies:
-            if army.side.id == side.id: jlist.append('armies[%s][%s]="%s";' % (side.id,army.id,army.name))
-
-    if request.method == 'POST':
-        form = UpdateProfileForm(request.POST, request.FILES, request=request)
-        if form.is_valid():
-            from PIL import Image
-            u = User.objects.get(id__exact=request.user.id)
-            avatar_data = form.cleaned_data['avatar']
-            photo_data = form.cleaned_data['photo']
-            if avatar_data:
-                avatar_file = ''
-                for i in avatar_data.chunks(): avatar_file += i
-                avatar = Image.open(StringIO(avatar_file))
-                avatar_path = "%s/avatars/avatar_%s.%s" % (settings.MEDIA_ROOT,request.user.id,
-                    avatar_data.name[avatar_data.name.rindex('.')+1:] )
-                avatar.save(avatar_path)
-                avatar_path = avatar_path[len(settings.MEDIA_ROOT):]
-                if avatar_path[0] == '/': avatar_path = avatar_path[1:]
-                u.plain_avatar = avatar_path
-            if photo_data:
-                photo_file = ''
-                for i in photo_data.chunks(): photo_file += i
-                photo = Image.open(StringIO(photo_file))
-                photo_path = "%s/photos/photo_%s.%s" % (settings.MEDIA_ROOT, request.user.id,
-                    photo_data.name[photo_data.name.rindex('.')+1:] )
-                photo.save(photo_path)
-                photo_path = photo_path[len(settings.MEDIA_ROOT):]
-                if photo_path[0] == '/': photo_path = photo_path[1:]
-                u.photo = photo_path
-            #nickname = form.cleaned_data['nickname']
-            #if not nickname: nickname = u.nickname
-            #if nickname: u.nickname = nickname
-            army = request.POST.get('army','')
-            if not army: army = u.army.id
-            try:
-                a = Army.objects.get(id__exact=army)
-            except Army.DoesNotExist:
-                a = Army.objects.all()[0]
-            old_army = u.army
-            u.army = a
-            #jid = form.cleaned_data['jid']
-            #uin = form.cleaned_data['uin']
-            #gender = form.cleaned_data['gender']
-            #if jid: u.jid = jid
-            #if uin: u.uin = uin
-            #автоматический финт
-            skin = Skin.objects.get(id=int(form.cleaned_data['skin']))
-            u.skin = skin
-            keys = ['about','email','jid','uin', 'gender','nickname','first_name','last_name']
-            for key in keys:
-                if form.cleaned_data[key]: setattr(u,key,form.cleaned_data[key])
-            #make avatar from army image and plain_avatar
-            if old_army != u.army or not u.avatar:
-                import Image
-                from math import trunc
-                army_img = os.path.join(settings.MEDIA_ROOT,'images/armies/%s/%s_16x16.png' % (u.army.side.name.lower(), u.army.name.lower()))
-                #TODO MAKE A REVERTION
-                #print army_img
-            u.save()
-            #return HttpResponseRedirect('/accounts/update/profile/successfull')
-            return HttpResponseRedirect('/accounts/update/profile/') #flip it back
-        else:
-            return render_to_response(template,
-                {'form': form ,
-                'sides':sides,
-                'armies':armies,
-                'armies_list': jlist},
-                context_instance=RequestContext(request))
-    form = UpdateProfileForm()
-    keys = ['about','email','jid','uin','gender', 'nickname','first_name','last_name']
-    for key in keys:
-        form.fields[key].initial = getattr(request.user,key)
-    return render_to_response(template,
-        {'form':form,
-        'sides':sides,
-        'armies':armies,
-        'armies_list': jlist},
-        context_instance=RequestContext(request))
-
-@login_required
-def armies_list(request):
-    template = get_skin_template(request.user, 'test/armies.html')
-    sides = Side.objects.all().order_by('id')
-    armies = Army.objects.all()
-    sides_list = []
-    jlist = []
-    for side in sides:
-        for army in armies:
-            if army.side.id == side.id: jlist.append('armies[%s][%s]="%s";' % (side.id,army.id,army.name))
-    return render_to_response(template,
-        {'sides':sides,
-        'armies': armies,
-        'armies_list': jlist},
-        context_instance=RequestContext(request))
 
 @login_required
 def pm_view(request):
@@ -393,6 +251,7 @@ def view_pms(request,outcome=False):
         'page': pm},
         context_instance=RequestContext(request,
             processors=[pages]))
+
 @login_required
 def view_pm(request,pm_id=0):
     template = get_skin_template(request.user, 'accounts/pm.html')
@@ -542,91 +401,6 @@ def get_math_image(request, sid=''):
     rsid.save()
     return HttpResponse(image, mimetype='image/png')
 
-#OBSOLETE, delete when it's possible
-def view_wish_list(request):
-    template = get_skin_template(request.user,'feedback/wishes.html')
-    try:
-        page = request.GET.get('p',1)
-    except:
-        page = 1
-    if request.user.is_superuser: wishes = WishList.objects.filter()
-    else: wishes = WishList.objects.filter(published=True)
-    _pages_ = get_settings(request.user,'objects_on_page',30)
-    paginator = Paginator(wishes,_pages_)
-    try:
-        wishes = paginator.page(page)
-        paginator.number = int(page)
-    except (EmptyPage, InvalidPage):
-        wishes = paginator.page(1)
-        paginator.number = int(1)
-    #links = make_links(paginator.num_pages)
-    links = paginator.page_range
-    return render_to_response(template,
-        {'wishes': wishes,
-        'links': links,
-        'page': paginator},
-        context_instance=RequestContext(request,
-            processors=[pages]))
-
-#realize anonymous possibilities
-@login_required
-@can_act
-def add_wish(request):
-    template = get_skin_template(request.user,'feedback/add_wish.html')
-    if request.method == 'POST':
-        form = AddWishForm(request.POST)
-        if form.is_valid():
-            post = form.cleaned_data['post']
-            #Here we shoud insert user check uping' if he is not Anonymous
-            author = request.user
-            ip = request.META['REMOTE_ADDR']
-            published = False
-            wish = WishList(post=post, author=author, ip=ip, published=published)
-            wish.save()
-            return HttpResponseRedirect('/feedback/wishes/added')
-
-        else:
-            return render_to_response(template,
-            {'form': form},
-            context_instance=RequestContext(request))
-    else:
-        form = AddWishForm()
-        return render_to_response(template,
-            {'form': form},
-            context_instance=RequestContext(request))
-@login_required
-def manage_wish(request,wish_id,filter=''):
-    #FIXME: add this ability to coders squad
-    if request.user.is_superuser:
-        try:
-            wish = WishList.objects.get(id=wish_id)
-            if filter == 'approve':
-                wish.approved = True
-                wish.published = True
-                wish.save()
-                return HttpResponseRedirect('../../')
-            elif filter == 'publish':
-                wish.published = True
-                wish.save()
-                return HttpResponseRedirect('../../')
-            elif filter == 'unpublish':
-                wish.published = False
-                wish.save()
-                return HttpResponseRedirect('../../')
-            elif filter == 'unapprove':
-                wish.approved = False
-                wish.save()
-                return HttpResponseRedirect('../../')
-            elif filter == 'done':
-                wish.delete()
-                return HttpResponseRedirect('../../')
-            else:
-                return HttpResponseRedirect('/feedback/wishes')
-        except WishList.DoesNotExist:
-            return HttpRedirect('/feedback/wishes')
-    else:
-        return HttpRedirect('/feedback/wishes')
-
 @login_required
 def change_password(request):
     template = get_skin_template(request.user, 'accounts/change_password.html')
@@ -697,37 +471,6 @@ def show_rank(request,id=None,codename=None):
         'img': img},
         context_instance=RequestContext(request))
 
-"""
-#implement unification method to edit simple text fields within ONE function
-@login_required
-@can_act
-def edit_rank(request,codename=None,id=None):
-    try:
-        rank = Rank.objects.get(codename__exact=codename)
-    except Rank.DoesNotExist:
-        error_msg = u"Rank not found"
-        return HttpResponseServerError(error_msg)
-    #insert perms
-    if request.method == 'POST':
-        post = request.POST.copy()
-        if post.has_key('text'):
-            if rank.description != post['text']:
-                rank.description = post['text']
-            #insert DDoS prevention
-            rank.save()
-            html = Template("[success]")
-            html = html.render(Context({}))
-            response = HttpResponse(html)
-            response['Content-Type'] = "text/javascript"
-            return response
-        else:
-            error_msg = u"Unknown data is submitted"
-            return HttpResponseServerError(error_msg)
-    else:
-        error_msg = u"no POST data is sent"
-        return HttpResponseServerError(error_msg)
-"""
-
 def get_rank(request, codename=None, id=None, raw=True):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
@@ -739,7 +482,7 @@ def get_rank(request, codename=None, id=None, raw=True):
         if not raw:
             rank.description = striptags(rank.description)
             rank.description = spadvfilter(rank.description)
-        response.write(serializers.serialize("json",[rank]))
+        response.write(serializers.serialize("json", [rank]))
         return response
     except Rank.DoesNotExist:
         msg_error = u"no rank"
@@ -765,15 +508,6 @@ def x_get_users_list(request,nick_part=''):
         response.write('[]')
     return response
 
-#CLEANUP:
-def urls_parse(request):
-    template = get_skin_template(request.user, 'test/urls_parse.html')
-    from urls import urlpatterns as urls
-    return render_to_response(template,
-        {'urls': urls,
-        'path': request.path},
-        context_instance=RequestContext(request))
-
 #deprecated, cleanse as soon as possible
 def get_armies_raw(request,id):
     response = HttpResponse()
@@ -785,7 +519,7 @@ def get_armies_raw(request,id):
         response.write('[failed]')
     return response
 
-def get_skins_raw(request,id):
+def get_skins_raw(request, id):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
     try:
@@ -798,6 +532,7 @@ def get_skins_raw(request,id):
         response.write('[failed]')
     return response
 
+#TODO: rewrite
 def get_user_avatar(request, nickname=''):
     response = HttpResponse()
     response['Content-Type'] = 'image/png'
@@ -821,23 +556,6 @@ def get_user_avatar(request, nickname=''):
         img = open(img_path,'rb')
         response.write(img.read())
     return response
-
-def get_user_photo(request,nickname):
-    response = HttpResponse()
-    response['Content-Type'] = 'image/jpeg'
-    user = get_object_or_404(User,nickname__iexact=nickname)
-    if user.photo:
-        response.write(user.photo.read())
-        return response
-    else:
-        reponse = HttpResponse()
-        response['Content-Type'] = 'image/jpg'
-        response.write(
-            open(os.path.join(
-                settings.MEDIA_ROOT, 'images/null-photo.jpg')
-            ).read()
-        )
-        return response
 
 def get_race_icon(request,race):
     response = HttpResponse()
@@ -1072,14 +790,3 @@ def password_restore(request, sid):
             form.save()
             return {'redirect': 'core:password-restored'}
     return {'form': form}
-
-
-#@login_required
-#@render_to('accounts/password_change.html')
-#def password_change(request):
-#    form = PasswordChangeForm(request.POST or None, instance=request.user)
-#    if request.method == 'POST':
-#        if form.is_valid():
-#            form.save()
-#            return {'redirect': 'wh:password-changed'}
-#    return {'form': form}
