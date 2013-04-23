@@ -1,8 +1,8 @@
 # coding: utf-8
 #from django.utils import unittest
 from django.test import TestCase
-import unittest
-from django.test.client import RequestFactory, Client
+#import unittest
+#from django.test.client import RequestFactory, Client
 from apps.news.models import Category, News
 from django.contrib.auth.models import User, AnonymousUser
 #from django.test.client import RequestFactory, Client
@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_object_or_None
-from django.db import connections
+#from django.db import connections
 from django.core.cache import cache
 from django.conf import settings
 from django.db.models import Q
@@ -19,6 +19,7 @@ from django.template import Context, Template
 from apps.core.helpers import paginate
 
 from datetime import datetime
+
 
 class JustTest(TestCase):
     fixtures = [
@@ -108,8 +109,6 @@ class JustTest(TestCase):
             raise AssertionError
 
     def test_user_login(self):
-        #import ipdb
-        #ipdb.set_trace()
         pass
 
     def test_urls_user(self):
@@ -457,6 +456,7 @@ class BenchmarkTest(TestCase):
         'tests/fixtures/load_news_categories.json',
         'tests/fixtures/production/load_news.json',
     ]
+
     def setUp(self):
         #self.request = RequestFactory()
         #self.client = Client()
@@ -475,17 +475,17 @@ class BenchmarkTest(TestCase):
             else:
                 self.client.logout()
             results = []
+            url = reverse('news:news')
             for i in xrange(1, 10):
                 n = datetime.now()
-                url = reverse('news:news')
-                response = self.client.get(url)
+                self.client.get(url)
                 offset = datetime.now() - n
                 results.append(offset.total_seconds())
             minimum = min(results)
             maximum = max(results)
             avg = sum(results) / len(results)
             msg = {
-                'time': offset, 'url': url, 'user': user or 'Anonymous',
+                'url': url, 'user': user or 'Anonymous',
                 'min': minimum, 'max': maximum, 'avg': avg
             }
             print "Benchmarking %(user)s %(url)s: min: %(min)s, max: %(max)s, avg: %(avg)s" % msg
@@ -518,19 +518,16 @@ class BenchmarkTemplatesTest(TestCase):
             'avg': sum(results) / len(results)
         }
 
-    def benchmark(self, template, context={}, runs=10):
+    def benchmark(self, template, context=None, runs=10):
         results = []
-        wr = True
+        context = context or {}
         for i in xrange(runs):
             n = datetime.now()
             if isinstance(template, basestring):
                 tmpl = Template(template)
             else:
                 tmpl = template
-            html = tmpl.render(Context(context))
-            #if wr:
-            #    open('file.html', 'w').write(html.encode('utf-8'))
-            #    wr = False
+            tmpl.render(Context(context))
             offset = datetime.now() - n
             results.append(offset.total_seconds())
         rmin = min(results)
@@ -545,7 +542,7 @@ class BenchmarkTemplatesTest(TestCase):
     def test_news_page_plain(self):
         print "Testing news page without render, only with context processors and stuff"
         template = get_template('news.html')
-        url = reverse('wh:login')  #  without anything worthless
+        url = reverse('wh:login')  # without anything worthless
         response = self.client.get(url)
         context = response.context[0]
 
