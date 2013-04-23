@@ -363,7 +363,7 @@ class BenchmarkTemplatesTest(TestCase):
             'avg': avg
         }
     def test_benchmark_get_form_tag(self):
-        template = """
+        template = """{% load coretags %}
         {% get_form 'apps.core.forms.CommentForm' as form %}
         <form class='' method='POST'>
         {% csrf_token %}

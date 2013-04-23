@@ -43,6 +43,7 @@ from apps.news.templatetags.newsfilters import spadvfilter
 from django.template.defaultfilters import striptags
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
+from django.shortcuts import redirect
 from apps.core.helpers import (
     get_settings, get_object_or_none, paginate, can_act,
     handle_uploaded_file, render_to, get_object_or_None,
@@ -475,7 +476,7 @@ def onsite_register(request):
             except RegisterSid.DoesNotExist:
                 #O_O
                 pass
-            return HttpResponseRedirect('/registered')
+            return redirect('wh:registered')
         else:
             #register denied
             rsids_byip = RegisterSid.objects.filter(ip=request.META['REMOTE_ADDR']).count()
@@ -636,7 +637,7 @@ def change_password(request):
             password = form.cleaned_data['password1']
             user.set_password(password)
             user.save()
-            return HttpResponseRedirect('/accounts/password/changed/successful')
+            return redirect('wh:password-changed')
 
     return render_to_response(template,
         {'form': form},

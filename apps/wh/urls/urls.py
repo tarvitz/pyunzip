@@ -82,5 +82,12 @@ urlpatterns = patterns('apps.wh.views',
         name='warning-alter-form'),
     #url(r'^miniquote/get/raw', 'get_miniquote_raw', name='miniquote-get-raw'), # todo: move to json
     url(r'^favicon.ico$', 'favicon', name='favicon'),
+    # static
+    url(r'^registered/$', direct_to_template,
+        {'template': 'accounts/registered.html'}, name='registered'
+    ),
+    url(r'password/recovered/$', direct_to_template,
+        {'template': 'accounts/password_changed.html'},
+        name='password-changed'
+    )
 )
-
