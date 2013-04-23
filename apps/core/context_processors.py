@@ -17,7 +17,7 @@ def base_template(request):
     if is_auth and request.user.skin:
         templ = "skins/%s/base.html" % (request.user.skin.name.lower())
         skin_css_path = "%(root)s/%(skin)s/main.css" % {
-            'root': settings.STYLES_ROOT,
+            'root': settings.STYLES_URL,
             'skin': request.user.skin.name.lower()
         }
         try:
