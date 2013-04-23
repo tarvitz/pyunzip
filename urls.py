@@ -59,6 +59,10 @@ urlpatterns = patterns('',
     #    {'template':'codex.html'})
     #
 )
+urlpatterns += patterns('',
+    ('^', include('django.contrib.flatpages.urls')),
+)
+
 
 if settings.DEV_SERVER:
     urlpatterns += patterns('',
