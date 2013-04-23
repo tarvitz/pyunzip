@@ -356,7 +356,7 @@ class JustTest(TestCase):
                 })
         if messages:
             for msg in messages:
-                print "Got error assigning: %(key) with %(err)s" % msg
+                print "Got error assigning: %(key)s with %(err)s" % msg
             raise AssertionError
         comment = warning.comments.filter(comment__iexact=post['comment'])
         self.assertEqual(comment.count(), 1)

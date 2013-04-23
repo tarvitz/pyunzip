@@ -1,6 +1,6 @@
 from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
-from django.utils.translation import ugettext_lazy as _
+#from django.utils.translation import ugettext_lazy as _
 
 urlpatterns = patterns('apps.wh.views.views',
     url('^login/$', 'login', name='login'),
