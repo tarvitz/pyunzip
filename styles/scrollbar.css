@@ -6,6 +6,8 @@ textarea::-webkit-scrollbar {
 /* Track */
 textarea::-webkit-scrollbar-track {
     border: 1px solid #ccc;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
 }
  
 /* Handle */

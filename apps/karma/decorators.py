@@ -26,7 +26,7 @@ def amount_comments_required(amount):
     def decorator(func):
         def wrapper(*args,**kwargs):
             request = args[0]
-            count = request.user.comments_count
+            count = request.user.get_comments_count()
             if count >= amount:
                 return func(*args,**kwargs)
             else:
@@ -37,7 +37,7 @@ def amount_comments_required(amount):
 def twenty_comments_required(func,*args,**kwargs):
     def wrapper(*args,**kwargs):
         request = args[0]
-        if request.user.comments_count > 20:
+        if request.user.get_comments_count() > 20:
             return func(*args,**kwargs)
         else:
             return HttpResponseRedirect('/user/power/insufficient/')
