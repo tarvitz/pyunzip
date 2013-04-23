@@ -2,7 +2,7 @@ from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = patterns('apps.wh.views',
+urlpatterns = patterns('apps.wh.views.views',
     url('^login/$', 'login', name='login'),
     url('^sulogin/$', 'sulogin',
         name='superlogin'),
@@ -63,7 +63,7 @@ urlpatterns = patterns('apps.wh.views',
         name='rank'),
     url(r'^ranks/(?P<codename>[\w\s]+)/get/$', 'get_rank', name='rank-get'),
     url(r'^ranks/(?P<codename>[\w\s]+)/get/formatted/$', 'get_rank', {'raw':False}, name='rank-get-raw'), #todo: move to json
-    url('^warnings/(?P<nickname>[\w\s]+)/(?P<type>(increase|decrease))/$', 'alter_warning',
+    url('^warnings/(?P<nickname>[\w\s]+)/(?P<typ>(increase|decrease))/$', 'alter_warning',
         name='warning-alter'),
     url('^warnings/alter/(?P<nickname>[\w\s]+)/$', 'alter_warning_form',
         name='warning-alter-form'),

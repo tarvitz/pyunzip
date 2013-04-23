@@ -131,12 +131,9 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.menu.context_processors.menu',
 )
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    #os.path.join(os.path.dirname(__file__), 'templates').replace('\\','/'),
     rel_path('templates'),
 )
+
 #FILE_UPLOAD_HANDLERS = (
 #    "apps.core.handlers.UploadProgressHandler",
 #    "django.core.files.uploadhandler.MemoryFileUploadHandler",

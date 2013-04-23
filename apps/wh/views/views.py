@@ -6,9 +6,9 @@ from apps.wh.models import (
 )
 from apps.core.models import UserSID
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse,HttpResponseServerError
+from django.http import HttpResponse, HttpResponseServerError
 from django.template import RequestContext
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib import auth
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
@@ -29,7 +29,7 @@ from apps.wh.forms import (
 from apps.core import pages, get_skin_template
 
 import Image
-from datetime import datetime,timedelta
+from datetime import datetime, timedelta
 from hashlib import sha1
 from random import randint, random
 
@@ -46,14 +46,16 @@ from apps.core.helpers import (
 )
 import os
 
-def superuser_required(func,*args,**kwargs):
+
+def superuser_required(func):
     def wrapper(*args, **kwargs):
         request = args[0]
         if request.user.is_superuser:
-            return func(*args,**kwargs)
+            return func(*args, **kwargs)
         else:
-            return HttpResponseRedirect('/permission/denied')
+            return redirect('/permission/denied')
     return wrapper
+
 
 @render_to('accounts/login.html', allow_xhr=True)
 def login(request):
@@ -68,6 +70,7 @@ def login(request):
             return {'redirect': '/'}
     return {'form': form}
 
+
 #KIND A HACK o_O
 @superuser_required
 def sulogin(request):
@@ -79,90 +82,112 @@ def sulogin(request):
         if user:
             user.backend = 'django.contrib.auth.backends.ModelBackend'
             auth.login(request, user)
-            return HttpResponseRedirect(request.GET.get('next') or '/')
+            return redirect(request.GET.get('next') or '/')
         else:
             raise Http404("no such user")
     return render_to_response(
         'accounts/login.html', {
-            'next': referer,'referer':referer,
+            'next': referer,
+            'referer': referer,
             'form': form
         },
         context_instance=RequestContext(request)
     )
 
+
 def logout(request):
     if hasattr(request.user, 'useractivity'):
-        request.user.useractivity.is_logout = True #do not display users whom logged out
+        #do not display users whom logged out
+        request.user.useractivity.is_logout = True
         request.user.useractivity.save()
     auth.logout(request)
-    return HttpResponseRedirect('/')
+    return redirect('/')
+
 
 #Поиск по имени рега
 #Переписать все это нахуй, стремно как-то выглядит
 #upd: 06.10.2010 - внатуре, сижу ржу над топорностью, надо бы переписать и вправду
+#upd: 22.04.2013 - надо бы не ругаться :)
 @login_required
 def profile(request, account_name='self'):
-    template = get_skin_template(request.user,'accounts/profile.html')
+    template = get_skin_template(request.user, 'accounts/profile.html')
     if account_name == 'self':
-        from apps.files.models import Gallery
-        #galleries = Gallery.objects.filter(owner=request.user)
-        return render_to_response(template,
-            {'usr': request.user,
-            '__galleries':'#'}, #still not implemented
+        return render_to_response(
+            template, {
+                'usr': request.user,
+                '__galleries': '#'
+            },  # still not implemented
             context_instance=RequestContext(request))
     try:
         user = User.objects.get(username__exact=account_name)
         permissions = user.user_permissions.all()
     except User.DoesNotExist:
-        user = {'errors':_('There is no such user')}
+        user = {'errors': _('There is no such user')}
         permissions = {}
-    return render_to_response(template,
-        {'usr': user,
-        'userperms': permissions},
-        context_instance=RequestContext(request))
+    return render_to_response(
+        template,
+        {
+            'usr': user,
+            'userperms': permissions
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 #Поиск по имени ника
 @login_required
-def profile_by_nick(request, nickname ='self'):
+def profile_by_nick(request, nickname='self'):
     template = get_skin_template(request.user, 'accounts/profile.html')
     from apps.files.models import Gallery
     if nickname == 'self':
-        galleries = Gallery.objects.filter()
-        return render_to_response('accounts/profile.html',
-            {'usr': request.user,
-            'galleries':galleries},
+        galleries = Gallery.objects.all()
+        return render_to_response(
+            'accounts/profile.html',
+            {
+                'usr': request.user,
+                'galleries': galleries
+            },
             context_instance=RequestContext(request))
     try:
         user = User.objects.get(nickname__exact=nickname)
         galleries = Gallery.objects.filter()
         if not user.is_active:
-            return HttpResponseRedirect('/user/does/not/exist')
-    except    User.DoesNotExist:
-            return HttpResponseRedirect('/user/does/not/exist')
+            return redirect('/user/does/not/exist')
+    except User.DoesNotExist:
+            return redirect('/user/does/not/exist')
 
-    if hasattr(user,'user_permissions'):
+    if hasattr(user, 'user_permissions'):
         permissions = user.user_permissions.all()
     else:
         permissions = dict()
 
-    return render_to_response(template,
-        {'usr': user,
-        'userperms': permissions,
-        'galleries': galleries},
-        context_instance=RequestContext(request))
+    return render_to_response(
+        template,
+        {
+            'usr': user,
+            'userperms': permissions,
+            'galleries': galleries
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 #Все пользователи
 @login_required
 def users(request):
-    template = get_skin_template(request.user,'accounts/index.html')
+    template = get_skin_template(request.user, 'accounts/index.html')
     page = get_int_or_zero(request.GET.get('page')) or 1
     users = User.objects.filter(is_active=True).order_by('date_joined')
     _pages_ = get_settings(request.user, 'objects_on_page', 30)
-    users = paginate(users,page,pages=_pages_)
-    return render_to_response(template,
-        {'users':users,
-        'page':users},
-        context_instance=RequestContext(request))
+    users = paginate(users, page, pages=_pages_)
+    return render_to_response(
+        template,
+        {
+            'users': users,
+            'page': users
+        },
+        context_instance=RequestContext(request)
+    )
 
 
 @login_required
@@ -172,18 +197,24 @@ def update_profile(request):
         form = UpdateProfileModelForm(request.POST, request.FILES, instance=request.user, request=request)
         if form.is_valid():
             if 'avatar' in request.FILES:
-                avatar = handle_uploaded_file(request.FILES['avatar'],
-                    'avatars/%s' % request.user.id)
+                avatar = handle_uploaded_file(
+                    request.FILES['avatar'],
+                    'avatars/%s' % request.user.id
+                )
                 form.instance.avatar = avatar
             if 'photo' in request.FILES:
-                photo = handle_uploaded_file(request.FILES['photo'],
-                    'photos/%s' % request.user.id)
+                photo = handle_uploaded_file(
+                    request.FILES['photo'],
+                    'photos/%s' % request.user.id
+                )
                 form.instance.photo = photo
             form.save()
-            return HttpResponseRedirect(reverse('wh:profile'))
+            return redirect(reverse('wh:profile'))
         else:
-            return direct_to_template(request, template,
-                {'form': form})
+            return direct_to_template(
+                request, template,
+                {'form': form}
+            )
     form = UpdateProfileModelForm(instance=request.user, request=request)
     return direct_to_template(request, template, {'form': form})
 
@@ -192,18 +223,23 @@ def update_profile(request):
 def pm_view(request):
     template = get_skin_template(request.user, 'pm.html')
     user = request.user
-    sent = PM.objects.filter(sender=user,dbs=False).count()
-    recv = PM.objects.filter(addressee=user,dba=False).count()
-    all = int(sent)+int(recv)
-    return render_to_response(template,
-        {'pm_sent': sent,
-        'pm_recv': recv,
-        'pm_all': all},
-        context_instance=RequestContext(request))
+    _sent = PM.objects.filter(sender=user, dbs=False).count()
+    recv = PM.objects.filter(addressee=user, dba=False).count()
+    msg = int(_sent) + int(recv)
+    return render_to_response(
+        template,
+        {
+            'pm_sent': _sent,
+            'pm_recv': recv,
+            'pm_all': msg
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 @login_required
 @can_act
-def send_pm(request,nickname=''):
+def send_pm(request, nickname=''):
     template = get_skin_template(request.user, 'accounts/send_pm.html')
     if request.method == 'POST':
         form = PMForm(request.POST, request=request)
@@ -214,95 +250,116 @@ def send_pm(request,nickname=''):
             title = form.cleaned_data['title']
             content = form.cleaned_data['content']
             now = datetime.now()
-            sender_chk_limit = PM.objects.filter(sender=sender,dbs=False).count()
+            sender_chk_limit = PM.objects.filter(sender=sender, dbs=False).count()
             if int(sender_chk_limit) > 100:
-                return HttpResponseRedirect('/pm/send/senderlimiterror')
-            addr_chk_limit = PM.objects.filter(addressee=a,dba=False).count()
+                return redirect('/pm/send/senderlimiterror')
+            addr_chk_limit = PM.objects.filter(addressee=a, dba=False).count()
             if int(addr_chk_limit) > 100:
-                return HttpResponseRedirect('/pm/send/addresseelimiterror')
-            pm = PM(sender=sender,addressee=a,title=title,content=content,sent=now)
-            pm.save()
+                return redirect('/pm/send/addresseelimiterror')
+            PM.objects.create(
+                sender=sender, addressee=a, title=title,
+                content=content, sent=now
+            )
+            #pm.save()
             #send notification here
-            return HttpResponseRedirect('/pm/send/successfull')
+            return redirect('/pm/send/successfull')
         else:
-            return render_to_response(template,
-                {'form': form,},
-                context_instance=RequestContext(request))
+            return render_to_response(
+                template,
+                {'form': form},
+                context_instance=RequestContext(request)
+            )
     else:
         form = PMForm()
-        if nickname: form.fields['addressee'].initial = nickname
-        return render_to_response(template,
-            {'form': form,},
-            context_instance=RequestContext(request))
+        if nickname:
+            form.fields['addressee'].initial = nickname
+        return render_to_response(
+            template,
+            {'form': form},
+            context_instance=RequestContext(request)
+        )
+
 
 @login_required
-def view_pms(request,outcome=False):
+def view_pms(request, outcome=False):
     template = get_skin_template(request.user, 'accounts/pms.html')
-    if outcome == True:
-        pm = PM.objects.filter(sender=request.user,dbs=False).order_by('-sent')
+    if outcome:
+        pm = PM.objects.filter(
+            sender=request.user, dbs=False).order_by('-sent')
     else:
-        pm = PM.objects.filter(addressee=request.user,dba=False).order_by('-sent')
-    _pages_ = get_settings(request.user,'pms_on_page',50)
-    page = request.GET.get('page',1)
-    pm = paginate(pm,page,pages=_pages_)
-    return render_to_response(template,
-        {'pms': pm,
-        'outcome': outcome,
-        'page': pm},
-        context_instance=RequestContext(request,
-            processors=[pages]))
+        pm = PM.objects.filter(
+            addressee=request.user, dba=False
+        ).order_by('-sent')
+    _pages_ = get_settings(request.user, 'pms_on_page', 50)
+    page = request.GET.get('page', 1)
+    pm = paginate(pm, page, pages=_pages_)
+    return render_to_response(
+        template,
+        {
+            'pms': pm,
+            'outcome': outcome,
+            'page': pm
+        },
+        context_instance=RequestContext(
+            request,
+            processors=[pages]
+        )
+    )
+
 
 @login_required
-def view_pm(request,pm_id=0):
+def view_pm(request, pm_id=0):
     template = get_skin_template(request.user, 'accounts/pm.html')
     try:
         pm = PM.objects.get(id=pm_id)
     except PM.DoesNotExist:
-        return HttpResponseRedirect('/pm/doesnotexist')
+        return redirect('/pm/doesnotexist')
     user = request.user
     if (user.id != pm.sender.id) and (user.id != pm.addressee.id):
-        return HttpResponseRedirect('/pm/doesnotexist')
+        return redirect('/pm/doesnotexist')
     if user == pm.addressee:
         pm.is_read = True
         pm.save()
-    return render_to_response(template,
-        {'pmsg': pm },
-        context_instance=RequestContext(request))
+    return render_to_response(
+        template,
+        {'pmsg': pm},
+        context_instance=RequestContext(request)
+    )
+
 
 @login_required
-def delete_pm(request,pm_id=0, approve='force'):
+def delete_pm(request, pm_id=0):
     user = request.user
-    try:
-        pm = PM.objects.get(id=pm_id)
-        if pm.sender == user:
-            if pm.dba:
-                pm.delete()
-            else:
-                pm.dbs = True
-                pm.save()
-            return HttpResponseRedirect('/pm/deleted')
-        elif pm.addressee == user:
-            if pm.dbs:
-                pm.delete()
-            else:
-                pm.dba = True
-                pm.save()
-            return HttpResponseRedirect('/pm/deleted')
+    pm = get_object_or_404(PM, id=pm_id)
+    if pm.sender == user:
+        if pm.dba:
+            pm.delete()
         else:
-            return HttpResponseRedirect('/pm/permissiondenied')
-    except:
-        HttpResponseRedirect('/pm/doesnotexist')
+            pm.dbs = True
+            pm.save()
+        return redirect('/pm/deleted')
+    elif pm.addressee == user:
+        if pm.dbs:
+            pm.delete()
+        else:
+            pm.dba = True
+            pm.save()
+        return redirect('/pm/deleted')
+
+    return redirect('/pm/permissiondenied')
+
 
 @lock_with_dev({'ALLOW_REGISTER': True})
 def onsite_register(request):
-    template = get_skin_template(request.user,'accounts/register.html')
+    template = get_skin_template(request.user, 'accounts/register.html')
     if request.user.username:
-        return HttpResponseRedirect('/')
+        return redirect('/')
     #old sids deletion
     rsids = RegisterSid.objects.all()
     now = datetime.now()
     for rsid in rsids:
-        if rsid.expired < now: rsid.delete()
+        if rsid.expired < now:
+            rsid.delete()
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -311,7 +368,7 @@ def onsite_register(request):
             username = form.cleaned_data['username']
             nickname = form.cleaned_data['nickname']
             email = form.cleaned_data['email']
-            newuser = User(username=username,email=email,nickname=nickname)
+            newuser = User(username=username, email=email, nickname=nickname)
             newuser.set_password(password)
             #a kind of dangerous but ..
             skin = Skin.objects.get(name__iexact='default')
@@ -326,7 +383,7 @@ def onsite_register(request):
             try:
                 newuser_rank = Rank.objects.get(codename='users')
             except Rank.DoesNotExist:
-               newuser_rank = Rank.objects.order_by('id')[0]
+                newuser_rank = Rank.objects.order_by('id')[0]
             newuser.ranks.add(newuser_rank)
             newuser.save()
             try:
@@ -342,57 +399,77 @@ def onsite_register(request):
             if rsids_byip > 5:
                 msg = _('You\'ve exceeded limit of registration, please wait 10 minutes and try again, thank you')
                 form._errors['answ'] = ErrorList([msg])
-                return render_to_response(template,
+                return render_to_response(
+                    template,
                     {'form': form},
-                    context_instance=RequestContext(request))
+                    context_instance=RequestContext(request)
+                )
 
             sid = form.data.get('sid')
-            return render_to_response(template,
-                {'form': form,
-                'sid': sid},
+            return render_to_response(
+                template,
+                {
+                    'form': form,
+                    'sid': sid
+                },
                 context_instance=RequestContext(request))
     else:
         form = RegisterForm()
+        sid = sha1(str(randint(0, 100))).hexdigest()
         while 1:
-            sid = sha1(str(randint(0,100))).hexdigest()
+            sid = sha1(str(randint(0, 100))).hexdigest()
             sids = RegisterSid.objects.filter(sid=sid)
-            if not sids: break
+            if not sids:
+                break
         form.fields['sid'].initial = sid
-        return render_to_response(template,
-            {'form': form,
-            'sid': sid},
-            context_instance=RequestContext(request))
+        return render_to_response(
+            template,
+            {
+                'form': form,
+                'sid': sid
+            },
+            context_instance=RequestContext(request)
+        )
+
 
 def get_math_image(request, sid=''):
-    import ImageFont, ImageDraw
+    import ImageFont
+    import ImageDraw
     #for joke sake
     if not sid:
-        image = Image.new('RGBA', (630,40),(0,0,0))
+        image = Image.new('RGBA', (630, 40), (0, 0, 0))
         #print os.path.join(settings.MEDIA_ROOT,'arial.ttf')
-        ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
+        ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'arial.ttf'), 24)
         draw = ImageDraw.Draw(image)
-        draw.text((2,0), 'Hope is the first step on the road to the disappointment', font=ifo)
-        img_path = os.path.join(settings.MEDIA_ROOT,'tmp/bannerimage.png')
-        image.save(img_path,'PNG')
+        draw.text((2, 0), 'Hope is the first step on the road to the disappointment', font=ifo)
+        img_path = os.path.join(settings.MEDIA_ROOT, 'tmp/bannerimage.png')
+        image.save(img_path, 'PNG')
         image = open(img_path).read()
         os.remove(img_path)
         return HttpResponse(image, mimetype='image/png')
     #end for joke sake
+    f = 0
+    s = 0
     while 1:
-        f = randint(10,98)
-        s = randint(2,9)
-        if f % s == 0: break
-    t = randint(0,20)
-    image = Image.new('RGBA',(95,40),(0,0,0))
-    ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT,'arial.ttf'), 24)
+        f = randint(10, 98)
+        s = randint(2, 9)
+        if f % s == 0:
+            break
+    t = randint(0, 20)
+    image = Image.new('RGBA', (95, 40), (0, 0, 0))
+    ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'arial.ttf'), 24)
     #print ifo
     draw = ImageDraw.Draw(image)
-    draw.text((2, 0), str(f)+'/'+str(s)+'-'+str(t), font=ifo)
+    draw.text(
+        (2, 0),
+        str(f) + '/' + str(s) + '-' + str(t),
+        font=ifo
+    )
     fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT, str(random())[2:6])
     image.save(fp_name, 'PNG')
-    image = open(fp_name,'r').read()
+    image = open(fp_name, 'r').read()
     os.remove(fp_name)
-    answ = f/s-t
+    answ = f / s - t
     #if sid:
     offset = int(8)
     expired = datetime.now() + timedelta(minutes=offset)
@@ -400,6 +477,7 @@ def get_math_image(request, sid=''):
     rsid = RegisterSid(sid=sid, expired=expired, ip=ip, value=answ)
     rsid.save()
     return HttpResponse(image, mimetype='image/png')
+
 
 @login_required
 def change_password(request):
@@ -413,9 +491,12 @@ def change_password(request):
             user.save()
             return redirect('wh:password-changed')
 
-    return render_to_response(template,
+    return render_to_response(
+        template,
         {'form': form},
-        context_instance=RequestContext(request))
+        context_instance=RequestContext(request)
+    )
+
 
 @render_to('accounts/password_recovery.html')
 def password_recover(request):
@@ -440,43 +521,62 @@ def password_recover(request):
                 "Thank you for using our service."
             ) % (request.user.username, new_pass)
             if settings.SEND_MESSAGES:
-                send_mail('Password Changed', text_content, settings.FROM_EMAIL,
+                send_mail(
+                    'Password Changed',
+                    text_content, settings.FROM_EMAIL,
                     [email], fail_silently=False,
                     auth_user=settings.EMAIL_HOST_USER,
-                    auth_password=settings.EMAIL_HOST_PASSWORD)
+                    auth_password=settings.EMAIL_HOST_PASSWORD
+                )
             user.save()
             return {'redirect': '/accounts/password/changed/successful'}
     return {'form': form}
 
-def show_rank(request,id=None,codename=None):
+
+def show_rank(request, id=None, codename=None):
+    from os import stat
     if id is None and codename is None:
-        return HttpResponseRedirect('/')
-    template = get_skin_template(request.user,'ranks/rank.html')
+        return redirect('/')
+    template = get_skin_template(request.user, 'ranks/rank.html')
+    rank = None
     try:
         if codename:
             rank = Rank.objects.get(codename__exact=codename)
         elif id:
             rank = Rank.objects.get(id=id)
-        img = "%s/images/ranks/%s/%s.jpg" % (settings.MEDIA_ROOT,rank.type.type.lower(),rank.codename)
-        from os import stat
+        img = "%s/images/ranks/%s/%s.jpg" % (
+            settings.MEDIA_ROOT, rank.type.type.lower(), rank.codename
+        )
         try:
             stat(img)
             img = "images/ranks/%s/%s.jpg" % (rank.type.type.lower(), rank.codename)
         except OSError:
             img = "images/ranks/_none_.jpg"
-    except:
-        return HttpResponseRedirect('/')
-    return render_to_response(template,
-        {'rank':rank,
-        'img': img},
-        context_instance=RequestContext(request))
+    except Rank.DoesNotExist:
+        return redirect('/')
+    return render_to_response(
+        template,
+        {
+            'rank': rank,
+            'img': img
+        },
+        context_instance=RequestContext(request)
+    )
+
 
 def get_rank(request, codename=None, id=None, raw=True):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
+    qset = Q()
+    if codename:
+        qset = Q(codename__exact=codename)
+    elif id:
+        qset = Q(pk=id)
+    else:
+        pass
     try:
-        rank = Rank.objects.get(codename__exact=codename)
-        #FIXME :(
+        rank = Rank.objects.get(qset)
+        # FIXME: :(
         from time import sleep
         sleep(0.125)
         if not raw:
@@ -488,16 +588,19 @@ def get_rank(request, codename=None, id=None, raw=True):
         msg_error = u"no rank"
         return HttpResponseServerError(msg_error)
 
+
 #@has_permission('wh.can_test')
 #x means ajaX
 @login_required
-def x_get_users_list(request,nick_part=''):
+def x_get_users_list(request, nick_part=''):
+    nick = nick_part or ''
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
-    if len(nick_part)<2:
-    	response.write('[]')
-   	return response
-    users = User.objects.filter(nickname__icontains=nick_part,is_active=True)
+    if len(nick_part) < 2:
+        response.write('[]')
+        return response
+
+    users = User.objects.filter(nickname__icontains=nick, is_active=True)
     if users:
         #response.write(serializers.serialize('json',users))
         us = [i.nickname for i in users]
@@ -508,16 +611,18 @@ def x_get_users_list(request,nick_part=''):
         response.write('[]')
     return response
 
+
 #deprecated, cleanse as soon as possible
-def get_armies_raw(request,id):
+def get_armies_raw(request, id):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
     try:
         armies = Army.objects.filter(side__id__exact=int(id))
-        response.write(serializers.serialize("json",armies))
+        response.write(serializers.serialize("json", armies))
     except Army.DoesNotExist:
         response.write('[failed]')
     return response
+
 
 def get_skins_raw(request, id):
     response = HttpResponse()
@@ -525,12 +630,16 @@ def get_skins_raw(request, id):
     try:
         side = Side.objects.get(id=id)
         #skins = Skin.objects.filter(Q(name__iexact='default')|Q(fraction__id__exact=side.fraction.id)).order_by('id')
-        skins = Skin.objects.filter(Q(is_general=True)|Q(fraction__id__exact=side.fraction.id)).order_by('id')
-        response.write(serializers.serialize("json",skins))
+        skins = Skin.objects.filter(
+            Q(is_general=True) |
+            Q(fraction__id__exact=side.fraction.id)
+        ).order_by('id')
+        response.write(serializers.serialize("json", skins))
     except Side.DoesNotExist:
         #skins = []
         response.write('[failed]')
     return response
+
 
 #TODO: rewrite
 def get_user_avatar(request, nickname=''):
@@ -541,112 +650,154 @@ def get_user_avatar(request, nickname=''):
         if user.avatar:
             response.write(user.avatar.read())
         else:
-            if hasattr(user.army,'side'):
-                img_path = os.path.join(settings.MEDIA_ROOT,"avatars/%s/default.png" % (user.army.side.name.lower()))
+            if hasattr(user.army, 'side'):
+                img_path = os.path.join(
+                    settings.MEDIA_ROOT,
+                    "avatars/%s/default.png" % (user.army.side.name.lower())
+                )
             else:
-                img_path = os.path.join(settings.MEDIA_ROOT,"avatars/default.png")
+                img_path = os.path.join(
+                    settings.MEDIA_ROOT,
+                    "avatars/default.png"
+                )
             try:
-                img = open(img_path,'rb')
+                img = open(img_path, 'rb')
             except IOError:
-                img_path = os.path.join(settings.MEDIA_ROOT,'avatars/none.png')
-                img = open(img_path,'rb')
+                img_path = os.path.join(settings.MEDIA_ROOT, 'avatars/none.png')
+                img = open(img_path, 'rb')
             response.write(img.read())
     except User.DoesNotExist:
-        img_path = os.path.join(settings.MEDIA_ROOT,'avatars/none.png')
-        img = open(img_path,'rb')
+        img_path = os.path.join(settings.MEDIA_ROOT, 'avatars/none.png')
+        img = open(img_path, 'rb')
         response.write(img.read())
     return response
 
-def get_race_icon(request,race):
+
+def get_race_icon(request, race):
     response = HttpResponse()
     response['Content-Type'] = 'image/png'
-    race = get_object_or_none(Side,name__iexact=race)
+    race = get_object_or_none(Side, name__iexact=race)
     if race:
-        img_path = os.path.join(settings.MEDIA_ROOT,'images/armies/50x50/%s.png' % race.name.lower())
+        img_path = os.path.join(
+            settings.MEDIA_ROOT, 'images/armies/50x50/%s.png' % race.name.lower()
+        )
     else:
-        img_path = os.path.join(settings.MEDIA_ROOT,'images/armies/50x50/none.png')
+        img_path = os.path.join(
+            settings.MEDIA_ROOT, 'images/armies/50x50/none.png'
+        )
     try:
-        img = open(img_path,'rb')
+        img = open(img_path, 'rb')
     except IOError:
-        img_path = os.path.join(settings.MEDIA_ROOT,'images/armies/50x50/none.png')
+        img_path = os.path.join(
+            settings.MEDIA_ROOT, 'images/armies/50x50/none.png'
+        )
         img = open(img_path, 'rb')
     response.write(img.read())
     return response
 
-def get_user_side_icon(request,nickname=''):
+
+def get_user_side_icon(request, nickname=''):
     response = HttpResponse()
     response['Content-Type'] = 'image/png'
     try:
         user = User.objects.get(nickname__iexact=nickname)
-        if hasattr(user.army,'side'):
-            img_path = os.path.join(settings.MEDIA_ROOT,'accounts/50x50/%s.png' % user.army.side.name.lower())
+        if hasattr(user.army, 'side'):
+            img_path = os.path.join(
+                settings.MEDIA_ROOT,
+                'accounts/50x50/%s.png' % user.army.side.name.lower()
+            )
             try:
                 os.stat(img_path)
             except OSError:
-                img_path = os.path.join(settings.MEDIA_ROOT,'accounts/50x50/none.png')
-            img = open(img_path,'rb')
+                img_path = os.path.join(
+                    settings.MEDIA_ROOT, 'accounts/50x50/none.png'
+                )
+            img = open(img_path, 'rb')
         else:
-            img_path = os.path.join(settings.MEDIA_ROOT,'accounts/50x50/none.png')
-            img = open(img_path,'rb')
+            img_path = os.path.join(
+                settings.MEDIA_ROOT, 'accounts/50x50/none.png'
+            )
+            img = open(img_path, 'rb')
         response.write(img.read())
         del img
     except User.DoesNotExist:
-        img_path = os.path.join(settings.MEDIA_ROOT,'accounts/50x50/none.png')
-        img = open(img_path,'rb')
+        img_path = os.path.join(
+            settings.MEDIA_ROOT,
+            'accounts/50x50/none.png'
+        )
+        img = open(img_path, 'rb')
         response.write(img.read())
         del img
     return response
+
 
 def favicon(request):
     response = HttpResponse()
     response['Content-Type'] = 'image/vnd.microsoft.icon'
-    if hasattr(request.user,'nickname'):
+    if hasattr(request.user, 'nickname'):
         try:
             file_name = 'images/armies/%s/title_16x16.png' % (request.user.army.side.name.lower())
-            file_path = os.path.join(settings.MEDIA_ROOT,file_name)
-            file = open(os.path.join(settings.MEDIA_ROOT,file_name),'rb')
-        except:
-            file = open(os.path.join(settings.MEDIA_ROOT,'favicon.ico'),'rb')
+            #file_path = os.path.join(settings.MEDIA_ROOT,file_name)
+            _file = open(os.path.join(settings.MEDIA_ROOT, file_name), 'rb')
+        except OSError:
+            _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
     else:
-        file = open(os.path.join(settings.MEDIA_ROOT,'favicon.ico'),'rb')
-    response.write(file.read())
+        _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
+    response.write(_file.read())
     return response
+
 
 @has_permission('wh.set_warnings')
 @can_act
-def alter_warning(request,nickname,type):
+def alter_warning(request, nickname, typ):
     """alter_warning could increase or decrease warning level of the user """
-    from apps.wh.models import Warning,WarningType
+    from apps.wh.models import Warning, WarningType
     user = get_object_or_404(User, nickname__iexact=nickname)
     warnings = Warning.objects.filter(user__nickname__iexact=nickname)
-    if type in 'increase': type_offset = 1
-    if type in 'decrease': type_offset = -1
+
+    #if typ in 'increase':
+    #    type_offset = 1
+    #if typ in 'decrease':
+    #    type_offset = -1
+
+    type_offset = 1 if typ == 'increase' else -1
     if warnings:
         #fixing instabillity
-        if len(warnings)>1:
-            for n in xrange(1,len(warnings)-1):
+        if len(warnings) > 1:
+            for n in xrange(1, len(warnings)-1):
                 #Instabillity
                 warnings[n].remove()
         old_warning = warnings[0]
-        #FIXME: we should use more strict expired schema
-        from datetime import datetime,timedelta
-        expired = datetime.now()+timedelta(days=int(old_warning.level)*7)
-        new_warning = Warning(user=user,level=int(old_warning.level)+type_offset,expired=expired,style='color:red;')
+
+        # FIXME: we should use more strict expired schema
+        from datetime import datetime, timedelta
+        expired = datetime.now() + timedelta(
+            days=int(old_warning.level) * 7
+        )
+        new_warning = Warning(
+            user=user,
+            level=int(old_warning.level) + type_offset,
+            expired=expired,
+            style='color:red;'
+        )
         #search for a type
         #NOTICE that block could be dangerous because there could not be nor general warningtype nor common!
-        if type in 'decrease' and int(old_warning.level) == 1:
+        if typ in 'decrease' and int(old_warning.level) == 1:
             from django.contrib.contenttypes.models import ContentType
             from django.contrib.comments.models import Comment
-            ct = ContentType.objects.get(app_label='wh',model='warning')
+            ct = ContentType.objects.get(app_label='wh', model='warning')
             try:
-                comments = Comment.objects.filter(content_type=ct,object_pk=str(old_warning.pk))
+                comments = Comment.objects.filter(
+                    content_type=ct, object_pk=str(old_warning.pk)
+                )
                 if comments:
-		    for c in comments: c.delete()
+                    for c in comments:
+                        c.delete()
             except Comment.DoesNotExist:
                 #do nothing
                 pass
             old_warning.delete()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+            return redirect(request.META.get('HTTP_REFERER', '/'))
         try:
             warning_type = WarningType.objects.get(
                 side=safe_ret(user, 'army.side'),
@@ -659,14 +810,14 @@ def alter_warning(request,nickname,type):
                     is_general=True
                 )
             except WarningType.DoesNotExist:
-                return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+                return redirect(request.META.get('HTTP_REFERER', '/'))
 
         new_warning.type = warning_type
         new_warning.save()
     else:
         #we can not decreese null warnings :)
-        if type in 'decrease':
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+        if typ in 'decrease':
+            return redirect(request.META.get('HTTP_REFERER', '/'))
         #there is no warnings
         try:
             #common_warning contains warning message for each side
@@ -676,27 +827,31 @@ def alter_warning(request,nickname,type):
             )
         except WarningType.DoesNotExist:
             #we fail, so we search for general warning, JUST FOR ALL
-            warning_type = WarningType.objects.get(level=1,is_general=True)
-        from datetime import datetime,timedelta
-        expired = datetime.now()+timedelta(days=7)
-        warning = Warning(type=warning_type,user=user,level=1,style='color:red;',expired=expired)
+            warning_type = WarningType.objects.get(level=1, is_general=True)
+        from datetime import datetime, timedelta
+        expired = datetime.now() + timedelta(days=7)
+        warning = Warning(
+            type=warning_type, user=user, level=1,
+            style='color:red;', expired=expired
+        )
         warning.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 @has_permission('wh.set_warnings')
 @can_act
-def alter_warning_form(request,nickname):
+def alter_warning_form(request, nickname):
     #implement here an free warning alteration
-    from apps.wh.models import Warning,WarningType
-    template = get_skin_template(request.user,'warnings/alter.html')
+    from apps.wh.models import Warning, WarningType
+    template = get_skin_template(request.user, 'warnings/alter.html')
     from apps.wh.forms import WarningForm
-    warn_user = get_object_or_404(User,nickname__iexact=nickname)
+    warn_user = get_object_or_404(User, nickname__iexact=nickname)
     if request.method == 'POST':
-        form = WarningForm(request.POST,request=request)
+        form = WarningForm(request.POST, request=request)
         if form.is_valid():
             level = int(form.cleaned_data['level'])
             comment = form.cleaned_data['comment']
-            nickname = form.cleaned_data['nickname']
+            #nickname = form.cleaned_data['nickname']
             referer = form.cleaned_data['next']
             try:
                 warning_type = WarningType.objects.get(
@@ -705,8 +860,10 @@ def alter_warning_form(request,nickname):
                 )
             except WarningType.DoesNotExist:
                 #it's a little bit dangerous
-                warning_type = WarningType.objects.get(is_general=True,level=level)
-            expired = datetime.now()+timedelta(days=level*7)
+                warning_type = WarningType.objects.get(
+                    is_general=True, level=level
+                )
+            expired = datetime.now() + timedelta(days=level * 7)
             warning = Warning(
                 type=warning_type,
                 user=warn_user, level=level,
@@ -717,15 +874,15 @@ def alter_warning_form(request,nickname):
                 #saving comment for warning alteration
                 from django.contrib.contenttypes.models import ContentType
                 from django.contrib.comments.models import Comment
-                ct = ContentType.objects.get(app_label='wh',model='warning')
+                ct = ContentType.objects.get(app_label='wh', model='warning')
                 c = Comment(
                     content_type=ct, object_pk=str(warning.pk), user=request.user,
                     comment=comment, submit_date=datetime.now(), is_public=True, site_id=1
                 )
                 c.save()
-            return HttpResponseRedirect(referer)
+            return redirect(referer or '/')
         else:
-            return direct_to_template(request,template,{'form':form})
+            return direct_to_template(request, template, {'form': form})
     else:
         try:
             warning = Warning.objects.get(user=warn_user)
@@ -735,18 +892,20 @@ def alter_warning_form(request,nickname):
         form = WarningForm(request=request)
         form.fields['level'].initial = level
         form.fields['nickname'].initial = warn_user.nickname
-        form.fields['next'].initial = request.META.get('HTTP_REFERER','/')
-    return direct_to_template(request,template,{'form':form})
+        form.fields['next'].initial = request.META.get('HTTP_REFERER', '/')
+    return direct_to_template(request, template, {'form': form})
 
+
+# noinspection PyUnresolvedReferences
 @render_to('accounts/password_restore_initiate.html')
 def password_restore_initiate(request):
     form = PasswordRestoreInitiateForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             users = form.cleaned_data['users']
+            #sids = []
             sids = UserSID.objects.filter(user__in=users, expired=True)
-
-            sids = []
+            sids = list(sids)
             if not sids:
                 for user in users:
                     sid = UserSID.objects.create(user)
@@ -756,6 +915,7 @@ def password_restore_initiate(request):
                     sid = UserSID.objects.filter(
                         user=request.user).order_by('-id')[0]
                     sids.append(sid)
+                    (lambda x: x)(user)
 
             for sid in sids:
                 msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
