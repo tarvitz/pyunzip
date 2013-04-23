@@ -533,17 +533,17 @@ def password_recover(request):
     return {'form': form}
 
 
-def show_rank(request, id=None, codename=None):
+def show_rank(request, pk=None, codename=None):
     from os import stat
-    if id is None and codename is None:
+    if pk is None and codename is None:
         return redirect('/')
     template = get_skin_template(request.user, 'ranks/rank.html')
     rank = None
     try:
         if codename:
             rank = Rank.objects.get(codename__exact=codename)
-        elif id:
-            rank = Rank.objects.get(id=id)
+        elif pk:
+            rank = Rank.objects.get(pk=pk)
         img = "%s/images/ranks/%s/%s.jpg" % (
             settings.MEDIA_ROOT, rank.type.type.lower(), rank.codename
         )
@@ -564,14 +564,14 @@ def show_rank(request, id=None, codename=None):
     )
 
 
-def get_rank(request, codename=None, id=None, raw=True):
+def get_rank(request, codename=None, pk=None, raw=True):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
     qset = Q()
     if codename:
         qset = Q(codename__exact=codename)
-    elif id:
-        qset = Q(pk=id)
+    elif pk:
+        qset = Q(pk=pk)
     else:
         pass
     try:
@@ -613,22 +613,22 @@ def x_get_users_list(request, nick_part=''):
 
 
 #deprecated, cleanse as soon as possible
-def get_armies_raw(request, id):
+def get_armies_raw(request, pk):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
     try:
-        armies = Army.objects.filter(side__id__exact=int(id))
+        armies = Army.objects.filter(side__id__exact=int(pk))
         response.write(serializers.serialize("json", armies))
     except Army.DoesNotExist:
         response.write('[failed]')
     return response
 
 
-def get_skins_raw(request, id):
+def get_skins_raw(request, pk):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
     try:
-        side = Side.objects.get(id=id)
+        side = Side.objects.get(pk=pk)
         #skins = Skin.objects.filter(Q(name__iexact='default')|Q(fraction__id__exact=side.fraction.id)).order_by('id')
         skins = Skin.objects.filter(
             Q(is_general=True) |
