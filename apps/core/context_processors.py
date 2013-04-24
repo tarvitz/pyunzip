@@ -6,6 +6,13 @@ from apps.core.helpers import get_settings
 from django.template.loader import get_template, TemplateDoesNotExist
 from apps.helpers import get_self_ip_address
 
+
+def core(request):
+    base = base_template(request)
+    base.update(global_referer(request))
+    base.update(global_settings(request))
+    return base
+
 def session(request):
     return {'session': request.session}
 

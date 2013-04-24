@@ -116,18 +116,19 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     #deprecated
     #'django.core.context_processors.auth',
     'django.core.context_processors.request',
-    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
+    'django.contrib.auth.context_processors.auth',
     'apps.core.context_processors.global_settings',
     #'apps.core.context_processors.expressions',
     #'apps.core.context_processors.briefing_news',
     #'apps.core.context_processors.last_replays',
     #'apps.core.context_processors.pm',
     #'apps.core.context_processors.user_settings',
-    'apps.core.context_processors.global_referer',
-    'apps.core.context_processors.base_template',
-    'apps.core.context_processors.session',
+    'apps.core.context_processors.core',
+    #'apps.core.context_processors.global_referer',
+    #'apps.core.context_processors.base_template',
+    #'apps.core.context_processors.session',
     'apps.menu.context_processors.menu',
 )
 TEMPLATE_DIRS = (
