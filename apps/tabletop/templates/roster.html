@@ -91,7 +91,7 @@
 	<div class='msg_footer'>
 		{% spaceless %}
 			{% ifnotequal roster.user roster.owner %}
-				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{{ roster.owner.get_nickname }}</a>]
+				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{{ roster.owner.get_nickname|safe }}</a>]
 			{% endifnotequal %}
 			{% if perms.tabletop.edit_roster %}
             {% ifequal roster.owner user %}
