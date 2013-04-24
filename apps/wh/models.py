@@ -75,6 +75,9 @@ class MiniQuote(models.Model):
         _('content'), max_length=255
     )
 
+    def __unicode__(self):
+        return self.content
+
     class Meta:
         verbose_name = _('Mini Quote')
         verbose_name_plural = _('Mini Quotes')

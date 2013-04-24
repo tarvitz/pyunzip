@@ -113,14 +113,11 @@ def show_best(request,app_model):
 @can_act
 def comment_rate(request, id):
     template = get_skin_template(request.user,'comment_rate.html')
-    rate = get_object_or_none(Rate,id=id)
+    rate = get_object_or_404(Rate, pk=id)
     if request.method == 'POST':
         form = VoteForm(request.POST)
         if form.is_valid():
-            if rate:
-                rate.comment = form.cleaned_data['comment']
-            else:
-                return HttpResponseRedirect('/vote/rate/does/not/exist')
+            rate.comment = form.cleaned_data['comment']
             rate.save()
             return HttpResponseRedirect(form.cleaned_data.get('next','/'))
         else:

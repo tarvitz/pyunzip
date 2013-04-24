@@ -60,7 +60,7 @@ class JustTest(TestCase):
 
     """ testing helpers module """
     def test_urls(self):
-        prefix='core'
+        prefix = 'core'
         urls = [
             'password-restored',
             'password-restore-initiated',
@@ -72,6 +72,23 @@ class JustTest(TestCase):
             'wot_verification',
             'url_robots',
             'subscription',
+            # static
+            'vote-invalid-object',
+            'karma-self-alter',
+            'karma-power-insufficient',
+            'user-not-exists',
+            'timeout',
+            'rules',
+            'pm-success',
+            'sender-limit-error',
+            'addressee-limit-error',
+            'pm-permission-denied',
+            'pm-deleted',
+            'permission-denied',
+            'image-undeletable',
+            'image-deleted',
+            'password-changed'
+
         ]
         messages = []
         for user in ['user', 'admin', None]:
