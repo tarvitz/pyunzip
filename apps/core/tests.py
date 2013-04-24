@@ -79,6 +79,7 @@ class JustTest(TestCase):
             'user-not-exists',
             'timeout',
             'rules',
+            'faq',
             'pm-success',
             'sender-limit-error',
             'addressee-limit-error',
