@@ -1,9 +1,9 @@
 {% extends base_template %} {% load newsfilters %}
 {% block css %}
 {{ block.super }}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"round_message.css"}}' type='text/css' media='screen'>
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"tabletop.css"}}' type='text/css' media='screen'>
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"forms.css"}}' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/round_message.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/tabletop.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/styles/forms.css' type='text/css' media='screen'>
 {% endblock %}
 {% block js %}
 {{ block.super }}
