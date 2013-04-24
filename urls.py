@@ -60,7 +60,7 @@ urlpatterns = patterns('',
     #
 )
 urlpatterns += patterns('',
-    ('^', include('django.contrib.flatpages.urls')),
+    ('^pages/', include('django.contrib.flatpages.urls')),
 )
 
 

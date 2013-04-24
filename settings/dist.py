@@ -211,7 +211,6 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.comments',
     'django.contrib.flatpages',
-    'django.contrib.staticfiles',
     #
     'apps.jsonapp',
     'apps.core',
@@ -240,6 +239,7 @@ INSTALLED_APPS = (
     'grappelli',
     'django.contrib.admin',
     'django.contrib.admindocs',
+    'django.contrib.staticfiles',
 )
 #settings
 DOMAIN='w40k.net'
