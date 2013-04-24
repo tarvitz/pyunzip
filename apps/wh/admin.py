@@ -48,7 +48,7 @@ class ArmyAdmin(admin.ModelAdmin):
         (
             _('Armies'),
             {'fields': ('name', 'side')}
-        )
+        ),
     )
     list_filter = ['side']
 admin.site.register(Army, ArmyAdmin)
