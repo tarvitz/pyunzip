@@ -610,34 +610,6 @@ def show_all_images_old(request,id=''):
         context_instance=RequestContext(request,
             processors=[pages,benchmark]))
 
-""" USER GALLERIES
-@login_required
-def create_gallery(request):
-    template = get_skin_template(request.user,'gallery/create.html')
-    if request.method == 'POST':
-        form = CreateGalleryForm(request.POST)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            owner = request.user
-            nums = Gallery.objects.filter(owner=owner).count()
-            if nums>3:
-                return HttpResponseRedirect('/gallery/overlimited')
-            try:
-                check = Gallery.objects.get(name=name,owner=owner)
-                return HttpResponseRedirect('/gallery/exists')
-            except Gallery.DoesNotExist:
-                gallery = Gallery(name=name, owner=owner)
-                gallery.save()
-                return HttpResponseRedirect('/gallery/created')
-        else:
-            return render_to_response(template,
-                {'form': form},
-                context_instance=RequestContext(request))
-    form = CreateGalleryForm()
-    return render_to_response(template,
-        {'form': form},
-        context_instance=RequestContext(request))
-"""
 
 @benchmarking
 def show_gallery(request,gallery=1,gallery_name=None):

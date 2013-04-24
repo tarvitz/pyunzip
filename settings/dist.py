@@ -91,7 +91,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'apps.core.middleware.ChecksMiddleware',
     'apps.core.middleware.UserActivityMiddleware',
     'apps.core.middleware.GuestActivityMiddleware',
@@ -210,7 +210,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.comments',
-    'django.contrib.flatpages',
+    #'django.contrib.flatpages',
     #
     'apps.jsonapp',
     'apps.core',

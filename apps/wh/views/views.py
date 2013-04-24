@@ -310,13 +310,10 @@ def view_pms(request, outcome=False):
 @login_required
 def view_pm(request, pm_id=0):
     template = get_skin_template(request.user, 'accounts/pm.html')
-    try:
-        pm = PM.objects.get(id=pm_id)
-    except PM.DoesNotExist:
-        return redirect('/pm/doesnotexist')
+    pm = get_object_or_404(PM, pk=pm_id)
     user = request.user
     if (user.id != pm.sender.id) and (user.id != pm.addressee.id):
-        return redirect('/pm/doesnotexist')
+        raise Http404("go away")
     if user == pm.addressee:
         pm.is_read = True
         pm.save()

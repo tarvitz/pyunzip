@@ -433,10 +433,7 @@ def view_subscription(request):
 def delete_subscription(request,id,action=''):
     """ deletes the subscription"""
     user = request.user
-    try:
-        announcement = Announcement.objects.get(id__exact=id)
-    except Announcement.DoesNotExist:
-        return HttpResponseRedirect('/announcement/does/not/exist')
+    announcement = get_object_or_404(Announcement, pk=id)
     announcement.users.remove(user)
     announcement.notified_users.remove(user)
     announcement.save()
@@ -752,7 +749,7 @@ def edit_comment(request, id=0):
 
     if request.user != comment.user and not can_edit_comments\
     and not request.user.is_superuser:
-        return HttpResponseRedirect('/comment/not/found')
+        raise Http404("not found")
 
     form = CommentForm(
         request.POST or None, request=request, instance=comment)
@@ -842,10 +839,7 @@ def del_restore_comment(request,id=0,flag='delete'):
         if jump: referer += "#c%s" % jump
     except KeyError:
         referer = None
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
+    comment = get_object_or_404(Comment, pk=id)
 
     if request.user != comment.user\
     and not can_del_restore_comments\
@@ -869,10 +863,7 @@ def del_restore_comment(request,id=0,flag='delete'):
 def purge_comment_old(request,id=0):
     #only superuser and can_purge_comments can delete comments
     can_purge_comments =  request.user.user_permissions.filter(codename='purge_comments') #if smb can edit news
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
+    comment = get_object_or_404(Comment, pk=id)
     if request.user.is_superuser or can_purge_comments:
             message = _('Do you realy want to PURGE this comment?')
             return action_approve_simple(request,'/comment/%s/purge' % comment.id, message)
@@ -886,15 +877,12 @@ def purge_comment(request,id=0,approve='force'):
         if form.is_valid():
             next = form.cleaned_data['url'] #from where we get here ;)
     can_purge_comments = request.user.user_permissions.filter(codename='purge_comments')
-    try:
-        comment = Comment.objects.get(id=id)
-    except Comment.DoesNotExist:
-        return HttpResponseRedirect('/comment/not/found')
+    comment = get_object_or_404(Comment, pk=id)
     if request.user.is_superuser or can_purge_comments:
         comment.delete()
         if next:
             return HttpResponseRedirect(next)
         return HttpResponseRedirect('/')
     else:
-        return HttpResponseRedirect('/comment/not/found')
+        raise Http404("not found")
 
