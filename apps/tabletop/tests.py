@@ -34,10 +34,12 @@ class JustTest(TestCase):
             reverse('tabletop:roster', args=(1, )),
             reverse('tabletop:roster', args=(2, )),
             reverse('tabletop:roster', args=(3, )),
-            reverse('tabletop:battle-reports-self')
+            reverse('tabletop:battle-reports-self'),
+            reverse('tabletop:rosters-index')
         ]
         self.urls_registered = [
             reverse('tabletop:report', args=(1, )),
+            reverse('tabletop:rosters'),
         ]
         self.urls_params = [
         ]
