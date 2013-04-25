@@ -5,6 +5,7 @@
 td .description{
     font-size: 8pt;
 }
+td.title a{ color: #666; }
 .posts .post{
     border: 1px solid #ccc;
 }
@@ -16,6 +17,7 @@ td .description{
 }
 .posts .post .author{
 }
+
 .round.message{
     width: 90%;
     margin-left: auto;
