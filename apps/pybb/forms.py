@@ -14,10 +14,13 @@ class AddPostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ['markup', 'body']
+        fields = [
+            #'markup',
+            'body'
+        ]
         widgets = {
             'markup': forms.Select(attrs={'class': 'span6'}),
-            'body': forms.Textarea(attrs={'class': 'span6'}),
+            #'body': forms.Textarea(attrs={'class': 'span6'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -30,7 +33,10 @@ class AddPostForm(forms.ModelForm):
             self.fields['name'].widget = forms.HiddenInput()
             self.fields['name'].required = False
 
-        self.fields.keyOrder = ['markup', 'body']
+        self.fields.keyOrder = [
+            #'markup',
+            'body'
+        ]
         if not self.topic:
             self.fields.keyOrder.insert(0, 'name')
 
@@ -44,9 +50,11 @@ class AddPostForm(forms.ModelForm):
         else:
             topic = self.topic
 
-        post = Post(topic=topic, user=self.user, user_ip=self.ip,
-                    markup=self.cleaned_data['markup'],
-                    body=self.cleaned_data['body'])
+        post = Post(
+            topic=topic, user=self.user, user_ip=self.ip,
+            #markup=self.cleaned_data['markup'],
+            body=self.cleaned_data['body']
+        )
         post.save()
         return post
 

@@ -58,3 +58,6 @@ td.title a{ color: #666; }
 .quote.content .headline .transparency{
     background-color: #666 !important;
 }
+.markItUpEditor{ border: 1px solid #ccc; border-top-color: transparent; padding-left: 40px; padding-right: 10px;}
+.markItUpHeader{ border: 1px solid #ccc; border-bottom-color: transparent;}
+.markItUpContainer .fileinput-button{ display: none; }
