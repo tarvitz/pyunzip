@@ -226,7 +226,7 @@ INSTALLED_APPS = (
     'utils',
     #'apps.bincase',
     'apps.karma',
-    'apps.blogs',
+    #'apps.blogs',
     'apps.tracker',
     'apps.farseer',
     'apps.pybb',
