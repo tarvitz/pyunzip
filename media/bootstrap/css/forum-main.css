@@ -17,7 +17,11 @@ td .description{
 .posts .post .author{
 }
 .round.message{
-    width: initial;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 .round.message .message-body .avatar,
 .round.message .message-body .text,
