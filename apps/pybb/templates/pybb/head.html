@@ -6,8 +6,8 @@
             <a class='brand' href="{% url "pybb_index" %}">WarMist Форум</a>
             <div class='nav-collapse collapse pull-right'>
                 <ul class="nav">
-                    <li><a href="/">{% trans "Home" %}</a></li>
-                    <li><a href="{% url "pybb_users" %}">{% trans "Users" %}</a></li>
+                    <li><a href="{% url "news:news" %}">{% trans "News" %}</a></li>
+                    <li><a href="{% url "wh:users" %}">{% trans "Users" %}</a></li>
                     {% if user.is_authenticated %}
                     <!--<li><a href="{% url "pybb_edit_profile" %}">{% trans "My profile" %}</a></li> -->
                     <li class='dropdown'>
