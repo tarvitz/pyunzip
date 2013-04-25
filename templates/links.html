@@ -1,25 +1,4 @@
 {% load kamwhfilters vurl %}
-{% comment %}<center>
-<div class="pager">
-Страницы:
-{#{% if page.has_next %}{#<a href="{% url "apps.quotes.views.index" page.next_page_number %}">{{ page.next_page_number }}</a>{% endif %}#}
-{% for num in page.page_range %}
-	{% if not num %} ...  {# literally dots #}
-    {% else %}
-        {% ifequal page.number num %}
-            [{{ num }}]
-        {% else %}
-            {% if page.raw_model and page.view %}
-				<a href="{% vurl page.view model=page.raw_model %}?page={{ num }}">{{ num }}</a>
-			{% else %}
-				<a href="?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}">{{ num }}</a>
-			{% endif %}
-        {% endifequal %}
-    {% endif %}
-{% endfor %}
-</div>
-</center>
-{% endcomment %}
 <center>
 <div class='pagination pagination-mini pagination-inverse no-margin'>
     <ul>
