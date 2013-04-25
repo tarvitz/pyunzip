@@ -2,7 +2,11 @@
 var reloadExpression = function(){
     url = "{% url "json:wh:expression" %}";
     $.getJSON(url, function(json){
-        $("#expression .content").text(json.expression.content);
+        if (json.expression.content){
+            $("#expression .content").text(json.expression.content);
+        } else {
+            $("#expression .content").text(json.expression.original_content);
+        }
         $("#expression .author").text(json.expression.author);
     });
 }
