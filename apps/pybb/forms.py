@@ -15,6 +15,10 @@ class AddPostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = ['markup', 'body']
+        widgets = {
+            'markup': forms.Select(attrs={'class': 'span6'}),
+            'body': forms.Textarea(attrs={'class': 'span6'}),
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)

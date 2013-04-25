@@ -1,59 +1,37 @@
-{% load pybb_extras %}
-{% load i18n %}
+{% load pybb_extras i18n %}
 
-<div class="head_box">
-    <div class="head main-box">
-        <div class="logo">
-            <a href="{% url "pybb_index" %}">WarMist Форум{# {{ "HEADER"|pybb_setting }} #}</a>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class='container'>
+            <a class='brand' href="{% url "pybb_index" %}">WarMist Форум</a>
+            <div class='nav-collapse collapse pull-right'>
+                <ul class="nav">
+                    <li><a href="/">{% trans "Home" %}</a></li>
+                    <li><a href="{% url "pybb_users" %}">{% trans "Users" %}</a></li>
+                    {% if user.is_authenticated %}
+                    <!--<li><a href="{% url "pybb_edit_profile" %}">{% trans "My profile" %}</a></li> -->
+                    <li class='dropdown'>
+                        <a class='dropdown-toggle' role='button' data-toggle="dropdown" href='#'>
+                            {{ user.get_nickname|safe }}
+                            <span class='caret'></span>
+                        </a>
+                        <ul class='dropdown-menu pull-right' role="menu">
+                            {% if user.is_superuser %}
+                            <li><a href="/admin/">{% trans "Admincp" %}</a></li>
+                            {% endif %}
+                            <li><a href="{% url "wh:logout" %}">{% trans "Log out" %}</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url "wh:register" %}">{% trans "Sign up" %}</a></li>
+                    <li><a href="{% url "wh:login" %}">{% trans "Log in" %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
-        <ul class="navigation">
-            <li><a href="/">{% trans "Home" %}</a></li>
-			<li><a href="#" onclick="$('.search_box').toggle(); return false;"/>{% trans "Search" %}</a></li>
-            <li><a href="{% url "pybb_users" %}">{% trans "Users" %}</a></li>
-            {% if user.is_authenticated %}
-            <!--<li><a href="{% url "pybb_edit_profile" %}">{% trans "My profile" %}</a></li> -->
-            {% with user.pybb_profile.unread_pm_count as count %}
-            <li class="{% if count %}unread-pm{% endif %}">
-                <a href="{% url "pybb_pm_inbox" %}">{% trans "PM" %}{% if count %}({{ count }}){% endif %}</a>
-            </li>
-            {% endwith %}
-            {% if user.is_superuser %}
-            <li><a href="{{ "ADMIN_URL"|pybb_setting }}">{% trans "Admincp" %}</a></li>
-            {% endif %}
-            <li><a href="{% url "wh:logout" %}">{% trans "Log out" %}</a></li>
-            <li>{% trans "Logged in as " %} <a href='{% url "pybb_profile" user.nickname %}'>{{ user.get_nickname|safe }}</a></li>
-            {% else %}
-            <li><a href="{% url "wh:register" %}">{% trans "Sign up" %}</a></li>
-            <li><a href="{% url "wh:login" %}">{% trans "Log in" %}</a></li>
-            {% endif %}
-            {# <li><a href="{% url django.contrib.syndication.views.feed "posts" %}" /><img src="{{ MEDIA_URL }}/pybb/img/feed-icon-small.png" /></a></li> #}
-        </ul>
-        <div class="clear"></div>
-        <h2 class="description">{{ "TAGLINE"|pybb_setting|safe }}</h2>
-        <div class="clear"></div>
     </div>
 </div>
-
-<div class="search_box" style="display: none">
-    <div class="search main-box">
-        <script type="text/javascript">
-            function pybb_search(form) {
-                var query = $.trim($('.query', form).val());
-                if (query) {
-                    query = 'site:{{ request.get_host }} ' + query;
-                    location.href = 'http://www.google.com/search?q=' + query;
-                }
-                return false;
-            }
-        </script>
-        <form method="get" onsubmit="return pybb_search(this)">
-            {% csrf_token %}
-            <input type="text" class="query" />
-            <input type="submit" value="{% trans "Search" %}" />
-            <span class="comment">{% trans "Search powered by Google" %}</span>
-        </form>
-    </div>
-</div>
+<div style='height: 50px;'></div>
 
 {% if "NOTICE"|pybb_setting %}
 <div class="notice_box">

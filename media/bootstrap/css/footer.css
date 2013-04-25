@@ -1,0 +1,19 @@
+html, body{
+    height: 100%;
+}
+
+#footer{
+    margin-top: 0px;
+}
+#wrap{
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -41px;
+}
+#push{
+    height: 45px;
+}
+#footer{
+    height: 20px;
+}

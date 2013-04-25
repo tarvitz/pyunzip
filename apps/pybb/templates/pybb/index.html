@@ -2,27 +2,21 @@
 {% load pybb_extras %}
 
 {% block content %}
-<div class="splitted">
-    <div class="left">
-        <ul class="tablist">
-        {% for iter in cats %}
-            <li class="tablist-row category corners">
-                <h3 class="header">{% pybb_link iter.cat %}</h3>
-                <ul class="tablist-inner">
-                    {% for forum in iter.forums %}
-                    <li class="tablist-inner-row forum">
-                    {% include 'pybb/forum_row.html' %}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-        </ul>
+<div class="row span7">
+    {% for iter in cats %}
+    <div class=''>
+        <h3><a class='brand' href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a></h3>
+        <div class=''>
+            <table class='table striped'>
+            {% for forum in iter.forums %}
+                {% include 'pybb/forum_row.html' %}
+            {% endfor %}
+            </table>
+        </div>
     </div>
-
-    <div class="right">
-        {% include 'pybb/quick_access.html' %}
-    </div>
-    <div class="clear"></div>
+    {% endfor %}
+</div>
+<div class="row span5 pull-right">
+    {% include 'pybb/quick_access.html' %}
 </div>
 {% endblock %}

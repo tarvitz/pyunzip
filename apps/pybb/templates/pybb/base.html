@@ -8,15 +8,7 @@
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-    <link href="{{ MEDIA_URL }}pybb/css/style.css" type="text/css" rel="stylesheet">
-    {% comment %}
-    <link rel="alternate" type="application/atom+xml" href="{% url django.contrib.syndication.views.feed "posts" %}" title="{% trans "Latest posts on forum" %}" />
-    <link rel="alternate" type="application/atom+xml" href="{% url django.contrib.syndication.views.feed "topics" %}" title="{% trans "Latest topics on forum" %}" />
-    {% endcomment %}
-    <!--<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />-->
-    <script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/jquery.js"></script>
-    <!--<script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/rounded_corners.inc.js"></script>-->
-    <!--<script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/corners_init.js"></script>-->
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.7.1.min.js"></script>
 
     <!-- Highlightjs goodies -->
     <script type="text/javascript" src="{{ MEDIA_URL }}pybb/js/highlight.js"></script>
@@ -25,17 +17,26 @@
     </script>
     <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}pybb/css/hljs_styles/idea.css" />
     <link type="text/css" rel='stylesheet' href='/styles/rank.css' />
+    <link type='text/css' rel='stylesheet' href='/styles/round_message.css' />
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/bootstrap.min.css'>
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/bootstrap-responsive.min.css'>
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/forum-main.css'>
+    <script type='text/javascript' src='{{ MEDIA_URL }}bootstrap/js/bootstrap.min.js'></script>
     {% block extra_meta %}{% endblock %}
 </head>
 <body>
+<div id='wrap'>
     {% include 'pybb/head.html' %}
-
-    <div class="content_box">
-        <div class="content main-box">
+    <div class='container-fluid'>
         {% block content %}{% endblock %}
-        </div>
     </div>
-
-    {% include 'pybb/footer.html' %}
+    <div id='push'></div>
+</div>
+{% include 'pybb/footer.html' %}
 </body>
+<script type='text/javascript'>
+$(document).ready(function(){
+    $("[rel=tooltip]").tooltip({live: true});
+});
+</script>
 </html>
