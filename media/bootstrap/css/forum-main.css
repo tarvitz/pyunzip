@@ -1,5 +1,7 @@
 @import "footer.css";
-
+.tablist-inner-row{
+    list-style-type: none;
+}
 td .description{
     font-size: 8pt;
 }

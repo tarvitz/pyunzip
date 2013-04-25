@@ -9,7 +9,7 @@
         <div class="tab-pane active" id='topics'>
             {% for topic in quick.last_topics|pybb_unreads:user %}
             <li class="tablist-inner-row forum">
-            {% if topic|pybb_has_unreads:user %}<span class="unread"></span>{% endif %}
+            {% if topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
             {% pybb_link topic %}
             &rarr;
             <span class="author"><a href="{% url "pybb_profile" topic.user.nickname %}">{{ topic.user.get_nickname|safe }}</a></span>
@@ -21,7 +21,7 @@
         <div class="tab-pane" id='posts'>
             {% for post in quick.last_posts|pybb_unreads:user %}
             <li class="tablist-inner-row forum">
-            {% if post.topic|pybb_has_unreads:user %}<span class="unread"></span>{% endif %}
+            {% if post.topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
             <a href="{{ post.get_absolute_url }}">{{ post.topic }}</a>
             &rarr;
             <span class="author"><a href="{% url "pybb_profile" post.user.nickname %}">{{ post.user.get_nickname|safe }}</a></span>
