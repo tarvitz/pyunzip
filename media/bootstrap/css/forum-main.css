@@ -49,3 +49,12 @@ td.title a{ color: #666; }
     background-color: lightgrey !important;
     opacity: 0.4;
 }
+.quote_content .transparency,
+.quote.content .transparency{
+    opacity: 0.6;
+    background-color: #999 !important;
+}
+.quote_content .quote_headline .transparency,
+.quote.content .headline .transparency{
+    background-color: #666 !important;
+}

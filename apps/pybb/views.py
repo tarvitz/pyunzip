@@ -73,7 +73,7 @@ def show_forum_ctx(request, forum_id):
             }
 show_forum = render_to('pybb/forum.html')(show_forum_ctx)
 
-    
+
 @paged('posts', pybb_settings.TOPIC_PAGE_SIZE)
 def show_topic_ctx(request, topic_id):
     try:
@@ -88,7 +88,7 @@ def show_topic_ctx(request, topic_id):
         topic.update_read(request.user)
 
     posts = topic.posts.all().select_related()
-    
+
     if pybb_settings.FREEZE_FIRST_POST:
         first_post = topic.posts.order_by('created')[0]
     else:
@@ -97,7 +97,7 @@ def show_topic_ctx(request, topic_id):
 
     profiles = Profile.objects.filter(user__pk__in=set(x.user.id for x in posts))
     profiles = dict((x.user_id, x) for x in profiles)
-    
+
     for post in posts:
         post.user.pybb_profile = profiles[post.user.id]
 
@@ -143,7 +143,7 @@ def add_post_ctx(request, forum_id, topic_id):
         return HttpResponseRedirect(topic.get_absolute_url())
 
     if not request.user.is_authenticated():
-        return handle_anonymous_post(request, topic_id) 
+        return handle_anonymous_post(request, topic_id)
 
     # GET request
     if 'GET' == request.method:
@@ -177,7 +177,7 @@ def add_post_ctx(request, forum_id, topic_id):
         if form.is_valid():
             post = form.save();
             return HttpResponseRedirect(post.get_absolute_url())
-            
+
 
     return {'form': form,
             'topic': topic,
@@ -215,7 +215,7 @@ def edit_profile_ctx(request):
             }
 edit_profile = render_to('pybb/edit_profile.html')(edit_profile_ctx)
 
-    
+
 @login_required
 def edit_post_ctx(request, post_id):
     from apps.pybb.templatetags.pybb_extras import pybb_editable_by

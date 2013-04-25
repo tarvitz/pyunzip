@@ -9,10 +9,11 @@ from django.utils.translation import ugettext_lazy as _
 #from markdown2 import markdown as Markdown
 from apps.thirdpaty.markdown2 import markdown as Markdown
 
-from apps.pybb.markups import mypostmarkup 
+from apps.pybb.markups import mypostmarkup
 from apps.pybb.fields import AutoOneToOneField, ExtendedImageField
 from apps.pybb.util import urlize, memoize_method
 from apps.pybb import settings as pybb_settings
+from apps.core.helpers import post_markup_filter, render_filter
 
 LANGUAGE_CHOICES = (
     ('en', 'English'),
@@ -31,6 +32,7 @@ TZ_CHOICES = [(float(x[0]), x[1]) for x in (
 )]
 
 MARKUP_CHOICES = (
+    ('textile', 'textile'),
     ('bbcode', 'bbcode'),
     ('markdown', 'markdown'),
 )
@@ -57,7 +59,7 @@ class Category(models.Model):
     @property
     def topics(self):
         return Topic.objects.filter(forum__category=self).select_related()
-    
+
     @property
     def posts(self):
         return Post.objects.filter(topic__forum__category=self).select_related()
@@ -86,7 +88,7 @@ class Forum(models.Model):
 
     def get_absolute_url(self):
         return reverse('pybb_forum', args=[self.id])
-    
+
     @property
     def posts(self):
         return Post.objects.filter(topic__forum=self).select_related()
@@ -119,7 +121,7 @@ class Topic(models.Model):
 
     def __unicode__(self):
         return self.name
-    
+
     @property
     def head(self):
         return self.posts.all().order_by('created').select_related()[0]
@@ -202,7 +204,7 @@ class Post(RenderableItem):
 
     def summary(self):
         LIMIT = 50
-        tail = len(self.body) > LIMIT and '...' or '' 
+        tail = len(self.body) > LIMIT and '...' or ''
         return self.body[:LIMIT] + tail
 
     __unicode__ = summary
@@ -210,7 +212,7 @@ class Post(RenderableItem):
     def save(self, *args, **kwargs):
         if self.created is None:
             self.created = datetime.now()
-        self.render()
+        self.body_html = self.render("body")
 
         new = self.id is None
 
@@ -224,11 +226,14 @@ class Post(RenderableItem):
 
         super(Post, self).save(*args, **kwargs)
 
-
-
-
     def get_absolute_url(self):
         return reverse('pybb_post', args=[self.id])
+
+    def render(self, field):
+        out = post_markup_filter(getattr(self, field))
+        return render_filter(out, self.markup)
+
+    render_body = lambda self: self.render("body")
 
     def delete(self, *args, **kwargs):
         self_id = self.id
@@ -272,7 +277,7 @@ class Profile(models.Model):
 
 class Read(models.Model):
     """
-    For each topic that user has entered the time 
+    For each topic that user has entered the time
     is logged to this model.
     """
 
@@ -316,7 +321,7 @@ class PrivateMessage(RenderableItem):
     # move to common functions
     def summary(self):
         LIMIT = 50
-        tail = len(self.body) > LIMIT and '...' or '' 
+        tail = len(self.body) > LIMIT and '...' or ''
         return self.body[:LIMIT] + tail
 
     def __unicode__(self):
