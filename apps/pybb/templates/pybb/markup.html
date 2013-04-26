@@ -34,4 +34,14 @@ var setMarkItUp = function(type){
 $(document).ready(function(){
     loadMarkitUp();
 });
+$('.posts .post').on('click', '.forum.quote', function(e){
+    nick = $(this).parents('[data-nickname]').data('nickname');
+    if (nick){
+        var quote = "(" + nick + "){";
+        var txt = document.getSelection().toString();
+        txt = quote + txt + "}";
+        $("#id_body").text($("#id_body").text() + "\n" + txt);
+        return false;
+    }
+});
 </script>

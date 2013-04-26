@@ -10,6 +10,7 @@ from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from apps.djangosphinx.models import SphinxSearch
+from apps.core.helpers import post_markup_filter, render_filter
 
 NEWS_STATUSES = (
     ('approved', _("approved")),
