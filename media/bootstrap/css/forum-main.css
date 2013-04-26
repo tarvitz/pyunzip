@@ -63,3 +63,13 @@ td.title a{ color: #666; }
 .markItUpEditor{ border: 1px solid #ccc; border-top-color: transparent; padding-left: 40px; padding-right: 10px;}
 .markItUpHeader{ border: 1px solid #ccc; border-bottom-color: transparent;}
 .markItUpContainer .fileinput-button{ display: none; }
+.code-insert{
+    background-color: #e5e5e5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    width: 90%;
+    padding: 5px 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
