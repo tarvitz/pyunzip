@@ -33,7 +33,6 @@
 	</div> <!-- msg_avatar -->
 	<div class='msg_text'>
 		<div id='profile_data'>
-			{% if usr.photo %}<b><i><a href='{% url "wh:photo" usr.nickname %}'>Фото</a></b></i><br>{% endif %}
 			<b>Имя</b> <span class='notice'>(никнейм)</span>: {{ usr.get_nickname|safe }}<br>
 			{% spaceless %}
 			{% if usr.first_name or usr.last_name %}
