@@ -1,17 +1,19 @@
 $(document).ready(function(){
     $('.message .msg_headline .transparency:even').addClass('tr_navy');
-        $('.spoiler_block a').click(function(){
-            $(this).parent().children('.spoiler').toggle(500, function(){
-            p = $(this).parent();
-            if (p.children('.spoiler').css('display') != 'none'){
-                p.attr('class', p.attr('class') + ' spoiler_show');
-                p.children('.marker').html('[-]');
-            }else{
-                p.attr('class', 'spoiler_block');
-                p.children('.marker').html('[+]');
-            }
-            });
+    $('.spoiler_block a').click(function(e){
+        $(this).parent().children('.spoiler').toggle(500, function(){
+        p = $(this).parent();
+        if (p.children('.spoiler').css('display') != 'none'){
+            p.attr('class', p.attr('class') + ' spoiler_show');
+            p.children('.marker').html('[-]');
+        }else{
+            p.attr('class', 'spoiler_block');
+            p.children('.marker').html('[+]');
+        }
         });
+        e.preventDefault();
+        return false;
+    });
 });//document ready
 
 	function perform_update(field, val,id,url){

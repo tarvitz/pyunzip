@@ -73,3 +73,17 @@ td.title a{ color: #666; }
     margin-left: auto;
     margin-right: auto;
 }
+.spoiler_block .spoiler .transparency,
+.spoiler.block .spoiler .transparency{
+    background-color: #ccc !important;
+}
+.spoiler_block .spoiler,
+.spoiler.block .spoiler{
+    display: none;
+}
+.spoiler_show, .spoiler.show{
+    border: 1px dotted #ccc;
+}
+.offtopic{
+    background-color: #888;
+}
