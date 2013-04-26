@@ -10,7 +10,10 @@ from apps.pybb.models import Topic, Post, Profile, PrivateMessage
 from apps.pybb import settings as pybb_settings
 
 class AddPostForm(forms.ModelForm):
-    name = forms.CharField(label=_('Subject'))
+    name = forms.CharField(
+        label=_('Subject'),
+        widget=forms.TextInput(attrs={'class': 'span6'})
+    )
 
     class Meta:
         model = Post
@@ -89,7 +92,10 @@ class EditProfileForm(forms.ModelForm):
 class EditPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = ['markup', 'body']
+        fields = [
+            #'markup',
+            'body'
+        ]
 
     def save(self):
         post = super(EditPostForm, self).save(commit=False)

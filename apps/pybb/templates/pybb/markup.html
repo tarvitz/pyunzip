@@ -1,0 +1,37 @@
+{% load i18n %}
+{% include "jtmpl/core.html" %}
+{% include "js/locale.ru.html" %}
+
+<script type='text/javascript'>
+/* settings */
+var markItUpParsers = {
+    'textile': '{% url "news:markup-preview" %}?markup=textile&template=comment',
+}
+
+myMarkupSettings['textile']['previewParserPath'] = markItUpParsers['textile'];
+
+var reloadMarkItUp = function(type){
+    setMarkItUp(type);
+    $('#id-comment-form #id_markitup').val(type);
+
+}
+var loadMarkitUp = function(type){
+    var mySettings = myMarkupSettings["{{ syntax|default:'textile'}}"];
+    settings = {
+        'bb-code': myMarkupSettings['bb-code'],
+        'textile': myMarkupSettings['textile']
+    }
+    if (type in settings){
+        mySettings = settings[type];
+    }
+	$('#id_body').markItUp(mySettings);
+}
+
+var setMarkItUp = function(type){
+    $('#id_body').markItUp('remove');
+    loadMarkitUp(type);
+}
+$(document).ready(function(){
+    loadMarkitUp();
+});
+</script>

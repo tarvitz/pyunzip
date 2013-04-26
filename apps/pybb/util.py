@@ -172,6 +172,8 @@ def quote_text(text, markup):
         return '>'+text.replace('\n','\n>').replace('\r','\n>') + '\n'
     elif markup == 'bbcode':
         return '[quote]%s[/quote]\n' % text
+    elif markup == 'textile':
+        return '(%s){%s}' % ('UserName', text)
     else:
         return text
 

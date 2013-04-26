@@ -153,7 +153,10 @@ def add_post_ctx(request, forum_id, topic_id):
             quote = ''
         else:
             qpost = get_object_or_404(Post, pk=quote_id)
-            quote = quote_text(qpost.body_text, request.user.pybb_profile.markup)
+            quote = quote_text(
+                qpost.body_text,
+                request.user.pybb_profile.markup
+            )
 
         apost = load_anonymous_post(request, topic)
         if apost:

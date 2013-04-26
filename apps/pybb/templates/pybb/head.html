@@ -21,6 +21,11 @@
                             <span class='caret'></span>
                         </a>
                         <ul class='dropdown-menu pull-right' role="menu">
+                            <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
+                            <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>{% trans "My reports" %}</a></li>
+                            <li class=''><a href='{% url "files:files" %}'>{% trans "My files" %}</a></li>
+                            <li class=''><a href='{% url "wh:profile" %}'>{% trans "My profile" %}</a></li>
+                            <li class='divider divide'></li>
                             {% if user.is_superuser %}
                             <li><a href="/admin/">{% trans "Admincp" %}</a></li>
                             {% endif %}
