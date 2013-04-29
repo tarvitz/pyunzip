@@ -5,8 +5,9 @@ from django.utils.translation import ugettext_lazy as _
 from cStringIO import StringIO
 from PIL import Image
 from apps.wh.models import User
-from apps.wh.models import Side,RegisterSid, Skin, Army
+from apps.wh.models import Side,RegisterSid, Skin, Army, PM
 from apps.core import get_safe_message
+from apps.core.helpers import get_object_or_None
 from apps.core.models import UserSID
 from apps.core.forms import RequestModelForm, BruteForceCheck
 from django.contrib.auth.models import User
@@ -284,7 +285,15 @@ class PMForm(RequestForm):
         return cleaned_data
 
 class RegisterForm(forms.Form):
-    username = forms.CharField()
+    username = forms.RegexField(
+        label=_("Username"),
+        regex=re.compile(r'^[A-z][\w\d\._-]+\w+$'),
+        max_length=32,
+        min_length=3,
+        error_message=_('Try to pass only latin symbols, numbers and underscores with your nickname'),
+        help_text=_('Only latin symbols and numbers and underscore are allowed'),
+
+    )
     nickname = forms.CharField(required=True)
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
@@ -299,6 +308,7 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError(_('There\'s already user with such login here'))
         except User.DoesNotExist:
             return value
+
     def clean_email(self):
         value = self.cleaned_data.get('email', '')
         try:
@@ -306,6 +316,7 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError(_('User with such email already exists'))
         except User.DoesNotExist:
             return value
+
     def clean_nickname(self):
         value = self.cleaned_data.get('nickname', '')
         if not value: return value
@@ -420,9 +431,9 @@ class SuperUserLoginForm(forms.ModelForm):
 
 
 class LoginForm(forms.ModelForm):
-    username = forms.CharField(
-        label=_('username'), required=True
-    )
+    #username = forms.CharField(
+    #    label=_('username'), required=True
+    #)
     password = forms.CharField(
         label=_('password'), widget=forms.PasswordInput(),
         required=True

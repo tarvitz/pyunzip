@@ -16,6 +16,7 @@ from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
 from apps.djangosphinx.models import SphinxSearch
 from django.core.cache import cache
+from datetime import datetime
 
 
 class Universe(models.Model):
