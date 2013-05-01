@@ -172,7 +172,6 @@
             if (mail){
                 return mail.nick_id;
             }
-            console.log(mail);
         }
         self.getReplyTitle = function(mail){
             if (mail){
@@ -180,7 +179,6 @@
             }
         }
         self.checkReadState = function(mail){
-            console.log(mail);
             if (mail){
                 return mail.is_read;
             }
@@ -191,10 +189,15 @@
 </script>
 
 <script type='text/javascript'>
-function sendMessage(form){
+function sendMessage(form, success){
     postFormAjax({
         form: form,
         successMsg: '{% trans "Private message was sent" %}',
+        success: function(response){
+            if (success){
+                success(response);
+            }
+        }
     });
 }
 $(document).ready(function(){
@@ -209,12 +212,19 @@ $(document).ready(function(){
     });
     $('#id_message_form').submit(function(e){
         var form = $(this);
-        sendMessage(form);
+        sendMessage(form, function(response){
+            $('.show-message').toggleClass('active');
+            $('.send.pm').toggleClass('hide');
+
+        });
         return false;
     });
     $('#id_message_form #id_submit').click(function(e){
         var form = $(this).parents('form');
-        sendMessage(form);
+        sendMessage(form, function(response){
+            $('.show-message').toggleClass('active');
+            $('.send.pm').toggleClass('hide');
+        });
         return false;
     });
     $('.show-message').click(function(e){
@@ -235,7 +245,7 @@ $(document).ready(function(){
                 results.push({value: user.id, text: user.title});
             });
             return results;
-        }, {placeholder_text: "{% trans "Search some rosters" %}"});
+        }, {placeholder_text: "{% trans "Search the user" %}"});
     });
 
 });

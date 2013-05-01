@@ -262,6 +262,7 @@ class PMForm(RequestModelForm):
         queryset=User.objects.none()
     )
     content = forms.CharField(
+        label=_("Content"),
         widget=forms.Textarea(attrs={'class': 'markitup'})
     )
 

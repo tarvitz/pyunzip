@@ -146,10 +146,12 @@ class Expression(models.Model):
 
 class PM(models.Model):
     sender = models.ForeignKey(
-        User, related_name='sender'
+        User, related_name='sender',
+        verbose_name=_("sender")
     )
     addressee = models.ForeignKey(
-        User, related_name='addressee'
+        User, related_name='addressee',
+        verbose_name=_("addressee")
     )
     title = models.CharField(
         _('title'), max_length=50
