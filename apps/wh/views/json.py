@@ -93,7 +93,7 @@ def pm_view(request):
         'from': message.sender.nickname or message.sender.username,
         'date': message.sent.strftime('%Y-%m-%d %H:%M'),
         'subject': message.title,
-        'content': message.content,
+        'content': message.cache_content,
         'folder': folder,
         'avatar': avatar,
         'nickname': nickname,

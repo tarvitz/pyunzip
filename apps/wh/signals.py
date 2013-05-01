@@ -2,7 +2,7 @@ from django.db.models.signals import (
     pre_save, post_save, pre_delete
 )
 from apps.wh.actions import rank_scheme_alter
-from apps.wh.models import RankType
+from apps.wh.models import RankType, PM
 from django.contrib.auth.models import User
 from django.core.cache import get_cache, cache
 from django.dispatch import receiver
@@ -48,6 +48,11 @@ def on_rank_type_change(instance, **kwargs):
 @receiver(pre_delete, sender=RankType)
 def on_rank_type_delete(instance, **kwargs):
     return on_rank_type_change(instance, **kwargs)
+
+@receiver(pre_save, sender=PM)
+def on_pm_pre_save(instance, **kwargs):
+    instance.cache_content = instance.render("content")
+    return instance
 
 def setup_signals():
     pre_save.connect(rank_scheme_alter,sender=User)

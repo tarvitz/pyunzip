@@ -17,6 +17,7 @@ from django.core.urlresolvers import reverse
 from apps.djangosphinx.models import SphinxSearch
 from django.core.cache import cache
 from datetime import datetime
+from apps.core.helpers import post_markup_filter, render_filter
 
 
 class Universe(models.Model):
@@ -154,6 +155,9 @@ class PM(models.Model):
         _('title'), max_length=50
     )
     content = models.TextField(_('text'))
+    cache_content = models.TextField(
+        _("cache content"), blank=True, null=True
+    )
     is_read = models.BooleanField(_('is read'), default=False)
     sent = models.DateTimeField(
         _('sent'), auto_now=True, default=datetime.now
@@ -177,6 +181,12 @@ class PM(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def render(self, field):
+        return render_filter(
+            post_markup_filter(getattr(self, field)),
+            self.syntax
+        )
 
 class RegisterSid(models.Model):
     sid = models.CharField(
@@ -621,8 +631,7 @@ class UserExtension(object):
 class CommentExtension(object):
     def render_comment(self):
         """ renturns comment in render"""
-        from apps.core.helpers import post_markup_filter as pmf, render_filter
-        return render_filter(pmf(self.comment), self.syntax or 'textile')
+        return render_filter(post_markup_filter(self.comment), self.syntax or 'textile')
 
     def get_content(self):
         return self.comment
