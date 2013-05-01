@@ -106,7 +106,8 @@ def logout(request):
 
 #Поиск по имени рега
 #Переписать все это нахуй, стремно как-то выглядит
-#upd: 06.10.2010 - внатуре, сижу ржу над топорностью, надо бы переписать и вправду
+#upd: 06.10.2010 - внатуре, сижу ржу над топорностью,
+#     надо бы переписать и вправду
 #upd: 22.04.2013 - надо бы не ругаться :)
 @login_required
 def profile(request, account_name='self'):
@@ -194,7 +195,10 @@ def users(request):
 def update_profile(request):
     template = get_skin_template(request.user, 'accounts/update_profile.html')
     if request.method == 'POST':
-        form = UpdateProfileModelForm(request.POST, request.FILES, instance=request.user, request=request)
+        form = UpdateProfileModelForm(
+            request.POST, request.FILES, instance=request.user,
+            request=request
+        )
         if form.is_valid():
             if 'avatar' in request.FILES:
                 avatar = handle_uploaded_file(
@@ -220,64 +224,50 @@ def update_profile(request):
 
 
 @login_required
-def pm_view(request):
-    template = get_skin_template(request.user, 'pm.html')
-    user = request.user
-    _sent = PM.objects.filter(sender=user, dbs=False).count()
-    recv = PM.objects.filter(addressee=user, dba=False).count()
-    msg = int(_sent) + int(recv)
-    return render_to_response(
-        template,
-        {
-            'pm_sent': _sent,
-            'pm_recv': recv,
-            'pm_all': msg
-        },
-        context_instance=RequestContext(request)
-    )
+@render_to('accounts/pm.html')
+def pm(request):
+    #_sent = PM.objects.filter(sender=request.user, dbs=False).count()
+    #recv = PM.objects.filter(addressee=request.user, dba=False).count()
+    #msg = int(_sent) + int(recv)
+    form = PMForm()
+    return {
+        'form': form,
+        #'pm_sent': _sent,
+        #'pm_recv': recv,
+        #'pm_all_count': msg
+    }
 
 
 @login_required
-@can_act
-def send_pm(request, nickname=''):
-    template = get_skin_template(request.user, 'accounts/send_pm.html')
+@render_to('accounts/pm_send.html', allow_xhr=True)
+def pm_send(request):
+    form = PMForm(request.POST or None, request=request)
     if request.method == 'POST':
-        form = PMForm(request.POST, request=request)
         if form.is_valid():
-            sender = request.user
-            addressee = form.cleaned_data['addressee']
-            a = User.objects.get(nickname=addressee)
-            title = form.cleaned_data['title']
-            content = form.cleaned_data['content']
-            now = datetime.now()
-            sender_chk_limit = PM.objects.filter(sender=sender, dbs=False).count()
-            if int(sender_chk_limit) > 100:
-                return redirect('/pm/send/senderlimiterror')
-            addr_chk_limit = PM.objects.filter(addressee=a, dba=False).count()
-            if int(addr_chk_limit) > 100:
-                return redirect('/pm/send/addresseelimiterror')
-            PM.objects.create(
-                sender=sender, addressee=a, title=title,
-                content=content, sent=now
-            )
-            #pm.save()
-            #send notification here
-            return redirect('/pm/send/successfull')
-        else:
-            return render_to_response(
-                template,
-                {'form': form},
-                context_instance=RequestContext(request)
-            )
+            form.save()
+            return {
+                'success': True
+            }
+    return {'form': form}
+
+
+@login_required
+@render_to('accounts/pm_delete.html', allow_xhr=True)
+def pm_delete(request, pk):
+    message = get_object_or_404(PM, pk=pk)
+    if request.user not in (message.addressee, message.sender):
+        raise Http404("hands off")
+    if request.user == message.addressee:
+        message.dba = True
+    elif request.user == message.sender:
+        message.dbs = True
     else:
-        form = PMForm()
-        if nickname:
-            form.fields['addressee'].initial = nickname
-        return render_to_response(
-            template,
-            {'form': form},
-            context_instance=RequestContext(request)
-        )
+        pass
+    if message.dbs and message.dba:
+        message.delete()
+    else:
+        message.save()
+    return {'message': message or None, 'success': True}
 
 
 @login_required
@@ -392,9 +382,14 @@ def onsite_register(request):
             return redirect('wh:registered')
         else:
             #register denied
-            rsids_byip = RegisterSid.objects.filter(ip=request.META['REMOTE_ADDR']).count()
+            rsids_byip = RegisterSid.objects.filter(
+                ip=request.META['REMOTE_ADDR']
+            ).count()
             if rsids_byip > 5:
-                msg = _('You\'ve exceeded limit of registration, please wait 10 minutes and try again, thank you')
+                msg = _(
+                    'You\'ve exceeded limit of registration, '
+                    'please wait 10 minutes and try again, thank you'
+                )
                 form._errors['answ'] = ErrorList([msg])
                 return render_to_response(
                     template,
@@ -626,7 +621,6 @@ def get_skins_raw(request, pk):
     response['Content-Type'] = 'application/json'
     try:
         side = Side.objects.get(pk=pk)
-        #skins = Skin.objects.filter(Q(name__iexact='default')|Q(fraction__id__exact=side.fraction.id)).order_by('id')
         skins = Skin.objects.filter(
             Q(is_general=True) |
             Q(fraction__id__exact=side.fraction.id)
@@ -761,7 +755,7 @@ def alter_warning(request, nickname, typ):
     if warnings:
         #fixing instabillity
         if len(warnings) > 1:
-            for n in xrange(1, len(warnings)-1):
+            for n in xrange(1, len(warnings) - 1):
                 #Instabillity
                 warnings[n].remove()
         old_warning = warnings[0]
@@ -778,7 +772,8 @@ def alter_warning(request, nickname, typ):
             style='color:red;'
         )
         #search for a type
-        #NOTICE that block could be dangerous because there could not be nor general warningtype nor common!
+        # NOTICE that block could be dangerous because there could not
+        # be nor general warningtype nor common!
         if typ in 'decrease' and int(old_warning.level) == 1:
             from django.contrib.contenttypes.models import ContentType
             from django.contrib.comments.models import Comment
@@ -803,7 +798,7 @@ def alter_warning(request, nickname, typ):
         except WarningType.DoesNotExist:
             try:
                 warning_type = WarningType.objects.get(
-                    level=int(old_warning.level)+type_offset,
+                    level=int(old_warning.level) + type_offset,
                     is_general=True
                 )
             except WarningType.DoesNotExist:
@@ -873,8 +868,10 @@ def alter_warning_form(request, nickname):
                 from django.contrib.comments.models import Comment
                 ct = ContentType.objects.get(app_label='wh', model='warning')
                 c = Comment(
-                    content_type=ct, object_pk=str(warning.pk), user=request.user,
-                    comment=comment, submit_date=datetime.now(), is_public=True, site_id=1
+                    content_type=ct, object_pk=str(warning.pk),
+                    user=request.user,
+                    comment=comment, submit_date=datetime.now(),
+                    is_public=True, site_id=1
                 )
                 c.save()
             return redirect(referer or '/')
@@ -921,7 +918,9 @@ def password_restore_initiate(request):
                 }
                 if settings.SEND_MESSAGES:
                     send_mail(
-                        subject=unicode(_('Your password requested to change')),
+                        subject=unicode(
+                            _('Your password requested to change')
+                        ),
                         message=unicode(msg),
                         from_email=settings.FROM_EMAIL,
                         recipient_list=[sid.user.email]

@@ -11,6 +11,7 @@ from apps.core.helpers import get_object_or_None
 from apps.core.models import UserSID
 from apps.core.forms import RequestModelForm, BruteForceCheck
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.contrib import auth
 import re
 #from apps.core.forms import RequestForm
@@ -251,22 +252,27 @@ class UpdateProfileForm(RequestForm):
         else:
             return value
 
-class PMForm(RequestForm):
-    title = forms.CharField()
-    addressee = forms.CharField()
-    content = forms.CharField(widget=forms.Textarea())
-    #recieving all request :)
-    
-    #def __init__(self, *args, **kwargs):
-    #    if 'request' in kwargs:
-    #        self.request = kwargs['request']
-    #        del kwargs['request']
-    #    super(PMForm, self).__init__(*args, **kwargs)
-    
-    def clean_content(self):
-        message = self.cleaned_data.get('content','')
-        message = get_safe_message(message)
-        return message
+class PMForm(RequestModelForm):
+    addressee = forms.ModelChoiceField(
+        label=_("Addressee"),
+        widget=forms.Select(attrs={
+            'class': 'ajax-chosen',
+            'url': reverse('json:wh:users')
+        }),
+        queryset=User.objects.none()
+    )
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'markitup'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PMForm, self).__init__(*args, **kwargs)
+        if all(self.data or [None, ]):
+            self.base_fields['addressee'].queryset = User.objects
+            self.fields['addressee'].queryset = User.objects
+        else:
+            self.base_fields['addressee'].queryset = User.objects.none()
+            self.fields['addressee'].queryset = User.objects.none()
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -277,12 +283,19 @@ class PMForm(RequestForm):
             if sender == a:
                 msg = _('You can not send private messages to yourself')
                 self._errors['addressee'] = ErrorList([msg])
-                del cleaned_data['addressee']
         except User.DoesNotExist:
             msg = _('There\'s no user with such nickname, sorry')
             self._errors['addressee'] = ErrorList([msg])
-            del cleaned_data['addressee']
         return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.sender = self.request.user
+        self.instance.addressee = self.cleaned_data['addressee']
+        return super(PMForm, self).save(commit)
+
+    class Meta:
+        model = PM
+        fields = ('addressee', 'title', 'content')
 
 class RegisterForm(forms.Form):
     username = forms.RegexField(

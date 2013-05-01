@@ -117,7 +117,34 @@ onClick="recieve_formatted_comment('+this.pk+')">\
 	}
 
    //	});
- 
+
+var xhr = function(params){
+    url = params.url;
+    data = params.data || {};
+    type = params.type || "GET";
+
+    $.ajax(url, {
+        dataType: params.dataType || "json",
+        data: data,
+        type: type,
+        crossDomain: params.crossDomain || false,
+        success: function(response, state, jqXHR){
+            if (params.success) params.success(response, state);
+        },
+        error: function(response, state, jqXHR){
+            if (params.failure) params.failure(response, state);
+        },
+        beforeSend: function(xhrResponse, settings){
+            xhrResponse.setRequestHeader('X-Force-XHttpResponse', 'on');
+        }
+    });
+}
+
+var postAjax = function(params){
+    params.type = 'POST';
+    xhr(params);
+}
+/*
 var postAjax = function(params){
     url = params.url;
     data = params.data;
@@ -137,7 +164,7 @@ var postAjax = function(params){
             xhrResponse.setRequestHeader('X-Force-XHttpResponse', 'on');
         },
     });
-}
+}*/
 
 var updateFormErrors = function(form, errors){
     $('ul.errors').detach().remove();

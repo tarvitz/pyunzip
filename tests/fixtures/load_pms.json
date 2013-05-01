@@ -1,0 +1,32 @@
+[
+{
+    "pk": 1, 
+    "model": "wh.pm", 
+    "fields": {
+        "is_read": false, 
+        "sender": 6, 
+        "title": "tes", 
+        "dba": false, 
+        "syntax": "textile", 
+        "content": "dasdad", 
+        "addressee": 7, 
+        "dbs": false, 
+        "sent": "2013-04-27T00:00:00"
+    }
+},
+{
+    "pk": 2, 
+    "model": "wh.pm", 
+    "fields": {
+        "is_read": false, 
+        "sender": 7, 
+        "title": "\u0421\u0430\u043c \u0442\u0430\u043a\u043e\u0439", 
+        "dba": false, 
+        "syntax": "textile", 
+        "content": "\u0441\u0430\u043c \u0442\u0430\u043a\u043e\u0439!", 
+        "addressee": 6, 
+        "dbs": false, 
+        "sent": "2013-04-27T06:16:00"
+    }
+}
+]

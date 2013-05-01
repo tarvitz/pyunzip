@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-29 17:58+0400\n"
+"POT-Creation-Date: 2013-05-01 03:01+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -919,7 +919,7 @@ msgstr "Комментарий"
 msgid "Power"
 msgstr "Сила"
 
-#: apps/karma/models.py:17 apps/wh/templates/accounts/pm.html:35
+#: apps/karma/models.py:17 apps/wh/templates/accounts/pm.html:36
 msgid "Date"
 msgstr "Дата"
 
@@ -1236,7 +1236,7 @@ msgid "Latest topics on forum"
 msgstr "Последние топики на форуме"
 
 #: apps/pybb/forms.py:14 apps/pybb/models.py:107 apps/pybb/models.py:310
-#: apps/wh/templates/accounts/pm.html:34
+#: apps/wh/templates/accounts/pm.html:35
 msgid "Subject"
 msgstr "Тема"
 
@@ -1485,7 +1485,7 @@ msgstr "Сменить пароль"
 #: apps/pybb/templates/pybb/pm/common.html:5
 #: apps/pybb/templates/pybb/pm/inbox.html:7
 #: apps/pybb/templates/pybb/pm/message.html:9
-#: apps/wh/templates/accounts/pm.html:80
+#: apps/wh/templates/accounts/pm.html:114
 msgid "Inbox"
 msgstr "Входящие"
 
@@ -1553,6 +1553,7 @@ msgid "Edit"
 msgstr "Правка"
 
 #: apps/pybb/templates/pybb/post_template.html:47
+#: apps/wh/templates/accounts/pm.html:84
 msgid "Delete"
 msgstr "Удалить"
 
@@ -1621,7 +1622,7 @@ msgstr "Поиск"
 #: apps/pybb/templates/pybb/pm/common.html:6
 #: apps/pybb/templates/pybb/pm/message.html:9
 #: apps/pybb/templates/pybb/pm/outbox.html:7
-#: apps/wh/templates/accounts/pm.html:80
+#: apps/wh/templates/accounts/pm.html:114
 msgid "Outbox"
 msgstr "Исходящие"
 
@@ -1638,7 +1639,7 @@ msgid "Message for"
 msgstr "Сообщение для"
 
 #: apps/pybb/templates/pybb/pm/message.html:71
-#: apps/wh/templates/accounts/pm.html:69
+#: apps/wh/templates/accounts/pm.html:98
 msgid "Reply"
 msgstr "Ответить"
 
@@ -2670,8 +2671,7 @@ msgstr "Имя пользователя"
 #: apps/wh/forms.py:302
 msgid ""
 "Try to pass only latin symbols, numbers and underscores with your nickname"
-msgstr ""
-"Только латинские символы, цифры и символ подчеркивания разрешены"
+msgstr "Только латинские символы, цифры и символ подчеркивания разрешены"
 
 #: apps/wh/forms.py:303
 msgid "Only latin symbols and numbers and underscore are allowed"
@@ -3043,22 +3043,38 @@ msgid "Change password"
 msgstr "Сменить пароль"
 
 #: apps/wh/templates/accounts/pm.html:32
-msgid "From"
-msgstr ""
+msgid "State"
+msgstr "Статус"
 
 #: apps/wh/templates/accounts/pm.html:33
+msgid "From"
+msgstr "Источник"
+
+#: apps/wh/templates/accounts/pm.html:34
 msgid "To"
-msgstr ""
+msgstr "Адресат"
 
-#: apps/wh/templates/accounts/pm.html:80
-#, fuzzy
-msgid "Deleted"
-msgstr "Удалить"
-
+#: apps/wh/templates/accounts/pm.html:102
 #: apps/wh/templates/accounts/pm_send.html:9
-#, fuzzy
 msgid "Send"
-msgstr "Отослать ЛС"
+msgstr "Отослать"
+
+#: apps/wh/templates/accounts/pm.html:114
+msgid "Deleted"
+msgstr "Удаленные"
+
+#: apps/wh/templates/accounts/pm.html:144
+#: apps/wh/templates/accounts/pm_delete.html:4
+msgid "Successfully deleted"
+msgstr "Успешно удален"
+
+#: apps/wh/templates/accounts/pm.html:182
+msgid "Private message was sent"
+msgstr "Сообщение было отослано"
+
+#: apps/wh/templates/accounts/pm_delete.html:6
+msgid "Message wasn't deleted"
+msgstr "Сообщение не было удалено"
 
 #: apps/wh/templates/accounts/registered.html:3
 #, fuzzy
@@ -3073,7 +3089,7 @@ msgstr "Уровень"
 msgid "There is no such user"
 msgstr "Такого пользователя нет"
 
-#: apps/wh/views/views.py:369
+#: apps/wh/views/views.py:388
 msgid ""
 "You've exceeded limit of registration, please wait 10 minutes and try again, "
 "thank you"
@@ -3081,7 +3097,7 @@ msgstr ""
 "Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 минут "
 "и попробуйте снова"
 
-#: apps/wh/views/views.py:901
+#: apps/wh/views/views.py:920
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 

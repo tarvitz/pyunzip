@@ -1,0 +1,17 @@
+{% extends base_template %} {% load i18n %}
+{% block content %} 
+
+<form  method='post' action="{% url "wh:pm-send" %}" class='form form-horizontal'>
+    {% csrf_token %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    <div class='controls-group'>
+        <div class='control'>
+            <input type='submit' value='{% trans "Send" %}'>
+        </div>
+    </div>
+</form>
+
+<script language='javascript'>
+</script>
+{% endblock %}
+

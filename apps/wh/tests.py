@@ -4,21 +4,23 @@ import os
 import re
 from django.test import TestCase
 from django.contrib.auth.models import User
-from apps.wh.models import Side, RegisterSid, Rank, RankType
+from apps.wh.models import (
+    Side, RegisterSid, Rank, RankType, PM
+)
 from apps.core.models import UserSID
-#from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
-#from django.conf import settings
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
+import simplejson as json
 
 
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_rank_types.json',
         'tests/fixtures/load_ranks.json',
-        'tests/fixtures/load_users.json'
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_pms.json'
     ]
 
     def setUp(self):
@@ -31,7 +33,6 @@ class JustTest(TestCase):
             reverse('wh:users'),
             reverse('wh:url_x_get_users_list_null'),
             reverse('wh:url_x_get_users_list', args=('use', )),
-            reverse('wh:pm-view'),
             reverse('wh:pm-sent'),
             reverse('wh:pm-income'),
         ]
@@ -391,6 +392,58 @@ class JustTest(TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'image/vnd.microsoft.icon')
+
+    def test_send_pm(self):
+        admin = User.objects.get(username='admin')
+        post = {
+            'addressee': admin.pk,
+            'title': 'me here',
+            'content': u'Preved medved, waaaGH?'
+        }
+        count = PM.objects.count()
+        url = reverse('wh:pm-send')
+        # anonymous can not post pm
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count, PM.objects.count())
+        # user can post private messages
+        self.client.login(username='user', password='123456')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(count + 1, PM.objects.count())
+        pm = PM.objects.all()[0]
+        edit = deepcopy(post)
+        edit.update({'addressee': admin})
+        self.check_state(pm, edit, check=self.assertEqual)
+
+    def test_json_pm_fetch(self):
+        logged = self.client.login(username='user', password='123456')
+        user = User.objects.get(username='user')
+
+        self.assertEqual(logged, True)
+
+        # inbox
+        url = reverse('json:wh:pm-view')
+        pm = PM.objects.filter(addressee=user)[0]
+        inbox_url = "%s?pk=%s&folder=inbox" % (url, pm.pk)
+        response = self.client.get(inbox_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get("Content-Type"), 'application/json')
+        js = json.loads(response.content)
+        self.assertEqual(js['to'], user.nickname)
+        sender = User.objects.get(nickname__iexact=js['from'])
+        self.assertIn(sender.nickname, js['nickname'])
+
+        # outbox
+        pm = PM.objects.filter(sender=user)[0]
+        outbox_url = "%s?pk=%s&folder=outbox" % (url, pm.pk)
+        response = self.client.get(outbox_url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get("Content-Type"), 'application/json')
+        js = json.loads(response.content)
+        self.assertEqual(js['from'], user.nickname)
+        addressee = User.objects.get(nickname__iexact=js['to'])
+        self.assertIn(addressee.nickname, js['nickname'])
 
 
 class CacheTest(TestCase):

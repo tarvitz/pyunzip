@@ -154,8 +154,10 @@ class PM(models.Model):
         _('title'), max_length=50
     )
     content = models.TextField(_('text'))
-    is_read = models.BooleanField(_('is read'))
-    sent = models.DateTimeField(_('sent'))
+    is_read = models.BooleanField(_('is read'), default=False)
+    sent = models.DateTimeField(
+        _('sent'), auto_now=True, default=datetime.now
+    )
     dbs = models.BooleanField(_('deleted by sendr'))
     dba = models.BooleanField(_('deleted by addr'))
     syntax = models.CharField(
@@ -173,6 +175,8 @@ class PM(models.Model):
             self.remove()
         return
 
+    def __unicode__(self):
+        return self.title
 
 class RegisterSid(models.Model):
     sid = models.CharField(
@@ -508,6 +512,14 @@ class UserExtension(object):
 
     def __unicode__(self):
         return self.nickname or self.username
+
+    def get_avatar_url(self):
+        avatar = None
+        real_avatar = safe_ret(self, 'avatar.url') or ''
+        if not real_avatar:
+            avatar = os.path.join(settings.MEDIA_URL, 'avatars/none.png')
+        avatar = avatar or real_avatar
+        return avatar
 
     def get_username(self):
         return self.nickname or self.username

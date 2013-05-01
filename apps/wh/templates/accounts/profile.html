@@ -55,7 +55,7 @@
 	</div> <!-- msg_content -->
 	<br clear='all'>
 	<div class='msg_footer' style='text-align: left'>
-		[<a class='act_link' href="{% url "wh:pm-send-nick" usr.get_username %}" title='отправить лс'>pm</a>]
+		{% comment %}[<a class='act_link' href="{% url "wh:pm-send-nick" usr.get_username %}" title='отправить лс'>pm</a>]{% endcomment %}
                 {% if user == usr %}[<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
 
                 {% if user.is_staff %}[{{ usr.username }}]{% endif %}

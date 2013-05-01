@@ -205,6 +205,17 @@
         });
 
         $("select.chosen").chosen();
+        $.get("{% url 'json:wh:pm-unread' %}", {}, function(response){
+            if (response.pm_unread){
+                $(".pm.count").text(" [" + response.pm_unread+ "]");
+                noty({
+                    text: "{% trans 'You have unread messages' %}: " + response.pm_unread,
+                    type: "success",
+                    dismissQueue: true,
+                    timeout: 5000,
+                });
+            }
+        });
     });
 
     {% comment %}

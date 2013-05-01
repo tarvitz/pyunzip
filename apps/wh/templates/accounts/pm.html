@@ -1,45 +1,244 @@
-{% extends base_template %}{% load newsfilters %}
-{% block title %} {{ block.super }}:{{ pmsg.title }} {% endblock %}
-{% block css %}
-{{ block.super }}
-<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
+{% extends base_template %}{% load newsfilters i18n %}
+{% block css %}{{ block.super }}
+<link rel='stylesheet' type='text/css' href='/styles/message.css' />
+<link rel='stylesheet' type='text/css' href='/styles/round_message.css' />
 {% endblock %}
-{% block text_content %} 
+{% block js %}{{ block.super }}
+<script type='text/javascript' src='/media/js/knockout-2.2.1.js'></script>{% endblock %}
+{% block text_content %}
+<a class='btn btn-inverse pull-right show-message btn-mini' data-toggle='button'>
+    {% trans "Send message" %}
+</a>
 
-<center>
-<div class='message'>
-<div class='msg_headline'>
-	<div class='transparency' id='black'></div>
-	<center><b>{{ pmsg.title }}</b></center>
-</div>
-<div class='msg_content'>
-    <div class='transparency'></div>
-	<div class='msg_avatar'>
-		{% with pmsg.sender as usr %}
-			{% include "msg/avatar.html" %}
-		{% endwith %}
-	</div> <!-- msg_avatar -->
-	<div class='msg_text'>
-		<div class='msg_reply_author'>
-			{% if outcome %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.sender.get_username %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.sender.get_username %}'></a>{% else %}
-			<a href='{% url apps.wh.views.profile_by_nick nickname=pmsg.addressee.get_username %}'><img src='{% url apps.wh.views.get_user_avatar nickname=pmsg.addressee.get_username %}'></a>{% endif %}
-		</div>
-		{{ pmsg.content|render_filter:pmsg.syntax|safe }}<br>
-
-		<br clear='all'>
-		<!-- <a href='delete' id='button' >Удалить</a> -->
-	</div> <!-- msg_text -->
-</div> <!-- msg_content -->
-<br clear='all'>
-<div class='msg_footer'>
-<a href="{% url apps.wh.views.delete_pm pm_id=pmsg.id approve='approve' %}">удалить</a>|
-<a href="{% url "url_send_pm_by_nick" pmsg.sender.get_username %}">ответить</a>
+<div class='send pm hide'>
+    <form class='form form-horizontal' id='id_message_form' action='{% url "wh:pm-send" %}' method='POST'>
+    {% csrf_token %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    <div class='control-group'>
+        <div class='controls'>
+            <input type='submit' class='btn btn-inverse' value='{% trans "Send" %}' id='id_submit'>
+        </div>
+    </div>
+    </form>
 </div>
 
-</div> <!-- message -->
-</center>
-<script language='javascript'>
-    	sliding_up('.msg_reply_author img',{width: '100px',},{width: '50px',},1000);
+<div class='tabbable'>
+    <ul class='nav nav-pills nav-inverse' data-bind='foreach: folders'>
+        <li data-bind='
+            css: {active: $data == $root.chosenFolderId()},
+            click: $root.goToFolder
+        '><a data-bind='text: $root.getFolderName($data)' href='#'></a></li>
+        {% comment %}
+            <a href='#inbox' data-toggle='tab'>{% trans "Inbox" %}</a></li>
+        <li><a href='#outbox' data-toggle='tab'>{% trans "Outbox" %}</a></li>
+        <li><a href='#deleted' data-toggle='tab'>{% trans "Deleted" %}</a></li>{% endcomment %}
+    </ul>
+    {% comment %}
+    <div class='folders tab-content' data-bind='foreach: folders'>
+        <div class='tab-pane' data-bind='text: $root.getFolderName($data),
+            css: { active: $data == $root.chosenFolderId() },
+            attr: { id: $data },
+            click: $root.goToFolder'>
+        </div>
+    </div>{% endcomment %}
+    <table class='table table-striped no-margin mails' data-bind='with: chosenFolderData'>
+        <tr>
+            <th>{% trans "State" %}</th>
+            <th>{% trans "From" %}</th>
+            <th>{% trans "To" %}</th>
+            <th>{% trans "Subject" %}</th>
+            <th>{% trans "Date" %}</th>
+        </tr>
+        <tbody data-bind='foreach: mails'>
+        <tr data-bind='click: $root.goToMail, css: {new: !is_read && folder == "inbox"}'>
+            <td>
+                <i class='icon-white'
+                    data-bind='css: {
+                        "icon-comment": !is_read,
+                        "hide": folder != "inbox"
+                    }'></i>
+            </td>
+            <td data-bind='text: from'></td>
+            <td data-bind='text: to'></td>
+            <td data-bind='text: subject'></td>
+            <td data-bind='text: date'></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class='view mail' data-bind='foreach: chosenMailData'>
+        <div class='round message'>
+            <div class='message-headline'>
+                <div class='transparency black'></div>
+                <span data-bind='text: subject'></span>,
+                <span class='date' data-bind='text: date'></span>
+            </div>
+            <div class='message-body'>
+                <div class='avatar'>
+                    <img data-bind='attr: {src: avatar}' alt='avatar'>
+                    <span class='nickname' data-bind='html: nickname'></span>
+                </div>
+                <div class='text'>
+                    <div class='from' data-bind='text: from'></div>
+                    <div class='date' data-bind='text: date'></div>
+                    <div class='msg' data-bind='text: content'></div>
+               </div>
+            </div>
+            <div class='message-footer'>
+                <div class='transparency black'></div>
+                <div class='links'>
+                    <span><a href='#' class='delete-pm'
+                        data-bind='
+                            click: $root.deleteMail,
+                            attr: {
+                                "data-nickname": nick_raw,
+                                "id": id
+                            },
+                            css: {hide: folder == "deleted"}
+                            '>{% trans "Delete" %}</a>
+                    </span>
+                </div>
+                <span data-bind='text: date, css: {hide: folder != "deleted"}'></span>
+            </div>
+        </div>
+    </div>
+
+    <div class='reply form' data-bind='css: {hide: $root.chosenFolderId() != "inbox"}'>
+        <form id='id_reply_form' class='form' data-bind='css: {hide: $root.chosenMailData() == null}'
+            action='{% url "wh:pm-send" %}' method='POST'>
+            {% csrf_token %}
+            <div class='controls-group'>
+                <div class='controls'>
+                    <!--<label for='id_reply'>{% trans "Reply" %}</label>-->
+                    <textarea id='id_reply' name='content' class='reply text'></textarea>
+                    <input type='hidden' name='addressee' data-bind='value: $root.getNickname($root.chosenMailData())'>
+                    <input type='hidden' name='title' data-bind='value: $root.getReplyTitle($root.chosenMailData())'>
+                    <input id='id_submit' type='submit' value='{% trans "Send" %}' class='btn btn-inverse'>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+<script type='text/javascript'>
+    function MailModel(){
+        var self = this;
+
+        self.folders = ['inbox', 'outbox', 'deleted'];
+        self.folders_trans = ['{% trans "Inbox" %}', '{% trans "Outbox" %}', '{% trans "Deleted" %}'];
+        self.chosenFolderId = ko.observable();
+        self.chosenFolderData = ko.observable();
+        self.chosenMailData = ko.observable();
+        self.testMe = false;
+
+        self.goToFolder = function(folder){
+            self.chosenFolderId(folder);
+            self.chosenMailData(null);
+            $.get('{% url "json:wh:pm" %}', {folder: folder}, self.chosenFolderData);
+        }
+
+        self.getFolderName = function(folder){
+            return self.folders_trans[self.folders.indexOf(folder)];
+        }
+        self.goToMail = function(mail){
+            self.chosenFolderId(mail.folder);
+            self.chosenFolderData(null);
+            $.get(
+                '{% url "json:wh:pm-view" %}',
+                {pk: mail.id, folder: mail.folder}, self.chosenMailData
+            );
+        }
+
+        self.deleteMail = function(mail){
+            url = "{% url 'wh:pm-delete' 0 %}".replace(0, mail.id)
+            xhr({
+                url: url,
+                success: function(response){
+                    noty({
+                        text: "{% trans 'Successfully deleted' %}",
+                        type: "success",
+                        dismissQueue: true,
+                        timeout: 4000
+                    });
+                    self.chosenFolderId(mail.folder);
+                    self.chosenMailData(null);
+                    self.goToFolder(mail.folder);
+                }
+            });
+        }
+
+        self.goToFolder("inbox");
+        self.getNickname = function(mail){
+            if (mail){
+                return mail.nick_id;
+            }
+            console.log(mail);
+        }
+        self.getReplyTitle = function(mail){
+            if (mail){
+                return "Re: " + mail.subject.replace('Re: ', '');
+            }
+        }
+        self.checkReadState = function(mail){
+            console.log(mail);
+            if (mail){
+                return mail.is_read;
+            }
+            return true;
+        }
+    }
+    ko.applyBindings(new MailModel());
 </script>
+
+<script type='text/javascript'>
+function sendMessage(form){
+    postFormAjax({
+        form: form,
+        successMsg: '{% trans "Private message was sent" %}',
+    });
+}
+$(document).ready(function(){
+    form = $("#id_reply_form");
+    $("#id_reply_form").submit(function(e){
+        sendMessage(form);
+        return false;
+    });
+    $("#id_reply_form #id_submit").click(function(e){
+        sendMessage(form);
+        return false;
+    });
+    $('#id_message_form').submit(function(e){
+        var form = $(this);
+        sendMessage(form);
+        return false;
+    });
+    $('#id_message_form #id_submit').click(function(e){
+        var form = $(this).parents('form');
+        sendMessage(form);
+        return false;
+    });
+    $('.show-message').click(function(e){
+        $(".send.pm").toggleClass('hide');
+    });
+
+    $.each($(".ajax-chosen"), function(idx, block){
+        $(block).ajaxChosen({
+            type: 'GET',
+            url: $(block).attr('url'),
+            dataType: 'json',
+            jsonTermKey: 'q',
+            keepTypingMsg: '{% trans "Please, keep typing ..." %}',
+            lookingForMsg: "{% trans 'Searching for' %}",
+        }, function(data){
+            var results = [];
+            data.map(function(user){
+                results.push({value: user.id, text: user.title});
+            });
+            return results;
+        }, {placeholder_text: "{% trans "Search some rosters" %}"});
+    });
+
+});
+</script>
+{% include "markup.html" with markup_path_id="#id_reply" block_source_id="" quote_btn_class="" %}
 {% endblock %}

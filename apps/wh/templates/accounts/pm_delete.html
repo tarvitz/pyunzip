@@ -1,0 +1,8 @@
+{% extends base_template %}{% load i18n %}
+{% block content %}
+{% if success %}
+    <h3>{% trans "Successfully deleted" %}</h3>
+{% else %}
+    <h3>{% trans "Message wasn't deleted" %}</h3>
+{% endif %}
+{% endblock %}
