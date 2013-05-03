@@ -416,6 +416,9 @@ class JustTest(TestCase):
         edit.update({'addressee': admin})
         self.check_state(pm, edit, check=self.assertEqual)
 
+    def test_delete_pm(self):
+        raise "Implement me"
+
     def test_json_pm_fetch(self):
         logged = self.client.login(username='user', password='123456')
         user = User.objects.get(username='user')
