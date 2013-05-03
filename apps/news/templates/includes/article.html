@@ -55,7 +55,11 @@
  {% endif %}
  <div id='read'>
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
- {% if news_general %} <a href='{% url "news:article" number=n.id %}'>читать далее</a> {% endif %}
+ {% if news_general %}
+    <a href='{% url "news:article" number=n.id %}'>читать далее</a>
+    {% get_comment_count for n as count %}
+    <a href='{% url "news:article" number=n.id %}?page=last'>[ {{ count }} ]</a>
+ {% endif %}
  </div>
  <hr>
  <div class='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
