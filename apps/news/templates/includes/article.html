@@ -57,8 +57,6 @@
  {# <a href='article/{{ n.id }}'>читать далее</a> #}
  {% if news_general %}
     <a href='{% url "news:article" number=n.id %}'>читать далее</a>
-    {% get_comment_count for n as count %}
-    <a href='{% url "news:article" number=n.id %}?page=last'>[ {{ count }} ]</a>
  {% endif %}
  </div>
  <hr>
@@ -67,7 +65,7 @@
  {% if n.url %}<div class='footer url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
  {% spaceless %}
     {% get_comment_count for n as comments %}
- <div class='footer'>Коментариев: {{ comments }}
+ <div class='footer'>Коментариев: <a href='{% url "news:article" number=n.id %}?page=last'>{{ comments }}</a>
  {% with n as object %}
     {% include "tracker/is_new.html" %}
  {% endwith %}
