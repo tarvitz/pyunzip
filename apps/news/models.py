@@ -66,6 +66,9 @@ class AbstractNews(models.Model):
     )
     content = models.TextField(
         _('content'), null=False)
+    cache_content = models.TextField(
+        _('cache content'), blank=True, null=True
+    )
     date = models.DateTimeField(
         _('dateTime'), null=False, default=datetime.now)
     approved = models.BooleanField(
@@ -142,7 +145,6 @@ class AbstractNews(models.Model):
         return 'inverse'
 
     def render(self, field):
-        from apps.core.helpers import post_markup_filter, render_filter
         out = post_markup_filter(getattr(self, field))
         return render_filter(out, self.syntax)
 
