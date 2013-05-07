@@ -474,6 +474,11 @@ Comment.add_to_class(
         choices=settings.SYNTAX)
 )
 Comment.add_to_class('search', SphinxSearch(weights={'comment': 100}))
+Comment.add_to_class(
+    'cache_comment', models.TextField(
+        _("cache comment"), null=True, blank=True
+    )
+)
 
 
 # UserAdmin import should be placed heres

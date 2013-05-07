@@ -44,7 +44,9 @@
                 {% <markdownit></markdownit>}
 					{{ c.render_comment|render_filter:c.syntax|safe }}
 				{% endmarkdownit %}{% endcomment %}
-                {{ c.render_comment|safe }}
+                {# {{ c.render_comment|safe }} #}
+                {{ c.cache_comment|safe }}
+
 			</div>
 			{% if c.user.about %}
 			<small>---<br>{{ c.user.about }}</small>

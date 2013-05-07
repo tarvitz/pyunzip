@@ -4,6 +4,7 @@ from django.db.models.signals import (
 from apps.wh.actions import rank_scheme_alter
 from apps.wh.models import RankType, PM
 from django.contrib.auth.models import User
+from django.contrib.comments.models import Comment
 from django.core.cache import get_cache, cache
 from django.dispatch import receiver
 
@@ -52,6 +53,11 @@ def on_rank_type_delete(instance, **kwargs):
 @receiver(pre_save, sender=PM)
 def on_pm_pre_save(instance, **kwargs):
     instance.cache_content = instance.render("content")
+    return instance
+
+@receiver(pre_save, sender=Comment)
+def on_comment_pre_save(instance, **kwargs):
+    instance.comment = instance.render_comment()
     return instance
 
 def setup_signals():
