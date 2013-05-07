@@ -26,7 +26,11 @@ def pre_save_news(instance, **kwargs):
                 fail_silently=True
             )
             instance.resend = False
-    instance.cache_content = instance.render("content")
+    return instance
+
+@receiver(pre_save, sender=News)
+def on_news_pre_save(instance, **kwargs):
+    instance.cache_content = instance.render_content()
     return instance
 
 @receiver(post_save, sender=News)
