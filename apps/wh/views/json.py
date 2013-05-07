@@ -1,6 +1,6 @@
 # coding: utf-8
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
 from apps.wh.models import MiniQuote, Army, Expression, PM
@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from apps.core.helpers import render_to, render_to_json, get_int_or_zero
 from apps.core.decorators import login_required_json
 from django.utils.html import strip_tags
+from django.db.models import Q
 
 def miniquote(request):
     response = HttpResponse()
@@ -46,7 +47,10 @@ def pm(request):
     elif folder == 'outbox':
         pm = PM.objects.filter(sender=request.user, dbs=False)
     elif folder == 'deleted':
-        pm = PM.objects.filter(dbs=True)
+        pm = PM.objects.filter(
+            dbs=True,
+            Q(sender=request.user)|Q(addressee=request.user)
+        )
     else:
         return {}
     _pm = []
@@ -86,7 +90,7 @@ def pm_view(request):
         nick_id = message.addressee.pk
     else:
         pass
-    
+
     msg = {
         'id': message.pk,
         'to': message.addressee.nickname or message.addressee.username,
