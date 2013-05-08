@@ -57,7 +57,7 @@ def on_pm_pre_save(instance, **kwargs):
 
 @receiver(pre_save, sender=Comment)
 def on_comment_pre_save(instance, **kwargs):
-    instance.comment = instance.render_comment()
+    instance.cache_comment = instance.render_comment()
     return instance
 
 def setup_signals():
