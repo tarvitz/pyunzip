@@ -47,10 +47,8 @@ def pm(request):
     elif folder == 'outbox':
         pm = PM.objects.filter(sender=request.user, dbs=False)
     elif folder == 'deleted':
-        pm = PM.objects.filter(
-            dbs=True,
-            Q(sender=request.user)|Q(addressee=request.user)
-        )
+        qset = Q(dbs=True) & (Q(sender=request.user)|Q(addressee=request.user))
+        pm = PM.objects.filter(qset)
     else:
         return {}
     _pm = []
