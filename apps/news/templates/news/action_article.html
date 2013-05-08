@@ -21,7 +21,7 @@ var markItUpParsers = {
     'textile': '{% url "news:markup-preview" %}?markup=textile&template=article',
 }
 
-myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];
+//myMarkupSettings['bb-code']['previewParserPath'] = markItUpParsers['bb-code'];
 myMarkupSettings['textile']['previewParserPath'] = markItUpParsers['textile'];
 
 var reloadMarkItUp = function(type){
@@ -32,7 +32,7 @@ var reloadMarkItUp = function(type){
 var loadMarkitUp = function(type){
     var mySettings = myMarkupSettings["{{ syntax|default:'textile'}}"];
     settings = {
-        'bb-code': myMarkupSettings['bb-code'],
+        //'bb-code': myMarkupSettings['bb-code'],
         'textile': myMarkupSettings['textile']
     }
     if (type in settings){
