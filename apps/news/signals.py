@@ -31,6 +31,8 @@ def pre_save_news(instance, **kwargs):
 @receiver(pre_save, sender=News)
 def on_news_pre_save(instance, **kwargs):
     instance.cache_content = instance.render_content()
+    if instance.approved:
+        instance.status = 'approved'
     return instance
 
 @receiver(post_save, sender=News)
