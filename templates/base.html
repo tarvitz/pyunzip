@@ -23,53 +23,13 @@
 <link rel="stylesheet" href="/styles/tags.css" type="text/css" media="screen">
 <link rel="stylesheet" href="/styles/karma.css" type="text/css" media="screen">
 <link rel='stylesheet' href='/styles/scrollbar.css' type='text/css' media='screen'>
-
+<link href='http://fonts.googleapis.com/css?family=Noto+Serif&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
 {% endblock %}
 {# stylesheet special for overriding base style templates withing one file #}
 <link rel='stylesheet' href='/styles/override.css' type='text/css' media='screen'>
 {# user css'es #}
 
 {% if skin_css_path %}<link rel='stylesheet' href='{{ skin_css_path }}' type='text/css' media='screen'>{% endif %}
-{% block js %}
-{% include "js/locale.ru.html" %}
-<script type='text/javascript' src='/media/js/core.js'></script>
-<script type='text/javascript' src='/media/js/base.js'></script>
-<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
-<script type='text/javascript' src='/media/js/chosen.min.js'></script>
-<script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
-<script type='text/javascript' src='/media/js/video.js' async></script>
-<script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
-{# <script type='text/javascript' src='/media/js/bootstrap-image-gallery.min.js' async></script> #}
-<script type='text/javascript' src='/media/colorbox/jquery.colorbox-min.js'></script>
-<script type='text/javascript' src='/media/colorbox/i18n/jquery.colorbox-ru.js'></script>
-<script type='text/javascript' src='/media/js/jq_defaults.js'></script>
-<script type='text/javascript' src='/media/js/jquery.tmpl.min.js'></script>
-<script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
-<script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
-<script type='text/javascript' src='/media/js/markitup/textile.js'></script>
-
-<!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
-<script type='text/javascript' src='/media/js/m_effects.js'></script>
-<!-- noty -->
-<script type="text/javascript" src="/media/js/noty/jquery.noty.js"></script>
-<script type="text/javascript" src="/media/js/noty/promise.js"></script>
-
-<script type="text/javascript" src="/media/js/noty/layouts/top.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/topLeft.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/topRight.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/center.js"></script>
-<script type="text/javascript" src="/media/js/noty/themes/default.js"></script>
-<script type="text/javascript" src="/media/js/noty/themes/warmist.js"></script>
-<!-- You can add more layouts if you want -->
-<script type='text/javascript' src='/media/js/jq_base.js'></script>
-<script type='text/javascript' src='/media/js/ZeroClipboard.min.js'></script>
-<!--<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>-->
-{% comment %}
-<script language='javascript'>
-	//alert(isOpera);
-</script>
-{% endcomment %}
-{% endblock %}
 {% block head_content %}{% endblock %}
 </head>
 
@@ -168,6 +128,47 @@
 {% endif %}
 <!-- end of modals -->
 {% endblock %} {# modals #}
+
+{% block js %}
+{% include "js/locale.ru.html" %}
+<script type='text/javascript' src='/media/js/core.js'></script>
+<script type='text/javascript' src='/media/js/base.js'></script>
+<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
+<script type='text/javascript' src='/media/js/chosen.min.js'></script>
+<script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
+<script type='text/javascript' src='/media/js/video.js' async></script>
+<script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
+{# <script type='text/javascript' src='/media/js/bootstrap-image-gallery.min.js' async></script> #}
+<script type='text/javascript' src='/media/colorbox/jquery.colorbox-min.js'></script>
+<script type='text/javascript' src='/media/colorbox/i18n/jquery.colorbox-ru.js'></script>
+<script type='text/javascript' src='/media/js/jq_defaults.js'></script>
+<script type='text/javascript' src='/media/js/jquery.tmpl.min.js'></script>
+<script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
+<script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
+<script type='text/javascript' src='/media/js/markitup/textile.js'></script>
+
+<!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
+<script type='text/javascript' src='/media/js/m_effects.js'></script>
+<!-- noty -->
+<script type="text/javascript" src="/media/js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="/media/js/noty/promise.js"></script>
+
+<script type="text/javascript" src="/media/js/noty/layouts/top.js"></script>
+<script type="text/javascript" src="/media/js/noty/layouts/topLeft.js"></script>
+<script type="text/javascript" src="/media/js/noty/layouts/topRight.js"></script>
+<script type="text/javascript" src="/media/js/noty/layouts/center.js"></script>
+<script type="text/javascript" src="/media/js/noty/themes/default.js"></script>
+<script type="text/javascript" src="/media/js/noty/themes/warmist.js"></script>
+<!-- You can add more layouts if you want -->
+<script type='text/javascript' src='/media/js/jq_base.js'></script>
+<script type='text/javascript' src='/media/js/ZeroClipboard.min.js'></script>
+<!--<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>-->
+{% comment %}
+<script language='javascript'>
+	//alert(isOpera);
+</script>
+{% endcomment %}
+{% endblock %}
 
 {% block endjs %}
 {% include "jtmpl/core.html" %}
