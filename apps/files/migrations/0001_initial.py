@@ -8,17 +8,116 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Game'
+        db.create_table(u'files_game', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('short_name', self.gf('django.db.models.fields.CharField')(max_length=30)),
+        ))
+        db.send_create_signal(u'files', ['Game'])
+
+        # Adding model 'Version'
+        db.create_table(u'files_version', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
+            ('patch', self.gf('django.db.models.fields.CharField')(max_length=20)),
+            ('release_number', self.gf('django.db.models.fields.IntegerField')()),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['files.Game'])),
+        ))
+        db.send_create_signal(u'files', ['Version'])
+
+        # Adding model 'Attachment'
+        db.create_table(u'files_attachment', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+        ))
+        db.send_create_signal(u'files', ['Attachment'])
+
+        # Adding model 'Replay'
+        db.create_table(u'files_replay', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('version', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['files.Version'])),
+            ('upload_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('type', self.gf('django.db.models.fields.IntegerField')(max_length=30)),
+            ('nonstd_layout', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('teams', self.gf('django.db.models.fields.CharField')(max_length=200, blank=True)),
+            ('races', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('winner', self.gf('django.db.models.fields.IntegerField')(max_length=30)),
+            ('author', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('replay', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('comments', self.gf('django.db.models.fields.TextField')(blank=True)),
+            ('is_set', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('syntax', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'files', ['Replay'])
+
+        # Adding model 'Gallery'
+        db.create_table(u'files_gallery', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('type', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=100)),
+        ))
+        db.send_create_signal(u'files', ['Gallery'])
+
+        # Adding model 'Image'
+        db.create_table(u'files_image', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('alias', self.gf('django.db.models.fields.CharField')(max_length=32, unique=True, null=True, blank=True)),
+            ('comments', self.gf('django.db.models.fields.TextField')()),
+            ('gallery', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['files.Gallery'])),
+            ('image', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('thumbnail', self.gf('django.db.models.fields.files.ImageField')(max_length=100)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+        ))
+        db.send_create_signal(u'files', ['Image'])
+
+        # Adding model 'File'
+        db.create_table(u'files_file', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('upload_date', self.gf('django.db.models.fields.DateTimeField')()),
+            ('url', self.gf('django.db.models.fields.URLField')(max_length=200, blank=True)),
+        ))
+        db.send_create_signal(u'files', ['File'])
+
         # Adding model 'UserFile'
         db.create_table(u'files_userfile', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('title', self.gf('django.db.models.fields.CharField')(max_length=256, null=True, blank=True)),
             ('file', self.gf('django.db.models.fields.files.FileField')(max_length=100)),
-            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='user_file_set', to=orm['auth.User'])),
+            ('plain_type', self.gf('django.db.models.fields.CharField')(default='octet/stream', max_length=256, null=True, blank=True)),
+            ('size', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
         ))
         db.send_create_signal(u'files', ['UserFile'])
 
 
     def backwards(self, orm):
+        # Deleting model 'Game'
+        db.delete_table(u'files_game')
+
+        # Deleting model 'Version'
+        db.delete_table(u'files_version')
+
+        # Deleting model 'Attachment'
+        db.delete_table(u'files_attachment')
+
+        # Deleting model 'Replay'
+        db.delete_table(u'files_replay')
+
+        # Deleting model 'Gallery'
+        db.delete_table(u'files_gallery')
+
+        # Deleting model 'Image'
+        db.delete_table(u'files_image')
+
+        # Deleting model 'File'
+        db.delete_table(u'files_file')
+
         # Deleting model 'UserFile'
         db.delete_table(u'files_userfile')
 
@@ -131,7 +230,9 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'UserFile'},
             'file': ('django.db.models.fields.files.FileField', [], {'max_length': '100'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'owner': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
+            'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'user_file_set'", 'to': u"orm['auth.User']"}),
+            'plain_type': ('django.db.models.fields.CharField', [], {'default': "'octet/stream'", 'max_length': '256', 'null': 'True', 'blank': 'True'}),
+            'size': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '256', 'null': 'True', 'blank': 'True'})
         },
         u'files.version': {
@@ -141,6 +242,13 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'patch': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'release_number': ('django.db.models.fields.IntegerField', [], {})
+        },
+        u'tracker.seenobject': {
+            'Meta': {'object_name': 'SeenObject'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_seenobject'", 'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_pk': ('django.db.models.fields.TextField', [], {}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'wh.army': {
             'Meta': {'ordering': "['side']", 'object_name': 'Army'},
