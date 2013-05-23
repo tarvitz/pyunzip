@@ -5,7 +5,7 @@
 <script type='text/javascript'>
 /* settings */
 var markItUpParsers = {
-    'textile': '{% url "news:markup-preview" %}?markup=textile&template=comment',
+    'textile': '{% url "news:markup-preview" %}?markup=textile&template=comment'
 }
 
 myMarkupSettings['textile']['previewParserPath'] = markItUpParsers['textile'];
@@ -40,7 +40,7 @@ $('.posts .post').on('click', '.forum.quote', function(e){
         var quote = "(" + nick + "){";
         var txt = document.getSelection().toString();
         txt = quote + txt + "}";
-        $("#id_body").text($("#id_body").text() + "\n" + txt);
+        $("#id_body").val($("#id_body").val() + "\n" + txt);
         return false;
     }
 });
