@@ -5,13 +5,15 @@ South==0.7.6
 amqp==1.0.6
 amqplib==1.0.2
 anyjson==0.3.3
+argparse==1.2.1
 billiard==2.7.3.19
 celery==2.4.4
-django-actions==0.2
+distribute==0.6.34
+-e git://github.com/tarvitz/django-actions.git@ab4a61cbf087f2f2a3e184b8c8fe93189b529873#egg=django_actions-dev
 django-celery==2.3.3
 django-debug-toolbar==0.9.4
 django-debug-toolbar-extra==0.0.2
-django-extwidgets==0.1
+-e git://github.com/tarvitz/django-extwidgets.git@00141a36826c80c83162fc7284d9f8d655da4b47#egg=django_extwidgets-dev
 django-grappelli==2.4.3
 django-picklefield==0.3.0
 ipdb==0.7
@@ -19,8 +21,10 @@ ipython==0.13.1
 kombu==2.5.4
 psycopg2==2.4.6
 python-dateutil==1.5
+python-memcached==1.51
+pytils==0.2.3
 simplejson==2.6.2
 six==1.2.0
-sleekxmpp==1.2.0
+sleekxmpp==1.1.11
 sorl-thumbnail==11.12
 wsgiref==0.1.2
