@@ -10,6 +10,13 @@ ADMINS = (
     ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
 )
 
+DATABASES={
+    'default':{
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'sqlite.db'
+    }
+}
+
 def get_local(value, default):
     import local
     if hasattr(local, value):
