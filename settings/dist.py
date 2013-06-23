@@ -2,6 +2,11 @@
 # Django settings for WarMist project.
 import os, sys
 from settings_path import rel_path
+try:
+    import psycopg2
+except ImportError:
+    from psycopg2ct import compat
+    compat.register()
 #from apps import djcelery
 #djcelery.setup_loader()
 DEBUG=False
