@@ -28,7 +28,7 @@ from apps.wh.forms import (
 
 from apps.core import pages, get_skin_template
 
-import Image
+from PIL import Image
 from datetime import datetime, timedelta
 from hashlib import sha1
 from random import randint, random
@@ -425,8 +425,8 @@ def onsite_register(request):
 
 
 def get_math_image(request, sid=''):
-    import ImageFont
-    import ImageDraw
+    from PIL import ImageFont
+    from PIL import ImageDraw
     #for joke sake
     if not sid:
         image = Image.new('RGBA', (630, 40), (0, 0, 0))

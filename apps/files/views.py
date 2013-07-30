@@ -704,7 +704,7 @@ def show_image(request, number=None,object_model='files.image', alias=None):
             processors=[pages]))
 
 def show_raw_image(request, alias, thumbnail=False):
-    import Image
+    from PIL import Image
     response = HttpResponse()
     image = get_object_or_404(GalleryImage, alias__iexact=alias)
     if thumbnail:
