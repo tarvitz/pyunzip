@@ -24,7 +24,7 @@
     {% endfor %}
 </table>
 {% else %}
-<div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_DEFAULT_THEME }}'>
+<div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
     <div class='panel-heading'><strong>{{ forum }}</strong></div>
     {{ forum.description }}
     <ul class='list-group'>
