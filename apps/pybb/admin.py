@@ -21,6 +21,7 @@ class ForumAdmin(admin.ModelAdmin):
     list_per_page = 20
     ordering = ['-category']
     search_fields = ['name', 'category__name']
+    list_editable = ['css_icon', ]
     actions = [revert_hidden,]
     fieldsets = (
         (None, {
