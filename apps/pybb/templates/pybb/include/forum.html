@@ -1,4 +1,11 @@
 {% load i18n pybb_extras %}
+
+<div class="controls btn-group" style='margin-bottom: 10px'>
+    <a class='btn btn-primary btn-mini' 
+       href="{% url "pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
+</div>
+
+{% if gs.BOOTSTRAP_VERSION != "3" %}
 <h3 class="header">{{ forum }}</h3>
 <table class="table table-striped">
     {% for topic in topics|pybb_unreads:user %}
@@ -15,10 +22,33 @@
         </li>
     </tr>
     {% endfor %}
-
 </table>
+{% else %}
+<div class='panel panel-primary'>
+    <div class='panel-heading'><strong>{{ forum }}</strong></div>
+    {{ forum.description }}
+    <ul class='list-group'>
+    {% for topic in topics|pybb_unreads:user %}
+        <li class='list-group-item'>
+            <span class='title col-lg-6'>{% pybb_link topic %}</span>
+            <span class='updated col-lg-3'>{% pybb_time topic.updated %}</span>
+            <span class='icons col-lg-2'>
+                {% if topic.sticky %}<i class='glyphicon glyphicon-calendar icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
+                {% if topic|pybb_has_unreads:user %}<i class="glyphicon glyphicon-comment icon-comment"></i>{% endif %}
+                {% if topic.closed %}<i class='glyphicon glyphicon-remove icon-remove' data-title='{% trans "Closed" %}' rel='tooltip'></i>{% endif %}
+                {% if topic.sticky %}<i class='glyphicon glyphicon-flag icon-flag' data-title='{% trans "Important" %}' rel='tooltip'></i>{% endif %}
+            </span>
+
+            <span class='count'>[{{ topic.post_count }}]</span>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endif %}
 
 {% pybb_pagination %}
+{% comment %}
 <div class="controls">
     <a href="{% url "pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
 </div>
+{% endcomment %}

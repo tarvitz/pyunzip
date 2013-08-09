@@ -1,4 +1,5 @@
 {% for iter in cats %}
+{% if gs.BOOTSTRAP_VERSION != '3' %}
 <div class=''>
     <h3><a class='brand' href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a></h3>
     <div class=''>
@@ -9,4 +10,18 @@
         </table>
     </div>
 </div>
+{% else %}
+    <div class='panel panel-primary'>
+        <div class='panel-heading' style='margin-bottom: 0px;'>
+            <strong>
+                <a href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a>
+            </strong>
+        </div>
+        <ul class='list-group' style='margin-top: 0px'>
+            {% for forum in iter.forums %}
+                {% include "pybb/forum_row_bs3.html" %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
 {% endfor %}

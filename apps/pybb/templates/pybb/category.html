@@ -29,12 +29,14 @@
 </div>
 {% else %}
     <div class='col-lg-7'>
-        <h3 class='header'>{{ category }}</h3>
-        <table class='table striped'>
+        <div class='panel panel-primary'>
+            <div class='panel-heading' style='margin-bottom: 0px'><strong>{{ category }}</strong></div>
+            <ul class='list-group' style='margin-top: 0px'>
             {% for forum in category.forums.all %}
-                {% include 'pybb/forum_row.html' %}
+                {% include 'pybb/forum_row_bs3.html' %}
             {% endfor %}
-        </table>
+            </ul>
+        </div>
     </div>
     <div class='col-lg-5'>
         {% include "pybb/quick_access_bs3.html" %}

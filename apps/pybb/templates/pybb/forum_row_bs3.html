@@ -1,0 +1,16 @@
+{% load pybb_extras %}
+<li class='list-group-item'>
+    <span class="title col-lg-7">
+        <a  rel='tooltip' data-title='{{ forum.description|safe }}' data-html='true'
+            data-delay='1000'
+            data-placement='right'
+            href='{{ forum.get_absolute_url }}'>{{ forum }}</a>
+    </span>
+    <span class="updated col-lg-3">
+        {% pybb_time forum.updated %}
+    </span>
+
+    <span class="">
+       [{{ forum.post_count }}]
+    </span>
+</li>

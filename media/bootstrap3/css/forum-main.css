@@ -95,3 +95,9 @@ a.user.image:hover .thumbnail{
 .tablist-inner-row{
     list-style-type: none;
 }
+.no-top-margin{
+    margin-top: 0px;
+}
+.panel.panel-primary .panel-heading a {
+    color: white;
+}
