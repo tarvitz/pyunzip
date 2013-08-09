@@ -628,6 +628,13 @@ class UserExtension(object):
                 mag = r.type.magnitude
         return mag
 
+    def get_forum_theme(self):
+        if isinstance(self.settings, dict):
+            return self.settings.get('forum_theme',
+                                     settings.FORUM_THEME_DEFAULT)
+        else:
+            return settings.FORUM_THEME_DEFAULT
+
     class Meta:
         permissions = (
             ('can_test', 'Can test functional')

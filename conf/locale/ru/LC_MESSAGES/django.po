@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-05-02 01:44+0400\n"
+"POT-Creation-Date: 2013-08-09 16:26+0400\n"
 "PO-Revision-Date: 2013-02-03 10:00+03\n"
 "Last-Translator: Saul Tarvitz <tarvitz@blacklibrary.ru>\n"
 "Language-Team: Russian <russian_warmist@blacklibrary.ru>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: apps/blogs/admin.py:13 apps/news/models.py:39 apps/news/models.py:68
-#: apps/news/models.py:259 apps/wh/models.py:77 apps/wh/models.py:122
+#: apps/news/models.py:262 apps/wh/models.py:77 apps/wh/models.py:122
 msgid "content"
 msgstr "контент"
 
@@ -54,7 +54,7 @@ msgid "Author IP address"
 msgstr "IP адрес автора"
 
 #: apps/blogs/models.py:42 apps/files/models.py:102 apps/karma/models.py:56
-#: apps/news/models.py:78 apps/tabletop/models.py:104
+#: apps/news/models.py:81 apps/tabletop/models.py:104
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44 apps/wh/models.py:473
 msgid "Syntax"
@@ -74,6 +74,7 @@ msgstr "Пост"
 
 #: apps/blogs/models.py:103 apps/pybb/models.py:203
 #: apps/pybb/templates/pybb/quick_access.html:38
+#: apps/pybb/templates/pybb/quick_access_bs3.html:38
 msgid "Posts"
 msgstr "Посты"
 
@@ -173,12 +174,12 @@ msgstr "Истекает"
 msgid "expired?"
 msgstr "Истекает"
 
-#: apps/core/models.py:194 apps/news/models.py:266
+#: apps/core/models.py:194 apps/news/models.py:269
 #, fuzzy
 msgid "created on"
 msgstr "Создано"
 
-#: apps/core/models.py:198 apps/news/models.py:269
+#: apps/core/models.py:198 apps/news/models.py:272
 #, fuzzy
 msgid "updated on"
 msgstr "Обновлено"
@@ -442,7 +443,7 @@ msgstr "Базовый"
 msgid "Additional"
 msgstr "Дополнительный"
 
-#: apps/files/admin.py:43 apps/news/admin.py:33
+#: apps/files/admin.py:43 apps/news/admin.py:34
 msgid "Stuff"
 msgstr "Стафф"
 
@@ -720,7 +721,7 @@ msgstr "Изображения"
 msgid "Original URL"
 msgstr "URL оригинала"
 
-#: apps/files/models.py:363 apps/news/models.py:253
+#: apps/files/models.py:363 apps/news/models.py:256
 msgid "owner"
 msgstr "владелец"
 
@@ -729,7 +730,7 @@ msgid "Files"
 msgstr "Файлы"
 
 #: apps/files/models.py:370 apps/menu/models.py:8 apps/news/models.py:37
-#: apps/news/models.py:54 apps/news/models.py:239 apps/news/models.py:250
+#: apps/news/models.py:54 apps/news/models.py:242 apps/news/models.py:253
 #: apps/tabletop/models.py:55 apps/tabletop/models.py:85
 #: apps/tabletop/models.py:188 apps/tabletop/models.py:316
 #: apps/tabletop/models.py:328 apps/tabletop/models.py:465
@@ -770,8 +771,7 @@ msgid "User files"
 msgstr "файлы"
 
 #: apps/files/templates/files/user_files.html:8
-#: apps/files/templates/files/user_files.html:15 templates/test_upload.html:8
-#: templates/test_upload.html.py:15
+#: apps/files/templates/files/user_files.html:15
 msgid "Upload files"
 msgstr "Загрузить файлы"
 
@@ -851,22 +851,19 @@ msgid ""
 msgstr ""
 
 #: apps/files/templates/files/user_files.html:181
-#: templates/test_upload.html:39
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
 #: apps/files/templates/files/user_files.html:188 templates/base.html:279
-#: templates/test_upload.html:46
 msgid "Yes"
 msgstr "Да"
 
 #: apps/files/templates/files/user_files.html:197
-#: templates/test_upload.html:55
 msgid "No"
 msgstr "Нет"
 
 #: apps/files/templates/files/user_files.html:205
-#: templates/test_upload.html:63 templates/js/locale.ru.html:8
+#: templates/js/locale.ru.html:8
 msgid "Do you want to proceed uploading the file?"
 msgstr "Вы действительно хотите загрузить этот файл?"
 
@@ -875,7 +872,7 @@ msgid "downloaded successfull, reload the page"
 msgstr "успешно загружено, обновите страницу"
 
 #: apps/files/templates/files/user_files.html:243
-#: templates/test_upload.html:87 templates/js/locale.ru.html:9
+#: templates/js/locale.ru.html:9
 msgid "error while uploading file"
 msgstr "произошла ошибка при загрузке файла"
 
@@ -1050,7 +1047,7 @@ msgstr "Неизвестный тип файла"
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
-#: apps/news/models.py:16 apps/news/models.py:72 apps/news/models.py:271
+#: apps/news/models.py:16 apps/news/models.py:75 apps/news/models.py:274
 #: apps/tabletop/models.py:207 apps/tabletop/templates/reports.html:45
 msgid "approved"
 msgstr "утверждено"
@@ -1085,7 +1082,7 @@ msgstr "автор"
 msgid "ip address"
 msgstr "IP адрес"
 
-#: apps/news/models.py:42 apps/news/models.py:261 apps/tabletop/models.py:209
+#: apps/news/models.py:42 apps/news/models.py:264 apps/tabletop/models.py:209
 #: apps/wh/models.py:170 apps/wh/models.py:252
 msgid "syntax"
 msgstr "синтаксис"
@@ -1100,113 +1097,114 @@ msgstr "Редактор"
 msgid "original URL"
 msgstr "URL оригинала"
 
-#: apps/news/models.py:70
+#: apps/news/models.py:70 apps/wh/models.py:161
+#, fuzzy
+msgid "cache content"
+msgstr "Содержимое заголовка"
+
+#: apps/news/models.py:73
 #, fuzzy
 msgid "dateTime"
 msgstr "ДатаВремя"
 
-#: apps/news/models.py:74 apps/news/models.py:273 apps/news/models.py:277
+#: apps/news/models.py:77 apps/news/models.py:276 apps/news/models.py:280
 #, fuzzy
 msgid "author ip address"
 msgstr "IP адрес автора"
 
-#: apps/news/models.py:76
+#: apps/news/models.py:79
 #, fuzzy
 msgid "is event"
 msgstr "событие?"
 
-#: apps/news/models.py:82
+#: apps/news/models.py:85
 msgid "reason"
 msgstr "причина"
 
-#: apps/news/models.py:93
+#: apps/news/models.py:96
 msgid "resend"
 msgstr "отправить"
 
-#: apps/news/models.py:94
+#: apps/news/models.py:97
 msgid "marks if news notification should resend"
 msgstr "да, если нужно отослать оповещение"
 
-#: apps/news/models.py:165
+#: apps/news/models.py:168
 msgid "Archived Article"
 msgstr "Архивная статья"
 
-#: apps/news/models.py:166
+#: apps/news/models.py:169
 msgid "Archived News"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:183
+#: apps/news/models.py:186
 #, fuzzy
 msgid "Can edit archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:185 apps/news/models.py:186
+#: apps/news/models.py:188 apps/news/models.py:189
 msgid "Archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:228
+#: apps/news/models.py:231
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:229 apps/pybb/templates/pybb/head.html:14
+#: apps/news/models.py:232 apps/pybb/templates/pybb/head.html:14
 msgid "News"
 msgstr "Новости"
 
-#: apps/news/models.py:231
+#: apps/news/models.py:234
 msgid "Can edit news"
 msgstr ""
 
-#: apps/news/models.py:232
+#: apps/news/models.py:235
 msgid "Can delete and restore comments"
 msgstr ""
 
-#: apps/news/models.py:233
+#: apps/news/models.py:236
 #, fuzzy
 msgid "Can edit comments"
 msgstr "комментарии"
 
-#: apps/news/models.py:234
+#: apps/news/models.py:237
 #, fuzzy
 msgid "Can purge comments"
 msgstr "комментарии"
 
-#: apps/news/models.py:240 apps/wh/models.py:241 apps/wh/models.py:322
+#: apps/news/models.py:243 apps/wh/models.py:241 apps/wh/models.py:322
 #, fuzzy
 msgid "codename"
 msgstr "Кодовое имя"
 
-#: apps/news/models.py:244
+#: apps/news/models.py:247
 msgid "Meating Type"
 msgstr ""
 
-#: apps/news/models.py:245
+#: apps/news/models.py:248
 msgid "Meating Types"
 msgstr ""
 
-#: apps/news/models.py:251 apps/wh/models.py:222
+#: apps/news/models.py:254 apps/wh/models.py:222
 msgid "type"
 msgstr ""
 
-#: apps/news/models.py:256
+#: apps/news/models.py:259
 #, fuzzy
 msgid "members"
 msgstr "Участники"
 
-#: apps/news/models.py:288
+#: apps/news/models.py:291
 msgid "Meating"
 msgstr ""
 
-#: apps/news/models.py:289
+#: apps/news/models.py:292
 msgid "Meatings"
 msgstr ""
 
 #: apps/news/signals.py:22
 msgid "Your article changed status"
 msgstr "Статус вашей статьи был изменен"
-
-#: apps/news/templates/add_meating.html:11
-msgid "Add meating"
-msgstr ""
 
 #: apps/news/templates/includes/article.html:17
 #, fuzzy
@@ -1249,7 +1247,7 @@ msgstr "Рецепиент"
 msgid "User with login %s does not exist"
 msgstr "Пользователя с именем %s не существует"
 
-#: apps/pybb/models.py:20 settings/debug_dist.py:33 settings/dist.py:34
+#: apps/pybb/models.py:20 settings/dist.py:49
 msgid "Russian"
 msgstr "Русский"
 
@@ -1286,11 +1284,13 @@ msgstr "Создан"
 msgid "Views count"
 msgstr "Количество просмотров"
 
-#: apps/pybb/models.py:112 apps/pybb/templates/pybb/forum.html:18
+#: apps/pybb/models.py:112 apps/pybb/templates/pybb/include/forum.html:14
+#: apps/pybb/templates/pybb/include/forum.html:36
 msgid "Sticky"
 msgstr "Прикрепленная"
 
-#: apps/pybb/models.py:113 apps/pybb/templates/pybb/forum.html:20
+#: apps/pybb/models.py:113 apps/pybb/templates/pybb/include/forum.html:16
+#: apps/pybb/templates/pybb/include/forum.html:38
 msgid "Closed"
 msgstr "Закрытая"
 
@@ -1304,6 +1304,7 @@ msgid "Topic"
 msgstr "Топик"
 
 #: apps/pybb/models.py:120 apps/pybb/templates/pybb/quick_access.html:35
+#: apps/pybb/templates/pybb/quick_access_bs3.html:35
 msgid "Topics"
 msgstr "Топики"
 
@@ -1387,7 +1388,7 @@ msgstr "Показывать подписи"
 msgid "Default markup"
 msgstr "Разметка по умолчанию"
 
-#: apps/pybb/models.py:269 apps/wh/models.py:484
+#: apps/pybb/models.py:269 apps/wh/models.py:489
 msgid "Profile"
 msgstr "Профиль"
 
@@ -1415,32 +1416,34 @@ msgstr "Приватное сообщение"
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/add_post.html:8
-#: apps/pybb/templates/pybb/add_post.html:10
-#: apps/pybb/templates/pybb/category.html:7
+#: apps/pybb/templates/pybb/add_post.html:9
+#: apps/pybb/templates/pybb/add_post.html:19
+#: apps/pybb/templates/pybb/category.html:8
+#: apps/pybb/templates/pybb/category.html:13
 #: apps/pybb/templates/pybb/create_pm.html:7
 #: apps/pybb/templates/pybb/edit_post.html:7
-#: apps/pybb/templates/pybb/forum.html:7 apps/pybb/templates/pybb/topic.html:7
+#: apps/pybb/templates/pybb/forum.html:8
+#: apps/pybb/templates/pybb/forum.html:14
+#: apps/pybb/templates/pybb/topic.html:8
+#: apps/pybb/templates/pybb/topic.html:15
 #: apps/pybb/templates/pybb/pm/create_pm.html:7
 #: apps/pybb/templates/pybb/pm/message.html:9
 msgid "Root"
 msgstr "Корень"
 
-#: apps/pybb/templates/pybb/add_post.html:14
-#: apps/pybb/templates/pybb/add_post.html:19
-#: apps/pybb/templates/pybb/forum.html:34
+#: apps/pybb/templates/pybb/add_post.html:34
+#: apps/pybb/templates/pybb/include/forum.html:5
 msgid "New topic"
 msgstr "Новый топик"
 
-#: apps/pybb/templates/pybb/add_post.html:14
-#: apps/pybb/templates/pybb/add_post.html:19
-#: apps/pybb/templates/pybb/topic.html:66
+#: apps/pybb/templates/pybb/add_post.html:34
+#: apps/pybb/templates/pybb/topic.html:74
 msgid "New reply"
 msgstr "Новый ответ"
 
-#: apps/pybb/templates/pybb/add_post.html:21
+#: apps/pybb/templates/pybb/add_post.html:41
 #: apps/pybb/templates/pybb/create_pm.html:15
-#: apps/pybb/templates/pybb/topic.html:70
+#: apps/pybb/templates/pybb/topic.html:78
 #: apps/pybb/templates/pybb/pm/create_pm.html:16
 msgid "Submit"
 msgstr "Отправить"
@@ -1461,7 +1464,6 @@ msgid "Yes, I am sure."
 msgstr "Да, я уверен."
 
 #: apps/pybb/templates/pybb/edit_post.html:10
-#: apps/pybb/templates/pybb/edit_post.html:15
 msgid "Editing the post"
 msgstr "Правка поста"
 
@@ -1498,12 +1500,9 @@ msgstr "исходящие"
 msgid "Subscriptions on topics"
 msgstr "Подписки на топики"
 
-#: apps/pybb/templates/pybb/forum.html:21
-msgid "Important"
-msgstr "Важное"
-
 #: apps/pybb/templates/pybb/head.html:15
 #: apps/pybb/templates/pybb/quick_access.html:41
+#: apps/pybb/templates/pybb/quick_access_bs3.html:41
 #: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
 msgid "Users"
 msgstr "Пользователи"
@@ -1532,11 +1531,15 @@ msgstr "Админка"
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:36
+#: apps/pybb/templates/pybb/head.html:37
+msgid "Themes"
+msgstr "Темы"
+
+#: apps/pybb/templates/pybb/head.html:47
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:37
+#: apps/pybb/templates/pybb/head.html:48
 msgid "Log in"
 msgstr "Войти"
 
@@ -1558,39 +1561,42 @@ msgid "Delete"
 msgstr "Удалить"
 
 #: apps/pybb/templates/pybb/quick_access.html:4
+#: apps/pybb/templates/pybb/quick_access_bs3.html:4
 msgid "Last topics"
 msgstr "Топики"
 
 #: apps/pybb/templates/pybb/quick_access.html:5
+#: apps/pybb/templates/pybb/quick_access_bs3.html:5
 msgid "Last posts"
 msgstr "Посты"
 
 #: apps/pybb/templates/pybb/quick_access.html:6
+#: apps/pybb/templates/pybb/quick_access_bs3.html:6
 #: apps/pybb/templates/pybb/user.html:18
 msgid "Statistics"
 msgstr "Статистика"
 
-#: apps/pybb/templates/pybb/topic.html:32
+#: apps/pybb/templates/pybb/topic.html:40
 msgid "Unstick topic"
 msgstr "Неприкрепленные топики"
 
-#: apps/pybb/templates/pybb/topic.html:37
+#: apps/pybb/templates/pybb/topic.html:45
 msgid "Stick topic"
 msgstr "Прикрепленные топики"
 
-#: apps/pybb/templates/pybb/topic.html:43
+#: apps/pybb/templates/pybb/topic.html:51
 msgid "Open topic"
 msgstr "Открыть топик"
 
-#: apps/pybb/templates/pybb/topic.html:48
+#: apps/pybb/templates/pybb/topic.html:56
 msgid "Close topic"
 msgstr "Закрыть топик"
 
-#: apps/pybb/templates/pybb/topic.html:55
+#: apps/pybb/templates/pybb/topic.html:63
 msgid "Unsubscribe"
 msgstr "Отписаться"
 
-#: apps/pybb/templates/pybb/topic.html:57
+#: apps/pybb/templates/pybb/topic.html:65
 msgid "Subscribe"
 msgstr "Подписаться"
 
@@ -1618,6 +1624,11 @@ msgstr "Отослать ЛС"
 #: apps/pybb/templates/pybb/users.html:10
 msgid "Search"
 msgstr "Поиск"
+
+#: apps/pybb/templates/pybb/include/forum.html:17
+#: apps/pybb/templates/pybb/include/forum.html:39
+msgid "Important"
+msgstr "Важное"
 
 #: apps/pybb/templates/pybb/pm/common.html:6
 #: apps/pybb/templates/pybb/pm/message.html:9
@@ -1647,28 +1658,28 @@ msgstr "Ответить"
 msgid "to"
 msgstr ""
 
-#: apps/pybb/templatetags/pybb_extras.py:50
+#: apps/pybb/templatetags/pybb_extras.py:51
 msgid "seconds ago,seconds ago,seconds ago"
 msgstr "секунд назад,секунды назад,секунд назад"
 
-#: apps/pybb/templatetags/pybb_extras.py:54
+#: apps/pybb/templatetags/pybb_extras.py:55
 msgid "seconds ago"
 msgstr "секунд назад"
 
-#: apps/pybb/templatetags/pybb_extras.py:60
+#: apps/pybb/templatetags/pybb_extras.py:61
 msgid "minutes ago,minutes ago,minutes ago"
 msgstr "минут назад,минуты назад,минуты назад"
 
-#: apps/pybb/templatetags/pybb_extras.py:64
+#: apps/pybb/templatetags/pybb_extras.py:65
 msgid "minutes ago"
 msgstr "минут назад"
 
-#: apps/pybb/templatetags/pybb_extras.py:67
+#: apps/pybb/templatetags/pybb_extras.py:68
 #, python-format
 msgid "today, %s"
 msgstr "сегодня, %s"
 
-#: apps/pybb/templatetags/pybb_extras.py:69
+#: apps/pybb/templatetags/pybb_extras.py:70
 #, python-format
 msgid "yesterday, %s"
 msgstr "вчера, %s"
@@ -2341,17 +2352,16 @@ msgid "Select some options"
 msgstr "Нажмите для выбора"
 
 #: apps/tabletop/templates/reports.html:106
-#: apps/wh/templates/accounts/pm.html:246
+#: apps/wh/templates/accounts/pm.html:242
 msgid "Please, keep typing ..."
 msgstr "Продолжайте печатать ..."
 
 #: apps/tabletop/templates/reports.html:107
-#: apps/wh/templates/accounts/pm.html:247
+#: apps/wh/templates/accounts/pm.html:243
 msgid "Searching for"
 msgstr "Поиск"
 
 #: apps/tabletop/templates/reports.html:116
-#: apps/wh/templates/accounts/pm.html:254
 msgid "Search some rosters"
 msgstr "Поиск ростеров"
 
@@ -2826,11 +2836,6 @@ msgstr "Адресат"
 msgid "text"
 msgstr ""
 
-#: apps/wh/models.py:161
-#, fuzzy
-msgid "cache content"
-msgstr "Содержимое заголовка"
-
 #: apps/wh/models.py:163
 #, fuzzy
 msgid "is read"
@@ -3039,7 +3044,12 @@ msgstr "О себе"
 msgid "time zone"
 msgstr "Временная зона"
 
-#: apps/wh/models.py:502
+#: apps/wh/models.py:479
+#, fuzzy
+msgid "cache comment"
+msgstr "Содержимое заголовка"
+
+#: apps/wh/models.py:507
 msgid "Overload"
 msgstr "Оверлоад"
 
@@ -3090,9 +3100,14 @@ msgstr "Удаленные"
 msgid "Successfully deleted"
 msgstr "Успешно удален"
 
-#: apps/wh/templates/accounts/pm.html:199
+#: apps/wh/templates/accounts/pm.html:197
 msgid "Private message was sent"
 msgstr "Сообщение было отослано"
+
+#: apps/wh/templates/accounts/pm.html:250
+#, fuzzy
+msgid "Search the user"
+msgstr "Поиск ростеров"
 
 #: apps/wh/templates/accounts/pm_delete.html:6
 msgid "Message wasn't deleted"
@@ -3123,9 +3138,29 @@ msgstr ""
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
-#: settings/debug_dist.py:34 settings/dist.py:35
+#: settings/dist.py:50
 msgid "English"
 msgstr "Английский"
+
+#: settings/dist.py:284
+msgid "winter"
+msgstr "зимняя"
+
+#: settings/dist.py:285
+msgid "summer"
+msgstr "летняя"
+
+#: settings/dist.py:286
+msgid "autumn"
+msgstr "осенняя"
+
+#: settings/dist.py:287
+msgid "spring"
+msgstr "весенняя"
+
+#: settings/dist.py:288
+msgid "void"
+msgstr "пустотная"
 
 #: settings/initials.py:3
 msgid ""

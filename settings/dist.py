@@ -279,13 +279,14 @@ OBJECTS_ON_PAGE=20
 EXPEREMENTAL=False
 USER_FILES_LIMIT=100*1024*1024
 
+FORUM_THEME_DEFAULT='winter'
 FORUM_THEMES = (
     # <name>, panel-<class>
-    (_('winter'), 'primary'),
-    (_('summer'), 'warning'),
-    (_('autumn'), 'danger'),
-    (_("spring"), 'success'),
-    (_("void"), '')
+    ('winter', 'primary'),
+    ('summer', 'warning'),
+    ('autumn', 'danger'),
+    ("spring", 'success'),
+    ("void", '')
 )
 # TEMPLATES INCLUES
 DOCUMENT = {
