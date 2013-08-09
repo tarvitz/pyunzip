@@ -1,7 +1,7 @@
 import math
 import datetime
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, Http404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import connection
 
+from apps.core.helpers import render_to
 from apps.pybb.util import render_to, paged, build_form, quote_text
 from apps.pybb.models import Category, Forum, Topic, AnonymousPost, Post, Profile, PrivateMessage
 from apps.pybb.forms import AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm
@@ -403,3 +404,14 @@ def show_pm_ctx(request, pm_id):
             'post_user': post_user,
             }
 show_pm = render_to('pybb/pm/message.html')(show_pm_ctx)
+
+
+@login_required
+def switch_theme(request, theme):
+    themes = [i[0] for i in settings.FORUM_THEMES]
+    if theme in themes:
+        if not request.user.settings:
+            request.user.settings = {}
+        request.user.settings['forum_theme'] = settings.FORUM_THEMES[themes.index(theme)][1]
+        request.user.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))

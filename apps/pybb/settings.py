@@ -1,5 +1,6 @@
 #coding: utf-8
 from django.conf import settings
+_ = lambda s: s
 
 def get(key, default):
     return getattr(settings, key, default)
