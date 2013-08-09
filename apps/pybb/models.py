@@ -250,7 +250,7 @@ class Post(RenderableItem):
             self.topic.delete()
 
 class Profile(models.Model):
-    user = models.ForeignKey(User, related_name='pybb_profile', verbose_name=_('User'))
+    user = AutoOneToOneField(User, related_name='pybb_profile', verbose_name=_('User'))
     site = models.URLField(_('Site'), blank=True, default='')
     jabber = models.CharField(_('Jabber'), max_length=80, blank=True, default='')
     icq = models.CharField(_('ICQ'), max_length=12, blank=True, default='')
