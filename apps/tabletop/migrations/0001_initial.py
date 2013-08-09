@@ -8,8 +8,67 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Removing M2M table for field users on 'BattleReport'
-        db.delete_table('tabletop_battlereport_users')
+        # Adding model 'Codex'
+        db.create_table(u'tabletop_codex', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('content_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='ct_set_for_codex', to=orm['contenttypes.ContentType'])),
+            ('object_id', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=128)),
+            ('plain_side', self.gf('django.db.models.fields.CharField')(max_length=128, blank=True)),
+            ('revisions', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=64)),
+        ))
+        db.send_create_signal(u'tabletop', ['Codex'])
+
+        # Adding model 'Roster'
+        db.create_table(u'tabletop_roster', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='roster_owner', to=orm['auth.User'])),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='user', null=True, to=orm['auth.User'])),
+            ('player', self.gf('django.db.models.fields.CharField')(max_length=32, blank=True)),
+            ('roster', self.gf('django.db.models.fields.TextField')(max_length=4096)),
+            ('comments', self.gf('django.db.models.fields.TextField')(max_length=10240, null=True, blank=True)),
+            ('codex', self.gf('django.db.models.fields.related.ForeignKey')(default=1, to=orm['tabletop.Codex'], null=True, blank=True)),
+            ('custom_codex', self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True)),
+            ('revision', self.gf('django.db.models.fields.IntegerField')()),
+            ('pts', self.gf('django.db.models.fields.IntegerField')()),
+            ('syntax', self.gf('django.db.models.fields.CharField')(max_length=20, null=True, blank=True)),
+            ('is_orphan', self.gf('django.db.models.fields.NullBooleanField')(default=False, null=True, blank=True)),
+            ('wins', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, blank=True)),
+            ('defeats', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, blank=True)),
+        ))
+        db.send_create_signal(u'tabletop', ['Roster'])
+
+        # Adding model 'Game'
+        db.create_table(u'tabletop_game', (
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=50, primary_key=True)),
+            ('codename', self.gf('django.db.models.fields.CharField')(unique=True, max_length=15)),
+        ))
+        db.send_create_signal(u'tabletop', ['Game'])
+
+        # Adding model 'Mission'
+        db.create_table(u'tabletop_mission', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=50)),
+            ('game', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tabletop.Game'])),
+        ))
+        db.send_create_signal(u'tabletop', ['Mission'])
+
+        # Adding model 'BattleReport'
+        db.create_table(u'tabletop_battlereport', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=100)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='battle_report_set', to=orm['auth.User'])),
+            ('published', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('mission', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['tabletop.Mission'])),
+            ('layout', self.gf('django.db.models.fields.CharField')(max_length=30)),
+            ('deployment', self.gf('django.db.models.fields.CharField')(default='dow', max_length=128)),
+            ('comment', self.gf('django.db.models.fields.TextField')(max_length=10240)),
+            ('approved', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('ip_address', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True)),
+            ('syntax', self.gf('django.db.models.fields.CharField')(max_length=20)),
+        ))
+        db.send_create_signal(u'tabletop', ['BattleReport'])
 
         # Adding M2M table for field rosters on 'BattleReport'
         db.create_table(u'tabletop_battlereport_rosters', (
@@ -19,18 +78,201 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(u'tabletop_battlereport_rosters', ['battlereport_id', 'roster_id'])
 
-
-    def backwards(self, orm):
-        # Adding M2M table for field users on 'BattleReport'
-        db.create_table(u'tabletop_battlereport_users', (
+        # Adding M2M table for field winners on 'BattleReport'
+        db.create_table(u'tabletop_battlereport_winners', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('battlereport', models.ForeignKey(orm[u'tabletop.battlereport'], null=False)),
             ('roster', models.ForeignKey(orm[u'tabletop.roster'], null=False))
         ))
-        db.create_unique(u'tabletop_battlereport_users', ['battlereport_id', 'roster_id'])
+        db.create_unique(u'tabletop_battlereport_winners', ['battlereport_id', 'roster_id'])
+
+        # Adding model 'Army'
+        db.create_table(u'tabletop_army', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+        ))
+        db.send_create_signal(u'tabletop', ['Army'])
+
+        # Adding model 'AutoRoster'
+        db.create_table(u'tabletop_autoroster', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('army', self.gf('django.db.models.fields.related.ForeignKey')(related_name='auto_rosters', to=orm['tabletop.Army'])),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=4096, null=True, blank=True)),
+            ('owner', self.gf('django.db.models.fields.related.ForeignKey')(related_name='auto_roster_user_set', to=orm['auth.User'])),
+            ('pts', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'tabletop', ['AutoRoster'])
+
+        # Adding model 'WargearContainer'
+        db.create_table(u'tabletop_wargearcontainer', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('amount', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('pts', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
+            ('link', self.gf('django.db.models.fields.related.ForeignKey')(related_name='wargear_containers', to=orm['tabletop.Wargear'])),
+            ('unit', self.gf('django.db.models.fields.related.ForeignKey')(related_name='wargear_containers', to=orm['tabletop.UnitContainer'])),
+        ))
+        db.send_create_signal(u'tabletop', ['WargearContainer'])
+
+        # Adding model 'UnitContainer'
+        db.create_table(u'tabletop_unitcontainer', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('amount', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('model_unit', self.gf('django.db.models.fields.related.ForeignKey')(related_name='units', to=orm['tabletop.ModelUnit'])),
+            ('pts', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
+            ('roster', self.gf('django.db.models.fields.related.ForeignKey')(related_name=u'unit_containers', to=orm['tabletop.AutoRoster'])),
+        ))
+        db.send_create_signal(u'tabletop', ['UnitContainer'])
+
+        # Adding model 'ModelUnit'
+        db.create_table(u'tabletop_modelunit', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('type', self.gf('django.db.models.fields.CharField')(default='hq', max_length=16)),
+            ('unit_type', self.gf('django.db.models.fields.CharField')(default='infantry', max_length=32)),
+            ('is_dedicated', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=4096, blank=True)),
+            ('army', self.gf('django.db.models.fields.related.ForeignKey')(related_name='model_units', to=orm['tabletop.Army'])),
+            ('is_unique', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('pts', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+            ('min', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('max', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('mwr_amount', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
+        ))
+        db.send_create_signal(u'tabletop', ['ModelUnit'])
+
+        # Adding model 'MWRUnit'
+        db.create_table(u'tabletop_mwrunit', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('model_unit', self.gf('django.db.models.fields.related.ForeignKey')(related_name='requirements', to=orm['tabletop.ModelUnit'])),
+            ('wargear', self.gf('django.db.models.fields.related.ForeignKey')(related_name='mwr_requirements', to=orm['tabletop.Wargear'])),
+            ('threshold', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'tabletop', ['MWRUnit'])
+
+        # Adding unique constraint on 'MWRUnit', fields ['model_unit', 'wargear']
+        db.create_unique(u'tabletop_mwrunit', ['model_unit_id', 'wargear_id'])
+
+        # Adding model 'UnitWargearRequirement'
+        db.create_table(u'tabletop_unitwargearrequirement', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('amount', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('amount_target', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('target', self.gf('django.db.models.fields.related.ForeignKey')(related_name='unit_wargear_requirements', to=orm['tabletop.Wargear'])),
+            ('require', self.gf('django.db.models.fields.related.ForeignKey')(related_name='unit_wargear_require_targets', to=orm['tabletop.ModelUnit'])),
+        ))
+        db.send_create_signal(u'tabletop', ['UnitWargearRequirement'])
+
+        # Adding model 'WargearRequirement'
+        db.create_table(u'tabletop_wargearrequirement', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('amount', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('amount_target', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('target', self.gf('django.db.models.fields.related.ForeignKey')(related_name='wargear_requirements', to=orm['tabletop.Wargear'])),
+            ('require', self.gf('django.db.models.fields.related.ForeignKey')(related_name='wargear_require_targets', to=orm['tabletop.Wargear'])),
+            ('threshold', self.gf('django.db.models.fields.PositiveIntegerField')(default=0)),
+        ))
+        db.send_create_signal(u'tabletop', ['WargearRequirement'])
+
+        # Adding model 'Wargear'
+        db.create_table(u'tabletop_wargear', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('title', self.gf('django.db.models.fields.CharField')(max_length=256)),
+            ('short_title', self.gf('django.db.models.fields.CharField')(default='unkwn', max_length=256)),
+            ('description', self.gf('django.db.models.fields.CharField')(max_length=4096, blank=True)),
+            ('pts', self.gf('django.db.models.fields.PositiveIntegerField')()),
+            ('limit', self.gf('django.db.models.fields.PositiveIntegerField')(default=1)),
+            ('threshold', self.gf('django.db.models.fields.IntegerField')(default=1)),
+            ('is_squad_only', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('unit_amount', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
+        ))
+        db.send_create_signal(u'tabletop', ['Wargear'])
+
+        # Adding M2M table for field model_units on 'Wargear'
+        db.create_table(u'tabletop_wargear_model_units', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('wargear', models.ForeignKey(orm[u'tabletop.wargear'], null=False)),
+            ('modelunit', models.ForeignKey(orm[u'tabletop.modelunit'], null=False))
+        ))
+        db.create_unique(u'tabletop_wargear_model_units', ['wargear_id', 'modelunit_id'])
+
+        # Adding M2M table for field blocks on 'Wargear'
+        db.create_table(u'tabletop_wargear_blocks', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('from_wargear', models.ForeignKey(orm[u'tabletop.wargear'], null=False)),
+            ('to_wargear', models.ForeignKey(orm[u'tabletop.wargear'], null=False))
+        ))
+        db.create_unique(u'tabletop_wargear_blocks', ['from_wargear_id', 'to_wargear_id'])
+
+        # Adding M2M table for field combines on 'Wargear'
+        db.create_table(u'tabletop_wargear_combines', (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('from_wargear', models.ForeignKey(orm[u'tabletop.wargear'], null=False)),
+            ('to_wargear', models.ForeignKey(orm[u'tabletop.wargear'], null=False))
+        ))
+        db.create_unique(u'tabletop_wargear_combines', ['from_wargear_id', 'to_wargear_id'])
+
+
+    def backwards(self, orm):
+        # Removing unique constraint on 'MWRUnit', fields ['model_unit', 'wargear']
+        db.delete_unique(u'tabletop_mwrunit', ['model_unit_id', 'wargear_id'])
+
+        # Deleting model 'Codex'
+        db.delete_table(u'tabletop_codex')
+
+        # Deleting model 'Roster'
+        db.delete_table(u'tabletop_roster')
+
+        # Deleting model 'Game'
+        db.delete_table(u'tabletop_game')
+
+        # Deleting model 'Mission'
+        db.delete_table(u'tabletop_mission')
+
+        # Deleting model 'BattleReport'
+        db.delete_table(u'tabletop_battlereport')
 
         # Removing M2M table for field rosters on 'BattleReport'
         db.delete_table('tabletop_battlereport_rosters')
+
+        # Removing M2M table for field winners on 'BattleReport'
+        db.delete_table('tabletop_battlereport_winners')
+
+        # Deleting model 'Army'
+        db.delete_table(u'tabletop_army')
+
+        # Deleting model 'AutoRoster'
+        db.delete_table(u'tabletop_autoroster')
+
+        # Deleting model 'WargearContainer'
+        db.delete_table(u'tabletop_wargearcontainer')
+
+        # Deleting model 'UnitContainer'
+        db.delete_table(u'tabletop_unitcontainer')
+
+        # Deleting model 'ModelUnit'
+        db.delete_table(u'tabletop_modelunit')
+
+        # Deleting model 'MWRUnit'
+        db.delete_table(u'tabletop_mwrunit')
+
+        # Deleting model 'UnitWargearRequirement'
+        db.delete_table(u'tabletop_unitwargearrequirement')
+
+        # Deleting model 'WargearRequirement'
+        db.delete_table(u'tabletop_wargearrequirement')
+
+        # Deleting model 'Wargear'
+        db.delete_table(u'tabletop_wargear')
+
+        # Removing M2M table for field model_units on 'Wargear'
+        db.delete_table('tabletop_wargear_model_units')
+
+        # Removing M2M table for field blocks on 'Wargear'
+        db.delete_table('tabletop_wargear_blocks')
+
+        # Removing M2M table for field combines on 'Wargear'
+        db.delete_table('tabletop_wargear_combines')
 
 
     models = {
@@ -101,6 +343,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "['-id']", 'object_name': 'BattleReport'},
             'approved': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'comment': ('django.db.models.fields.TextField', [], {'max_length': '10240'}),
+            'deployment': ('django.db.models.fields.CharField', [], {'default': "'dow'", 'max_length': '128'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'ip_address': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'layout': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
@@ -110,7 +353,7 @@ class Migration(SchemaMigration):
             'rosters': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['tabletop.Roster']", 'symmetrical': 'False'}),
             'syntax': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'winners': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'winner'", 'null': 'True', 'to': u"orm['tabletop.Roster']"})
+            'winners': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'breport_winners_sets'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['tabletop.Roster']"})
         },
         u'tabletop.codex': {
             'Meta': {'object_name': 'Codex'},
@@ -159,6 +402,7 @@ class Migration(SchemaMigration):
             'codex': ('django.db.models.fields.related.ForeignKey', [], {'default': '1', 'to': u"orm['tabletop.Codex']", 'null': 'True', 'blank': 'True'}),
             'comments': ('django.db.models.fields.TextField', [], {'max_length': '10240', 'null': 'True', 'blank': 'True'}),
             'custom_codex': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'defeats': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_orphan': ('django.db.models.fields.NullBooleanField', [], {'default': 'False', 'null': 'True', 'blank': 'True'}),
             'owner': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'roster_owner'", 'to': u"orm['auth.User']"}),
@@ -168,7 +412,8 @@ class Migration(SchemaMigration):
             'roster': ('django.db.models.fields.TextField', [], {'max_length': '4096'}),
             'syntax': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             'title': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user'", 'null': 'True', 'to': u"orm['auth.User']"})
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'user'", 'null': 'True', 'to': u"orm['auth.User']"}),
+            'wins': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'blank': 'True'})
         },
         u'tabletop.unitcontainer': {
             'Meta': {'object_name': 'UnitContainer'},
@@ -217,6 +462,13 @@ class Migration(SchemaMigration):
             'require': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'wargear_require_targets'", 'to': u"orm['tabletop.Wargear']"}),
             'target': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'wargear_requirements'", 'to': u"orm['tabletop.Wargear']"}),
             'threshold': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0'})
+        },
+        u'tracker.seenobject': {
+            'Meta': {'object_name': 'SeenObject'},
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'content_type_set_for_seenobject'", 'to': u"orm['contenttypes.ContentType']"}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'object_pk': ('django.db.models.fields.TextField', [], {}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'wh.army': {
             'Meta': {'ordering': "['side']", 'object_name': 'Army'},
