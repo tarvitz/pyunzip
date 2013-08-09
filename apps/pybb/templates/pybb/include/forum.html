@@ -11,7 +11,7 @@
     {% for topic in topics|pybb_unreads:user %}
     <tr>
         <td class="attrs">
-            {% if topic.sticky %}<i class='icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
+            {% if topic.sticky %}<i class='icon-paperclip' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
             {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
             {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip'></i>{% endif %}
             {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip'></i>{% endif %}
@@ -33,7 +33,7 @@
             <span class='title col-lg-5'>{% pybb_link topic %}</span>
             <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
             <span class='icons col-lg-2'>
-                {% if topic.sticky %}<i class='icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                {% if topic.sticky %}<i class='icon-paperclip' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
                 {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
                 {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
                 {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
