@@ -20,6 +20,7 @@ class NewsAdmin(admin.ModelAdmin):
         (_('Base'),
             {
                 'fields':(
+                    'owner',
                     'title','author',
                     'editor',
                     #'head_content',
