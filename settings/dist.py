@@ -261,6 +261,7 @@ APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
 YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
+BOOTSTRAP_VERSION='3'
 ENABLE_500_TEST=False
 SERVER_EMAIL='noreply@w40k.net'
 DEV_SERVER=True
@@ -298,18 +299,18 @@ from apps.wh.settings import *
 from search_settings import *
 from apps.karma.settings import *
 
-import djcelery
-djcelery.setup_loader()
+#import djcelery
+#djcelery.setup_loader()
 # Celery settings
 # Time after task will be expired, 5 hours
-CELERY_TASK_RESULT_EXPIRES = 18000
+#CELERY_TASK_RESULT_EXPIRES = 18000
 # Send notifications for admins if troubles would happen
-CELERND_TASK_ERROR_EMAILS = True
-CELERY_RESULT_BACKEND = "redis"
-CELERY_REDIS_HOST = "redis"
-CELERY_REDIS_PORT = 6379
-CELERY_REDIS_DB = 0
-BROKER_URL = "redis://redis:6379/0"
+#CELERND_TASK_ERROR_EMAILS = True
+#CELERY_RESULT_BACKEND = "redis"
+#CELERY_REDIS_HOST = "redis"
+#CELERY_REDIS_PORT = 6379
+#CELERY_REDIS_DB = 0
+#BROKER_URL = "redis://redis:6379/0"
 
 DEBUG_TOOLBAR=False
 DEBUG=True
