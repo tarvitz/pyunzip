@@ -278,6 +278,15 @@ SEND_MESSAGES=True
 OBJECTS_ON_PAGE=20
 EXPEREMENTAL=False
 USER_FILES_LIMIT=100*1024*1024
+
+FORUM_THEMES = (
+    # <name>, panel-<class>
+    (_('winter'), 'primary'),
+    (_('summer'), 'warning'),
+    (_('autumn'), 'danger'),
+    (_("spring"), 'success'),
+    (_("void"), '')
+)
 # TEMPLATES INCLUES
 DOCUMENT = {
     'links': 'links.html',
