@@ -89,7 +89,7 @@ class Migration(SchemaMigration):
         # Adding model 'Profile'
         db.create_table(u'pybb_profile', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(related_name='pybb_profile', to=orm['auth.User'])),
+            ('user', self.gf('apps.pybb.fields.AutoOneToOneField')(related_name='pybb_profile', unique=True, to=orm['auth.User'])),
             ('site', self.gf('django.db.models.fields.URLField')(default='', max_length=200, blank=True)),
             ('jabber', self.gf('django.db.models.fields.CharField')(default='', max_length=80, blank=True)),
             ('icq', self.gf('django.db.models.fields.CharField')(default='', max_length=12, blank=True)),
@@ -287,7 +287,7 @@ class Migration(SchemaMigration):
             'signature': ('django.db.models.fields.TextField', [], {'default': "''", 'max_length': '1024', 'blank': 'True'}),
             'site': ('django.db.models.fields.URLField', [], {'default': "''", 'max_length': '200', 'blank': 'True'}),
             'time_zone': ('django.db.models.fields.FloatField', [], {'default': '3.0'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'pybb_profile'", 'to': u"orm['auth.User']"}),
+            'user': ('apps.pybb.fields.AutoOneToOneField', [], {'related_name': "'pybb_profile'", 'unique': 'True', 'to': u"orm['auth.User']"}),
             'yahoo': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '80', 'blank': 'True'})
         },
         u'pybb.read': {

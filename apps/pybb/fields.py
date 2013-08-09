@@ -90,4 +90,7 @@ class ExtendedImageField(models.ImageField):
 
 
 from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ['apps.pybb.fields.ExtendedImageField'])
+add_introspection_rules([], [
+    'apps.pybb.fields.ExtendedImageField',
+    'apps.pybb.fields.AutoOneToOneField'
+])
