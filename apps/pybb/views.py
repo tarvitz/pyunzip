@@ -104,7 +104,8 @@ def show_topic_ctx(request, topic_id):
     profiles = dict((x.user_id, x) for x in profiles)
 
     for post in posts:
-        post.user.pybb_profile = profiles[post.user.id]
+        #post.user.pybb_profile = profiles[post.user.id]
+        pass
 
     initial = {}
     apost = load_anonymous_post(request, topic)
@@ -112,7 +113,7 @@ def show_topic_ctx(request, topic_id):
         initial = {'markup': apost.markup, 'body': apost.body}
 
     if request.user.is_authenticated():
-        initial = {'markup': request.user.pybb_profile.markup}
+        initial = {'markup': 'textile'}  #request.user.pybb_profile.markup}
 
     form = AddPostForm(topic=topic, initial=initial)
 
