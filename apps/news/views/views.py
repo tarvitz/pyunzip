@@ -108,7 +108,7 @@ def news(request, approved='approved', category=''):
     news = cache.get('news:all:%s' % cache_key)
     if not news:
         news = News.objects.filter(qset).order_by('-date')
-        cache.set('news:all:%s' % cache_key, news)
+        cache.set('news:all:%s' % cache_key, news[:50])
     _pages_ = get_settings(request.user, 'news_on_page', 30)
     news = paginate(
         news, page, pages=_pages_,
