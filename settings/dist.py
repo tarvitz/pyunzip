@@ -279,7 +279,7 @@ OBJECTS_ON_PAGE=20
 EXPEREMENTAL=False
 USER_FILES_LIMIT=100*1024*1024
 
-FORUM_THEME_DEFAULT='winter'
+FORUM_THEME_DEFAULT='primary'
 FORUM_THEMES = (
     # <name>, panel-<class>
     ('winter', 'primary'),
