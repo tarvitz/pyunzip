@@ -33,10 +33,10 @@
             <span class='title col-lg-5'>{% pybb_link topic %}</span>
             <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
             <span class='icons col-lg-2'>
-                {% if topic.sticky %}<i class='glyphicon glyphicon-calendar icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
+                {% if topic.sticky %}<i class='glyphicon glyphicon-calendar icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
                 {% if topic|pybb_has_unreads:user %}<i class="glyphicon glyphicon-comment icon-comment"></i>{% endif %}
-                {% if topic.closed %}<i class='glyphicon glyphicon-remove icon-remove' data-title='{% trans "Closed" %}' rel='tooltip'></i>{% endif %}
-                {% if topic.sticky %}<i class='glyphicon glyphicon-flag icon-flag' data-title='{% trans "Important" %}' rel='tooltip'></i>{% endif %}
+                {% if topic.closed %}<i class='glyphicon glyphicon-remove icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                {% if topic.sticky %}<i class='glyphicon glyphicon-flag icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
             </span>
 
             <span class='count'>[{{ topic.post_count }}]</span>
