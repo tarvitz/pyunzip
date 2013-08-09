@@ -87,3 +87,7 @@ class ExtendedImageField(models.ImageField):
         string = StringIO()
         image.save(string, format='PNG')
         return string.getvalue()
+
+
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ['apps.pybb.fields.ExtendedImageField'])

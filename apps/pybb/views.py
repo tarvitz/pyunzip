@@ -11,7 +11,11 @@ from django.db import connection
 
 from apps.core.helpers import render_to
 from apps.pybb.util import render_to, paged, build_form, quote_text
-from apps.pybb.models import Category, Forum, Topic, AnonymousPost, Post, Profile, PrivateMessage
+from apps.pybb.models import (
+    Category, Forum, Topic, AnonymousPost, Post,
+    Profile,
+    PrivateMessage
+)
 from apps.pybb.forms import AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm
 from apps.pybb import settings as pybb_settings
 from apps.pybb.anonymous_post import handle_anonymous_post, load_anonymous_post, delete_anonymous_post

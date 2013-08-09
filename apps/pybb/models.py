@@ -73,6 +73,7 @@ class Forum(models.Model):
     moderators = models.ManyToManyField(User, blank=True, null=True, verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
+    css_icon = models.CharField(_("Css icon"), blank=True, default='', max_length=64)
     is_hidden = models.BooleanField(_('is hidden'))
 
     class Meta:
@@ -248,9 +249,8 @@ class Post(RenderableItem):
         if self_id == head_post_id:
             self.topic.delete()
 
-
 class Profile(models.Model):
-    user = AutoOneToOneField(User, related_name='pybb_profile', verbose_name=_('User'))
+    user = models.ForeignKey(User, related_name='pybb_profile', verbose_name=_('User'))
     site = models.URLField(_('Site'), blank=True, default='')
     jabber = models.CharField(_('Jabber'), max_length=80, blank=True, default='')
     icq = models.CharField(_('ICQ'), max_length=12, blank=True, default='')
@@ -273,7 +273,6 @@ class Profile(models.Model):
     @memoize_method
     def unread_pm_count(self):
         return PrivateMessage.objects.filter(dst_user=self, read=False).count()
-
 
 class Read(models.Model):
     """
