@@ -14,7 +14,8 @@
     <fieldset class='col-lg-7'>
         {# <legend>{% trans "Editing the post" %}</legend> #}
             {{ form.as_p }}
-            <p><input type="submit" value="{% trans "Save" %}" /></p>
+            <p><input type="submit" value="{% trans "Save" %}"
+                      class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'/></p>
         </legend>
     </fieldset>
 </form>

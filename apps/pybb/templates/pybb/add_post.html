@@ -38,7 +38,8 @@
     <fieldset class='col-lg-7'>
         {# <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend> #}
         {{ form.as_p }}
-        <p><input type="submit" value="{% trans "Submit" %}" /></p>
+        <p><input type="submit" value="{% trans "Submit" %}"
+                  class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'/></p>
     </fieldset>
 </form>
 

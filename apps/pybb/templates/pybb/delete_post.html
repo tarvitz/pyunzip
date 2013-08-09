@@ -8,6 +8,7 @@
 </p>
 <form method="post">
     {% csrf_token %}
-    <p><input type="submit" value="{% trans "Yes, I am sure." %}" /></p>
+    <p><input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
+        type="submit" value="{% trans "Yes, I am sure." %}" /></p>
 </form>
 {% endblock %}

@@ -75,7 +75,8 @@
         {% include "forms/bootstrap_horizontal.html" with form=form %}
         <div class='control-group'>
             <div class='controls'>
-                <input class='btn' type="submit" value="{% trans "Submit" %}" />
+                <input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
+                       type="submit" value="{% trans "Submit" %}" />
             </div>
         </div>
     </fieldset>
