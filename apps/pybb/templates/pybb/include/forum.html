@@ -30,8 +30,8 @@
     <ul class='list-group'>
     {% for topic in topics|pybb_unreads:user %}
         <li class='list-group-item'>
-            <span class='title col-lg-6'>{% pybb_link topic %}</span>
-            <span class='updated col-lg-3'>{% pybb_time topic.updated %}</span>
+            <span class='title col-lg-5'>{% pybb_link topic %}</span>
+            <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
             <span class='icons col-lg-2'>
                 {% if topic.sticky %}<i class='glyphicon glyphicon-calendar icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
                 {% if topic|pybb_has_unreads:user %}<i class="glyphicon glyphicon-comment icon-comment"></i>{% endif %}
