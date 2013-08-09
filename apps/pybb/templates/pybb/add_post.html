@@ -3,11 +3,31 @@
 {% load i18n %}
 
 {% block content %}
-<div class="crumbs">
+<div class="breadcrumb">
 {% if forum %}
-    <a href="{% url "pybb_index" %}">{% trans "Root" %}</a> / {% pybb_link forum.category %} / {% pybb_link forum %}
+    <li>
+        <a href="{% url "pybb_index" %}">{% trans "Root" %}</a>
+        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
+    </li>
+    <li>
+        {% pybb_link forum.category %} 
+        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
+    </li>
+    <li>{% pybb_link forum %}</li>
 {% else %}
-    <a href="{% url "pybb_index" %}">{% trans "Root" %}</a> / {% pybb_link topic.forum.category %} / {% pybb_link topic.forum %} / {% pybb_link topic %}
+    <li>
+        <a href="{% url "pybb_index" %}">{% trans "Root" %}</a> 
+        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
+    </li>
+    <li>
+        {% pybb_link topic.forum.category %}
+        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
+    </li>
+    <li>
+        {% pybb_link topic.forum %}
+        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
+    <li>
+    <li>{% pybb_link topic %}</li>
 {% endif %}
 </div>
 
@@ -15,8 +35,8 @@
 
 <form action="{% if forum %}{% url "pybb_add_topic" forum.id %}{% else %}{% url "pybb_add_post" topic.id %}{% endif %}" method="post">
     {% csrf_token %}
-    <fieldset>
-        <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend>
+    <fieldset class='col-lg-7'>
+        {# <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend> #}
         {{ form.as_p }}
         <p><input type="submit" value="{% trans "Submit" %}" /></p>
     </fieldset>

@@ -24,11 +24,16 @@
 
     <link rel='stylesheet' href='{{ MEDIA_URL }}css/markitup/skins/markitup/style.css' type='text/css' media='screen' async>
     <link rel='stylesheet' href='{{ MEDIA_URL }}css/markitup/whhg.css' type='text/css' media='screen' async>
-    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/bootstrap.min.css'>
-    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/bootstrap-responsive.min.css'>
-    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap/css/forum-main.css'>
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap{{ gs.BOOTSTRAP_VERSION }}/css/bootstrap.min.css'>
+    {% if gs.BOOTSTRAP_VERSION != '3' %}
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap{{ gs.BOOTSTRAP_VERSION }}/css/bootstrap-responsive.min.css'>
+    {% else %}
+    <link type='text/css' rel='stylesheet' 
+          href='{{ MEDIA_URL }}bootstrap{{ gs.BOOTSTRAP_VERSION }}/css/bootstrap-glyphicons.css'>
+    {% endif %}
+    <link type='text/css' rel='stylesheet' href='{{ MEDIA_URL }}bootstrap{{ gs.BOOTSTRAP_VERSION }}/css/forum-main.css'>
     <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
-    <script type='text/javascript' src='{{ MEDIA_URL }}bootstrap/js/bootstrap.min.js'></script>
+    <script type='text/javascript' src='{{ MEDIA_URL }}bootstrap{{ gs.BOOTSTRAP_VERSION }}/js/bootstrap.min.js'></script>
     <script type='text/javascript' src='{{ MEDIA_URL }}js/markitup/textile.js'></script>
     <script type='text/javascript' src='{{ MEDIA_URL }}js/jquery.markitup.js'></script>
     <!-- NOTY -->
@@ -52,12 +57,12 @@
 <body>
 <div id='wrap'>
     {% include 'pybb/head.html' %}
-    <div class='container-fluid'>
+    <div class='{% if gs.BOOTSTRAP_VERSION != "3" %}container-fluid{% else %}container{% endif %}'>
         {% block content %}{% endblock %}
     </div>
     <div id='push'></div>
 </div>
-{% include 'pybb/footer.html' %}
+{% include 'pybb/footer.html' %} 
 </body>
 <script type='text/javascript'>
 $(document).ready(function(){

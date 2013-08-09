@@ -2,21 +2,21 @@
 {% load pybb_extras %}
 
 {% block content %}
+{% if not gs.BOOTSTRAP_VERSION == '3' %}
 <div class="row span7">
-    {% for iter in cats %}
-    <div class=''>
-        <h3><a class='brand' href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a></h3>
-        <div class=''>
-            <table class='table striped'>
-            {% for forum in iter.forums %}
-                {% include 'pybb/forum_row.html' %}
-            {% endfor %}
-            </table>
-        </div>
-    </div>
-    {% endfor %}
+    {% include "pybb/include/index.html" %}
 </div>
 <div class="row span5 pull-right">
     {% include 'pybb/quick_access.html' %}
 </div>
+{% else %}
+<div class='row'>
+    <div class='col-lg-8'>
+        {% include "pybb/include/index.html" %}
+    </div>
+    <div class='col-lg-4'>
+        {% include "pybb/quick_access_bs3.html" %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

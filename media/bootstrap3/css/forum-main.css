@@ -1,0 +1,97 @@
+@import "footer.css";
+#@import "whhg.css";
+
+.tablist-inner-row{
+    list-style-type: none;
+}
+td .description{
+    font-size: 8pt;
+}
+td.title a{ color: #666; }
+.posts .post{
+    border: 1px solid #ccc;
+}
+.posts .post .info{
+    padding: 15px 10px;
+}
+.posts .post .avatar img{
+    border: 1px solid #ccc;
+}
+.posts .post .author{
+}
+
+.round.message{
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.round.message .message-body .avatar,
+.round.message .message-body .text,
+.round.message .message-headline{
+    color: #000;
+}
+
+
+.round_message .msg_footer div.links span,
+.round.message .message-footer div.links span{
+    border-top-color: transparent;
+    border-left: 1px dotted #ccc;
+}
+.round.message .message-headline .transparency{
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+}
+.round.message .message-footer .transparency{
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+.transparency.grey{
+    background-color: lightgrey !important;
+    opacity: 0.4;
+}
+.quote_content .transparency,
+.quote.content .transparency{
+    opacity: 0.6;
+    background-color: #999 !important;
+}
+.quote_content .quote_headline .transparency,
+.quote.content .headline .transparency{
+    background-color: #666 !important;
+}
+.markItUpEditor{ border: 1px solid #ccc; border-top-color: transparent; padding-left: 40px; padding-right: 10px; width: 100%;}
+.markItUpHeader{ border: 1px solid #ccc; border-bottom-color: transparent;}
+.markItUpContainer .fileinput-button{ display: none; }
+.code-insert{
+    background-color: #e5e5e5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: block;
+    width: 90%;
+    padding: 5px 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.spoiler_block .spoiler .transparency,
+.spoiler.block .spoiler .transparency{
+    background-color: #ccc !important;
+}
+.spoiler_block .spoiler,
+.spoiler.block .spoiler{
+    display: none;
+}
+.spoiler_show, .spoiler.show{
+    border: 1px dotted #ccc;
+}
+.offtopic{
+    background-color: #888;
+}
+.thumbnail.inline{ display: inline; }
+a.user.image:hover .thumbnail{
+    border: 1px solid #0088cc;
+}
+
+.tablist-inner-row{
+    list-style-type: none;
+}

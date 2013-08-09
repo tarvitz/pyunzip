@@ -12,7 +12,7 @@ from apps.pybb import settings as pybb_settings
 class AddPostForm(forms.ModelForm):
     name = forms.CharField(
         label=_('Subject'),
-        widget=forms.TextInput(attrs={'class': 'span6'})
+        widget=forms.TextInput(attrs={'class': 'span6 form-control'})
     )
 
     class Meta:
@@ -22,7 +22,7 @@ class AddPostForm(forms.ModelForm):
             'body'
         ]
         widgets = {
-            'markup': forms.Select(attrs={'class': 'span6'}),
+            'markup': forms.Select(attrs={'class': 'span6 form-controass'}),
             #'body': forms.Textarea(attrs={'class': 'span6'}),
         }
 

@@ -3,11 +3,19 @@
 {% load i18n %}
 
 {% block content %}
+{% if gs.BOOTSTRAP_VERSION != '3' %}
 <div class="breadcrumb">
     <li><a href="{% url "pybb_index" %}">{% trans "Root" %}</a><span class='divider'>/</span></li>
     <li><strong>{{ category }}</strong></li>
 </div>
+{% else %}
+<ul class="breadcrumb">
+    <li><a href="{% url "pybb_index" %}">{% trans "Root" %}</a></li>
+    <li><strong>{{ category }}</strong></li>
+</ul>
+{% endif %}
 
+{% if gs.BOOTSTRAP_VERSION != '3' %}
 <div class="row span7">
     <h3 class="header">{{ category }}</h3>
     <table class="table striped">
@@ -19,5 +27,18 @@
 <div class="row span5">
     {% include 'pybb/quick_access.html' %}
 </div>
+{% else %}
+    <div class='col-lg-7'>
+        <h3 class='header'>{{ category }}</h3>
+        <table class='table striped'>
+            {% for forum in category.forums.all %}
+                {% include 'pybb/forum_row.html' %}
+            {% endfor %}
+        </table>
+    </div>
+    <div class='col-lg-5'>
+        {% include "pybb/quick_access_bs3.html" %}
+    </div>
+{% endif %}
 
 {% endblock %}

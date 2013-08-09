@@ -13,6 +13,7 @@ from django.utils import dateformat
 from apps.pybb.models import Forum, Topic, Read, PrivateMessage
 from apps.pybb.unread import cache_unreads
 from apps.pybb import settings as pybb_settings
+from django.conf import settings as gs
 
 register = template.Library()
 
@@ -72,7 +73,12 @@ class PybbTimeNode(template.Node):
 
 
 # TODO: this old code requires refactoring
-@register.inclusion_tag('pybb/pagination.html',takes_context=True)
+pagination = (
+    'pybb/pagination.html'
+    if gs.BOOTSTRAP_VERSION != '3'
+    else 'pybb/pagination_bs3.html'
+)
+@register.inclusion_tag(pagination, takes_context=True)
 def pybb_pagination(context, adjacent_pages=5):
     """
     Return the list of A tags with links to pages.

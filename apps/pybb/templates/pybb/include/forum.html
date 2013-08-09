@@ -1,0 +1,24 @@
+{% load i18n pybb_extras %}
+<h3 class="header">{{ forum }}</h3>
+<table class="table table-striped">
+    {% for topic in topics|pybb_unreads:user %}
+    <tr>
+        <td class="attrs">
+            {% if topic.sticky %}<i class='glyphicon glyphicon-calendar icon-calendar' data-title='{% trans "Sticky" %}' rel='tooltip'></i>{% endif %}
+            {% if topic|pybb_has_unreads:user %}<i class="glyphicon glyphicon-comment icon-comment"></i>{% endif %}
+            {% if topic.closed %}<i class='glyphicon glyphicon-remove icon-remove' data-title='{% trans "Closed" %}' rel='tooltip'></i>{% endif %}
+            {% if topic.sticky %}<i class='glyphicon glyphicon-flag icon-flag' data-title='{% trans "Important" %}' rel='tooltip'></i>{% endif %}
+        </td>
+        <td class="title">{% pybb_link topic %}</td>
+        <td class="post_count">{{ topic.post_count }}</td>
+        <td class="updated">{% pybb_time topic.updated %}</td>
+        </li>
+    </tr>
+    {% endfor %}
+
+</table>
+
+{% pybb_pagination %}
+<div class="controls">
+    <a href="{% url "pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
+</div>
