@@ -101,3 +101,6 @@ a.user.image:hover .thumbnail{
 .panel.panel-primary .panel-heading a {
     color: white;
 }
+.list-group-item.forum{
+    overflow: hidden;
+}

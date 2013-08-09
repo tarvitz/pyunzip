@@ -29,7 +29,7 @@
     {{ forum.description }}
     <ul class='list-group'>
     {% for topic in topics|pybb_unreads:user %}
-        <li class='list-group-item'>
+        <li class='list-group-item forum'>
             <span class='title col-lg-5'>{% pybb_link topic %}</span>
             <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
             <span class='icons col-lg-2'>
