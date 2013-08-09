@@ -11,7 +11,7 @@
     </div>
 </div>
 {% else %}
-    <div class='panel panel-{{ user.get_forum_them }}'>
+    <div class='panel panel-{{ user.get_forum_theme|default_if_none:gs.FORUM_THEME_DEFAULT }}'>
         <div class='panel-heading' style='margin-bottom: 0px;'>
             <strong>
                 <a href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a>

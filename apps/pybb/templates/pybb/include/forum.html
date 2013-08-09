@@ -1,7 +1,7 @@
 {% load i18n pybb_extras %}
 
 <div class="controls btn-group" style='margin-bottom: 10px'>
-    <a class='btn btn-{{ user.get_forum_theme }} btn-mini'
+    <a class='btn btn-{{ user.get_forum_theme|default_if_none:gs.FORUM_THEME_DEFAULT }} btn-mini'
        href="{% url "pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
 </div>
 
@@ -24,7 +24,7 @@
     {% endfor %}
 </table>
 {% else %}
-<div class='panel panel-{{ user.get_forum_theme }}'>
+<div class='panel panel-{{ user.get_forum_theme|default_if_none:gs.FORUM_DEFAULT_THEME }}'>
     <div class='panel-heading'><strong>{{ forum }}</strong></div>
     {{ forum.description }}
     <ul class='list-group'>
