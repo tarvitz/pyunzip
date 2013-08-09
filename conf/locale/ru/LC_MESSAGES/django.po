@@ -1559,11 +1559,11 @@ msgstr "Удалить"
 
 #: apps/pybb/templates/pybb/quick_access.html:4
 msgid "Last topics"
-msgstr "Последние топики"
+msgstr "Топики"
 
 #: apps/pybb/templates/pybb/quick_access.html:5
 msgid "Last posts"
-msgstr "Последние посты"
+msgstr "Посты"
 
 #: apps/pybb/templates/pybb/quick_access.html:6
 #: apps/pybb/templates/pybb/user.html:18
