@@ -1,3 +1,7 @@
+.markItUpContainer iframe{
+    width: 100%;
+    min-height: 320px;
+}
 .panel-heading > li,
 .panel-heading > ul > li{
     display: inline;
