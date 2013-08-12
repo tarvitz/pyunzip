@@ -260,7 +260,7 @@ INSTALLED_APPS = (
 )
 #settings
 DOMAIN='w40k.net'
-ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'localhost')
+ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
 APP_VOTE_ENABLED=True
 PRODUCTION=get_local('PRODUCTION', True)
 DEVELOPMENT=get_local('DEVELOPMENT', False)
