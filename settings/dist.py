@@ -231,7 +231,7 @@ INSTALLED_APPS = (
     'apps.jsonapp',
     'apps.core',
     'apps.wh',
-    'apps.whadmin',
+    #'apps.whadmin',
     'apps.news',
     'apps.files',
     'apps.tabletop',
@@ -246,15 +246,15 @@ INSTALLED_APPS = (
     'apps.farseer',
     'apps.pybb',
     'apps.menu',
-    'djcelery',
-    'apps.djangosphinx',
+    #'djcelery',
+    #'apps.djangosphinx',
     'extwidgets',
     'south',
     'sorl.thumbnail',
     #
     'grappelli',
     'django.contrib.admin',
-    'django.contrib.admindocs',
+    #'django.contrib.admindocs',
     'django.contrib.staticfiles',
 )
 #settings

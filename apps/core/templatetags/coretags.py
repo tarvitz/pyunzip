@@ -1,4 +1,5 @@
 # ^^, coding: utf-8 ^^,
+import importlib
 from django.template import Library, Node
 from apps.news.models import News
 from django.contrib.auth.models import User
@@ -706,7 +707,8 @@ class GetFormNode(Node):
         instance = self.instance.resolve(context, ignore_failures=True) if self.instance else None
         app = self.init[:self.init.rindex('.')]
         _form = self.init[self.init.rindex('.')+1:]
-        module = __import__(app, 0, 0, -1)
+        #module = __import__(app, 0, 0, -1)
+        module = importlib.import_module(app)
         form_class = getattr(module, _form)
         context[self.varname] = form_class(request=context['request'], instance=instance) \
             if self.use_request else form_class(instance=instance)

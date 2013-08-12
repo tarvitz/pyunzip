@@ -39,6 +39,8 @@ from apps.news.templatetags.newsfilters import spadvfilter,bbfilter
 from apps.core.helpers import render_filter, post_markup_filter
 import simplejson
 import logging
+from django.utils.decorators import method_decorator
+
 logger = logging.getLogger(__name__)
 
 #simple
@@ -886,3 +888,46 @@ def purge_comment(request,id=0,approve='force'):
     else:
         raise Http404("not found")
 
+
+# CBV Mixins
+class RequestMixin(object):
+    def get_form_kwargs(self):
+        kwargs = super(RequestMixin, self).get_form_kwargs()
+        kwargs.update({
+            'request': self.request
+        })
+        return kwargs
+
+
+class LoginRequiredMixin(object):
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(
+            request, *args, **kwargs
+        )
+
+
+class TemplateNamesMixin(object):
+    def get_template_names(self):
+        """
+        :return: list of template names formatted within '_'
+        symbols between class words, e.g.
+        TestItem binds as test_item
+        TestItemStuff binds as test_item_stuff
+        """
+
+        if self.template_name:
+            return self.template_name
+        name = self.model._meta.object_name
+        name = (
+            name[0].lower() + "".join(
+                ['_' + i if i.isupper() else i for i in name[1:]]
+            ).lower()
+        )
+        template_name = "{app}/{model}{suffix}.html".format(
+            app=self.model._meta.app_label,
+            model=name,
+            suffix=self.template_name_suffix or ''
+        )
+
+        return [template_name, ]

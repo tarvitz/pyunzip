@@ -25,7 +25,14 @@ from django.core.urlresolvers import reverse
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
 from django.core.exceptions import ImproperlyConfigured
-from celery.task import task
+try:
+    from celery.task import task
+    send_email_message = task()(send_mail)
+except ImportError:
+    pass
+    send_email_message = lambda x: x
+    send_email_message.delay = send_mail
+
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import simplejson as json
 import bz2
@@ -33,7 +40,6 @@ import re
 import logging
 logger = logging.getLogger(__name__)
 
-send_email_message = task()(send_mail)
 
 IM_TEXT="""
 user '%s' has left comment on '%s%s?page=last'
