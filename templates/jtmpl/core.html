@@ -2,7 +2,7 @@
 <script type='text/html' id='uploadFileTemplate'>
 <div id='upload-file'>
     <div class="progress hide textarea" id='progress-bar'>
-      <div class="bar" style="width: 0%;"></div>
+      <div class="bar progress-bar progress-bar-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}" style="width: 0%;"></div>
     </div>
     <span class='fileinput-button' id='file-uploader'>
         <input type='file' name='file' id='id_file'>
