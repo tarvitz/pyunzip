@@ -256,6 +256,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     #'django.contrib.admindocs',
     'django.contrib.staticfiles',
+    'gunicorn',
 )
 #settings
 DOMAIN='w40k.net'
