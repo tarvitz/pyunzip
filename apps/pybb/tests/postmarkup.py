@@ -1,6 +1,6 @@
 import unittest
 
-from pybb.markups import mypostmarkup
+from apps.pybb.markups import mypostmarkup
 
 class PostmarkupTestCase(unittest.TestCase):
     def setUp(self):

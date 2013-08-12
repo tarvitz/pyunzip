@@ -3,7 +3,7 @@ The root of pybb tests.
 """
 import unittest
 
-from pybb.tests.postmarkup import PostmarkupTestCase
+from apps.pybb.tests.postmarkup import PostmarkupTestCase
 
 def suite():
     cases = (PostmarkupTestCase,
@@ -12,3 +12,6 @@ def suite():
         unittest.TestLoader().loadTestsFromTestCase(x)\
         for x in cases)
     return tests
+
+
+from .common import *

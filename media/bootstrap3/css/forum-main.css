@@ -60,6 +60,7 @@ td.title a{ color: #666; }
 .quote.content .headline .transparency{
     background-color: #666 !important;
 }
+/*
 .markItUpEditor{ border: 1px solid #ccc; border-top-color: transparent; padding-left: 40px; padding-right: 10px; width: 100%;}
 .markItUpHeader{ border: 1px solid #ccc; border-bottom-color: transparent;}
 .markItUpContainer .fileinput-button{ display: none; }
@@ -72,7 +73,8 @@ td.title a{ color: #666; }
     padding: 5px 10px;
     margin-left: auto;
     margin-right: auto;
-}
+}*/
+
 .spoiler_block .spoiler .transparency,
 .spoiler.block .spoiler .transparency{
     background-color: #ccc !important;
@@ -104,3 +106,4 @@ a.user.image:hover .thumbnail{
 .list-group-item.forum{
     overflow: hidden;
 }
+

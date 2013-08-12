@@ -5,7 +5,8 @@ myMarkupSettings = {
         previewAutoRefresh: false,
         onShiftEnter:		{keepDefault:false, replaceWith:'\n\n'},
         markupSet: [
-            {name: "Headings", className: 'heading',
+            {
+            name: "", className: 'heading',
             dropMenu: [
                 {name:'Heading 1', key:'1', openWith:'h1(!(([![Class]!]))!). ', placeHolder:'Your title here...', className: 'h1'},
                 {name:'Heading 2', key:'2', openWith:'h2(!(([![Class]!]))!). ', placeHolder:'Your title here...', className: 'h2'},
@@ -14,32 +15,32 @@ myMarkupSettings = {
                 {name:'Heading 5', key:'5', openWith:'h5(!(([![Class]!]))!). ', placeHolder:'Your title here...', className: 'h5'},
                 {name:'Heading 6', key:'6', openWith:'h6(!(([![Class]!]))!). ', placeHolder:'Your title here...', className: 'h6'},
             ]},
-            {name:'Paragraph', key:'P', openWith:'p(!(([![Class]!]))!). ', className: 'p'},
-            {name:'Bold', key:'B', closeWith:'*', openWith:'*', className: 'bold'},
-            {name:'Italic', key:'I', closeWith:'_', openWith:'_', className: 'italic'},
-            {name:'Underline', key:'U', openWith:'+', closeWith:'+', className: 'underline'},
-            {name:'Stroke through', key:'S', closeWith:'-', openWith:'-', className: 'stroke'},
-            {separator:'---------------' },
-            {name:'Bulleted list', openWith:'(!(* |!|*)!)', className: 'list-bullet'},
-            {name:'Numeric list', openWith:'(!(# |!|#)!)', className: 'list-numeric'},
+            {name:'', key:'P', openWith:'p(!(([![Class]!]))!). ', className: 'p', dataTitle: "new paragraph"},
+            {name:'', key:'B', closeWith:'*', openWith:'*', className: 'bold', dataTitle: "bold text"},
+            {name:'', key:'I', closeWith:'_', openWith:'_', className: 'italic', dataTitle: "italic text"},
+            {name:'', key:'U', openWith:'+', closeWith:'+', className: 'underline', dataTitle: "underline text"},
+            {name:'', key:'S', closeWith:'-', openWith:'-', className: 'stroke', dataTitle: "strike through text"},
+            {separator:'', className: 'divider' },
+            {name:'', openWith:'(!(* |!|*)!)', className: 'list-bullet', dataTitle: "bullet list"},
+            {name:'', openWith:'(!(# |!|#)!)', className: 'list-numeric', dataTitle: "numeric list"},
             //{name:'Quotes', openWith:'bq(!(([![Class]!]))!). ', className: 'quote'},
-            {name:'Code', openWith:'@', closeWith:'@', className: 'code'},
-            {separator:'---------------' },
+            {name:'', openWith:'@', closeWith:'@', className: 'code', dataTitle: "code"},
+            {separator:'', className: 'divider' },
             /*{name:'Clean', className:"clean", replaceWith:function(markitup) { return false; }, className: 'clean' },*/
             /*{name:'Markup', key:'M', className: 'markup',
             dropMenu :[
                 {name:'BBcode', call: 'reloadMarkItUp("bb-code")'},
                 {name:'Textile', call: 'reloadMarkItUp("textile")'}
             ]},*/
-            {name: "Spoiler", className: 'spoiler-button', openWith:'(spoiler)[', closeWith: ']'},
-            {name: "Offtopic", className: 'offtopic-button', openWith:'(off)[', closeWith: ']'},
-            {name: "Video", className: 'video', openWith:'(video)[', closeWith: ']'},
-            {separator:"---------------"},
-            {name:'Link', openWith:'"', closeWith:'[![Title]!]":[![Link:!:http://]!]',
+            {name: "", className: 'spoiler-button', openWith:'(spoiler)[', closeWith: ']', dataTitle: "spoiler"},
+            {name: "", className: 'offtopic-button', openWith:'(off)[', closeWith: ']', dataTitle: "offtopic"},
+            {name: "", className: 'video', openWith:'(video)[', closeWith: ']', dataTitle: "video"},
+            {separator:"", className: 'divider'},
+            {name:'', openWith:'"', closeWith:'[![Title]!]":[![Link:!:http://]!]',
                 //placeHolder:'Your text to link here...',
-                className: 'link'},
+                className: 'link', dataTitle: "link"},
 
-            {name: "Picture", className: 'upload-picture',
+            {name: "", className: 'upload-picture',
             dropMenu: [
                 {name:'Picture', replaceWith:'![![Source:!:http://]!]([![Alternative text]!])!', className: 'picture'},
                 {
@@ -143,7 +144,7 @@ myMarkupSettings = {
                 }
             }
             ]},
-            {name:'Preview', call:'preview', className:'preview', className:' preview'},
+            {name:'', call:'preview', className:'preview', className:' preview', dataTitle: "preview"},
         ]
     } //end textile
 
