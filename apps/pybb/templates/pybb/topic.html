@@ -3,21 +3,13 @@
 {% load i18n %}
 
 {% block content %}
-{% if gs.BOOTSTRAP_VERSION != '3' %}
-<div class="breadcrumb">
-    <li><a href="{% url "pybb_index" %}">{% trans "Root" %}</a><span class='divider'>/</span></li>
-    <li>{% pybb_link topic.forum.category %}<span class='divider'>/</span></li>
-    <li>{% pybb_link topic.forum %}<span class='divider'>/</span></li>
-    <li><strong>{% pybb_link topic %}</strong></li>
-</div>
-{% else %}
 <ul class='breadcrumb'>
     <li><a href="{% url "pybb_index" %}">{% trans "Root" %}</a></li>
     <li>{% pybb_link topic.forum.category %}</li>
     <li>{% pybb_link topic.forum %}</li>
     <li><strong>{% pybb_link topic %}</strong></li>
 </ul>
-{% endif %}
+
 {% pybb_pagination %}
 
 <div class="posts">
@@ -38,23 +30,19 @@
     {% if topic.sticky %}
     <li>
         <a href="{% url "pybb_unstick_topic" topic.id %}">{% trans "Unstick topic" %}</a>
-        {% if gs.BOOTSTRAP_VERSION != '3' %}<span class='divider'>/</span>{% endif %}
     </li>
     {% else %}
     <li>
         <a href="{% url "pybb_stick_topic" topic.id %}">{% trans "Stick topic" %}</a>
-        {% if gs.BOOTSTRAP_VERSION != '3' %}<span class='divider'>/</span>{% endif %}
     </li>
     {% endif %}
     {% if topic.closed %}
     <li>
         <a href="{% url "pybb_open_topic" topic.id %}">{% trans "Open topic" %}</a>
-        {% if gs.BOOTSTRAP_VERSION != '3' %}<span class='divider'>/</span>{% endif %}
     </li>
     {% else %}
     <li>
         <a href="{% url "pybb_close_topic" topic.id %}">{% trans "Close topic" %}</a>
-        {% if gs.BOOTSTRAP_VERSION != '3' %}<span class='divider'>/</span>{% endif %}
     </li>
     {% endif %}
     {% endif %}

@@ -7,25 +7,20 @@
 {% if forum %}
     <li>
         <a href="{% url "pybb_index" %}">{% trans "Root" %}</a>
-        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
     </li>
     <li>
         {% pybb_link forum.category %} 
-        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
     </li>
     <li>{% pybb_link forum %}</li>
 {% else %}
     <li>
         <a href="{% url "pybb_index" %}">{% trans "Root" %}</a> 
-        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
     </li>
     <li>
         {% pybb_link topic.forum.category %}
-        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
     </li>
     <li>
         {% pybb_link topic.forum %}
-        {% if gs.BOOTSTRAP_VERSION != "3" %}<span class='divider'>/</span>{% endif %}
     <li>
     <li>{% pybb_link topic %}</li>
 {% endif %}
