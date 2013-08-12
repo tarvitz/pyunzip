@@ -18,6 +18,9 @@
 .panel-heading > ul > li a{
     font-family: "WebHostingHub-Glyphs";
 }
+.panel-heading li a:hover{
+    text-decoration: none;
+}
 
 .heading > a:before{
     content: "\f1f8";
