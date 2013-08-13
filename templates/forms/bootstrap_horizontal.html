@@ -1,16 +1,13 @@
 {% for field in form.visible_fields %}
-<div class="control-group">
+<div class="control-group form-group">
     {% if field.errors %}{{ field.errors }}{% endif %}
-    <label class="control-label" for="id_{{ field.name }}">{{ field.label }}:</label>
-    <div class="controls">
-        <label id='{{ field.label_name }}'>{{ field.label_title }}</label>
+    <label class="control-label col-lg-2 control-label"
+           for="id_{{ field.name }}">{{ field.label }}:</label>
+    <div class="controls col-lg-10">
         {{ field }}<br>
         {% if field.help_text %}
-        <span class='help-text'>({{ field.help_text }})</span>
+            <span class='help-text'>({{ field.help_text }})</span>
         {% endif %}
-    {% if forloop.last and submit %}
-        <input type='submit' class='{{ submit_class }}' value='{{ submit }}'>
-    {% endif %}
     </div>
 </div>
 {% endfor %}
@@ -23,13 +20,5 @@
     {% endfor %}
     </div>
 {% endif %}
-{% if use_submit %}
-<div class="control-group">
-    <label class="control-label" for="id_submit">&nbsp;{{ field.label }}</label>
-    <div class="controls {{ submit_class }}">
-        <input type='submit' class='{{ submit_class_btn|default:"btn btn-success" }}'
-            value="{{ submit_value|default:"Отправить" }}">
-    </div>
-</div>
-{% endif %}
+
 {% if form.media %}{{ form.media }}{% endif %}

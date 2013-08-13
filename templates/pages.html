@@ -32,7 +32,7 @@
 </center>
 
 <div class='pagination pagination-mini no-margin'>
-    <ul>
+    <ul class='pagination'>
         <li><a href="{{ page.previous_page_number }}">&ltratio;</a></li>
         {% for num in page.page_rante %}
         <li><a href='?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}'>{{ num }}</a></li>

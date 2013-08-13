@@ -7,14 +7,13 @@
 <meta name="wot-verification" content="581220ae922fc400475a"/>
 <title>{% block title %}Warhammer 40,000{% endblock%}</title>
 {% block css %}
-<link rel='stylesheet' href='/media/bootstrap/css/bootstrap.min.css' type='text/css' media='screen'>
-<link rel='stylesheet' href='/media/bootstrap/css/main.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/media/bootstrap3/css/bootstrap.min.css' type='text/css' media='screen'>
+<link rel='stylesheet' href='/media/bootstrap3/css/main.css' type='text/css' media='screen'>
 
-<link rel='stylesheet' href='/media/css/markitup/skins/markitup/style.css' type='text/css' media='screen' async>
-<link rel='stylesheet' href='/media/css/markitup/whhg.css' type='text/css' media='screen' async>
+<link rel='stylesheet' href='/media/css/markitup/skins/bootstrap/style.css' type='text/css' media='screen' async>
 <link rel='stylesheet' href='/media/css/jquery.fileupload-ui.css' type='text/css' media='screen' async>
 <link rel='stylesheet' href='/media/css/video-js.css' type='text/css' media='screen' async>
-<link rel='stylesheet' href='/media/css/chosen.css' type='text/css' media='screen'>
+<!--<link rel='stylesheet' href='/media/css/chosen.css' type='text/css' media='screen'> -->
 {#<link rel='stylesheet' href='/media/css/bootstrap-image-gallery.min.css' type='text/css' media='screen' async>#}
 <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
 
@@ -38,7 +37,7 @@
 <script type='text/javascript' src='/media/js/chosen.min.js'></script>
 <script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
 <script type='text/javascript' src='/media/js/video.js' async></script>
-<script type='text/javascript' src='/media/bootstrap/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='/media/bootstrap3/js/bootstrap.min.js'></script>
 {# <script type='text/javascript' src='/media/js/bootstrap-image-gallery.min.js' async></script> #}
 <script type='text/javascript' src='/media/colorbox/jquery.colorbox-min.js'></script>
 <script type='text/javascript' src='/media/colorbox/i18n/jquery.colorbox-ru.js'></script>
@@ -103,23 +102,21 @@
             <li><a href='{% url "news:news" %}'>сайт</a></li>{% endcomment %}
         </ul>
     </div>
-    <div class='navbar navbar-inverse no-margin-bottom'>
-        <div class='navbar-inner grey'>
-            <div id='miniquote'>
-                <center><span class='content'>{{ miniquote.content }}</span></center>
-            </div>
+    <div class='navbar navbar-inverse no-margin-bottom no-padding grey'>
+        <div id='miniquote'>
+            <center><span class='content'>{{ miniquote.content }}</span></center>
         </div>
     </div>
     <!-- navbars end -->
-    <div class='row-fluid'>
-        <div id='main-content' class='content span9-5 offset05'>
+    <div class='row'>
+        <div id='main-content' class='content {#span9-5 offset05#} col-lg-9 col-lg-offset-05'>
             <div class='transparency'></div>
             <div class='content'>
                 {% block content %}{% block text_content %}  {% endblock %}{% endblock %}
                 {% if timeit %}{% include "timeit.html" %}{% endif %}
             </div>
         </div>
-        <div class='bars span2 dis-yellow-marker' id='sidebar'>
+        <div class='bars {#span2 #} dis-yellow-marker col-lg-2' id='sidebar'>
         {# control content #}
         {% block control_content %}
             {% include "base/sidebar/profile.html" %}
