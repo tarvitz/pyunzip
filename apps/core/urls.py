@@ -5,10 +5,12 @@ from apps.core.shortcuts import direct_to_template
 urlpatterns = patterns('apps.core.views',
     #(r'^search/$', 'search', name='search'),
     #(r'^search/(?P<model>\w+)/$', 'search_model'),
-    url(r'^search/(?P<model>\w+)/$', 'sphinx_search_model',
-        name='search-sph-model'),
+
+    #url(r'^search/(?P<model>\w+)/$', 'sphinx_search_model',
+    #    name='search-sph-model'),
     url(r'^search/$', 'sphinx_search',
         name='search-sph'),
+
     url(r'^settings/$','user_settings', name='settings'),
     url(r'^settings/store/(?P<key>[\w_]+)/(?P<value>\w+)/$','set_settings'),
     url(r'^subscription/$','view_subscription',

@@ -1,22 +1,17 @@
 # coding: utf-8
 #
 import os
-from datetime import datetime, timedelta, date, time
-#from apps.core.forms import CommentForm
+from datetime import datetime, date, time
 from functools import partial
 from django.http import HttpResponseRedirect, HttpResponse
 from apps.core import get_skin_template
-from apps.core.shortcuts import direct_to_template
 from django.shortcuts import (
-    render_to_response, get_object_or_404 as _get_object_or_404,
-    redirect
+    render_to_response, redirect
 )
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib.comments.models import Comment
 from django.contrib.auth.models import User, AnonymousUser
-from datetime import datetime
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -25,6 +20,7 @@ from django.core.urlresolvers import reverse
 from django.template.loader import get_template, TemplateDoesNotExist
 from django.core.mail import send_mail
 from django.core.exceptions import ImproperlyConfigured
+from django.template import Context
 try:
     from celery.task import task
     send_email_message = task()(send_mail)
@@ -35,7 +31,6 @@ except ImportError:
 
 from django.utils.translation import ugettext_lazy as _, ugettext as tr
 import simplejson as json
-import bz2
 import re
 import logging
 logger = logging.getLogger(__name__)
@@ -46,6 +41,7 @@ user '%s' has left comment on '%s%s?page=last'
 Please visit this page to figure out that have been done there.
 """
 EMAIL_TEXT = """"""
+
 
 # safe method get obj.attr.attr1 and so on
 # safe_ret(cell, 'room.pk')
@@ -60,9 +56,11 @@ safe_ret = (
     )
 )
 
+
 get_int_or_zero = lambda x: int(x) if (
     x.isdigit() if isinstance(x, basestring) else x
 ) else 0
+
 
 #TODO: OVERWRITE IT =\
 #instance is the object passing through the signal
@@ -76,10 +74,14 @@ def send_notification(instance,**kwargs):
         #do anything we want to do ;)
         #print real_object
         # do notification
-        # DO NOT FORGET THAT Primary info contained in instance object not in real, we just test if real object has user that shoud be
-        # announcemented
+        # DO NOT FORGET THAT Primary info contained in instance object not in real,
+        # we just test if real object has user that should be
+        # announced
         try:
-            announcement = Announcement.objects.get(content_type=instance.content_type,object_pk=str(instance.object_pk))
+            announcement = Announcement.objects.get(
+                content_type=instance.content_type,
+                object_pk=str(instance.object_pk)
+            )
             for user in announcement.users.distinct():
                 #sending notification
                 #it would be wise to do not notify yourself :)
@@ -103,10 +105,13 @@ def send_notification(instance,**kwargs):
                     notify_jid = user.settings.get('notify_jid', False)
                     notify_email = user.settings.get('notify_email', True)
                     if user.email and notify_email:
-                        send_email_message.delay(_('WarMist no-replay notification'),text_content,settings.FROM_EMAIL,
+                        send_email_message.delay(
+                            _('WarMist no-replay notification'),
+                            text_content,settings.FROM_EMAIL,
                             [user.email],fail_silently=False,
                             auth_user=settings.EMAIL_HOST_USER,
-                            auth_password=settings.EMAIL_HOST_PASSWORD)
+                            auth_password=settings.EMAIL_HOST_PASSWORD
+                        )
                     if user.jid and notify_jid:
                         message = "s_notify jid:%s message:%s" % (user.jid,text_content)
                         send_network_message.delay('localhost', 40001, message)
@@ -146,6 +151,7 @@ def send_notification(instance,**kwargs):
             pass
         #print "do notification for %r" % instance
 
+
 def get_object_or_none(Object, **kwargs):
     try:
         obj = Object.objects.get(**kwargs)
@@ -155,12 +161,14 @@ def get_object_or_none(Object, **kwargs):
     return None
 get_object_or_None = get_object_or_none
 
+
 def get_settings(user,settings,default=False):
     if hasattr(user, 'settings'):
         return user.settings.get(settings, default) if \
             user.settings else default
     else:
         return default
+
 
 # decorator
 def can_act(func):
@@ -177,90 +185,10 @@ def can_act(func):
         return func(request,*args,**kwargs)
     return wrapper
 
-"""
-#obsolete, moved to views with another level functionallity
-@login_required
-@can_act
-def save_comment(request,template,vars,ct=None,object_pk=None,redirect_to=None):
-    if request.method == 'POST':
-        form = CommentForm(request.POST,request=request)
-        if form.is_valid():
-            comment = form.cleaned_data['comment']
-            syntax = form.cleaned_data.get('syntax',None)
-            hidden_syntax = form.cleaned_data.get('hidden_syntax',None)
-            subscribe = form.cleaned_data.get('subscribe',False)
-            unsubscribe = form.cleaned_data.get('unsubscribe',False)
-            if not syntax:
-                if hidden_syntax: syntax = hidden_syntax
-                else: syntax = settings.SYNTAX[0][0] #the default syntax is at the top of the list
-
-            #adding user to announcement table
-            #if Announcement 's already exist for this object
-            try:
-                announcement = Announcement.objects.get(content_type=ct,object_pk=str(object_pk))
-                #if subscribed we gonna subscribe him or she :)
-                if subscribe:
-                    announcement.update(request.user)
-                    announcement.save()
-                #update notification readiness
-                if request.user in announcement.notified_users.distinct():
-                    announcement.update(request.user)
-
-            #there is no any users for their announcement s
-            except Announcement.DoesNotExist:
-                if subscribe:
-                    announcement = Announcement(content_type=ct,object_pk=str(object_pk))
-                    #saving users before saving announcement
-                    announcement.save()
-                    announcement.users.add(request.user)
-                    announcement.save()
-            #end of Announcement
-
-            #kind of danger :)
-            try:
-                c = Comment.objects.filter(
-                    content_type=ct,object_pk=str(object_pk)
-                    ).order_by('-id')[0]
-                if c.user == request.user:
-                    if c.comment != comment:
-                        now = datetime.now().__format__('%H:%M:%S')
-                        c.comment = c.comment + '\n\n[upd %s]' % now + comment
-                        # I think i'd be great idea to do not change the syntax
-                        # withing composing old comment and new one
-                        #c.syntax = syntax
-                        c.save()
-                    #do nothing if we're trying to pass the same comment :)
-                    else:
-                        pass
-                else:
-                    c = Comment(content_type=ct,object_pk=str(object_pk),
-                        comment=comment,
-                        user=request.user,is_public=True,
-                        site_id=1,submit_date=datetime.now(),
-                        syntax=syntax)
-                    c.save()
-                if redirect_to:
-                    return {'success':True,'redirect':redirect_to}
-                else:
-                    return {'success':True,'redirect':request.META.get('HTTP_REFERER','/')}
-            #there is no comments at all
-            except IndexError:
-                c = Comment(content_type=ct,object_pk=str(object_pk),comment=comment,
-                        user=request.user,is_public=True,site_id=1,submit_date=datetime.now(),syntax=syntax)
-                c.save()
-                if redirect_to:
-                    return {'success':True,'redirect':redirect_to}
-                else:
-                    return {'success': True,'redirect':request.META.get('HTTP_REFERER','/')}
-        else:
-            vars.update({'form':form})
-            return {'success':False,'form':form}
-    else:
-        return {}
-"""
 
 def send_email(email,content,**kwargs):
    pass
+
 
 def purge_unexistable_comments():
     pass
@@ -287,6 +215,7 @@ def get_user(username=None,nickname=None,id=None):
             return user
         except User.DoesNotExist:
             return None
+
 
 def get_content_type(Object):
     """works with ModelBase based classes, its instances
@@ -321,12 +250,14 @@ def get_content_type(Object):
     ct = ContentType.objects.get(app_label=app_label,model=model)
     return ct
 
+
 def get_content_type_or_none(Object):
     try:
         ct = get_content_type(Object)
         return ct
     except:
         return None
+
 
 def get_comments(Object,**kwargs):
     #model = Object.__name__.lower()
@@ -338,6 +269,7 @@ def get_comments(Object,**kwargs):
     ct = get_content_type(Object)
     comments = Comment.objects.filter(content_type=ct,**kwargs)
     return comments
+
 
 def paginate(Objects,page,**kwargs):
     if 'pages' in kwargs: _pages_ = kwargs['pages']
@@ -360,6 +292,7 @@ def paginate(Objects,page,**kwargs):
 
     return objects
 
+
 def get_template_or_none(template,plain=False):
     try:
         t = get_template(template)
@@ -370,6 +303,7 @@ def get_template_or_none(template,plain=False):
     except TemplateDoesNotExist:
         return None
 
+
 def validate_object(app_n_label,obj_id):
     app_label,model = app_n_label.split('.')
     try:
@@ -378,6 +312,7 @@ def validate_object(app_n_label,obj_id):
         return True
     except:
         return False
+
 
 def handle_uploaded_file(f,path,compress=False):
     from django.conf import settings
@@ -404,6 +339,7 @@ def handle_uploaded_file(f,path,compress=False):
     #print "filename: ", os.path.join(path,f.name)
     return os.path.join(path,f_name)
 
+
 def get_upload_form(path):
     from apps.core.settings import UPLOAD_SETTINGS
     try:
@@ -415,6 +351,7 @@ def get_upload_form(path):
     except:
         return None
 
+
 def get_upload_helper(path):
     from apps.core.settings import UPLOAD_SETTINGS
     try:
@@ -425,6 +362,7 @@ def get_upload_helper(path):
         return getattr(module,helper)
     except:
         return None
+
 
 @task
 def send_network_message(host,port,message):
@@ -438,6 +376,7 @@ def send_network_message(host,port,message):
     except:
         logger.error('Could not send message')
         return False
+
 
 def get_content_type_new(Object):
     """
@@ -493,6 +432,7 @@ def make_http_response(**kw):
         response.write(kw['content'])
     return response
 
+
 def model_json_encoder(obj, **kwargs):
     from django.db.models.base import ModelState
     from django.db.models import Model
@@ -534,9 +474,6 @@ def model_json_encoder(obj, **kwargs):
             for f in kwargs.get('fields_restrict'):
                 if f in dt:
                     del dt[f]
-        #make week more humanic
-        if is_human and 'week' in dt:
-            dt['week'] = unicode(humanday(dt['week']))
         return dt
     elif isinstance(obj, ModelState):
         return 'state'
@@ -597,6 +534,7 @@ def get_model_instance_json(Obj, id):
     }, default=model_json_encoder))
     return response
 
+
 def render_to_json(content_type='application/json', is_mongo=False):
     def decorator(func):
         def wrapper(request, *args, **kwargs):
@@ -608,8 +546,10 @@ def render_to_json(content_type='application/json', is_mongo=False):
         return wrapper
     return decorator
 
+
 def render_to(template, allow_xhr=False, content_type='text/html'):
     _content_type = content_type
+
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             response = make_http_response(content_type='application/json')
@@ -621,7 +561,10 @@ def render_to(template, allow_xhr=False, content_type='text/html'):
 
             content_type = dt.get('_content_type', _content_type)
 
-            force_ajax = request.META.get('HTTP_X_FORCE_XHTTPRESPONSE', None)
+            force_ajax = (
+                request.is_ajax() or request.META.get('HTTP_X_FORCE_XHTTPRESPONSE',
+                                                      None)
+            )
             if 'redirect' in dt:
                 if force_ajax:
                     response.write(json.dumps({"status": "ok"}))
@@ -638,9 +581,8 @@ def render_to(template, allow_xhr=False, content_type='text/html'):
                     response.write(json.dumps(dt, default=model_json_encoder))
                     return response
                 return render_to_response(
-                    tmpl,
-                    dt,
-                    context_instance=RequestContext(request))
+                    tmpl, dt, context_instance=RequestContext(request)
+                )
 
             elif content_type.lower() == 'text/csv':
                 response = make_http_response(content_type=content_type)
@@ -663,6 +605,7 @@ def render_to(template, allow_xhr=False, content_type='text/html'):
                     dt, context_instance=RequestContext(request))
         return wrapper
     return decorator
+
 
 def post_markup_filter(string):
     r = re.compile(r'\((?P<tag>\w+)\)\[(?P<text>.*?)\]', re.M|re.I|re.S)
@@ -701,10 +644,12 @@ def post_markup_filter(string):
     string = string.replace('(cut)', '')
     return string
 
+
 def unescape(string):
     string = string.replace('&lt;', '<')
     string = string.replace('&gt;', '>')
     return string
+
 
 def render_filter(value, arg):
     from apps.thirdpaty.postmarkup import render_bbcode
@@ -717,9 +662,7 @@ def render_filter(value, arg):
         if arg in 'bb-code':
             return unescape(render_bbcode(value))
         elif arg in 'creole' or arg in 'wiki':
-            return creole_filter(value)
+            return render_creole(value)
         elif arg in 'textile':
             return render_textile(value)
-        elif arg in 'markdown':
-            return spadvfilter(value)
     return render_textile(value)
