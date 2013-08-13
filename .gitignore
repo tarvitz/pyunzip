@@ -33,3 +33,4 @@ django.mo
 /media/uploads
 /media/replays
 /media/cache
+/media/user/*
