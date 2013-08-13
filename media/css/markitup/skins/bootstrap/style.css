@@ -16,10 +16,11 @@
     padding: 0px;
 }
 .panel-heading ul > li {
-    margin-left: 3px;
+    margin-left: 4px;
 }
 .panel-heading > ul > li a{
     font-family: "WebHostingHub-Glyphs";
+    font-size: 1.25em;
 }
 .panel-heading li a:hover{
     text-decoration: none;
@@ -44,7 +45,13 @@
     content: "\f1f7";
 }
 .divider > a:before{
-    content: "";
+    content: " ";
+    color: black;
+    font-size: 1.65em;
+    vertical-align: middle;
+}
+.divider > a{
+    cursor: default;
 }
 .list-bullet > a:before{
     content: "\f111";
