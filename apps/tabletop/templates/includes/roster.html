@@ -6,7 +6,7 @@
 			<!-- end of effects -->
 			<div class='links'>	
                 {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
-                    <input class='left' value='{{ r.id }}' type='checkbox' name='items'>
+                    <input class='left pull-left' value='{{ r.id }}' type='checkbox' name='items'>
                 {% endif %}
 				{% ifequal user r.owner %}
 					{% spaceless %}
