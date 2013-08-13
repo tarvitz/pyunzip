@@ -19,7 +19,6 @@ django-picklefield==0.3.0
 ipdb==0.7
 ipython==0.13.1
 kombu==2.5.4
-psycopg2==2.4.6
 python-dateutil==1.5
 python-memcached==1.51
 pytils==0.2.3
