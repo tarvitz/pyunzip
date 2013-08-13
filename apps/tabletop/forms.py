@@ -19,6 +19,7 @@ from apps.tabletop import fields
 import re
 
 from apps.wh.models import Fraction, Side, Army
+
 class AddCodexModelForm(forms.ModelForm):
     required_css_class = 'required'
     side = forms.ModelChoiceField(queryset=Side.objects)
@@ -50,14 +51,14 @@ class AddBattleReportForm(RequestModelForm):
         #regex=re.compile('^[\w\d\ \-\_\.]+$'),
         label=pgettext_lazy("Title", "battle report title"),
         help_text=_("battle report title, please be more creative"),
-        widget=forms.TextInput(attrs={'class': 'span8'})
+        widget=forms.TextInput(attrs={'class': 'span8 form-control'})
     )
     rosters = forms.ModelMultipleChoiceField(
         label=_("Rosters"),
         queryset=Roster.objects,
         help_text=_("user rosters participating in the battle you want to describe"),
         widget=forms.SelectMultiple(
-            attrs={'class': 'span8', 'data-class': 'ajax-chosen'}
+            attrs={'class': 'span8 form-control', 'data-class': 'ajax-chosen'}
         )
     )
     winners = forms.ModelMultipleChoiceField(
@@ -65,7 +66,7 @@ class AddBattleReportForm(RequestModelForm):
         queryset=Roster.objects,
         help_text=_("winner or winners, should be at least one"),
         widget=forms.SelectMultiple(
-            attrs={'class': 'span8', 'data-class': 'chosen'}
+            attrs={'class': 'span8 form-control', 'data-class': 'chosen'}
         )
     )
     #_mission_choices = [(i.id,'%s:%s' % (i.game.codename, i.title)) for i in Mission.objects.all()]
@@ -74,7 +75,7 @@ class AddBattleReportForm(RequestModelForm):
         queryset=Mission.objects,
         help_text=_('mission you played'),
         widget=forms.Select(
-            attrs={'class': 'span8', 'data-class': 'chosen'}
+            attrs={'class': 'span8 form-control', 'data-class': 'chosen'}
         )
     )
     layout = forms.RegexField(
@@ -82,7 +83,7 @@ class AddBattleReportForm(RequestModelForm):
         label=_("Layout"),
         help_text=_('how much players participated in the game, 1vs1, 2vs2 and so on'),
         widget=forms.TextInput(
-            attrs={'class': 'span8'}
+            attrs={'class': 'span8 form-control'}
         )
     )
     #syntax = forms.ChoiceField(choices=settings.SYNTAX)
@@ -90,7 +91,7 @@ class AddBattleReportForm(RequestModelForm):
     comment = forms.CharField(
         label=pgettext_lazy("Content", "battle report content"),
         widget=forms.Textarea(
-            attrs={'class': 'textile'}
+            attrs={'class': 'textile form-control'}
         )
     )
     next = forms.CharField(required=False, widget=forms.HiddenInput()) # could it be dangerous ?
@@ -166,7 +167,7 @@ class AddBattleReportForm(RequestModelForm):
         model = BattleReport
         fields = ('title', 'mission', 'rosters', 'winners', 'layout', 'deployment', 'comment')
         widgets = {
-            'deployment': forms.Select(attrs={'data-class': 'chosen'})
+            'deployment': forms.Select(attrs={'data-class': 'chosen', 'class': 'form-control'})
         }
 
 class AddBattleReportModelForm(RequestModelForm):
@@ -223,7 +224,11 @@ class AddBattleReportModelForm(RequestModelForm):
         if layout and users:
             l = sum([int(l) for l in layout.split('vs') if l ])
             if len(users) != l:
-                msg =_('You should set right layout, for example 2vs2, 3vs1, number of players should be equal to number of rosters you\'ve passed')
+                msg =_(
+                    'You should set right layout, for example 2vs2, '
+                    '3vs1, number of players should be equal to number '
+                    'of rosters you\'ve passed'
+                )
                 self._errors['users'] = ErrorList([msg])
                 del cleaned_data['users']
         return cleaned_data
@@ -232,7 +237,10 @@ class AddBattleReportModelForm(RequestModelForm):
         layout = self.cleaned_data['layout']
         l = sum([int(l) for l in layout.split('vs') if l])
         if l > 10:
-            raise forms.ValidationError(_('10 players is absolute maximum, do not try to add layout with more players, it\'s strickly forbidden'))
+            raise forms.ValidationError(_(
+                '10 players is absolute maximum, do not try to'
+                ' add layout with more players, it\'s strickly forbidden'
+            ))
         return layout
 
 class DeepSearchRosterForm(RequestForm):
@@ -315,24 +323,25 @@ class AddRosterForm(RequestForm):
         else:
             raise forms.ValidationError(_('The common pts should be greater than 500'))
 
+
 class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
     codex = forms.ModelChoiceField(
         queryset=Codex.objects, required=True, empty_label=None,
         widget=forms.Select(attrs={'class': 'span5 chosen'}),
         label=_('Codex')
-
     )
+
     class Meta:
         model = Roster
         exclude = ['owner', 'user', 'is_orphan', 'plain_side']
         widgets = {
             #'comments': TinyMkWidget(attrs={'disable_user_quote': True}),
             #'roster': TinyMkWidget(attrs={'disable_user_quote': True})
-            'title': forms.TextInput(attrs={'class': 'span5'}),
-            'pts': forms.TextInput(attrs={'class': 'span5'}),
-            'revision': forms.Select(attrs={'class': 'span5 chosen'}),
-            'roster': forms.Textarea(attrs={'class': 'markitup textile'})
+            'title': forms.TextInput(attrs={'class': 'span5 form-control'}),
+            'pts': forms.TextInput(attrs={'class': 'span5 form-control'}),
+            'revision': forms.Select(attrs={'class': 'span5 chosen form-control'}),
+            'roster': forms.Textarea(attrs={'class': 'markitup textile form-control'})
         }
         fields = [
             'title',
@@ -341,16 +350,22 @@ class AddRosterModelForm(RequestModelForm):
             #'syntax',
             'codex',
             #'custom_codex',
-            'revision', 'roster',
+            'revision',
+            'roster',
         ]
 
     def clean(self):
         cleaned_data = self.cleaned_data
         revision = cleaned_data.get('revision', None)
         codex = cleaned_data.get('codex', None)
-        if not codex or not revision: return cleaned_data
+        if not codex or not revision:
+            return cleaned_data
+
         if not str(revision) in codex.revisions.split(','):
-            msg = _('There is no such revision in "%(unicode)s", try to pass %(revisions)s as valid values') % {
+            msg = _(
+                'There is no such revision in "%(unicode)s",'
+                ' try to pass %(revisions)s as valid values'
+            ) % {
                 'unicode': codex.__unicode__(),
                 'revisions': codex.revisions
             }
@@ -367,11 +382,14 @@ class AddRosterModelForm(RequestModelForm):
 
     def clean_player(self):
         player = self.cleaned_data.get('player',None)
-        if len(player)>64:
-	    raise forms.ValidationError(_('You can not pass player\'s name that contains more than 64 symbols'))
+        if len(player) > 64:
+            raise forms.ValidationError(
+                _('You can not pass player\'s name that contains more than 64 symbols')
+            )
         if not player:
             player = self.request.user.nickname
         return player
+
 
 class ActionAlterRosterCodex(ActionForm):
     required_css_class='required'

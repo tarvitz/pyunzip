@@ -1,9 +1,8 @@
-{% extends base_template %} {% load newsfilters %} {% load i18n %}
+{% extends base_template %} {% load newsfilters i18n %}
 {% block css %}
 {{ block.super }}
 <link rel='stylesheet' href='/styles/tabletop.css' type='text/css' media='screen'>
 <link rel='stylesheet' href='/styles/round_message.css' type='text/css' media='screen'>
-<link rel='stylesheet' href='/styles/forms.css' type='text/css' media='screen'>
 {% endblock %}
 {% block js %}
 {{ block.super }}
@@ -11,8 +10,11 @@
 <script language='javascript' src='/media/js/jq_tabletop.js'></script>
 {% endblock %}
 {% block text_content %}
-<a href='{% url "tabletop:roster-add" %}' class='a_button' style='color: black'>Добавить</a>
-<a href='{% url "core:search-sph-model" 'roster' %}' class='a_button' style='color: black'>Поиск</a>
+<div class='btn-group'>
+    <a href='{% url "tabletop:roster-add" %}'
+        class='btn btn-xs btn-primary'>{% trans "Add" %}</a>
+    {# <a href='{% url "core:search-sph-model" 'roster' %}' class='btn btn-primary btn-xs'>{% trans "Search" %}</a> #}
+</div>
 
 {% if rosters.object_list %}
 {% if perms.tabletop.change_roster or perms.tabletop.delete_roster %}

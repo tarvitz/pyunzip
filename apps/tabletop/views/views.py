@@ -41,7 +41,7 @@ from django.contrib.comments.models import Comment
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
-from anyjson import serialize as serialize_json
+import simplejson as json
 from django.core.cache import cache
 
 from datetime import datetime
@@ -142,11 +142,11 @@ def index(request):
             if 'response' in qset: return qset['response']
             return HttpResponseRedirect(reverse('tabletop:battle-report'))
         else:
-            return direct_to_template(request, tempalte,
+            return direct_to_template(request, template,
                 {'battlereps': battlereps,
                 'form': form}, processors=[benchmark])
     form = formclass()
-    battlereps = paginate(battlereps,page,pages=_pages_) 
+    battlereps = paginate(battlereps,page,pages=_pages_)
     return direct_to_template(request, template,
         {'battlereps': battlereps,
         'form': form},
@@ -402,11 +402,11 @@ def action_roster(request, id=None, action=None):
         instance = get_object_or_404(Roster, id=id)
 
     form = AddRosterModelForm(
-        request.POST or None, instance=instance, request=request
+        request.POST or None, instance=instance,
+        request=request
     )
 
     if request.method == 'POST':
-        #form = AddRosterModelForm(request.POST, instance=instance, request=request)
         if form.is_valid():
             #do not let overriding owner
             if not hasattr(form.instance, 'owner'):
@@ -416,14 +416,13 @@ def action_roster(request, id=None, action=None):
                 'redirect': 'tabletop:roster',
                 'redirect-args': (form.instance.pk,)
             }
-
     return {
         'form': form
     }
 
 
 @login_required
-def action_roster_old(request,id=None,action=''):
+def action_roster_old(request, id=None, action=''):
     template = get_skin_template(request.user,'add_roster.html')
     if request.method == 'POST':
         form = AddRosterForm(request.POST,request=request)
@@ -668,10 +667,10 @@ def xhr_rosters(request, search):
     lw_rosters = list()
     raw = [ (r.pk, r.__unicode__()) for r in rosters ]
     lw_rosters = [ {'pk': r[0], 'title': r[1] } for r in raw ]
-    #response.write(serializers.serialize("json",lw_rosters))    
+    #response.write(serializers.serialize("json",lw_rosters))
     if lw_rosters> 20:
         lw_rosters = lw_rosters[:20]
-    response.write(serialize_json(lw_rosters))
+    response.write(json.dumps(lw_rosters))
     return response
 
 def xhr_get_roster(request, id):
@@ -696,7 +695,7 @@ def xhr_get_codex_revisions(request, id=None):
     response['Content-Type'] = 'text/javascript'
     codex = get_object_or_none(Codex, id=id)
     if codex:
-        response.write(serialize_json(
+        response.write(json.dumps(
             {
                 'revisions': codex.revisions,
                 'revlist': [int(i) for i in codex.revisions.split(',')],

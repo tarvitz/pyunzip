@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Min
 from django.utils.translation import (
     ugettext_lazy as _, ugettext as tr,
-    pgettext_lazy
+    pgettext_lazy, pgettext
 )
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
@@ -76,34 +76,44 @@ class Codex(models.Model):
                 self.plain_side = bound.name
         super(Codex, self).save(*args, **kwargs)
 
+
 class Roster(models.Model):
     def valid_revision(value):
         if not 0 < value < 15:
             raise ValidationError, tr('should be with range of 0 to 100')
         return value
-    owner = models.ForeignKey(User,related_name='roster_owner')
-    title = models.CharField(_('title'),max_length=100)
-    user = models.ForeignKey(User,blank=True,null=True,related_name='user')
-    player = models.CharField(_('player'),blank=True,max_length=32)
-    roster = models.TextField(_('roster'),max_length=4096)
+
+    owner = models.ForeignKey(User, related_name='roster_owner')
+    title = models.CharField(_('title'), max_length=100)
+    user = models.ForeignKey(User, blank=True, null=True, related_name='roster_user_set')
+    player = models.CharField(_('player'), blank=True,max_length=32)
+    roster = models.TextField(_('roster'), max_length=4096)
     #may cause an errors as CharField was moved to TextField without database
     #changes
-    comments = models.TextField(_('comments'),max_length=10240,blank=True,null=True)
+    comments = models.TextField(_('comments'), max_length=10240,blank=True,null=True)
     #race = models.ForeignKey(Side,related_name='race',blank=True,null=True)
     codex = models.ForeignKey(
         Codex, blank=True, null=True, default=1,
         verbose_name=_("codex")
     )
-    custom_codex = models.CharField(_('custom Codex'),max_length=50,blank=True,null=True)
+    custom_codex = models.CharField(
+        _('custom Codex'),max_length=50, blank=True, null=True
+    )
     revision = models.IntegerField(
-        pgettext_lazy('revision', 'codex revision'), validators=[valid_revision,],
+        #fixme: pgettext_lazy falls to exception within model form render :(
+        pgettext('revision', 'codex revision'),
+        validators=[valid_revision,],
         help_text=_("revision means how new your codex is (bigger is newer)")
     )
     pts = models.IntegerField(
-        _('pts'), help_text=_("amount of codex points")) #we should make A LOT OF CHECK UPS :( within
-    syntax = models.CharField(_('Syntax'), max_length=20,blank=True,null=True,choices=settings.SYNTAX)
+        _('pts'), help_text=_("amount of codex points")
+    )
+    syntax = models.CharField(_('Syntax'), max_length=20, blank=True,
+                              null=True,choices=settings.SYNTAX
+    )
 
-    is_orphan = models.NullBooleanField(_('Orphan'),default=False,blank=True,null=True)
+    is_orphan = models.NullBooleanField(
+        _('Orphan'), default=False, blank=True, null=True)
     wins = models.PositiveIntegerField(_('wins'), default=0, blank=True)
     defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
 
@@ -111,9 +121,12 @@ class Roster(models.Model):
     actions = [common_delete_action, alter_codex_action]
 
     def show_player(self):
-       if hasattr(self.user,'nickname'): return self.user.get_username()
-       if self.player: return self.player
-       if self.owner: return self.owner.get_username()
+        if hasattr(self.user, 'nickname'):
+            return self.user.get_username()
+        if self.player:
+            return self.player
+        if self.owner:
+            return self.owner.get_username()
     show_player.short_description = _('Player')
 
     @property
@@ -164,6 +177,7 @@ class Roster(models.Model):
             ('edit_user_rosters','Can edit another user\'s rosters'),
         )
         ordering = ['-id']
+
 
 class Game(models.Model):
     name = models.CharField(_('Title'),primary_key=True,max_length=50)

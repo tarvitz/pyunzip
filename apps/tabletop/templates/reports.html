@@ -1,13 +1,15 @@
 {% extends base_template %}
 {% load i18n %}
 {% block content %}
-    <a class='btn btn-inverse add-report pull-right' style='margin-bottom: 10px;' href='{% url "tabletop:roster-add" %}'>
-        <i class="icon-plus icon-white"></i>
-        {% trans "Add" %}
-    </a>
+    <div class='btn-group'>
+        <a class='btn btn-info add-report' style='margin-bottom: 10px;'
+           href='{% url "tabletop:roster-add" %}'>
+            <i class="icon-plus icon-white"></i>
+            {% trans "Add" %}
+        </a>
+    </div>
 
-
-    <div class='report'>
+    <div class='report container'>
         <form class='form-horizontal' {% spaceless %}
               {% if not form.instance.pk %}
               action='{% url "tabletop:report-add" %}'
@@ -121,7 +123,7 @@
                 option = $("<option>").attr({'value': $(opt).val()}).text($(opt).text());
                 $(option).appendTo($("#id_winners"));
             });
-            $("#id_winners").trigger('liszt:updated');
+            $("#id_winners").trigger('chosen:updated');
             return e;
         });
         $("#add-report-form #id_submit").click(function(e){
