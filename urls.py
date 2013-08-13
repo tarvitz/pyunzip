@@ -1,14 +1,11 @@
 #from django.conf.urls.defaults import *
 from django.conf.urls import *
 from django.conf import settings
-from apps.core.helpers import direct_to_template
-from django.shortcuts import redirect
-from django.utils.translation import ugettext_lazy as _
+from apps.core.shortcuts import direct_to_template
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 from apps.core.feeds import *
-from django.contrib.sites.models import Site
 
 urlpatterns = patterns('',
     # Example:
