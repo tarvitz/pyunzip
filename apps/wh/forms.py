@@ -332,18 +332,19 @@ class UpdateProfileForm(RequestForm):
         else:
             return value
 
+
 class PMForm(RequestModelForm):
     addressee = forms.ModelChoiceField(
         label=_("Addressee"),
         widget=forms.Select(attrs={
-            'class': 'ajax-chosen',
+            'class': 'ajax-chosen form-control',
             'url': reverse('json:wh:users')
         }),
         queryset=User.objects.none()
     )
     content = forms.CharField(
         label=_("Content"),
-        widget=forms.Textarea(attrs={'class': 'markitup'})
+        widget=forms.Textarea(attrs={'class': 'markitup form-control'})
     )
 
     def __init__(self, *args, **kwargs):
@@ -377,6 +378,9 @@ class PMForm(RequestModelForm):
     class Meta:
         model = PM
         fields = ('addressee', 'title', 'content')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 class RegisterForm(forms.Form):
     username = forms.RegexField(

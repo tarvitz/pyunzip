@@ -6,21 +6,20 @@
 {% block js %}{{ block.super }}
 <script type='text/javascript' src='/media/js/knockout-2.2.1.js'></script>{% endblock %}
 {% block text_content %}
-<a class='btn btn-inverse pull-right show-message btn-mini' data-toggle='button'>
-    {% trans "Send message" %}
-</a>
-
-<div class='send pm hide'>
-    <form class='form form-horizontal' id='id_message_form' action='{% url "wh:pm-send" %}' method='POST'>
-    {% csrf_token %}
-    {% include "forms/bootstrap_horizontal.html" with form=form %}
-    <div class='control-group'>
-        <div class='controls'>
-            <input type='submit' class='btn btn-inverse' value='{% trans "Send" %}' id='id_submit'>
-        </div>
+    <div class='btn-group' style='margin-bottom: 10px;'>
+        <a class='btn btn-info btn-xs show-message btn-mini' data-toggle='button'>
+            {% trans "Send message" %}
+        </a>
     </div>
-    </form>
-</div>
+
+    {% trans "Send" as submit_text %}
+    <div class='send pm'>
+        <form class='form form-horizontal' id='id_message_form' action='{% url "wh:pm-send" %}' method='POST'>
+        {% csrf_token %}
+        {% include "forms/bootstrap_horizontal.html" with form=form %}
+        {% include "forms/submit.html" with class='btn btn-success' text=submit_text %}
+        </form>
+    </div>
 
 <div class='tabbable'>
     <ul class='nav nav-pills nav-inverse' data-bind='foreach: folders'>
@@ -201,6 +200,7 @@ function sendMessage(form, success){
     });
 }
 $(document).ready(function(){
+    setTimeout(function(){ $('.send.pm').addClass('hide')}, 300);
     form = $("#id_reply_form");
     $("#id_reply_form").submit(function(e){
         sendMessage(form);
