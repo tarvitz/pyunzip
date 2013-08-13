@@ -18,7 +18,10 @@ class AddNewsForm(forms.Form):
 
 class ArticleModelForm(RequestModelForm):
     required_css_class = 'required'
-    author = forms.CharField(required=False)
+    author = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
     hidden_syntax = forms.CharField(widget=forms.HiddenInput(), required=False)
     approved = forms.BooleanField(
@@ -57,7 +60,10 @@ class ArticleModelForm(RequestModelForm):
         ]
         widgets = {
             'content': forms.Textarea,
-            'syntax': forms.HiddenInput
+            'syntax': forms.HiddenInput,
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+            'url': forms.TextInput(attrs={'class': 'form-control'})
         }
 
 class ArticleStatusForm(forms.ModelForm):

@@ -1,18 +1,14 @@
 {% extends base_template %} {% load i18n %}
 {% block css %}
     {{ block.super }}
-    <link rel='stylesheet' href='/styles/forms.css' media='screen' type='text/css'>
+    {# <link rel='stylesheet' href='/styles/forms.css' media='screen' type='text/css'> #}
 {% endblock %}
 {% block text_content %}
-<center>
-<div class='forms'>
-<form id='id-form-add' method='POST' action='.'>
+<form id='id-form-add' method='POST' action='.' class='form-horizontal col-lg-10'>
     {% csrf_token %}
-    {{ form.as_ul }}
-    <input type='submit' value='{% trans "submit" %}'>
+    {% include "forms/bootstrap_horizontal.html" %}
+    {% include "forms/submit.html" %}
 </form>
-</div>
-</center>
 
 <script type='text/javascript'>
 /* settings */

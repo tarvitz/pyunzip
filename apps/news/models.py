@@ -55,11 +55,11 @@ class AbstractNews(models.Model):
         null=False
     )
     author = models.CharField(
-        _('author'), max_length=30,
+        _('author'), max_length=255,
         null=False
     )
     editor = models.CharField(
-        _('editor'), max_length=30, blank=True
+        _('editor'), max_length=255, blank=True
     )
     url = models.CharField(
         _('original URL'), max_length=200, blank=True
