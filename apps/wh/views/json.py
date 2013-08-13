@@ -10,6 +10,7 @@ from apps.core.decorators import login_required_json
 from django.utils.html import strip_tags
 from django.db.models import Q
 
+
 def miniquote(request):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
@@ -22,21 +23,20 @@ def miniquote(request):
 
     return response
 
-def army(request, id=None):
-    response = HttpResponse()
-    response['Content-Type'] = 'application/json'
-    if not id:
-        response.write("[]")
-        return response
-    armies = Army.objects.filter(side__id=id)
-    response.write(serializers.serialize("json", armies))
-    return response
+
+@render_to_json(content_type='application/json')
+def army(request, pk=None):
+    #armies = Army.objects.filter(side__id=id)
+    #response.write(serializers.serialize("json", armies))
+    return Army.objects.filter(side__pk=pk)
+
 
 @render_to_json(content_type='application/json')
 def expression(request):
     return {
         'expression': Expression.objects.order_by('?').all()[0]
     }
+
 
 @login_required
 @render_to_json(content_type='application/json')

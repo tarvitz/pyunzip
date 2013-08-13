@@ -1,22 +1,33 @@
 {% extends base_template %} {% load i18n %}
-{% block css %}
-    {{ block.super }}
-    <link rel='stylesheet' href='/styles/forms.css' media='screen' type='text/css'>
-{% endblock %}
 {% block text_content %}
-<center>
-<div class='forms'>
-    <form id='id_update_profile_form' action='.' method='post' enctype='multipart/form-data'>
+    <form id='id_update_profile_form' class='form-horizontal col-lg-10'
+          action='.' method='post' enctype='multipart/form-data'>
         {% csrf_token %}
-        {{ form.as_ul }}
-        <input type='submit' value='{% trans "submit" %}'>
+        {% include "forms/bootstrap_horizontal.html" %}
+        {% include "forms/submit.html" with class='btn btn-success' %}
     </form>
-</div>
-</center>
-<script language='javascript'>
-    var _xhr_get_armies = "{% url "json:wh:armies" %}";
-    var _user_army_side_id = {{ user.army.side.id }};
-    var _user_army_id = {{ user.army.id }};
-</script>
-<script language='javascript' src='/media/js/jq_wh.js'> </script>
+
+    <script type='text/javascript'>
+        $(document).ready(function(){
+            var army_url = String("{% url "json:wh:armies" 0 %}");
+            $.each($('[data-class=chosen]'), function(idx, item){
+                $(item).chosen();
+            });
+
+            $("#id_side").chosen().change(function(e){
+                var pk = $("#id_side").find('option:selected').val();
+
+                $.getJSON(army_url.replace('0', pk), function(data){
+                    $("#id_army").find('option').detach().remove();
+                    data.map(function(army){
+                        opt = $("<option>").text(army.name).attr({'value': army.id});
+                        opt.appendTo($("#id_army"));
+                    });
+
+                    $("#id_army").trigger('chosen:updated');
+                });
+            });
+
+        });
+    </script>
 {% endblock %}

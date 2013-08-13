@@ -7,7 +7,7 @@ urlpatterns = patterns(
         name='miniquote'),
     url(r'^armies/$', 'army',
         name='armies'),
-    url(r'^armies/(?P<id>\d+)/$', 'army',
+    url(r'^armies/(?P<pk>\d+)/$', 'army',
         name='armies'),
     #
     url(r'^expression/$', 'expression',

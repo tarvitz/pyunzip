@@ -40,12 +40,6 @@ urlpatterns = patterns('apps.wh.views.views',
         name='race-icon'),
     url(r'^accounts/get/side/icon/(?P<nickname>[\w\s-]+)/$','get_user_side_icon',
         name='user-side-icon'),
-    #deprecated use xhr instead of this, todo: cleanse
-    url(r'^accounts/get/armies/(?P<pk>\d+)/$', 'get_armies_raw',
-        name='armies-raw'),
-    url(r'^accounts/get/skins/(?P<pk>\d+)/$', 'get_skins_raw',
-        name='skins-raw'),
-
     url(r'^pm/$','pm', name='pm'),
     url(r'^pm/send/$', 'pm_send', name='pm-send'),
     url(r'^pm/(?P<pk>\d+)/delete/$', 'pm_delete', name='pm-delete'),

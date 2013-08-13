@@ -8,14 +8,16 @@ from apps.wh.models import (
     Side, RegisterSid, Rank, RankType, PM
 )
 from apps.core.models import UserSID
+from apps.core.tests import TestHelperMixin
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
 import simplejson as json
 
 
-class JustTest(TestCase):
+class JustTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_rank_types.json',
         'tests/fixtures/load_ranks.json',
@@ -31,8 +33,6 @@ class JustTest(TestCase):
             reverse('wh:profile-real', args=('user', )),
             reverse('wh:profile-by-nick', args=('user', )),
             reverse('wh:users'),
-            reverse('wh:url_x_get_users_list_null'),
-            reverse('wh:url_x_get_users_list', args=('use', )),
             reverse('wh:pm-sent'),
             reverse('wh:pm-income'),
         ]
@@ -40,7 +40,7 @@ class JustTest(TestCase):
 
     def test_registered_urls(self):
         messages = []
-        for user in ('admin', 'user'):
+        for user in ('admin', 'user', ):
             logged = self.client.login(username=user, password='123456')
             self.assertEqual(logged, True)
             for url in self.urls_registered:
@@ -159,6 +159,34 @@ class JustTest(TestCase):
         self.assertEqual(logged, True)
         #   self.client.post(url, post, follow=True)
 
+    def test_duplicate_nick_update(self):
+        # can update self nickname for current nickname
+        url = reverse('wh:profile-update')
+        post = {
+            'nickname': 'user',
+        }
+        self.login('user')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].nickname, post['nickname'])
+
+    def test_duplicate_nick_failure(self):
+        # can not update to follow nickname because it's busy
+        url = reverse('wh:profile-update')
+        post = {
+            'nickname': 'user'
+        }
+        self.login('admin')
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        self.assertNotEqual(response.context['form'].errors, {})
+        form = response.context['form']
+        self.assertEqual(
+            form.errors['nickname'][0],
+            unicode(_('Another user with %s nickname exists.' % post['nickname']))
+        )
+
     def test_profile_update(self):
         avatar_name = 'avatar.jpg'
         avatar = open('tests/fixtures/avatar.jpg')
@@ -184,6 +212,13 @@ class JustTest(TestCase):
         self.assertEqual(logged, True)
         url = reverse('wh:profile-update')
         response = self.client.post(url, post, follow=True)
+        context = response.context
+        if 'form' in context:
+            form = context['form']
+            if form.errors:
+                print "Got form errors within posting form, proceeding:"
+                for (key, error_list) in form.errors.items():
+                    print "in '%s': '%s'" % (key, "; ".join(error_list))
 
         self.assertEqual(response.status_code, 200)
         messages = []
@@ -231,16 +266,9 @@ class JustTest(TestCase):
     def test_user_side_icon(self):
         pass
 
-    def test_get_armies_raw(self):
+    def test_get_armies(self):
         # TODO: refactor this functional
-        url = reverse('wh:armies-raw', args=(1, ))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get('Content-Type'), 'application/json')
-
-    def test_get_skins_raw(self):
-        # TODO: refactor this functional
-        url = reverse('wh:skins-raw', args=(1, ))
+        url = reverse('json:wh:armies', args=(1, ))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'application/json')
@@ -406,12 +434,13 @@ class JustTest(TestCase):
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(count, PM.objects.count())
+
         # user can post private messages
         self.client.login(username='user', password='123456')
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(count + 1, PM.objects.count())
-        pm = PM.objects.all()[0]
+        pm = PM.objects.order_by('-id').all()[0]
         edit = deepcopy(post)
         edit.update({'addressee': admin})
         self.check_state(pm, edit, check=self.assertEqual)

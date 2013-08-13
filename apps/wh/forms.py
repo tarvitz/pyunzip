@@ -1,42 +1,40 @@
 # ^^, coding: utf-8 ^^,
 from django import forms
+from django.conf import settings
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from cStringIO import StringIO
 from PIL import Image
 from apps.wh.models import User
-from apps.wh.models import Side,RegisterSid, Skin, Army, PM
-from apps.core import get_safe_message
-from apps.core.helpers import get_object_or_None
+from apps.wh.models import Side, RegisterSid, Skin, Army, PM
 from apps.core.models import UserSID
-from apps.core.forms import RequestModelForm, BruteForceCheck
-from django.contrib.auth.models import User
+from apps.core.helpers import get_object_or_None
+from apps.core.forms import (
+    RequestModelForm, RequestForm, BruteForceCheck,
+    RequestFormMixin
+)
 from django.core.urlresolvers import reverse
 from django.contrib import auth
 import re
-#from apps.core.forms import RequestForm
 
-#requests request variable from views
-class RequestForm(forms.Form):
-    def __init__(self, *args, **kwargs):
-                if 'request' in kwargs:
-                        self.request = kwargs['request']
-                        del kwargs['request']
-                super(RequestForm, self).__init__(*args, **kwargs)
-#implement more
-class WarningForm(RequestForm):
-    from django.conf import settings
+
+class WarningForm(RequestFormMixin, forms.Form):
     nickname = forms.CharField(widget=forms.HiddenInput())
-    level = forms.ChoiceField(choices=settings.SIGN_CHOICES,required=False)
-    comment = forms.CharField(required=False,widget=forms.Textarea({'cols':40,'rows':10}))
-    next = forms.CharField(required=False,widget=forms.HiddenInput())
+    level = forms.ChoiceField(choices=settings.SIGN_CHOICES, required=False)
+    comment = forms.CharField(
+        required=False, widget=forms.Textarea({'cols': 40, 'rows': 10})
+    )
+    next = forms.CharField(required=False, widget=forms.HiddenInput())
     
     def clean_level(self):
         from django.conf import settings
-        level = int(self.cleaned_data.get('level',1))
-        if level>len(settings.SIGN_CHOICES) or level<=0:
-            raise form.ValidationError(_('Level should not be greater than %i' % len(settings.SIGN_CHOICES)))
+        level = int(self.cleaned_data.get('level', 1))
+        if level > len(settings.SIGN_CHOICES) or level <= 0:
+            raise forms.ValidationError(
+                _('Level should not be greater than %i' % len(settings.SIGN_CHOICES))
+            )
         return level
+
 
 class UploadAvatarForm(forms.Form):
     avatar = forms.ImageField()
@@ -50,66 +48,106 @@ class UploadAvatarForm(forms.Form):
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(
+                    _('jpeg, png, gif, jpg image only')
+                )
         try:
             img = Image.open(StringIO(content))
             x,y = img.size
         except:
-            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
-        if y>100 or x >100:
-            raise forms.ValidationError(_('Upload a valid avatar. Avatar\'s size should not be greater than 100x100 pixels'))
+            raise forms.ValidationError(
+                _(
+                    'Upload a valid avatar. The file you uploaded '
+                    'was either not an image or a corrupted image.'
+                )
+            )
+        if y > 100 or x > 100:
+            raise forms.ValidationError(
+                _(
+                    'Upload a valid avatar. Avatar\'s size should '
+                    'not be greater than 100x100 pixels'
+                )
+            )
         return value
 
-class UpdateProfileModelForm(RequestModelForm):
-    required_css_class='required'
-    side = forms.ChoiceField(choices=((i.id, i.name) for i in Side.objects.all()), required=False)
-    army = forms.ModelChoiceField(queryset=Army.objects, required=True)
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name', 'email', 'nickname', 'avatar', 'photo',
-            'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army', 'tz'
-        ]
-        exclude = ['password', 'username', 'groups', 'ranks', 'user_permissions', 'is_staff',
-            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar',
-        ]
+
+class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
+    required_css_class = 'required'
+    first_name = forms.CharField(
+        label=_("Name"), widget=forms.TextInput(
+            attrs={'class': 'form-control'}
+        )
+    )
+    side = forms.ModelChoiceField(
+        queryset=Side.objects, required=False,
+        widget=forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'})
+    )
+    army = forms.ModelChoiceField(
+        queryset=Army.objects.none(), required=True,
+        widget=forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(UpdateProfileModelForm, self).__init__(*args, **kwargs)
+        user = self.request.user
+        if all(self.data or [None, ]):
+            self.fields['army'].queryset = Army.objects.all()
+        else:
+            if user.army:
+                self.fields['army'].queryset = Army.objects.filter(
+                    side__pk=user.army.side.pk
+                )
+                self.fields['side'].initial = user.army.side
+                self.fields['army'].initial = user.army
 
     def clean_nickname(self):
         current_nickname = self.request.user.nickname
-        value = self.cleaned_data.get('nickname','')
-        r = re.compile('[\w\s-]+',re.U)
-        if r.match(value):
-            return r.match(value).group()
-        else:
-            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
-        try:
-            user = User.objects.get(nickname__exact=value)
-            if not user.nickname == current_nickname:
-                raise forms.ValidationError(_('Another user with %s nickname exists.' % (value)))
-            else:
-                return value
-        except User.DoesNotExist:
-            return value
+        nick = self.cleaned_data.get('nickname', '')
+        r = re.compile(r'[\w\s-]+', re.U)
+        if not r.match(nick):
+            raise forms.ValidationError(
+                _('You can not use additional symbols in you nickname')
+            )
+        user = get_object_or_None(
+            User, nickname__exact=nick,
+        )
+        if not user:
+            return nick
+
+        user_nickname = getattr(user, 'nickname') if hasattr(user, 'nickname') else None
+        if not user_nickname == current_nickname and user != self.request.user:
+            raise forms.ValidationError(
+                _('Another user with %s nickname exists.' % nick)
+            )
+        return nick
+
 
     def clean_avatar(self):
         value = self.cleaned_data.get('avatar','')
         if not value: return None
         file = ''
-        for i in value.chunks(): file += i
-        #content = value.read()
+        for i in value.chunks():
+            file += i
         content = file
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(_('jpeg, png, gif, jpg image only'))
         try:
             img = Image.open(StringIO(content))
-            x,y = img.size
+            x, y = img.size
         except:
-            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
-        if y>100 or x >100:
-            raise forms.ValidationError(_('Upload a valid avatar. Avatar\'s size should not be greater than 100x100 pixels'))
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. The file you uploaded was either'
+                'not an image or a corrupted image.'
+            ))
+        if y > 100 or x >100:
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. Avatar\'s size should not be '
+                'greater than 100x100 pixels'
+            ))
         return value
-
+    """
     def clean_photo(self):
         value = self.cleaned_data.get('photo','')
         if not value: return None
@@ -120,14 +158,18 @@ class UpdateProfileModelForm(RequestModelForm):
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(_('jpeg, png, gif, jpg image only'))
         try:
             img = Image.open(StringIO(content))
             x,y = img.size
         except:
-            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. The file you uploaded was either not '
+                'an image or a corrupted image.'
+            ))
         return value
-    
+    """
+
     def clean_jid(self):
         jid = self.cleaned_data['jid']
         if jid:
@@ -137,6 +179,32 @@ class UpdateProfileModelForm(RequestModelForm):
             if user and user != u:
                 raise forms.ValidationError(_('User with such JID already exists'))
         return "".join(jid).lower()
+
+    class Meta:
+        model = User
+        fields = [
+            'first_name', 'last_name', 'email', 'nickname', 'avatar',
+            #'photo',
+            'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army', 'tz'
+        ]
+        exclude = [
+            'password', 'username', 'groups', 'ranks', 'user_permissions', 'is_staff',
+            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar',
+        ]
+
+        widgets = {
+            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.TextInput(attrs={'class': 'form-control'}),
+            'nickname': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'jid': forms.TextInput(attrs={'class': 'form-control'}),
+            'uin': forms.TextInput(attrs={'class': 'form-control'}),
+            'about': forms.TextInput(attrs={'class': 'form-control'}),
+            'skin': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'first_name': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'tz': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
+
+        }
 
 #obsolete
 class UpdateProfileForm(RequestForm):
@@ -187,9 +255,15 @@ class UpdateProfileForm(RequestForm):
             img = Image.open(StringIO(content))
             x,y = img.size
         except:
-            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. The file you uploaded '
+                'was either not an image or a corrupted image.'
+            ))
         if y>100 or x >100:
-            raise forms.ValidationError(_('Upload a valid avatar. Avatar\'s size should not be greater than 100x100 pixels'))
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. Avatar\'s size should not'
+                ' be greater than 100x100 pixels'
+            ))
         return value
 
     def clean_photo(self):
@@ -207,7 +281,10 @@ class UpdateProfileForm(RequestForm):
             img = Image.open(StringIO(content))
             x,y = img.size
         except:
-            raise forms.ValidationError(_('Upload a valid avatar. The file you uploaded was either not an image or a corrupted image.'))
+            raise forms.ValidationError(_(
+                'Upload a valid avatar. The file you uploaded was '
+                'either not an image or a corrupted image.'
+            ))
         return value
     
     def clean_jid(self):
@@ -242,7 +319,10 @@ class UpdateProfileForm(RequestForm):
             skin = Skin.objects.get(id=int(value))
             return value
         except Skin.DoesNotExist:
-            raise forms.ValidationError(_('There\'s no any mention for this skin, try to update page and upload profile one more time'))
+            raise forms.ValidationError(_(
+                'There\'s no any mention for this skin, try to update page'
+                'and upload profile one more time'
+            ))
     
     #self limit is on the 512 value, but there is some issues
     def clean_about(self):
@@ -313,7 +393,9 @@ class RegisterForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput())
     email = forms.EmailField()
     answ = forms.CharField()
-    sid = forms.CharField(required=False, widget=forms.HiddenInput()) #should be hidden, supports error info for wrong image answer formations
+
+    #should be hidden, supports error info for wrong image answer formations
+    sid = forms.CharField(required=False, widget=forms.HiddenInput())
  
     def clean_username(self):
         value = self.cleaned_data.get('username', '')

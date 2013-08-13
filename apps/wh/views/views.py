@@ -192,13 +192,14 @@ def users(request):
 
 
 @login_required
+@render_to('accounts/update_profile.html')
 def update_profile(request):
     template = get_skin_template(request.user, 'accounts/update_profile.html')
+    form = UpdateProfileModelForm(
+        request.POST or None, request.FILES or None, instance=request.user,
+        request=request
+    )
     if request.method == 'POST':
-        form = UpdateProfileModelForm(
-            request.POST, request.FILES, instance=request.user,
-            request=request
-        )
         if form.is_valid():
             if 'avatar' in request.FILES:
                 avatar = handle_uploaded_file(
@@ -213,14 +214,8 @@ def update_profile(request):
                 )
                 form.instance.photo = photo
             form.save()
-            return redirect(reverse('wh:profile'))
-        else:
-            return direct_to_template(
-                request, template,
-                {'form': form}
-            )
-    form = UpdateProfileModelForm(instance=request.user, request=request)
-    return direct_to_template(request, template, {'form': form})
+            return {'redirect': 'wh:profile'}
+    return {'form': form}
 
 
 @login_required
@@ -604,18 +599,6 @@ def x_get_users_list(request, nick_part=''):
     return response
 
 
-#deprecated, cleanse as soon as possible
-def get_armies_raw(request, pk):
-    response = HttpResponse()
-    response['Content-Type'] = 'application/json'
-    try:
-        armies = Army.objects.filter(side__id__exact=int(pk))
-        response.write(serializers.serialize("json", armies))
-    except Army.DoesNotExist:
-        response.write('[failed]')
-    return response
-
-
 def get_skins_raw(request, pk):
     response = HttpResponse()
     response['Content-Type'] = 'application/json'
@@ -839,7 +822,7 @@ def alter_warning_form(request, nickname):
     from apps.wh.forms import WarningForm
     warn_user = get_object_or_404(User, nickname__iexact=nickname)
     if request.method == 'POST':
-        form = WarningForm(request.POST, request=request)
+        form = WarningForm(request.POST or None, request=request)
         if form.is_valid():
             level = int(form.cleaned_data['level'])
             comment = form.cleaned_data['comment']
