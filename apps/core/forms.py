@@ -16,31 +16,37 @@ from django.contrib.contenttypes.models import ContentType
 
 import re
 
-class RequestModelForm(forms.ModelForm):
+
+class RequestFormMixin(object):
     def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
             self.request = kwargs['request']
             del kwargs['request']
-        super(RequestModelForm, self).__init__(*args, **kwargs)
+        super(RequestFormMixin, self).__init__(*args, **kwargs)
 
-class RequestForm(forms.Form):
-	def __init__(self, *args, **kwargs):
-                if 'request' in kwargs:
-                        self.request = kwargs['request']
-                        del kwargs['request']
-                super(RequestForm, self).__init__(*args, **kwargs)
+
+class RequestModelForm(RequestFormMixin, forms.ModelForm):
+    pass
+
+
+class RequestForm(RequestFormMixin, forms.Form):
+    pass
+
 
 class AddEditCssForm(RequestForm):
     css = forms.CharField(widget=forms.Textarea())
 
+
 class ApproveActionForm(forms.Form):
      url = forms.CharField(widget=forms.HiddenInput())
+
 
 class SearchForm(forms.Form):
     query = forms.CharField()
 
     def clean(self):
         return self.cleaned_data
+
 
 class SettingsForm(RequestForm):
     #objects_on_page = forms.IntegerField(_('Objects on page'),required=True)
@@ -56,6 +62,7 @@ class SettingsForm(RequestForm):
         super(RequestForm,self).__init__(*args,**kwargs)
 
 SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
+
 
 #duplicates with files.forms need more 'usable' interface for comments
 class CommentForm(forms.ModelForm):
@@ -216,6 +223,7 @@ class CommentForm(forms.ModelForm):
 class SphinxSearchForm(forms.Form):
     query = forms.CharField(required=True)
 
+
 def action_formset(qset, actions):
     """ taken within stackoverflow,
     form which allows the user to pick specified action to perform on a chosen
@@ -226,6 +234,7 @@ def action_formset(qset, actions):
         action = forms.ChoiceField(choices=[(None, '--------'),]+zip(actions, actions))
 
     return _ActionForm
+
 
 def action_formset_ng(request, qset, model, permissions=[]):
     """ more useable generic action form """
@@ -259,6 +268,7 @@ def action_formset_ng(request, qset, model, permissions=[]):
             super(_ActionForm, self).__init__(*args, **kwargs)
     return _ActionForm
 
+
 class ActionForm(forms.Form):
     items = forms.ModelMultipleChoiceField(queryset=[], widget=forms.MultipleHiddenInput())
     action = forms.ChoiceField(widget=forms.HiddenInput())
@@ -276,9 +286,11 @@ class ActionForm(forms.Form):
         del _actions
         super(ActionForm, self).__init__(*args, **kwargs)
 
+
 class ActionApproveForm(ActionForm):
     approve = forms.BooleanField(label=_('Approve'), required=True,
         help_text=_('Yes, i approve'))   
+
 
 class BruteForceCheck(object):
     """ depents on RequestModelForm """
