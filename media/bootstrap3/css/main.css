@@ -438,3 +438,6 @@ a > *[class^=icon-]{
    font-size: 0.75em;
    vertical-align: bottom;
 }
+.markItUpContainer .panel-heading{
+    padding: 0px;
+}
