@@ -30,7 +30,9 @@ hr.center{ margin-left: auto; margin-right: auto;}
 .navbar-nav.no-left{
     float: none;
 }
-
+.no-left, .no-right{
+    float: none;
+}
 #top-spacer{ margin-top: 10px; }
 
 #miniquote{

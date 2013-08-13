@@ -11,10 +11,12 @@ from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
 import re
 
+
 class AddNewsForm(forms.Form):
     author = forms.RegexField(regex=re.compile(r'[\w\s-]+',re.U),required=True)
     content = forms.CharField(widget=forms.Textarea())
     approved = forms.BooleanField(required=False)
+
 
 class ArticleModelForm(RequestModelForm):
     required_css_class = 'required'
@@ -62,7 +64,7 @@ class ArticleModelForm(RequestModelForm):
             'content': forms.Textarea,
             'syntax': forms.HiddenInput,
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control chosen'}),
             'url': forms.TextInput(attrs={'class': 'form-control'})
         }
 
