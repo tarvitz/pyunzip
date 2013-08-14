@@ -144,25 +144,31 @@
 </body>
 <!-- modals -->
 {% block modals %}
+
 {% if not user.is_authenticate %}
-<div class='modal hide fade in no-background' id='login-modal'>
-    <div class='transparency heavy black'></div>
-    <div class='modal-header'>
-        <a class='close' href='#' data-dismiss='modal'>x</a>
-        <h3>Войти</h3>
+<div class='modal fade' id='login-modal'>
+    <div class='modal-dialog'>
+    <div class='modal-content'>
+        <div class='modal-header'>
+            <a class='close' href='#' data-dismiss='modal'>x</a>
+            <div class='modal-title'><h4>Войти</h4></div>
+        </div>
+        <div class='modal-body'>
+            {% get_form 'apps.wh.forms.LoginForm' as form %}
+            <form class='form-horizontal' action='{% url "wh:login" %}' method='POST'>
+                {% csrf_token %}
+                {% include "forms/bootstrap_horizontal.html" with form=form %}
+                {% include "forms/submit.html" with class="btn btn-success postAjax" submit_text="Войти" %}
+            </form>
+        </div>
+        <div class='modal-footer'>
+            <a class='btn btn-default' class='close' data-dismiss='modal'>Закрыть</a>
+        </div>
     </div>
-    <div class='modal-body'>
-        {% get_form 'apps.wh.forms.LoginForm' as form %}
-        <form class='form-horizontal' action='{% url "wh:login" %}' method='POST'>
-            {% csrf_token %}
-            {% include "forms/bootstrap_horizontal.html" with form=form use_submit="Yes" submit_value="Войти" submit_class_btn="btn btn-success postAjax" %}
-        </form>
-    </div>
-    <div class='modal-footer no-background'>
-        <a class='btn btn-inverse' class='close' data-dismiss='modal'>Закрыть</a>
     </div>
 </div>
 {% endif %}
+
 <!-- end of modals -->
 {% endblock %} {# modals #}
 

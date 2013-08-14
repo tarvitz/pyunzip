@@ -227,6 +227,18 @@ class News(AbstractNews):
         else:
             return "%s\%s" % (self.title, self.content)
 
+    def get_edit_url(self):
+        return reverse('news:article-edit', args=(self.pk, ))
+
+    def get_approve_url(self):
+        return reverse('news:article-action', args=(self.pk, 'approve'))
+
+    def get_disapprove_url(self):
+        return reverse('news:article-action', args=(self.pk, 'unapprove'))
+
+    def get_delete_url(self):
+        return reverse('news:article-action', args=(self.pk, 'delete'))
+
     class Meta:
         verbose_name = _('Article')
         verbose_name_plural = _('News')

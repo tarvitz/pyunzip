@@ -535,7 +535,9 @@ class LoginForm(forms.ModelForm):
     #    label=_('username'), required=True
     #)
     password = forms.CharField(
-        label=_('password'), widget=forms.PasswordInput(),
+        label=_('password'), widget=forms.PasswordInput(
+            attrs={'class': 'form-control'}
+        ),
         required=True
     )
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
@@ -558,6 +560,9 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+        widgets = {
+            'username': forms.TextInput(attrs={'class': 'form-control'})
+        }
 
 
 class PasswordRestoreInitiateForm(forms.Form):
