@@ -391,6 +391,7 @@ img.purity-seal{
 .title.approved{}
 .title.disapproved, .title.disapproved a{ color: red;}
 .thumbnail.inline{ display: inline; }
+.thumbnail, .img-thumbnail{ background-color: transparent; }
 a.user.image:hover .thumbnail{
     border: 1px solid #0088cc;
 }
