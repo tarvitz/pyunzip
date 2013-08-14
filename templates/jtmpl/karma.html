@@ -1,22 +1,26 @@
 {% load i18n coretags %}
 <script type='text/html' id='karmaAlterTemplate'>
-    <div class='modal hide fade in no-background' id='karma-alter-${ user }-${ alter }'>
-        <div class='transparency black'></div>
-        <form class='' action='${ action }' method='POST'>
-        <div class='modal-header'>
-            <a href='#' data-dismiss='modal' class='close'>x</a>
-            <h3>{% trans "Alter karma for user" %} ${ user_nickname }</h3>
+    <div class='modal fade no-background' id='karma-alter-${ user }-${ alter }'>
+        <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='transparency black'></div>
+            <form class='' action='${ action }' method='POST'>
+            <div class='modal-header'>
+                <a href='#' data-dismiss='modal' class='close'>x</a>
+                <h3>{% trans "Alter karma for user" %} ${ user_nickname }</h3>
+            </div>
+            <div class='modal-body'>
+                {% csrf_token %}
+                {% get_form 'apps.karma.forms.KarmaModelForm' as form %}
+                {{ form.as_ul }}
+            </div>
+            <div class='modal-footer no-background'>
+                <input type='submit' class='btn ${ btnAlter }' value='{% trans "Alter" %}'>
+                <a class='btn btn-inverse' href='#' data-dismiss='modal'>{% trans "Close" %}</a>
+            </div>
+            </form>
         </div>
-        <div class='modal-body'>
-            {% csrf_token %}
-            {% get_form 'apps.karma.forms.KarmaModelForm' as form %}
-            {{ form.as_ul }}
         </div>
-        <div class='modal-footer no-background'>
-            <input type='submit' class='btn ${ btnAlter }' value='{% trans "Alter" %}'>
-            <a class='btn btn-inverse' href='#' data-dismiss='modal'>{% trans "Close" %}</a>
-        </div>
-        </form>
     </div>
 </script>
 
