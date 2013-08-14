@@ -58,11 +58,11 @@
 {% if not topic.closed and user.is_authenticated %}
 <form action="{% url "pybb_add_post" topic.id %}" method="post" class='form-horizontal'>
     {% csrf_token %}
-    <fieldset class='col-lg-7'>
+    <fieldset class='col-lg-10'>
         <legend>{% trans "New reply" %}</legend>
         {% include "forms/bootstrap_horizontal.html" with form=form %}
-        <div class='control-group'>
-            <div class='controls'>
+        <div class='control-group form-group'>
+            <div class='controls col-lg-offset-2 col-lg-10'>
                 <input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
                        type="submit" value="{% trans "Submit" %}" />
             </div>
