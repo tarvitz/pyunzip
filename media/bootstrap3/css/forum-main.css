@@ -63,7 +63,6 @@ td.title a{ color: #666; }
 /*
 .markItUpEditor{ border: 1px solid #ccc; border-top-color: transparent; padding-left: 40px; padding-right: 10px; width: 100%;}
 .markItUpHeader{ border: 1px solid #ccc; border-bottom-color: transparent;}
-.markItUpContainer .fileinput-button{ display: none; }
 .code-insert{
     background-color: #e5e5e5;
     border: 1px solid #ccc;
@@ -75,6 +74,7 @@ td.title a{ color: #666; }
     margin-right: auto;
 }*/
 
+.markItUpContainer .fileinput-button{ display: none; }
 .spoiler_block .spoiler .transparency,
 .spoiler.block .spoiler .transparency{
     background-color: #ccc !important;

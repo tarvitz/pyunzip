@@ -1,9 +1,9 @@
 {% extends base_template %}{% load i18n thumbnail %}
 {% block content %}
-<form>
+<form style='margin-bottom: 10px;'>
 <fieldset>
 {% csrf_token %}
-<span class='btn btn-inverse btn-small fileinput-button'>
+<span class='btn btn-info btn-small fileinput-button'>
     <i class='icon-plus icon-white'></i>
     {% trans "Upload files" %}
     <input type="file" multiple="multiple" id="upload_field" name='file'/>
