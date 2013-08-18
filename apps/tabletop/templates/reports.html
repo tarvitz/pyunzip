@@ -18,7 +18,8 @@
               {% endif %} {% endspaceless %}method='POST' id='add-report-form'>
             {% csrf_token %}
             {% trans "Save" as submit %}
-            {% include "forms/bootstrap_horizontal.html" with form=form submit=submit submit_class='btn btn-success' %}
+            {% include "forms/bootstrap_horizontal.html" with form=form %}
+            {% include "forms/submit.html" with class='btn btn-success' submit_text=submit %}
         </form>
     </div>
 
