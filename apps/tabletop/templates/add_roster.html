@@ -13,7 +13,6 @@
         </form>
     </div>
 
-{% comment %}
 <script language='javascript'>
 var _xhr_get_codex_revisions = '{% url "json:tabletop:codex-revisions" %}';
 var revision = document.getElementById('id_revision');
@@ -66,5 +65,4 @@ $(document).ready(function(){
     });
 });
 </script>
-{% endcomment %}
 {% endblock %}
