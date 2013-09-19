@@ -107,3 +107,4 @@ a.user.image:hover .thumbnail{
     overflow: hidden;
 }
 
+.icon.unread{ font-size: 1.1em; color: #3a87ad;}
