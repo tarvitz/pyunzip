@@ -146,11 +146,11 @@
 				}
 				$$.wrap('<div '+nameSpace+'></div>');
 				$$.wrap(
-					$('<div '+id+' class="markItUp"></div>').addClass(options.mkClass || "panel")
+					$('<div '+id+' class="markItUp"></div>').addClass(options.mkClass)
 				);
 				$$.wrap(
 					$('<div class="markItUpContainer"></div>').addClass(
-						options.containerClass
+						options.containerClass || "panel panel-default"
 					)
 				);
 				$$.addClass("markItUpEditor").addClass(options.textareaClasses || "");

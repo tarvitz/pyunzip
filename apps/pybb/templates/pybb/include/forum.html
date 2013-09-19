@@ -6,24 +6,28 @@
 </div>
 
 <div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
-    <div class='panel-heading'><strong>{{ forum }}</strong></div>
-    {{ forum.description }}
-    <ul class='list-group'>
-    {% for topic in topics|pybb_unreads:user %}
-        <li class='list-group-item forum'>
-            <span class='title col-lg-5'>{% pybb_link topic %}</span>
-            <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
-            <span class='icons col-lg-2'>
-                {% if topic.sticky %}<i class='icon-paperclip' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
-                {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
-                {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
-                {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
-            </span>
+    <div class='panel-heading'>
+        <h3 class='panel-title'>{{ forum }}</h3>
+    </div>
+    <div class='panel-body'>
+        <em>{{ forum.description }}</em>
+        <ul class='list-group no-margin-bottom'>
+        {% for topic in topics|pybb_unreads:user %}
+            <li class='list-group-item forum'>
+                <span class='title col-lg-5'>{% pybb_link topic %}</span>
+                <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
+                <span class='icons col-lg-2'>
+                    {% if topic.sticky %}<i class='icon-paperclip' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
+                    {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                </span>
 
-            <span class='count'>[{{ topic.post_count }}]</span>
-        </li>
-    {% endfor %}
-    </ul>
+                <span class='count'>[{{ topic.post_count }}]</span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% pybb_pagination %}

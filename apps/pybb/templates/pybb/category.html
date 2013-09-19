@@ -11,11 +11,13 @@
 <div class='col-lg-7'>
     <div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
         <div class='panel-heading' style='margin-bottom: 0px'><strong>{{ category }}</strong></div>
-        <ul class='list-group' style='margin-top: 0px'>
-        {% for forum in category.forums.all %}
-            {% include 'pybb/forum_row.html' %}
-        {% endfor %}
-        </ul>
+        <div class='panel-body'>
+            <ul class='list-group no-margin-bottom'>
+            {% for forum in category.forums.all %}
+                {% include 'pybb/forum_row.html' %}
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 <div class='col-lg-5'>

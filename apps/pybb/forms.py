@@ -22,7 +22,7 @@ class AddPostForm(forms.ModelForm):
             'body'
         ]
         widgets = {
-            'markup': forms.Select(attrs={'class': 'span6 form-controass'}),
+            'markup': forms.Select(attrs={'class': 'span6 form-control'}),
             #'body': forms.Textarea(attrs={'class': 'span6'}),
         }
 

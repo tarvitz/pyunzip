@@ -1,14 +1,16 @@
 {% for iter in cats %}
 <div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
-    <div class='panel-heading' style='margin-bottom: 0px;'>
-        <strong>
+    <div class='panel-heading'>
+        <h3 class='panel-title'>
             <a href='{{ iter.cat.get_absolute_url }}'>{{ iter.cat }}</a>
-        </strong>
+        </h3>
     </div>
-    <ul class='list-group' style='margin-top: 0px'>
-        {% for forum in iter.forums %}
-            {% include "pybb/forum_row.html" %}
-        {% endfor %}
-    </ul>
+    <div class='panel-body'>
+        <ul class='list-group no-margin-bottom'>
+            {% for forum in iter.forums %}
+                {% include "pybb/forum_row.html" %}
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endfor %}

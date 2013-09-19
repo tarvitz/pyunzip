@@ -1,7 +1,10 @@
 {% load pybb_extras %}
 <li class='list-group-item forum'>
     <span class="title col-lg-7" style='padding-left: 0px;'>
-        <i class='icon {{ forum.css_icon|default:"icon-forumsalt" }}'></i>&nbsp;
+        <i class='icon {{ forum.css_icon|default:"icon-forumsalt" }} {% spaceless %}
+        {% if forum|pybb_forum_has_unreads:user %}
+            unread
+        {% endif %}{% endspaceless %}'></i>&nbsp;
         <a  rel='tooltip' data-title='{{ forum.description|safe }}' data-html='true'
             data-delay='1000'
             data-placement='right'

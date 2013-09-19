@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from django import template
 from django.core.urlresolvers import reverse
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.safestring import mark_safe
 from django.template import RequestContext
 from django.utils.encoding import smart_unicode
@@ -164,6 +165,22 @@ def pybb_has_unreads(topic, user):
                     return topic.updated > read.time
         else:
             raise Exception('Object should be a topic')
+
+@register.filter
+def pybb_forum_has_unreads(forum, user):
+    """
+    Check if forum has unread messages
+    """
+    if not user.is_authenticated():
+        return False
+    if isinstance(forum, Forum):
+        for topic in forum.topics.all()[:20]:
+            result = pybb_has_unreads(topic, user)
+            if result:
+                return True
+        return False
+    else:
+        raise ImproperlyConfigured("Object should be a forum instance")
 
 
 @register.filter
