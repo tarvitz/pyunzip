@@ -9,6 +9,17 @@
     </span>
 </div>
 </script>
+<script type='text/html' id='uploadFileOperaTemplate'>
+    <div id='upload-file'>
+        <div class="progress textarea" id='progress-bar'>
+            <div class="bar progress-bar
+                progress-bar-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}" style="width: 0%;"></div>
+        </div>
+        <span class='no-fileinput-button' id='file-uploader'>
+            <input type='file' name='file' id='id_file'>
+        </span>
+    </div>
+</script>
 
 <script type='text/html' id='showImageLinkHelpTemplate'>
     <div class='modal hide fade in no-background' id='${ id }'>

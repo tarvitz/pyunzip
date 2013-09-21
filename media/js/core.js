@@ -2,8 +2,9 @@ var isOpera = (navigator.userAgent.indexOf("Opera")>=0) && parseFloat(navigator.
 //var isIE = ((document.all) && (!isOpera)) && parseFloat(navigator.appVersion.split("MSIE ")[1].split(";")[0]); // it was banned forever!
 var isFireFox = (navigator.userAgent.indexOf("Firefox")>=0) ? true: false;
 var isChrome = (navigator.userAgent.indexOf("Chrome")>=0) ? true: false;
+var isWebkit = (navigator.userAgent.indexOf('Webkit')>=0) ? true : false;
 
 var markItUpParsers = {
     'bb-code': '/markup/preview/?markup=bb-code',
-    'textile': '/markup/preview/?markup=textile',
+    'textile': '/markup/preview/?markup=textile'
 }
