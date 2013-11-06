@@ -287,7 +287,7 @@ FORUM_THEMES = (
     ('summer', 'warning'),
     ('autumn', 'danger'),
     ("spring", 'success'),
-    ("void", 'void')
+    ("void", 'default')
 )
 # TEMPLATES INCLUES
 DOCUMENT = {
