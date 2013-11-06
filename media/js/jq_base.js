@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('.message .msg_headline .transparency:even').addClass('tr_navy');
-    $('.spoiler_block a').click(function(e){
+    $('.spoiler_block > a').click(function(e){
         $(this).parent().children('.spoiler').toggle(500, function(){
         p = $(this).parent();
         if (p.children('.spoiler').css('display') != 'none'){
