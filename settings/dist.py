@@ -25,12 +25,6 @@ DATABASES={
     }
 }
 
-def get_local(value, default):
-    import local
-    if hasattr(local, value):
-        return getattr(local, value)
-    return default
-
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -57,7 +51,7 @@ LOCALE_PATHS = (
 USE_I18N = True
 
 
-MEDIA_ROOT=get_local('MEDIA_ROOT', rel_path('media'))
+MEDIA_ROOT=rel_path('media')
 STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
@@ -262,9 +256,9 @@ INSTALLED_APPS = (
 DOMAIN='w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
 APP_VOTE_ENABLED=True
-PRODUCTION=get_local('PRODUCTION', True)
-DEVELOPMENT=get_local('DEVELOPMENT', False)
-YANDEX_METRICA_ENABLED = get_local('YANDEX_METRICA_ENABLED', False)
+PRODUCTION=True
+DEVELOPMENT=False
+YANDEX_METRICA_ENABLED = False
 BOOTSTRAP_VERSION=''
 ENABLE_500_TEST=False
 SERVER_EMAIL='noreply@w40k.net'
