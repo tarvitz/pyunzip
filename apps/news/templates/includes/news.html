@@ -2,7 +2,8 @@
 {% with "True" as news_general %}
 {% if news.object_list %}
 {% for n in news.object_list %}
-    {% include settings.document.article_inc %}
+    {#% include settings.document.article_inc %#}
+    {% include "includes/article.html" %}
 {% endfor %}
 {% include "tracker/tracker_js.html" %} {# provides tracker user-js implementation #}
 
