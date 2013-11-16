@@ -1,19 +1,10 @@
 # coding: utf-8
 #from django.utils import unittest
-import os
-import re
+from datetime import datetime
 from django.test import TestCase
-from django.contrib.auth.models import User
-from apps.wh.models import (
-    Side, RegisterSid, Rank, RankType, PM
-)
-from apps.core.models import UserSID
 from django.core.urlresolvers import reverse
 from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
-from copy import deepcopy
-from django.core.cache import cache
-import simplejson as json
 
 
 class JustTest(TestCase):
@@ -83,6 +74,6 @@ class BenchmarkTest(TestHelperMixin, TestCase):
 
     def test_index_render(self):
         now = datetime.now()
-        response = self.client.get(response, follow, True)
+        response = self.client.get(self.index_url, follow=True)
         process = datetime.now() - now
         print "Got: %s" % process

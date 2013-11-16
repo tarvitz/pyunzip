@@ -1,20 +1,13 @@
 # coding: utf-8
-#from django.utils import unittest
-import os
 from django.test import TestCase
 from apps.tabletop.models import Codex, Roster, Mission, BattleReport
 from django.contrib.auth.models import User
-from django.contrib.comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
-from apps.core.helpers import model_json_encoder
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.cache import cache
 from copy import deepcopy
-import simplejson as json
-
 from apps.core.helpers import get_object_or_None
 
 
