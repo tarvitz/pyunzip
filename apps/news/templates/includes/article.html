@@ -2,7 +2,8 @@
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url "news:news" category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
-		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}' src='{% if n.author %}{% url "wh:avatar" nickname=n.author %}{% else %}/media/avatars/none.png{% endif %}'>
+		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}'
+             src='{{ n.owner.get_avatar_url }}'>
 		{% if perms.news.edit_news or n.owner == user and not n.approved %}
             <span id='edit_button' class='first'><a id='button' href="{% url "news:article-edit" n.id %}">Править</a></span>
         {% endif %}
