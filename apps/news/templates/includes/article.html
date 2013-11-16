@@ -1,4 +1,4 @@
-<div id='news'> {% load newsfilters comments i18n coretags %}
+<div id='news'> {% load comments i18n coretags %}
 	<div align="center" class='headline'>{% spaceless %}
 		<a href="{% url "news:news" category=n.category|lower %}">
 		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
@@ -61,7 +61,7 @@
  {% endif %}
  </div>
  <hr>
- <div class='footer'> (by {% get_raw_nickname n.author %}), published {{ n.date }}</div>
+ <div class='footer'> (by {{ n.author|default_if_none:n.owner.get_nickname }}), published {{ n.date }}</div>
  {% if n.editor %}<div class='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
  {% if n.url %}<div class='footer url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
  {% spaceless %}
