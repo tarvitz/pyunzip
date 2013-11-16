@@ -1,47 +1,29 @@
 # Create your views here.
-# ^^, coding: utf-8 ^^,
-import os
-from apps.news.models import News,Category,ArchivedNews, Meating
+# coding: utf-8
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.news.models import News, Meating, ArchivedNews
 from apps.news.forms import (
-    ArticleForm, ArticleModelForm, AddMeatingForm, ArticleStatusForm
+    ArticleModelForm, AddMeatingForm, ArticleStatusForm
 )
 from apps.core.forms import CommentForm, SphinxSearchForm
-from apps.files.models import Attachment
-from apps.files.helpers import save_uploaded_file as save_file
-from apps.core import make_links_from_pages as make_links
-from apps.core import pages, get_skin_template
-from apps.core.views import action_approve_simple
+from apps.core import get_skin_template
 from apps.core.models import Announcement
-#deprecated
-#from django.views.generic.simple import direct_to_template
-#overriding
 from apps.core.shortcuts import direct_to_template
 from apps.core.forms import ApproveActionForm
-#from apps.settings import MEDIA_ROOT
 from django.conf import settings
-from django.template import RequestContext,Template,Context
-from django.contrib import auth
-from django.contrib.auth.decorators import login_required,permission_required
-from django.contrib.auth.models import User,Permission
-from django.utils.translation import ugettext_lazy as _
-from django.core.paginator import InvalidPage, EmptyPage
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseServerError, Http404
+from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse,HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.db.models import Q
-from django.core import serializers
 from django.core.urlresolvers import reverse
-from django.views.decorators.cache import cache_page
 from datetime import datetime,timedelta
-from os import stat
-#filters
-from apps.news.templatetags.newsfilters import spadvfilter,bbfilter, render_filter
-from django.template.defaultfilters import striptags
+
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import (
-    get_settings, paginate,can_act, handle_uploaded_file, render_to,
+    get_settings, paginate,can_act, render_to,
     get_int_or_zero
 )
 from apps.core.decorators import (
@@ -51,12 +33,9 @@ from apps.core.decorators import (
 from apps.core.helpers import render_to, get_object_or_None
 from apps.core import benchmark #processors
 from django.core.cache import cache
+from django.views import generic
+from apps.core.views import LoginRequiredMixin
 
-#def get_a_normal_browser(request):
-#    agent = request.META['HTTP_USER_AGENT']
-#    if 'msie 6.0' in agent.title().lower()\
-#    or 'msie 7.0' in agent.title().lower():
-#        return HttpResponseRedirect('you/should/fuifuill/your/destiny')
 
 @benchmarking
 def archived_news(request,year='',month='',day=''):
@@ -119,6 +98,19 @@ def news(request, approved='approved', category=''):
         'page': news
 
     }
+
+
+class NewsListView(generic.ListView):
+    template_name = 'news.html'
+    paginate_by = settings.OBJECTS_ON_PAGE
+    paginator_class = Paginator
+
+    def get_queryset(self):
+        queryset = super(NewsListView, self).get_queryset()
+        if not self.request.user.has_perm('news.edit_news'):
+            return queryset.filter(approved=True)
+        return queryset
+
 
 def search_article(request):
     template = get_skin_template(request.user, "news/search.html")
