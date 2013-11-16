@@ -104,6 +104,7 @@ class NewsListView(generic.ListView):
     template_name = 'news.html'
     paginate_by = settings.OBJECTS_ON_PAGE
     paginator_class = Paginator
+    model = News
 
     def get_queryset(self):
         queryset = super(NewsListView, self).get_queryset()
@@ -111,6 +112,14 @@ class NewsListView(generic.ListView):
             return queryset.filter(approved=True)
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super(NewsListView, self).get_context_data(**kwargs)
+        context.update({
+            'news': {
+                'object_list': context['object_list']
+            }
+        })
+        return context
 
 def search_article(request):
     template = get_skin_template(request.user, "news/search.html")

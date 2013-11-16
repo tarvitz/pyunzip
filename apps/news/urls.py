@@ -2,8 +2,9 @@ from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 from apps.news import views
 
-urlpatterns = patterns('apps.news.views', 
-    url(r'^$','news', name='index'),
+urlpatterns = patterns('apps.news.views',
+    #url(r'^$', 'news', name='index'),
+    url('^$', views.NewsListView.as_view(), name='index'),
     url(r'^news/(?P<approved>(unapproved|approved))/$', 'news', name='news'), #this is somekind of brainfuck!
     #url(r'^news/$', views.news, name='news'),
     url(r'^news/$', views.NewsListView.as_view(), name='news'),
