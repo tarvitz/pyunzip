@@ -108,9 +108,11 @@ class NewsListView(generic.ListView):
 
     def get_queryset(self):
         queryset = super(NewsListView, self).get_queryset()
+        order = ('-date', )
+
         if not self.request.user.has_perm('news.edit_news'):
-            return queryset.filter(approved=True)
-        return queryset
+            return queryset.filter(approved=True).order_by(*order)
+        return queryset.order_by(*order)
 
     def get_context_data(self, **kwargs):
         context = super(NewsListView, self).get_context_data(**kwargs)
