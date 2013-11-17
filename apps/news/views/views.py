@@ -10,6 +10,8 @@ from apps.core import get_skin_template
 from apps.core.models import Announcement
 from apps.core.shortcuts import direct_to_template
 from apps.core.forms import ApproveActionForm
+
+from django.core.paginator import InvalidPage, EmptyPage
 from django.conf import settings
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
@@ -35,6 +37,7 @@ from apps.core import benchmark #processors
 from django.core.cache import cache
 from django.views import generic
 from apps.core.views import LoginRequiredMixin
+from django.utils.decorators import method_decorator
 
 
 @benchmarking
@@ -161,6 +164,46 @@ def article(request, number=1, object_model='news.news'):
         'form': form,
         'page': comments
     }
+
+
+class NewsDetail(generic.DetailView):
+    template_name = 'news/article.html'
+    model = News
+
+    def get_context_data(self, **kwargs):
+        context = super(NewsDetail, self).get_context_data(**kwargs)
+        page = get_int_or_zero(self.request.GET.get('page', 0))
+        form = CommentForm(None, request=self.request, initial={
+            'app_n_model': 'news.news', 'obj_id': self.kwargs.get('number', 0),
+            'url': self.request.META.get('PATH_INFO', ''),
+            'page': page
+        })
+        paginator = Paginator(self.object.comments.all(),
+                              settings.OBJECTS_ON_PAGE)
+        try:
+            comments = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            comments = paginator.page(1)
+
+        context.update({
+            'form': form,
+            'article': context['object'],
+            'comments': comments,
+            'paginator': paginator
+        })
+        return context
+
+    @method_decorator(user_visit(object_pk='pk', ct='news.news'))
+    @method_decorator(update_subscription_new(app_model='news.news',
+                                              pk_field='pk'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(NewsDetail, self).dispatch(request, *args, **kwargs)
+
+    def get_queryset(self):
+        queryset = super(NewsDetail, self).get_queryset()
+        if not self.request.user.has_perm('news.edit_news'):
+            return queryset.filter(approved=True)
+        return queryset
 
 @login_required
 def article_action(request, id=None, action=None):

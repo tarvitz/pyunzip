@@ -1,7 +1,5 @@
 <div id='news'> {% load comments i18n coretags %}
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url "news:news" category=n.category|lower %}">
-		{# <img id="hdimg" src="/media/images/news/categories/{{ n.category|lower }}.png">#}</a>
 		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}'
              src='{{ n.owner.get_avatar_url }}'>
 		{% if perms.news.edit_news or n.owner == user and not n.approved %}
@@ -23,7 +21,7 @@
             {% spaceless%}
             {% if news_general %}
                 <span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-                    <a href="{% url "news:article" number=n.id %}">{{ n.title }}</a>
+                    <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
                 </span>
             {% else %}
                 <span class='unapproved'>{{ n.title }}</span>
@@ -31,7 +29,7 @@
 		{% else %}
 			{% spaceless %}
                 {% if news_general %}
-                <a href='{% url "news:article" number=n.id %}'>{{ n.title }}</a>
+                <a href='{{ n.get_absolute_url }}'>{{ n.title }}</a>
                 {% else %}
                 {{ n.title }}
                 {% endif %}{% endspaceless %}

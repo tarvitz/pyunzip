@@ -364,7 +364,7 @@ def get_upload_helper(path):
         return None
 
 
-@task
+#@task
 def send_network_message(host,port,message):
     import socket
     try:

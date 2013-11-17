@@ -1,0 +1,24 @@
+{% load i18n %}
+{% if page.num_pages > 0 %}
+  <center>
+    <ul class='pagination pagination-sm pagination-inverse'>
+      {% if page_obj.has_previous %}
+        <li><a data-toggle='paginator' href="?page={{ page_obj.previous_page_number }}">«</a></li>
+      {% else %}
+        <li class='disabled'><a href='#'>«</a></li>
+      {% endif %}
+      {% for num in page.page_range %}
+        {% if page_obj.number == num %}
+          <li class='active'><a href='#'>{{ num }}</a></li>
+        {% else %}
+          <li><a data-toggle='paginator' href='?page={{ num }}{% if page.jump %}{{ page.jump }}{% endif %}'>{{ num }}</a></li>
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <li><a data-toggle='paginator' href="?page={{ page_obj.next_page_number }}">»</a></li>
+      {% else %}
+        <li class='disabled'><a href='#'>»</a></li>
+      {% endif %}
+    </ul>
+  </center>
+{% endif %}

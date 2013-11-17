@@ -1,17 +1,13 @@
 {% extends base_template %} {% load coretags %}
-{% block css %}
-    {{ block.super }}
-    <link rel='stylesheet' media='screen' href='/styles/news.css'>
-{% endblock %}
 {% block text_content %}
 {% if article %}
 {% with article as n %}
     {% include "includes/article.html" %}
 {% endwith %}
 {% if comments.object_list %}
-    {% include settings.document.links %}
-    {% include settings.document.comments %}
-    {% include settings.document.links %}
+    {% include "generic/pages.html" with page=paginator page_obj=comments %}
+    {% include "comments.html" with comments=comments page_obj=comments %}
+    {% include "generic/pages.html" with page=paginator %}
 {% endif %}
 {% if user.is_authenticated and article.approved %}
     {% get_content_type article as object %}

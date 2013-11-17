@@ -34,3 +34,7 @@ django.mo
 /media/replays
 /media/cache
 /media/user/*
+/media/css/bootstrap.css
+/media/components
+/data/plop
+/uploads/*

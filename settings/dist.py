@@ -60,38 +60,33 @@ ADMIN_MEDIA = rel_path('admin_media')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
-STYLES_URL = '/styles/'
+MEDIA_URL = '/uploads/'
+STATIC_URL = '/media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-STATIC_ROOT = rel_path('media/static')
+STATIC_ROOT = ''
+MEDIA_ROOT = rel_path('uploads')
 
-#STATICFILES_DIRS = (
-#    rel_path('media'),
+STATICFILES_DIRS = (
+    rel_path('media'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-#)
+)
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    #deprecated
-    #'django.template.loaders.filesystem.load_template_source',
-    #'django.template.loaders.app_directories.load_template_source',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.load_template_source',
 )
 
 MIDDLEWARE_CLASSES = (

@@ -197,9 +197,14 @@ class News(AbstractNews):
             'content': 100,
         }
     )
+    comments = generic.GenericRelation(
+        Comment,
+        content_type_field='content_type',
+        object_id_field='object_pk'
+    )
 
-    def get_absolute_url(self):
-        return reverse('news:article', kwargs={'number': self.id})
+    #def get_absolute_url(self):
+    #    return reverse('news:article', kwargs={'number': self.id})
 
     def archive(self):
         a = ArchivedNews()
@@ -226,6 +231,9 @@ class News(AbstractNews):
             )
         else:
             return "%s\%s" % (self.title, self.content)
+
+    def get_absolute_url(self):
+        return reverse('news:article', kwargs={'pk': self.pk, })
 
     def get_edit_url(self):
         return reverse('news:article-edit', args=(self.pk, ))

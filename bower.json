@@ -1,0 +1,26 @@
+{
+  "name": "warmist",
+  "version": "0.0.1",
+  "authors": [
+    "Tarvitz <tarvitz@blacklibrary.ru>"
+  ],
+  "license": "EULA",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": ">=3.0.0",
+    "jquery": "=1.8.3",
+    "jquery-colorbox": ">=1.4.33",
+    "jquery-tmpl": "",
+    "noty": ">=2.1.0"
+  },
+  "devDependencies": {
+    "select2": ">=3.4.3"
+  }
+}

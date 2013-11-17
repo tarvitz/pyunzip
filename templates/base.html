@@ -1,75 +1,48 @@
 <!DOCTYPE html>
-<html>{% load newsfilters i18n cache coretags %}
-{% if user.is_authenticated %} {% load whfilters votetags %}{% endif %}
+<html>{% load newsfilters i18n cache coretags whfilters votetags %}
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf8">
-<!-- wot -->
-<meta name="wot-verification" content="581220ae922fc400475a"/>
-<title>{% block title %}Warhammer 40,000{% endblock%}</title>
-{% block css %}
-<link rel='stylesheet' href='/media/bootstrap3/css/bootstrap.min.css' type='text/css' media='screen'>
-<link rel='stylesheet' href='/media/bootstrap3/css/main.css' type='text/css' media='screen'>
+  <meta http-equiv="content-type" content="text/html; charset=utf8">
+  <!-- wot -->
+  <meta name="wot-verification" content="581220ae922fc400475a"/>
+  <title>{% block title %}Warhammer 40,000{% endblock%}</title>
+  {% block css %}
+    <link rel='stylesheet' href='/media/css/bootstrap.css' type='text/css' media='screen'>
+    <link rel='stylesheet' href='/media/css/whhg.css' type='text/css' media='screen'>
+    <link rel='stylesheet' href='/media/css/markitup/skins/bootstrap/style.css' type='text/css' media='screen' async>
+    <link rel='stylesheet' href='/media/css/jquery.fileupload-ui.css' type='text/css' media='screen' async>
+    <link rel='stylesheet' href='/media/css/video-js.css' type='text/css' media='screen' async>
 
-<link rel='stylesheet' href='/media/css/markitup/skins/bootstrap/style.css' type='text/css' media='screen' async>
-<link rel='stylesheet' href='/media/css/jquery.fileupload-ui.css' type='text/css' media='screen' async>
-<link rel='stylesheet' href='/media/css/video-js.css' type='text/css' media='screen' async>
-<!--<link rel='stylesheet' href='/media/css/chosen.css' type='text/css' media='screen'> -->
-{#<link rel='stylesheet' href='/media/css/bootstrap-image-gallery.min.css' type='text/css' media='screen' async>#}
-<link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
+    <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
+  {% endblock %}
 
-<link rel='stylesheet' href='/styles/message.css' type='text/css' media='screen'>
-<link rel="stylesheet" href="/styles/rank.css" type="text/css" media="screen">
-<link rel="stylesheet" href="/styles/tags.css" type="text/css" media="screen">
-<link rel="stylesheet" href="/styles/karma.css" type="text/css" media="screen">
-<link rel='stylesheet' href='/styles/scrollbar.css' type='text/css' media='screen'>
+  {% block js %}
+    {% include "js/locale.ru.html" %}
+    <script type='text/javascript' src='/media/js/core.js'></script>
+    <script type='text/javascript' src='/media/js/base.js'></script>
+    <script type='text/javascript' src='/media/components/jquery/jquery.min.js'></script>
+    <script type='text/javascript' src='/media/js/chosen.min.js'></script>
+    <script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
+    <script type='text/javascript' src='/media/js/video.js' async></script>
+    <script type='text/javascript' src='/media/components/bootstrap/dist/js/bootstrap.min.js'></script>
 
-{% endblock %}
-{# stylesheet special for overriding base style templates withing one file #}
-<link rel='stylesheet' href='/styles/override.css' type='text/css' media='screen'>
-{# user css'es #}
+    <script type='text/javascript' src='/media/components/jquery-colorbox/jquery.colorbox-min.js'></script>
+    <script type='text/javascript' src='/media/components/jquery-colorbox/i18n/jquery.colorbox-ru.js'></script>
 
-{% if skin_css_path %}<link rel='stylesheet' href='{{ skin_css_path }}' type='text/css' media='screen'>{% endif %}
-{% block js %}
-{% include "js/locale.ru.html" %}
-<script type='text/javascript' src='/media/js/core.js'></script>
-<script type='text/javascript' src='/media/js/base.js'></script>
-<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
-<script type='text/javascript' src='/media/js/chosen.min.js'></script>
-<script type='text/javascript' src='/media/js/ajax-chosen.min.js'></script>
-<script type='text/javascript' src='/media/js/video.js' async></script>
-<script type='text/javascript' src='/media/bootstrap3/js/bootstrap.min.js'></script>
-{# <script type='text/javascript' src='/media/js/bootstrap-image-gallery.min.js' async></script> #}
-<script type='text/javascript' src='/media/colorbox/jquery.colorbox-min.js'></script>
-<script type='text/javascript' src='/media/colorbox/i18n/jquery.colorbox-ru.js'></script>
-<script type='text/javascript' src='/media/js/jq_defaults.js'></script>
-<script type='text/javascript' src='/media/js/jquery.tmpl.min.js'></script>
-<script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
-<script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
-<script type='text/javascript' src='/media/js/markitup/textile.js'></script>
+    <script type='text/javascript' src='/media/js/jq_defaults.js'></script>
 
-<!--<script type='text/javascript' src='/media/js/bootstrap-twipsy.js'></script>-->
-<script type='text/javascript' src='/media/js/m_effects.js'></script>
-<!-- noty -->
-<script type="text/javascript" src="/media/js/noty/jquery.noty.js"></script>
-<script type="text/javascript" src="/media/js/noty/promise.js"></script>
+    <script type='text/javascript' src='/media/components/jquery-tmpl/jquery.tmpl.min.js'></script>
 
-<script type="text/javascript" src="/media/js/noty/layouts/top.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/topLeft.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/topRight.js"></script>
-<script type="text/javascript" src="/media/js/noty/layouts/center.js"></script>
-<script type="text/javascript" src="/media/js/noty/themes/default.js"></script>
-<script type="text/javascript" src="/media/js/noty/themes/warmist.js"></script>
-<!-- You can add more layouts if you want -->
-<script type='text/javascript' src='/media/js/jq_base.js'></script>
-<script type='text/javascript' src='/media/js/ZeroClipboard.min.js'></script>
-<!--<script type='text/javascript' src='/media/js/plugins/jq.animate-shadow.min.js'></script>-->
-{% comment %}
-<script language='javascript'>
-	//alert(isOpera);
-</script>
-{% endcomment %}
-{% endblock %}
-{% block head_content %}{% endblock %}
+    <script type='text/javascript' src='/media/js/jquery.markitup.js'></script>
+    <script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
+    <script type='text/javascript' src='/media/js/markitup/textile.js'></script>
+
+    <script type='text/javascript' src='/media/js/m_effects.js'></script>
+
+    <!-- You can add more layouts if you want -->
+    <script type='text/javascript' src='/media/js/jq_base.js'></script>
+    <script type='text/javascript' src='/media/js/ZeroClipboard.min.js'></script>
+  {% endblock %}
+  {% block head_content %}{% endblock %}
 </head>
 
 <body>
@@ -306,6 +279,16 @@
         return false;
     });
 </script>
+<!-- noty -->
+<script type="text/javascript" src="/media/components/noty/js/noty/jquery.noty.js"></script>
+<script type="text/javascript" src="/media/components/noty/js/noty/promise.js"></script>
+
+<script type="text/javascript" src="/media/components/noty/js/noty/layouts/top.js"></script>
+<script type="text/javascript" src="/media/components/noty/js/noty/layouts/topLeft.js"></script>
+<script type="text/javascript" src="/media/components/noty/js/noty/layouts/topRight.js"></script>
+<script type="text/javascript" src="/media/components/noty/js/noty/layouts/center.js"></script>
+<script type="text/javascript" src="/media/components/noty/js/noty/themes/default.js"></script>
+<script type="text/javascript" src="/media/js/noty/themes/warmist.js"></script>
 
 {% endblock %} {# endjs #}
 {% block sidejs %}

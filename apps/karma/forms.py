@@ -22,11 +22,12 @@ class KarmaModelForm(forms.ModelForm):
         choices=ALTER_CHOICES, widget=forms.HiddenInput
     )
     user = forms.IntegerField(
-        _("user"), required=True, widget=forms.HiddenInput
+        label=_("user"), required=True, widget=forms.HiddenInput
     )
     url = forms.CharField(
-        _("url"), required=False, widget=forms.HiddenInput
+        label=_("url"), required=False, widget=forms.HiddenInput
     )
+
     def clean_user(self):
         user_id = self.cleaned_data['user']
         if not user_id:

@@ -14,13 +14,13 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     url(r'^grappelli/', include('grappelli.urls')),
-    url(r'static/(?P<path>.*)$', 'django.views.static.serve',
-            {
-                'document_root': settings.STATIC_ROOT,
-                'show_indexes': True,
-            }
-        ),
-
+    #url(r'static/(?P<path>.*)$', 'django.views.static.serve',
+    #        {
+    #            'document_root': settings.STATIC_ROOT,
+    #            'show_indexes': True,
+    #        }
+    #    ),
+    #
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     (r'^comments/', include('django.contrib.comments.urls')),
     # Uncomment the next line to enable the admin:
@@ -63,24 +63,24 @@ urlpatterns = patterns('',
 
 if settings.DEV_SERVER:
     urlpatterns += patterns('',
-        (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+        (r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
                 {'document_root': settings.MEDIA_ROOT ,
                 'show_indexes': True,
                 }),
-        (r'^styles/(?P<path>.*)$', 'django.views.static.serve',
-                {'document_root':settings.STYLES_ROOT,
-                    'show_indexes': True,
-                }),
-        (r'^admin_media/(?P<path>.*)$', 'django.views.static.serve',
-            {'document_root': settings.ADMIN_MEDIA,
-            'show_indexes': True,
-            }
-        ),
-        url(r'static/(?P<path>.*)$', 'django.views.static.serve',
-            {
-                'document_root': settings.STATIC_ROOT,
-                'show_indexes': True,
-            }
-        ),
+        #(r'^styles/(?P<path>.*)$', 'django.views.static.serve',
+        #        {'document_root':settings.STYLES_ROOT,
+        #            'show_indexes': True,
+        #        }),
+        #(r'^admin_media/(?P<path>.*)$', 'django.views.static.serve',
+        #    {'document_root': settings.ADMIN_MEDIA,
+        #    'show_indexes': True,
+        #    }
+        #),
+        #url(r'static/(?P<path>.*)$', 'django.views.static.serve',
+        #    {
+        #        'document_root': settings.STATIC_ROOT,
+        #        'show_indexes': True,
+        #    }
+        #),
 
     )
