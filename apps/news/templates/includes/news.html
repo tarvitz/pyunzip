@@ -16,9 +16,8 @@ $('.headline img.right').click(
 });
 
 </script>
-{% if page %}
-    {% include settings.document.links %}
-{% endif %}
+
+{% include "generic/pages.html" with page=paginator %}
 
 {% else %}
 	<center>
