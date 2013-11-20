@@ -1,6 +1,7 @@
 # coding: utf-8
 #
 import os
+from functools import wraps
 from datetime import datetime, date, time
 from functools import partial
 from django.http import HttpResponseRedirect, HttpResponse
@@ -537,6 +538,7 @@ def get_model_instance_json(Obj, id):
 
 def render_to_json(content_type='application/json', is_mongo=False):
     def decorator(func):
+        @wraps(func)
         def wrapper(request, *args, **kwargs):
             dt = func(request, *args, **kwargs)
             response = make_http_response(content_type=content_type)
@@ -551,6 +553,7 @@ def render_to(template, allow_xhr=False, content_type='text/html'):
     _content_type = content_type
 
     def decorator(func):
+        @wraps(func)
         def wrapper(request, *args, **kwargs):
             response = make_http_response(content_type='application/json')
             dt = func(request, *args, **kwargs)
