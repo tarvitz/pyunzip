@@ -33,7 +33,7 @@
 
             название: &quot;<b>{{ image.title }}</b>&quot;<br>
             {% if image.alias %}<small>Алиас: {{ image.alias }}</small><br>{% endif %}
-            {% if image.comments %}<small>комментарий: {{ image.comments }}</small><br>{% endif %}
+            {% if image.comments %}<small>комментарий: {{ image.comments|truncatewords:10 }}</small><br>{% endif %}
             <small>загружено: <b>{% get_nickname image.owner %}</b></small><br>
 
             {% get_comment_count for image as comments %}
