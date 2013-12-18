@@ -6,7 +6,7 @@
         {% endif %}
 
         {% for number in page_list %}
-        {% if number == "." %}...
+        {% if number == "." %}<a href='#'>...</a>
         {% else %}
             {% if number == page %}
             <li class="active"><a href='#'>{{ number }}</a></li>
