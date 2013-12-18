@@ -8,7 +8,8 @@
             {% endif %}
 
             {% for number in page_list %}
-            {% if number == "." %}...
+            {% if number == "." %}
+                <li>...</li>
             {% else %}
                 {% if number == page %}
                 <li class="active"><a href='#'>{{ number }}</a></li>
