@@ -2,11 +2,9 @@ from datetime import datetime
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
-#from markdown import Markdown
-#from markdown2 import markdown as Markdown
 from apps.thirdpaty.markdown2 import markdown as Markdown
 
 from apps.pybb.markups import mypostmarkup
@@ -14,6 +12,7 @@ from apps.pybb.fields import AutoOneToOneField, ExtendedImageField
 from apps.pybb.util import urlize, memoize_method
 from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 
 LANGUAGE_CHOICES = (
     ('en', 'English'),
@@ -124,12 +123,25 @@ class Topic(models.Model):
         return self.name
 
     @property
+    def owner(self):
+        return self.user
+
+    @property
     def head(self):
         return self.posts.all().order_by('created').select_related()[0]
 
     @property
     def last_post(self):
         return self.posts.all().order_by('-created').select_related()[0]
+
+    @property
+    def poll(self):
+        instance = None
+        try:
+            instance = self.poll_topic_set.get()
+        except (ObjectDoesNotExist, MultipleObjectsReturned):
+            pass
+        return instance
 
     def get_absolute_url(self):
         return reverse('pybb_topic', args=[self.id])
@@ -144,6 +156,9 @@ class Topic(models.Model):
         if not new:
             read.time = datetime.now()
             read.save()
+
+    def get_poll_add_url(self):
+        return reverse_lazy('pybb_poll_add', args=(self.pk, ))
 
     #def has_unreads(self, user):
         #try:
@@ -335,8 +350,98 @@ class PrivateMessage(RenderableItem):
         super(PrivateMessage, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return  reverse('pybb_show_pm', args=[self.id])
+        return reverse('pybb_show_pm', args=[self.id])
 
+
+class Poll(models.Model):
+    topic = models.ForeignKey(Topic, related_name='poll_topic_set',
+                              unique=True)
+    title = models.CharField(_('title'), max_length=2048,
+                             help_text=_("poll title"))
+    voted_amount = models.PositiveIntegerField(
+        _("voted amount"), help_text=_("amount of voted user, cache field"),
+        default=0
+    )
+    items_amount = models.PositiveIntegerField(
+        _('items amount'),
+        help_text=_('positive amount of poll items for further creation'),
+        default=2
+    )
+    is_multiple = models.BooleanField(
+        _("is multiple"), help_text=_("is multiple select allowed")
+    )
+    is_prepared = models.BooleanField(
+        _('is prepared'),
+        help_text=_('marks if poll is prepared to rock n roll'),
+        default=False
+    )
+    is_finished = models.BooleanField(
+        _('is finished'), help_text=_("marks if poll is finished"),
+        default=False
+    )
+    date_expire = models.DateTimeField(
+        _("date expire"), help_text=_("date then poll is expired"),
+        blank=True, null=True
+    )
+
+    @property
+    def items(self):
+        return self.poll_item_poll_set
+
+    def get_voted_amount(self, commit=True):
+        amount = sum(self.items.values('voted_amount') or [0])
+        if amount != self.voted_amount:
+            self.voted_amount = amount
+            if commit:
+                self.save()
+        return amount
+
+    def get_configure_url(self):
+        return reverse_lazy('pybb_poll_configure', args=(self.pk, ))
+
+    def get_update_url(self):
+        return reverse_lazy('pybb_poll_update', args=(self.pk, ))
+
+    def get_vote_url(self):
+        return reverse_lazy('pybb_poll_vote', args=(self.pk, ))
+
+    def __unicode__(self):
+        return '%s [%i]' % (self.title, self.voted_amount)
+
+    class Meta:
+        verbose_name = _("Poll")
+        verbose_name_plural = _("Polls")
+
+
+class PollItem(models.Model):
+    poll = models.ForeignKey(Poll, related_name='poll_item_poll_set')
+    title = models.CharField(_('title'), max_length=2048)
+    voted_amount = models.PositiveIntegerField(
+        _("voted amount"), help_text=_("amount of voted user, cache field"),
+        default=0
+    )
+
+    def __unicode__(self):
+        return self.title
+        #return u'[%s] %s [%i]' % (self.poll.title, self.title,
+        #                          self.voted_amount)
+
+    class Meta:
+        verbose_name = _("Poll item")
+        verbose_name_plural = _("Poll items")
+
+
+class PollAnswer(models.Model):
+    poll_item = models.ForeignKey(PollItem,
+                                  related_name='answer_poll_item_set')
+    user = models.ForeignKey('auth.User', related_name='answer_user_set')
+
+    def __unicode__(self):
+        return u'%s: %s' % (self.user.get_username(), self.poll_item.title)
+
+    class Meta:
+        verbose_name = _("Poll answer")
+        verbose_name_plural = _("Poll answers")
 
 from apps.pybb import signals
 signals.setup_signals()

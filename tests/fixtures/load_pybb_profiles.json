@@ -1,0 +1,62 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.profile", 
+    "fields": {
+        "show_signatures": true, 
+        "avatar": "", 
+        "language": "en", 
+        "markup": "textile", 
+        "site": "", 
+        "yahoo": "", 
+        "aim": "", 
+        "msn": "", 
+        "time_zone": 3.0, 
+        "user": 1, 
+        "signature": "", 
+        "icq": "", 
+        "jabber": "", 
+        "location": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "pybb.profile", 
+    "fields": {
+        "show_signatures": true, 
+        "avatar": "", 
+        "language": "en", 
+        "markup": "textile", 
+        "site": "", 
+        "yahoo": "", 
+        "aim": "", 
+        "msn": "", 
+        "time_zone": 3.0, 
+        "user": 6, 
+        "signature": "", 
+        "icq": "", 
+        "jabber": "", 
+        "location": ""
+    }
+},
+{
+    "pk": 7, 
+    "model": "pybb.profile", 
+    "fields": {
+        "show_signatures": true, 
+        "avatar": "", 
+        "language": "en", 
+        "markup": "textile", 
+        "site": "", 
+        "yahoo": "", 
+        "aim": "", 
+        "msn": "", 
+        "time_zone": 3.0, 
+        "user": 7, 
+        "signature": "", 
+        "icq": "", 
+        "jabber": "", 
+        "location": ""
+    }
+}
+]

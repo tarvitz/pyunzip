@@ -1,15 +1,17 @@
 # coding: utf-8
 #from django.utils import unittest
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
+from apps.pybb.models import Poll, PollItem, PollAnswer, Topic, Post
 
 
 class JustTest(TestCase):
-    fixtures = [
-    ]
+    fixtures = []
 
     def setUp(self):
         self.urls_void = [
@@ -17,24 +19,6 @@ class JustTest(TestCase):
         self.urls_registered = [
         ]
         self.get_object = get_object_or_None
-
-    def test_registered_urls(self):
-        messages = []
-        for user in ('admin', 'user'):
-            logged = self.client.login(username=user, password='123456')
-            self.assertEqual(logged, True)
-            for url in self.urls_registered:
-                response = self.client.get(url, follow=True)
-                try:
-                    self.assertEqual(response.status_code, 200)
-                except AssertionError as err:
-                    messages.append({
-                        'user': user, 'err': err, 'url': url
-                    })
-        if messages:
-            for msg in messages:
-                print "Got assertion on %(url)s with %(user)s: %(err)s" % msg
-            raise AssertionError
 
     def tearDown(self):
         pass
@@ -66,14 +50,229 @@ class CacheTest(TestCase):
         pass
 
 
-class BenchmarkTest(TestHelperMixin, TestCase):
-    index_url = reverse('pybb_index')
+class PollTest(TestHelperMixin, TestCase):
+    """ TestCase for polls creation, update and deletion actions and logic """
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_pybb_categories.json',
+        'tests/fixtures/load_forums.json',
+        'tests/fixtures/load_topics.json',
+        'tests/fixtures/load_posts.json',
+        'tests/fixtures/load_pybb_profiles.json',
+    ]
+    poll_post = {
+        'title': 'Poll',
+        'items_amount': 4,
+        'is_multiple': True,
+        'date_expire': datetime.now() + timedelta(days=7)
+    }
 
     def setUp(self):
-        pass
+        self.topic = get_object_or_None(Topic, pk=1)
 
-    def test_index_render(self):
-        now = datetime.now()
-        response = self.client.get(self.index_url, follow=True)
-        process = datetime.now() - now
-        print "Got: %s" % process
+    def add_poll(self, role='admin'):
+        """ check if possible create Poll instance.
+        This uses in some tests below
+
+        :param role: username as role
+        :return:
+        """
+        self.login(role)
+        url = self.topic.get_poll_add_url()
+        count = Poll.objects.count()
+
+        response = self.client.post(url, self.poll_post, follow=True)
+        self.assertEqual(Poll.objects.count(), count + 1)
+        poll = Poll.objects.latest('id')
+        context = response.context
+        self.assertEqual(context['request'].get_full_path(),
+                         reverse('pybb_poll_configure', args=(poll.pk, )))
+        self.assertEqual(response.status_code, 200)
+        formset = context['form']
+        self.assertEqual(len(formset.forms), self.poll_post['items_amount'])
+        self.check_state(poll, self.poll_post, self.assertEqual)
+        return poll
+
+    def add_poll_items(self, role='admin'):
+        """ check if possible to create Poll items within already created
+        poll instance.
+
+        :param role: username as role
+        :return:
+        """
+        poll = self.add_poll(role)
+        poll_items_count = self.poll_post['items_amount']
+        count = PollItem.objects.count()
+
+        post = {
+            'poll_item_poll_set-TOTAL_FORMS': 4,
+            'poll_item_poll_set-INITIAL_FORMS': 0,
+            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-0-title': 'Variant 1',
+            'poll_item_poll_set-1-title': 'Variant 2',
+            'poll_item_poll_set-2-title': 'Variant 3',
+            'poll_item_poll_set-3-title': 'Variant 4',
+        }
+        response = self.client.post(poll.get_configure_url(), post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(PollItem.objects.count(), count + poll_items_count)
+        self.assertEqual(poll.items.count(), poll_items_count)
+        return poll
+
+    def test_add_poll(self, role='admin'):
+        """ create poll in 2 steps """
+        pole = self.add_poll_items(role)
+
+    def test_update_poll(self, role='admin'):
+        poll = self.add_poll_items(role)
+        items_amount = poll.items.count()
+        url = poll.get_update_url()
+        post = {
+            'title': u'new poll title',
+            'items_amount': items_amount + 1
+        }
+        response = self.client.post(url, post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['request'].get_full_path(),
+                         reverse('pybb_poll_configure', args=(poll.pk, )))
+
+        items_post = {
+            'poll_item_poll_set-TOTAL_FORMS': 5,
+            'poll_item_poll_set-INITIAL_FORMS': 4,
+            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-0-title': 'Variant 1',
+            'poll_item_poll_set-0-id': 1,
+            'poll_item_poll_set-1-title': 'Variant 2',
+            'poll_item_poll_set-1-id': 2,
+            'poll_item_poll_set-2-title': 'Variant 3',
+            'poll_item_poll_set-2-id': 3,
+            'poll_item_poll_set-3-title': 'Variant 4',
+            'poll_item_poll_set-3-id': 4,
+            'poll_item_poll_set-4-title': 'Variant 5',
+        }
+        response = self.client.post(poll.get_configure_url(),
+                                    items_post, follow=True)
+        self.proceed_form_errors(response.context)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(poll.items.count(), items_amount + 1)
+
+    def test_add_full_clean_poll_item(self, role='admin'):
+        poll = self.add_poll(role)
+        post = {
+            'poll_item_poll_set-TOTAL_FORMS': 4,
+            'poll_item_poll_set-INITIAL_FORMS': 0,
+            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-0-title': '',
+            'poll_item_poll_set-1-title': '',
+            'poll_item_poll_set-2-title': '',
+            'poll_item_poll_set-3-title': '',
+        }
+        response = self.client.post(poll.get_configure_url(), post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertNotEqual(form.errors, {})
+        for item in form.errors:
+            self.assertEqual(
+                item['title'][0], unicode(_("Title should be set"))
+            )
+
+    def test_add_poll_item_unclean(self, role='admin'):
+        poll = self.add_poll(role)
+        post = {
+            'poll_item_poll_set-TOTAL_FORMS': 4,
+            'poll_item_poll_set-INITIAL_FORMS': 0,
+            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-0-title': 'Variant 1',
+            'poll_item_poll_set-1-title': 'Variant 2',
+            'poll_item_poll_set-2-title': '',
+            'poll_item_poll_set-3-title': 'Variant 4',
+        }
+        response = self.client.post(poll.get_configure_url(), post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertNotEqual(form.errors, {})
+        self.assertEqual(form.errors[2]['title'][0],
+                         unicode(_("Title should be set")))
+
+
+class PollAnswerTest(TestHelperMixin, TestCase):
+    """ TestCase for voting polls actions and logic """
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_pybb_categories.json',
+        'tests/fixtures/load_forums.json',
+        'tests/fixtures/load_topics.json',
+        'tests/fixtures/load_posts.json',
+        'tests/fixtures/load_pybb_profiles.json',
+        'tests/fixtures/load_polls.json',
+        'tests/fixtures/load_poll_items.json'
+    ]
+
+    def setUp(self):
+        # poll 1 is multicheck
+        self.multiple_poll = Poll.objects.get(pk=1)
+        self.multiple_poll.date_expire = datetime.now() + timedelta(weeks=1)
+        self.multiple_poll.save()
+
+        self.single_poll = Poll.objects.get(pk=2)
+        self.single_poll.date_expire = datetime.now() + timedelta(weeks=1)
+        self.single_poll.save()
+
+    def test_multiple_poll_vote(self):
+        """ successful multiple poll vote action/logic """
+        self.login('user')
+        url = self.multiple_poll.get_vote_url()
+        pks = map(lambda x: x['pk'], self.multiple_poll.items.values('pk'))
+
+        post = {
+            'vote': pks[0:2],
+        }
+        amount = len(post['vote'])
+
+        count = PollAnswer.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.proceed_form_errors(response.context)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(PollAnswer.objects.count(), count + amount)
+
+    def test_single_poll_vote(self):
+        """ successful single poll vote action/logic """
+        self.login('user')
+        url = self.single_poll.get_vote_url()
+        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        post = {
+            'vote': pks[0]
+        }
+        amount = 1
+        count = PollAnswer.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.proceed_form_errors(response.context)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(PollAnswer.objects.count(), count + amount)
+
+    def test_single_poll_vote_failure(self):
+        """ in-successful single poll vote action/logic, user can not post
+         more than one vote option"""
+        self.login('user')
+        url = self.single_poll.get_vote_url()
+        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        post = {
+            'vote': pks[0:2]
+        }
+        amount = len(post['vote'])
+        count = PollAnswer.objects.count()
+        response = self.client.post(url, post, follow=True)
+        self.proceed_form_errors(response.context)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(PollAnswer.objects.count(), count + amount)
+        # only one option is valid
+        self.assertEqual(PollAnswer.objects.count(), count + 1)

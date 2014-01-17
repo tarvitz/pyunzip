@@ -1,0 +1,30 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.poll", 
+    "fields": {
+        "is_multiple": true, 
+        "is_prepared": false, 
+        "voted_amount": 0, 
+        "title": "\u041e\u043f\u0440\u043e\u0441 \u21161", 
+        "topic": 1, 
+        "date_expire": "2014-01-20T00:00:00", 
+        "items_amount": 6, 
+        "is_finished": false
+    }
+},
+{
+    "pk": 2, 
+    "model": "pybb.poll", 
+    "fields": {
+        "is_multiple": false, 
+        "is_prepared": false, 
+        "voted_amount": 0, 
+        "title": "\u0421\u043e\u0433\u043b\u0430\u0441\u043d\u044b \u043b\u0438 \u0432\u044b \u0441 \u0443\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435\u043c \u043e \u0442\u043e\u043c \u0447\u0442\u043e \u0443\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u0438\u0435 \u0443\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043d\u043e?", 
+        "topic": 2, 
+        "date_expire": "2014-01-30T00:00:00", 
+        "items_amount": 3, 
+        "is_finished": false
+    }
+}
+]

@@ -1,0 +1,74 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 1, 
+        "title": "\u0412\u0430\u0440\u0438\u0430\u043d\u0442 1"
+    }
+},
+{
+    "pk": 2, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 1, 
+        "title": "\u0412\u0430\u0440\u0438\u0430\u043d\u0442 2"
+    }
+},
+{
+    "pk": 3, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 1, 
+        "title": "\u0412\u0430\u0440\u0438\u0430\u043d\u0442 3"
+    }
+},
+{
+    "pk": 4, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 1, 
+        "title": "\u0412\u0430\u0440\u0438\u0430\u043d\u0442 4"
+    }
+},
+{
+    "pk": 5, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 1, 
+        "title": "\u0412\u0430\u0440\u0438\u0430\u043d\u0442 5"
+    }
+},
+{
+    "pk": 6, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 2, 
+        "title": "\u0414\u0430"
+    }
+},
+{
+    "pk": 7, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 2, 
+        "title": "\u041d\u0435\u0442"
+    }
+},
+{
+    "pk": 8, 
+    "model": "pybb.pollitem", 
+    "fields": {
+        "voted_amount": 0, 
+        "poll": 2, 
+        "title": "\u041d\u0435 \u0437\u043d\u0430\u044e"
+    }
+}
+]

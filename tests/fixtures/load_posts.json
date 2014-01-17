@@ -1,0 +1,32 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.post", 
+    "fields": {
+        "body": "\u0442\u0435\u043c\u0430", 
+        "user_ip": "127.0.0.1", 
+        "updated": null, 
+        "created": "2013-12-26T16:55:07.000", 
+        "markup": "textile", 
+        "body_text": "", 
+        "body_html": "\t<p>\u0442\u0435\u043c\u0430</p>", 
+        "topic": 1, 
+        "user": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "pybb.post", 
+    "fields": {
+        "body": "\u0422\u0443\u0442 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0442\u0435\u043c\u044b \u21162", 
+        "user_ip": "127.0.0.1", 
+        "updated": null, 
+        "created": "2014-01-17T14:30:58.347", 
+        "markup": "textile", 
+        "body_text": "", 
+        "body_html": "\t<p>\u0422\u0443\u0442 \u043e\u043f\u0438\u0441\u0430\u043d\u0438\u0435 \u0442\u0435\u043c\u044b \u21162</p>", 
+        "topic": 2, 
+        "user": 1
+    }
+}
+]

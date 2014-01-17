@@ -1,0 +1,10 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.category", 
+    "fields": {
+        "position": 0, 
+        "name": "General"
+    }
+}
+]

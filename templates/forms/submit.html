@@ -2,7 +2,8 @@
 {% trans "Submit" as submit %}
 <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-        <button type="submit"
-                class='{{ class|default:"btn btn-default" }}'>{{ save_text|default:submit }}</button>
+        <button type="submit" {% if klass %}
+                class='btn btn-{{ klass }}'
+                {% else %}class='{{ class|default:"btn btn-default" }}'{% endif %}>{{ save_text|default:submit }}</button>
     </div>
 </div>

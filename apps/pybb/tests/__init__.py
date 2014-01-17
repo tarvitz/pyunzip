@@ -5,6 +5,7 @@ import unittest
 
 from apps.pybb.tests.postmarkup import PostmarkupTestCase
 
+
 def suite():
     cases = (PostmarkupTestCase,
             )
@@ -15,3 +16,4 @@ def suite():
 
 
 from .common import *
+from .wizards import *

@@ -1,0 +1,34 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.topic", 
+    "fields": {
+        "updated": "2013-12-26T16:55:07.069", 
+        "name": "\u041d\u043e\u0432\u0430\u044f \u0442\u0435\u043c\u0430", 
+        "forum": 1, 
+        "views": 99, 
+        "post_count": 1, 
+        "created": "2013-12-26T16:55:06.864", 
+        "subscribers": [], 
+        "sticky": false, 
+        "user": 1, 
+        "closed": false
+    }
+},
+{
+    "pk": 2, 
+    "model": "pybb.topic", 
+    "fields": {
+        "updated": "2014-01-17T14:30:58.400", 
+        "name": "\u0422\u0435\u043c\u0430 \u21162", 
+        "forum": 1, 
+        "views": 44, 
+        "post_count": 1, 
+        "created": "2014-01-17T14:30:58.195", 
+        "subscribers": [], 
+        "sticky": false, 
+        "user": 1, 
+        "closed": false
+    }
+}
+]

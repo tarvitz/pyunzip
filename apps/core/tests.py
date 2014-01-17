@@ -435,3 +435,42 @@ class TestHelperMixin(object):
             for msg in messages:
                 print u"Got %(err)s in %(key)s" % msg
             raise AssertionError
+
+    def proceed_form_errors(self, context):
+        """
+        :param context: requires response context instance
+            to check form errors and print them to stdout
+        :return: None
+        """
+        if not 'form' in context:
+            return
+
+        form = context['form']
+        have_errors = (
+            getattr(form, 'errors')
+            if hasattr(form, 'errors') else False
+        )
+        if not have_errors:
+            return
+
+        print "Got errors in form:"
+        if isinstance(form.errors, dict):
+            for key, error_list in form.errors.items():
+                print "in '%(key)s' got: '%(errors)s'" % {
+                    'key': key,
+                    'errors': (
+                        "; ".join([unicode(i) for i in error_list])
+                        if isinstance(error_list, (list, tuple))
+                        else unicode(error_list)
+                    )
+                }
+            return
+        elif isinstance(form.errors, (list, tuple)):
+            for f in form.errors:
+                for key, error_list in f.items():
+                    print u"in '%(key)s got: %(errors)s'" % {
+                        'key': key, 'errors': "; ".join([
+                            unicode(i) for i in error_list])
+                    }
+        else:
+            pass

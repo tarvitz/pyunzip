@@ -1,0 +1,19 @@
+[
+{
+    "pk": 1, 
+    "model": "pybb.forum", 
+    "fields": {
+        "category": 1, 
+        "updated": "2013-12-26T16:55:07.069", 
+        "name": "Tech support", 
+        "post_count": 1, 
+        "moderators": [
+            1
+        ], 
+        "position": 0, 
+        "is_hidden": false, 
+        "css_icon": "", 
+        "description": ""
+    }
+}
+]

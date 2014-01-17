@@ -1,0 +1,29 @@
+.pagination-inverse{
+  > li {
+    > a{
+      color: @wh-default-text;
+      background-color: @wh-default-background;
+      &:hover{
+        background-color: lighten(@wh-default-background, 5%);
+      }
+    }
+    &.disabled{
+      > a{
+        background-color: darken(@wh-default-background, 10%);
+        &:hover{
+          background-color: lighten(@wh-default-background, 5%);
+        }
+      }
+    }
+    &.active{
+      > a{
+        background-color: darken(@wh-default-background, 15%);
+        border-color: @wh-default-border;
+        &:hover{
+          background-color: lighten(@wh-default-background, 10%);
+          border-color: @wh-default-border;
+        }
+      }
+    }
+  }
+}

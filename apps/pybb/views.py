@@ -1,25 +1,37 @@
 import math
 import datetime
 
+from django.forms.formsets import formset_factory
+from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, Http404
+from django.http import (
+    HttpResponseRedirect, HttpResponse, HttpResponseNotFound, Http404)
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from django.core.urlresolvers import reverse
-from django.db import connection
+from django.core.urlresolvers import reverse, reverse_lazy
 
-from apps.core.helpers import render_to
+from apps.core.helpers import render_to, get_int_or_zero, get_object_or_None
 from apps.pybb.util import render_to, paged, build_form, quote_text
 from apps.pybb.models import (
     Category, Forum, Topic, AnonymousPost, Post,
     Profile,
-    PrivateMessage
+    PrivateMessage,
+    Poll, PollItem, PollAnswer
 )
-from apps.pybb.forms import AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm
+from apps.pybb.forms import (
+    AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm,
+    AddPollForm, PollItemForm, PollItemBaseinlineFormset, UpdatePollForm,
+    SingleVotePollForm, MultipleVotePollForm
+)
 from apps.pybb import settings as pybb_settings
-from apps.pybb.anonymous_post import handle_anonymous_post, load_anonymous_post, delete_anonymous_post
+from apps.pybb.anonymous_post import (
+    handle_anonymous_post, load_anonymous_post, delete_anonymous_post)
 from django.views.decorators.csrf import csrf_exempt
+from django.views import generic
+from django.utils.decorators import method_decorator
+from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
+from django.core.exceptions import PermissionDenied
 
 
 def index_ctx(request):
@@ -123,6 +135,10 @@ def show_topic_ctx(request, topic_id):
     else:
         subscribed = False
 
+    poll_form_class = SingleVotePollForm
+    if topic.poll and topic.poll.is_multiple:
+        poll_form_class = MultipleVotePollForm
+    poll_form = poll_form_class(None, poll=topic.poll) if topic.poll else None
     return {'topic': topic,
             'last_post': last_post,
             'first_post': first_post,
@@ -130,6 +146,7 @@ def show_topic_ctx(request, topic_id):
             'moderator': moderator,
             'subscribed': subscribed,
             'paged_qs': posts,
+            'poll_form': poll_form
             }
 show_topic = render_to('pybb/topic.html')(show_topic_ctx)
 
@@ -393,7 +410,7 @@ pm_inbox = render_to('pybb/pm/inbox.html')(pm_inbox_ctx)
 def show_pm_ctx(request, pm_id):
     msg = get_object_or_404(PrivateMessage, pk=pm_id)
     if not request.user in [msg.dst_user, msg.src_user]:
-        return HttpRedirectException('/')
+        raise PermissionDenied('not allowed')
     if request.user == msg.dst_user:
         pm_mode = 'inbox'
         if not msg.read:
@@ -419,3 +436,166 @@ def switch_theme(request, theme):
         request.user.settings['forum_theme'] = settings.FORUM_THEMES[themes.index(theme)][1]
         request.user.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+
+class PollMixin(object):
+    def get_poll_object(self):
+        if not hasattr(self, 'poll'):
+            self.poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
+        return self.poll
+
+
+class AddPollView(generic.FormView):
+    """ Add poll view to existent topic """
+    #model = Poll
+    form_class = AddPollForm
+    template_name = 'pybb/poll_add.html'
+
+    def get_form_class(self):
+        if self.kwargs.get('update', False):
+            return UpdatePollForm
+        return super(AddPollView, self).get_form_class()
+
+    def get_form_kwargs(self):
+        if self.kwargs.get('update', False):
+            instance = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
+        else:
+            topic = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
+            instance = topic.poll
+        kwargs = super(AddPollView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': instance
+        })
+        return kwargs
+
+    def get_success_url(self, pk):
+        return reverse_lazy('pybb_poll_configure', args=(pk, ))
+
+    def form_valid(self, form):
+        form.instance.topic = get_object_or_404(Topic,
+                                                pk=self.kwargs.get('pk', 0))
+        instance = form.save()
+        return redirect(self.get_success_url(pk=instance.pk))
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AddPollView, self).dispatch(request, *args, **kwargs)
+
+
+class ConfigurePollView(PollMixin, generic.FormView):
+    template_name = 'pybb/poll_configure.html'
+
+    def get_form_kwargs(self):
+        self.get_poll_object()
+        kwargs = super(ConfigurePollView, self).get_form_kwargs()
+        kwargs.update({
+            'instance': self.poll
+        })
+        return kwargs
+
+    def get_form_class(self):
+        self.get_poll_object()
+        amount = (
+            self.poll.items_amount if not self.poll.items.count()
+            else self.poll.items_amount - self.poll.items.count()
+        )
+        formset = inlineformset_factory(
+            Poll, PollItem, formset=PollItemBaseinlineFormset,
+            fk_name='poll', fields=('title', ),
+            can_delete=self.poll.poll_item_poll_set.count(),
+            extra=amount,
+            max_num=settings.MAXIMUM_POLL_ITEMS_AMOUNT)
+        return formset
+
+    def get_success_url(self):
+        self.get_poll_object()
+        return self.poll.topic.get_absolute_url()
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        context = super(ConfigurePollView, self).get_context_data(**kwargs)
+        context.update({
+            'poll': self.get_poll_object()
+        })
+        return context
+
+
+class PollVoteView(PollMixin, generic.CreateView):
+    """ PollVoteView operates with user vote single or multiple vote poll. """
+    model = PollAnswer
+    # get_form_class alters SingleVotePollForm to multple one
+    form_class = SingleVotePollForm
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(PollVoteView, self).dispatch(request, *args, **kwargs)
+
+    def get_form_class(self):
+        if self.get_poll_object().is_multiple:
+            return MultipleVotePollForm
+        return super(PollVoteView, self).get_form_class()
+
+    def get_form_kwargs(self):
+        kwargs = super(PollVoteView, self).get_form_kwargs()
+        kwargs.update({'poll': self.get_poll_object()})
+        return kwargs
+
+    def form_valid(self, form):
+        """ save PollAnswer
+
+        :param form: PollForm
+        :return: success redirect url
+        """
+        votes = form.cleaned_data['vote']
+        if hasattr(votes, '__iter__'):
+            for poll_item in votes:
+                PollAnswer.objects.get_or_create(
+                    poll_item=poll_item, user=self.request.user
+                )
+        else:
+            PollAnswer.objects.get_or_create(
+                poll_item=votes, user=self.request.user
+            )
+        #for key, voted in form.cleaned_data.items():
+        #    if voted:
+        #        poll_item = get_object_or_404(PollItem,
+        #                                      pk=key.replace('item_', ''))
+        #        answer_item = PollAnswer.objects.get_or_create(
+        #            poll_item=poll_item, user=self.request.user
+        #        )
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return self.get_poll_object().topic.get_absolute_url()
+
+    def get(self, request, *args, **kwargs):
+        raise PermissionDenied("not allowed")
+
+
+def add_poll_wizard(request, pk, step=None):
+    extra = int(request.POST.get('0-items_amount', 1))
+    PollItemsFormset = formset_factory(PollItemForm, extra=extra)
+
+    wizard = AddPollWizard.as_view(
+        [AddPollForm, PollItemsFormset], url_name='pybb_poll_add',
+        done_step_name='finished')
+    return wizard(request, pk=pk, step=step)
+
+
+class AddPollWizard(NamedUrlSessionWizardView):
+    template_name = 'pybb/poll_wizard.html'
+
+    def done(self, form_list, **kwargs):
+        poll_form = form_list[0]
+        poll_item_formset = form_list[1]
+        return redirect('/')
+
+    def get_step_url(self, step):
+        return reverse_lazy(self.url_name,
+                            args=(self.kwargs.get('pk', 0), step))
+
+    def get_template_names(self):
+        return self.template_name

@@ -1,0 +1,29 @@
+{% load i18n %}
+{% with poll=topic.poll %}
+  <div class='message round'>
+    <div class='message-headline'>
+      {% if topic.owner == user %}
+        <div class='links'>
+          <span><a href='{{ poll.get_update_url }}'>{% trans "edit" %}</a></span>
+        </div>
+      {% endif %}
+      {% trans "Poll" %}: {{ poll.title }}
+    </div>
+    <div class='message-body'>
+      <div class='text'>
+        {% if user in poll.get_user_answered %}
+          {% for item in poll.items.all %}
+            <li>{{ item.title }}</li>
+          {% endfor %}
+        {% else %}
+          <form class='form-horizontal'>
+            {% csrf_token %}
+            {% include "forms/bootstrap_horizontal.html" with form=poll_form %}
+            {% include "forms/submit.html" %}
+          </form>
+        {% endif %}
+      </div>
+    </div>
+    <div class='message-footer'></div>
+  </div>
+{% endwith %}
