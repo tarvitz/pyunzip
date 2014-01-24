@@ -8,6 +8,7 @@ from django.conf import settings
 from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Poll, PollItem, PollAnswer, Topic, Post
+from django.contrib.auth.models import User
 
 
 class JustTest(TestCase):
@@ -241,6 +242,10 @@ class PollAnswerTest(TestHelperMixin, TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PollAnswer.objects.count(), count + amount)
+        # check voted users
+        self.assertEqual(len(self.multiple_poll.get_voted_users()), 1)
+        user = User.objects.get(username='user')
+        self.assertEqual(self.multiple_poll.get_voted_users()[0], user)
 
     def test_single_poll_vote(self):
         """ successful single poll vote action/logic """
@@ -257,6 +262,10 @@ class PollAnswerTest(TestHelperMixin, TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PollAnswer.objects.count(), count + amount)
+        # check voted users
+        self.assertEqual(len(self.single_poll.get_voted_users()), 1)
+        user = User.objects.get(username='user')
+        self.assertEqual(self.single_poll.get_voted_users()[0], user)
 
     def test_single_poll_vote_failure(self):
         """ in-successful single poll vote action/logic, user can not post
@@ -276,3 +285,7 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.assertNotEqual(PollAnswer.objects.count(), count + amount)
         # only one option is valid
         self.assertEqual(PollAnswer.objects.count(), count + 1)
+        # check voted users
+        self.assertEqual(len(self.single_poll.get_voted_users()), 1)
+        user = User.objects.get(username='user')
+        self.assertEqual(self.single_poll.get_voted_users()[0], user)

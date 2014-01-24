@@ -552,20 +552,18 @@ class PollVoteView(PollMixin, generic.CreateView):
         votes = form.cleaned_data['vote']
         if hasattr(votes, '__iter__'):
             for poll_item in votes:
-                PollAnswer.objects.get_or_create(
-                    poll_item=poll_item, user=self.request.user
+                poll_answer, created = PollAnswer.objects.get_or_create(
+                    poll_item=poll_item, user=self.request.user,
+                    poll=poll_item.poll
                 )
         else:
-            PollAnswer.objects.get_or_create(
-                poll_item=votes, user=self.request.user
+            poll_answer, created = PollAnswer.objects.get_or_create(
+                poll_item=votes, user=self.request.user,
+                poll=votes.poll
             )
-        #for key, voted in form.cleaned_data.items():
-        #    if voted:
-        #        poll_item = get_object_or_404(PollItem,
-        #                                      pk=key.replace('item_', ''))
-        #        answer_item = PollAnswer.objects.get_or_create(
-        #            poll_item=poll_item, user=self.request.user
-        #        )
+        if created:
+            poll_answer.poll_item.poll.reload_score()
+
         return redirect(self.get_success_url())
 
     def get_success_url(self):

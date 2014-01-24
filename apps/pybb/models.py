@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 from apps.thirdpaty.markdown2 import markdown as Markdown
 
 from apps.pybb.markups import mypostmarkup
@@ -13,6 +14,7 @@ from apps.pybb.util import urlize, memoize_method
 from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 LANGUAGE_CHOICES = (
     ('en', 'English'),
@@ -388,6 +390,10 @@ class Poll(models.Model):
     def items(self):
         return self.poll_item_poll_set
 
+    @property
+    def answers(self):
+        return self.answer_poll_set
+
     def get_voted_amount(self, commit=True):
         amount = sum(self.items.values('voted_amount') or [0])
         if amount != self.voted_amount:
@@ -405,6 +411,23 @@ class Poll(models.Model):
     def get_vote_url(self):
         return reverse_lazy('pybb_poll_vote', args=(self.pk, ))
 
+    def get_voted_users(self):
+        qset = PollAnswer.objects.filter(poll=self)
+        if 'psycopg' in settings.DATABASES['default']['ENGINE']:
+            return qset.distinct('user')
+        users = set()
+        for poll_answer in qset:
+            users.add(poll_answer.user.pk)
+        return User.objects.filter(pk__in=list(users))
+
+    def reload_score(self, commit=True):
+        self.voted_amount = len(self.get_voted_users())
+        for item in self.items.all():
+            item.reload_score()
+        if commit:
+            self.save()
+        return self
+
     def __unicode__(self):
         return '%s [%i]' % (self.title, self.voted_amount)
 
@@ -420,6 +443,29 @@ class PollItem(models.Model):
         _("voted amount"), help_text=_("amount of voted user, cache field"),
         default=0
     )
+    score = models.DecimalField(
+        _('score'), help_text=_('score in percent'), default=0,
+        max_digits=10, decimal_places=2,
+        validators=[MinValueValidator(0), MaxValueValidator(100)])
+
+    @property
+    def answers(self):
+        return self.answer_poll_item_set
+
+    def reload_score(self, commit=True):
+        """saves ``PollItem instance`` with reloaded percent score
+
+        :param commit: saves instance when ``True``, ``True`` by default
+        :return: self ``instance``
+        """
+        amount = self.poll.answers.count()
+        #if not self.poll.is_multiple:
+        #    amount = self.poll.get_voted_users()
+        voted = self.answers.count()
+        self.score = voted / (amount * 0.01)
+        if commit:
+            self.save()
+        return self
 
     def __unicode__(self):
         return self.title
@@ -432,6 +478,7 @@ class PollItem(models.Model):
 
 
 class PollAnswer(models.Model):
+    poll = models.ForeignKey(Poll, related_name='answer_poll_set')
     poll_item = models.ForeignKey(PollItem,
                                   related_name='answer_poll_item_set')
     user = models.ForeignKey('auth.User', related_name='answer_user_set')
