@@ -15,18 +15,19 @@
         {% if user in poll.get_voted_users %}
           {% for item in poll.items.all %}
             <span class='text-{{ item.score|yesno:"default,black" }}'>{{ item.title }}</span>
-            <div class="progress progress-striped">
+            <div class="progress progress">
               <div class="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60"
                    aria-valuemin="0" aria-valuemax="100" style="width: {{ item.score }}%;">
                 <strong>{{ item.score }} %</strong>
               </div>
             </div>
           {% endfor %}
+        <em>{% trans "Users voted" %}: {{ poll.get_voted_users.count }}</em>
         {% else %}
           <form class='form-horizontal' action='{{ poll.get_vote_url }}' method='POST'>
             {% csrf_token %}
             {% include "forms/bootstrap_horizontal.html" with form=poll_form %}
-            {% include "forms/submit.html" %}
+            {% include "forms/submit.html" with klass=user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT %}
           </form>
         {% endif %}
       </div>
