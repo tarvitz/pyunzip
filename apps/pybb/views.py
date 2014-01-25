@@ -501,6 +501,7 @@ class ConfigurePollView(PollMixin, generic.FormView):
         )
         formset = inlineformset_factory(
             Poll, PollItem, formset=PollItemBaseinlineFormset,
+            form=PollItemForm,
             fk_name='poll', fields=('title', ),
             can_delete=self.poll.poll_item_poll_set.count(),
             extra=amount,

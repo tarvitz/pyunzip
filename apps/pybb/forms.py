@@ -180,6 +180,10 @@ class UpdatePollForm(forms.ModelForm):
     class Meta:
         model = Poll
         fields = ('title', 'items_amount', )
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'items_amount': forms.NumberInput(attrs={'class': 'form-control'})
+        }
 
 
 class PollItemForm(forms.ModelForm):
@@ -187,6 +191,9 @@ class PollItemForm(forms.ModelForm):
     class Meta:
         model = PollItem
         fields = ('title', )
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
 
 class PollItemBaseinlineFormset(BaseInlineFormSet):
