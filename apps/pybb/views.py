@@ -22,7 +22,7 @@ from apps.pybb.models import (
 from apps.pybb.forms import (
     AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm,
     AddPollForm, PollItemForm, PollItemBaseinlineFormset, UpdatePollForm,
-    SingleVotePollForm, MultipleVotePollForm
+    SingleVotePollForm, MultipleVotePollForm, AgreeForm
 )
 from apps.pybb import settings as pybb_settings
 from apps.pybb.anonymous_post import (
@@ -445,41 +445,55 @@ class PollMixin(object):
         return self.poll
 
 
-class AddPollView(generic.FormView):
-    """ Add poll view to existent topic """
-    #model = Poll
+class ManagePollView(generic.FormView):
+    """ Manage poll view to existent topic """
     form_class = AddPollForm
     template_name = 'pybb/poll_add.html'
 
     def get_form_class(self):
         if self.kwargs.get('update', False):
             return UpdatePollForm
-        return super(AddPollView, self).get_form_class()
+        elif self.kwargs.get('delete', False):
+            return AgreeForm
+        return super(ManagePollView, self).get_form_class()
 
     def get_form_kwargs(self):
         if self.kwargs.get('update', False):
             instance = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
+        elif self.kwargs.get('delete', False):
+            pass
         else:
             topic = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
             instance = topic.poll
-        kwargs = super(AddPollView, self).get_form_kwargs()
-        kwargs.update({
-            'instance': instance
-        })
+        kwargs = super(ManagePollView, self).get_form_kwargs()
+        if not self.kwargs.get('delete', False):
+            kwargs.update({
+                'instance': instance
+            })
         return kwargs
 
     def get_success_url(self, pk):
         return reverse_lazy('pybb_poll_configure', args=(pk, ))
 
     def form_valid(self, form):
-        form.instance.topic = get_object_or_404(Topic,
-                                                pk=self.kwargs.get('pk', 0))
-        instance = form.save()
-        return redirect(self.get_success_url(pk=instance.pk))
+        if self.kwargs.get('delete', False):
+            instance = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
+            redirect_url = instance.topic.get_absolute_url()
+            instance.delete()
+        else:
+            form.instance.topic = get_object_or_404(
+                Topic, pk=self.kwargs.get('pk', 0)
+            )
+            instance = form.save()
+            redirect_url = self.get_success_url(pk=instance.pk)
+        return redirect(redirect_url)
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        return super(AddPollView, self).dispatch(request, *args, **kwargs)
+        if self.kwargs.get('delete', False):
+            if not request.user.has_perm('pybb.change_poll'):
+                raise PermissionDenied("not allowed")
+        return super(ManagePollView, self).dispatch(request, *args, **kwargs)
 
 
 class ConfigurePollView(PollMixin, generic.FormView):

@@ -289,3 +289,51 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.assertEqual(len(self.single_poll.get_voted_users()), 1)
         user = User.objects.get(username='user')
         self.assertEqual(self.single_poll.get_voted_users()[0], user)
+
+
+class PollManageTest(TestHelperMixin, TestCase):
+    """ TestCase for managing polls: delete, update"""
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_pybb_categories.json',
+        'tests/fixtures/load_forums.json',
+        'tests/fixtures/load_topics.json',
+        'tests/fixtures/load_posts.json',
+        'tests/fixtures/load_pybb_profiles.json',
+        'tests/fixtures/load_polls.json',
+        'tests/fixtures/load_poll_items.json'
+    ]
+
+    def setUp(self):
+        self.poll = Poll.objects.get(pk=1)
+
+    def test_delete_poll(self):
+        """ pybb.change_poll permission is required to delete any poll """
+        self.login('admin')
+        post = {
+            'agree': True
+        }
+        count = Poll.objects.count()
+        items_count = PollItem.objects.count()
+        items_amount = self.poll.items.count()
+        response = self.client.post(self.poll.get_delete_url(), post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Poll.objects.count(), count - 1)
+        self.assertEqual(PollItem.objects.count(), items_count - items_amount)
+
+    def test_delete_post_failure(self):
+        """ only pybb.change_poll permission holders can delete polls """
+        self.login(self.poll.topic.user.username)
+        post = {
+            'agree': True
+        }
+        count = Poll.objects.count()
+        items_count = PollItem.objects.count()
+        items_amount = self.poll.items.count()
+        response = self.client.post(self.poll.get_delete_url(), post,
+                                    follow=True)
+        # permission denied
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(Poll.objects.count(), count)
+        self.assertEqual(PollItem.objects.count(), items_count)

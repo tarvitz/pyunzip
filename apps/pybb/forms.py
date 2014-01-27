@@ -186,6 +186,11 @@ class UpdatePollForm(forms.ModelForm):
         }
 
 
+class AgreeForm(forms.Form):
+    agree = forms.BooleanField(label=_("Agree"),
+                               help_text=_("Yes, I agree"), required=True)
+
+
 class PollItemForm(forms.ModelForm):
     """common ``PollItem`` instance actions form (create, update)"""
     class Meta:

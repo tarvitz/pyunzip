@@ -408,6 +408,9 @@ class Poll(models.Model):
     def get_update_url(self):
         return reverse_lazy('pybb_poll_update', args=(self.pk, ))
 
+    def get_delete_url(self):
+        return reverse_lazy('pybb_poll_delete', args=(self.pk, ))
+
     def get_vote_url(self):
         return reverse_lazy('pybb_poll_vote', args=(self.pk, ))
 
