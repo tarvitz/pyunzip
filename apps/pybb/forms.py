@@ -203,7 +203,7 @@ class UpdatePollForm(forms.ModelForm):
 
 
 class AgreeForm(forms.Form):
-    agree = forms.BooleanField(label=_("Agree"),
+    agree = forms.BooleanField(label=_("Delete?"),
                                help_text=_("Yes, I agree"), required=True)
 
 
