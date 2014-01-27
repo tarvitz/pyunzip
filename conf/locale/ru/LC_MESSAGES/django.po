@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-28 01:08+0400\n"
-"PO-Revision-Date: 2014-01-28 01:43+0400\n"
+"POT-Creation-Date: 2014-01-28 02:19+0400\n"
+"PO-Revision-Date: 2014-01-28 02:21+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1244,27 +1244,35 @@ msgstr "Количество элементов опроса"
 msgid "poll items amount for voting"
 msgstr "количество элементов опроса для голосования"
 
-#: apps/pybb/forms.py:174
+#: apps/pybb/forms.py:190
 #, fuzzy
 msgid "You can not set items amount less thanthe variants to select"
 msgstr "Вам нельзя слать самим себе сообщения"
 
-#: apps/pybb/forms.py:190
+#: apps/pybb/forms.py:206
 msgid "Agree"
 msgstr ""
 
-#: apps/pybb/forms.py:191
+#: apps/pybb/forms.py:207
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/pybb/forms.py:212 apps/pybb/tests/common.py:181
+#: apps/pybb/forms.py:213
+msgid "Poll item title"
+msgstr "Заголовок элемента"
+
+#: apps/pybb/forms.py:214
+msgid "poll item title users would vote on"
+msgstr "название элемента для пользовательского голосвания"
+
+#: apps/pybb/forms.py:231 apps/pybb/tests/common.py:181
 #: apps/pybb/tests/common.py:202
 msgid "Title should be set"
 msgstr "Поле должно быть не пустым"
 
-#: apps/pybb/forms.py:231 apps/pybb/forms.py:246
+#: apps/pybb/forms.py:250 apps/pybb/forms.py:265
 msgid "Your option"
-msgstr ""
+msgstr "Ваш выбор"
 
 #: apps/pybb/models.py:21 settings/dist.py:43
 msgid "Russian"
@@ -1460,11 +1468,11 @@ msgstr ""
 
 #: apps/pybb/models.py:373
 msgid "is multiple"
-msgstr ""
+msgstr "множественный выбор"
 
 #: apps/pybb/models.py:373
 msgid "is multiple select allowed"
-msgstr ""
+msgstr "позволяет выбрать несколько вариантов для ответа"
 
 #: apps/pybb/models.py:376
 msgid "is prepared"
@@ -1488,7 +1496,7 @@ msgstr "дата окончания"
 
 #: apps/pybb/models.py:385
 msgid "date then poll is expired"
-msgstr ""
+msgstr "дата, когда опрос будет завершен"
 
 #: apps/pybb/models.py:438 apps/pybb/templates/pybb/poll.html:13
 msgid "Poll"

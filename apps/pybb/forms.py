@@ -209,12 +209,15 @@ class AgreeForm(forms.Form):
 
 class PollItemForm(forms.ModelForm):
     """common ``PollItem`` instance actions form (create, update)"""
+    title = forms.CharField(
+        label=_("Poll item title"),
+        help_text=_("poll item title users would vote on"), required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = PollItem
         fields = ('title', )
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-        }
 
 
 class PollItemBaseinlineFormset(BaseInlineFormSet):
