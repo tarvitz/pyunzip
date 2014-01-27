@@ -481,9 +481,10 @@ class ManagePollView(generic.FormView):
             redirect_url = instance.topic.get_absolute_url()
             instance.delete()
         else:
-            form.instance.topic = get_object_or_404(
-                Topic, pk=self.kwargs.get('pk', 0)
-            )
+            if not self.kwargs.get('update', False):
+                form.instance.topic = get_object_or_404(
+                    Topic, pk=self.kwargs.get('pk', 0)
+                )
             instance = form.save()
             redirect_url = self.get_success_url(pk=instance.pk)
         return redirect(redirect_url)
