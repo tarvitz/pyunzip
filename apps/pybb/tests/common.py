@@ -5,10 +5,11 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.db.models import Q
 from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Poll, PollItem, PollAnswer, Topic, Post
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Permission
 
 
 class JustTest(TestCase):
@@ -337,3 +338,49 @@ class PollManageTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Poll.objects.count(), count)
         self.assertEqual(PollItem.objects.count(), items_count)
+
+    def test_manage_poll_failure(self):
+        """ non poll-owner user can not manage/update poll"""
+        qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
+        user = User.objects.filter(qset)[0]
+        self.login(user.username)
+        response = self.client.get(self.poll.get_update_url(), follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_manage_poll_success(self):
+        """ non poll-owner with change_poll permission can
+        manage/update poll"""
+        perm = Permission.objects.get(codename='change_poll')
+        qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
+        user = User.objects.filter(qset)[0]
+        user.user_permissions.add(perm)
+        user.save()
+        response = self.client.get(self.poll.get_update_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # post actions
+        user.user_permissions.remove(perm)
+        user.save()
+
+    def test_configure_poll_failure(self):
+        """ non poll-owner user can not manage/update poll items"""
+        qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
+        user = User.objects.filter(qset)[0]
+        self.login(user.username)
+        response = self.client.get(self.poll.get_configure_url(), follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_configure_poll_success(self):
+        """ non poll-owner with change_poll permission can
+        manage/update poll items"""
+        perm = Permission.objects.get(codename='change_poll')
+        qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
+        user = User.objects.filter(qset)[0]
+        user.user_permissions.add(perm)
+        user.save()
+        response = self.client.get(self.poll.get_configure_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # post actions
+        user.user_permissions.remove(perm)
+        user.save()

@@ -444,6 +444,13 @@ class PollMixin(object):
             self.poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
         return self.poll
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        is_owner = self.get_poll_object().topic.user == request.user
+        if not any([is_owner, request.user.has_perm('pybb.change_poll')]):
+            raise PermissionDenied("access denied")
+        return super(PollMixin, self).dispatch(request, *args, **kwargs)
+
 
 class ManagePollView(generic.FormView):
     """ Manage poll view to existent topic """
@@ -494,6 +501,14 @@ class ManagePollView(generic.FormView):
         if self.kwargs.get('delete', False):
             if not request.user.has_perm('pybb.change_poll'):
                 raise PermissionDenied("not allowed")
+
+        if self.kwargs.get('update', False):
+            poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
+            instance = poll.topic
+        instance = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0 ))
+        is_owner = instance.user == request.user
+        if not any([is_owner, request.user.has_perm('pybb.change_poll')]):
+            raise PermissionDenied('not allowed')
         return super(ManagePollView, self).dispatch(request, *args, **kwargs)
 
 

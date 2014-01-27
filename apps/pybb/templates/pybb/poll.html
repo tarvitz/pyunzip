@@ -2,14 +2,14 @@
 {% with poll=topic.poll %}
   <div class='message round'>
     <div class='message-headline'>
-      {% if topic.owner == user %}
         <div class='links'>
-          <span><a href='{{ poll.get_update_url }}'>{% trans "edit" %}</a></span>
+          {% if topic.owner == user or perms.pybb.change_poll %}
+            <span><a href='{{ poll.get_update_url }}'>{% trans "edit" %}</a></span>
+          {% endif %}
           {% if perms.pybb.change_poll %}
             <span><a href='{{ poll.get_delete_url }}'>{% trans "delete" %}</a></span>
           {% endif %}
         </div>
-      {% endif %}
       {% trans "Poll" %}: {{ poll.title }}
     </div>
     <div class='message-body'>
