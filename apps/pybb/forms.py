@@ -161,7 +161,23 @@ class AddPollForm(forms.ModelForm):
         fields = ('title', 'items_amount', 'is_multiple', 'date_expire', )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_expire': forms.TextInput(
+                attrs={
+                    'class': 'datetimepicker form-control',
+                    'data-format': 'YYYY-MM-DD HH:mm'
+                }
+            )
         }
+
+    class Media:
+        js = (
+            '/media/components/moment/min/moment.min.js',
+            '/media/components/eonasdan-bootstrap-datetimepicker/build/js/'
+                'bootstrap-datetimepicker.min.js',
+            '/media/components/eonasdan-bootstrap-datetimepicker/src/js/'
+                'locales/bootstrap-datetimepicker.ru.js',
+            '/media/js/datetimepickers.js'
+        )
 
 
 class UpdatePollForm(forms.ModelForm):

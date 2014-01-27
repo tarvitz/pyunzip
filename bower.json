@@ -18,7 +18,9 @@
     "jquery": "=1.8.3",
     "jquery-colorbox": ">=1.4.33",
     "jquery-tmpl": "",
-    "noty": ">=2.1.0"
+    "noty": ">=2.1.0",
+    "eonasdan-bootstrap-datetimepicker": "~2.1.30",
+    "momentjs": ">=2.5.1"
   },
   "devDependencies": {
     "select2": ">=3.4.3"

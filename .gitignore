@@ -1,5 +1,6 @@
 *.py[co]
 /media/avatars
+/media/css/*.css
 /media/images/galleries
 /settings/*_local.py
 /celery*
