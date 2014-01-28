@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-01-28 02:25+0400\n"
-"PO-Revision-Date: 2014-01-28 02:59+0400\n"
+"POT-Creation-Date: 2014-01-28 13:21+0400\n"
+"PO-Revision-Date: 2014-01-28 13:24+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -89,7 +89,7 @@ msgstr "ядро"
 #: apps/files/templates/files/user_files.html:52
 #: apps/files/templates/files/user_files.html:101
 #: apps/pybb/templates/pybb/edit_profile.html:31
-#: apps/pybb/templates/pybb/poll.html:9
+#: apps/pybb/templates/pybb/poll.html:10
 msgid "delete"
 msgstr "удалить"
 
@@ -184,14 +184,12 @@ msgid "updated on"
 msgstr "обновлено"
 
 #: apps/core/models.py:207
-#, fuzzy
 msgid "UserSID"
-msgstr "Пользователь"
+msgstr "UserSID"
 
 #: apps/core/models.py:208
-#, fuzzy
 msgid "UserSIDs"
-msgstr "Пользователи"
+msgstr "UserSID'ы"
 
 #: apps/core/settings.py:70
 msgid "The Objects on page"
@@ -760,9 +758,8 @@ msgid "User file"
 msgstr "Файл пользователя"
 
 #: apps/files/models.py:419
-#, fuzzy
 msgid "User files"
-msgstr "файлы"
+msgstr "Файлы пользователя"
 
 #: apps/files/templates/files/user_files.html:8
 #: apps/files/templates/files/user_files.html:15
@@ -891,9 +888,8 @@ msgid "url"
 msgstr ""
 
 #: apps/karma/forms.py:38
-#, fuzzy
 msgid "No such user exists"
-msgstr "Такого пользователя с данным email'ом нет"
+msgstr "Подобного пользователя не существует"
 
 #: apps/karma/forms.py:40 apps/karma/tests.py:102
 msgid "You can not alter karma for yourself"
@@ -988,9 +984,8 @@ msgid "is url?"
 msgstr ""
 
 #: apps/menu/models.py:93
-#, fuzzy
 msgid "Vertical Menu"
-msgstr "Статья"
+msgstr "Вертикальное меню"
 
 #: apps/menu/models.py:94
 msgid "Vertical Menus"
@@ -1085,29 +1080,24 @@ msgid "editor"
 msgstr "редактор"
 
 #: apps/news/models.py:65
-#, fuzzy
 msgid "original URL"
 msgstr "URL оригинала"
 
 #: apps/news/models.py:70 apps/wh/models.py:161
-#, fuzzy
 msgid "cache content"
-msgstr "Содержимое заголовка"
+msgstr "кеш контента"
 
 #: apps/news/models.py:73
-#, fuzzy
 msgid "dateTime"
-msgstr "ДатаВремя"
+msgstr "Дата-Время"
 
 #: apps/news/models.py:77 apps/news/models.py:296 apps/news/models.py:300
-#, fuzzy
 msgid "author ip address"
-msgstr "IP адрес автора"
+msgstr "ip адрес автора"
 
 #: apps/news/models.py:79
-#, fuzzy
 msgid "is event"
-msgstr "событие?"
+msgstr "событие"
 
 #: apps/news/models.py:85
 msgid "reason"
@@ -1130,9 +1120,8 @@ msgid "Archived News"
 msgstr "Архивные новости"
 
 #: apps/news/models.py:186
-#, fuzzy
 msgid "Can edit archived news"
-msgstr "Архивные новости"
+msgstr "Может редактировать архивные новости"
 
 #: apps/news/models.py:188 apps/news/models.py:189
 msgid "Archived news"
@@ -1155,14 +1144,12 @@ msgid "Can delete and restore comments"
 msgstr ""
 
 #: apps/news/models.py:256
-#, fuzzy
 msgid "Can edit comments"
-msgstr "комментарии"
+msgstr "Может редактировать комментарии"
 
 #: apps/news/models.py:257
-#, fuzzy
 msgid "Can purge comments"
-msgstr "комментарии"
+msgstr "Может удалять комментарии"
 
 #: apps/news/models.py:263 apps/wh/models.py:241 apps/wh/models.py:322
 msgid "codename"
@@ -1236,42 +1223,44 @@ msgstr "Рецепиент"
 msgid "User with login %s does not exist"
 msgstr "Пользователя с именем %s не существует"
 
-#: apps/pybb/forms.py:154
+#: apps/pybb/forms.py:154 apps/pybb/forms.py:190
 msgid "Poll items amount"
 msgstr "Количество элементов опроса"
 
-#: apps/pybb/forms.py:155
+#: apps/pybb/forms.py:155 apps/pybb/forms.py:191
 msgid "poll items amount for voting"
 msgstr "количество элементов опроса для голосования"
 
-#: apps/pybb/forms.py:190
-#, fuzzy
-msgid "You can not set items amount less thanthe variants to select"
-msgstr "Вам нельзя слать самим себе сообщения"
+#: apps/pybb/forms.py:202
+msgid ""
+"You can not set items amount less than the variants to select or variants "
+"already have been created."
+msgstr ""
+"Вы не можете установить количество меньше количества вариантов для "
+"голосвания."
 
-#: apps/pybb/forms.py:206
-#, fuzzy
+#: apps/pybb/forms.py:218
 msgid "Delete?"
-msgstr "Удалить"
+msgstr "Удалить?"
 
-#: apps/pybb/forms.py:207
+#: apps/pybb/forms.py:219
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/pybb/forms.py:213
+#: apps/pybb/forms.py:225
 msgid "Poll item title"
 msgstr "Заголовок элемента"
 
-#: apps/pybb/forms.py:214
+#: apps/pybb/forms.py:226
 msgid "poll item title users would vote on"
 msgstr "название элемента для пользовательского голосвания"
 
-#: apps/pybb/forms.py:231 apps/pybb/tests/common.py:181
-#: apps/pybb/tests/common.py:202
+#: apps/pybb/forms.py:243 apps/pybb/tests/common.py:182
+#: apps/pybb/tests/common.py:203
 msgid "Title should be set"
 msgstr "Поле должно быть не пустым"
 
-#: apps/pybb/forms.py:250 apps/pybb/forms.py:265
+#: apps/pybb/forms.py:262 apps/pybb/forms.py:277
 msgid "Your option"
 msgstr "Ваш выбор"
 
@@ -1580,6 +1569,7 @@ msgstr "Правка поста"
 
 #: apps/pybb/templates/pybb/edit_post.html:17
 #: apps/pybb/templates/pybb/edit_profile.html:21
+#: apps/pybb/templates/pybb/poll_configure.html:11
 #: apps/pybb/templates/pybb/poll_wizard.html:19
 #: apps/tabletop/templates/add_roster.html:7
 #: apps/tabletop/templates/reports.html:20
@@ -1661,7 +1651,7 @@ msgstr "Войти"
 msgid "edit"
 msgstr "правка"
 
-#: apps/pybb/templates/pybb/poll.html:28
+#: apps/pybb/templates/pybb/poll.html:29
 msgid "Users voted"
 msgstr "Пользователей проголосовало"
 
@@ -2792,7 +2782,6 @@ msgid "Not identified"
 msgstr "Не определен"
 
 #: apps/wh/forms.py:323
-#, fuzzy
 msgid ""
 "There's no any mention for this skin, try to update pageand upload profile "
 "one more time"

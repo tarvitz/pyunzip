@@ -153,8 +153,12 @@ class AddPollForm(forms.ModelForm):
     items_amount = forms.IntegerField(
         label=_("Poll items amount"),
         help_text=_("poll items amount for voting"),
-        widget=forms.NumberInput(attrs={'class': 'form-control'})
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        min_value=0, max_value=settings.MAXIMUM_POLL_ITEMS_AMOUNT
     )
+
+    def clean_items_amount(self):
+        return self.cleaned_data['items_amount']
 
     class Meta:
         model = Poll
@@ -182,13 +186,22 @@ class AddPollForm(forms.ModelForm):
 
 class UpdatePollForm(forms.ModelForm):
     """form which operates with update ``Poll`` instance action"""
+    items_amount = forms.IntegerField(
+        label=_("Poll items amount"),
+        help_text=_("poll items amount for voting"),
+        widget=forms.NumberInput(attrs={'class': 'form-control'}),
+        min_value=0, max_value=settings.MAXIMUM_POLL_ITEMS_AMOUNT
+    )
+
     def clean_items_amount(self):
         items_amount = self.cleaned_data['items_amount']
-        if self.instance.items_amount > items_amount:
+        if (self.instance.items_amount > items_amount
+                and self.instance.items.count() > items_amount):
             raise forms.ValidationError(
                 _(
-                    "You can not set items amount less than"
-                    "the variants to select"
+                    "You can not set items amount less than "
+                    "the variants to select or variants "
+                    "already have been created."
                 )
             )
         return items_amount
@@ -198,7 +211,6 @@ class UpdatePollForm(forms.ModelForm):
         fields = ('title', 'items_amount', )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'items_amount': forms.NumberInput(attrs={'class': 'form-control'})
         }
 
 

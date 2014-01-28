@@ -8,7 +8,8 @@
           {% include "forms/bootstrap_horizontal.html" with form=form %}
         {% endfor %}
         {% with klass=user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT %}
-          {% include "forms/submit.html" with klass=klass %}
+          {% trans "Save" as submit_i18n %}
+          {% include "forms/submit.html" with klass=klass save_text=submit_i18n %}
         {% endwith %}
     </form>
 {% endblock %}
