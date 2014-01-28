@@ -18,7 +18,7 @@
         {% if user in poll.get_voted_users %}
           {% for item in poll.items.all %}
             <span class='text-{{ item.score|yesno:"default,black" }}'>{{ item.title }}</span>
-            <div class="progress progress">
+            <div class="progress">
               <div class="progress-bar progress-bar-{{ user.get_forum_theme|default:"default" }}"
                    role="progressbar" aria-valuenow="60"
                    aria-valuemin="0" aria-valuemax="100" style="width: {{ item.score }}%;">
