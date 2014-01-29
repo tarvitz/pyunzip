@@ -562,6 +562,8 @@ class PollVoteView(PollMixin, generic.CreateView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        if self.get_poll_object().is_finished:
+            raise PermissionDenied('not allowed')
         return super(PollVoteView, self).dispatch(request, *args, **kwargs)
 
     def get_form_class(self):

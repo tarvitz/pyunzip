@@ -291,6 +291,23 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         user = User.objects.get(username='user')
         self.assertEqual(self.single_poll.get_voted_users()[0], user)
 
+    def test_poll_vote_when_finished(self):
+        """ test if poll is not available to vote if it's finished """
+        self.single_poll.is_finished = True
+        self.single_poll.save()
+        self.login('user')
+        count = PollAnswer.objects.count()
+        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        post = {
+            'vote': pks[0]
+        }
+        response = self.client.post(self.single_poll.get_vote_url(), post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(PollAnswer.objects.count(), count)
+        self.single_poll.is_finished = False
+        self.single_poll.save()
+
 
 class PollManageTest(TestHelperMixin, TestCase):
     """ TestCase for managing polls: delete, update"""
