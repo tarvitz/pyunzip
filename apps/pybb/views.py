@@ -517,11 +517,12 @@ class ManagePollView(generic.FormView):
             if not request.user.has_perm('pybb.change_poll'):
                 raise PermissionDenied("not allowed")
 
-        instance = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
+
         if any([is_delete, is_update]):
             poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
             instance = poll.topic
-
+        else:
+            instance = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
         is_owner = instance.user == request.user
         if not any([is_owner, request.user.has_perm('pybb.change_poll')]):
             raise PermissionDenied('not allowed')
