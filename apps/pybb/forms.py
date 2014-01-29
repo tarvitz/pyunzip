@@ -246,6 +246,7 @@ class PollItemBaseinlineFormset(BaseInlineFormSet):
 
 
 class PollVoteFormMixin(object):
+    """Poll form mixin for voting purpose"""
     def __init__(self, *args, **kwargs):
         if not 'poll' in kwargs:
             raise ImproperlyConfigured(
@@ -258,6 +259,7 @@ class PollVoteFormMixin(object):
 
 
 class SingleVotePollForm(PollVoteFormMixin, forms.ModelForm):
+    """ Single vote poll form, for polls with only one vote option"""
     vote = forms.ModelChoiceField(
         label=_("Your option"), widget=forms.RadioSelect,
         queryset=PollItem.objects, empty_label=None
@@ -273,6 +275,7 @@ class SingleVotePollForm(PollVoteFormMixin, forms.ModelForm):
 
 
 class MultipleVotePollForm(PollVoteFormMixin, forms.ModelForm):
+    """ Multiple vote poll form, for polls with many vote options"""
     vote = forms.ModelMultipleChoiceField(
         label=_("Your option"), widget=forms.CheckboxSelectMultiple,
         queryset=PollItem.objects

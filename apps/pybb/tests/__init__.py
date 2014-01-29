@@ -17,3 +17,4 @@ def suite():
 
 from .common import *
 from .wizards import *
+from .polls import *
