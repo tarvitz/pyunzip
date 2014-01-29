@@ -500,14 +500,17 @@ class ManagePollView(generic.FormView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if self.kwargs.get('delete', False):
+        is_update = self.kwargs.get('update', False)
+        is_delete = self.kwargs.get('delete', False)
+        if is_delete:
             if not request.user.has_perm('pybb.change_poll'):
                 raise PermissionDenied("not allowed")
 
-        if self.kwargs.get('update', False):
+        instance = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
+        if any([is_delete, is_update]):
             poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
             instance = poll.topic
-        instance = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0 ))
+
         is_owner = instance.user == request.user
         if not any([is_owner, request.user.has_perm('pybb.change_poll')]):
             raise PermissionDenied('not allowed')
