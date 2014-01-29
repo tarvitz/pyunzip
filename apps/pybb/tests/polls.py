@@ -17,6 +17,7 @@ from django.db.models import Q
 from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Poll, PollItem, PollAnswer, Topic
+from apps.pybb.cron import UpdatePollJob
 from django.contrib.auth.models import User, Permission
 
 
@@ -371,3 +372,30 @@ class PollManageTest(TestHelperMixin, TestCase):
         # post actions
         user.user_permissions.remove(perm)
         user.save()
+
+
+class TestCronJobs(TestHelperMixin, TestCase):
+    """ TestCase for testing cron jobs """
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_pybb_categories.json',
+        'tests/fixtures/load_forums.json',
+        'tests/fixtures/load_topics.json',
+        'tests/fixtures/load_posts.json',
+        'tests/fixtures/load_pybb_profiles.json',
+        'tests/fixtures/load_polls.json',
+        'tests/fixtures/load_poll_items.json'
+    ]
+
+    def setUp(self):
+        self.poll = Poll.objects.get(pk=1)
+
+    def test_update_expire_job(self):
+        self.poll.date_expire = datetime.now() - timedelta(seconds=1)
+        self.poll.save()
+        self.assertEqual(self.poll.is_finished, False)
+
+        job = UpdatePollJob()
+        job.do()
+        poll = Poll.objects.get(pk=self.poll.pk)
+        self.assertEqual(poll.is_finished, True)

@@ -237,6 +237,7 @@ INSTALLED_APPS = (
     #'djcelery',
     #'apps.djangosphinx',
     'extwidgets',
+    'django_extensions',
     'south',
     'sorl.thumbnail',
     #
@@ -245,7 +246,13 @@ INSTALLED_APPS = (
     #'django.contrib.admindocs',
     'django.contrib.staticfiles',
     'gunicorn',
+    'django_cron',
 )
+
+CRON_CLASSES = (
+    'apps.pybb.cron.UpdatePollJob',
+)
+
 #settings
 DOMAIN='w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
