@@ -76,6 +76,10 @@ show_category = render_to('pybb/category.html')(show_category_ctx)
 @paged('topics', pybb_settings.FORUM_PAGE_SIZE)
 def show_forum_ctx(request, forum_id):
     forum = get_object_or_404(Forum, pk=forum_id)
+    is_private = forum.is_private
+    if is_private and (not request.user in forum.participants.all()):
+        raise Http404("not found")
+
     topics = forum.topics.order_by('-sticky', '-updated').select_related()
     quick = {'posts': forum.post_count,
              'topics': forum.topics.count(),
@@ -95,6 +99,10 @@ show_forum = render_to('pybb/forum.html')(show_forum_ctx)
 def show_topic_ctx(request, topic_id):
     try:
         topic = Topic.objects.select_related().get(pk=topic_id)
+        is_private = topic.forum.is_private
+        forum = topic.forum
+        if is_private and (request.user not in forum.participants.all()):
+            raise Http404("not found")
     except Topic.DoesNotExist:
         raise Http404()
     topic.views += 1
@@ -164,6 +172,9 @@ def add_post_ctx(request, forum_id, topic_id):
     if topic and topic.closed:
         return HttpResponseRedirect(topic.get_absolute_url())
 
+    if forum.is_private and (request.user not in forum.participants.all()):
+        raise Http404("not found")
+
     if not request.user.is_authenticated():
         return handle_anonymous_post(request, topic_id)
 
@@ -192,7 +203,7 @@ def add_post_ctx(request, forum_id, topic_id):
                           user=request.user, initial={'markup': markup, 'body': body})
 
     # POST request
-    else:
+    elif request.method == 'POST':
         delete_anonymous_post(request, topic)
 
         ip = request.META.get('REMOTE_ADDR', '')

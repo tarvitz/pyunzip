@@ -30,7 +30,8 @@ class ForumAdmin(admin.ModelAdmin):
          ),
         (_('Additional options'), {
                 'classes': ('collapse',),
-                'fields': ('position', 'description', 'post_count', 'moderators')
+                'fields': ('position', 'description', 'post_count',
+                           'moderators', 'is_private', 'participants')
                 }
             ),
         )

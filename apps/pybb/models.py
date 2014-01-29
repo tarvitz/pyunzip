@@ -65,7 +65,6 @@ class Category(models.Model):
     def posts(self):
         return Post.objects.filter(topic__forum__category=self).select_related()
 
-
 class Forum(models.Model):
     category = models.ForeignKey(Category, related_name='forums', verbose_name=_('Category'))
     name = models.CharField(_('Name'), max_length=80)
@@ -76,6 +75,11 @@ class Forum(models.Model):
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
     css_icon = models.CharField(_("Css icon"), blank=True, default='', max_length=64)
     is_hidden = models.BooleanField(_('is hidden'))
+    is_private = models.BooleanField(_('is private'), default=False)
+    participants = models.ManyToManyField(
+        'auth.User', related_name='forum_user_sets',
+        help_text=_("private participants list"),
+        blank=True, null=True)
 
     class Meta:
         ordering = ['position']
