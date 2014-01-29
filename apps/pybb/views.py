@@ -445,13 +445,13 @@ class PollMixin(object):
         return self.poll
 
 
-class ActionPollMixin(object):
+class AccessPollMixin(object):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         is_owner = self.get_poll_object().topic.user == request.user
         if not any([is_owner, request.user.has_perm('pybb.change_poll')]):
             raise PermissionDenied("access denied")
-        return super(ActionPollMixin, self).dispatch(request, *args, **kwargs)
+        return super(AccessPollMixin, self).dispatch(request, *args, **kwargs)
 
 
 class ManagePollView(generic.FormView):
@@ -514,7 +514,7 @@ class ManagePollView(generic.FormView):
         return super(ManagePollView, self).dispatch(request, *args, **kwargs)
 
 
-class ConfigurePollView(PollMixin, ActionPollMixin, generic.FormView):
+class ConfigurePollView(PollMixin, AccessPollMixin, generic.FormView):
     template_name = 'pybb/poll_configure.html'
 
     def get_form_kwargs(self):
