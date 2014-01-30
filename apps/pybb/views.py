@@ -76,7 +76,7 @@ show_category = render_to('pybb/category.html')(show_category_ctx)
 @paged('topics', pybb_settings.FORUM_PAGE_SIZE)
 def show_forum_ctx(request, forum_id):
     forum = get_object_or_404(Forum, pk=forum_id)
-    is_private = forum.is_private
+    is_private = bool(forum) and forum.is_private
     if is_private and (not request.user in forum.participants.all()):
         raise Http404("not found")
 
@@ -172,8 +172,8 @@ def add_post_ctx(request, forum_id, topic_id):
     if topic and topic.closed:
         return HttpResponseRedirect(topic.get_absolute_url())
 
-    if forum.is_private and (request.user not in forum.participants.all()):
-        raise Http404("not found")
+    #if forum.is_private and (request.user not in forum.participants.all()):
+    #    raise Http404("not found")
 
     if not request.user.is_authenticated():
         return handle_anonymous_post(request, topic_id)
