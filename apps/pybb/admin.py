@@ -17,7 +17,8 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ['name']
 
 class ForumAdmin(admin.ModelAdmin):
-    list_display = ['name', 'category', 'position', 'topic_count', 'css_icon', 'is_hidden']
+    list_display = ['name', 'category', 'position', 'topic_count', 'css_icon',
+                    'is_hidden', 'is_private']
     list_per_page = 20
     ordering = ['-category']
     search_fields = ['name', 'category__name']
@@ -25,7 +26,8 @@ class ForumAdmin(admin.ModelAdmin):
     actions = [revert_hidden,]
     fieldsets = (
         (None, {
-                'fields': ('category', 'name', 'css_icon', 'updated', 'is_hidden')
+                'fields': ('category', 'name', 'css_icon', 'updated',
+                           'is_hidden', 'is_private')
                 }
          ),
         (_('Additional options'), {

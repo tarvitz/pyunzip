@@ -38,8 +38,10 @@ def index_ctx(request):
     quick = {'posts': Post.objects.count(),
              'topics': Topic.objects.count(),
              'users': User.objects.count(),
-             'last_topics': Topic.objects.all().select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': Post.objects.order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+             'last_topics': Topic.objects.filter(
+                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+             'last_posts': Post.objects.filter(
+                 topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
              }
 
     cats = {}
