@@ -15,7 +15,7 @@
     <div class='message-body'>
       <div class='text'>
         <h3>{{ poll.title }}</h3>
-        {% if user in poll.get_voted_users and not poll.is_finished %}
+        {% if user in poll.get_voted_users or poll.is_finished %}
           {% for item in poll.items.all %}
             <span class='text-{{ item.score|yesno:"default,black" }}'>{{ item.title }}</span>
             <div class="progress">
