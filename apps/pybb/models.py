@@ -421,7 +421,8 @@ class Poll(models.Model):
     def get_voted_users(self):
         qset = PollAnswer.objects.filter(poll=self)
         if 'psycopg' in settings.DATABASES['default']['ENGINE']:
-            return qset.distinct('user')
+            return User.objects.filter(
+                pk__in=qset.distinct('user').values('user'))
         users = set()
         for poll_answer in qset:
             users.add(poll_answer.user.pk)
