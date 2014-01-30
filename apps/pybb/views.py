@@ -39,7 +39,8 @@ def index_ctx(request):
              'topics': Topic.objects.count(),
              'users': User.objects.count(),
              'last_topics': Topic.objects.filter(
-                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+                 forum__is_private=False).select_related()[
+                            :pybb_settings.QUICK_TOPICS_NUMBER],
              'last_posts': Post.objects.filter(
                  topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
              }
@@ -66,8 +67,10 @@ def show_category_ctx(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
     quick = {'posts': category.posts.count(),
              'topics': category.topics.count(),
-             'last_topics': category.topics.select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': category.posts.order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+             'last_topics': category.topics.filter(
+                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+             'last_posts': category.posts.filter(
+                 topic__forum__is_private=True).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
              }
     return {'category': category,
             'quick': quick,
@@ -85,8 +88,10 @@ def show_forum_ctx(request, forum_id):
     topics = forum.topics.order_by('-sticky', '-updated').select_related()
     quick = {'posts': forum.post_count,
              'topics': forum.topics.count(),
-             'last_topics': forum.topics.all().select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': forum.posts.order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+             'last_topics': forum.topics.filter(
+                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+             'last_posts': forum.posts.filter(
+                topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
              }
 
     return {'forum': forum,
@@ -392,7 +397,7 @@ def create_pm_ctx(request):
                                'recipient': recipient})
 
     if form.is_valid():
-        post = form.save();
+        post = form.save()
         return HttpResponseRedirect(reverse('pybb_pm_outbox'))
 
     return {'form': form,
