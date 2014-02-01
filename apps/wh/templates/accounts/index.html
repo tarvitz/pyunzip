@@ -17,7 +17,7 @@
 
 			<a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{{ user.get_nickname|safe }}{% else %}Soulless inhabit{% endif %}</a>
 		</div><!-- msg_headline -->
-		<div class='message-content'>
+		<div class='message-body'>
 			<div class='avatar'>
 				<img src='{% url "wh:avatar" user.get_username %}'>
 			</div> <!-- msg_avatar -->
