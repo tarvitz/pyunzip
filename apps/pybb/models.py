@@ -74,7 +74,7 @@ class Forum(models.Model):
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
     css_icon = models.CharField(_("Css icon"), blank=True, default='', max_length=64)
-    is_hidden = models.BooleanField(_('is hidden'))
+    is_hidden = models.BooleanField(_('is hidden'), default=False)
     is_private = models.BooleanField(_('is private'), default=False)
     participants = models.ManyToManyField(
         'auth.User', related_name='forum_user_sets',
@@ -374,7 +374,8 @@ class Poll(models.Model):
         default=2
     )
     is_multiple = models.BooleanField(
-        _("is multiple"), help_text=_("is multiple select allowed")
+        _("is multiple"), help_text=_("is multiple select allowed"),
+        default=False
     )
     is_prepared = models.BooleanField(
         _('is prepared'),

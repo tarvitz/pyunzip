@@ -72,7 +72,7 @@ class AbstractNews(models.Model):
     date = models.DateTimeField(
         _('dateTime'), null=False, default=datetime.now)
     approved = models.BooleanField(
-        _('approved'), blank=True)
+        _('approved'), blank=True, default=False)
     author_ip = models.CharField(
         _('author ip address'), max_length=16, blank=True)
     category = models.ForeignKey(Category)

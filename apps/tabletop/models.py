@@ -484,7 +484,7 @@ class ModelUnit(models.Model):
         Army, related_name='model_units'
     )
     is_unique = models.BooleanField(
-        _("is unique?"), help_text=_("marks if its unique"))
+        _("is unique?"), help_text=_("marks if its unique"), default=False)
     pts = models.PositiveIntegerField(
         _('pts'), help_text=_("points per model unit"),
         default=0
@@ -636,6 +636,7 @@ class Wargear(models.Model):
     )
     is_squad_only = models.BooleanField(
         _('is squad only?'), help_text=_("marks if upgrade allowed for entire squad only"),
+        default=False
     )
     unit_amount = models.PositiveIntegerField(
         _("unit amount"),

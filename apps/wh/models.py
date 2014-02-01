@@ -164,8 +164,8 @@ class PM(models.Model):
     sent = models.DateTimeField(
         _('sent'), auto_now=True, default=datetime.now
     )
-    dbs = models.BooleanField(_('deleted by sendr'))
-    dba = models.BooleanField(_('deleted by addr'))
+    dbs = models.BooleanField(_('deleted by sendr'), default=False)
+    dba = models.BooleanField(_('deleted by addr'), default=False)
     syntax = models.CharField(
         _('syntax'), max_length=50,
         choices=settings.SYNTAX, blank=True, null=True
@@ -208,7 +208,7 @@ class Skin(models.Model):
     name = models.CharField(_('name'), max_length=40)
     description = models.TextField(_('description'))
     fraction = models.ManyToManyField(Fraction, blank=True)
-    is_general = models.BooleanField(_('is general'), blank=True)
+    is_general = models.BooleanField(_('is general'), blank=True, default=False)
 
     def __unicode__(self):
         return self.name.lower()
@@ -247,7 +247,7 @@ class Rank(models.Model):
         blank=True, null=True
     )
     side = models.ManyToManyField(Side, blank=True)
-    is_general = models.BooleanField(_('is General'), blank=True)
+    is_general = models.BooleanField(_('is General'), blank=True, default=False)
     syntax = models.CharField(
         _('syntax'), max_length=50, choices=settings.SYNTAX,
         blank=True, null=True
@@ -329,7 +329,7 @@ class WarningType(models.Model):
     )
     side = models.ManyToManyField(Side, blank=True)
     is_general = models.BooleanField(
-        _('is general'), blank=True
+        _('is general'), blank=True, default=False
     )
 
     class Meta:

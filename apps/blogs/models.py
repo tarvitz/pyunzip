@@ -31,7 +31,7 @@ class AbstractPost(models.Model):
     content =  models.TextField(_('Content'), null=False)
     date = models.DateTimeField(_('DateTime'),null=False)
     #is that normal to approve selves blog posts ?
-    approved = models.BooleanField(_('Approved'),blank=True)
+    approved = models.BooleanField(_('Approved'),blank=True, default=False)
     author_ip = models.CharField(_('Author IP address'), max_length=16, blank=True)
     #may be it would be better to tag posts?
     #category = models.ForeignKey(Category)

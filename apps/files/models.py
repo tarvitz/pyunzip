@@ -98,7 +98,7 @@ class Replay(models.Model):
     #replay = BinCaseFileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,"replays/"))
     #users_announcement = models.ForeignKey(Announcement,null=True,blank=True)
     comments = models.TextField(_('Comments'),blank=True)
-    is_set = models.BooleanField(_('is set'), blank=True)
+    is_set = models.BooleanField(_('is set'), blank=True, default=False)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True) 
     search = SphinxSearch(weights={
         'title': 30,

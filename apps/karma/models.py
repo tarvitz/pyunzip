@@ -52,7 +52,7 @@ class KarmaStatus(models.Model):
     is_humor = models.NullBooleanField(_('Humor'),null=True,blank=True)
     description = models.CharField(_('Description'),max_length=1024)
     side = models.ManyToManyField(Side,blank=True)
-    is_general = models.BooleanField(_('is General'),blank=True)
+    is_general = models.BooleanField(_('is General'),blank=True, default=False)
     syntax = models.CharField(_('Syntax'),max_length=20,blank=True,null=True,choices=settings.SYNTAX)    
     def __unicode__(self):
         return "%s" % (self.status)
