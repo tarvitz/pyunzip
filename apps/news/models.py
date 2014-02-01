@@ -76,7 +76,7 @@ class AbstractNews(models.Model):
     author_ip = models.CharField(
         _('author ip address'), max_length=16, blank=True)
     category = models.ForeignKey(Category)
-    is_event = models.BooleanField(_('is event'))
+    is_event = models.BooleanField(_('is event'), default=False)
     syntax = models.CharField(
         _('Syntax'), max_length=20, blank=True, null=True,
         choices=settings.SYNTAX
