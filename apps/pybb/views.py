@@ -86,13 +86,14 @@ def show_forum_ctx(request, forum_id):
         raise Http404("not found")
 
     topics = forum.topics.order_by('-sticky', '-updated').select_related()
-    quick = {'posts': forum.post_count,
-             'topics': forum.topics.count(),
-             'last_topics': forum.topics.filter(
-                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': forum.posts.filter(
-                topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
-             }
+    quick = {
+        'posts': forum.post_count,
+        'topics': forum.topics.count(),
+        'last_topics': forum.topics.filter(
+            forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+        'last_posts': forum.posts.filter(
+            topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+    }
 
     return {'forum': forum,
             'topics': topics,

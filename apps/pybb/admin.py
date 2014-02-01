@@ -27,7 +27,7 @@ class ForumAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
                 'fields': ('category', 'name', 'css_icon', 'updated',
-                           'is_hidden', 'is_private')
+                           'is_hidden',)
                 }
          ),
         (_('Additional options'), {

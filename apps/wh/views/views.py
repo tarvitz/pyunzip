@@ -67,7 +67,8 @@ def login(request):
             auth.login(request, form.cleaned_data['user'])
             if referer:
                 return {'redirect': referer}
-            return {'redirect': '/'}
+            referer = request.META.get('HTTP_REFERER', '/')
+            return {'redirect': referer}
     return {'form': form}
 
 

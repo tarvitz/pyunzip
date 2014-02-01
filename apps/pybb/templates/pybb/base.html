@@ -61,7 +61,11 @@
     </div>
     <div id='push'></div>
 </div>
-{% include 'pybb/footer.html' %} 
+{% include 'pybb/footer.html' %}
+<!-- modals -->
+{% if not user.is_authenticated %}
+  {% include "forms/login_modal.html" %}
+{% endif %}
 </body>
 <script type='text/javascript'>
 $(document).ready(function(){
