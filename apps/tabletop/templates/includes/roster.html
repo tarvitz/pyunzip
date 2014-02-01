@@ -1,6 +1,6 @@
 <center> {% load newsfilters %}
 	<div class='round_message' id='roster_{{ r.id }}'>
-		<div class='msg_headline'>
+		<div class='message-headline'>
 			<!-- effects -->
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
@@ -44,8 +44,8 @@
 			</div>
 			<a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a> 
 			</div><!-- msg_headline -->
-		<div class='msg_content'>
-			<div class='msg_avatar'>
+		<div class='message-content'>
+			<div class='avatar'>
 				{% spaceless %}
 				{% comment %}
 					{% if r.user.nickname %}
@@ -64,7 +64,7 @@
 					{% endif %}
 				{% endspaceless %}
 			</div> <!-- msg_avatar -->
-			<div class='msg_text'>
+			<div class='text'>
 				<div class='transparency'></div>
 				<div class='reflects_left'></div>
 				<div class='reflects_right'></div>
@@ -103,7 +103,7 @@
 			</div> <!-- msg_text -->
 		</div><!-- msg_content -->
 		<br clear='all'>
-		<div class='msg_footer'>
+		<div class='message-footer'>
 			<div class='transparency_black'></div>
 			<div class='links'>	
                                 <span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}' {% spaceless %}

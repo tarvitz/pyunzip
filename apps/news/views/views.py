@@ -33,10 +33,11 @@ from apps.core.decorators import (
     login_required_json, benchmark as timeit
 )
 from apps.core.helpers import render_to, get_object_or_None
-from apps.core import benchmark #processors
+from apps.core import benchmark
 from django.core.cache import cache
 from django.views import generic
 from apps.core.views import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 
 
@@ -230,6 +231,25 @@ def article_action(request, id=None, action=None):
     else:
         article.save()
     return redirect(redirect_path or referer)
+
+
+class NewsUpdateView(LoginRequiredMixin, generic.UpdateView):
+    template_name = 'news/action_article.html'
+    model = News
+    form_class = ArticleModelForm
+
+    def get_form_kwargs(self):
+        kwargs = super(NewsUpdateView, self).get_form_kwargs()
+        kwargs.update({
+            'request': self.request
+        })
+        return kwargs
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('news.edit_news'):
+            raise PermissionDenied("permission denied")
+        return super(NewsUpdateView, self).dispatch(request, *args, **kwargs)
+
 
 #@obsolete
 @login_required

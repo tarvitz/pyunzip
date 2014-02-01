@@ -10,11 +10,11 @@
 {% if pms.object_list %}
 <center>
 <div class='message'>
-	<div class='msg_headline'>
+	<div class='message-headline'>
 		<div class='transparency' id='black'></div>
 		<b>Непрочитанные</b>
 	</div>
-	<div class='msg_content'>
+	<div class='message-content'>
 	<div class='transparency'></div>
 	<ul>
 		{% for p in pms.object_list %}
@@ -36,11 +36,11 @@
 
 <center>
 <div class='message'>
-	<div class='msg_headline'>
+	<div class='message-headline'>
 		<div class='transparency' id='black'></div>
 		<b>Прочитанные</b>
 	</div>
-	<div class='msg_content'>
+	<div class='message-content'>
 	<div class='transparency'></div>
 	<ul>
 	{% for p in pms.object_list %}

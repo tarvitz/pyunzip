@@ -13,7 +13,7 @@
 <a name="c{{ c.id }}">&nbsp;</a>
 <div class="message">
     {% if not c.is_removed %}
-    <div class="msg_headline">
+    <div class="message-headline">
 		<div class="transparency tr_black"></div>
 		{% if not block_edit_comments %}{% ifequal c.user user %}
 			<a href="{% url "core:comment-edit" id=c.id %}?j=y" class="msg_button">[править]</a>
@@ -21,23 +21,23 @@
                 {% if user.is_authenticated %}
                     <a href='#id_comment' class='msg_button' onClick='insertQuoteUser("{{ c.user.nickname }}");'>[цитировать]</a>
                 {% endif %}
-		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>
-		<span class="msg_user_nickname">{% spaceless %}
+		<span class="comment-date">[{{ c.submit_date|date:"Y/M/d, H:i:s" }}]</span>
+		<span class="user-nickname">{% spaceless %}
 		<span class="nickname">{{ c.user.get_nickname|safe }}</span>  комментирует:
 		{% endspaceless %}
 		</span>
 	</div>
-    <div class="msg_content">
+    <div class="message-content">
 		<div class='reflects_left'></div>
 		<div class='reflects_down'></div>
-		<div class="msg_avatar">
+		<div class="avatar">
 			<div class='transparency'></div>
 			{% with c.user as usr %}
 				{% include "msg/avatar.html" %}
 			{% endwith %}
 		<br clear='all'>
 		</div> <!-- avatar -->
-		<div class="msg_text">
+		<div class="text">
 			<div class="transparency"></div>
 			<div id="text_{{ c.id }}">
                 {% comment %}
@@ -56,7 +56,7 @@
     </div> <!-- content -->
     <br clear="all">
 	{% if user.skin %} {# todo: get rid of this #}
-    <div class="msg_footer">
+    <div class="message-footer">
 	{% if not block_edit_comments %}{% spaceless %}
 		{% ifnotequal user c.user %}
 			{% if user.is_superuser or perms.news.edit_comments %}
@@ -86,15 +86,15 @@
 {% else %} {# it's deleted #}
     {% spaceless %}
 	{% if user.skin %}
-	<div class="msg_headline">
+	<div class="message-headline">
 	{% else %}
-	<div class="msg_headline" class='anonymous'>
+	<div class="message-headline" class='anonymous'>
 	{% endif %}{% endspaceless %}
 		<div class="transparency" id="black"></div>
-		<span class="msg_user_nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
+		<span class="user-nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
 	</div> <!-- headline -->
     {% if user.skin %}
-	<div class="msg_footer" class="deleted">
+	<div class="message-footer" class="deleted">
 	{% spaceless %}
     {% if perms.news.edit_comments or user.is_superuser %}
             <a href="{% url "core:comment-edit" id=c.id %}">[править]</a> |

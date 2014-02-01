@@ -1,102 +1,90 @@
 <div id='news'> {% load comments i18n coretags %}
-	<div align="center" class='headline'>{% spaceless %}
-		<img id='hdimg' class='right {% if forloop.counter == 1 %}first {% endif %}'
-             src='{{ n.owner.get_avatar_url }}'>
-		{% if perms.news.edit_news or n.owner == user and not n.approved %}
-            <span id='edit_button' class='first'><a id='button' href="{% url "news:article-edit" n.id %}">Править</a></span>
+  <div align="center">{% spaceless %}
+    <img class='pull-right headline-avatar {% if forloop.counter == 1 %}first {% endif %}'
+         src='{{ n.owner.get_avatar_url }}'>
+
+    <div class='btn-group pull-right'>
+      {% if perms.news.edit_news or n.owner == user and not n.approved %}
+        <a class='btn btn-xs btn-primary' href="{{ n.get_edit_url }}">Править</a></span>
+      {% endif %}
+      {% if perms.news.edit_news %}
+        {% if not n.approved %}
+          <a class='btn btn-xs btn-info' href='#status-article-{{ n.id }}' data-toggle='modal'>Статус</a>
+          <a class='btn btn-xs btn-success' href="{{ n.get_approve_url }}">Утвердить</a>
+        {% else %}
+          <a class='btn btn-xs btn-default' href='{{ n.get_disapprove_url }}'>Убрать</a></span>
         {% endif %}
-        {% if perms.news.edit_news %}
-			{% if not n.approved %}
-            <span id='edit_button'><a id='button' href='#status-article-{{ n.id }}' data-toggle='modal'>Статус</a></span>
-			<span id="edit_button"><a id='button' href="{% url "news:article-action" id=n.id action='approve' %}">Утвердить</a></span>
-			{% else %}
-			<span id="edit_button"><a id='button' href='{% url "news:article-action" id=n.id action='unapprove' %}'>Убрать</a></span>
-			{% endif %}
-            <span id='edit_button'>
-                <a id='button' data-text='{% trans "Do you want to delete this article?" %}'
-                    data-yes-btn-class='btn btn-danger'
-                    href='#' class='noty confirm' data-href='{% url "news:article-delete" n.id %}'>Удалить</a></span>
-		{% endif %}
-		{% if not n.approved %}
-            {% spaceless%}
-            {% if news_general %}
-                <span class='unapproved'>{# <a href='article/{{ n.id }}'>{{ n.title }}</a>#}
-                    <a href="{{ n.get_absolute_url }}">{{ n.title }}</a>
-                </span>
-            {% else %}
-                <span class='unapproved'>{{ n.title }}</span>
-            {% endif %}{% endspaceless %}
-		{% else %}
-			{% spaceless %}
-                {% if news_general %}
-                <a href='{{ n.get_absolute_url }}'>{{ n.title }}</a>
-                {% else %}
-                {{ n.title }}
-                {% endif %}{% endspaceless %}
-		{% endif %}{% endspaceless %}
-	</div>
-	<hr>
- <div id='spacer'>&nbsp;</div>
- {% if news_general %}
-        {{ n.render_head_content|safe }}
-        <br clear='all'>
- {% else %}
+        <a class='btn btn-xs btn-danger hide' data-text='{% trans "Do you want to delete this article?" %}'
+           data-yes-btn-class='btn btn-danger'
+           href='#' class='noty confirm' data-href='{{ n.get_delete_url }}'>Удалить</a></span>
+      {% endif %}
+    </div>
+
+    <h3 class='news'><a class='{{ n.approved|yesno:'text-default,text-danger' }}'
+                        href='{% if news_general %}{{ n.get_absolute_url }}{% else %}#{% endif %}'>{{ n.title }}</a>
+    </h3>{% endspaceless %}
+  </div>
+  <hr>
+  <div id='spacer'>&nbsp;</div>
+  {% if news_general %}
+    {{ n.render_head_content|safe }}
+    <br clear='all'>
+  {% else %}
     {% if not n.approved %}
-        <div class='alert warning-block'>
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            <strong>Внимание!</strong> Статья находится в очереди на премодерацию.
-            После ее просмотра модератором она будет утверждена и добавлена на главную
-            или возвращена с указанием причины возврата.
-        </div>
+      <div class='alert alert-warning'>
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>Внимание!</strong> Статья находится в очереди на премодерацию.
+        После ее просмотра модератором она будет утверждена и добавлена на главную
+        или возвращена с указанием причины возврата.
+      </div>
     {% endif %}
     {{ n.cache_content|safe }}
     <br clear='all'>
- {% endif %}
- <div id='read'>
- {# <a href='article/{{ n.id }}'>читать далее</a> #}
- {% if news_general %}
-    <a href='{% url "news:article" number=n.id %}'>читать далее</a>
- {% endif %}
- </div>
- <hr>
- <div class='footer'> (by {{ n.author|default_if_none:n.owner.get_nickname }}), published {{ n.date }}</div>
- {% if n.editor %}<div class='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
- {% if n.url %}<div class='footer url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
- {% spaceless %}
+  {% endif %}
+  <div id='read'>
+    {% if news_general %}
+      <a href='{% url "news:article" number=n.id %}'>читать далее</a>
+    {% endif %}
+  </div>
+  <hr>
+  <div class='footer'> (by {{ n.author|default_if_none:n.owner.get_nickname }}), published {{ n.date }}</div>
+  {% if n.editor %}<div class='footer'>(edited by {% get_raw_nickname n.editor %})</div>{% endif %}
+  {% if n.url %}<div class='footer url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
+  {% spaceless %}
     {% get_comment_count for n as comments %}
- <div class='footer'>Коментариев: <a href='{% url "news:article" number=n.id %}?page=last'>{{ comments }}</a>
- {% with n as object %}
-    {% include "tracker/is_new.html" %}
- {% endwith %}
- </div>
- {% endspaceless %}
- </div>
+    <div class='footer'>Коментариев: <a href='{% url "news:article" number=n.id %}?page=last'>{{ comments }}</a>
+      {% with n as object %}
+        {% include "tracker/is_new.html" %}
+      {% endwith %}
+    </div>
+  {% endspaceless %}
+</div>
 
 {% if not n.approved %}
-{% get_form 'apps.news.forms.ArticleStatusForm' as form no_request n %}
-<div class='modal fade no-background' id='status-article-{{ n.id }}'>
+  {% get_form 'apps.news.forms.ArticleStatusForm' as form no_request n %}
+  <div class='modal fade no-background' id='status-article-{{ n.id }}'>
     <div class='modal-dialog'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <a class='close' href='#' data-dismiss='modal'>x</a>
-                <h3>Статус</h3>
-            </div>
-            <div class='modal-body'>
-                <form class='form-horizontal' method='POST' action='{% url "news:article-status-set" n.pk %}'>
-                    {% csrf_token %}
-                    {% include "forms/bootstrap_horizontal.html" with form=form %}
-                    <div class='control-group'>
-                        <label class='control-label' for='id_submit'>&nbsp;</label>
-                        <div class='controls'>
-                            <input type='submit' value='Сохранить' class='btn btn-success'>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class='modal-footer no-background'>
-                <a class='btn btn-inverse' data-dismiss='modal'>Закрыть</a>
-            </div>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <a class='close' href='#' data-dismiss='modal'>x</a>
+          <h3>Статус</h3>
         </div>
+        <div class='modal-body'>
+          <form class='form-horizontal' method='POST' action='{% url "news:article-status-set" n.pk %}'>
+            {% csrf_token %}
+            {% include "forms/bootstrap_horizontal.html" with form=form %}
+            <div class='control-group'>
+              <label class='control-label' for='id_submit'>&nbsp;</label>
+              <div class='controls'>
+                <input type='submit' value='Сохранить' class='btn btn-success'>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class='modal-footer no-background'>
+          <a class='btn btn-inverse' data-dismiss='modal'>Закрыть</a>
+        </div>
+      </div>
     </div>
-</div>
+  </div>
 {% endif %}

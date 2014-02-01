@@ -11,7 +11,7 @@
 {% block text_content %}
 <center>
 <div class='message'>
-	<div class='msg_headline'>
+	<div class='message-headline'>
 		<div class='transparency' id='black'></div>
 		{% ifequal user roster.owner %}
 			<a href='{% url "tabletop:roster-edit" roster.id %}' class='msg_button'>[править]</a>
@@ -24,14 +24,14 @@
 		{{ roster.title }}:<a href='{% url "tabletop:rosters-pts" pts=roster.pts %}'>{{ roster.pts }} pts</a>
 		
 	</div> <!-- msg_headline -->
-	<div class='msg_content'>
+	<div class='message-content'>
 		<div class='transparency'></div>
-		<div class='msg_avatar'>
+		<div class='avatar'>
 		{% if roster.user %}
 			<div align='center' class='nickname'>{{ roster.user.get_nickname|safe }}</div>
 		{% spaceless %}
 		    <div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ c.user.date_joined|timesince }}</div>
-            <span class='msg_ranks'>статус:
+            <span class='ranks'>статус:
             {% if roster.user.ranks.values %}
                 {% for rank in roster.user.ranks.values %}
                     <a href="{% url "wh:rank" codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
@@ -62,7 +62,7 @@
             {% endif %}
 		{% endif %}
 		</div> <!-- msg_avatar -->
-		<div class='msg_text'>
+		<div class='text'>
 		<span class='msg_right_icon'>
 			{# <a href='{% url "url_race_rosters" race=roster.show_race %}'><img src="{% url "url_get_race_icon" roster.show_race %}"> </a> #}
 		</span><!--implement with message.css -->
@@ -88,7 +88,7 @@
 		</div> <!-- msg_text -->
 	</div> <!-- msg_content -->
 	<br clear='all'>
-	<div class='msg_footer'>
+	<div class='message-footer'>
 		{% spaceless %}
 			{% ifnotequal roster.user roster.owner %}
 				[добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'{{ roster.owner.get_nickname|safe }}</a>]

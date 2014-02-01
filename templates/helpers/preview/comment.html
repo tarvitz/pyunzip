@@ -6,22 +6,22 @@
 <script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
 
 <div class="message">
-    <div class="msg_headline">
+    <div class="message-headline">
 		<div class="transparency tr_black"></div>
-        <span class="msg_comment_date">[{% now "Y/M/d, H:i:s" %}]</span>
-		<span class="msg_user_nickname">
+        <span class="comment-date">[{% now "Y/M/d, H:i:s" %}]</span>
+		<span class="user-nickname">
 		<span class="nickname">{{ user.nickname|default_if_none:"not me :)" }}</span>  комментирует:
 		</span>
 	</div>
-    <div class="msg_content">
+    <div class="message-content">
 		<div class='reflects_left'></div>
 		<div class='reflects_down'></div>
-		<div class="msg_avatar">
+		<div class="avatar">
 			<div class='transparency'></div>
             {% include "msg/avatar.html" with usr=user %}
 		<br clear='all'>
 		</div> <!-- avatar -->
-		<div class="msg_text">
+		<div class="text">
 			<div class="transparency"></div>
 			<div id="text_0">
                 {{ preview|safe }}
@@ -33,7 +33,7 @@
 		</div> <!-- text -->
     </div> <!-- content -->
     <br clear="all">
-    <div class="msg_footer"><center>;)</center></div> <!-- footer -->
+    <div class="message-footer"><center>;)</center></div> <!-- footer -->
 </div> <!-- message -->
 
 <script language='javascript'>

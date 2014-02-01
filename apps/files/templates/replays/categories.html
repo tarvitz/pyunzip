@@ -13,16 +13,16 @@
     <center>
     
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info"><a href="all">Полный список реплеев: [{{ stats.all }} шт]</a></span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <img src="/media/images/replays/all_list.png">
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены реплеи всех игр, всех аддонов игр ;)
                 [<a href='all'>перейти</a>]
                 <br clear='all'>
@@ -32,16 +32,16 @@
     </div> <!-- message -->
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info"><a href="all/duel">Дуэльные игры: [{{ stats.duels }} шт]</a></span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='all/duel'><img src="/media/images/replays/1v1.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены дуэльные (1vs1) реплеи игр, всех аддонов игр ;)
                 [<a href='all/duel'>перейти</a>]
                 <br clear='all'>
@@ -51,16 +51,16 @@
     </div> <!-- message -->
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info"><a href="all/team">Коммандные игры: [{{ stats.teams }} шт]</a></span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='all/team'><img src="/media/images/replays/team_vs_team.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены коммандные (2vs2, 3vs3, 4vs4) реплеи игр, всех аддонов игр ;)
                 [<a href='all/team'>перейти</a>]
                 <br clear='all'>
@@ -70,16 +70,16 @@
     </div> <!-- message -->
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info"><a href="all/nonstd">Нестандартные игры: [{{ stats.nonstds }} шт]</a></span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='all/nonstd'><img src="/media/images/replays/nonstd.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены игры с нестандартной командной разметкой (различный ffa: 
                 3vs2, 1vs2vs1, 1vs1vs1vs1, 3vs4, 4vs2 и тд) всех аддонов игр ;)
                 [<a href='all/nonstd'>перейти</a>]
@@ -98,7 +98,7 @@
     <center>
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info">
 		<a href="{{ g.short_name }}">Полный список игр: [{{ stats.all }} шт]</a>
@@ -108,12 +108,12 @@
 		</span>
 		</span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='{{ g.short_name }}'><img src="/media/images/replays/all_list.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлен весь список реплеев <b>{{ g.name }}</b>
                 [<a href='{{ g.short_name }}'>перейти</a>]<br>
                 {% get_versions_for_game for g as version %}
@@ -155,7 +155,7 @@
     </div> <!-- message -->
     
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info">
 			<a href="{{ g.short_name }}/duel">Cписок дуэльных игр: [{{ stats.duels }} шт]</a>
@@ -165,12 +165,12 @@
 		</span>
 		</span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='{{ g.short_name }}/duel'><img src="/media/images/replays/1v1.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены дуэльные игры (1vs1) <b>{{ g.name }}</b>
                 [<a href='{{ g.short_name }}/duel'>перейти</a>]
                 {% get_versions_for_game for g as version %}
@@ -213,7 +213,7 @@
     </div> <!-- message -->
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info">
 			<a href="{{ g.short_name }}/team">Cписок коммандных игр: [{{ stats.teams }} шт]</a>
@@ -223,12 +223,12 @@
 		</span>
 		</span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='{{ g.short_name }}/team'><img src="/media/images/replays/team_vs_team.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены командные игры (2vs2,3vs3,4vs4) <b>{{ g.name }}</b>
                 [<a href='{{ g.short_name }}/team'>перейти</a>]
                 
@@ -273,7 +273,7 @@
     </div> <!-- message -->
 
     <div class="message">
-        <div class="msg_headline">
+        <div class="message-headline">
         <div class='transparency' id='black'></div>
         <span class="info">
 			<a href="{{ g.short_name }}/nonstd">Cписок нестандартных игр: [{{ stats.nonstds }} шт]</a>
@@ -283,12 +283,12 @@
 		</span>
 		</span>
         </div> <!-- headline -->
-        <div class='msg_content'>
+        <div class='message-content'>
         <div class='transparency'></div>
-            <div class='msg_avatar'>
+            <div class='avatar'>
                 <a href='{{ g.short_name }}/nonstd'><img src="/media/images/replays/nonstd.png"></a>
             </div>
-            <div class='msg_text'>
+            <div class='text'>
                 В этой категории представлены игры с нестандартной коммандной разметкой  (различный ffa: 
                 3vs2, 1vs2vs1, 1vs1vs1vs1, 3vs4, 4vs2 и тд) <b>{{ g.name }}</b>
                 [<a href='{{ g.short_name }}/nonstd'>перейти</a>]

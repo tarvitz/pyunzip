@@ -1,10 +1,9 @@
 /*comments*/
 .message{
-    margin-top: 5px;
-    border: 1px solid darkgrey;
-    width: 80%;
-}
-.message .msg_headline{
+  margin-top: 5px;
+  border: 1px solid darkgrey;
+  width: 80%;
+  .msg_headline, .message-headline{
     color: white;
     font-size: 8pt;
     line-height: 13px;
@@ -12,109 +11,85 @@
     padding-top: 5px;
     padding-bottom: 5px;
     padding-left: 3px;
-
-}
-.message .msg_headline.anonymous{
-	border: 0px;
-}
-.message .msg_headline a.msg_button{
-    color: white;
-    float: right;
-}
-
-
-
-.message .msg_comment_date{
+    &.anonymous{
+      border: 0px;
+    }
+    .msg_button,.message-button{
+      color: white;
+      float: right;
+    }
+  }
+  .comment-date, .msg_comment_date{
     float: left;
     font-size: 1em;
     font-family: Verdana;
-}
-
-.message .msg_user_nickname{
-    /*margin-left: -100px;*/
+  }
+  .msg_user_nickname, .user-nickname{
     text-align: center;
-}
-.message .msg_user_nickname.deleted{
-	margin-left: 0px;
-}
-.message .msg_ranks{
+    &.deleted{
+      margin-left: 0px;
+    }
+  }
+  .ranks, .msg_ranks{
     float: left;
-}
-.message .msg_content{
+  }
+  .message-content, .msg_content{
     text-align: justify;
     float: left;
     width: 100%;
-    
-}
-/*stable 
-.message .msg_content .msg_avatar{
-    float: left;
-    margin: 0px;
-    width: 105px;
-    color: white;
-    font-size: x-small;
-} */
-/*testing */
-.message .msg_content .msg_avatar{
-    position: absolute;
-    width: 105px;
-    margin-right: 5px;
-    height: 100%;
-    color: white;
-    font-size: 8pt;
-    line-height: initial;
-    top: 0;
-    left: 0;
-    padding-right: 5px;
-}
-.message .msg_content .msg_avatar img{
-    margin-bottom: 3px;
-    margin-top: 3px;
-    margin-left: 5px;
-    border: 1px dotted grey;
-}
-.message .msg_content .msg_text{
-    border-left: 1px dotted darkgrey;
-    padding-left: 5px;
-    padding-right: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    text-indent: 8px;
-    margin-left: 110px; /*<- WHAT THE FUCK IS IT? O_O*/
-    color: white;
-    min-height: 250px; /* used with msg_avatar testing */
-}
-
-.message .msg_content .msg_text .msg_reply_author{
-	float: right;
-	margin-top: -25px;
-	margin-right: -25px;
-}
-.msg_reply_author img{
-	width: 50px;
-	border: 1px dotted white;
-}
-.message .msg_footer{
+    > .avatar, .msg_avatar{
+      position: absolute;
+      width: 105px;
+      margin-right: 5px;
+      height: 100%;
+      color: white;
+      font-size: 8pt;
+      line-height: initial;
+      top: 0;
+      left: 0;
+      padding-right: 5px;
+      img{
+        margin-bottom: 3px;
+        margin-top: 3px;
+        margin-left: 5px;
+        border: 1px dotted grey;
+      }
+    }
+    >.text, .msg_text{
+      border-left: 1px dotted darkgrey;
+      padding-left: 5px;
+      padding-right: 5px;
+      padding-top: 5px;
+      padding-bottom: 5px;
+      text-indent: 8px;
+      margin-left: 110px; /*<- WHAT THE FUCK IS IT? O_O*/
+      color: white;
+      min-height: 250px; /* used with msg_avatar testing */
+      >.reply, .msg_reply_author{
+        float: right;
+        margin-top: -25px;
+        margin-right: -25px;
+        > img{
+          	width: 50px;
+	        border: 1px dotted white;
+        }
+      }
+    }
+  }
+  .message-footer, .msg_footer{
     color: white;
     font-size: 8pt;
     line-height: initial;
     padding: 0px;
     border-top: 1px dotted darkgrey;
-}
-.message .msg_footer.deleted{ border: 0px; }
-
-.message .since{
-	text-align: center;
-}
-.message .msg_headline,
-.message .msg_content,
-.message .msg_avatar,
-.message .msg_text,
-.message .msg_footer{
-    position: relative;
-}
-
-.message .transparency{
+    &.deleted{
+      border: 0px;
+    }
+  }
+  .since{
+    text-align: center;
+  }
+  .transparency{
     position: absolute;
     height: 100%;
     background-color: #666666;
@@ -124,30 +99,42 @@
     left: 0px;
     z-index:-1;
     border: 0px;
+    &#black,&.black{
+      background-color: black;
+    }
+    &#txt, &.txt{
+      background-color: #666;
+      opacity: 0.80;
+      filter: alpha(opacity=80);
+    }
+  }
+  .msg_right_icon, .right-icon{
+	float: right;
+	margin-top: -30px;
+	margin-right: -40px;
+    a img{
+	  border: 0px;
+    }
+  }
 }
 
-.message .transparency#black{
-    background-color: black;
+.message {
+  .msg_headline, .message-headline,
+  .msg_content, .message-content,
+  .msg_avatar, .avatar,
+  .msg_text, .text,
+  .msg_footer, .message-footer{
+    position: relative;
+  }
 }
-.message .transparency#txt{
-    background-color: #666;
-    opacity: 0.80;
-    filter: alpha(opacity=80);
-}
+
+
 .message span.nickname{
     font-weight: bold;
     color: grey;
 }
 
-.message .msg_right_icon{
-	float: right;
-	margin-top: -30px;
-	margin-right: -40px;
-}
-
-.message .msg_right_icon a img{
-	border: 0px;
-}
+.message .msg_right_icon
 .quote_content{
 	padding: 0px;
 	margin: 0px;

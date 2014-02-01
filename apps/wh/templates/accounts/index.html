@@ -9,19 +9,19 @@
 
 {% for user in users.object_list %}
 	<center>
-	<div class='round_message'>
-		<div class='msg_headline'>
+	<div class='round message'>
+		<div class='message-headline'>
 			<!-- effects -->
 			<div class='transparency_black'></div>
 			<!-- end of effects -->
 
 			<a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{{ user.get_nickname|safe }}{% else %}Soulless inhabit{% endif %}</a>
 		</div><!-- msg_headline -->
-		<div class='msg_content'>
-			<div class='msg_avatar'>
+		<div class='message-content'>
+			<div class='avatar'>
 				<img src='{% url "wh:avatar" user.get_username %}'>
 			</div> <!-- msg_avatar -->
-			<div class='msg_text'>
+			<div class='text'>
 				<div class='transparency'></div>
 				<div class='reflects_left'></div>
 				<div class='reflects_right'></div>
@@ -41,7 +41,7 @@
 			</div> <!-- msg_text -->
 		</div><!-- msg_content -->
 		<br clear='all'>
-		<div class='msg_footer'>
+		<div class='message-footer'>
 			<div class='transparency_black'></div>
 			<div class='links'>	
 				<span class='first'><a href='{% url "wh:profile-by-nick" user.get_username %}'>profile</a></span>

@@ -236,7 +236,7 @@ class News(AbstractNews):
         return reverse('news:article', kwargs={'pk': self.pk, })
 
     def get_edit_url(self):
-        return reverse('news:article-edit', args=(self.pk, ))
+        return reverse('news:news-update', args=(self.pk, ))
 
     def get_approve_url(self):
         return reverse('news:article-action', args=(self.pk, 'approve'))

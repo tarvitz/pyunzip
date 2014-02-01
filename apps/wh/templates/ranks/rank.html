@@ -6,7 +6,7 @@
 {% block text_content %}
 <div align="center">
 <div class="message">
-	<div class="msg_headline">
+	<div class="message-headline">
 		<div class="transparency" id='black'><!-- wise transparency --></div>
 		{% if rank.type.color_scheme %}
 		<span style='color: {{ rank.type.color_scheme }}'>
@@ -15,17 +15,17 @@
 		{{ rank.short_name }}
 		{% endif %}
 	</div>
-	<div class="msg_content">
+	<div class="message-content">
 	<div class='transparency'></div>
-		<div class="msg_avatar">
+		<div class="avatar">
 			<img src="/media/{{ img }}">
 		</div>
-		<div class="msg_text" id="rank_{{ rank.id }}">
+		<div class="text" id="rank_{{ rank.id }}">
 			{{ rank.description|render_filter:rank.syntax|safe }}
 			<br clear="all">
 		</div>
 	{% if user.is_superuser %}
-	<div class="msg_footer">
+	<div class="message-footer">
 		<center></center>
 	</div>
 	{% endif %}

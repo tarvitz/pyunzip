@@ -22,30 +22,30 @@
 <a name="c{{ c.id }}">&nbsp;</a>
 <div class="message">
     {% if not c.is_removed %}
-    <div class="msg_headline">
+    <div class="message-headline">
 		<div class="transparency" id="black"></div>
 		{% ifequal c.user user %}
 			<a href="{% url apps.news.views.edit_comment id=c.id %}" class="msg_button">[править]</a>
 		{% endifequal %}
 
-		<span class="msg_comment_date">[{{ c.submit_date|date:"Y/M/d, H:m:s" }}]</span>
-		<span class="msg_user_nickname">{% spaceless %}
+		<span class="comment-date">[{{ c.submit_date|date:"Y/M/d, H:m:s" }}]</span>
+		<span class="user-nickname">{% spaceless %}
 		<a href='{{ c.get_absolute_url }}'>
 		<span class="nickname"{{ c.user.get_nickname|safe }}</span>  комментирует:</a>
 		{% endspaceless %}
 		</span>
 	</div>
-    <div class="msg_content">
+    <div class="message-content">
 		<div class='reflects_left'></div>
 		<div class='reflects_down'></div>
-		<div class="msg_avatar">{% spaceless %}
+		<div class="avatar">{% spaceless %}
 			{% comment %}{% get_user_ranks for c.user as ranks %}
 			{% if ranks %}
-			<span class="msg_ranks">статус:
+			<span class="ranks">статус:
 			{% for r in ranks %}
 				<a href="{% url apps.wh.views.show_rank codename=r.rank.codename %}">{{ r.rank.short_name|lower }}</a>{% if not forloop.last %},{% endif %}
 			{% endfor %} {% endcomment %}
-			<span class='msg_ranks'>статус:
+			<span class='ranks'>статус:
 			{% if c.user.ranks.values %}
 				{% for rank in c.user.ranks.values %}
 					<a href="{% url apps.wh.views.show_rank codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
@@ -73,7 +73,7 @@
 			{% if c.user.email and not c.user.settings.hide_email %}<a href="mailto:{{ c.user.email }}">[mail]</a>{% endif %}
 			{% endif %}
 		</div> <!-- avatar -->
-		<div class="msg_text">
+		<div class="text">
 			<div class="transparency" id="txt"></div>
 			<div id="text_{{ c.id }}">
 				{% markdownit %}
@@ -88,20 +88,20 @@
     </div> <!-- content -->
     <br clear="all">
 	{% if user.skin %}
-    <div class="msg_footer"><a href='{{ c.get_absolute_url }}'>перейти</a></div> <!-- footer -->
+    <div class="message-footer"><a href='{{ c.get_absolute_url }}'>перейти</a></div> <!-- footer -->
 	{% endif %} {# if user.skin #}
    {% else %} {# it's deleted #}
 	{% spaceless %}
 	{% if user.skin %}
-	<div class="msg_headline">
+	<div class="message-headline">
 	{% else %}
-	<div class="msg_headline" class='anonymous'>
+	<div class="message-headline" class='anonymous'>
 	{% endif %}{% endspaceless %}
 		<div class="transparency" id="black"></div>
-		<span class="msg_user_nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
+		<span class="user-nickname" class='deleted'><span class="nickname">Коментарий скрыт</span></span>
 	</div> <!-- headline -->
     {% if user.skin %}
-	<div class="msg_footer" class="deleted"></div> <!-- footer -->
+	<div class="message-footer" class="deleted"></div> <!-- footer -->
 	{% endif %} {# not an registered user #}
 {% endif %}
 </div> <!-- message -->

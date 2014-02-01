@@ -635,6 +635,9 @@ class UserExtension(object):
         else:
             return settings.FORUM_THEME_DEFAULT
 
+    def get_private_forums(self):
+        pass
+
     class Meta:
         permissions = (
             ('can_test', 'Can test functional')

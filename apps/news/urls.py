@@ -8,6 +8,8 @@ urlpatterns = patterns('apps.news.views',
     url(r'^news/(?P<pk>\d+)/$', views.NewsDetail.as_view(), name='article'),
     url(r'^news/(?P<approved>(unapproved|approved))/$', 'news', name='news'), #this is somekind of brainfuck!
     url(r'^news/$', views.NewsListView.as_view(), name='news'),
+    url(r'^news/(?P<pk>\d+)/edit/$', views.NewsUpdateView.as_view(),
+        name='news-update'),
     url(r'^news/user/$', 'news_user', name='news-user'),
     url(r'^news/archived/$','archived_news', name='archived-news'),
     url(r'^archived/article/(?P<id>\d+)/$','show_archived_article', name='article-archived'),
