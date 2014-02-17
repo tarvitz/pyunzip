@@ -23,7 +23,7 @@
 <div class="posts">
     {% if first_post %}{% ifnotequal first_post posts.0 %}
         {% with first_post as post %}
-            {% include "pybb/post_template.html" with page=page %}
+            {% include "pybb/post_template.html" with page=page spoiler='yes' %}
         {% endwith %}
     {% endifnotequal %}{% endif %}
     {% for post in posts %}
