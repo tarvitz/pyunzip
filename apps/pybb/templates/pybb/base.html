@@ -54,6 +54,7 @@
     {% block extra_meta %}{% endblock %}
 </head>
 <body>
+{% trans "open" as i18n_open %}{% trans "close" as i18n_close %}
 <div id='wrap'>
     {% include 'pybb/head.html' %}
     <div class='container'>
@@ -74,6 +75,13 @@ $(document).ready(function(){
         $(img).attr({'rel': 'gal'});
     });
     $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
+    $(".spoiler a").click(function(e){
+      $(this).text(
+        $(this).text() == '{{ i18n_open }}' ? "{{ i18n_close }}"
+          : "{{ i18n_open }}"
+      );
+      $(this).next().toggleClass('hide');
+    });
 });
 </script>
 </html>

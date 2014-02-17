@@ -21,7 +21,16 @@
             </div>
         </div>
         <div class='text'>
-            {{ post.body_html|safe }}
+            {% if page == '1' %}
+              {{ post.body_html|safe }}
+            {% else %}
+              <div class="spoiler">
+                <a href="#">{% trans "open" %}</a>
+                <div class="spoiler block hide">
+                  {{ post.body_html|safe }}
+                </div>
+              </div>
+            {% endif %}
             {% if not user.is_authenticated or user.pybb_profile.show_signatures %}
             {% if post.user.pybb_profile.signature %}
             <div class="signature">
