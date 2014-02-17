@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class='text'>
-            {% if page == '1' and not spoiler %}
+            {% if page == '1' or not spoiler %}
               {{ post.body_html|safe }}
             {% else %}
               <div class="spoiler">
