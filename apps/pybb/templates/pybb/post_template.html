@@ -25,7 +25,7 @@
               {{ post.body_html|safe }}
             {% else %}
               <div class="spoiler">
-                <a href="#">{% trans "open" %}</a>
+                <a href="#" class='btn btn-xs btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>{% trans "open text" %}</a>
                 <div class="spoiler block hide">
                   {{ post.body_html|safe }}
                 </div>
