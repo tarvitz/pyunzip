@@ -270,6 +270,9 @@ class Post(RenderableItem):
         if self_id == head_post_id:
             self.topic.delete()
 
+    def get_body_messges_count(self):
+        return len(self.body.split(' '))
+
 class Profile(models.Model):
     user = AutoOneToOneField(User, related_name='pybb_profile', verbose_name=_('User'))
     site = models.URLField(_('Site'), blank=True, default='')

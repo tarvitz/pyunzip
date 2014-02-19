@@ -322,6 +322,8 @@ from apps.karma.settings import *
 #CELERY_REDIS_DB = 0
 #BROKER_URL = "redis://redis:6379/0"
 
+MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
+
 DEBUG_TOOLBAR=False
 DEBUG=True
 if DEBUG and DEBUG_TOOLBAR:

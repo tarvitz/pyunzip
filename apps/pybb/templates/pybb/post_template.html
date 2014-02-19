@@ -24,6 +24,7 @@
             {% if page == '1' or not spoiler %}
               {{ post.body_html|safe }}
             {% else %}
+              {% if post.get_body_messges_count > gs.MAXIMUM_WORDS_COUNT_BEFORE_HIDE %}
               <div class="spoiler">
                 <a href="#" class='btn btn-xs btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
                    rel='tooltip' data-title='{% trans "Show/hide first topic post content" %}'>{% trans "open text" %}</a>
@@ -31,6 +32,9 @@
                   {{ post.body_html|safe }}
                 </div>
               </div>
+              {% else %}
+                {{ post.body_html|safe }}
+              {% endif %}
             {% endif %}
             {% if not user.is_authenticated or user.pybb_profile.show_signatures %}
             {% if post.user.pybb_profile.signature %}
