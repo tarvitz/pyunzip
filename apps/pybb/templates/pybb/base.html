@@ -80,7 +80,7 @@ $(document).ready(function(){
         $(this).text() == '{{ i18n_open }}' ? "{{ i18n_close }}"
           : "{{ i18n_open }}"
       );
-      $(this).next().toggleClass('hide');
+      $(this).parent().find('.spoiler.block').toggleClass('hide');
     });
 });
 </script>
