@@ -669,9 +669,13 @@ class PostListView(generic.ListView):
         topic = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
         if self.request.user.is_authenticated():
             topic.update_read(self.request.user)
-
+        moderator = (
+            self.request.user.is_superuser or
+            self.request.user in topic.forum.moderators.all()
+        )
         context.update({
             'topic': topic,
+            'moderator': moderator,
             'form': AddPostForm(topic=topic, initial={})
         })
         return context
