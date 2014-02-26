@@ -3,78 +3,82 @@
 {% load i18n %}
 
 {% block content %}
-<ul class='breadcrumb'>
+  <ul class='breadcrumb'>
     <li><a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a></li>
     <li>{% pybb_link topic.forum.category %}</li>
     <li>{% pybb_link topic.forum %}</li>
     <li><strong>{% pybb_link topic %}</strong></li>
-</ul>
-{% include "generic/paginator.html" %}
+    {% if topic.owner == user and not topic.poll %}
+      <li class="pull-right">
+        <a href='{{ topic.get_poll_add_url }}' rel="tooltip"
+           data-title="{% trans "Add poll to the topic" %}"
+           data-placement="bottom" data-container="body">{% trans "Add poll" %}</a>
+      </li>
+    {% endif %}
+  </ul>
 
-{% if topic.poll %}
-  {% include "pybb/poll.html" with topic=topic %}
-{% elif topic.owner == user %}
-  <div class='btn-group pull-right'>
-    <a class='btn btn-primary'
-       href='{{ topic.get_poll_add_url }}'>{% trans "Add poll" %}</a>
-  </div>
-{% endif %}
-<div class="posts">
+  {% include "generic/paginator.html" %}
+
+  {% if topic.poll %}
+    {% include "pybb/poll.html" with topic=topic %}
+  {% endif %}
+
+  <div class="posts">
     {% if page_obj.number != 1 %}
       {% include "pybb/post_template.html" with page=page_obj.number spoiler='yes' post=topic.head %}
     {% endif %}
     {% for post in object_list %}
-        {% include "pybb/post_template.html" %}
+      {% include "pybb/post_template.html" %}
     {% endfor %}
-</div>
+  </div>
 
-{% include "generic/paginator.html" %}
+  {% include "generic/paginator.html" %}
 
-<div class="breadcrumb">
+  <div class="breadcrumb">
     {% if moderator %}
-    {% if topic.sticky %}
-    <li>
-        <a href="{% url "pybb:pybb_unstick_topic" topic.id %}">{% trans "Unstick topic" %}</a>
-    </li>
-    {% else %}
-    <li>
-        <a href="{% url "pybb:pybb_stick_topic" topic.id %}">{% trans "Stick topic" %}</a>
-    </li>
-    {% endif %}
-    {% if topic.closed %}
-    <li>
-        <a href="{% url "pybb:pybb_open_topic" topic.id %}">{% trans "Open topic" %}</a>
-    </li>
-    {% else %}
-    <li>
-        <a href="{% url "pybb:pybb_close_topic" topic.id %}">{% trans "Close topic" %}</a>
-    </li>
-    {% endif %}
+      {% if topic.sticky %}
+        <li>
+          <a href="{% url "pybb:pybb_unstick_topic" topic.id %}">{% trans "Unstick topic" %}</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url "pybb:pybb_stick_topic" topic.id %}">{% trans "Stick topic" %}</a>
+        </li>
+      {% endif %}
+      {% if topic.closed %}
+        <li>
+          <a href="{% url "pybb:pybb_open_topic" topic.id %}">{% trans "Open topic" %}</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url "pybb:pybb_close_topic" topic.id %}">{% trans "Close topic" %}</a>
+        </li>
+      {% endif %}
     {% endif %}
     {% if user.is_authenticated %}
-    {% if subscribed %}
-    <li><a href="{% url "pybb:pybb_delete_subscription" topic.id %}?from_topic">{% trans "Unsubscribe" %}</a></li>
-    {% else %}
-    <li><a href="{% url "pybb:pybb_add_subscription" topic.id %}">{% trans "Subscribe" %}</a></li>
+      {% if subscribed %}
+        <li><a href="{% url "pybb:pybb_delete_subscription" topic.id %}?from_topic">{% trans "Unsubscribe" %}</a></li>
+      {% else %}
+        <li><a href="{% url "pybb:pybb_add_subscription" topic.id %}">{% trans "Subscribe" %}</a></li>
+      {% endif %}
     {% endif %}
-    {% endif %}
-</div>
+  </div>
 
-{% if not topic.closed and user.is_authenticated %}
-<form action="{% url "pybb:pybb_add_post" topic.id %}" method="post" class='form-horizontal'>
-    {% csrf_token %}
-    <fieldset class='col-lg-10'>
+  {% if not topic.closed and user.is_authenticated %}
+    <form action="{% url "pybb:pybb_add_post" topic.id %}" method="post" class='form-horizontal'>
+      {% csrf_token %}
+      <fieldset class='col-lg-10'>
         <legend>{% trans "New reply" %}</legend>
         {% include "forms/bootstrap_horizontal.html" with form=form %}
         <div class='control-group form-group'>
-            <div class='controls col-lg-offset-2 col-lg-10'>
-                <input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
-                       type="submit" value="{% trans "Submit" %}" />
-            </div>
+          <div class='controls col-lg-offset-2 col-lg-10'>
+            <input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
+                   type="submit" value="{% trans "Submit" %}" />
+          </div>
         </div>
-    </fieldset>
-</form>
-{% endif %}
-{% include "pybb/markup.html" %}
+      </fieldset>
+    </form>
+  {% endif %}
+  {% include "pybb/markup.html" %}
 
 {% endblock %}
