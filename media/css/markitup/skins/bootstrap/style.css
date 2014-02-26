@@ -84,3 +84,4 @@
     content: "\f0c6";
 }
 .markItUpContainer .fileinput-button{ display: none; }
+.markItUpContainer textarea{ height: 350px;}
