@@ -4,7 +4,7 @@
 
 {% block content %}
 <ul class="breadcrumb">
-    <li><a href="{% url "pybb_index" %}">{% trans "Root" %}</a></li>
+    <li><a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a></li>
     <li>{% pybb_link forum.category %}</li>
     <li>{% pybb_link forum %}</li>
 </ul>

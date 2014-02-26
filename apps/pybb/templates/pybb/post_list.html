@@ -9,8 +9,7 @@
     <li>{% pybb_link topic.forum %}</li>
     <li><strong>{% pybb_link topic %}</strong></li>
 </ul>
-
-{% pybb_pagination %}
+{% include "generic/paginator.html" %}
 
 {% if topic.poll %}
   {% include "pybb/poll.html" with topic=topic %}
@@ -21,17 +20,15 @@
   </div>
 {% endif %}
 <div class="posts">
-    {% if first_post %}{% ifnotequal first_post posts.0 %}
-        {% with first_post as post %}
-            {% include "pybb/post_template.html" with page=page spoiler='yes' %}
-        {% endwith %}
-    {% endifnotequal %}{% endif %}
-    {% for post in posts %}
+    {% if page_obj.number != 1 %}
+      {% include "pybb/post_template.html" with page=page_obj.number spoiler='yes' post=topic.head %}
+    {% endif %}
+    {% for post in object_list %}
         {% include "pybb/post_template.html" %}
     {% endfor %}
 </div>
 
-{% pybb_pagination %}
+{% include "generic/paginator.html" %}
 
 <div class="breadcrumb">
     {% if moderator %}

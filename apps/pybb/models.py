@@ -55,7 +55,7 @@ class Category(models.Model):
         return self.forums.all().count()
 
     def get_absolute_url(self):
-        return reverse('pybb_category', args=[self.id])
+        return reverse('pybb:pybb_category', args=[self.id])
 
     @property
     def topics(self):
@@ -93,7 +93,7 @@ class Forum(models.Model):
         return self.topics.all().count()
 
     def get_absolute_url(self):
-        return reverse('pybb_forum', args=[self.id])
+        return reverse('pybb:pybb_forum', args=[self.id])
 
     @property
     def posts(self):
@@ -140,6 +140,9 @@ class Topic(models.Model):
     def last_post(self):
         return self.posts.all().order_by('-created').select_related()[0]
 
+    def get_last_page(self):
+        return (self.posts.count() / settings.OBJECTS_ON_PAGE) + 1
+
     @property
     def poll(self):
         instance = None
@@ -150,7 +153,7 @@ class Topic(models.Model):
         return instance
 
     def get_absolute_url(self):
-        return reverse('pybb_topic', args=[self.id])
+        return reverse('pybb:pybb_topic', args=[self.id])
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -164,7 +167,10 @@ class Topic(models.Model):
             read.save()
 
     def get_poll_add_url(self):
-        return reverse_lazy('pybb_poll_add', args=(self.pk, ))
+        return reverse_lazy('pybb:pybb_poll_add', args=(self.pk, ))
+
+    def get_absolute_url(self):
+        return reverse_lazy('pybb:posts', args=(self.pk, ))
 
     #def has_unreads(self, user):
         #try:
@@ -218,7 +224,6 @@ class Post(RenderableItem):
     body_text = models.TextField(_('Text version'))
     user_ip = models.IPAddressField(_('User IP'), blank=True, default='')
 
-
     class Meta:
         ordering = ['created']
         verbose_name = _('Post')
@@ -249,7 +254,12 @@ class Post(RenderableItem):
         super(Post, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('pybb_post', args=[self.id])
+        return reverse('pybb:posts', args=[self.topic.pk]) + (
+            '?page=%(page)s#post-%(post)s' % {
+                'page': self.topic.get_last_page(),
+                'post': self.pk
+            }
+        )
 
     def render(self, field):
         out = post_markup_filter(getattr(self, field))
@@ -359,7 +369,7 @@ class PrivateMessage(RenderableItem):
         super(PrivateMessage, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('pybb_show_pm', args=[self.id])
+        return reverse('pybb:pybb_show_pm', args=[self.id])
 
 
 class Poll(models.Model):
@@ -411,16 +421,16 @@ class Poll(models.Model):
         return amount
 
     def get_configure_url(self):
-        return reverse_lazy('pybb_poll_configure', args=(self.pk, ))
+        return reverse_lazy('pybb:pybb_poll_configure', args=(self.pk, ))
 
     def get_update_url(self):
-        return reverse_lazy('pybb_poll_update', args=(self.pk, ))
+        return reverse_lazy('pybb:pybb_poll_update', args=(self.pk, ))
 
     def get_delete_url(self):
-        return reverse_lazy('pybb_poll_delete', args=(self.pk, ))
+        return reverse_lazy('pybb:pybb_poll_delete', args=(self.pk, ))
 
     def get_vote_url(self):
-        return reverse_lazy('pybb_poll_vote', args=(self.pk, ))
+        return reverse_lazy('pybb:pybb_poll_vote', args=(self.pk, ))
 
     def get_voted_users(self):
         qset = PollAnswer.objects.filter(poll=self)

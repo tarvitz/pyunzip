@@ -24,6 +24,8 @@ urlpatterns += patterns('',
 
     # Topic
     url('^topic/(?P<topic_id>\d+)/$', views.show_topic, name='pybb_topic'),
+    url('^topics/(?P<pk>\d+)/posts/$', views.PostListView.as_view(),
+        name='posts'),
     url('^forum/(?P<forum_id>\d+)/topic/add/$', views.add_post,
         {'topic_id': None}, name='pybb_add_topic'),
     url('^topic/(?P<topic_id>\d+)/stick/$', views.stick_topic, name='pybb_stick_topic'),

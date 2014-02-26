@@ -6,7 +6,7 @@
 {% with msg as post %}
 
 <div class="crumbs">
-    <a href="{% url "pybb_index" %}">{% trans "Root" %}</a> / {% ifequal pm_mode "inbox" %}<a href="{% url "pybb_pm_inbox" %}">{% trans "Inbox" %}</a>{% else %}<a href="{% url "pybb_pm_outbox" %}">{% trans "Outbox" %}</a>{% endifequal %} / <strong>{{ post.subject }}</strong>
+    <a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a> / {% ifequal pm_mode "inbox" %}<a href="{% url "pybb:pybb_pm_inbox" %}">{% trans "Inbox" %}</a>{% else %}<a href="{% url "pybb_pm_outbox" %}">{% trans "Outbox" %}</a>{% endifequal %} / <strong>{{ post.subject }}</strong>
 </div>
 
 {% include "pybb/pm/common.html" %}
@@ -26,7 +26,7 @@
                         {% comment %}
                         {% if post_user.pybb_profile.avatar %}
                         <div class="avatar">
-                            <a href="{% url "pybb_profile" post_user %}">
+                            <a href="{% url "pybb:pybb_profile" post_user %}">
                             <img src="{{ post_user.pybb_profile.avatar.url }}" />
                             </a>
                         </div>{% endcomment %}
@@ -67,7 +67,7 @@
 
 <div class="controls">
     {% ifequal pm_mode "inbox" %}
-    <a href="{% url "pybb_create_pm" %}?recipient={{ post.src_user.nickname }}">{% trans "Reply" %}</a>
+    <a href="{% url "pybb:pybb_create_pm" %}?recipient={{ post.src_user.nickname }}">{% trans "Reply" %}</a>
     {% endifequal %}
 </div>
 

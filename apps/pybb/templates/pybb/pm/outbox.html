@@ -8,8 +8,8 @@
 <ul>
     {% for msg in messages %}
     <li>
-        <a href="{% url "pybb_show_pm" msg.id %}">{{ msg.subject }}</a> {% trans "to" %}
-        <span class="author"><a href="{% url "pybb_profile" msg.dst_user.nickname %}">{{ msg.dst_user.get_nickname|safe }}</a></span>
+        <a href="{% url "pybb:pybb_show_pm" msg.id %}">{{ msg.subject }}</a> {% trans "to" %}
+        <span class="author"><a href="{% url "pybb:pybb_profile" msg.dst_user.nickname %}">{{ msg.dst_user.get_nickname|safe }}</a></span>
         <span class="date">@ {% pybb_time msg.created %}</span>
     </li>
     {% endfor %}
