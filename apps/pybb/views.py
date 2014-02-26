@@ -220,14 +220,14 @@ def add_post_ctx(request, forum_id, topic_id):
                           user=request.user, ip=ip)
 
         if form.is_valid():
-            post = form.save();
+            post = form.save()
             return HttpResponseRedirect(post.get_absolute_url())
 
-
-    return {'form': form,
-            'topic': topic,
-            'forum': forum,
-            }
+    return {
+        'form': form,
+        'topic': topic,
+        'forum': forum,
+    }
 
 add_post = render_to('pybb/add_post.html')(add_post_ctx)
 

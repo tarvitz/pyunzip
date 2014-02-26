@@ -28,7 +28,7 @@
 
 <h1>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</h1>
 
-<form action="{% if forum %}{% url "pybb:pybb_add_post" topic.id %}{% endif %}" method="post">
+<form action="{% if topic %}{% url "pybb:pybb_add_post" topic.id %}{% endif %}" method="post">
     {% csrf_token %}
     <fieldset class='col-lg-7'>
         {# <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend> #}
