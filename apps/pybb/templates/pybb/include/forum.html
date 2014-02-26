@@ -21,6 +21,8 @@
                     {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
                     {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
                     {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic.poll %}<i class='icon-check' data-title="{% trans "Poll" %}"
+                                          rel="tooltip" data-placement="left"></i>{% endif %}
                 </span>
 
                 <span class='count'>[{{ topic.post_count }}]</span>

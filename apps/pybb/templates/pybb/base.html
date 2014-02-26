@@ -1,56 +1,51 @@
-{% load i18n %}
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru" lang="ru">
+<!doctype html>{% load i18n static %}
+<html>
 <head>
-    <title>Forum</title>
-    <meta name="description" content="WarMist Forum" />
+    <title>Tessera Forum</title>
+    <meta name="description" content="Tessera Forum" />
     <meta name="keywords" content="pybb" />
 
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}/js/core.js'></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}components/jquery/jquery.min.js"></script>
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}js/jquery.tmpl.min.js'></script>
+    <script type='text/javascript' src='{% static "js/core.js" %}'></script>
+    <script type="text/javascript" src="{% static "components/jquery/jquery.min.js" %}"></script>
+    <script type='text/javascript' src='{% static "js/jquery.tmpl.min.js" %}'></script>
     <script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
-
     <!-- Highlightjs goodies -->
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}pybb/js/highlight.js"></script>
+    <script type="text/javascript" src="{% static "pybb/js/highlight.js" %}"></script>
     <script type="text/javascript">
       hljs.initHighlightingOnLoad();
     </script>
-    <link type="text/css" rel="stylesheet" href="{{ gs.STATIC_URL }}pybb/css/hljs_styles/idea.css" />
-    <!-- <link type="text/css" rel='stylesheet' href='/styles/rank.css' />
-    <link type='text/css' rel='stylesheet' href='/styles/message.css' />
-    -->
 
-    <link rel='stylesheet' href='{{ gs.STATIC_URL }}css/markitup/skins/bootstrap/style.css' type='text/css' media='screen' async>
-    <link rel='stylesheet' href='{{ gs.STATIC_URL }}css/bootstrap-forum.css'>
-    <link rel='stylesheet' href='{{ gs.STATIC_URL }}css/whhg.css'>
-    <!--<link rel='stylesheet' href='{{ gs.STATIC_URL }}css/markitup/skins/markitup/style.css' type='text/css' media='screen' async> -->
-    <!--<link rel='stylesheet' href='{{ gs.STATIC_URL }}css/markitup/whhg.css' type='text/css' media='screen' async> -->
-    <!--<link type='text/css' rel='stylesheet' href='{{ gs.STATIC_URL }}bootstrap3/css/bootstrap.min.css'>-->
+    <link type="text/css" rel="stylesheet"
+          href="{% static "pybb/css/hljs_styles/idea.css" %}" />
+    <link rel='stylesheet' href='{% static "css/markitup/skins/bootstrap/style.css" %}'
+          type='text/css' media='screen' async>
+    <link rel='stylesheet' href='{% static "css/bootstrap-forum.css" %}'>
+    <link rel='stylesheet' href='{% static "css/whhg.css" %}'>
     <link type='text/css' rel='stylesheet' 
-          href='{{ gs.STATIC_URL }}bootstrap3/css/bootstrap-glyphicons.css'>
-    <!--<link type='text/css' rel='stylesheet' href='{{ gs.STATIC_URL }}bootstrap3/css/forum-main.css'> -->
-    <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css' type='text/css' media='screen' async>
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}bootstrap3/js/bootstrap.min.js'></script>
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}js/markitup/textile.js'></script>
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}js/jquery.markitup.js'></script>
-    <!-- NOTY -->
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/jquery.noty.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/promise.js"></script>
+          href='{% static "bootstrap3/css/bootstrap-glyphicons.css" %}'>
+    <link rel='stylesheet' href='/media/colorbox/css/fasion/colorbox.css'
+          type='text/css' media='screen' async>
 
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/layouts/top.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/layouts/topLeft.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/layouts/topRight.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/layouts/center.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/themes/default.js"></script>
-    <script type="text/javascript" src="{{ gs.STATIC_URL }}js/noty/themes/warmist.js"></script>
+    <script type='text/javascript' src='{% static "bootstrap3/js/bootstrap.min.js" %}'></script>
+    <script type='text/javascript' src='{% static "js/markitup/textile.js" %}'></script>
+    <script type='text/javascript' src='{% static "js/jquery.markitup.js" %}'></script>
+    <!-- NOTY -->
+    <script type="text/javascript" src="{% static "js/noty/jquery.noty.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/promise.js" %}"></script>
+
+    <script type="text/javascript" src="{% static "js/noty/layouts/top.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/layouts/topLeft.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/layouts/topRight.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/layouts/center.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/themes/default.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/noty/themes/warmist.js" %}"></script>
     <!-- END OF NOTY -->
     <!-- colorbox -->
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}colorbox/jquery.colorbox-min.js'></script>
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}colorbox/i18n/jquery.colorbox-ru.js'></script>
+    <script type='text/javascript' src='{% static "colorbox/jquery.colorbox-min.js" %}'></script>
+    <script type='text/javascript' src='{% static "colorbox/i18n/jquery.colorbox-ru.js" %}'></script>
     <!-- colorbox -->
-    <script type='text/javascript' src='{{ gs.STATIC_URL }}js/jq_base.js'></script>
+    <script type='text/javascript' src='{% static "js/jq_base.js" %}'></script>
     {% block extra_meta %}{% endblock %}
 </head>
 <body>
@@ -63,11 +58,13 @@
     <div id='push'></div>
 </div>
 {% include 'pybb/footer.html' %}
+
 <!-- modals -->
 {% if not user.is_authenticated %}
   {% include "forms/login_modal.html" %}
 {% endif %}
 </body>
+
 <script type='text/javascript'>
 $(document).ready(function(){
     $("[rel=tooltip]").tooltip({live: true});
