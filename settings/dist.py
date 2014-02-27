@@ -96,9 +96,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'apps.core.middleware.ChecksMiddleware',
-    'apps.core.middleware.UserActivityMiddleware',
-    'apps.core.middleware.GuestActivityMiddleware',
-    'apps.core.middleware.TestMiddleware',
+    #'apps.core.middleware.UserActivityMiddleware',
+    # todo: CLEANSE
+    #'apps.core.middleware.GuestActivityMiddleware',
     #obsolete
     #'apps.core.middleware.UserSettingsMiddleware',
     'apps.wh.middleware.WarningsMiddleware',

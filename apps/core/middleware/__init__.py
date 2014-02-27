@@ -23,24 +23,6 @@ class SetRemoteAddrFromForwardedFor(object):
             real_ip = real_ip.split(',')[0]
             request.META['REMOTE_ADDR'] = real_ip
 
-class TestMiddleware(object):
-    def process_request(self, request):
-        request.META['test'] = 'thiz iz da \'est'
-    #FIXME: make search replacements!!!
-    """
-    def process_response(self,request,response):
-        if hasattr(request,'session'):
-            query = request.session.get('search_q','').lower()
-            if ("/search/" in request.get_full_path() and query) or \
-            ("/search/" in request.META.get('HTTP_REFERER','')):
-                #make replacing more clear and wise
-                content = response.content.decode('utf-8','ignore')
-                if query in content.lower():
-                    content = content.replace(query,"<span style='background-color: white;color: red;'>%s</span>" % query)
-                    response.content = content
-
-        return response
-    """
 
 class UserActivityMiddleware(object):
     def process_request(self, request):
