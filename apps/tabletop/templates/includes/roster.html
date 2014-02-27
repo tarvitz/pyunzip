@@ -1,122 +1,108 @@
 <center> {% load newsfilters %}
-	<div class='round_message' id='roster_{{ r.id }}'>
-		<div class='message-headline'>
-			<!-- effects -->
-			<div class='transparency_black'></div>
-			<!-- end of effects -->
-			<div class='links'>	
-                {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
-                    <input class='left pull-left' value='{{ r.id }}' type='checkbox' name='items'>
+  <div class='round message' id='roster_{{ r.id }}'>
+    <div class='message-headline'>
+      <!-- effects -->
+      <div class='transparency_black'></div>
+      <!-- end of effects -->
+      <div class='links'>
+        {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
+          <input class='left pull-left' value='{{ r.id }}' type='checkbox' name='items'>
+        {% endif %}
+        {% ifequal user r.owner %}
+          {% spaceless %}
+            {% if r.is_orphan %}
+              {% ifequal user r.owner %}
+                <span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
+              {% else %}
+                {% if perms.tabletop.undelete_rosters or user.is_superuser %}
+                  <span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
+                {% else %}
+                  <span class='first notice'>удалён</span>
                 {% endif %}
-				{% ifequal user r.owner %}
-					{% spaceless %}
-					{% if r.is_orphan %}
-						{% ifequal user r.owner %}
-							<span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
-						{% else %}
-						{% if perms.tabletop.undelete_rosters or user.is_superuser %}
-							<span class='first'><a href='{% url "tabletop:roster-unorphan" r.id %}' class='restore_link'>вернуть</a></span>
-						{% else %}
-							<span class='first notice'>удалён</span>
-						{% endif %}
-						{% endifequal %}
-					{% else %}
-						<span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
-					{% endif %}{% endspaceless %}
-					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
-				{% else %}
-				{% if perms.tabletop.edit_user_rosters or user.is_superuser %}
-					{% spaceless %}
-					{% if r.is_orphan %}
-						<span class='first'><a href="{% url "tabletop:roster-unorphan" r.id %}" title='' class='restore_link'>вернуть</a></span>
-					{% else %}
-						<span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
-					{% endif %}
-					{% endspaceless  %}
-					<span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
-				{% else %}
-					{% if r.is_orphan %}<span class='first'>удалён</span>{% endif %}
-				{% endif %}
-				{% ifequal user r.user %}
-					<span><a href='{% url "tabletop:roster-spawn" r.id %}' title='забрать данный ростер себе' class='spawn'>spawn</a></span>
-				{% endifequal %}
-				{% endifequal %}
-			</div>
-			<a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a> 
-			</div><!-- msg_headline -->
-		<div class='message-content'>
-			<div class='avatar'>
-				{% spaceless %}
-				{% comment %}
-					{% if r.user.nickname %}
-						<img src='{% url "url_get_avatar" user.get_username %}'><br>
-						{% get_nickname r.user %}
-					{% else %}
-						<img src='{% url "url_get_avatar" owner.get_username %}'><br>
-						{% get_nickname r.owner %}
-					{% endif %}
-				{% endcomment %}
-					<img src='{% url "wh:avatar" r.show_player %}'><br>
-					{% if r.user %}
-						<a href='{% url "tabletop:rosters" r.user.get_username %}'>{{ r.user.get_nickname|safe }}</a>
-					{% else %}
-						{{ r.show_player }}
-					{% endif %}
-				{% endspaceless %}
-			</div> <!-- msg_avatar -->
-			<div class='text'>
-				<div class='transparency'></div>
-				<div class='reflects_left'></div>
-				<div class='reflects_right'></div>
-					{% spaceless %}
-						{% ifnotequal r.owner r.user %}
-							<div class='msg_txt'>Владелец: {{ r.owner.get_nickname|safe }}</div>
-						{% endifnotequal %}
-					{% endspaceless %}
-					<div class='msg_txt'>Автор: <i>{% if r.user %}{{ r.user.get_nickname|safe }}{% else %}{{ r.show_player }}{% endif %}</i></div>
-                    <div class='msg_txt'>Побед/поражений: </i>: {{ r.wins }}/{{ r.defeats }}</div>
-					<div class='msg_txt'>Кодекс: <i>{{ r.codex }}</i></div>
-					<div class='msg_txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>
-					<div class='msg_txt'>Очки: <i>{{ r.pts }} pts</i></div>
-					{% ifequal roster_flag "True" %}
-						<div class='msg_txt'>Ростер:<br>
-							<span class='roster'>
-								{# {{ r.roster|render_filter:r.syntax|safe }} #}
-                                {{ r.render_roster|safe }}
-							</span>
-						</div>
-                                        {% else %}
-                                                <div class='msg_txt' id='id_roster_{{ r.id }}'>
-                                                    Ростер: <a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url "json:tabletop:roster" r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
-                                                    <span class='roster'></span>
-                                                </div>
-					{% endifequal %}
-                    {% if r.comments %}
-					<div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
-                    {% endif %}
-					{% load comments %}
-					{% get_comment_count for r as comments_count %}
-					{% if comments_count %}
-						<div class='msg_txt'>Коментариев: {{ comments_count }}</div>
-					{% endif %}
-					<div style='clear: both;'></div>
-			</div> <!-- msg_text -->
-		</div><!-- msg_content -->
-		<br clear='all'>
-		<div class='message-footer'>
-			<div class='transparency_black'></div>
-			<div class='links'>	
-                                <span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}' {% spaceless %}
-                                    title='{{ r.revision }}-я редакция кодекса'
-                                {% endspaceless %}>{{ r.codex }} [{{ r.revision }}]</a></span>
-				<span><a href='{% url "tabletop:rosters-pts" r.pts %}'>{{ r.pts }} pts</a></span>
-			</div>
-			<br clear='all'>
-		</div> <!-- msg_footer -->
-	</div> <!-- message -->
+              {% endifequal %}
+            {% else %}
+              <span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
+            {% endif %}{% endspaceless %}
+          <span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+        {% else %}
+          {% if perms.tabletop.edit_user_rosters or user.is_superuser %}
+            {% spaceless %}
+              {% if r.is_orphan %}
+                <span class='first'><a href="{% url "tabletop:roster-unorphan" r.id %}" title='' class='restore_link'>вернуть</a></span>
+              {% else %}
+                <span class='first'><a href='{% url "tabletop:roster-delete" r.id "approve" %}' title='удалить' class='del_link'>[x]</a></span>
+              {% endif %}
+            {% endspaceless  %}
+            <span><a href="{% url "tabletop:roster-edit" r.id %}" title='редактировать ростер' class='edit_link'>правка</a></span>
+          {% else %}
+            {% if r.is_orphan %}<span class='first'>удалён</span>{% endif %}
+          {% endif %}
+          {% ifequal user r.user %}
+            <span><a href='{% url "tabletop:roster-spawn" r.id %}' title='забрать данный ростер себе' class='spawn'>spawn</a></span>
+          {% endifequal %}
+        {% endifequal %}
+      </div>
+      <a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a>
+    </div><!-- msg_headline -->
+    <div class='message-content'>
+      <div class='avatar'>
+        {% spaceless %}
+          <img src='{% url "wh:avatar" r.show_player %}'><br>
+          {% if r.user %}
+            <a href='{% url "tabletop:rosters" r.user.get_username %}'>{{ r.user.get_nickname|safe }}</a>
+          {% else %}
+            {{ r.show_player }}
+          {% endif %}
+        {% endspaceless %}
+      </div> <!-- msg_avatar -->
+      <div class='text'>
+        <div class='transparency'></div><div class='reflects_left'></div>
+        <div class='reflects_right'></div>
+        {% spaceless %}
+          {% ifnotequal r.owner r.user %}
+            <div class='txt'>Владелец: {{ r.owner.get_nickname|safe }}</div>
+          {% endifnotequal %}
+        {% endspaceless %}
+        <div class='txt'>
+          Автор: <i>{% if r.user %}{{ r.user.get_nickname|safe }}{% else %}{{ r.show_player }}{% endif %}</i>
+        </div>
+        <div class='txt'>Побед/поражений: </i>: {{ r.wins }}/{{ r.defeats }}</div>
+        <div class='txt'>Кодекс: <i>{{ r.codex }}</i></div>
+        <div class='txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>
+        <div class='txt'>Очки: <i>{{ r.pts }} pts</i></div>
+        {% ifequal roster_flag "True" %}
+          <div class='txt'>Ростер:<br>
+            <span class='roster'>
+              {{ r.render_roster|safe }}
+            </span>
+          </div>
+        {% else %}
+          <div class='msg_txt' id='id_roster_{{ r.id }}'>
+            Ростер: <a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url "json:tabletop:roster" r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>
+            <span class='roster'></span>
+          </div>
+        {% endifequal %}
+        {% if r.comments %}
+          <div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
+        {% endif %}
+        {% load comments %}
+        {% get_comment_count for r as comments_count %}
+        {% if comments_count %}
+          <div class='msg_txt'>Коментариев: {{ comments_count }}</div>
+        {% endif %}
+        <div style='clear: both;'></div>
+      </div> <!-- msg_text -->
+    </div><!-- msg_content -->
+    <br clear='all'>
+    <div class='message-footer'>
+      <div class='transparency_black'></div>
+      <div class='links'>
+        <span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}'{% spaceless %}
+                 title='{{ r.revision }}-я редакция кодекса'
+        {% endspaceless %}>{{ r.codex }} [{{ r.revision }}]</a></span>
+        <span><a href='{% url "tabletop:rosters-pts" r.pts %}'>{{ r.pts }} pts</a></span>
+      </div>
+      <br clear='all'>
+    </div> <!-- msg_footer -->
+  </div> <!-- message -->
 </center>
-{% comment %}
-{% if comments.object_list %}
-	{% include settings.document.comments %}
-{% endif %}
-{% endcomment %}

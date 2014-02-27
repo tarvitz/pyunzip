@@ -328,7 +328,7 @@ class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
     codex = forms.ModelChoiceField(
         queryset=Codex.objects, required=True, empty_label=None,
-        widget=forms.Select(attrs={'class': 'span5 chosen'}),
+        widget=forms.Select(attrs={'class': 'span5 chosen form-control'}),
         label=_('Codex')
     )
 
@@ -340,8 +340,10 @@ class AddRosterModelForm(RequestModelForm):
             #'roster': TinyMkWidget(attrs={'disable_user_quote': True})
             'title': forms.TextInput(attrs={'class': 'span5 form-control'}),
             'pts': forms.TextInput(attrs={'class': 'span5 form-control'}),
-            'revision': forms.Select(attrs={'class': 'span5 chosen form-control'}),
-            'roster': forms.Textarea(attrs={'class': 'markitup textile form-control'})
+            'revision': forms.Select(attrs={
+                'class': 'span5 chosen form-control'}),
+            'roster': forms.Textarea(attrs={
+                'class': 'markitup textile form-control'})
         }
         fields = [
             'title',

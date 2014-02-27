@@ -1,7 +1,6 @@
 import math
 import datetime
 
-from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.http import (
@@ -14,7 +13,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from apps.core.helpers import render_to, get_int_or_zero, get_object_or_None
 from apps.pybb.util import render_to, paged, build_form, quote_text
 from apps.pybb.models import (
-    Category, Forum, Topic, AnonymousPost, Post,
+    Category, Forum, Topic, Post,
     Profile,
     PrivateMessage,
     Poll, PollItem, PollAnswer
@@ -30,7 +29,6 @@ from apps.pybb.anonymous_post import (
 from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.utils.decorators import method_decorator
-from django.contrib.formtools.wizard.views import NamedUrlSessionWizardView
 from django.core.exceptions import PermissionDenied
 from utils.paginator import DiggPaginator as Paginator
 
@@ -583,7 +581,7 @@ class ConfigurePollView(PollMixin, AccessPollMixin, generic.FormView):
 class PollVoteView(PollMixin, generic.CreateView):
     """ PollVoteView operates with user vote single or multiple vote poll. """
     model = PollAnswer
-    # get_form_class alters SingleVotePollForm to multple one
+    # get_form_class alters SingleVotePollForm to multiple one
     form_class = SingleVotePollForm
 
     @method_decorator(login_required)
@@ -632,33 +630,8 @@ class PollVoteView(PollMixin, generic.CreateView):
         raise PermissionDenied("not allowed")
 
 
-def add_poll_wizard(request, pk, step=None):
-    extra = int(request.POST.get('0-items_amount', 1))
-    PollItemsFormset = formset_factory(PollItemForm, extra=extra)
-
-    wizard = AddPollWizard.as_view(
-        [AddPollForm, PollItemsFormset], url_name='pybb_poll_add',
-        done_step_name='finished')
-    return wizard(request, pk=pk, step=step)
-
-
-class AddPollWizard(NamedUrlSessionWizardView):
-    template_name = 'pybb/poll_wizard.html'
-
-    def done(self, form_list, **kwargs):
-        poll_form = form_list[0]
-        poll_item_formset = form_list[1]
-        return redirect('/')
-
-    def get_step_url(self, step):
-        return reverse_lazy(self.url_name,
-                            args=(self.kwargs.get('pk', 0), step))
-
-    def get_template_names(self):
-        return self.template_name
-
-
 class PostListView(generic.ListView):
+    """ Topic posts list view, e.g. paginated topic posts instance view """
     model = Post
     paginator_class = Paginator
     paginate_by = settings.OBJECTS_ON_PAGE
