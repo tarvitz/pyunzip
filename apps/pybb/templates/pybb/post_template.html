@@ -3,7 +3,7 @@
 <div class="post post-{% cycle "odd" "even" %} round message message-center" data-nickname='{{ post.user.nickname }}'>
     <a name="post-{{ post.id }}"></a>
     <div class="message-headline {% spaceless %}
-        {% if counter %}
+        {% if counter == 1%}
           message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
         {% endif %}{% endspaceless %}">
         <div class='transparency grey'></div>
@@ -54,7 +54,7 @@
         </div>
     </div>
     <div class='message-footer {% spaceless %}
-        {% if counter %}
+        {% if counter == 1%}
           message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
         {% endif %}{% endspaceless %}'>
         <div class='transparency grey'></div>
