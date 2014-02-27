@@ -1,16 +1,11 @@
 # coding: utf-8
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseRedirect
-from django.template.loader import get_template
-from django.template import Context
-from apps.wh.models import UserActivity, GuestActivity, User, Skin,Army, Rank
-from django.db.models import Q
+from django.http import HttpResponseRedirect
+from apps.wh.models import UserActivity, GuestActivity
 from django.contrib import auth
 from datetime import datetime
-from datetime import timedelta
-from apps.core.settings import SETTINGS,ANONYMOUS_SETTINGS
-from apps.core.helpers import get_object_or_none, safe_ret
-from apps.core.decorators import null
+from apps.core.helpers import safe_ret
+
 
 class SetRemoteAddrFromForwardedFor(object):
     def process_request(self, request):
@@ -52,6 +47,7 @@ class UserActivityMiddleware(object):
                 except GuestActivity.DoesNotExist:
                     pass
 
+
 class GuestActivityMiddleware(object):
     def process_request(self, request):
         if not request.user.is_authenticated():
@@ -67,58 +63,34 @@ class GuestActivityMiddleware(object):
                 ip_account.save()
         return None
 
-#obsolete
-class UserSettingsMiddleware(object):
-    def process_request(self,request):
-        from apps.core.models import Settings
-        #for user that exists
-        if request.user.is_authenticated():
-            if not request.user.settings:
-                request.user.settings = SETTINGS
-                request.user.save()
-        #for anonymous users by defaults
-        else:
-            anonymous_settings = SETTINGS
-            anonymous_settings.update(ANONYMOUS_SETTINGS)
-            setattr(request.user,'settings',anonymous_settings)
 
 class ChecksMiddleware(object):
     def process_request(self, request):
-        #let ie burn in hell
-        user_agent = request.META.get('HTTP_USER_AGENT', '')
+        # let ie burn in hell
+        #user_agent = request.META.get('HTTP_USER_AGENT', '')
         user = request.user
-        if 'msie 6.0' in user_agent.title().lower()\
-        or 'msie 7.0' in user_agent.title().lower():
-            template = get_template('get_a_working_browser.html')
-            html = template.render(Context())
-            return HttpResponse(html)
-        if  user_agent.title().lower() in (
-                'wbsearchbot', 'ahrefsbot/4.0'
-            ):
-            response = HttpResponse()
-            response['Content-Type'] = 'application/json'
-            response.write('500')
-            return response
+        #if 'msie 6.0' in user_agent.title().lower()\
+        #or 'msie 7.0' in user_agent.title().lower():
+        #    template = get_template('get_a_working_browser.html')
+        #    html = template.render(Context())
+        #    return HttpResponse(html)
+        #if  user_agent.title().lower() in (
+        #        'wbsearchbot', 'ahrefsbot/4.0'
+        #    ):
+        #    response = HttpResponse()
+        #    response['Content-Type'] = 'application/json'
+        #    response.write('500')
+        #    return response
         if user.is_authenticated() and not user.is_active:
-               auth.logout(request)
-        """
-        if user.is_authenticated():
-            #if not user.skin:
-            #    user.skin = Skin.objects.get(name__iexact='default')
-            #    #user.skin = Skin.objects.order_by('id')[0]
-            #    user.save()
-            if not user.army:
-	    	army = get_object_or_none(Army,name__iexact='none')
-		if army:
-			user.army = army
-			user.save()
-        """
+            auth.logout(request)
+
 
 class BenchmarkingMiddleware(object):
     def process_response(self, request, response):
-        if hasattr(requset, 'timeit'):
+        if hasattr(request, 'timeit'):
            pass
         return response
+
 
 class DevMiddleware(object):
     def process_response(self, request, response):
