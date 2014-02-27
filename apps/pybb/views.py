@@ -646,9 +646,16 @@ class PostListView(generic.ListView):
             self.request.user.is_superuser or
             self.request.user in topic.forum.moderators.all()
         )
+        poll_form_class = SingleVotePollForm
+        if topic.poll and topic.poll.is_multiple:
+            poll_form_class = MultipleVotePollForm
+        poll_form = (
+            poll_form_class(None, poll=topic.poll) if topic.poll else None
+        )
         context.update({
             'topic': topic,
             'moderator': moderator,
+            'poll_form': poll_form,
             'form': AddPostForm(topic=topic, initial={})
         })
         return context
