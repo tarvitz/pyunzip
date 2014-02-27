@@ -28,7 +28,7 @@
       {% include "pybb/post_template.html" with page=page_obj.number spoiler='yes' post=topic.head counter=1 %}
     {% endif %}
     {% for post in object_list %}
-      {% include "pybb/post_template.html" with counter=forloop.counter %}
+      {% include "pybb/post_template.html" %}
     {% endfor %}
   </div>
 
