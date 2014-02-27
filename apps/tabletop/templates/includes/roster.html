@@ -1,9 +1,7 @@
-<center> {% load newsfilters %}
+{% load newsfilters %}
+<center>
   <div class='round message' id='roster_{{ r.id }}'>
     <div class='message-headline'>
-      <!-- effects -->
-      <div class='transparency_black'></div>
-      <!-- end of effects -->
       <div class='links'>
         {% if perms.tabletop.change_roster and perms.tabletop.delete_roster %}
           <input class='left pull-left' value='{{ r.id }}' type='checkbox' name='items'>
@@ -56,8 +54,6 @@
         {% endspaceless %}
       </div> <!-- msg_avatar -->
       <div class='text'>
-        <div class='transparency'></div><div class='reflects_left'></div>
-        <div class='reflects_right'></div>
         {% spaceless %}
           {% ifnotequal r.owner r.user %}
             <div class='txt'>Владелец: {{ r.owner.get_nickname|safe }}</div>
@@ -95,7 +91,6 @@
     </div><!-- msg_content -->
     <br clear='all'>
     <div class='message-footer'>
-      <div class='transparency_black'></div>
       <div class='links'>
         <span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}'{% spaceless %}
                  title='{{ r.revision }}-я редакция кодекса'
