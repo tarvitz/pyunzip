@@ -1,2 +1,21 @@
+@import "../../bootstrap/variables";
+
 @round-message-text-color: #000;
 @msg-headline-transparency: lightgrey;
+.message-headline,.message-footer{
+  &.message-primary,&.message-info{
+    background-color: @alert-info-bg;
+  }
+  &.message-success{
+    background-color: @alert-success-bg;
+  }
+  &.message-danger{
+    background-color: @alert-danger-bg;
+  }
+  &.message-default{
+
+  }
+  &.message-warning{
+    background-color: @alert-warning-bg;
+  }
+}

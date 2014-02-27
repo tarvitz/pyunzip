@@ -2,7 +2,10 @@
 
 <div class="post post-{% cycle "odd" "even" %} round message message-center" data-nickname='{{ post.user.nickname }}'>
     <a name="post-{{ post.id }}"></a>
-    <div class="message-headline">
+    <div class="message-headline {% spaceless %}
+        {% if counter %}
+          message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
+        {% endif %}{% endspaceless %}">
         <div class='transparency grey'></div>
         <span class='links'>
             <a class="permalink" href="{{ post.get_absolute_url }}">#</a>
@@ -50,7 +53,10 @@
             </div>
         </div>
     </div>
-    <div class='message-footer'>
+    <div class='message-footer {% spaceless %}
+        {% if counter %}
+          message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
+        {% endif %}{% endspaceless %}'>
         <div class='transparency grey'></div>
         <div class='links'>
             <span><a class='forum quote'
