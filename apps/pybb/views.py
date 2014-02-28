@@ -10,16 +10,12 @@ from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.urlresolvers import reverse, reverse_lazy
 
-from apps.core.helpers import render_to, get_int_or_zero, get_object_or_None
 from apps.pybb.util import render_to, paged, build_form, quote_text
 from apps.pybb.models import (
-    Category, Forum, Topic, Post,
-    Profile,
-    PrivateMessage,
-    Poll, PollItem, PollAnswer
+    Category, Forum, Topic, Post, Profile, Poll, PollItem, PollAnswer
 )
 from apps.pybb.forms import (
-    AddPostForm, EditProfileForm, EditPostForm, UserSearchForm, CreatePMForm,
+    AddPostForm, EditProfileForm, EditPostForm, UserSearchForm,
     AddPollForm, PollItemForm, PollItemBaseinlineFormset, UpdatePollForm,
     SingleVotePollForm, MultipleVotePollForm, AgreeForm
 )
@@ -389,61 +385,6 @@ def add_subscription(request, topic_id):
     return HttpResponseRedirect(reverse('pybb:pybb_topic', args=[topic.id]))
 
 
-@login_required
-def create_pm_ctx(request):
-    recipient = request.GET.get('recipient', '')
-    form = build_form(CreatePMForm, request, user=request.user,
-                      initial={'markup': request.user.pybb_profile.markup,
-                               'recipient': recipient})
-
-    if form.is_valid():
-        post = form.save()
-        return HttpResponseRedirect(reverse('pybb:pybb_pm_outbox'))
-
-    return {'form': form,
-            'pm_mode': 'create',
-            }
-create_pm = render_to('pybb/pm/create_pm.html')(create_pm_ctx)
-
-
-@login_required
-def pm_outbox_ctx(request):
-    messages = PrivateMessage.objects.filter(src_user=request.user)
-    return {'messages': messages,
-            'pm_mode': 'outbox',
-            }
-pm_outbox = render_to('pybb/pm/outbox.html')(pm_outbox_ctx)
-
-
-@login_required
-def pm_inbox_ctx(request):
-    messages = PrivateMessage.objects.filter(dst_user=request.user)
-    return {'messages': messages,
-            'pm_mode': 'inbox',
-            }
-pm_inbox = render_to('pybb/pm/inbox.html')(pm_inbox_ctx)
-
-
-@login_required
-def show_pm_ctx(request, pm_id):
-    msg = get_object_or_404(PrivateMessage, pk=pm_id)
-    if not request.user in [msg.dst_user, msg.src_user]:
-        raise PermissionDenied('not allowed')
-    if request.user == msg.dst_user:
-        pm_mode = 'inbox'
-        if not msg.read:
-            msg.read = True
-            msg.save()
-        post_user = msg.src_user
-    else:
-        pm_mode = 'outbox'
-        post_user = msg.dst_user
-    return {'msg': msg,
-            'pm_mode': pm_mode,
-            'post_user': post_user,
-            }
-show_pm = render_to('pybb/pm/message.html')(show_pm_ctx)
-
 
 @login_required
 def switch_theme(request, theme):
@@ -451,7 +392,8 @@ def switch_theme(request, theme):
     if theme in themes:
         if not request.user.settings:
             request.user.settings = {}
-        request.user.settings['forum_theme'] = settings.FORUM_THEMES[themes.index(theme)][1]
+        request.user.settings['forum_theme'] = settings.FORUM_THEMES[
+            themes.index(theme)][1]
         request.user.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 

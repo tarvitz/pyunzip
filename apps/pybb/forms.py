@@ -6,11 +6,10 @@ from django.forms.util import ErrorList
 from django.forms.models import BaseInlineFormSet
 from django.conf import settings
 from django.utils.translation import ugettext as _
-from django.contrib.auth.models import User
 from django.core.exceptions import ImproperlyConfigured
 
 from apps.pybb.models import (
-    Topic, Post, Profile, PrivateMessage, Poll, PollAnswer, PollItem
+    Topic, Post, Profile, Poll, PollAnswer, PollItem
 )
 from apps.pybb import settings as pybb_settings
 
@@ -119,33 +118,6 @@ class UserSearchForm(forms.Form):
             return qs.filter(username__contains=query)
         else:
             return qs
-
-
-class CreatePMForm(forms.ModelForm):
-    recipient = forms.CharField(label=_('Recipient'))
-
-    class Meta:
-        model = PrivateMessage
-        fields = ['subject', 'body', 'markup']
-
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super(CreatePMForm, self).__init__(*args, **kwargs)
-        self.fields.keyOrder = ['recipient', 'subject', 'body', 'markup']
-
-    def clean_recipient(self):
-        name = self.cleaned_data['recipient']
-        try:
-            user = User.objects.get(nickname__iexact=name)
-        except User.DoesNotExist:
-            raise forms.ValidationError(_('User with login %s does not exist') % name)
-        else:
-            return user
-
-    def save(self):
-        pm = PrivateMessage(src_user=self.user, dst_user=self.cleaned_data['recipient'])
-        pm = forms.save_instance(self, pm)
-        return pm
 
 
 class AddPollForm(forms.ModelForm):

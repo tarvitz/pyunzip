@@ -8,13 +8,12 @@
                 <span class='icon-bar'></span>
                 <span class='icon-bar'></span>
             </button>
-            <a class='navbar-brand brand' href="{% url "pybb:pybb_index" %}">Tessera  Форум</a>
+            <a class='navbar-brand brand' href="{% url "pybb:index" %}">Tessera  Форум</a>
             <div class='nav-collapse pull-right'>
                 <ul class="nav navbar-nav">
                     <li><a href="{% url "news:news" %}">{% trans "News" %}</a></li>
                     <li><a href="{% url "wh:users" %}">{% trans "Users" %}</a></li>
                     {% if user.is_authenticated %}
-                    <!--<li><a href="{% url "pybb:pybb_edit_profile" %}">{% trans "My profile" %}</a></li> -->
                     <li class='dropdown'>
                         <a class='dropdown-toggle' role='button' data-toggle="dropdown" href='#'>
                             {{ user.get_nickname|safe }}
@@ -39,7 +38,7 @@
                         </a>
                         <ul class='dropdown-menu pull-right' role='menu'>
                             {% for theme in gs.FORUM_THEMES %}
-                                <li><a href='{% url "pybb:pybb_switch_theme" theme.0 %}'>{% trans theme.0 %}</a></li>
+                                <li><a href='{% url "pybb:theme-switch" theme.0 %}'>{% trans theme.0 %}</a></li>
                             {% endfor %}
                         </ul>
                     </li>

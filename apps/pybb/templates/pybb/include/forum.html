@@ -2,7 +2,7 @@
 
 <div class="controls btn-group" style='margin-bottom: 10px'>
     <a class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }} btn-mini'
-       href="{% url "pybb:pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
+       href="{% url "pybb:topic-add" forum.id %}">{% trans "New topic" %}</a>
 </div>
 
 <div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
@@ -42,6 +42,6 @@
 {% pybb_pagination %}
 {% comment %}
 <div class="controls">
-    <a href="{% url "pybb:pybb_add_topic" forum.id %}">{% trans "New topic" %}</a>
+    <a href="{% url "pybb:topic-add" forum.id %}">{% trans "New topic" %}</a>
 </div>
 {% endcomment %}

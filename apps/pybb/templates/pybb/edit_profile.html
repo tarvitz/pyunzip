@@ -10,8 +10,8 @@
 <img src="{% url "url_get_avatar" user.get_username %}" />
 <p><a href="{% url "auth_password_change" %}">{% trans "Change the password" %}</a></p>
 {#<p><a href="{% url "auth_email_change" %}">{% trans "Change the email" %}</a></p>#}
-<p><a href="{% url "pybb:pybb_pm_inbox" %}">{% trans "Inbox" %}</a></p>
-<p><a href="{% url "pybb:pybb_pm_outbox" %}">{% trans "outbox" %}</a></p>
+<p><a href="{% url "pybb:inbox-pm" %}">{% trans "Inbox" %}</a></p>
+<p><a href="{% url "pybb:outbox-pm" %}">{% trans "outbox" %}</a></p>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <fieldset>
@@ -27,7 +27,7 @@
 {% pybb_link sub %}
 &mdash;
 <strong>
-    <a href="{% url "pybb:pybb_delete_subscription" sub.id %}">{% trans "delete" %}</a>
+    <a href="{% url "pybb:subscription-delete" sub.id %}">{% trans "delete" %}</a>
 </strong>
 </li>
 {% endfor %}

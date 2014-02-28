@@ -6,7 +6,7 @@
 <div class="breadcrumb">
 {% if forum %}
     <li>
-        <a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a>
+        <a href="{% url "pybb:index" %}">{% trans "Root" %}</a>
     </li>
     <li>
         {% pybb_link forum.category %} 
@@ -14,7 +14,7 @@
     <li>{% pybb_link forum %}</li>
 {% else %}
     <li>
-        <a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a>
+        <a href="{% url "pybb:index" %}">{% trans "Root" %}</a>
     </li>
     <li>
         {% pybb_link topic.forum.category %}
@@ -28,7 +28,7 @@
 
 <h1>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</h1>
 
-<form action="{% if topic %}{% url "pybb:pybb_add_post" topic.id %}{% endif %}" method="post">
+<form action="{% if topic %}{% url "pybb:post-add" topic.id %}{% endif %}" method="post">
     {% csrf_token %}
     <fieldset class='col-lg-7'>
         {# <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend> #}

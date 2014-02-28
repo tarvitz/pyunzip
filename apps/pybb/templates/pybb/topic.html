@@ -4,7 +4,7 @@
 
 {% block content %}
 <ul class='breadcrumb'>
-    <li><a href="{% url "pybb:pybb_index" %}">{% trans "Root" %}</a></li>
+    <li><a href="{% url "pybb:index" %}">{% trans "Root" %}</a></li>
     <li>{% pybb_link topic.forum.category %}</li>
     <li>{% pybb_link topic.forum %}</li>
     <li><strong>{% pybb_link topic %}</strong></li>
@@ -37,34 +37,34 @@
     {% if moderator %}
     {% if topic.sticky %}
     <li>
-        <a href="{% url "pybb:pybb_unstick_topic" topic.id %}">{% trans "Unstick topic" %}</a>
+        <a href="{% url "pybb:topic-unstick" topic.id %}">{% trans "Unstick topic" %}</a>
     </li>
     {% else %}
     <li>
-        <a href="{% url "pybb:pybb_stick_topic" topic.id %}">{% trans "Stick topic" %}</a>
+        <a href="{% url "pybb:topic-stick" topic.id %}">{% trans "Stick topic" %}</a>
     </li>
     {% endif %}
     {% if topic.closed %}
     <li>
-        <a href="{% url "pybb:pybb_open_topic" topic.id %}">{% trans "Open topic" %}</a>
+        <a href="{% url "pybb:topic-open" topic.id %}">{% trans "Open topic" %}</a>
     </li>
     {% else %}
     <li>
-        <a href="{% url "pybb:pybb_close_topic" topic.id %}">{% trans "Close topic" %}</a>
+        <a href="{% url "pybb:topic-close" topic.id %}">{% trans "Close topic" %}</a>
     </li>
     {% endif %}
     {% endif %}
     {% if user.is_authenticated %}
     {% if subscribed %}
-    <li><a href="{% url "pybb:pybb_delete_subscription" topic.id %}?from_topic">{% trans "Unsubscribe" %}</a></li>
+    <li><a href="{% url "pybb:subscription-delete" topic.id %}?from_topic">{% trans "Unsubscribe" %}</a></li>
     {% else %}
-    <li><a href="{% url "pybb:pybb_add_subscription" topic.id %}">{% trans "Subscribe" %}</a></li>
+    <li><a href="{% url "pybb:subscription-add" topic.id %}">{% trans "Subscribe" %}</a></li>
     {% endif %}
     {% endif %}
 </div>
 
 {% if not topic.closed and user.is_authenticated %}
-<form action="{% url "pybb:pybb_add_post" topic.id %}" method="post" class='form-horizontal'>
+<form action="{% url "pybb:post-add" topic.id %}" method="post" class='form-horizontal'>
     {% csrf_token %}
     <fieldset class='col-lg-10'>
         <legend>{% trans "New reply" %}</legend>

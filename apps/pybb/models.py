@@ -55,7 +55,7 @@ class Category(models.Model):
         return self.forums.all().count()
 
     def get_absolute_url(self):
-        return reverse('pybb:pybb_category', args=[self.id])
+        return reverse('pybb:category', args=[self.id])
 
     @property
     def topics(self):
@@ -93,7 +93,7 @@ class Forum(models.Model):
         return self.topics.all().count()
 
     def get_absolute_url(self):
-        return reverse('pybb:pybb_forum', args=[self.id])
+        return reverse('pybb:forum', args=[self.id])
 
     @property
     def posts(self):
@@ -153,7 +153,7 @@ class Topic(models.Model):
         return instance
 
     def get_absolute_url(self):
-        return reverse('pybb:pybb_topic', args=[self.id])
+        return reverse('pybb:topic', args=[self.id])
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -167,7 +167,7 @@ class Topic(models.Model):
             read.save()
 
     def get_poll_add_url(self):
-        return reverse_lazy('pybb:pybb_poll_add', args=(self.pk, ))
+        return reverse_lazy('pybb:poll-add', args=(self.pk, ))
 
     def get_absolute_url(self):
         return reverse_lazy('pybb:posts', args=(self.pk, ))
@@ -333,45 +333,6 @@ class Read(models.Model):
         return u'T[%d], U[%d]: %s' % (self.topic.id, self.user.id, unicode(self.time))
 
 
-class PrivateMessage(RenderableItem):
-
-    dst_user = models.ForeignKey(User, verbose_name=_('Recipient'), related_name='dst_users')
-    src_user = models.ForeignKey(User, verbose_name=_('Author'), related_name='src_users')
-    read = models.BooleanField(_('Read'), blank=True, default=False)
-    created = models.DateTimeField(_('Created'), blank=True)
-    markup = models.CharField(_('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP, choices=MARKUP_CHOICES)
-    subject = models.CharField(_('Subject'), max_length=255)
-    body = models.TextField(_('Message'))
-    body_html = models.TextField(_('HTML version'))
-    body_text = models.TextField(_('Text version'))
-
-    class Meta:
-        ordering = ['-created']
-        verbose_name = _('Private message')
-        verbose_name_plural = _('Private messages')
-
-    # TODO: summary and part of the save method is the same as in the Post model
-    # move to common functions
-    def summary(self):
-        LIMIT = 50
-        tail = len(self.body) > LIMIT and '...' or ''
-        return self.body[:LIMIT] + tail
-
-    def __unicode__(self):
-        return self.subject
-
-    def save(self, *args, **kwargs):
-        if self.created is None:
-            self.created = datetime.now()
-        self.render()
-
-        new = self.id is None
-        super(PrivateMessage, self).save(*args, **kwargs)
-
-    def get_absolute_url(self):
-        return reverse('pybb:pybb_show_pm', args=[self.id])
-
-
 class Poll(models.Model):
     topic = models.ForeignKey(Topic, related_name='poll_topic_set',
                               unique=True)
@@ -421,16 +382,16 @@ class Poll(models.Model):
         return amount
 
     def get_configure_url(self):
-        return reverse_lazy('pybb:pybb_poll_configure', args=(self.pk, ))
+        return reverse_lazy('pybb:poll-configure', args=(self.pk, ))
 
     def get_update_url(self):
-        return reverse_lazy('pybb:pybb_poll_update', args=(self.pk, ))
+        return reverse_lazy('pybb:poll-update', args=(self.pk, ))
 
     def get_delete_url(self):
-        return reverse_lazy('pybb:pybb_poll_delete', args=(self.pk, ))
+        return reverse_lazy('pybb:poll-delete', args=(self.pk, ))
 
     def get_vote_url(self):
-        return reverse_lazy('pybb:pybb_poll_vote', args=(self.pk, ))
+        return reverse_lazy('pybb:poll-vote', args=(self.pk, ))
 
     def get_voted_users(self):
         qset = PollAnswer.objects.filter(poll=self)

@@ -10,7 +10,7 @@ from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.utils import dateformat
 
-from apps.pybb.models import Forum, Topic, Read, PrivateMessage
+from apps.pybb.models import Forum, Topic, Read
 from apps.pybb.unread import cache_unreads
 from apps.pybb import settings as pybb_settings
 from django.conf import settings as gs
@@ -20,7 +20,7 @@ register = template.Library()
 @register.filter
 def pybb_profile_link(user):
     data = u'<a href="%s">%s</a>' % (\
-        reverse('pybb_profile', args=[user.username]), user.username)
+        reverse('pybb:profile', args=[user.username]), user.username)
     return mark_safe(data)
 
 

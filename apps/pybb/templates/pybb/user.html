@@ -44,7 +44,7 @@
     <div class="clear"></div>
     {% if user.is_authenticated %}
     <div class="pm-link">
-        <a href="{% url "pybb:pybb_create_pm" %}?recipient={{ profile.nickname }}">{% trans "Send PM" %}</a>
+        <a href="{% url "pybb:pm-create" %}?recipient={{ profile.nickname }}">{% trans "Send PM" %}</a>
     </div>
     {% endif %}
 </div>

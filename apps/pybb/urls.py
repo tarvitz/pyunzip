@@ -9,60 +9,67 @@ feeds = {
 }
 urlpatterns = patterns(
     url('^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
-        {'feed_dict': feeds}, name='pybb_feed'),
+        {'feed_dict': feeds}, name='feed'),
 
 )
 urlpatterns += patterns('',
     # Misc
-    url('^$', views.index, name='pybb_index'),
-    url('^category/(?P<category_id>\d+)/$', views.show_category, name='pybb_category'),
-    url('^forum/(?P<forum_id>\d+)/$', views.show_forum, name='pybb_forum'),
-        # User
-    url('^user/(?P<username>.*)/$', views.user, name='pybb_profile'),
-    url('^profile/edit/$', views.edit_profile, name='pybb_edit_profile'),
-    url('^users/$', views.users, name='pybb_users'),
+    url('^$', views.index, name='index'),
+    url('^category/(?P<category_id>\d+)/$', views.show_category,
+        name='category'),
+    url('^forum/(?P<forum_id>\d+)/$', views.show_forum,
+        name='forum'),
+    # User
+    url('^user/(?P<username>.*)/$', views.user, name='profile'),
+    #url('^profile/edit/$', views.edit_profile, name='profile-edit'),
+    #url('^users/$', views.users, name='users'),
 
     # Topic
-    url('^topic/(?P<topic_id>\d+)/$', views.show_topic, name='pybb_topic'),
+    url('^topic/(?P<topic_id>\d+)/$', views.show_topic,
+        name='topic'),
     url('^topics/(?P<pk>\d+)/posts/$', views.PostListView.as_view(),
         name='posts'),
     url('^forum/(?P<forum_id>\d+)/topic/add/$', views.add_post,
-        {'topic_id': None}, name='pybb_add_topic'),
-    url('^topic/(?P<topic_id>\d+)/stick/$', views.stick_topic, name='pybb_stick_topic'),
-    url('^topic/(?P<topic_id>\d+)/unstick/$', views.unstick_topic, name='pybb_unstick_topic'),
-    url('^topic/(?P<topic_id>\d+)/close/$', views.close_topic, name='pybb_close_topic'),
-    url('^topic/(?P<topic_id>\d+)/open/$', views.open_topic, name='pybb_open_topic'),
+        {'topic_id': None}, name='topic-add'),
+    url('^topic/(?P<topic_id>\d+)/stick/$', views.stick_topic,
+        name='topic-stick'),
+    url('^topic/(?P<topic_id>\d+)/unstick/$', views.unstick_topic,
+        name='topic-unstick'),
+    url('^topic/(?P<topic_id>\d+)/close/$', views.close_topic,
+        name='topic-close'),
+    url('^topic/(?P<topic_id>\d+)/open/$', views.open_topic,
+        name='topic-open'),
 
     # Post
     url('^topic/(?P<topic_id>\d+)/post/add/$', views.add_post,
-        {'forum_id': None}, name='pybb_add_post'),
-    url('^post/(?P<post_id>\d+)/$', views.show_post, name='pybb_post'),
-    url('^post/(?P<post_id>\d+)/edit/$', views.edit_post, name='pybb_edit_post'),
-    url('^post/(?P<post_id>\d+)/delete/$', views.delete_post, name='pybb_delete_post'),
+        {'forum_id': None}, name='post-add'),
+    url('^post/(?P<post_id>\d+)/$', views.show_post, name='post'),
+    url('^post/(?P<post_id>\d+)/edit/$', views.edit_post, name='post-edit'),
+    url('^post/(?P<post_id>\d+)/delete/$', views.delete_post,
+        name='post-delete'),
 
     # Subscription
-    url('^subscription/topic/(?P<topic_id>\d+)/delete/$', views.delete_subscription, name='pybb_delete_subscription'),
-    url('^subscription/topic/(?P<topic_id>\d+)/add/$', views.add_subscription, name='pybb_add_subscription'),
+    url('^subscription/topic/(?P<topic_id>\d+)/delete/$',
+        views.delete_subscription, name='subscription-delete'),
+    url('^subscription/topic/(?P<topic_id>\d+)/add/$',
+        views.add_subscription, name='subscription-add'),
 
-    # Private messages
-    url('^pm/new/$', views.create_pm, name='pybb_create_pm'),
-    url('^pm/outbox/$', views.pm_outbox, name='pybb_pm_outbox'),
-    url('^pm/inbox/$', views.pm_inbox, name='pybb_pm_inbox'),
-    url('^pm/show/(?P<pm_id>\d+)/$', views.show_pm, name='pybb_show_pm'),
-    url('^themes/(?P<theme>[\w\d]+)/switch/$', views.switch_theme, name='pybb_switch_theme'),
-    # additional possibilites, Polls
+    # Themes
+    url('^themes/(?P<theme>[\w\d]+)/switch/$', views.switch_theme,
+        name='theme-switch'),
+    # Polls
     url('^topic/(?P<pk>\d+)/poll/add/$', views.ManagePollView.as_view(),
-        name='pybb_poll_add'),
+        name='poll-add'),
     url('^poll/(?P<pk>\d+)/update/$', views.ManagePollView.as_view(),
         {'update': True},
-        name='pybb_poll_update'),
+        name='poll-update'),
     url('^poll/(?P<pk>\d+)/delete/$', views.ManagePollView.as_view(),
         {'delete': True},
-        name='pybb_poll_delete'),
+        name='poll-delete'),
     url('^poll/(?P<pk>\d+)/configure/$', views.ConfigurePollView.as_view(),
-        name='pybb_poll_configure'),
+        name='poll-configure'),
     url('^poll/(?P<pk>\d+)/vote/$', views.PollVoteView.as_view(),
-        name='pybb_poll_vote'),
+        name='poll-vote'),
     #url('^topic/(?P<pk>\d+)/poll/add/step/(?P<step>.+)/$',
-    #    views.add_poll_wizard, name='pybb_poll_add'),
+    #    views.add_poll_wizard, name='add-poll'),
 )
