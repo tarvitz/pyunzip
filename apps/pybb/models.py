@@ -143,9 +143,6 @@ class Topic(models.Model):
             pass
         return instance
 
-    #def get_absolute_url(self):
-    #    return reverse('pybb:topic', args=[self.id])
-
     def save(self, *args, **kwargs):
         if self.id is None:
             self.created = datetime.now()
