@@ -4,7 +4,6 @@ from django import template
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.safestring import mark_safe
-from django.template import RequestContext
 from django.utils.encoding import smart_unicode
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -19,8 +18,9 @@ register = template.Library()
 
 @register.filter
 def pybb_profile_link(user):
-    data = u'<a href="%s">%s</a>' % (\
-        reverse('pybb:profile', args=[user.username]), user.username)
+    data = u'<a href="%s">%s</a>' % (
+        reverse('pybb:profile', args=[user.username]), user.username
+    )
     return mark_safe(data)
 
 

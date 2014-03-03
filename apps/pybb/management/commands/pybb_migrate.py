@@ -3,7 +3,7 @@ import os
 
 from django.core.management.base import BaseCommand, CommandError
 
-import pybb
+import apps.pybb as pybb
 
 class Command(BaseCommand):
     option_list = BaseCommand.option_list + ( 

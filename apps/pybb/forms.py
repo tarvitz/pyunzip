@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 from django import forms
@@ -9,9 +8,8 @@ from django.utils.translation import ugettext as _
 from django.core.exceptions import ImproperlyConfigured
 
 from apps.pybb.models import (
-    Topic, Post, Profile, Poll, PollAnswer, PollItem
+    Topic, Post, Poll, PollAnswer, PollItem
 )
-from apps.pybb import settings as pybb_settings
 
 
 class AddPostForm(forms.ModelForm):
@@ -23,12 +21,10 @@ class AddPostForm(forms.ModelForm):
     class Meta:
         model = Post
         fields = [
-            #'markup',
             'body'
         ]
         widgets = {
             'markup': forms.Select(attrs={'class': 'span6 form-control'}),
-            #'body': forms.Textarea(attrs={'class': 'span6'}),
         }
 
     def __init__(self, *args, **kwargs):
@@ -40,16 +36,12 @@ class AddPostForm(forms.ModelForm):
         if self.topic:
             self.fields['name'].widget = forms.HiddenInput()
             self.fields['name'].required = False
+        self.fields.keyOrder = ['body', ]
 
-        self.fields.keyOrder = [
-            #'markup',
-            'body'
-        ]
         if not self.topic:
             self.fields.keyOrder.insert(0, 'name')
 
-
-    def save(self):
+    def save(self, commit=True):
         if self.forum:
             topic = Topic(forum=self.forum,
                           user=self.user,
@@ -67,42 +59,12 @@ class AddPostForm(forms.ModelForm):
         return post
 
 
-class EditProfileForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        """
-        fields = ['site', 'jabber', 'icq', 'msn', 'aim', 'yahoo',
-                  'location', 'signature', 'time_zone', 'language',
-                  'avatar', 'show_signatures',
-                  'markup',
-                  ]
-        """
-        fields = ['site', 'jabber', 'icq', 'msn', 'aim', 'yahoo',
-                  'location', 'signature', 'time_zone', 'language',
-                  'show_signatures',
-                  'markup',
-                  ]
-
-    #def __init__(self, *args, **kwargs):
-        #super(EditProfileForm, self).__init__(*args, **kwargs)
-
-    def clean_signature(self):
-        value = self.cleaned_data['signature'].strip()
-        if len(re.findall(r'\n', value)) > pybb_settings.SIGNATURE_MAX_LINES:
-            raise forms.ValidationError('Number of lines is limited to %d' % pybb_settings.SIGNATURE_MAX_LINES)
-        if len(value) > pybb_settings.SIGNATURE_MAX_LENGTH:
-            raise forms.ValidationError('Length of signature is limited to %d' % pybb_settings.SIGNATURE_MAX_LENGTH)
-        return value
-
 class EditPostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = [
-            #'markup',
-            'body'
-        ]
+        fields = ['body', ]
 
-    def save(self):
+    def save(self, commit=True):
         post = super(EditPostForm, self).save(commit=False)
         post.updated = datetime.now()
         post.save()
@@ -227,7 +189,7 @@ class PollVoteFormMixin(object):
         self.poll = kwargs.pop('poll')
         if not self.poll or not isinstance(self.poll, Poll):
             raise ImproperlyConfigured("poll should be Poll instance")
-        super(PollVoteFormMixin, self).__init__(*args, **kwargs)
+        #super(PollVoteFormMixin, self).__init__(*args, **kwargs)
 
 
 class SingleVotePollForm(PollVoteFormMixin, forms.ModelForm):

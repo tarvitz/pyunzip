@@ -1,6 +1,4 @@
-from datetime import datetime
-import os.path
-import random
+import traceback
 from BeautifulSoup import BeautifulSoup
 
 from django.shortcuts import render_to_response
@@ -8,8 +6,7 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.utils.functional import Promise
 from django.utils.encoding import force_unicode
-from django.utils.simplejson import JSONEncoder
-from django import forms
+from simplejson import JSONEncoder
 from django.template.defaultfilters import urlize as django_urlize
 
 from apps.pybb import settings as pybb_settings

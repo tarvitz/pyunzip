@@ -3,34 +3,12 @@ from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from apps.thirdpaty.markdown2 import markdown as Markdown
-
-from apps.pybb.markups import mypostmarkup
-from apps.pybb.fields import AutoOneToOneField, ExtendedImageField
-from apps.pybb.util import urlize, memoize_method
 from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-LANGUAGE_CHOICES = (
-    ('en', 'English'),
-    ('ru', _('Russian')),
-)
-
-TZ_CHOICES = [(float(x[0]), x[1]) for x in (
-    (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
-    (-8.5, '-08.5'), (-8, '-08 PST'), (-7, '-07 MST'), (-6, '-06 CST'),
-    (-5, '-05 EST'), (-4, '-04 AST'), (-3.5, '-03.5'), (-3, '-03 ADT'),
-    (-2, '-02'), (-1, '-01'), (0, '00 GMT'), (1, '+01 CET'), (2, '+02'),
-    (3, '+03'), (3.5, '+03.5'), (4, '+04'), (4.5, '+04.5'), (5, '+05'),
-    (5.5, '+05.5'), (6, '+06'), (6.5, '+06.5'), (7, '+07'), (8, '+08'),
-    (9, '+09'), (9.5, '+09.5'), (10, '+10'), (10.5, '+10.5'), (11, '+11'),
-    (11.5, '+11.5'), (12, '+12'), (13, '+13'), (14, '+14'),
-)]
 
 MARKUP_CHOICES = (
     ('textile', 'textile'),
@@ -63,17 +41,22 @@ class Category(models.Model):
 
     @property
     def posts(self):
-        return Post.objects.filter(topic__forum__category=self).select_related()
+        return Post.objects.filter(
+            topic__forum__category=self).select_related()
+
 
 class Forum(models.Model):
-    category = models.ForeignKey(Category, related_name='forums', verbose_name=_('Category'))
+    category = models.ForeignKey(Category, related_name='forums',
+                                 verbose_name=_('Category'))
     name = models.CharField(_('Name'), max_length=80)
     position = models.IntegerField(_('Position'), blank=True, default=0)
     description = models.TextField(_('Description'), blank=True, default='')
-    moderators = models.ManyToManyField(User, blank=True, null=True, verbose_name=_('Moderators'))
+    moderators = models.ManyToManyField(User, blank=True, null=True,
+                                        verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
-    css_icon = models.CharField(_("Css icon"), blank=True, default='', max_length=64)
+    css_icon = models.CharField(_("Css icon"), blank=True, default='',
+                                max_length=64)
     is_hidden = models.BooleanField(_('is hidden'), default=False)
     is_private = models.BooleanField(_('is private'), default=False)
     participants = models.ManyToManyField(
@@ -109,7 +92,8 @@ class Forum(models.Model):
 
 
 class Topic(models.Model):
-    forum = models.ForeignKey(Forum, related_name='topics', verbose_name=_('Forum'))
+    forum = models.ForeignKey(Forum, related_name='topics',
+                              verbose_name=_('Forum'))
     name = models.CharField(_('Subject'), max_length=255)
     created = models.DateTimeField(_('Created'), null=True)
     updated = models.DateTimeField(_('Updated'), null=True)
@@ -117,7 +101,10 @@ class Topic(models.Model):
     views = models.IntegerField(_('Views count'), blank=True, default=0)
     sticky = models.BooleanField(_('Sticky'), blank=True, default=False)
     closed = models.BooleanField(_('Closed'), blank=True, default=False)
-    subscribers = models.ManyToManyField(User, related_name='subscriptions', verbose_name=_('Subscribers'), blank=True)
+    subscribers = models.ManyToManyField(
+        User, related_name='subscriptions', verbose_name=_('Subscribers'),
+        blank=True
+    )
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
 
     class Meta:
@@ -152,8 +139,8 @@ class Topic(models.Model):
             pass
         return instance
 
-    def get_absolute_url(self):
-        return reverse('pybb:topic', args=[self.id])
+    #def get_absolute_url(self):
+    #    return reverse('pybb:topic', args=[self.id])
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -172,40 +159,14 @@ class Topic(models.Model):
     def get_absolute_url(self):
         return reverse_lazy('pybb:posts', args=(self.pk, ))
 
-    #def has_unreads(self, user):
-        #try:
-            #read = Read.objects.get(user=user, topic=self)
-        #except Read.DoesNotExist:
-            #return True
-        #else:
-            #return self.updated > read.time
-
-
-class RenderableItem(models.Model):
-    """
-    Base class for models that has markup, body, body_text and body_html fields.
-    """
-
-    class Meta:
-        abstract = True
-
-    def render(self):
-        if self.markup == 'bbcode':
-            self.body_html = mypostmarkup.markup(self.body, auto_urls=False)
-        elif self.markup == 'markdown':
-            self.body_html = unicode(Markdown(self.body, safe_mode='escape'))
-        else:
-            raise Exception('Invalid markup property: %s' % self.markup)
-        self.body_text = strip_tags(self.body_html)
-        self.body_html = urlize(self.body_html)
-
 
 class AnonymousPost(models.Model):
     session_key = models.CharField(_('Session key'), max_length=40)
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'), blank=True)
     created = models.DateTimeField(_('Created'), auto_now_add=True)
 
-    markup = models.CharField(_('Markup'), max_length=15, blank=True, default='')
+    markup = models.CharField(_('Markup'), max_length=15, blank=True,
+                              default='')
     body = models.TextField(_('Message'), blank=True, default='')
 
     class Meta:
@@ -213,12 +174,16 @@ class AnonymousPost(models.Model):
         verbose_name_plural = _('Anonymous posts')
 
 
-class Post(RenderableItem):
-    topic = models.ForeignKey(Topic, related_name='posts', verbose_name=_('Topic'))
-    user = models.ForeignKey(User, related_name='posts', verbose_name=_('User'))
+class Post(models.Model):
+    topic = models.ForeignKey(Topic, related_name='posts',
+                              verbose_name=_('Topic'))
+    user = models.ForeignKey(User, related_name='posts',
+                             verbose_name=_('User'))
     created = models.DateTimeField(_('Created'), blank=True)
     updated = models.DateTimeField(_('Updated'), blank=True, null=True)
-    markup = models.CharField(_('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP, choices=MARKUP_CHOICES)
+    markup = models.CharField(
+        _('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP,
+        choices=MARKUP_CHOICES)
     body = models.TextField(_('Message'))
     body_html = models.TextField(_('HTML version'))
     body_text = models.TextField(_('Text version'))
@@ -230,9 +195,9 @@ class Post(RenderableItem):
         verbose_name_plural = _('Posts')
 
     def summary(self):
-        LIMIT = 50
-        tail = len(self.body) > LIMIT and '...' or ''
-        return self.body[:LIMIT] + tail
+        limit = 50
+        tail = len(self.body) > limit and '...' or ''
+        return self.body[:limit] + tail
 
     __unicode__ = summary
 
@@ -283,30 +248,6 @@ class Post(RenderableItem):
     def get_body_messges_count(self):
         return len(self.body.split(' '))
 
-class Profile(models.Model):
-    user = AutoOneToOneField(User, related_name='pybb_profile', verbose_name=_('User'))
-    site = models.URLField(_('Site'), blank=True, default='')
-    jabber = models.CharField(_('Jabber'), max_length=80, blank=True, default='')
-    icq = models.CharField(_('ICQ'), max_length=12, blank=True, default='')
-    msn = models.CharField(_('MSN'), max_length=80, blank=True, default='')
-    aim = models.CharField(_('AIM'), max_length=80, blank=True, default='')
-    yahoo = models.CharField(_('Yahoo'), max_length=80, blank=True, default='')
-    location = models.CharField(_('Location'), max_length=30, blank=True, default='')
-    signature = models.TextField(_('Signature'), blank=True, default='', max_length=pybb_settings.SIGNATURE_MAX_LENGTH)
-    time_zone = models.FloatField(_('Time zone'), choices=TZ_CHOICES, default=float(pybb_settings.DEFAULT_TIME_ZONE))
-    language = models.CharField(_('Language'), max_length=3, blank=True, default='en', choices=LANGUAGE_CHOICES)
-    avatar = ExtendedImageField(_('Avatar'), blank=True, default='', upload_to=pybb_settings.AVATARS_UPLOAD_TO, width=pybb_settings.AVATAR_WIDTH, height=pybb_settings.AVATAR_HEIGHT)
-    show_signatures = models.BooleanField(_('Show signatures'), blank=True, default=True)
-    markup = models.CharField(_('Default markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP, choices=MARKUP_CHOICES)
-
-    class Meta:
-        verbose_name = _('Profile')
-        verbose_name_plural = _('Profiles')
-
-
-    @memoize_method
-    def unread_pm_count(self):
-        return PrivateMessage.objects.filter(dst_user=self, read=False).count()
 
 class Read(models.Model):
     """
@@ -328,9 +269,9 @@ class Read(models.Model):
             self.time = datetime.now()
         super(Read, self).save(*args, **kwargs)
 
-
     def __unicode__(self):
-        return u'T[%d], U[%d]: %s' % (self.topic.id, self.user.id, unicode(self.time))
+        return u'T[%d], U[%d]: %s' % (self.topic.id, self.user.id,
+                                      unicode(self.time))
 
 
 class Poll(models.Model):
@@ -442,8 +383,6 @@ class PollItem(models.Model):
         :return: self ``instance``
         """
         amount = self.poll.answers.count()
-        #if not self.poll.is_multiple:
-        #    amount = self.poll.get_voted_users()
         voted = self.answers.count()
         self.score = voted / (amount * 0.01)
         if commit:
@@ -452,8 +391,6 @@ class PollItem(models.Model):
 
     def __unicode__(self):
         return self.title
-        #return u'[%s] %s [%i]' % (self.poll.title, self.title,
-        #                          self.voted_amount)
 
     class Meta:
         verbose_name = _("Poll item")
@@ -472,6 +409,7 @@ class PollAnswer(models.Model):
     class Meta:
         verbose_name = _("Poll answer")
         verbose_name_plural = _("Poll answers")
+
 
 from apps.pybb import signals
 signals.setup_signals()

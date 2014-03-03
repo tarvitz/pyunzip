@@ -3,8 +3,7 @@ import datetime
 
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
-from django.http import (
-    HttpResponseRedirect, HttpResponse, HttpResponseNotFound, Http404)
+from django.http import (HttpResponseRedirect, Http404)
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
@@ -12,10 +11,10 @@ from django.core.urlresolvers import reverse, reverse_lazy
 
 from apps.pybb.util import render_to, paged, build_form, quote_text
 from apps.pybb.models import (
-    Category, Forum, Topic, Post, Profile, Poll, PollItem, PollAnswer
+    Category, Forum, Topic, Post, Poll, PollItem, PollAnswer
 )
 from apps.pybb.forms import (
-    AddPostForm, EditProfileForm, EditPostForm, UserSearchForm,
+    AddPostForm, EditPostForm, UserSearchForm,
     AddPollForm, PollItemForm, PollItemBaseinlineFormset, UpdatePollForm,
     SingleVotePollForm, MultipleVotePollForm, AgreeForm
 )
@@ -111,7 +110,6 @@ def show_topic_ctx(request, topic_id):
     topic.views += 1
     topic.save()
 
-
     if request.user.is_authenticated():
         topic.update_read(request.user)
 
@@ -122,12 +120,6 @@ def show_topic_ctx(request, topic_id):
     else:
         first_post = None
     last_post = topic.posts.order_by('-created')[0]
-
-    profiles = Profile.objects.filter(user__pk__in=set(x.user.id for x in posts))
-    profiles = dict((x.user_id, x) for x in profiles)
-
-    for post in posts:
-        post.user.pybb_profile = profiles[post.user.id]
 
     initial = {}
     apost = load_anonymous_post(request, topic)
@@ -239,20 +231,8 @@ def show_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     count = post.topic.posts.filter(created__lt=post.created).count() + 1
     page = math.ceil(count / float(pybb_settings.TOPIC_PAGE_SIZE))
-    url = '%s?page=%d#post-%d' % (reverse('pybb:pybb_topic', args=[post.topic.id]), page, post.id)
+    url = '%s?page=%d#post-%d' % (reverse('pybb:topic', args=[post.topic.id]), page, post.id)
     return HttpResponseRedirect(url)
-
-
-@login_required
-def edit_profile_ctx(request):
-    form = build_form(EditProfileForm, request, instance=request.user.pybb_profile)
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse('pybb:pybb_edit_profile'))
-    return {'form': form,
-            'profile': request.user.pybb_profile,
-            }
-edit_profile = render_to('pybb/edit_profile.html')(edit_profile_ctx)
 
 
 @login_required
@@ -373,16 +353,16 @@ def delete_subscription(request, topic_id):
     topic = get_object_or_404(Topic, pk=topic_id)
     topic.subscribers.remove(request.user)
     if 'from_topic' in request.GET:
-        return HttpResponseRedirect(reverse('pybb:pybb_topic', args=[topic.id]))
+        return HttpResponseRedirect(reverse('pybb:topic', args=[topic.id]))
     else:
-        return HttpResponseRedirect(reverse('pybb:pybb_edit_profile'))
+        return HttpResponseRedirect(reverse('pybb:index'))
 
 
 @login_required
 def add_subscription(request, topic_id):
     topic = get_object_or_404(Topic, pk=topic_id)
     topic.subscribers.add(request.user)
-    return HttpResponseRedirect(reverse('pybb:pybb_topic', args=[topic.id]))
+    return HttpResponseRedirect(reverse('pybb:topic', args=[topic.id]))
 
 
 
@@ -442,7 +422,7 @@ class ManagePollView(generic.FormView):
         return kwargs
 
     def get_success_url(self, pk):
-        return reverse_lazy('pybb:pybb_poll_configure', args=(pk, ))
+        return reverse_lazy('pybb:poll-configure', args=(pk, ))
 
     def form_valid(self, form):
         if self.kwargs.get('delete', False):
