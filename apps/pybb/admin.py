@@ -15,7 +15,7 @@ def revert_hidden(modeladmin, request, queryset):
 
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'position', 'forum_count']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['position']
     search_fields = ['name']
 
@@ -23,7 +23,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class ForumAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'position', 'topic_count', 'css_icon',
                     'is_hidden', 'is_private']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-category']
     search_fields = ['name', 'category__name']
     list_editable = ['css_icon', ]
@@ -47,7 +47,7 @@ class ForumAdmin(admin.ModelAdmin):
 
 class TopicAdmin(admin.ModelAdmin):
     list_display = ['name', 'forum', 'created', 'head', 'post_count']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-created']
     date_hierarchy = 'created'
     search_fields = ['name']
@@ -71,14 +71,14 @@ class TopicAdmin(admin.ModelAdmin):
 
 class AnonymousPostAdmin(admin.ModelAdmin):
     list_display = ['session_key', 'created']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-created']
     search_fields = ['title']
     
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['topic', 'user', 'created', 'updated', 'summary']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-created']
     date_hierarchy = 'created'
     search_fields = ['body']
@@ -104,7 +104,7 @@ class PostAdmin(admin.ModelAdmin):
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ['user', 'time_zone', 'location', 'language']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-user']
     search_fields = ['user__username', 'user__first_name', 'user__last_name']
     fieldsets = (
@@ -131,7 +131,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 class ReadAdmin(admin.ModelAdmin):
     list_display = ['user', 'topic', 'time']
-    list_per_page = settings.OBJECT_ON_PAGE
+    list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-time']
     date_hierarchy = 'time'
     search_fields = ['user__username', 'topic__name']
