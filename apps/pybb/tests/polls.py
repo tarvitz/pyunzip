@@ -18,7 +18,12 @@ from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Poll, PollItem, PollAnswer, Topic
 from apps.pybb.cron import UpdatePollJob
-from django.contrib.auth.models import User, Permission
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+from django.contrib.auth.models import Permission
 
 
 class PollTest(TestHelperMixin, TestCase):
@@ -29,7 +34,6 @@ class PollTest(TestHelperMixin, TestCase):
         'tests/fixtures/load_forums.json',
         'tests/fixtures/load_topics.json',
         'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_pybb_profiles.json',
     ]
     poll_post = {
         'title': 'Poll',
@@ -57,7 +61,7 @@ class PollTest(TestHelperMixin, TestCase):
         poll = Poll.objects.latest('id')
         context = response.context
         self.assertEqual(context['request'].get_full_path(),
-                         reverse('pybb_poll_configure', args=(poll.pk, )))
+                         reverse('pybb:poll-configure', args=(poll.pk, )))
         self.assertEqual(response.status_code, 200)
         formset = context['form']
         self.assertEqual(len(formset.forms), self.poll_post['items_amount'])
@@ -107,7 +111,7 @@ class PollTest(TestHelperMixin, TestCase):
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['request'].get_full_path(),
-                         reverse('pybb_poll_configure', args=(poll.pk, )))
+                         reverse('pybb:poll-configure', args=(poll.pk, )))
 
         items_post = {
             'poll_item_poll_set-TOTAL_FORMS': 5,
@@ -181,7 +185,6 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         'tests/fixtures/load_forums.json',
         'tests/fixtures/load_topics.json',
         'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_pybb_profiles.json',
         'tests/fixtures/load_polls.json',
         'tests/fixtures/load_poll_items.json'
     ]
@@ -288,7 +291,6 @@ class PollManageTest(TestHelperMixin, TestCase):
         'tests/fixtures/load_forums.json',
         'tests/fixtures/load_topics.json',
         'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_pybb_profiles.json',
         'tests/fixtures/load_polls.json',
         'tests/fixtures/load_poll_items.json'
     ]
@@ -382,7 +384,6 @@ class TestCronJobs(TestHelperMixin, TestCase):
         'tests/fixtures/load_forums.json',
         'tests/fixtures/load_topics.json',
         'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_pybb_profiles.json',
         'tests/fixtures/load_polls.json',
         'tests/fixtures/load_poll_items.json'
     ]
