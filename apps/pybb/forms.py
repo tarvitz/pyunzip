@@ -189,7 +189,7 @@ class PollVoteFormMixin(object):
         self.poll = kwargs.pop('poll')
         if not self.poll or not isinstance(self.poll, Poll):
             raise ImproperlyConfigured("poll should be Poll instance")
-        #super(PollVoteFormMixin, self).__init__(*args, **kwargs)
+        super(PollVoteFormMixin, self).__init__(*args, **kwargs)
 
 
 class SingleVotePollForm(PollVoteFormMixin, forms.ModelForm):
