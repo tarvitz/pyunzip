@@ -8,7 +8,11 @@ from django.utils.translation import (
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
 from utils.models import copy_fields
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings

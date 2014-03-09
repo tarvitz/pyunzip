@@ -8,7 +8,11 @@ from django.shortcuts import get_object_or_404
 from apps.core import get_skin_template
 from apps.karma.models import Karma, KarmaStatus
 from apps.karma.forms import AlterKarmaForm, KarmaModelForm
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, InvalidPage
 from datetime import datetime
 from apps.karma.decorators import (

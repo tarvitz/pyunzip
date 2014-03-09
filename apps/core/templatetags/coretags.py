@@ -2,7 +2,11 @@
 import importlib
 from django.template import Library, Node
 from apps.news.models import News
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.wh.models import GuestActivity
 from django.db.models import get_model
 from django.template import TemplateSyntaxError

@@ -4,7 +4,12 @@ from django.test import TestCase
 #import unittest
 #from django.test.client import RequestFactory, Client
 from apps.news.models import Category, News
-from django.contrib.auth.models import User, AnonymousUser
+try:
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import AnonymousUser
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement

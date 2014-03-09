@@ -23,7 +23,11 @@ from apps.core.forms import CommentForm, SphinxSearchForm
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.http import (
     HttpResponse, HttpResponseRedirect, HttpResponseServerError,
     Http404

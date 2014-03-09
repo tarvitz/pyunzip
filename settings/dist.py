@@ -1,6 +1,5 @@
 # coding: utf-8
 # Django settings for WarMist project.
-import os, sys
 from settings_path import rel_path
 try:
     import psycopg2
@@ -10,16 +9,14 @@ except ImportError:
         compat.register()
     except ImportError:
         pass
-#from apps import djcelery
-#djcelery.setup_loader()
-DEBUG=False
 
+DEBUG = False
 ADMINS = (
     ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
 )
 
-DATABASES={
-    'default':{
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'sqlite.db'
     }
@@ -50,7 +47,7 @@ LOCALE_PATHS = (
 # to load the internationalization machinery.
 USE_I18N = True
 
-
+# TODO: cleanup
 STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
@@ -94,13 +91,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    #'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'apps.core.middleware.ChecksMiddleware',
-    #'apps.core.middleware.UserActivityMiddleware',
-    # todo: CLEANSE
-    #'apps.core.middleware.GuestActivityMiddleware',
-    #obsolete
-    #'apps.core.middleware.UserSettingsMiddleware',
     'apps.wh.middleware.WarningsMiddleware',
 )
 
@@ -116,33 +107,18 @@ CACHES = {
 ROOT_URLCONF = 'urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    #deprecated
-    #'django.core.context_processors.auth',
     'django.core.context_processors.request',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.contrib.auth.context_processors.auth',
     'apps.core.context_processors.global_settings',
-    #'apps.core.context_processors.expressions',
-    #'apps.core.context_processors.briefing_news',
-    #'apps.core.context_processors.last_replays',
-    #'apps.core.context_processors.pm',
-    #'apps.core.context_processors.user_settings',
     'apps.core.context_processors.core',
-    #'apps.core.context_processors.global_referer',
-    #'apps.core.context_processors.base_template',
-    #'apps.core.context_processors.session',
     'apps.menu.context_processors.menu',
 )
+
 TEMPLATE_DIRS = (
     rel_path('templates'),
 )
-
-#FILE_UPLOAD_HANDLERS = (
-#    "apps.core.handlers.UploadProgressHandler",
-#    "django.core.files.uploadhandler.MemoryFileUploadHandler",
-#    "django.core.files.uploadhandler.TemporaryFileUploadHandler",
-#)
 
 LOGGING = {
     'version': 1,
@@ -214,39 +190,38 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.comments',
-    #'django.contrib.flatpages',
-    #
+    #'apps.accounts',
     'apps.jsonapp',
     'apps.core',
     'apps.wh',
-    #'apps.whadmin',
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    #'apps.quotes', # conflicts with grappelli
     'apps.vote',
     'apps.tagging',
     'utils',
-    #'apps.bincase',
     'apps.karma',
-    #'apps.blogs',
     'apps.tracker',
     'apps.farseer',
     'apps.pybb',
     'apps.menu',
-    #'djcelery',
-    #'apps.djangosphinx',
     'extwidgets',
     'django_extensions',
     'south',
     'sorl.thumbnail',
-    #
     'grappelli',
     'django.contrib.admin',
-    #'django.contrib.admindocs',
     'django.contrib.staticfiles',
     'gunicorn',
     'django_cron',
+)
+
+AUTH_USER_MODEL = (
+    'accounts.User' if 'apps.accounts' in INSTALLED_APPS else 'auth.User'
+)
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    #'apps.accounts.backends.EmailAuthBackend',
 )
 
 CRON_CLASSES = (
@@ -254,29 +229,29 @@ CRON_CLASSES = (
 )
 
 #settings
-DOMAIN='w40k.net'
+DOMAIN = 'w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
-APP_VOTE_ENABLED=True
-PRODUCTION=True
-DEVELOPMENT=False
+APP_VOTE_ENABLED = True
+PRODUCTION = True
+DEVELOPMENT = False
 YANDEX_METRICA_ENABLED = False
-BOOTSTRAP_VERSION=''
-ENABLE_500_TEST=False
-SERVER_EMAIL='noreply@w40k.net'
-DEV_SERVER=True
-GRAPPELLI_ADMIN_TITLE='w40k.net'
-USE_OLD_THUMBNAIL_IMAGE_SCHEME=False
-DEFAULT_TEMPLATE='base.html'
-DEFAULT_SYNTAX='textile'
-IMAGE_THUMBNAIL_SIZE='200x200'
-BRUTEFORCE_ITER=10
-SEND_MESSAGES=True
-OBJECTS_ON_PAGE=20
-EXPEREMENTAL=False
-USER_FILES_LIMIT=100*1024*1024
+BOOTSTRAP_VERSION = ''
+ENABLE_500_TEST = False
+SERVER_EMAIL = 'noreply@w40k.net'
+DEV_SERVER = True
+GRAPPELLI_ADMIN_TITLE = 'w40k.net'
+USE_OLD_THUMBNAIL_IMAGE_SCHEME = False
+DEFAULT_TEMPLATE = 'base.html'
+DEFAULT_SYNTAX = 'textile'
+IMAGE_THUMBNAIL_SIZE = '200x200'
+BRUTEFORCE_ITER = 10
+SEND_MESSAGES = True
+OBJECTS_ON_PAGE = 20
+EXPEREMENTAL = False
+USER_FILES_LIMIT = 100*1024*1024
 MAXIMUM_POLL_ITEMS_AMOUNT = 10
 
-FORUM_THEME_DEFAULT='primary'
+FORUM_THEME_DEFAULT = 'primary'
 FORUM_THEMES = (
     # <name>, panel-<class>
     ('winter', 'primary'),
@@ -324,8 +299,8 @@ from apps.karma.settings import *
 
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
 
-DEBUG_TOOLBAR=False
-DEBUG=True
+DEBUG_TOOLBAR = False
+DEBUG = True
 if DEBUG and DEBUG_TOOLBAR:
     INTERNAL_IPS = ('127.0.0.1',)
     INSTALLED_APPS += (

@@ -1,6 +1,10 @@
 # coding : utf-8
 # Jabber Bot Decorators
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.core.helpers import get_object_or_none
 until = lambda s,e: s[:s.index(e)]
 import logging

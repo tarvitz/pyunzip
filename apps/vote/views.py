@@ -16,7 +16,11 @@ from apps.core import get_skin_template
 from apps.core.helpers import get_settings,paginate,get_content_type_or_none,\
     get_object_or_none
 from django.template import Template,Context
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission
 from apps.vote.decorators import vote_allow_objects

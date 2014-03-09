@@ -12,7 +12,12 @@ from django.shortcuts import (
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib.comments.models import Comment
-from django.contrib.auth.models import User, AnonymousUser
+try:
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import AnonymousUser
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User, AnonymousUser
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from apps.helpers.diggpaginator import DiggPaginator as Paginator

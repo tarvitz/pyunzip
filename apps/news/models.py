@@ -5,7 +5,11 @@ from django.contrib.contenttypes import generic
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
 from utils.models import copy_fields
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -84,7 +88,7 @@ class AbstractNews(models.Model):
     attachment = models.ForeignKey(Attachment, blank=True, null=True)
     reason = models.CharField(_('reason'), max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(
-        'auth.User', verbose_name='owner',
+        settings.AUTH_USER_MODEL, verbose_name='owner',
         related_name='%(class)s', default=1
     )
     status = models.CharField(

@@ -64,7 +64,7 @@ class Forum(models.Model):
     is_hidden = models.BooleanField(_('is hidden'), default=False)
     is_private = models.BooleanField(_('is private'), default=False)
     participants = models.ManyToManyField(
-        'auth.User', related_name='forum_user_sets',
+        settings.AUTH_USER_MODEL, related_name='forum_user_sets',
         help_text=_("private participants list"),
         blank=True, null=True)
 
@@ -402,7 +402,8 @@ class PollAnswer(models.Model):
     poll = models.ForeignKey(Poll, related_name='answer_poll_set')
     poll_item = models.ForeignKey(PollItem,
                                   related_name='answer_poll_item_set')
-    user = models.ForeignKey('auth.User', related_name='answer_user_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='answer_user_set')
 
     def __unicode__(self):
         return u'%s: %s' % (self.user.get_username(), self.poll_item.title)

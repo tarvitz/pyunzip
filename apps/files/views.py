@@ -5,7 +5,11 @@ from django.template import RequestContext
 from django.contrib import auth
 from django.db.models import get_model,Q, Sum
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
