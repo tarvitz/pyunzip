@@ -37,6 +37,10 @@ TEST_DATABASE_NAME = DATABASES['default']['NAME'] if \
     DATABASES['default']['NAME'].startswith('test_') else \
     'test_' + DATABASES['default']['NAME']
 
+if 'django_plop.middleware.PlopMiddleware' in MIDDLEWARE_CLASSES:
+    MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
+    MIDDLEWARE_CLASSES.pop(MIDDLEWARE_CLASSES.index('django_plop.middleware.PlopMiddleware'))
+
 #
 def _to_uni(value):
     try:
