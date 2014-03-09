@@ -180,8 +180,10 @@ class Post(models.Model):
                               verbose_name=_('Topic'))
     user = models.ForeignKey(User, related_name='posts',
                              verbose_name=_('User'))
-    created = models.DateTimeField(_('Created'), blank=True)
-    updated = models.DateTimeField(_('Updated'), blank=True, null=True)
+    created = models.DateTimeField(_('Created'), blank=True,
+                                   auto_now=True, default=datetime.now)
+    updated = models.DateTimeField(_('Updated'), blank=True, null=True,
+                                   auto_now_add=True, default=datetime.now)
     markup = models.CharField(
         _('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP,
         choices=MARKUP_CHOICES)
