@@ -71,6 +71,26 @@ class EditPostForm(forms.ModelForm):
         return post
 
 
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ('body', )
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+
+class TopicPostForm(PostForm):
+    name = forms.CharField(
+        label=_("Title"),
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Post
+        fields = ('name', 'body')
+
+
 class UserSearchForm(forms.Form):
     query = forms.CharField(required=False, label='')
 

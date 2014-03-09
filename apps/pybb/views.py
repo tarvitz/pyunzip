@@ -16,7 +16,8 @@ from apps.pybb.models import (
 from apps.pybb.forms import (
     AddPostForm, EditPostForm, UserSearchForm,
     AddPollForm, PollItemForm, PollItemBaseinlineFormset, UpdatePollForm,
-    SingleVotePollForm, MultipleVotePollForm, AgreeForm
+    SingleVotePollForm, MultipleVotePollForm, AgreeForm, PostForm,
+    TopicPostForm
 )
 from apps.pybb import settings as pybb_settings
 from apps.pybb.anonymous_post import (
@@ -529,6 +530,7 @@ class PollVoteView(PollMixin, generic.CreateView):
         :return: success redirect url
         """
         votes = form.cleaned_data['vote']
+        created = False
         if hasattr(votes, '__iter__'):
             for poll_item in votes:
                 poll_answer, created = PollAnswer.objects.get_or_create(
@@ -585,4 +587,47 @@ class PostListView(generic.ListView):
     def get_queryset(self):
         return super(PostListView, self).get_queryset().filter(
             topic=self.kwargs.get('pk', 0)
+        )
+
+
+class PostAddView(generic.CreateView):
+    """
+    PostAddView add/create post with topic instance or add to existent topic
+    ``Post`` instance
+    """
+    model = Post
+    form_class = PostForm
+    template_name = 'pybb/topic_form.html'
+
+    def get_form_class(self):
+        if self.kwargs.get('topic', False):
+            return TopicPostForm
+        return super(PostAddView, self).get_form_class()
+
+    def get_context_data(self, **kwargs):
+        context = super(PostAddView, self).get_context_data(**kwargs)
+        if self.kwargs.get('topic', False):
+            forum = get_object_or_404(Forum, pk=self.kwargs.get('pk', 0))
+            context.update({'forum': forum})
+        return context
+
+    def form_valid(self, form):
+        instance = form.save(commit=False)
+        is_new_topic = self.kwargs.get('topic', False)
+        if is_new_topic:
+            forum = get_object_or_404(Forum, pk=self.kwargs.get('pk', 0))
+            topic = Topic.objects.create(name=form.cleaned_data['name'],
+                                         forum=forum, user=self.request.user)
+        else:
+            topic = get_object_or_404(Topic, pk=self.kwargs.get('pk', 0))
+        instance.topic = topic
+        instance.user = self.request.user
+        instance.save()
+        if is_new_topic:
+            return redirect(topic.get_absolute_url())
+        page = (topic.posts.count() / settings.OBJECTS_ON_PAGE) + 1
+        return redirect(
+            topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
+                'page': page,
+                'post': instance.pk,}
         )

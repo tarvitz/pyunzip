@@ -2,6 +2,7 @@ from django.conf.urls import *
 
 from apps.pybb import views
 from apps.pybb.feeds import LastPosts, LastTopics
+from django.contrib.auth.decorators import login_required
 
 feeds = {
     'posts': LastPosts,
@@ -29,8 +30,12 @@ urlpatterns += patterns('',
         name='topic'),
     url('^topics/(?P<pk>\d+)/posts/$', views.PostListView.as_view(),
         name='posts'),
-    url('^forum/(?P<forum_id>\d+)/topic/add/$', views.add_post,
-        {'topic_id': None}, name='topic-add'),
+    #url('^forum/(?P<forum_id>\d+)/topic/add/$', views.add_post,
+    #    {'topic_id': None}, name='topic-add'),
+    url('^forums/(?P<pk>\d+)/topics/add/$',
+        login_required(views.PostAddView.as_view()),
+        {'topic': True},
+        name='topic-add'),
     url('^topic/(?P<topic_id>\d+)/stick/$', views.stick_topic,
         name='topic-stick'),
     url('^topic/(?P<topic_id>\d+)/unstick/$', views.unstick_topic,
@@ -41,8 +46,10 @@ urlpatterns += patterns('',
         name='topic-open'),
 
     # Post
-    url('^topic/(?P<topic_id>\d+)/post/add/$', views.add_post,
-        {'forum_id': None}, name='post-add'),
+    #url('^topic/(?P<topic_id>\d+)/post/add/$', views.add_post,
+    #    {'forum_id': None}, name='post-add'),
+    url('^topics/(?P<pk>\d+)/posts/add/$',
+        login_required(views.PostAddView.as_view()), name='post-add'),
     url('^post/(?P<post_id>\d+)/$', views.show_post, name='post'),
     url('^post/(?P<post_id>\d+)/edit/$', views.edit_post, name='post-edit'),
     url('^post/(?P<post_id>\d+)/delete/$', views.delete_post,
