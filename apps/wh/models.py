@@ -13,8 +13,8 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
-
 from django.contrib.contenttypes import generic
+from django.conf import settings
 
 from apps.core.helpers import safe_ret
 from picklefield import PickledObjectField
@@ -151,11 +151,11 @@ class Expression(models.Model):
 
 class PM(models.Model):
     sender = models.ForeignKey(
-        User, related_name='sender',
+        settings.AUTH_USER_MODEL, related_name='sender',
         verbose_name=_("sender")
     )
     addressee = models.ForeignKey(
-        User, related_name='addressee',
+        settings.AUTH_USER_MODEL, related_name='addressee',
         verbose_name=_("addressee")
     )
     title = models.CharField(
@@ -291,7 +291,7 @@ class AbstractActivity(models.Model):
 
 
 class UserActivity(AbstractActivity):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     is_logout = models.NullBooleanField(_('is logout'))
     last_action_time = models.DateTimeField(
         _('Last action time'),
@@ -351,7 +351,7 @@ class Warning(models.Model):
     level = models.IntegerField(
         _('sign'), max_length=10, choices=settings.SIGN_CHOICES
     )
-    user = models.ForeignKey(User, primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, primary_key=True)
     expired = models.DateTimeField(_('expired'))
     comments = generic.GenericRelation(
         'comments.Comment', object_id_field='object_pk'
@@ -377,7 +377,7 @@ class Warning(models.Model):
 class IPBan(models.Model):
     ip_address = models.IPAddressField(_('ip address'))
     description = models.CharField(_('description'))
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     class Meta:
         abstract = True
@@ -403,7 +403,7 @@ TZ_CHOICES = [(float(x[0]), x[1]) for x in (
 
 
 #monkey patching
-
+"""
 User.__unicode__ = lambda x: x.nickname or x.username
 User.add_to_class(
     'nickname',
@@ -459,20 +459,22 @@ User.add_to_class(
     'skin', models.ForeignKey(
         Skin, null=True, blank=True)
 )
-User.add_to_class(
-    'ranks',
-    models.ManyToManyField(Rank, null=True, blank=True)
-)
-User.add_to_class(
-    'army', models.ForeignKey(Army, null=True, blank=True)
-)
-User.add_to_class(
-    'tz', models.FloatField(
-        _('time zone'), choices=TZ_CHOICES, default=0)
-)
-User.add_to_class(
-    'settings', PickledObjectField(_('Settings'), null=True, blank=True)
-)
+"""
+#User.add_to_class(
+#    'ranks',
+#    models.ManyToManyField(Rank, null=True, blank=True)
+#)
+#User.add_to_class(
+#    'army', models.ForeignKey(Army, null=True, blank=True)
+#)
+#User.add_to_class(
+#    'tz', models.FloatField(
+#        _('time zone'), choices=TZ_CHOICES, default=0)
+#)
+#User.add_to_class(
+#    'settings', PickledObjectField(_('Settings'), null=True, blank=True)
+#)
+
 Comment.add_to_class(
     'syntax', models.CharField(
         _('Syntax'), max_length=50, null=True, blank=True,
@@ -485,7 +487,7 @@ Comment.add_to_class(
     )
 )
 
-
+"""
 # UserAdmin import should be placed heres
 from django.contrib.auth.admin import UserAdmin
 UserAdmin.raw_id_fields += ('ranks',)
@@ -506,6 +508,8 @@ UserAdmin.fieldsets += (
 )
 creation_fields = ('username', 'nickname', 'password1', 'password2')
 UserAdmin.add_fieldsets[0][1]['fields'] = creation_fields
+"""
+
 from django.contrib.comments.admin import CommentsAdmin
 CommentsAdmin.fieldsets += (
     (

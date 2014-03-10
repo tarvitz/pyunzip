@@ -67,10 +67,9 @@ if settings.DEV_SERVER:
                 {'document_root': settings.MEDIA_ROOT ,
                 'show_indexes': True,
                 }),
-        #(r'^styles/(?P<path>.*)$', 'django.views.static.serve',
-        #        {'document_root':settings.STYLES_ROOT,
-        #            'show_indexes': True,
-        #        }),
+        (r'^styles/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.STYLES_ROOT,
+            'show_indexes': True}),
         #(r'^admin_media/(?P<path>.*)$', 'django.views.static.serve',
         #    {'document_root': settings.ADMIN_MEDIA,
         #    'show_indexes': True,

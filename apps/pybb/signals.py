@@ -11,8 +11,8 @@ from apps.pybb.subscription import (
 from apps.pybb.models import Post
 
 
-def user_saved(instance, **kwargs):
-    check_gravatar(instance)
+#def user_saved(instance, **kwargs):
+#    check_gravatar(instance)
 
 def post_saved(instance, **kwargs):
     notify_topic_subscribers(instance)
@@ -22,5 +22,5 @@ def pm_saved(instance, **kwargs):
 
 
 def setup_signals():
-    post_save.connect(user_saved, sender=User)
+    #post_save.connect(user_saved, sender=User)
     post_save.connect(post_saved, sender=Post)

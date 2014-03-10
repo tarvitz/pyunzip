@@ -1,5 +1,6 @@
 # coding: utf-8
 # Django settings for WarMist project.
+import os
 from settings_path import rel_path
 try:
     import psycopg2
@@ -58,6 +59,7 @@ ADMIN_MEDIA = rel_path('admin_media')
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/media/'
+STYLES_URL = '/styles/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -190,9 +192,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.comments',
-    #'apps.accounts',
-    'apps.jsonapp',
+    'apps.accounts',
     'apps.core',
+    'apps.jsonapp',
+
     'apps.wh',
     'apps.news',
     'apps.files',
@@ -250,6 +253,7 @@ OBJECTS_ON_PAGE = 20
 EXPEREMENTAL = False
 USER_FILES_LIMIT = 100*1024*1024
 MAXIMUM_POLL_ITEMS_AMOUNT = 10
+NULL_AVATAR_URL = os.path.join(MEDIA_URL, 'avatars/none.png')
 
 FORUM_THEME_DEFAULT = 'primary'
 FORUM_THEMES = (

@@ -1,9 +1,9 @@
-from apps.wh.models import (Expression, Fraction, PM, MiniQuote, Settings)
+from apps.wh.models import (Expression, PM, MiniQuote)
 from apps.news.models import News
 from apps.files.models import Replay
-from apps.core import get_skin_template
 from apps.core.helpers import get_settings
-from django.template.loader import get_template, TemplateDoesNotExist
+from django.conf import settings
+from django.template.loader import get_template
 from apps.helpers import get_self_ip_address
 
 
@@ -16,11 +16,12 @@ def core(request):
     })
     return base
 
+
 def session(request):
     return {'session': request.session}
 
+
 def base_template(request):
-    from django.conf import settings
     template = settings.DEFAULT_TEMPLATE
     is_auth = request.user.is_authenticated()
     skin_css_path = None

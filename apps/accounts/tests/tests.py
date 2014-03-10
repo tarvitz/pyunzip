@@ -3,11 +3,7 @@
 import os
 import re
 from django.test import TestCase
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+from apps.accounts.models import User
 from apps.wh.models import (
     Side, RegisterSid, Rank, RankType, PM
 )
@@ -19,10 +15,6 @@ from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
 import simplejson as json
-
-
-class ImplementMe(Exception):
-    pass
 
 
 class JustTest(TestHelperMixin, TestCase):
@@ -37,17 +29,18 @@ class JustTest(TestHelperMixin, TestCase):
         self.urls_void = [
         ]
         self.urls_registered = [
-            reverse('wh:profile'),
-            reverse('wh:profile-real', args=('user', )),
-            reverse('wh:profile-by-nick', args=('user', )),
-            reverse('wh:users'),
-            reverse('wh:pm-sent'),
-            reverse('wh:pm-income'),
+            reverse_lazy('wh:profile'),
+            reverse_lazy('wh:profile-real', args=('user', )),
+            reverse_lazy('wh:profile-by-nick', args=('user', )),
+            reverse_lazy('wh:users'),
+            reverse_lazy('wh:pm-sent'),
+            reverse_lazy('wh:pm-income'),
         ]
         self.get_object = get_object_or_None
 
     def test_registered_urls(self):
         messages = []
+
         for user in ('admin', 'user', ):
             logged = self.client.login(username=user, password='123456')
             self.assertEqual(logged, True)
@@ -60,7 +53,7 @@ class JustTest(TestHelperMixin, TestCase):
                         messages.append({
                             'user': user, 'err': err, 'url': url,
                             'type': 'Assertion'
-                        })
+                      })
                 except NoReverseMatch as err:
                     messages.append({
                         'user': user, 'err': err, 'url': url,
@@ -278,22 +271,6 @@ class JustTest(TestHelperMixin, TestCase):
                 print "Race icon failed: %(err)s" % msg
             raise AssertionError
 
-    def test_user_side_icon(self):
-        pass
-
-    def test_get_armies(self):
-        # TODO: refactor this functional
-        url = reverse('json:wh:armies', args=(1, ))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get('Content-Type'), 'application/json')
-
-    def test_pm_send(self):
-        pass
-
-    def test_pm_delete(self):
-        pass
-
     def test_register(self):
         usernames = (
             ('test_user', 'test@blacklibrary.ru', 'test_nickname'),
@@ -336,6 +313,8 @@ class JustTest(TestHelperMixin, TestCase):
             })
 
             response = self.client.post(url, post, follow=True)
+            self.proceed_form_errors(response.context)
+
             self.assertEqual(response.status_code, 200)
             logged = self.client.login(username=usern[0], password='123456')
             self.assertEqual(logged, True)
@@ -385,106 +364,6 @@ class JustTest(TestHelperMixin, TestCase):
         increase_url = reverse('wh:warning-alter', args=('not_existing_user', 'increase'))
         response = self.client.get(increase_url)
         self.assertEqual(response.status_code, 404)
-
-    def test_warning_alter(self):
-        logged = self.client.login(username='admin', password='123456')
-        self.assertEqual(logged, True)
-        url = reverse('wh:warning-alter-form', args=('user', ))
-        edit = {
-            'level': 5
-        }
-        post = {
-            'nickname': 'user',
-            'comment': 'just deal with it'
-        }
-        post.update(edit)
-        response = self.client.post(url, post, follow=True)
-
-        self.assertEqual(response.status_code, 200)
-        u = User.objects.get(username='user')
-        self.assertEqual(u.warning_set.filter(level=1).count(), 0)
-        warning = u.warning_set.filter(level=5)
-        self.assertNotEqual(len(warning), 0)
-        warning = warning[0]
-
-        messages = []
-        for (key, value) in edit.items():
-            try:
-                self.assertEqual(getattr(warning, key), value)
-            except AssertionError as err:
-                messages.append({
-                    'err': err,
-                    'key': key
-                })
-        if messages:
-            for msg in messages:
-                print "Got error assigning: %(key)s with %(err)s" % msg
-            raise AssertionError
-        comment = warning.comments.filter(comment__iexact=post['comment'])
-        self.assertEqual(comment.count(), 1)
-        self.assertEqual(comment[0].comment, post['comment'])
-
-    def test_miniquote_get_raw(self):
-        url = reverse('json:wh:miniquote')
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get('Content-Type'), 'application/json')
-
-    def test_send_pm(self):
-        admin = User.objects.get(username='admin')
-        post = {
-            'addressee': admin.pk,
-            'title': 'me here',
-            'content': u'Preved medved, waaaGH?'
-        }
-        count = PM.objects.count()
-        url = reverse('wh:pm-send')
-        # anonymous can not post pm
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count, PM.objects.count())
-
-        # user can post private messages
-        self.client.login(username='user', password='123456')
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 1, PM.objects.count())
-        pm = PM.objects.order_by('-id').all()[0]
-        edit = deepcopy(post)
-        edit.update({'addressee': admin})
-        self.check_state(pm, edit, check=self.assertEqual)
-
-    def test_delete_pm(self):
-        self.assertEqual("", "Implement me")
-
-    def test_json_pm_fetch(self):
-        logged = self.client.login(username='user', password='123456')
-        user = User.objects.get(username='user')
-
-        self.assertEqual(logged, True)
-
-        # inbox
-        url = reverse('json:wh:pm-view')
-        pm = PM.objects.filter(addressee=user)[0]
-        inbox_url = "%s?pk=%s&folder=inbox" % (url, pm.pk)
-        response = self.client.get(inbox_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get("Content-Type"), 'application/json')
-        js = json.loads(response.content)
-        self.assertEqual(js['to'], user.nickname)
-        sender = User.objects.get(nickname__iexact=js['from'])
-        self.assertIn(sender.nickname, js['nickname'])
-
-        # outbox
-        pm = PM.objects.filter(sender=user)[0]
-        outbox_url = "%s?pk=%s&folder=outbox" % (url, pm.pk)
-        response = self.client.get(outbox_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get("Content-Type"), 'application/json')
-        js = json.loads(response.content)
-        self.assertEqual(js['from'], user.nickname)
-        addressee = User.objects.get(nickname__iexact=js['to'])
-        self.assertIn(addressee.nickname, js['nickname'])
 
 
 class CacheTest(TestCase):

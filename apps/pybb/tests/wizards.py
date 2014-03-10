@@ -6,14 +6,14 @@ from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
 
-__all__ = ['PollWizardTest', ]
+__all__ = ['SimpleTest', ]
 
 
 class SimpleTest(TestCase):
     def test_simple(self):
         self.assertEqual(2, 1 + 1)
 
-
+# TODO: remote, not usable
 class PollWizardTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',

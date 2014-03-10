@@ -25,14 +25,14 @@ from django.http import Http404
 class IncomeFile(models.Model):
     file = models.FileField(_('File'),upload_to=lambda s, fn: "files/%s/%s" % (str(s.owner.id), fn))
     description = models.CharField(_('Description'),max_length=255)
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     upload_date = models.DateTimeField(_('Upload date'))
     class Meta:
         abstract = True #do not store this model into db
 
 class IncomeReplay(models.Model):
     file = models.FileField(_('Replay'),upload_to=os.path.join(settings.MEDIA_ROOT,'replays/'))
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     upload_date = models.DateTimeField(_('Uploaded date'))
     class Meta:
         abstract = True
@@ -96,7 +96,7 @@ class Replay(models.Model):
     races = models.CharField(_('Races'), max_length=100, null=False)
     winner = models.IntegerField(_('Winner'), choices=winners, max_length=30, null=False)
     #author = models.CharField(_('Author'), max_length=100, null=False)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL)
     replay = models.FileField(_('File'),upload_to=lambda s, fn: "replays/%s/%s" % (str(s.author.id), fn))
     #implement it =\
     #replay = BinCaseFileField(_('File'),upload_to=os.path.join(settings.MEDIA_ROOT,"replays/"))
@@ -272,7 +272,7 @@ class MetaGallery(models.Model):
 
 class Gallery(MetaGallery):
     #name = models.CharField(_('Name'), max_length=100)
-    #owner = models.ForeignKey(User) #common gallery does not include owner
+    #owner = models.ForeignKey(settings.AUTH_USER_MODEL) #common gallery does not include owner
     def __unicode__(self):
         return self.name
     class Meta:
@@ -298,7 +298,7 @@ class Image(models.Model):
     image = models.ImageField(_('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (str(s.owner.id), fn))
     #os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
     thumbnail = models.ImageField(_('Thumbnail'), upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/"))
-    owner = models.ForeignKey(User)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     search = SphinxSearch(weights={
         'title': 40,
         'comments': 30,
@@ -370,12 +370,13 @@ class File(IncomeFile):
         verbose_name = _('File')
         verbose_name_plural = _('Files')
 
+
 class UserFile(models.Model):
     title = models.CharField(_('title'), max_length=256, blank=True, null=True)
     file = models.FileField(
         _('file'), upload_to=lambda s, fn: "user/%s/files/%s" % (str(s.owner.id), fn)
     )
-    owner = models.ForeignKey(User, related_name='user_file_set')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_file_set')
     plain_type = models.CharField(
         _("plain type"), help_text=_("plain type for "),
         max_length=256, default='octet/stream',
