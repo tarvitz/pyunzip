@@ -12,7 +12,8 @@
 		<div class='reflects_up'></div> 
 		<div class='reflects_down'></div>
 		<div class='reflects_left'></div>
-		{% if quote_user.nickname %}<img class='quote_avatar' src='{% url "wh:avatar" nickname=quote_user.get_username %}'> {% endif %}
+		{% if quote_user.nickname %}<img class='quote_avatar'
+                                     src='{{ quote_user.get_avatar_url }}'> {% endif %}
 		{{ quote_text|safe }}
 	</div>
 {% endspaceless %}</div>

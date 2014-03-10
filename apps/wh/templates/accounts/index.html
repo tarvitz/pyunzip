@@ -19,7 +19,7 @@
 		</div><!-- msg_headline -->
 		<div class='message-body'>
 			<div class='avatar'>
-				<img src='{% url "wh:avatar" user.get_username %}'>
+				<img src='{{ user.get_avatar_url }}'>
 			</div> <!-- msg_avatar -->
 			<div class='text'>
 				<div class='transparency'></div>

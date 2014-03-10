@@ -25,7 +25,7 @@
         </div>
         <div class='message-body'>
             <div class='avatar'>
-                <img src='{% url "wh:avatar" roster.owner.nickname %}'>
+                <img src='{{ roster.owner.get_avatar_url }}'>
                 <a href="{% url "wh:profile-by-nick" roster.owner.nickname %}">
                     {{ roster.owner.get_nickname|safe }}
                 </a>

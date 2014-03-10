@@ -21,7 +21,7 @@
             <div class='avatar'>
                 {% spaceless %}
                         {% if br.winners.all %}
-                            <img src='{% url "wh:avatar" br.winners.all.0.owner.nickname %}'><br>
+                            <img src='{{ br.winners.all.0.owner.get_avatar_url }}'><br>
                             {{  br.winners.all.0.show_player }}
                         {% else %}
                             <img src='/media/avatars/none.png'>

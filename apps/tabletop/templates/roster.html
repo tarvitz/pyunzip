@@ -41,7 +41,7 @@
 			{% endif %}{% endspaceless %}
 		{% endif %}
 			{% if roster.user %}
-                <img src='{% url "wh:avatar" nickname=roster.user.get_username %}'>
+                <img src='{{  roster.user.get_avatar_url }}'>
             {% endif %}
 		{% if roster.user %}
 			<center>

@@ -51,7 +51,7 @@
     <div class='menu'>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border pull-right'>
             {% if user.is_authenticated %}
-            <li><a href='{% url "wh:profile" %}'><img src='{% url "wh:avatar" user.nickname %}' class='top bar avatar'></a></li>
+            <li><a href='{% url "wh:profile" %}'><img src='{{ user.get_avatar_url }}' class='top bar avatar'></a></li>
             {% endif %}
             {% if user.is_superuser %}
             <li><a href="{% url "wh:superlogin" %}">&nbsp;<img width='16px' src='/media/icons/white/old_man.png'>&nbsp;</a></li>

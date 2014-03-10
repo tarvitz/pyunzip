@@ -11,7 +11,7 @@
 {% endif %}{% endspaceless %}
 
 <a href="{% url "wh:profile-by-nick" usr.get_username %}">
-    <img class='avatar' src="{% url "wh:avatar" nickname=usr.get_username %}">
+    <img class='avatar' src="{{ usr.get_avatar_url }}">
 </a>
 <center>
 	{% with usr as warn_user %}
