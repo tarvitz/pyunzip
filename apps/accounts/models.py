@@ -133,6 +133,9 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
+    def get_username(self):
+        return self.nickname or self.username
+
     def get_nickname(self, no_cache=False):
         nickname = (
             cache.get('nick:%s' % self.username)
