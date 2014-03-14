@@ -181,7 +181,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, related_name='posts',
                              verbose_name=_('User'))
     created = models.DateTimeField(_('Created'), blank=True,
-                                   auto_now=True, default=datetime.now)
+                                   default=datetime.now)
     updated = models.DateTimeField(_('Updated'), blank=True, null=True)
     markup = models.CharField(
         _('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP,
@@ -228,6 +228,9 @@ class Post(models.Model):
                 'post': self.pk
             }
         )
+
+    def get_edit_url(self):
+        return reverse('pybb:post-edit', args=(self.pk, ))
 
     def render(self, field):
         out = post_markup_filter(getattr(self, field))
