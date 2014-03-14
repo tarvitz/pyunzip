@@ -635,3 +635,23 @@ class PostAddView(generic.CreateView):
                 'page': page,
                 'post': instance.pk,}
         )
+
+
+class PostUpdateView(generic.UpdateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'pybb/post_form.html'
+
+    def get_success_url(self):
+        post = self.get_object()
+        topic = post.topic
+        page = topic.posts.count() / settings.OBJECTS_ON_PAGE + 1
+        return topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
+            'page': page, 'post': post.pk
+        }
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perms('pybb.edit_post'):
+            if self.get_object().user != request.user:
+                raise PermissionDenied("Permission denied")
+        return super(PostUpdateView, self).dispatch(request, *args, **kwargs)

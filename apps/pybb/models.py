@@ -180,7 +180,8 @@ class Post(models.Model):
                               verbose_name=_('Topic'))
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts',
                              verbose_name=_('User'))
-    created = models.DateTimeField(_('Created'), blank=True)
+    created = models.DateTimeField(_('Created'), blank=True,
+                                   default=datetime.now)
     updated = models.DateTimeField(_('Updated'), blank=True, null=True)
     markup = models.CharField(
         _('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP,
@@ -228,6 +229,9 @@ class Post(models.Model):
             }
         )
 
+    def get_edit_url(self):
+        return reverse('pybb:post-edit', args=(self.pk, ))
+
     def render(self, field):
         out = post_markup_filter(getattr(self, field))
         return render_filter(out, self.markup)
@@ -257,7 +261,7 @@ class Read(models.Model):
     is logged to this model.
     """
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'))
+    user = models.ForeignKey(User, verbose_name=_('User'))
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'))
     time = models.DateTimeField(_('Time'), blank=True)
 
