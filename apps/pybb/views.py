@@ -641,7 +641,8 @@ class PostUpdateView(generic.UpdateView):
     def get_success_url(self):
         post = self.get_object()
         topic = post.topic
-        page = topic.posts.count() / settings.OBJECTS_ON_PAGE + 1
+        page = list(topic.posts.values_list('pk', flat=True)).index(post.pk)
+        page = page / settings.OBJECTS_ON_PAGE + 1
         return topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
             'page': page, 'post': post.pk
         }
