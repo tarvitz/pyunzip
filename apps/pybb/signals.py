@@ -18,5 +18,5 @@ def pm_saved(instance, **kwargs):
 
 
 def setup_signals():
-    post_save.connect(user_saved, sender=User)
+    #post_save.connect(user_saved, sender=User)
     post_save.connect(post_saved, sender=Post)
