@@ -149,7 +149,8 @@
                     if (/[^\u0000-\u00ff]/.test(key)){
                         xhr.setRequestHeader(key, val);
                     } else {
-                        xhr.setRequestHeader('__file__', val);
+                        // ?
+                        //xhr.setRequestHeader('__file__', val);
                     }
                 });
 
