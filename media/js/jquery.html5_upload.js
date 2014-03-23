@@ -146,7 +146,11 @@
                 $.each(options.headers,function(key,val){
                     val = typeof(val) == "function" ? val(file) : val; // resolve value
                     if (val === false) return true; // if resolved value is boolean false, do not send this header
-                    xhr.setRequestHeader(key, val);
+                    if ("/[^\u0000-\u00ff]/".test(s)){
+                        xhr.setRequestHeader(key, val);
+                    } else {
+                        xhr.setRequestHeader(key, '__file__');
+                    }
                 });
 
                 if (!options.sendBoundary) {
