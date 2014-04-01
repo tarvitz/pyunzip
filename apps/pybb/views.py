@@ -128,7 +128,7 @@ def show_topic_ctx(request, topic_id):
         initial = {'markup': apost.markup, 'body': apost.body}
 
     if request.user.is_authenticated():
-        initial = {'markup': request.user.pybb_profile.markup}
+        initial = {'markup': settings.DEFAULT_SYNTAX}
 
     form = AddPostForm(topic=topic, initial=initial)
 
@@ -184,7 +184,7 @@ def add_post_ctx(request, forum_id, topic_id):
             qpost = get_object_or_404(Post, pk=quote_id)
             quote = quote_text(
                 qpost.body_text,
-                request.user.pybb_profile.markup
+                settings.DEFAULT_SYNTAX
             )
 
         apost = load_anonymous_post(request, topic)
@@ -192,7 +192,7 @@ def add_post_ctx(request, forum_id, topic_id):
             markup = apost.markup
             body = apost.body
         else:
-            markup = request.user.pybb_profile.markup
+            markup = settings.DEFAULT_SYNTAX
             body = quote
 
         form = build_form(AddPostForm, request, topic=topic, forum=forum,
