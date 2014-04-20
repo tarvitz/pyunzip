@@ -97,7 +97,8 @@ class JustTest(TestHelperMixin, TestCase):
         url = reverse('wh:logout')
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, '/logout/')
+        self.assertEqual(response.context['user'].is_authenticated(), False)
+        #self.assertNotContains(response, '/logout/')
 
     def test_sulogin(self):
         # admin can login as other users (to watch bugs and something)
