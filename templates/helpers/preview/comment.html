@@ -25,9 +25,9 @@
       <div id="text_0">
         {{ preview|safe }}
       </div>
-      {% if user.about %}
+      {% comment %}{% if user.about %}
         <small>---<br>{{ user.about }}</small>
-      {% endif %}
+      {% endif %}{% endcomment %}
     </div> <!-- text -->
   </div> <!-- content -->
   <div class="message-footer"><center>;)</center></div> <!-- footer -->
