@@ -66,7 +66,7 @@ UserAdmin.form = UserAdminForm
 UserAdmin.add_form = UserCreationForm
 
 UserAdmin.fieldsets[1][1]['fields'] = (
-    'nickname', 'avatar',
+    'nickname', 'avatar', 'army', 'ranks', 'skin', 'uin', 'jid'
 )
 
-#admin.site.register(User, UserAdmin)
+admin.site.register(User, UserAdmin)

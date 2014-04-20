@@ -92,7 +92,7 @@ class User(PermissionsMixin, AbstractBaseUser):
                             blank=True, null=True)
 
     uin = models.IntegerField(_('uin (icq number)'), max_length=12,
-                              blank=True, null=True)
+                              blank=True, null=True, default=0)
     about = models.CharField(_('about myself'), max_length=512, blank=True,
                              null=True)
     skin = models.ForeignKey('wh.Skin', null=True, blank=True)
