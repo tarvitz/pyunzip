@@ -1,56 +1,51 @@
-<link rel='stylesheet' href='/media/bootstrap/css/main.css' media='screen' type='text/css'>
-<link rel='stylesheet' href='/styles/message.css' media='screen' type='text/css'>
+{% load static %}
+<link rel='stylesheet' href='{% static "css/bootstrap-forum.css" %}' media='screen' type='text/css'>
 <style type='text/css'>
-.message{ width: 99%;}
+  .message{ width: 99%; !important}
 </style>
 <script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
 
-<div class="message">
-    <div class="message-headline">
-		<div class="transparency tr_black"></div>
-        <span class="comment-date">[{% now "Y/M/d, H:i:s" %}]</span>
-		<span class="user-nickname">
-		<span class="nickname">{{ user.nickname|default_if_none:"not me :)" }}</span>  комментирует:
-		</span>
-	</div>
-    <div class="message-content">
-		<div class='reflects_left'></div>
-		<div class='reflects_down'></div>
-		<div class="avatar">
-			<div class='transparency'></div>
-            {% include "msg/avatar.html" with usr=user %}
-		<br clear='all'>
-		</div> <!-- avatar -->
-		<div class="text">
-			<div class="transparency"></div>
-			<div id="text_0">
-                {{ preview|safe }}
-			</div>
-			{% if user.about %}
-                <small>---<br>{{ user.about }}</small>
-			{% endif %}
-			<br clear="all">
-		</div> <!-- text -->
-    </div> <!-- content -->
-    <br clear="all">
-    <div class="message-footer"><center>;)</center></div> <!-- footer -->
+<div class="round message" style="width: 97%">
+  <div class="message-headline">
+    <span class="comment-date">[{% now "Y/M/d, H:i:s" %}]</span>
+    <span class="user-nickname">
+      <span class="nickname">
+        {{ user.nickname|default_if_none:"not me :)" }}</span> комментирует:
+    </span>
+  </div>
+  <div class="message-body">
+    <div class="avatar">
+      {#% include "msg/avatar.html" with usr=user %#}
+      <img src="{{ user.get_avatar_url }}"/>
+      <div>
+        <a href="{% url "wh:profile-by-nick" user %}">{{ user.get_nickname|safe }} </a>
+      </div>
+    </div> <!-- avatar -->
+    <div class="text">
+      <div id="text_0">
+        {{ preview|safe }}
+      </div>
+      {% if user.about %}
+        <small>---<br>{{ user.about }}</small>
+      {% endif %}
+    </div> <!-- text -->
+  </div> <!-- content -->
+  <div class="message-footer"><center>;)</center></div> <!-- footer -->
 </div> <!-- message -->
 
 <script language='javascript'>
-$('.message .msg_headline .transparency:even').addClass('tr_navy');
-$(document).ready(function(){
+  $(document).ready(function(){
     $('.spoiler_block a').click(function(){
-        $(this).parent().children('.spoiler').toggle(500, function(){
+      $(this).parent().children('.spoiler').toggle(500, function(){
         p = $(this).parent();
         if (p.children('.spoiler').css('display') != 'none'){
-            p.attr('class', p.attr('class') + ' spoiler_show');
-            p.children('.marker').html('[-]');
+          p.attr('class', p.attr('class') + ' spoiler_show');
+          p.children('.marker').html('[-]');
         }else{
-            p.attr('class', 'spoiler_block');
-            p.children('.marker').html('[+]');
+          p.attr('class', 'spoiler_block');
+          p.children('.marker').html('[+]');
         }
-        });
+      });
     });
-});
+  });
 </script>
-
