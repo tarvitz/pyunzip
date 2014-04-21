@@ -218,6 +218,10 @@ class User(PermissionsMixin, AbstractBaseUser):
                 mag = r.type.magnitude
         return mag
 
+    @property
+    def files(self):
+        return  self.user_file_set
+
     def __unicode__(self):
         return self.nickname or self.username
 
