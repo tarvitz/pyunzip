@@ -37,5 +37,5 @@ $.each($('a.user.image'), function(idx, img){
 $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
 
 markupSettings = myMarkupSettings['textile'];
-markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&template=article';
+markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&template=comment';
 $('textarea.markitup').markItUp(markupSettings);
