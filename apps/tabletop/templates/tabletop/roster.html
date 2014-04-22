@@ -1,8 +1,14 @@
-{% extends "base_template.html" %} {% load newsfilters coretags static %}
+{% extends "base_template.html" %} {% load newsfilters coretags static i18n %}
 {% block js %}
   <script language='javascript' src='{% static "js/base.js" %}'></script>
 {% endblock %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{% url "tabletop:rosters" %}'>{% trans "rosters" %}</a></li>
+    <li class="active">{{ roster.title }}</li>
+  </ul>
+
   <div class='message message-center'>
     <div class='message-headline'>
       {% if user == roster.owner or perms.tabletop.edit_roster %}

@@ -1,6 +1,10 @@
 {% extends "base_template.html" %}
 {% load i18n %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{% url "tabletop:rosters" %}'>{% trans "rosters" %}</a></li>
+  </ul>
   {% if object_list %}
     {% for roster in object_list %}
       {% include "includes/roster.html" with r=roster %}

@@ -4,6 +4,11 @@
   <script type="text/javascript" src="{% static "js/ZeroClipboard.min.js" %}"></script>
 {% endblock %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{% url "files:files" %}'>{% trans "my files" %}</a></li>
+  </ul>
+
   <form style='margin-bottom: 10px;'>
     <fieldset>
       {% csrf_token %}

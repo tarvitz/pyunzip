@@ -1,6 +1,11 @@
 {% extends "base_template.html" %}
 {% load kamwhfilters i18n comments coretags %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li class="active">{% trans "profile" %}</li>
+  </ul>
+
   {% if usr.errors %}
     {{ usr.errors }}
   {% else %}
