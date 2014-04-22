@@ -4,7 +4,6 @@
   <center>
     {% if karmas.object_list %}
       <div class='karma_list'>
-        <div class='transparency_black'></div>
         {% for k in karmas.object_list %}
           {% spaceless %}
             {% if k.karma_value == 0 %} {# lost in warp #}
@@ -27,7 +26,6 @@
       {% include settings.document.links %}
     {% else %}
       <div class='block_notice'>
-        <div class='transparency tr_black'></div>
         {% if user.settings.karma_humor %}o_O нету ничо {% else %}Кармически пуст{% endif %}
       </div>
     {% endif %}
