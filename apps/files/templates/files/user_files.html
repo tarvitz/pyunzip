@@ -8,29 +8,30 @@
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
     <li><a href='{% url "files:files" %}'>{% trans "my files" %}</a></li>
   </ul>
-
-  <form style='margin-bottom: 10px;'>
-    <fieldset>
-      {% csrf_token %}
-      <span class='btn btn-info btn-small fileinput-button'>
-          <i class='icon-plus icon-white'></i>
-          {% trans "Upload files" %}
-          <input type="file" multiple="multiple" id="upload_field" name='file'/>
-      </span>
-      <div class="progress hide" id='progress-bar' style='width: 300px'>
-        <div class="bar" style="width: 0%;"></div>
-      </div>
-    </fieldset
-      {% trans "Upload files" %}>
-  </form>
+  <div class='upload pull-right'>
+    <form style='margin-bottom: 10px;'>
+      <fieldset>
+        {% csrf_token %}
+        <span class='btn btn-info btn-small fileinput-button'>
+            <i class='icon-plus icon-white'></i>
+            {% trans "Upload files" %}
+            <input type="file" multiple="multiple" id="upload_field" name='file'/>
+        </span>
+        <div class="progress hide" id='progress-bar' style='width: 300px'>
+          <div class="bar" style="width: 0%;"></div>
+        </div>
+      </fieldset
+        {% trans "Upload files" %}>
+    </form>
+    <div class='information'>
+        <span class='limit'>{% trans "Your limit" %} {{ gs.USER_FILES_LIMIT|filesizeformat }}</span> |
+        <span class='used'>{% trans "You used" context "You used file space" %}: {{ space_used|filesizeformat }}</span>
+    </div>
+  </div>
+  <h3>{% trans "My files" %}</h3>
 
   {% if files.object_list %}
     <div class='block info'>
-      <div class='information pull-right'>
-        <span class='limit'>{% trans "Your limit" %} {{ gs.USER_FILES_LIMIT|filesizeformat }}</span> |
-        <span class='used'>{% trans "You used" context "You used file space" %}: {{ space_used|filesizeformat }}</span>
-      </div>
-
       <ul class="nav nav-tabs">
         <li class="active"><a href="#general" data-toggle='tab'>{% trans "General" %}</a></li>
         <li><a href="#picts" data-toggle='tab'>{% trans "Pictures" %}</a></li>
