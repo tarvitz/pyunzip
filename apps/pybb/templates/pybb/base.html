@@ -9,7 +9,7 @@
     <script type='text/javascript' src='{% static "js/core.js" %}'></script>
     <script type="text/javascript" src="{% static "components/jquery/jquery.min.js" %}"></script>
     <script type='text/javascript' src='{% static "js/jquery.tmpl.min.js" %}'></script>
-    <script type='text/javascript' src='/media/js/jquery.html5_upload.js'></script>
+    <script type='text/javascript' src='{% static "js/jquery.html5_upload.js" %}'></script>
     <!-- Highlightjs goodies -->
     <script type="text/javascript" src="{% static "pybb/js/highlight.js" %}"></script>
     <script type="text/javascript">
@@ -66,20 +66,25 @@
 {% endif %}
 </body>
 
+{# templates, realtime settings #}
+{% include "js/locale.ru.html" %}
+{% include "jtmpl/core.html" %}
+
 <script type='text/javascript'>
-$(document).ready(function(){
-    $("[rel=tooltip]").tooltip({live: true});
-    $.each($('a.user.image'), function(idx, img){
-        $(img).attr({'rel': 'gal'});
-    });
-    $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
-    $(".spoiler a").click(function(e){
-      $(this).text(
-        $(this).text() == '{{ i18n_open }}' ? "{{ i18n_close }}"
-          : "{{ i18n_open }}"
-      );
-      $(this).parent().find('.spoiler.block').toggleClass('hide');
-    });
-});
+  $(document).ready(function(){
+      $("[rel=tooltip]").tooltip({live: true});
+      $.each($('a.user.image'), function(idx, img){
+          $(img).attr({'rel': 'gal'});
+      });
+      $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
+      $(".spoiler a").click(function(e){
+        $(this).text(
+          $(this).text() == '{{ i18n_open }}' ? "{{ i18n_close }}"
+            : "{{ i18n_open }}"
+        );
+        $(this).parent().find('.spoiler.block').toggleClass('hide');
+      });
+  });
 </script>
+<script type="text/javascript" src="{% static "js/load.js" %}"></script>
 </html>
