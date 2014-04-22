@@ -784,3 +784,21 @@ class UserRosterListView(RostersListView):
         return super(UserRosterListView, self).get_queryset().filter(
             owner=self.request.user
         )
+
+
+class RosterDetailView(generic.DetailView):
+    """ Single Roster show"""
+    model = Roster
+    template_name = 'tabletop/roster.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(RosterDetailView, self).get_context_data(**kwargs)
+        comments = get_comments(self.model, object_pk=self.kwargs.get('pk', 0))
+        comments = paginate(
+            comments, self.request.GET.get('page', 1),
+            pages=settings.OBJECTS_ON_PAGE
+        )
+        context.update({
+            'comments': comments
+        })
+        return context
