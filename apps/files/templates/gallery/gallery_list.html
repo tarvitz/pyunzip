@@ -1,0 +1,18 @@
+{% extends "base_template.html" %}
+{% load kamwhfilters comments i18n coretags %}
+{% block title %}{{ block.super }}:Галерея{% endblock %}
+{% block content %}
+
+  {% if object_list %}
+    {% for image in object_list %}
+      {% include "gallery/includes/image.html" %}
+    {% endfor %}
+    {% include "tracker/tracker_js.html" %}
+
+    {% include "generic/paginator.html" %}
+
+  {% else %}
+    {% include "nothing.html" %}
+  {% endif %}
+{% endblock %}
+

@@ -1,6 +1,6 @@
 from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
-from django.utils.translation import ugettext_lazy as _
+from apps.files import views
 
 urlpatterns = patterns('apps.files.views',
     #(r'^upload/file/$', 'upload_file'),
@@ -54,8 +54,9 @@ urlpatterns = patterns('apps.files.views',
     #(r'^replays/(?P<gametype>\w+)/(?P<type>\d+)/$', 'category_replays'),
     #(r'^replays/(?P<type>\d+)/$', 'all_'),
     #
-    url(r'^gallery/$', 'show_all_images',
-        name='galleries'),
+    #url(r'^gallery/$', 'show_all_images',
+    #    name='galleries'),
+    url(r'^galleries/$', views.GalleryListView.as_view(), name='galleries'),
     url(r'^gallery/(?P<id>\d+)/$', 'show_all_images', name='gallery'),
     #(r'^gallery/create/$', 'create_gallery'),
     url(r'^gallery/exists/$', direct_to_template,

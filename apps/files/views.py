@@ -14,9 +14,10 @@ from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
-from django.core.urlresolvers       import reverse
+from django.views import generic
+from django.core.urlresolvers import reverse
 from django.core import serializers
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect, Http404
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
@@ -1004,3 +1005,10 @@ def file_delete(request, pk, nickname=''):
     return {
         'redirect': 'files:files'
     }
+
+
+class GalleryListView(generic.ListView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_list.html'
+    paginate_by = settings.OBJECTS_ON_PAGE
+    paginator_class = Paginator
