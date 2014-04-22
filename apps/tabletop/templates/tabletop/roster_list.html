@@ -1,0 +1,14 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  {% if object_list %}
+    {% for roster in object_list %}
+      {% include "includes/roster.html" with r=roster %}
+    {% endfor %}
+    {% if paginator %}
+      {% include "generic/paginator.html" %}
+    {% endif %}
+  {% else %}
+    <h3>{% trans "No rosters found" %}</h3>
+  {% endif %}
+{% endblock %}

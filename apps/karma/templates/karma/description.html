@@ -1,35 +1,23 @@
-{% extends base_template %} {% load newsfilters %}
-{% block head_content %}
-<link rel="stylesheet" type="text/css" href="/styles/message.css" media='screen' >
-<link rel="stylesheet" type="text/css" href="/styles/ranks.css" media='screen'>
-{% endblock %}
-{% block text_content %}
-<div align="center">
-<div class="message">
-	<div class="message-headline">
-		<div class="transparency" id='black'><!-- wise transparency --></div>
-		{{ status.status }}
-	</div>
-	<div class="message-content">
-	<div class='transparency'></div>
-		<div class="avatar">
-			<img src="/media/{{ img }}.png">
-		</div>
-		<div class="text" id="status_{{ status.id }}">
-			{{ status.description|render_filter:status.syntax|safe }}
-			<br clear="all">
-		</div>
-	{% comment %}
-	{% if user.is_superuser %}
-	<div class="message-footer">
-		<center>
-			<a href="javascript:void(0);" onClick="flip_to_textarea('#rank',{{ rank.id }},'/ranks/{{ rank.codename }}/get/');">[правка]</a>
-		</center>
-	</div>
-	{% endif %}
-	{% endcomment %}
-	</div> <!-- content -->
-	<br clear="all">
-</div> <!-- end description -->
-</div> <!-- center -->
+{% extends "base_template.html" %}
+{% load newsfilters %}
+{% block content %}
+  <div align="center">
+    <div class="message">
+      <div class="message-headline">
+        <div class="transparency" id='black'><!-- wise transparency --></div>
+        {{ status.status }}
+      </div>
+      <div class="message-content">
+        <div class='transparency'></div>
+        <div class="avatar">
+          <img src="/media/{{ img }}.png">
+        </div>
+        <div class="text" id="status_{{ status.id }}">
+          {{ status.description|render_filter:status.syntax|safe }}
+          <br clear="all">
+        </div>
+      </div> <!-- content -->
+      <br clear="all">
+    </div> <!-- end description -->
+  </div> <!-- center -->
 {% endblock %}

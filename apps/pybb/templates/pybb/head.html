@@ -21,7 +21,10 @@
                         </a>
                         <ul class='dropdown-menu pull-right' role="menu">
                             <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
-                            <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>{% trans "My reports" %}</a></li>
+                            {% comment %}
+                              <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>
+                                {% trans "My reports" %}</a></li>
+                            {% endcomment %}
                             <li class=''><a href='{% url "files:files" %}'>{% trans "My files" %}</a></li>
                             <li class=''><a href='{% url "wh:profile" %}'>{% trans "My profile" %}</a></li> 
                             <li class='divider divide'></li>

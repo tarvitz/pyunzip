@@ -4,7 +4,7 @@
   border: 1px solid darkgrey;
   width: 80%;
   .msg_headline, .message-headline{
-    color: white;
+    color: @message-text-color;
     font-size: 8pt;
     line-height: 13px;
     border-bottom: 1px dotted darkgrey;
@@ -15,7 +15,7 @@
       border: 0px;
     }
     .msg_button,.message-button{
-      color: white;
+      color: @message-text-color;
       float: right;
     }
   }
@@ -42,7 +42,7 @@
       width: 105px;
       margin-right: 5px;
       height: 100%;
-      color: white;
+      color: @message-text-color;
       font-size: 8pt;
       line-height: initial;
       top: 0;
@@ -63,7 +63,7 @@
       padding-bottom: 5px;
       text-indent: 8px;
       margin-left: 110px; /*<- WHAT THE FUCK IS IT? O_O*/
-      color: white;
+      color: @message-text-color;
       min-height: 250px; /* used with msg_avatar testing */
       >.reply, .msg_reply_author{
         float: right;
@@ -77,7 +77,7 @@
     }
   }
   .message-footer, .msg_footer{
-    color: white;
+    color: @message-text-color;
     font-size: 8pt;
     line-height: initial;
     padding: 0px;

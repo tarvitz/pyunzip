@@ -1,30 +1,31 @@
-{% extends base_template %} {% load coretags %}
+{% extends "base_template.html" %}
+{% load coretags %}
 {% block title %}Пользователи{% endblock %}
 {% block css %}
   {{ block.super }}
-  <link rel='stylesheet' href='/styles/profileng.css' media='screen' type='text/css'>
-
+  <link rel='stylesheet' href='/styles/profileng.css' media='screen'
+        type='text/css'>
 {% endblock %}
-{% block text_content %}
 
+{% block content %}
   {% for user in users.object_list %}
     <center>
       <div class='round message'>
         <div class='message-headline'>
-          <!-- effects -->
-          <div class='transparency_black'></div>
-          <!-- end of effects -->
+          <a href='{% url "wh:profile-by-nick" user.get_username %}'>
+            {% if user.nickname %}
+              {{ user.get_nickname|safe }}
+            {% else %}
+              Soulless inhabit
+            {% endif %}
+          </a>
 
-          <a href='{% url "wh:profile-by-nick" user.get_username %}'>{% if user.nickname %}{{ user.get_nickname|safe }}{% else %}Soulless inhabit{% endif %}</a>
         </div><!-- msg_headline -->
         <div class='message-body'>
           <div class='avatar'>
             <img src='{{ user.get_avatar_url }}'>
           </div> <!-- msg_avatar -->
           <div class='text'>
-            <div class='transparency'></div>
-            <div class='reflects_left'></div>
-            <div class='reflects_right'></div>
             {% spaceless %}
               {% if user.first_name or user.last_name %}
                 <div class='msg_txt'>Реальное имя: <i>{{ user.first_name }} {{ user.last_name }}</i></div>
@@ -42,7 +43,6 @@
         </div><!-- msg_content -->
         <br clear='all'>
         <div class='message-footer'>
-          <div class='transparency_black'></div>
           <div class='links'>
             <span class='first'><a href='{% url "wh:profile-by-nick" user.get_username %}'>profile</a></span>
             {% comment %}<span><a href='{% url "wh:pm-send-nick" user.get_username %}'>pm</a></span>{% endcomment %}
@@ -55,12 +55,6 @@
           <br clear='all'>
         </div> <!-- msg_footer -->
       </div> <!-- message -->
-      {% comment %}
-		<a class='profile' href='{% url apps.wh.views.profile_by_nick nickname=user.nickname %}'>
-		<img class='account_user_img' src='{% url apps.wh.views.get_user_avatar nickname=user.get_nickname %}'>
-		<img class='account_side_icon' src='{% url apps.wh.views.get_user_side_icon nickname=user.nickname %}'>
-		{% get_nickname  user %}</a>
-		{% endcomment %}
     </center>
   {% endfor %}
 

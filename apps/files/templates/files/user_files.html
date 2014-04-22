@@ -1,254 +1,258 @@
-{% extends base_template %}{% load i18n thumbnail %}
+{% extends "base_template.html" %}
+{% load i18n thumbnail static %}
+{% block js %}
+  <script type="text/javascript" src="{% static "js/ZeroClipboard.min.js" %}"></script>
+{% endblock %}
 {% block content %}
-<form style='margin-bottom: 10px;'>
-<fieldset>
-{% csrf_token %}
+  <form style='margin-bottom: 10px;'>
+    <fieldset>
+      {% csrf_token %}
 <span class='btn btn-info btn-small fileinput-button'>
     <i class='icon-plus icon-white'></i>
     {% trans "Upload files" %}
     <input type="file" multiple="multiple" id="upload_field" name='file'/>
 </span>
-<div class="progress hide" id='progress-bar' style='width: 300px'>
-  <div class="bar" style="width: 0%;"></div>
-</div>
-</fieldset
-{% trans "Upload files" %}>
-</form>
+      <div class="progress hide" id='progress-bar' style='width: 300px'>
+        <div class="bar" style="width: 0%;"></div>
+      </div>
+    </fieldset
+      {% trans "Upload files" %}>
+  </form>
 
-{% if files.object_list %}
-<div class='block info'>
-    <div class='transparency black'></div>
-    <div class='information'>
+  {% if files.object_list %}
+    <div class='block info'>
+      <div class='transparency black'></div>
+      <div class='information'>
         <span class='limit'>{% trans "Your limit" %} {{ gs.USER_FILES_LIMIT|filesizeformat }}</span> |
         <span class='used'>{% trans "You used" context "You used file space" %}: {{ space_used|filesizeformat }}</span>
-    </div>
-    <div class='space'></div>
+      </div>
+      <div class='space'></div>
 
-    <div class='tabbable tabbable-inverse'>
+      <div class='tabbable tabbable-inverse'>
         <ul class="nav nav-tabs">
-            <li class="active"><a href="#general" data-toggle='tab'>{% trans "General" %}</a></li>
-            <li><a href="#picts" data-toggle='tab'>{% trans "Pictures" %}</a></li>
+          <li class="active"><a href="#general" data-toggle='tab'>{% trans "General" %}</a></li>
+          <li><a href="#picts" data-toggle='tab'>{% trans "Pictures" %}</a></li>
         </ul>
         <div class='tab-content'>
-            <div class='tab-pane active' id='general'>
-                <table class='table striped noth'>
-                    <tr>
-                        <th>{% trans "Type" %}</th>
-                        <th>{% trans "File" %}</th>
-                        <th>{% trans "Link" %}</th>
-                        <th>{% trans "Size" %}</th>
-                        <th>{% trans "Actions" %}</th>
-                    </tr>
-                {% for file in files.object_list %}
-                    <tr>
-                        <td>{{ file.plain_type }}</td>
-                        <td>{{ file.get_file_name }}</td>
-                        <td>{{ file.get_file_link|safe }}</td>
-                        <td>{{ file.get_file_size|filesizeformat }}</td>
-                        <td>
-                            <a  data-yes-btn-class='btn btn-danger'
-                                data-text="{% trans "Do you want to delete this file?" %}"
-                                href='{{ file.get_delete_url }}'
-                                class='btn btn-danger noty confirm'>{% trans "delete" %}</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-                </table>
-                {% include "links.html" with page=files %}
-            </div>
-            <div class='tab-pane' id='picts'>
-                <table class='table striped noth'>
-                    <tr>
-                        <th>{% trans "Image" %}</th>
-                        <th>{% trans "Links" %}</th>
-                        <th>{% trans "Size" %}</th>
-                        <th>{% trans "Actions" %}</th>
-                    </tr>
-                {% for file in pictures.object_list %}
+          <div class='tab-pane active' id='general'>
+            <table class='table striped noth'>
+              <tr>
+                <th>{% trans "Type" %}</th>
+                <th>{% trans "File" %}</th>
+                <th>{% trans "Link" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Actions" %}</th>
+              </tr>
+              {% for file in files.object_list %}
+                <tr>
+                  <td>{{ file.plain_type }}</td>
+                  <td>{{ file.get_file_name }}</td>
+                  <td>{{ file.get_file_link|safe }}</td>
+                  <td>{{ file.get_file_size|filesizeformat }}</td>
+                  <td>
+                    <a  data-yes-btn-class='btn btn-danger'
+                        data-text="{% trans "Do you want to delete this file?" %}"
+                        href='{{ file.get_delete_url }}'
+                        class='btn btn-danger noty confirm'>{% trans "delete" %}</a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+            {% include "links.html" with page=files %}
+          </div>
+          <div class='tab-pane' id='picts'>
+            <table class='table striped noth'>
+              <tr>
+                <th>{% trans "Image" %}</th>
+                <th>{% trans "Links" %}</th>
+                <th>{% trans "Size" %}</th>
+                <th>{% trans "Actions" %}</th>
+              </tr>
+              {% for file in pictures.object_list %}
                 {% thumbnail file.file gs.IMAGE_THUMBNAIL_SIZE as image %}
-                    <tr>
-                        <td>
-                            <a class='user image'
-                                href='{{ file.file.url }}' rel='gal'>
-                                <img class='thumbnail' src='{{ image.url }}' alt='{{ file.title|default:"" }}'>
-                            </a>
-                            {{ file.get_file_name }}
-                        </td>
-                        <td style='line-height: 23px;'>
-                            <a  data-id='thumb-{{ file.id }}'
-                                data-help='{% trans "Inserts thumbnail with link to image" %}'
-                                data-content='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
-                                class='show-help' href='#'>{% trans "Thumbnail and image" %}</a>
-                                <button data-clipboard-text='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
-                                   class='clip-copy btn btn-info btn-mini btn-xs btn-xs2 pull-right' data-delay='300'
-                                   rel='tooltip' href='#'
-                                   data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
-                                <br>
-                            <a  data-help='{% trans "Inserts only image" %}' data-id='img-{{ file.id }}'
-                                data-content='!(user image){{ file.file.url }}!' href='#' class='show-help'>
-                                {% trans "Image" %}
-                            </a>
-                            <button data-clipboard-text='"!(user image){{ file.file.url }}!"'
-                                    class='clip-copy btn btn-info btn-mini btn-xs btn-xs2 pull-right' data-delay='300'
-                                    rel='tooltip' href='#'
-                                    data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
-                        </td>
-                        <td>{{ file.get_file_size|filesizeformat }}</td>
-                        <td>
-                            <a  data-yes-btn-class='btn btn-danger'
-                                data-text="{% trans "Do you want to delete this file?" %}"
-                                href='{{ file.get_delete_url }}'
-                                class='btn btn-danger noty confirm'>{% trans "delete" %}</a>
-                        </td>
-                    </tr>
+                  <tr>
+                    <td>
+                      <a class='user image'
+                         href='{{ file.file.url }}' rel='gal'>
+                        <img class='thumbnail' src='{{ image.url }}' alt='{{ file.title|default:"" }}'>
+                      </a>
+                      {{ file.get_file_name }}
+                    </td>
+                    <td style='line-height: 23px;'>
+                      <a  data-id='thumb-{{ file.id }}'
+                          data-help='{% trans "Inserts thumbnail with link to image" %}'
+                          data-content='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
+                          class='show-help' href='#'>{% trans "Thumbnail and image" %}</a>
+                      <button data-clipboard-text='"(user image)!(thumbnail inline){{ image.url }}!":{{ file.file.url }}'
+                              class='clip-copy btn btn-info btn-mini btn-xs btn-xs2 pull-right' data-delay='300'
+                              rel='tooltip' href='#'
+                              data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
+                      <br>
+                      <a  data-help='{% trans "Inserts only image" %}' data-id='img-{{ file.id }}'
+                          data-content='!(user image){{ file.file.url }}!' href='#' class='show-help'>
+                        {% trans "Image" %}
+                      </a>
+                      <button data-clipboard-text='"!(user image){{ file.file.url }}!"'
+                              class='clip-copy btn btn-info btn-mini btn-xs btn-xs2 pull-right' data-delay='300'
+                              rel='tooltip' href='#'
+                              data-title='{% trans "Copies link to the clipboard" %}'>{% trans "copy" %}</button>
+                    </td>
+                    <td>{{ file.get_file_size|filesizeformat }}</td>
+                    <td>
+                      <a  data-yes-btn-class='btn btn-danger'
+                          data-text="{% trans "Do you want to delete this file?" %}"
+                          href='{{ file.get_delete_url }}'
+                          class='btn btn-danger noty confirm'>{% trans "delete" %}</a>
+                    </td>
+                  </tr>
                 {% endthumbnail %}
-                {% endfor %}
-                </table>
-                {% include "links.html" with page=pictures %}
-            </div>
+              {% endfor %}
+            </table>
+            {% include "links.html" with page=pictures %}
+          </div>
         </div>
+      </div>
     </div>
-</div>
-{% else %}
+  {% else %}
     <h3>{% trans "No files uploaded" %}</h3>
-{% endif %}
+  {% endif %}
 
-<!-- uploader -->
-<script type="text/javascript">
-ZeroClipboard.setDefaults( { moviePath: '/media/swf/ZeroClipboard.swf' } );
-var clip = new ZeroClipboard();
+  <!-- uploader -->
+  <script type="text/javascript">
+    ZeroClipboard.setDefaults( { moviePath: '/media/swf/ZeroClipboard.swf' } );
+    var clip = new ZeroClipboard();
 
-$(document).ready(function(){
-    clip.on('complete', function(client, args){
+    $(document).ready(function(){
+      clip.on('complete', function(client, args){
         noty({
-            text: "{% trans 'Copied to clipboard' %}" /*+ args.text*/,
-            type: 'success',
-            dismissQueue: true,
-            timeout: 3000
+          text: "{% trans 'Copied to clipboard' %}" /*+ args.text*/,
+          type: 'success',
+          dismissQueue: true,
+          timeout: 3000
         });
-    });
-    clip.on('wrongflash', function(clieng, args){
+      });
+      clip.on('wrongflash', function(clieng, args){
         noty({
-            text: "{% trans 'Sorry, your flash version is pretty old, please update to enable fast copying' %}",
-            type: "information",
-            dismissQueue: true,
-            timeout: 5000
+          text: "{% trans 'Sorry, your flash version is pretty old, please update to enable fast copying' %}",
+          type: "information",
+          dismissQueue: true,
+          timeout: 5000
         });
-    });
+      });
 
-    $('.show-help').click(function(e){
+      $('.show-help').click(function(e){
         t = $.template('#showImageLinkHelpTemplate');
         modal = "#modal-" + $(this).data('id');
         if (!$(modal).length){
-            block = $.tmpl(t, {
-                content: $(this).data('content'),
-                help: $(this).data('help') || false,
-                id: modal.replace('#', '')
-            }).appendTo('body');
+          block = $.tmpl(t, {
+            content: $(this).data('content'),
+            help: $(this).data('help') || false,
+            id: modal.replace('#', '')
+          }).appendTo('body');
         }
         $(modal).modal('show');
         return false;
-    });
-    $(".clip-copy").hover(function(e){
+      });
+      $(".clip-copy").hover(function(e){
         var self = this;
         data = $(this).data('clipboard-text');
         clip.setCurrent(this);
         clip.reposition();
         clip.setText(data);
+      });
     });
-});
 
     $(function() {
-        csrf = document.cookie.match(/csrftoken=([\w\d]+)/);
-        csrf = (csrf.length) ? csrf[1] : "";
-        $("#upload_field").html5_upload({
-            url: '{% url "files:file-upload" %}',
-            sendBoundary: function(event){
-                return true;
-                // window.FormData || $.browser.mozilla;
-            },
-            extraFields: {
-                'csrfmiddlewaretoken': csrf
-            },
-            fieldName: "file",
-            onStart: function(event, total) {
-                //return true;
-                $('#progress-bar').removeClass('hide').addClass('active');
-                /*
-                start = false;
+      csrf = document.cookie.match(/csrftoken=([\w\d]+)/);
+      csrf = (csrf.length) ? csrf[1] : "";
+      $("#upload_field").html5_upload({
+        url: '{% url "files:file-upload" %}',
+        sendBoundary: function(event){
+          return true;
+          // window.FormData || $.browser.mozilla;
+        },
+        extraFields: {
+          'csrfmiddlewaretoken': csrf
+        },
+        fieldName: "file",
+        onStart: function(event, total) {
+          //return true;
+          $('#progress-bar').removeClass('hide').addClass('active');
+          /*
+           start = false;
 
-                noty({
-                    text: "{% trans "You are trying to upload the file. Do you want to proceed" %}",
-                    type: "confirm",
-                    dismissQueue: true,
-                    layout: 'center',
-                    buttons: [
-                        {
-                            addClass: 'btn btn-small',
-                            text: "{% trans "Yes" %}",
-                            onClick: function($noty){
-                                start = true;
-                                $noty.close();
-                            }
+           noty({
+           text: "{% trans "You are trying to upload the file. Do you want to proceed" %}",
+           type: "confirm",
+           dismissQueue: true,
+           layout: 'center',
+           buttons: [
+           {
+           addClass: 'btn btn-small',
+           text: "{% trans "Yes" %}",
+           onClick: function($noty){
+           start = true;
+           $noty.close();
+           }
 
-                        },
-                        {
-                            addClass: 'btn btn-small',
-                            text: "{% trans "No" %}",
-                            onClick: function($noty){
-                                $noty.close();
-                            }
-                        }
-                    ]
-                });*/
-                //return start;
-                return confirm("{% trans 'Do you want to proceed uploading the file?' %}");
-            },
-            onProgress: function(event, progress, name, number, total) {
-                console.log([progress, number, name, total]);
-            },
-            setName: function(text) {
-                $("#progress_report_name").text(text);
-            },
-            setStatus: function(text) {
-                $("#progress_report_status").text(text);
-            },
-            setProgress: function(val) {
-                $('#progress-bar .bar').css('width', Math.ceil(val*100) + "%");
-            },
-            onFinishOne: function(event, response, name, number, total) {
-                $('#progress-bar').addClass('hide').removeClass('active');
-                js = JSON.parse(response);
-                if (!js.form){
-                    noty({
-                        text: "{% trans 'downloaded successfull, reload the page' %}",
-                        type: "success",
-                        dismissQueue: true
-                    });
-                } else if (js.form){
-                    message = '';
-                    for (el in js.form.errors){
-                        message += js.form.errors[el].join(", ");
-                    }
-                    noty({
-                        text: message,
-                        type: "information",
-                        layout: 'center',
-                        dismissQueue: true
-                    });
-                }
-            },
-            onError: function(event, name, error) {
-                noty({
-                    text: '{% trans "error while uploading file" %} ' + name,
-                    type: 'error',
-                    dismissQueue: true
-                });
-                $('#progress-bar').removeClass('active').addClass('hide');
+           },
+           {
+           addClass: 'btn btn-small',
+           text: "{% trans "No" %}",
+           onClick: function($noty){
+           $noty.close();
+           }
+           }
+           ]
+           });*/
+          //return start;
+          return confirm("{% trans 'Do you want to proceed uploading the file?' %}");
+        },
+        onProgress: function(event, progress, name, number, total) {
+          console.log([progress, number, name, total]);
+        },
+        setName: function(text) {
+          $("#progress_report_name").text(text);
+        },
+        setStatus: function(text) {
+          $("#progress_report_status").text(text);
+        },
+        setProgress: function(val) {
+          $('#progress-bar .bar').css('width', Math.ceil(val*100) + "%");
+        },
+        onFinishOne: function(event, response, name, number, total) {
+          $('#progress-bar').addClass('hide').removeClass('active');
+          js = JSON.parse(response);
+          if (!js.form){
+            noty({
+              text: "{% trans 'downloaded successfull, reload the page' %}",
+              type: "success",
+              dismissQueue: true
+            });
+          } else if (js.form){
+            message = '';
+            for (el in js.form.errors){
+              message += js.form.errors[el].join(", ");
             }
-        });
+            noty({
+              text: message,
+              type: "information",
+              layout: 'center',
+              dismissQueue: true
+            });
+          }
+        },
+        onError: function(event, name, error) {
+          noty({
+            text: '{% trans "error while uploading file" %} ' + name,
+            type: 'error',
+            dismissQueue: true
+          });
+          $('#progress-bar').removeClass('active').addClass('hide');
+        }
+      });
     });
-</script>
+  </script>
 
 
 {% endblock %}

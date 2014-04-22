@@ -9,7 +9,7 @@ from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
     AddRosterModelForm
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import (
     get_settings, get_comments, get_content_type,
     get_object_or_none, paginate, can_act, render_to,
@@ -42,6 +42,7 @@ from apps.core import benchmark
 from apps.wh.models import Side
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.comments.models import Comment
+from django.views import generic
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
@@ -766,3 +767,20 @@ def show_codexes(request):
     codexes = paginate(codexes, page, pages=_pages_)
     return direct_to_template(request, template,
         {'codexes': codexes})
+
+
+# cbv
+class RostersListView(generic.ListView):
+    """ Everyone rosters list with pagination"""
+    model = Roster
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'tabletop/roster_list.html'
+
+
+class UserRosterListView(RostersListView):
+    """ Users rosters list with pagination """
+    def get_queryset(self):
+        return super(UserRosterListView, self).get_queryset().filter(
+            owner=self.request.user
+        )
