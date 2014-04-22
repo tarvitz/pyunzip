@@ -171,6 +171,7 @@ class Roster(models.Model):
     def get_absolute_url(self):
         return reverse('tabletop:roster',args=[self.id])
 
+    #todo: SPEEDUP
     def render_roster(self):
         roster = post_markup_filter(self.roster)
         return render_filter(roster, self.syntax or 'textile')

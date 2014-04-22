@@ -55,7 +55,7 @@
             Ростер:
             <!--<a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url "json:tabletop:roster" r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>-->
             <span class='roster'>
-              {{ r.roster|safe }}
+              {{ r.render_roster|safe }}
             </span>
           </div>
         {% endif %}
