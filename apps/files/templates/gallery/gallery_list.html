@@ -2,7 +2,19 @@
 {% load kamwhfilters comments i18n coretags %}
 {% block title %}{{ block.super }}:Галерея{% endblock %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "gallery" %}</li>
+  </ul>
 
+  {% if user.is_authenticated %}
+  <div class="controls pull-right">
+    <a href="{% url "files:image-upload" %}"
+       class="btn btn-{{ user.get_color_theme }}">{% trans "Add image" %}</a>
+  </div>
+  {% endif %}
+
+  <h3>{% trans "Gallery" %}</h3>
   {% if object_list %}
     {% for image in object_list %}
       {% include "gallery/includes/image.html" %}

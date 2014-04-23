@@ -50,6 +50,12 @@ class UploadImageModelForm(forms.ModelForm):
     class Meta:
         model = ModelImage
         exclude = ['thumbnail', 'owner', 'alias']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'comments': forms.TextInput(attrs={'class': 'form-control'}),
+            'gallery': forms.Select(attrs={'class': 'form-control chosen'}),
+        }
+
 
 class ImageModelForm(UploadImageModelForm):
     required_css_class='required'
