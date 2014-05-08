@@ -667,10 +667,16 @@ def post_markup_filter(string):
 
     result = r.findall(string)
     for (username, text) in result:
-        user = get_object_or_None(User, nickname__iexact=username) or AnonymousUser()
-        html = render_to_string('q_comments.html', {'quote_user': user, 'quote_text': text})
-        html = re.sub(r'\n+', '', html)
-        string = string.replace('(%s){%s}' % (username, text), html)
+        if text:
+            user = (
+                get_object_or_None(User, nickname__iexact=username)
+                or AnonymousUser()
+            )
+            html = render_to_string(
+                'q_comments.html', {'quote_user': user, 'quote_text': text}
+            )
+            html = re.sub(r'\n+', '', html)
+            string = string.replace('(%s){%s}' % (username, text), html)
     string = string.replace('(cut)', '')
     return string
 
