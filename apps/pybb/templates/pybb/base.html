@@ -84,6 +84,17 @@
         );
         $(this).parent().find('.spoiler.block').toggleClass('hide');
       });
+      $.get("{% url 'json:wh:pm-unread' %}", {}, function(response){
+          if (response.pm_unread){
+              $(".pm.count").text(" [" + response.pm_unread+ "]");
+              noty({
+                  text: "{% trans 'You have unread messages' %}: " + response.pm_unread,
+                  type: "success",
+                  dismissQueue: true
+                  //timeout: 5000,
+              });
+          }
+      });
   });
 </script>
 <script type="text/javascript" src="{% static "js/load.js" %}"></script>

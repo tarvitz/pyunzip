@@ -1,11 +1,12 @@
-{% extends base_template %}{% load newsfilters i18n %}
-{% block css %}{{ block.super }}
-<link rel='stylesheet' type='text/css' href='/styles/message.css' />
+{% extends "base_template.html" %}{% load newsfilters i18n static %}
 
+{% block js %}
+  {{ block.super }}
+  <script type='text/javascript' src='{% static "js/knockout-2.2.1.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/chosen.min.js" %}'></script>
+  <script type='text/javascript' src='{% static "js/ajax-chosen.min.js" %}'></script>
 {% endblock %}
-{% block js %}{{ block.super }}
-<script type='text/javascript' src='/media/js/knockout-2.2.1.js'></script>{% endblock %}
-{% block text_content %}
+{% block content %}
     <div class='btn-group' style='margin-bottom: 10px;'>
         <a class='btn btn-info btn-xs show-message btn-mini' data-toggle='button'>
             {% trans "Send message" %}
@@ -22,24 +23,13 @@
     </div>
 
 <div class='tabbable'>
-    <ul class='nav nav-pills nav-inverse' data-bind='foreach: folders'>
+    <ul class='nav nav-pills' data-bind='foreach: folders'>
         <li data-bind='
             css: {active: $data == $root.chosenFolderId()},
             click: $root.goToFolder
         '><a data-bind='text: $root.getFolderName($data)' href='#'></a></li>
-        {% comment %}
-            <a href='#inbox' data-toggle='tab'>{% trans "Inbox" %}</a></li>
-        <li><a href='#outbox' data-toggle='tab'>{% trans "Outbox" %}</a></li>
-        <li><a href='#deleted' data-toggle='tab'>{% trans "Deleted" %}</a></li>{% endcomment %}
     </ul>
-    {% comment %}
-    <div class='folders tab-content' data-bind='foreach: folders'>
-        <div class='tab-pane' data-bind='text: $root.getFolderName($data),
-            css: { active: $data == $root.chosenFolderId() },
-            attr: { id: $data },
-            click: $root.goToFolder'>
-        </div>
-    </div>{% endcomment %}
+
     <table class='table table-striped no-margin mails' data-bind='with: chosenFolderData'>
         <tr>
             <th>{% trans "State" %}</th>
@@ -68,7 +58,6 @@
     <div class='view mail' data-bind='foreach: chosenMailData'>
         <div class='round message'>
             <div class='message-headline'>
-                <div class='transparency black'></div>
                 <span data-bind='text: subject'></span>,
                 <span class='date' data-bind='text: date'></span>
             </div>
@@ -84,7 +73,6 @@
                </div>
             </div>
             <div class='message-footer'>
-                <div class='transparency black'></div>
                 <div class='links'>
                     <span><a href='#' class='delete-pm'
                         data-bind='
