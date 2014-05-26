@@ -1012,3 +1012,16 @@ class GalleryListView(generic.ListView):
     template_name = 'gallery/gallery_list.html'
     paginate_by = settings.OBJECTS_ON_PAGE
     paginator_class = Paginator
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', 0)
+        if pk:
+            return super(GalleryListView, self).get_queryset().filter(pk=pk)
+        return super(GalleryListView, self).get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super(GalleryListView, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', 0)
+        if pk:
+            context.update({'gallery': get_object_or_404(Gallery, pk=pk)})
+        return context

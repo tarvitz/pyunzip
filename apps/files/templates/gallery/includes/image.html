@@ -36,7 +36,7 @@
         {% endspaceless %}
       {% else %}
         {% spaceless %}
-          <small>коментариев: <b>{{ comments}}</b>&nbsp;</small>
+          <small><a href="{{ image.get_absolute_url }}">коментариев: <b>{{ comments}}</b>&nbsp;</a></small>
         {% endspaceless %}
       {% endif %}
     </div>

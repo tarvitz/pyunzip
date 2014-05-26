@@ -1,23 +1,24 @@
-{% extends base_template %}{% load kamwhfilters %} {% load newsfilters %} {% load votetags coretags %}
-{% block head_content %}
-<link rel='stylesheet' href='/styles/gallery.css' type='text/css' media='screen'>
-{% endblock %}
-{% block js %}
-{{ block.super }}
-<script language='javascript' type='text/javascript' src='/media/js/stars.js'></script>
-{% endblock %}
+{% extends "base_template.html" %}
+{% load kamwhfilters newsfilters votetags coretags i18n %}
 {% block title %} Галерея: &quot;{{ image.gallery.name }}&quot; {% endblock %}
-{% block text_content %}
-<center>{% include settings.document.image_inc %}</center>
-<br clear='all'>
-{% with img_comments as comments %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "files:galleries" %}">{% trans "gallery" %}</a></li>
+    <li><a href="{% url "files:galleries" image.gallery.pk %}">{{ image.gallery.name }}</a></li>
+    <li class="active">{{ image.title }}</li>
+  </ul>
+  <h3>{{ image.title }}</h3>
+  <center>{% include settings.document.image_inc %}</center>
+  <br clear='all'>
+  {% with img_comments as comments %}
     {% include settings.document.comments %}
-{% endwith %}
+  {% endwith %}
 
-{% include settings.document.links %}
+  {% include settings.document.links %}
 
-{% if user.is_authenticated %}
+  {% if user.is_authenticated %}
     {% get_content_type image as object %}
     {% include settings.document.comments_form with object=object%}
-{% endif %}
+  {% endif %}
 {% endblock %}
