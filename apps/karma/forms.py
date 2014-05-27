@@ -13,12 +13,10 @@ ALTER_CHOICES = (
     ('down', _('down'))
 )
 
+
 class AlterKarmaForm(forms.Form):
-    #choice = forms.ChoiceField(widget=forms.RadioSelect(),choices=((-1,'+1'),(1,'-1')))
     comment = forms.CharField(widget=forms.Textarea(), max_length=512)
-    hidden_nickname = forms.CharField(widget=forms.HiddenInput())
-    referer = forms.CharField(widget=forms.HiddenInput())
-    url =   forms.CharField(widget=forms.HiddenInput(),required=False)
+    url = forms.CharField(widget=forms.HiddenInput(),required=False)
 
 
 class KarmaModelForm(forms.ModelForm):

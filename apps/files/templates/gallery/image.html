@@ -11,10 +11,12 @@
   <h3>{{ image.title }}</h3>
   <center>{% include settings.document.image_inc %}</center>
   <br clear='all'>
-  {% with img_comments as comments %}
-    {% include settings.document.comments %}
-  {% endwith %}
-
+  <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
+  <center>
+    {% for comment in img_comments %}
+      {% include "generic/comment.html" with c=comment %}
+    {% endfor %}
+  </center>
   {% include settings.document.links %}
 
   {% if user.is_authenticated %}

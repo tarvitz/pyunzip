@@ -1,4 +1,8 @@
-{% extends base_template %}{% load i18n %}
+{% extends "base_template.html" %}{% load i18n %}
 {% block content %}
-{% trans "Timeout, please wait for your turn ;)" %}
+<ul class="breadcrumb">
+  <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+  <li class="active">{% trans "operation you requested is restricted in time use" %}</li>
+</ul>
+<h3>{% trans "Timeout, please wait for your turn ;)" %}</h3>
 {% endblock %}

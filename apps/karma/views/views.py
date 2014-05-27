@@ -1,8 +1,11 @@
 # Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 from apps.core.decorators import null_function
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import redirect
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import get_object_or_404
 from apps.core import get_skin_template
@@ -24,6 +27,8 @@ from apps.karma.helpers import check_fraction
 from apps.core.helpers import get_settings, paginate
 from django.conf import settings
 from apps.core.helpers import can_act, render_to
+from django.views import generic
+from django.utils.decorators import method_decorator
 
 
 #old and deprecated
@@ -175,3 +180,36 @@ def show_karmastatus_description(request, id=None, codename=None):
     return direct_to_template(request, template,
         {'status':status,
         'img': img})
+
+
+class KarmaChangeView(generic.FormView):
+    form_class = AlterKarmaForm
+    template_name = 'karma/karma_change.html'
+
+    @method_decorator(day_expired)
+    def dispatch(self, request, *args, **kwargs):
+        return super(KarmaChangeView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(KarmaChangeView, self).get_context_data(**kwargs)
+        requestee = get_object_or_404(
+            User, nickname__icontains=self.kwargs.get('nickname', '!void')
+        )
+        context.update({
+            'requestee': requestee,
+            'choice': self.kwargs.get('choice', 'down')
+        })
+        return context
+
+    def form_valid(self, form):
+        comment = form.cleaned_data['comment']
+        voter = self.request.user
+        url = form.cleaned_data['url']
+        user = get_object_or_404(
+            User, nickname__iexact=self.kwargs.get('nickname', '!void'))
+        if voter == user:
+            raise PermissionDenied()
+        value = 1 if self.kwargs.get('choice', 'down') == 'up' else -1
+        Karma.objects.create(user=user, voter=voter, comment=comment,
+                             value=value, url=url)
+        return redirect(user.get_absolute_url())

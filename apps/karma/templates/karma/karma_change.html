@@ -1,0 +1,24 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "wh:profile-by-nick" requestee.nickname %}">{{ requestee.get_nickname|safe }}</a></li>
+    {% if choice == 'up' %}
+      <li class="active">{% trans "karma up" %}</li>
+    {% else %}
+      <li class="active">{% trans "karma down" %}</li>
+    {% endif %}
+  </ul>
+  {% if choice == 'up' %}
+    <h3>{% trans "Up user's karma" %}</h3>
+  {% else %}
+    <h3>{% trans "Down user's karma" %}</h3>
+  {% endif %}
+  <form class='form-horizontal' action='.' method='POST'>
+    {% csrf_token %}
+    {% trans "Submit" as submit_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=submit_i18n klass=request.user.get_forum_theme %}
+  </form>
+{% endblock %}

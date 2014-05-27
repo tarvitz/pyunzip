@@ -6,22 +6,23 @@ try:
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-# processin' this we got an error =\
+
 from apps.wh.models import Side
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
-# debugs an error listed above
-#side = __import__('apps.wh.models',0,0,1)
+from datetime import datetime
+
 
 # Create your models here.
 class Karma(models.Model):
     comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
-    date = models.DateTimeField(_('Date'), auto_now=True)
-    user = models.ForeignKey(User,related_name='karma_owner_set')
-    voter = models.ForeignKey(User,related_name='karma_voter_set')
-    url = models.URLField(_('URL'),blank=True,null=True)
+    date = models.DateTimeField(_('Date'), default=datetime.now,
+                                auto_now_add=True)
+    user = models.ForeignKey(User, related_name='karma_owner_set')
+    voter = models.ForeignKey(User, related_name='karma_voter_set')
+    url = models.URLField(_('URL'), blank=True, null=True)
 
     def get_karma(self):
         karmas = self._base_manager.filter(user=self.user)
@@ -44,26 +45,31 @@ class Karma(models.Model):
 
     #def get_status(self):
     def get_absolute_url(self):
-        return reverse('url_karma_user',args=(self.user.nickname,))
+        return reverse('url_karma_user', args=(self.user.nickname,))
 
     class Meta:
         ordering = ['-date']
 
+
 class KarmaStatus(models.Model):
-    codename = models.CharField(_('Codename'),max_length=100,unique=True)
-    status = models.CharField(_('Status'),max_length=100)
+    codename = models.CharField(_('Codename'), max_length=100, unique=True)
+    status = models.CharField(_('Status'), max_length=100)
     value = models.IntegerField(_('Value'))
-    is_humor = models.NullBooleanField(_('Humor'),null=True,blank=True)
-    description = models.CharField(_('Description'),max_length=1024)
-    side = models.ManyToManyField(Side,blank=True)
-    is_general = models.BooleanField(_('is General'),blank=True, default=False)
-    syntax = models.CharField(_('Syntax'),max_length=20,blank=True,null=True,choices=settings.SYNTAX)    
+    is_humor = models.NullBooleanField(_('Humor'), null=True, blank=True)
+    description = models.CharField(_('Description'), max_length=1024)
+    side = models.ManyToManyField(Side, blank=True)
+    is_general = models.BooleanField(_('is General'), blank=True,
+                                     default=False)
+    syntax = models.CharField(_('Syntax'), max_length=20,
+                              blank=True, null=True, choices=settings.SYNTAX)
+
     def __unicode__(self):
-        return "%s" % (self.status)
+        return "%s" % self.status
+
     def get_absolute_url(self):
-        url = reverse('url_karma_status',args=(self.codename,))
-        print url
+        url = reverse('url_karma_status', args=(self.codename,))
         return url
+
     class Meta:
         verbose_name = _('Karma Status')
-        verbose_name_plural=_('Karma Statuses')
+        verbose_name_plural = _('Karma Statuses')

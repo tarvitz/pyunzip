@@ -1,19 +1,21 @@
 from django.conf.urls import *
+from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = patterns('apps.karma.views',
-    #(r'vote/rate/(?P<model_name>[\w.]+)/(?P<obj_id>\d+)/(?P<rate>\d+)/$', 'vote_rate'),
-    #(r'vote/rate/(?P<app_label>[\w.]+)/(?P<model_name>[\w.]+)/(?P<obj_id>\d+)/(?P<rate>\d+)/$', 'vote_rate'),
-    #(r'vote/show/rated/(?P<id>\d+)/$','show_voted'),
-    #(r'karma/description/(?P<id>\d+)/$','show_karmastatus_description'),
+from apps.karma import views
+
+urlpatterns = patterns(
+    'apps.karma.views',
     url('karma/description/(?P<codename>[\w\s-]+)/$',
         'show_karmastatus_description',
         name='status'),
     #url(r'karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s]+)/$',
     #    'alter_karma', name='alter'),
-    url(r'karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s\d]+)/$',
-        'karma_alter', name='alter'),
+    #url(r'karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s\d]+)/$',
+    #    'karma_alter', name='alter'),
+    url(r'^karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s\d]+)/$',
+        login_required(views.KarmaChangeView.as_view()), name='alter'),
     url(r'karma/type/(?P<type>[\w]+)/$',
         'show_karma', name='karma'),
     url(r'karma/group/$',
