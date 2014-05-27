@@ -1016,7 +1016,8 @@ class GalleryListView(generic.ListView):
     def get_queryset(self):
         pk = self.kwargs.get('pk', 0)
         if pk:
-            return super(GalleryListView, self).get_queryset().filter(pk=pk)
+            return super(GalleryListView, self).get_queryset().filter(
+                gallery__pk=pk)
         return super(GalleryListView, self).get_queryset()
 
     def get_context_data(self, **kwargs):
