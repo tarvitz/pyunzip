@@ -50,7 +50,7 @@
                     </li>
                     {% else %}
                     <li><a href="{% url "wh:register" %}">{% trans "Register" %}</a></li>
-                    <li><a href="#login-modal" data-toggle='modal'>{% trans "Log in" %}</a></li>
+                    <li><a href="{% url "accounts:login" %}">{% trans "Log in" %}</a></li>
                     {% endif %}
                 </ul>
             </div>

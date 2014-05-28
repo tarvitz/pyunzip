@@ -87,14 +87,14 @@ class JustTest(TestHelperMixin, TestCase):
             'username': 'user',
             'password': '123456'
         }
-        url = reverse('wh:login')
+        url = reverse('accounts:login')
         response = self.client.post(url, login, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '/logout/')
 
     def test_logout(self):
         self.client.login(username='user', password='123456')
-        url = reverse('wh:logout')
+        url = reverse('accounts:logout')
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated(), False)

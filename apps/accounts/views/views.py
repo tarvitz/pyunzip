@@ -121,3 +121,16 @@ class ProfileUpdateView(LoginRequiredMixin, generic.FormView):
     def form_valid(self, form):
         form.save()
         return redirect(self.get_success_url())
+
+
+class LoginView(generic.FormView):
+    form_class = LoginForm
+    template_name = 'accounts/login.html'
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER', '/')
+
+    def form_valid(self, form):
+        user = form.cleaned_data['user']
+        auth.login(self.request, user)
+        return redirect(self.get_success_url())
