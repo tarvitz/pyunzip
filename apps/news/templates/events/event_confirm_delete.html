@@ -3,7 +3,7 @@
   <ul class="breadcrumb">
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" context "forum home" %}</a></li>
     <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
-    <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
     <li class="active">{% trans "confirm deletion" %}</li>
   </ul>
   <div class=''>

@@ -5,7 +5,7 @@
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
     {% if object %}
-      <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
     {% endif %}
     <li class="active">{% trans "create new event" %}</li>
   </ul>

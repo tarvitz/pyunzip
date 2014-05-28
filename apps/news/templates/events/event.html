@@ -4,7 +4,7 @@
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
-    <li class="active">{{ object.title }}</li>
+    <li class="active">{{ object.title|lower }}</li>
   </ul>
 
   {% if perms.news.change_event %}
