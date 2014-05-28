@@ -62,7 +62,7 @@
             {% if user.is_authenticated %}
             <li><a href="/logout/" title="logout">&nbsp;<img width='16px' src='/media/icons/white/circle_remove.png'>&nbsp;</a></li>
             {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;<img width='16px' src='/media/icons/white/user.png'>&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-            {% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
+            {% if not user.is_authenticated %}<li><a href="{% url "accounts:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
             <li><a href="/faq/" title="FAQ">&nbsp;<img width='16px' src='/media/icons/white/circle_question_mark.png'>&nbsp;</a></li>
         </ul>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
