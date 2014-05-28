@@ -9,7 +9,7 @@
   <div class=''>
     <form class='form form-horizontal' method='POST' action='{{ object.get_delete_url }}'>
       {% csrf_token %}
-      <h3>{% trans "Do you realy want to delete this test?" %}</h3>
+      <h3>{% trans "Do you realy want to delete this event?" %}</h3>
       <input type='submit' class='btn btn-edu btn-danger' value='{% trans "Yes, delete it" %}'>
     </form>
   </div>

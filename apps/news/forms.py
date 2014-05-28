@@ -197,9 +197,11 @@ class EventForm(forms.ModelForm):
         model = Event
         widgets = {
             'date_start': DateTimePickerInput(
+                format='%Y-%m-%d %H:%M',
                 attrs={'class': 'form-control', 'klass': 'col-lg-4'}
             ),
             'date_end': DateTimePickerInput(
+                format='%Y-%m-%d %H:%M',
                 attrs={'class': 'form-control', 'klass': 'col-lg-4'}
             ),
             'content': forms.Textarea(

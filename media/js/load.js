@@ -42,7 +42,6 @@ $('textarea.markitup').markItUp(markupSettings);
 
 (function(){
   $('[data-toggle=date-time-picker]').datetimepicker({
-    language: 'ru',
-    pick12HourFormat: false
+    language: 'ru'
   });
 })();

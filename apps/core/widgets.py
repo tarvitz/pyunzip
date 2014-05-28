@@ -57,7 +57,7 @@ class ChosenSelectMultiple(forms.SelectMultiple):
 class CommonDateTimePickerInput(Widget):
     def __init__(self, attrs={}, options={}, format=None):
         self.attrs = {
-            'data-date-format': 'YYYY-MM-DD hh:mm',
+            'data-date-format': 'YYYY-MM-DD HH:mm',
             'data-toggle': 'datetimepicker',
         }
         self.attrs.update(attrs)
@@ -138,7 +138,7 @@ class TimePickerInput(CommonDateTimePickerInput):
         super(TimePickerInput, self).__init__(attrs, options)
         self.format = format or '%H:%M:%S'
         self.attrs.update({
-            'data-date-format': 'hh:mm',
+            'data-date-format': 'HH:mm',
             'data-toggle': 'timepicker'
         })
         self.attrs.update(attrs)
