@@ -1,0 +1,66 @@
+{% extends "base_template.html" %}
+{% load i18n static %}
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "components/fullcalendar/fullcalendar.css" %}"
+        media="screen" type="text/css">
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "components/fullcalendar/fullcalendar.min.js" %}"></script>
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "events" %}</li>
+    {% if perms.news.event_add %}
+      <li class="pull-right">
+        <a href="{% url "news:event-create" %}">{% trans "Create event" %}</a></li>
+    {% endif %}
+  </ul>
+
+  <h3>{% trans "Events" %}</h3>
+  <div id="events"></div>
+  <script type="text/javascript">
+    var processDate = function(d){
+      var day = parseInt(d.getUTCDate()) + 1;
+      var month = parseInt(d.getUTCMonth()) + 1;
+      var year = parseInt(d.getUTCFullYear());
+      return year + "-" + month + "-" + day;
+    }
+
+    $(document).ready(function(){
+      $('#events').fullCalendar({
+        timeFormat: "H:mm{ - H:mm}",
+        firstDay: 1,
+        weekMode: "liquid",
+        events: function(start, end, callback){
+          $.ajax({
+            url: "{% url "news:event-list" %}",
+            dataType: "json",
+            data: {
+                // our hypothetical feed requires UNIX timestamps
+                date_start: processDate(start),
+                date_end: processDate(end)
+            },
+            success: function(json){
+              var events = [];
+              json.results.map(function(item){
+                events.push({
+                  title: item.title,
+                  url: item.url || '',
+                  start: item.date_start,
+                  end: item.date_end,
+                  allDay: false,
+                  className: item.class_name || ''
+                });
+              });
+              callback(events);
+            }
+          })
+        }
+      });
+    });
+  </script>
+{% endblock %}

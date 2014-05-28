@@ -25,7 +25,7 @@ from datetime import datetime,timedelta
 
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import (
-    get_settings, paginate,can_act, render_to,
+    get_settings, paginate, can_act, render_to,
     get_int_or_zero
 )
 from apps.core.decorators import (
@@ -39,6 +39,7 @@ from django.views import generic
 from apps.core.views import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
+
 
 
 @benchmarking
@@ -395,6 +396,7 @@ class EventPermissionMixin(object):
     def dispatch(self, request, *args, **kwargs):
         return super(EventPermissionMixin, self).dispatch(request, *args,
                                                           **kwargs)
+
 
 # CBV
 class EventCreateView(EventPermissionMixin, generic.CreateView):

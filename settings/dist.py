@@ -211,6 +211,7 @@ INSTALLED_APPS = (
     'extwidgets',
     'django_extensions',
     'south',
+    'rest_framework',
     'captcha',
     'sorl.thumbnail',
     'grappelli',
@@ -232,6 +233,15 @@ CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
     'apps.news.cron.EventsMarkFinishedCronJob'
 )
+
+
+REST_FRAMEWORK = {
+    #'DEFAULT_PERMISSION_CLASSES': (
+    #    'rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',),
+    'PAGINATE_BY': 50
+}
 
 #settings
 DOMAIN = 'w40k.net'

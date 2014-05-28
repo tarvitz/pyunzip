@@ -2,6 +2,12 @@ from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
 from apps.news import views
+from apps.news.views.rest import EventViewSet
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'events', EventViewSet)
 
 urlpatterns = patterns('apps.news.views',
     #url(r'^$', 'news', name='index'),
@@ -37,6 +43,8 @@ urlpatterns = patterns('apps.news.views',
         {'template': 'news/article_created.html'},
         name='article-created'),
     # cbv
+    url(r'^calendar/$', direct_to_template,
+        {'template': 'events/calendar.html'}, name='calendar'),
     url(r'^events/$', views.EventListView.as_view(), name='events'),
     url(r'^events/(?P<pk>\d+)/$', views.EventView.as_view(), name='event'),
     url(r'^events/create/$', login_required(views.EventCreateView.as_view()),
@@ -47,4 +55,9 @@ urlpatterns = patterns('apps.news.views',
     url(r'^events/(?P<pk>\d+)/delete/$',
         login_required(views.EventDeleteView.as_view()),
         name='event-delete')
+)
+
+urlpatterns += patterns(
+    '',
+    url(r'^api/', include(router.urls)),
 )

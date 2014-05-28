@@ -41,7 +41,9 @@ markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&templa
 $('textarea.markitup').markItUp(markupSettings);
 
 (function(){
-  $('[data-toggle=date-time-picker]').datetimepicker({
-    language: 'ru'
+  $.each($('[data-toggle=date-time-picker]'), function(idx, item){
+    $(item).datetimepicker({
+      language: 'ru'
+    });
   });
 })();
