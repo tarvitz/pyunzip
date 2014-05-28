@@ -18,6 +18,7 @@
         <th>{% trans "Title" %}</th>
         <th>{% trans "Date start" %}</th>
         <th>{% trans "Date end" %}</th>
+        <th>{% trans "Queued" %}</th>
         <th>&nbsp;</th>
       </tr>
       {% for object in object_list %}
@@ -25,6 +26,7 @@
           <td><a href='{{ object.get_absolute_url }}'>{{ object }}</a></td>
           <td>{{ object.date_start|date:"Y, M d H:i" }}</td>
           <td>{{ object.date_end|date:"Y, M d H:i" }}</td>
+          <td><i class="icon-{{ object.is_finished|yesno:"ban-circle,ok-circle" }}"></i></td>
           <td>
             {% if perms.news.event_change %}
               {% include "generic/actions.html" with object=object %}
