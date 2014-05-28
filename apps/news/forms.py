@@ -217,6 +217,9 @@ class EventForm(forms.ModelForm):
             settings.STATIC_URL + "components/moment/min/moment.min.js",
             settings.STATIC_URL + "components/"
             "eonasdan-bootstrap-datetimepicker/"
+            "src/js/locales/bootstrap-datetimepicker.ru.js",
+            settings.STATIC_URL + "components/"
+            "eonasdan-bootstrap-datetimepicker/"
             "build/js/bootstrap-datetimepicker.min.js",
         )
         css = {
