@@ -7,7 +7,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from apps.news.models import News
+from apps.news.models import News, Event
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.cache import cache
@@ -37,6 +37,11 @@ def on_news_pre_save(instance, **kwargs):
     instance.cache_content = instance.render_content()
     if instance.approved:
         instance.status = 'approved'
+    return instance
+
+@receiver(pre_save, sender=Event)
+def on_event_pre_save(instance, **kwargs):
+    instance.content_html = instance.render_content()
     return instance
 
 @receiver(post_save, sender=News)

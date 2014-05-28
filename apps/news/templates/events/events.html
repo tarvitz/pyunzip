@@ -1,0 +1,19 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "events" %}</li>
+    {% if perms.news.event_add %}
+      <li class="pull-right">
+        <a href="{% url "news:event-create" %}">{% trans "Create event" %}</a></li>
+    {% endif %}
+  </ul>
+  
+  <h3>{% trans "Events" %}</h3>
+
+  {% for object in object_list %}
+    <a href='{{ object.get_absolute_url }}'>{{ object }}</a>
+  {% endfor %}
+  {% include "generic/paginator.html" %}
+{% endblock %}

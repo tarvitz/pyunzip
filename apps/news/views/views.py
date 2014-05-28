@@ -20,7 +20,7 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.db.models import Q
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from datetime import datetime,timedelta
 
 from apps.tracker.decorators import user_visit
@@ -394,4 +394,29 @@ def article_status_set(request, pk):
 class EventCreateView(generic.CreateView):
     model = Event
     form_class = EventForm
-    template_name = 'events/event_create.html'
+    template_name = 'events/event_form.html'
+
+
+class EventListView(generic.ListView):
+    model = Event
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'events/events.html'
+
+
+class EventView(generic.DetailView):
+    model = Event
+    template_name = 'events/event.html'
+
+
+class EventUpdateView(generic.UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_form.html'
+
+
+class EventDeleteView(generic.DeleteView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_confirm_delete.html'
+    success_url = reverse_lazy('news:events')

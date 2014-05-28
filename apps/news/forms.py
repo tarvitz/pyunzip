@@ -202,7 +202,9 @@ class EventForm(forms.ModelForm):
             'date_end': DateTimePickerInput(
                 attrs={'class': 'form-control', 'klass': 'col-lg-4'}
             ),
-            'content': forms.Textarea(attrs),
+            'content': forms.Textarea(
+                attrs={'class': 'form-control markitup'}
+            ),
             'title': forms.TextInput(attrs),
             'type': forms.Select(attrs={'class': 'form-control chosen'}),
         }

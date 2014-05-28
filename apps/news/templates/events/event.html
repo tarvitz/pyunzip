@@ -1,0 +1,18 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
+    <li class="active">{{ object.title }}</li>
+  </ul>
+
+  {% if perms.news.change_event %}
+  <div class="pull-right">
+    {% include "generic/actions.html" with object=object %}
+  </div>
+  {% endif %}
+
+  <h3>{{ object.title }}</h3>
+  {{ object.content_html|safe }}
+{% endblock %}

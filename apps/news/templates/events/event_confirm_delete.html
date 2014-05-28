@@ -1,0 +1,16 @@
+{% extends "base_template.html" %}{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" context "forum home" %}</a></li>
+    <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
+    <li><a href="{{ object.get_absolute_url }}">{{ object.title }}</a></li>
+    <li class="active">{% trans "confirm deletion" %}</li>
+  </ul>
+  <div class=''>
+    <form class='form form-horizontal' method='POST' action='{{ object.get_delete_url }}'>
+      {% csrf_token %}
+      <h3>{% trans "Do you realy want to delete this test?" %}</h3>
+      <input type='submit' class='btn btn-edu btn-danger' value='{% trans "Yes, delete it" %}'>
+    </form>
+  </div>
+{% endblock %}

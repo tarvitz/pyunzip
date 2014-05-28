@@ -1,0 +1,5 @@
+{% load i18n %}
+<a href="{{ object.get_edit_url }}" rel="tooltip"
+   data-title="{% trans "Edit object" %}"><i class='icon-edit'></i></a>
+<a href="{{ object.get_delete_url }}" rel="tooltip"
+   data-title="{% trans "Delete object" %}"><i class='icon-remove icon-delete'></i></a>

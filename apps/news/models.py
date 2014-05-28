@@ -335,6 +335,10 @@ class Event(models.Model):
             "content event text, description, further manual and so on"),
         max_length=settings.MAX_DOCUMENT_SIZE
     )
+    content_html = models.TextField(
+        _("content html"),
+        help_text=_("rendered html content"), blank=True, null=True
+    )
     date_start = models.DateTimeField(
         _("date start"), help_text=_("when event date starts")
     )
@@ -353,6 +357,22 @@ class Event(models.Model):
 
     def __unicode__(self):
         return u'%s [%s]' % (self.title, self.type)
+
+    def get_absolute_url(self):
+        return reverse('news:event', args=(self.pk, ))
+
+    def get_edit_url(self):
+        return reverse('news:event-update', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('news:event-delete', args=(self.pk, ))
+
+    def render_content(self, field='content'):
+        """
+        renders content into html for better performance and security issues
+        """
+        out = post_markup_filter(getattr(self, field))
+        return render_filter(out, settings.DEFAULT_SYNTAX)
 
     class Meta:
         verbose_name = _("Event")

@@ -37,6 +37,14 @@ urlpatterns = patterns('apps.news.views',
         {'template': 'news/article_created.html'},
         name='article-created'),
     # cbv
-    url(r'events/create/$', login_required(views.EventCreateView.as_view()),
-        name='event-create')
+    url(r'^events/$', views.EventListView.as_view(), name='events'),
+    url(r'^events/(?P<pk>\d+)/$', views.EventView.as_view(), name='event'),
+    url(r'^events/create/$', login_required(views.EventCreateView.as_view()),
+        name='event-create'),
+    url(r'^events/(?P<pk>\d+)/update/$',
+        login_required(views.EventUpdateView.as_view()),
+        name='event-update'),
+    url(r'^events/(?P<pk>\d+)/delete/$',
+        login_required(views.EventDeleteView.as_view()),
+        name='event-delete')
 )
