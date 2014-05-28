@@ -1,28 +1,11 @@
-{% extends base_template %}
+{% extends "base_template.html" %}
 {% load i18n %}
-{% block css %}
- {{ block.super }}
- <link rel='stylesheet' href='/styles/forms.css' type='text/css'>
-{% endblock %}
-{% block text_content %}
-
-	<center>
-	<div id='warning_alter'>
-		<div class='reflects_up'></div>
-		<form method='post' action='.'>
-			{{ form.nickname }}
-			{{ form.level.errors }}
-			{% trans "Level" %}:<br>
-			{{ form.level }}<br>
-			{{ form.comment.errors }}
-			{% trans "Comment" %}:<br>
-			{{ form.comment }}
-			{{ form.next }}
-			<br>
-			<input type='submit' value='{% trans "submit" %}'>
-		</form>
-	</div>
-	</center>
-
+{% block content %}
+  <form method='post' action='.' class="form-horizontal">
+    {% csrf_token %}
+    {% trans "Alter" as save_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=save_i18n %}
+  </form>
 {% endblock %}
 
