@@ -6,7 +6,7 @@ from apps.core.views import (
     RequestMixin, LoginRequiredMixin
 )
 from apps.accounts.forms import (
-    LoginForm, ProfileForm,
+    LoginForm, ProfileForm, RegisterForm
 )
 
 from apps.accounts.models import (
@@ -133,4 +133,20 @@ class LoginView(generic.FormView):
     def form_valid(self, form):
         user = form.cleaned_data['user']
         auth.login(self.request, user)
+        return redirect(self.get_success_url())
+
+
+class RegisterView(generic.FormView):
+    form_class = RegisterForm
+    template_name = 'accounts/register.html'
+
+    def get_success_url(self):
+        return reverse_lazy('wh:profile')
+
+    def form_valid(self, form):
+        user = User.objects.create(username=form.cleaned_data['username'],
+                                   email=form.cleaned_data['email'],
+                                   nickname=form.cleaned_data['nickname'])
+        user.set_password(form.cleaned_data['password'])
+        user.save()
         return redirect(self.get_success_url())

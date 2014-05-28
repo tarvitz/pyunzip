@@ -1,29 +1,10 @@
-{% extends base_template %}
+{% extends "base_template.html" %}{% load i18n %}
 {% block title %}Регистрация{% endblock %}
-{% block text_content %}
-{% if sid %}
-<form action='.' method='post'>
-{% csrf_token %}
-{{ form.username.errors }}
-имя логина: <br>{{ form.username }}<br>
-{{ form.email.errors }}
-E-mail: <br>{{ form.email }}<br>
-{{ form.nickname.errors }}
-псевдоним (никнейм): <br>{{ form.nickname }}<br>
-{{ form.password1.errors }}
-Пароль: <br>{{ form.password1 }}<br>
-{{ form.password2.errors }}
-Подверждение пароля: <br>{{ form.password2 }}<br>
-{{ form.sid.errors }}
-Введите результат математического выражения с картинки<br>
-{{ form.answ.errors }}
-<img src='/register/get_math_image/{{ sid }}'>&nbsp;{{ form.answ }} <br>
-{{ form.sid }}
-<input type='submit'>
-{% else %}
-Простите, но регистрация для вашего адреса временно не доступно, попробуйте подождать 10 минут и повторить снова<br>
-Спасибо, что остаетесь с нами, в противном случае напишите о просьбе с регистрацией на e-mail: <a href='mailto:warpaevum@gmail.com'>warpaevum@gmail.com</a>, с темой Регистрация аккаунта,
-в письме не забудьте указать login и пароль в обязательном порядке, в противном случае регистрация не будет произведена.
-{% endif %}
-</form>
+{% block content %}
+
+  <form action='.' method='post' class="form-horizontal">
+    {% csrf_token %}{% trans "Register" as submit_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=submit_i18n %}
+  </form>
 {% endblock %}

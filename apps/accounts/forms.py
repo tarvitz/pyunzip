@@ -5,6 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from apps.accounts.models import User
 from django.contrib import auth
 
+from captcha.fields import ReCaptchaField
+
 
 #mixins
 class CleanPasswordMixin(object):
@@ -59,3 +61,32 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', )
+
+
+class RegisterForm(forms.ModelForm):
+    required_css_class = 'required'
+    username = forms.CharField(
+        label=_("Username"), required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(
+        label=_("Username"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password_repeat = forms.CharField(
+        label=_("Username"),
+        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(
+        label=_("Email"),
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    nickname = forms.CharField(
+        label=_("Nickname"),
+        widget=forms.TextInput(attrs={'class': 'form-control'}))
+    captcha = ReCaptchaField(
+        label=_("Captcha")
+    )
+
+    class Meta:
+        model = User
+        fields = ('username', 'nickname', 'email', )
+        widgets = {
+        }
+        exclude = ('password', )

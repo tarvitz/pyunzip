@@ -273,6 +273,7 @@ class JustTest(TestHelperMixin, TestCase):
             raise AssertionError
 
     def test_register(self):
+        os.environ['RECAPTCHA_TESTING'] = 'True'
         usernames = (
             ('test_user', 'test@blacklibrary.ru', 'test_nickname'),
             # (u'человек', 'test1@blacklibrary.ru', u'человек_человек') - not allowed
@@ -283,36 +284,14 @@ class JustTest(TestHelperMixin, TestCase):
                 'username':  usern[0],  # 'test_user',
                 'email': usern[1],  #'test@blacklibrary.ru',
                 'nickname': usern[2],  #'test_nickname',
-                'password1': '123456',
-                'password2': '123456',
-                'answ': 1
+                'password': '123456',
+                'password_repeat': '123456',
+                'recaptcha_response_field': 'PASSED'
             }
-            url = reverse('wh:register')
+            url = reverse('accounts:register')
             initial = self.client.get(url, follow=True)
-            rs_count = RegisterSid.objects.count()
-            self.assertEqual(RegisterSid.objects.count(), rs_count)
-            # little bit lazzy searching for sid,
-            # don't need to fetch beautifulsoup or something like
-            # xml2 to do this, sorry about that :)
-            sid_tag = re.findall(r'<input id="id_sid".*?>', initial.content)
-            self.assertEqual(len(sid_tag), 1)
-            tag = sid_tag[0]
-            sid = re.findall(r'value="([\w\d]+)"', tag)
-            self.assertEqual(len(sid), 1)
-            sid = sid[0]
 
-            math_image_url = reverse('wh:math-image', args=(sid, ))
-            initiate = self.client.get(math_image_url, follow=True)
-            self.assertEqual(initiate.status_code, 200)
-            self.assertEqual(initiate.get('Content-Type'), 'image/png')
-
-            sid = get_object_or_None(RegisterSid, sid=sid)
-            self.assertNotEqual(sid, None)
-            post.update({
-                'answ': sid.value,
-                'sid': sid.sid
-            })
-
+            self.assertEqual(initial.status_code, 200)
             response = self.client.post(url, post, follow=True)
             self.proceed_form_errors(response.context)
 
@@ -332,12 +311,13 @@ class JustTest(TestHelperMixin, TestCase):
 
             user = User.objects.get(username=usern[0])
             edit = deepcopy(post)
-            fields = ['answ', 'sid', 'password1', 'password2']
+            fields = ['recaptcha_response_field', 'password',
+                      'password_repeat']
             for f in fields:
                 del edit[f]
             self.check_state(user, edit, check=self.assertEqual)
-            self.assertNotEqual(user.army, None)
-            self.assertNotEqual(user.skin, None)
+            self.assertEqual(user.army, None)
+            self.assertEqual(user.skin, None)
             self.client.logout()
 
     def test_rank_view(self):

@@ -211,6 +211,7 @@ INSTALLED_APPS = (
     'extwidgets',
     'django_extensions',
     'south',
+    'captcha',
     'sorl.thumbnail',
     'grappelli',
     'django.contrib.admin',
