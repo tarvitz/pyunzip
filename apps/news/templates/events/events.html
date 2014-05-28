@@ -16,6 +16,7 @@
     <table class="table">
       <tr>
         <th>{% trans "Title" %}</th>
+        <th>{% trans "Type" %}</th>
         <th>{% trans "Date start" %}</th>
         <th>{% trans "Date end" %}</th>
         <th>{% trans "Queued" %}</th>
@@ -23,7 +24,8 @@
       </tr>
       {% for object in object_list %}
         <tr>
-          <td><a href='{{ object.get_absolute_url }}'>{{ object }}</a></td>
+          <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
+          <td>{{ object.type }}</td>
           <td>{{ object.date_start|date:"Y, M d H:i" }}</td>
           <td>{{ object.date_end|date:"Y, M d H:i" }}</td>
           <td><i class="icon-{{ object.is_finished|yesno:"ban-circle,ok-circle" }}"></i></td>
