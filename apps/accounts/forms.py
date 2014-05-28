@@ -69,10 +69,10 @@ class RegisterForm(forms.ModelForm):
         label=_("Username"), required=True,
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     password = forms.CharField(
-        label=_("Username"),
+        label=_("Password"),
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password_repeat = forms.CharField(
-        label=_("Username"),
+        label=_("Password repeat"),
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(
         label=_("Email"),
