@@ -390,32 +390,38 @@ def article_status_set(request, pk):
     return {'form': form}
 
 
+class EventPermissionMixin(object):
+    @method_decorator(has_permission('news.change_event'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(EventPermissionMixin, self).dispatch(request, *args,
+                                                          **kwargs)
+
 # CBV
-class EventCreateView(generic.CreateView):
+class EventCreateView(EventPermissionMixin, generic.CreateView):
     model = Event
     form_class = EventForm
     template_name = 'events/event_form.html'
 
 
-class EventListView(generic.ListView):
+class EventListView(EventPermissionMixin, generic.ListView):
     model = Event
     paginator_class = Paginator
     paginate_by = settings.OBJECTS_ON_PAGE
     template_name = 'events/events.html'
 
 
-class EventView(generic.DetailView):
+class EventView(EventPermissionMixin, generic.DetailView):
     model = Event
     template_name = 'events/event.html'
 
 
-class EventUpdateView(generic.UpdateView):
+class EventUpdateView(EventPermissionMixin, generic.UpdateView):
     model = Event
     form_class = EventForm
     template_name = 'events/event_form.html'
 
 
-class EventDeleteView(generic.DeleteView):
+class EventDeleteView(EventPermissionMixin, generic.DeleteView):
     model = Event
     form_class = EventForm
     template_name = 'events/event_confirm_delete.html'

@@ -28,7 +28,7 @@
           <td>{{ object.date_end|date:"Y, M d H:i" }}</td>
           <td><i class="icon-{{ object.is_finished|yesno:"ban-circle,ok-circle" }}"></i></td>
           <td>
-            {% if perms.news.event_change %}
+            {% if perms.news.change_event %}
               {% include "generic/actions.html" with object=object %}
             {% endif %}
           </td>

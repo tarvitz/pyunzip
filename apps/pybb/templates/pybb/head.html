@@ -20,6 +20,9 @@
                             <span class='caret'></span>
                         </a>
                         <ul class='dropdown-menu pull-right' role="menu">
+                            {% if perms.news.change_event or perms.news.add_event%}
+                              <li><a href="{% url "news:events" %}">{% trans "Events" %}</a></li>
+                            {% endif %}
                             <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
                             {% comment %}
                               <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>
