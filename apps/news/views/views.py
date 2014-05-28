@@ -1,9 +1,9 @@
 # Create your views here.
 # coding: utf-8
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from apps.news.models import News, Meating, ArchivedNews
+from apps.news.models import News, Meating, ArchivedNews, Event
 from apps.news.forms import (
-    ArticleModelForm, AddMeatingForm, ArticleStatusForm
+    ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm
 )
 from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.core import get_skin_template
@@ -388,3 +388,10 @@ def article_status_set(request, pk):
                 'redirect-args': (form.instance.pk, )
             }
     return {'form': form}
+
+
+# CBV
+class EventCreateView(generic.CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_create.html'

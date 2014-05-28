@@ -316,5 +316,48 @@ class Meating(models.Model):
         verbose_name_plural = _("Meatings")
         ordering = ['created_on', '-id', ]
 
+
+EVENT_TYPE_CHOICES = (
+    ('game', _("Game")),
+    ('tournament', _("Tournament")),
+    ('order', _("Order"))
+)
+
+
+class Event(models.Model):
+    """ different events model container for all-people notification usage
+    """
+    title = models.CharField(_("title"), help_text=_("event title"),
+                             max_length=256)
+    content = models.CharField(
+        _("content"),
+        help_text=_(
+            "content event text, description, further manual and so on"),
+        max_length=settings.MAX_DOCUMENT_SIZE
+    )
+    date_start = models.DateTimeField(
+        _("date start"), help_text=_("when event date starts")
+    )
+    date_end = models.DateTimeField(
+        _("date end"), help_text=_("when event date ends")
+    )
+    type = models.CharField(
+        _("type"), max_length=16,
+        choices=EVENT_TYPE_CHOICES
+    )
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='event_users_sets',
+        help_text=_("participants would take a part in the event"),
+        blank=True, null=True
+    )
+
+    def __unicode__(self):
+        return u'%s [%s]' % (self.title, self.type)
+
+    class Meta:
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
+
+
 from signals import setup_signals
 setup_signals()

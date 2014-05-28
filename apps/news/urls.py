@@ -1,5 +1,6 @@
 from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
+from django.contrib.auth.decorators import login_required
 from apps.news import views
 
 urlpatterns = patterns('apps.news.views',
@@ -35,4 +36,7 @@ urlpatterns = patterns('apps.news.views',
     url(r'article/created/$', direct_to_template,
         {'template': 'news/article_created.html'},
         name='article-created'),
+    # cbv
+    url(r'events/create/$', login_required(views.EventCreateView.as_view()),
+        name='event-create')
 )

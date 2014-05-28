@@ -1,0 +1,11 @@
+{% load i18n %}
+<div class="days-select">
+  <a href="#" data-toggle="choose-all" rel='twipsy'
+     data-title="{% trans "Selects all days" %}">{% trans "Select all" %}</a><br>
+  {% for item in items %}
+    <label class="checkbox inline">
+      {{ item.rendered|safe }}
+      {{ item.option_label }}
+    </label>
+  {% endfor %}
+</div>

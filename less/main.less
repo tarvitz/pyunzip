@@ -1,0 +1,16 @@
+.form-group{
+  &.required{
+    > label{
+      &:before{
+        content: "(*) ";
+        color: lighten(@text-color, 30%);
+        font-size: @font-size-small;
+      }
+      &:hover{
+        &:before{
+          color: @alert-danger-text;
+        }
+      }
+    }
+  }
+}

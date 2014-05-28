@@ -1,11 +1,11 @@
 # coding: utf-8
-from apps.news.models import Category as NewsCategory, Meating
+from apps.news.models import Category as NewsCategory, Meating, Event
 from apps.core import get_safe_message
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
-from apps.core.widgets import TinyMkWidget
+from apps.core.widgets import TinyMkWidget, DateTimePickerInput
 from apps.news.models import News
 from django.core.exceptions import ImproperlyConfigured
 from django.contrib.contenttypes.models import ContentType
@@ -178,8 +178,8 @@ class AddMeatingForm(forms.ModelForm):
     def save(self, commit=False):
         self.instance.owner = self.request.user
         self.instance.author_ipv4 = self.request.META.get('REMOTE_ADDR', '127.0.0.1')
-        if request.user.has_perm('news.add_meating') or\
-            request.user.has_perm('news.change_meating'):
+        if self.request.user.has_perm('news.add_meating') or\
+            self.request.user.has_perm('news.change_meating'):
             self.instance.is_approved = True
         return super(AddMeatingForm, self).save(commit=commit)
 
@@ -187,3 +187,38 @@ class AddMeatingForm(forms.ModelForm):
         model = Meating
         exclude = ['created_on', 'updated_on', 'is_approved',
             'author_ipv4', 'author_ipv6', 'owner', 'members',]
+
+
+class EventForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        attrs ={'class': 'form-control'}
+        model = Event
+        widgets = {
+            'date_start': DateTimePickerInput(
+                attrs={'class': 'form-control', 'klass': 'col-lg-4'}
+            ),
+            'date_end': DateTimePickerInput(
+                attrs={'class': 'form-control', 'klass': 'col-lg-4'}
+            ),
+            'content': forms.Textarea(attrs),
+            'title': forms.TextInput(attrs),
+            'type': forms.Select(attrs={'class': 'form-control chosen'}),
+        }
+        fields = ('title', 'content', 'date_start', 'date_end', 'type')
+
+    class Media:
+        js = (
+            settings.STATIC_URL + "components/moment/min/moment.min.js",
+            settings.STATIC_URL + "components/"
+            "eonasdan-bootstrap-datetimepicker/"
+            "build/js/bootstrap-datetimepicker.min.js",
+        )
+        css = {
+            'all': (
+                settings.STATIC_URL + 'components/'
+                "eonasdan-bootstrap-datetimepicker/build/css/"
+                "bootstrap-datetimepicker.min.css",
+            )
+        }

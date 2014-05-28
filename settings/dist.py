@@ -303,6 +303,7 @@ from apps.karma.settings import *
 #BROKER_URL = "redis://redis:6379/0"
 
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
+MAX_DOCUMENT_SIZE = 1024 * 4  # 4096 bytes
 
 DEBUG_TOOLBAR = False
 DEBUG = True

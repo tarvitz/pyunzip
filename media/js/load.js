@@ -39,3 +39,10 @@ $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
 markupSettings = myMarkupSettings['textile'];
 markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&template=comment';
 $('textarea.markitup').markItUp(markupSettings);
+
+(function(){
+  $('[data-toggle=date-time-picker]').datetimepicker({
+    language: 'ru',
+    pick12HourFormat: false
+  });
+})();
