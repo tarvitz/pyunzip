@@ -210,7 +210,8 @@ class EventForm(forms.ModelForm):
             'title': forms.TextInput(attrs),
             'type': forms.Select(attrs={'class': 'form-control chosen'}),
         }
-        fields = ('title', 'content', 'date_start', 'date_end', 'type')
+        fields = ('title', 'content', 'date_start', 'date_end', 'type',
+                  'is_all_day')
 
     class Media:
         js = (

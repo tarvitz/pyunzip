@@ -52,8 +52,8 @@
                   url: item.url || '',
                   start: item.date_start,
                   end: item.date_end,
-                  allDay: false,
-                  className: item.class_name || ''
+                  allDay: item.is_all_day || false,
+                  className: item.type || ''
                 });
               });
               callback(events);

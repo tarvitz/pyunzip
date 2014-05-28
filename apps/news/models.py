@@ -343,7 +343,8 @@ class Event(models.Model):
         _("date start"), help_text=_("when event date starts")
     )
     date_end = models.DateTimeField(
-        _("date end"), help_text=_("when event date ends")
+        _("date end"), help_text=_("when event date ends"),
+        blank=True, null=True
     )
     type = models.CharField(
         _("type"), max_length=16,
@@ -356,6 +357,10 @@ class Event(models.Model):
     )
     is_finished = models.BooleanField(
         _('is finished'), default=False
+    )
+    is_all_day = models.BooleanField(
+        _('is all day'), default=False,
+        help_text=_("marks if event could place whole day"),
     )
 
     def __unicode__(self):

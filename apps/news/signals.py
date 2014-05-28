@@ -12,7 +12,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.core.cache import cache
 from django.dispatch import receiver
-
+from datetime import datetime, timedelta
 
 def pre_save_news(instance, **kwargs):
     if instance.approved:
@@ -42,6 +42,11 @@ def on_news_pre_save(instance, **kwargs):
 @receiver(pre_save, sender=Event)
 def on_event_pre_save(instance, **kwargs):
     instance.content_html = instance.render_content()
+    if not instance.date_end:
+        instance.date_end = (
+            datetime(*instance.date_start.timetuple()[:3]) +
+            timedelta(hours=23, minutes=59)
+        )
     return instance
 
 @receiver(post_save, sender=News)
