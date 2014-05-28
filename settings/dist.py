@@ -230,6 +230,7 @@ AUTHENTICATION_BACKENDS = (
 
 CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
+    'apps.news.cron.EventsMarkFinishedCronJob'
 )
 
 #settings

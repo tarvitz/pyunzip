@@ -354,6 +354,9 @@ class Event(models.Model):
         help_text=_("participants would take a part in the event"),
         blank=True, null=True
     )
+    is_finished = models.BooleanField(
+        _('is finished'), default=False
+    )
 
     def __unicode__(self):
         return u'%s [%s]' % (self.title, self.type)
@@ -375,6 +378,7 @@ class Event(models.Model):
         return render_filter(out, settings.DEFAULT_SYNTAX)
 
     class Meta:
+        ordering = ['-is_finished', 'date_start', ]
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
 
