@@ -3,7 +3,9 @@
 {% block content %}
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    {% if perms.news.change_event %}
     <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
+    {% endif %}
     <li class="active">{{ object.title|lower }}</li>
   </ul>
 

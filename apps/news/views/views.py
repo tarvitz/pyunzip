@@ -412,7 +412,7 @@ class EventListView(EventPermissionMixin, generic.ListView):
     template_name = 'events/events.html'
 
 
-class EventView(EventPermissionMixin, generic.DetailView):
+class EventView(generic.DetailView):
     model = Event
     template_name = 'events/event.html'
 
