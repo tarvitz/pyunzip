@@ -35,7 +35,7 @@
                   ]</span>
                   <br>
                   <a class='notice' href="/replays/{{ r.id}}" title="{{ r.name }}">{{ r.name|newscut:"20" }}</a><br><span class='notice'>by
-                  <a href="{% url "wh:profile-by-nick" nickname=r.author.get_username %}">{% r.author.get_nickname|safe %}</a></span>
+                  <a href="{% url "accounts:profile-by-nick" nickname=r.author.get_username %}">{% r.author.get_nickname|safe %}</a></span>
                 {% endspaceless %}
                 </li>
             {% endfor %}

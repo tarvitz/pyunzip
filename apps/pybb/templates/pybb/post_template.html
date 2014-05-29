@@ -16,7 +16,7 @@
         <div class="avatar">
             <img src="{{ post.user.get_avatar_url }}"/>
             <div>
-                <a href="{% url "wh:profile-by-nick" post.user %}">{{ post.user.get_nickname|safe }} </a>
+                <a href="{% url "accounts:profile-by-nick" post.user %}">{{ post.user.get_nickname|safe }} </a>
             </div>
             <div class="bottom">
             </div>

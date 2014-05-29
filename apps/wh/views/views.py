@@ -220,7 +220,7 @@ def update_profile(request):
                 )
                 form.instance.photo = photo
             form.save()
-            return {'redirect': 'wh:profile'}
+            return {'redirect': 'accounts:profile'}
     return {'form': form}
 
 

@@ -12,7 +12,7 @@
     <center>
       <div class='round message'>
         <div class='message-headline'>
-          <a href='{% url "wh:profile-by-nick" user.get_username %}'>
+          <a href='{% url "accounts:profile-by-nick" user.get_username %}'>
             {% if user.nickname %}
               {{ user.get_nickname|safe }}
             {% else %}
@@ -44,7 +44,7 @@
         <br clear='all'>
         <div class='message-footer'>
           <div class='links'>
-            <span class='first'><a href='{% url "wh:profile-by-nick" user.get_username %}'>profile</a></span>
+            <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>profile</a></span>
             {% comment %}<span><a href='{% url "wh:pm-send-nick" user.get_username %}'>pm</a></span>{% endcomment %}
             <span>{{ user.army.side.name }}</span>
             <span>{% if not user.settings.invisible %}{% get_online user %}{% else %}offline{% endif %}</span>

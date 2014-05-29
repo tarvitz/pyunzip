@@ -18,7 +18,7 @@
       {#% include "msg/avatar.html" with usr=user %#}
       <img src="{{ user.get_avatar_url }}"/>
       <div>
-        <a href="{% url "wh:profile-by-nick" user %}">{{ user.get_nickname|safe }} </a>
+        <a href="{% url "accounts:profile-by-nick" user %}">{{ user.get_nickname|safe }} </a>
       </div>
     </div> <!-- avatar -->
     <div class="text">

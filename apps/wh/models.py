@@ -408,7 +408,7 @@ class UserExtension(object):
 
     def get_absolute_url(self):
         return reverse(
-            'wh:profile-by-nick', args=(
+            'accounts:profile-by-nick', args=(
                 self.nickname or self.username, )
         )
 

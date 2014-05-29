@@ -1,13 +1,20 @@
 from django.conf.urls import patterns, include, url
 from apps.core.shortcuts import direct_to_template
+from django.contrib.auth.decorators import login_required
 from apps.accounts import views
 
 
 urlpatterns = patterns('apps.accounts.views',
     url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^profile/$',
+        login_required(views.ProfileSelfView.as_view()), name='profile'),
+    url(r'^profiles/(?P<pk>\d+)/$',
+        login_required(views.ProfileView.as_view()),
+        name='profile'),
+    url(r'^profiles/(?P<nickname>[\w\d\-\_]+)/$',
+        login_required(views.ProfileView.as_view()), name='profile-by-nick'),
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
-    url(r'^profile/$', views.ProfileView.as_view(), name='profile'),
     url(r'^profile/update/$', views.ProfileUpdateView.as_view(),
         name='profile-update'),
     url(r'^register/success/$', direct_to_template,

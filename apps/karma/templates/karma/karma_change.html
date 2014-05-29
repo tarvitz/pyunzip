@@ -3,7 +3,7 @@
 {% block content %}
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
-    <li><a href="{% url "wh:profile-by-nick" requestee.nickname %}">{{ requestee.get_nickname|safe }}</a></li>
+    <li><a href="{% url "accounts:profile-by-nick" requestee.nickname %}">{{ requestee.get_nickname|safe }}</a></li>
     {% if choice == 'up' %}
       <li class="active">{% trans "karma up" %}</li>
     {% else %}

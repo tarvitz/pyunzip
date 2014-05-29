@@ -2,7 +2,7 @@
 {% for p in posts.object_list %}
  <div id='news'>
 	<div align="center" class='headline'>{% spaceless %}
-		<a href="{% url "wh:profile-by-nick" nickname=p.author %}"><img id="hdimg" class='right' src="{% url "wh:avatar" nickname=p.author %}"></a>
+		<a href="{% url "accounts:profile-by-nick" nickname=p.author %}"><img id="hdimg" class='right' src="{% url "wh:avatar" nickname=p.author %}"></a>
 		{% if not p.approved %}
 			<span class='unapproved'> <a href='{% url "blog:post" id=p.id %}'>{{ p.title }}</a></span>
 		{% else %}

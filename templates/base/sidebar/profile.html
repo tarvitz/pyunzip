@@ -19,12 +19,12 @@
                     <li><a rel='twipsy'
                            href='{% url "wh:pm" %}' title='Личные сообщения'>ЛC</a><span class='pm count'></span></li>
                     <li>
-                        <a rel='twipsy' href="{% url "wh:profile" %}" title='Просмотр своего профиля'>Профиль</a>
+                        <a rel='twipsy' href="{% url "accounts:profile" %}" title='Просмотр своего профиля'>Профиль</a>
                         <a class='icon-edit tiny' data-title="Редактировать свой профиль" rel='tooltip'
-                           href='{% url "wh:profile-update" %}'></a>
+                           href='{% url "accounts:profile-update" %}'></a>
                     </li>
                     {% comment %}
-                    <li class='lvl2'><a rel='twipsy' href='{% url "wh:profile-update" %}' title='Настройки профиля'>Править</a></li>
+                    <li class='lvl2'><a rel='twipsy' href='{% url "accounts:profile-update" %}' title='Настройки профиля'>Править</a></li>
                     <li class='lvl2'><a rel='twipsy' href='{% url "core:settings" %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
                     <li class='lvl2'><a rel='twipsy' href='{% url "core:subscription" %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
                     {% endcomment %}

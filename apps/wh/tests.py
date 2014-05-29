@@ -37,9 +37,9 @@ class JustTest(TestHelperMixin, TestCase):
         self.urls_void = [
         ]
         self.urls_registered = [
-            reverse('wh:profile'),
-            reverse('wh:profile-real', args=('user', )),
-            reverse('wh:profile-by-nick', args=('user', )),
+            reverse('accounts:profile'),
+            reverse('accounts:profile-real', args=('user', )),
+            reverse('accounts:profile-by-nick', args=('user', )),
             reverse('wh:users'),
             reverse('wh:pm-sent'),
             reverse('wh:pm-income'),
@@ -176,7 +176,7 @@ class JustTest(TestHelperMixin, TestCase):
 
     def test_duplicate_nick_update(self):
         # can update self nickname for current nickname
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         post = {
             'nickname': 'user',
         }
@@ -187,7 +187,7 @@ class JustTest(TestHelperMixin, TestCase):
 
     def test_duplicate_nick_failure(self):
         # can not update to follow nickname because it's busy
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         post = {
             'nickname': 'user'
         }
@@ -225,7 +225,7 @@ class JustTest(TestHelperMixin, TestCase):
 
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         response = self.client.post(url, post, follow=True)
         context = response.context
         if 'form' in context:

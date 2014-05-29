@@ -10,7 +10,10 @@ from apps.core.helpers import safe_ret
 class BanMiddleware(object):
     def process_request(self, request):
         if request.user.is_authenticated() and not request.user.is_active:
-            auth.logout(request.user)
+            try:
+                auth.logout(request.user)
+            except AttributeError:
+                pass
 
 
 class SetRemoteAddrFromForwardedFor(object):

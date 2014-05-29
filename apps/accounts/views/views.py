@@ -151,7 +151,7 @@ class RegisterView(generic.FormView):
     template_name = 'accounts/register.html'
 
     def get_success_url(self):
-        return reverse_lazy('wh:profile')
+        return reverse_lazy('accounts:login')
 
     def form_valid(self, form):
         user = User.objects.create(username=form.cleaned_data['username'],
@@ -160,3 +160,24 @@ class RegisterView(generic.FormView):
         user.set_password(form.cleaned_data['password'])
         user.save()
         return redirect(self.get_success_url())
+
+
+class ProfileSelfView(generic.TemplateView):
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileSelfView, self).get_context_data(**kwargs)
+        context.update({'object': self.request.user})
+        return context
+
+
+class ProfileView(generic.DetailView):
+    template_name = 'accounts/profile.html'
+    model = User
+
+    def get_queryset(self):
+        if 'nickname' in self.kwargs:
+            return super(ProfileView, self).get_queryset().filter(
+                nickname__iexact=self.kwargs.get('nickname', '!void')
+            )
+        return super(ProfileView, self).get_queryset()

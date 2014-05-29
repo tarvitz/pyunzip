@@ -40,7 +40,7 @@
                 <td>{{ report.published }}</td>
                 <td>
                     {% for player in report.get_players %}
-                        <a href='{% url "wh:profile-by-nick" player.nickname %}'>{{ player.get_nickname|safe }}</a>{% if not forloop.last %},{% endif %}
+                        <a href='{% url "accounts:profile-by-nick" player.nickname %}'>{{ player.get_nickname|safe }}</a>{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 </td>
                 <td>

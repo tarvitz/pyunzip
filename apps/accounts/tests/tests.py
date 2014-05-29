@@ -29,9 +29,9 @@ class JustTest(TestHelperMixin, TestCase):
         self.urls_void = [
         ]
         self.urls_registered = [
-            reverse_lazy('wh:profile'),
-            reverse_lazy('wh:profile-real', args=('user', )),
-            reverse_lazy('wh:profile-by-nick', args=('user', )),
+            reverse_lazy('accounts:profile'),
+            reverse_lazy('accounts:profile-real', args=('user', )),
+            reverse_lazy('accounts:profile-by-nick', args=('user', )),
             reverse_lazy('wh:users'),
             reverse_lazy('wh:pm-sent'),
             reverse_lazy('wh:pm-income'),
@@ -170,7 +170,7 @@ class JustTest(TestHelperMixin, TestCase):
 
     def test_duplicate_nick_update(self):
         # can update self nickname for current nickname
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         post = {
             'nickname': 'user',
         }
@@ -181,7 +181,7 @@ class JustTest(TestHelperMixin, TestCase):
 
     def test_duplicate_nick_failure(self):
         # can not update to follow nickname because it's busy
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         post = {
             'nickname': 'user'
         }
@@ -219,7 +219,7 @@ class JustTest(TestHelperMixin, TestCase):
 
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
-        url = reverse('wh:profile-update')
+        url = reverse('accounts:profile-update')
         response = self.client.post(url, post, follow=True)
         context = response.context
         if 'form' in context:
@@ -357,6 +357,25 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['request'].user.is_authenticated(),
                          False)
 
+    def test_banned_user_while_session(self):
+        u = User.objects.get(username='user')
+        u.is_active = True
+        u.save()
+        logged = self.client.login(username=u.username, password='123456')
+        self.assertEqual(logged, True)
+
+        url = reverse('pybb:index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['request'].user.is_authenticated(),
+                         True)
+        u.is_active = False
+        u.save()
+
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['request'].user.is_authenticated(),
+                         False)
 
 class CacheTest(TestCase):
     fixtures = [

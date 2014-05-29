@@ -6,8 +6,8 @@
     <li class="active">{% trans "profile" %}</li>
   </ul>
 
-  {% if usr.errors %}
-    {{ usr.errors }}
+  {% if object.errors %}
+    {{ object.errors }}
   {% else %}
     <center>
       <div class='message'>
@@ -21,35 +21,35 @@
           <div class='reflects_left'></div>
 
           <div class='avatar'>
-            {% include "msg/avatar.html" %}
+            {% include "msg/avatar.html" with object=object %}
           </div> <!-- msg_avatar -->
           <div class='text'>
             <div id='profile_data'>
-              <b>Имя</b> <span class='notice'>(никнейм)</span>: {{ usr.get_nickname|safe }}<br>
+              <b>Имя</b> <span class='notice'>(никнейм)</span>: {{ object.get_nickname|safe }}<br>
               {% spaceless %}
-                {% if usr.first_name or usr.last_name %}
-                  <b>Реальное имя</b>: {{ usr.first_name }} {{ usr.last_name }}<br>
+                {% if object.first_name or object.last_name %}
+                  <b>Реальное имя</b>: {{ object.first_name }} {{ object.last_name }}<br>
                 {% endif %}{% endspaceless %}
-              {% ifnotequal usr.army.side.name "None" %}<b>Состоит на службе у</b> {{ usr.army.side.name }}<br>
-                <b>Приписан к</b>: {{ usr.army.name }}<br> {% endifnotequal %}
-              <b>Пол</b>: {{ usr.gender|gender_transform }}<br>
+              {% ifnotequal object.army.side.name "None" %}<b>Состоит на службе у</b> {{ object.army.side.name }}<br>
+                <b>Приписан к</b>: {{ object.army.name }}<br> {% endifnotequal %}
+              <b>Пол</b>: {{ object.gender|gender_transform }}<br>
               <br><b>Координаты на просторах галлактики:</b><br>
-              {% if usr.uin and not usr.settings.hide_uin %}<b>uin</b>: {{ usr.uin }}<br>{% endif %}
-              {% if usr.jid and not usr.settings.hide_jid %}<b>jid</b>: {{ usr.jid }}<br>{% endif %}
-              {% if usr.email and not usr.settings.hide_email %}<b>email</b>: {{ usr.email }}<br> {% endif %}
+              {% if object.uin and not object.settings.hide_uin %}<b>uin</b>: {{ object.uin }}<br>{% endif %}
+              {% if object.jid and not object.settings.hide_jid %}<b>jid</b>: {{ object.jid }}<br>{% endif %}
+              {% if object.email and not object.settings.hide_email %}<b>email</b>: {{ object.email }}<br> {% endif %}
               <br>
-              <!-- <a href='{% url "tabletop:rosters" usr.get_username %}'>Ростеры автора</a><br> -->
-              Количество коментариев: {{ usr.comments_count }}<br>
-              {% if usr.about %}<b>{{ usr.get_nickname|safe }} о себе</b>: {{ usr.about }}<br>{% endif %}
+              <!-- <a href='{% url "tabletop:rosters" object.get_username %}'>Ростеры автора</a><br> -->
+              Количество коментариев: {{ object.comments_count }}<br>
+              {% if object.about %}<b>{{ object.get_nickname|safe }} о себе</b>: {{ object.about }}<br>{% endif %}
             </div> <!-- profile_data -->
           </div> <!-- msg_text -->
         </div> <!-- msg_content -->
         <br clear='all'>
         <div class='message-footer' style='text-align: left'>
-          {% comment %}[<a class='act_link' href="{% url "wh:pm-send-nick" usr.get_username %}" title='отправить лс'>pm</a>]{% endcomment %}
-          {% if user == usr %}[<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
+          {% comment %}[<a class='act_link' href="{% url "wh:pm-send-nick" object.get_username %}" title='отправить лс'>pm</a>]{% endcomment %}
+          {% if user == object %}[<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
 
-          {% if user.is_staff %}[{{ usr.username }}]{% endif %}
+          {% if user.is_staff %}[{{ object.username }}]{% endif %}
 
         </div><!-- msg_footer -->
       </div> <!-- message -->
