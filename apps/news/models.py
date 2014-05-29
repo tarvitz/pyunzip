@@ -370,7 +370,7 @@ class Event(models.Model):
     )
     place = models.ForeignKey(
         'news.EventPlace', related_name='event_place_set',
-        blank=True, null=True
+        blank=True, null=True, verbose_name=_("event place")
     )
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='event_users_sets',
