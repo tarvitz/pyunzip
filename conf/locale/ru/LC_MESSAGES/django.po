@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-29 21:01+0400\n"
-"PO-Revision-Date: 2014-05-29 21:01+0400\n"
+"POT-Creation-Date: 2014-05-29 21:09+0400\n"
+"PO-Revision-Date: 2014-05-29 21:09+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -216,7 +216,7 @@ msgstr "Настройки"
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:239 apps/pybb/templates/pybb/head.html:25
+#: apps/accounts/models.py:239 apps/pybb/templates/pybb/head.html:29
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
 msgid "Users"
@@ -901,7 +901,7 @@ msgid "Replays"
 msgstr "Реплеи"
 
 #: apps/files/models.py:279 apps/files/templates/gallery/gallery_list.html:22
-#: apps/pybb/templates/pybb/head.html:44
+#: apps/pybb/templates/pybb/head.html:48
 msgid "Gallery"
 msgstr "Галерея"
 
@@ -1019,7 +1019,7 @@ msgid "You used"
 msgstr "Вы испольщовали"
 
 #: apps/files/templates/files/user_files.html:31
-#: apps/pybb/templates/pybb/head.html:42
+#: apps/pybb/templates/pybb/head.html:46
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -1450,7 +1450,7 @@ msgstr "Архивные новости"
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:256 apps/pybb/templates/pybb/head.html:24
+#: apps/news/models.py:256 apps/pybb/templates/pybb/head.html:28
 msgid "News"
 msgstr "Новости"
 
@@ -1598,7 +1598,7 @@ msgstr "Событие"
 
 #: apps/news/models.py:413 apps/news/templates/events/calendar.html:23
 #: apps/news/templates/events/events.html:13
-#: apps/pybb/templates/pybb/head.html:34
+#: apps/pybb/templates/pybb/head.html:38
 msgid "Events"
 msgstr "События"
 
@@ -2166,43 +2166,47 @@ msgid "Subscriptions on topics"
 msgstr "Подписки на топики"
 
 #: apps/pybb/templates/pybb/head.html:16
+msgid "VK social page"
+msgstr "Мы ВКонтакте"
+
+#: apps/pybb/templates/pybb/head.html:20
 msgid "Forthcoming events"
 msgstr "Предстоящие события"
 
-#: apps/pybb/templates/pybb/head.html:17
+#: apps/pybb/templates/pybb/head.html:21
 msgid "Calendar"
 msgstr "Календарь"
 
-#: apps/pybb/templates/pybb/head.html:36
+#: apps/pybb/templates/pybb/head.html:40
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: apps/pybb/templates/pybb/head.html:43
+#: apps/pybb/templates/pybb/head.html:47
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: apps/pybb/templates/pybb/head.html:46
+#: apps/pybb/templates/pybb/head.html:50
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/head.html:49
+#: apps/pybb/templates/pybb/head.html:53
 msgid "Admincp"
 msgstr "Админка"
 
-#: apps/pybb/templates/pybb/head.html:51
+#: apps/pybb/templates/pybb/head.html:55
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:56
+#: apps/pybb/templates/pybb/head.html:60
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:66
+#: apps/pybb/templates/pybb/head.html:70
 #: apps/wh/templates/accounts/register.html:6
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:67
+#: apps/pybb/templates/pybb/head.html:71
 msgid "Log in"
 msgstr "Войти"
 

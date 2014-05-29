@@ -11,6 +11,10 @@
             <a class='navbar-brand brand' href="{% url "pybb:index" %}">Tessera  Форум</a>
             <div class='nav-collapse pull-right'>
                 <ul class="nav navbar-nav">
+                    <li class="social">
+                      <a href="https://vk.com/teccera" rel="tooltip"
+                         data-title="{% trans "VK social page" %}"><i class="icon icon-vk"></i></a>
+                    </li>
                     <li>
                       <a href="{% url "news:calendar" %}" rel="tooltip"
                          data-title="{% trans "Forthcoming events" %}"
