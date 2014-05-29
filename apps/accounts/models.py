@@ -133,6 +133,9 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
+    def get_update_profile_url(self):
+        return reverse('accounts:profile-update')
+
     def get_color_theme(self):
         return self.get_forum_theme()
 

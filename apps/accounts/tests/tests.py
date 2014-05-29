@@ -205,14 +205,14 @@ class JustTest(TestHelperMixin, TestCase):
             'gender': 'm',  # (f)emale, (n)ot identified
             'nickname': 'real_tester',
             'jid': 'tester@jabber.org',
-            'uin': 123412,
+            #'uin': 123412,
             'about': 'Duty is our salvation',
-            'tz': 3.0
+            #'tz': 3.0
         }
         post = {
-            'skin': 1,
-            'side': 1,
-            'army': 1,
+            #'skin': 1,
+            #'side': 1,
+            #'army': 1,
             'avatar': avatar,
         }
         post.update(edit)
@@ -243,13 +243,14 @@ class JustTest(TestHelperMixin, TestCase):
                 print "Can not edit user got: %(err)s" % msg
             raise AssertionError
 
-        self.assertEqual(user.skin.id, post['skin'])
-        self.assertEqual(user.army.id, post['army'])
-        self.assertEqual(
-            'avatars/%s/%s' % (user.pk, avatar_name),
-            user.avatar.name
-        )
-        os.lstat(user.avatar.path)
+        #self.assertEqual(user.skin.id, post['skin'])
+        #self.assertEqual(user.army.id, post['army'])
+        #self.assertEqual(
+        #    'avatars/%s/%s' % (user.pk, avatar_name),
+        #    user.avatar.name
+        #)
+        self.assertEqual(os.path.exists(user.avatar.path), True)
+        os.unlink(user.avatar.path)
 
     def test_profile_get_avatar(self):
         avatar_url = reverse('wh:avatar', args=('user', ))

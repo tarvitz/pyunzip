@@ -115,7 +115,8 @@ class ProfileUpdateView(LoginRequiredMixin, generic.FormView):
 
     def get_form_kwargs(self):
         kwargs = super(ProfileUpdateView, self).get_form_kwargs()
-        kwargs.update({'instance': self.request.user})
+        kwargs.update({
+            'instance': self.request.user, 'request': self.request})
         return kwargs
 
     def form_valid(self, form):

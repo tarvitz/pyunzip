@@ -3,6 +3,7 @@ from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from apps.accounts.models import User
+from apps.core.forms import RequestFormMixin
 from django.contrib import auth
 
 from captcha.fields import ReCaptchaField
@@ -57,10 +58,30 @@ class AgreeForm(forms.Form):
     )
 
 
-class ProfileForm(forms.ModelForm):
+class ProfileForm(RequestFormMixin, forms.ModelForm):
+    def clean_nickname(self):
+        nickname = self.cleaned_data['nickname']
+        exists = User.objects.filter(nickname__iexact=nickname).exclude(
+            pk=self.request.user.pk)
+        if exists.count():
+            raise forms.ValidationError(
+                _("Another user with user nickname exists."))
+        return nickname
+
     class Meta:
+        attrs = {'class': 'form-control'}
         model = User
-        fields = ('first_name', 'last_name', )
+        fields = ('first_name', 'last_name', 'nickname', 'avatar', 'gender',
+                  'jid',
+                  'about')
+        widgets = {
+            'first_name': forms.TextInput(attrs),
+            'last_name': forms.TextInput(attrs),
+            'nickname': forms.TextInput(attrs),
+            'gender': forms.Select(attrs),
+            'jid': forms.EmailInput(attrs),
+            'about': forms.TextInput(attrs)
+        }
 
 
 class RegisterForm(forms.ModelForm):

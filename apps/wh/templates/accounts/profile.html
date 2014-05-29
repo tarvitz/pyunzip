@@ -4,6 +4,9 @@
   <ul class="breadcrumb">
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
     <li class="active">{% trans "profile" %}</li>
+    {% if user == object %}
+      <li class="pull-right"><a href="{{ user.get_update_profile_url }}">{% trans "update profile" %}</a></li>
+    {% endif %}
   </ul>
 
   {% if object.errors %}
