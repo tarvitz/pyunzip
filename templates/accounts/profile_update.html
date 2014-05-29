@@ -1,5 +1,10 @@
 {% extends "base_template.html" %}{% load i18n %}
 {% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{{ user.get_profile_url }}'>{{ user.get_nickname|safe }}</a></li>
+    <li class="active">{% trans "profile's update" %}</li>
+  </ul>
 
   <form class="form-horizontal" action="{{ request.path }}" method="POST"
         enctype="multipart/form-data">

@@ -133,6 +133,9 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
+    def get_profile_url(self):
+        return reverse('accounts:profile')
+
     def get_update_profile_url(self):
         return reverse('accounts:profile-update')
 

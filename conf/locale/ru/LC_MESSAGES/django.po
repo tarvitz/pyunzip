@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-29 19:38+0400\n"
-"PO-Revision-Date: 2014-05-29 19:39+0400\n"
+"POT-Creation-Date: 2014-05-29 19:43+0400\n"
+"PO-Revision-Date: 2014-05-29 19:44+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -210,13 +210,13 @@ msgstr "временная зона"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:235 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/accounts/models.py:238 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:182 apps/pybb/models.py:264 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:236 apps/pybb/templates/pybb/head.html:16
+#: apps/accounts/models.py:239 apps/pybb/templates/pybb/head.html:16
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
 msgid "Users"
@@ -995,8 +995,8 @@ msgstr "Файлы пользователя"
 #: apps/tabletop/templates/tabletop/roster.html:7
 #: apps/tabletop/templates/tabletop/roster_list.html:5
 #: apps/wh/templates/accounts/change_password.html:6
-#: apps/wh/templates/accounts/pm.html:11
-#: apps/wh/templates/accounts/profile.html:5 templates/static/timeout.html:4
+#: apps/wh/templates/accounts/pm.html:11 templates/accounts/profile.html:5
+#: templates/accounts/profile_update.html:4 templates/static/timeout.html:4
 msgid "forum"
 msgstr "форум"
 
@@ -3677,7 +3677,7 @@ msgid "[everban]"
 msgstr "[навекибан]"
 
 #: apps/wh/templates/accounts/change_password.html:7
-#: apps/wh/templates/accounts/profile.html:6
+#: templates/accounts/profile.html:6
 msgid "profile"
 msgstr "профиль"
 
@@ -3752,10 +3752,6 @@ msgstr "Поиск пользователя"
 #: apps/wh/templates/accounts/pm_delete.html:6
 msgid "Message wasn't deleted"
 msgstr "Сообщение не было удалено"
-
-#: apps/wh/templates/accounts/profile.html:8
-msgid "update profile"
-msgstr "обновить профиль"
 
 #: apps/wh/templates/accounts/registered.html:3
 msgid "Successfully registered"
@@ -3885,7 +3881,15 @@ msgstr "Процедура восстановления пароля"
 msgid "Initiate"
 msgstr "Начать"
 
+#: templates/accounts/profile.html:8
+msgid "update profile"
+msgstr "обновить профиль"
+
 #: templates/accounts/profile_update.html:6
+msgid "profile's update"
+msgstr "обновление профиля"
+
+#: templates/accounts/profile_update.html:11
 msgid "Update"
 msgstr "Обновить"
 
