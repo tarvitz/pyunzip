@@ -7,6 +7,12 @@ from datetime import datetime
 from apps.core.helpers import safe_ret
 
 
+class BanMiddleware(object):
+    def process_request(self, request):
+        if request.user.is_authenticated() and not request.user.is_active:
+            auth.logout(request.user)
+
+
 class SetRemoteAddrFromForwardedFor(object):
     def process_request(self, request):
         try:

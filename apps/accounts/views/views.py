@@ -132,6 +132,8 @@ class LoginView(generic.FormView):
 
     def form_valid(self, form):
         user = form.cleaned_data['user']
+        if not user.is_active:
+            return redirect(reverse_lazy('accounts:banned'))
         auth.login(self.request, user)
         return redirect(self.get_success_url())
 

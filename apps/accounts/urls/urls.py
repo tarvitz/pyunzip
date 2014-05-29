@@ -17,4 +17,7 @@ urlpatterns = patterns('apps.accounts.views',
         name='context-set'),
     url(r'^context/switch/$', 'user_switch_context',
         name='context-switch'),
+
+    url(r'^accounts/banned/$', direct_to_template,
+        {'template': 'accounts/banned.html'}, name='banned')
 )
