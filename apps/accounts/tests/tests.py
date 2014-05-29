@@ -346,6 +346,17 @@ class JustTest(TestHelperMixin, TestCase):
         response = self.client.get(increase_url)
         self.assertEqual(response.status_code, 404)
 
+    def test_banned_user(self):
+        u = User.objects.get(username='user')
+        u.is_active = False
+        u.save()
+        logged = self.client.login(username=u.username, password='123456')
+        self.assertEqual(logged, False)
+        response = self.client.get(reverse('pybb:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['request'].user.is_authenticated(),
+                         False)
+
 
 class CacheTest(TestCase):
     fixtures = [
