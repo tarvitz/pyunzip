@@ -11,7 +11,16 @@
             <a class='navbar-brand brand' href="{% url "pybb:index" %}">Tessera  Форум</a>
             <div class='nav-collapse pull-right'>
                 <ul class="nav navbar-nav">
-                    <li><a href="{% url "news:calendar" %}">{% trans "Calendar" %}</a></li>
+                    <li>
+                      <a href="{% url "news:calendar" %}" rel="tooltip"
+                         data-title="{% trans "Forthcoming events" %}"
+                         data-placement="bottom">{% trans "Calendar" %}
+                      {% if new_events %}
+                        <span class="label label-{{ user.get_forum_theme|default:"warning" }}">
+                          {{ new_events.count }}
+                        </span>{% endif %}</a>
+
+                    </li>
                     <li><a href="{% url "news:news" %}">{% trans "News" %}</a></li>
                     <li><a href="{% url "wh:users" %}">{% trans "Users" %}</a></li>
                     {% if user.is_authenticated %}
