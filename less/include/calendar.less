@@ -1,6 +1,11 @@
 @tournament-text: darken(@alert-warning-bg, 45%);
 
 .fc-event{
+  &.game,&.tournament,&.order{
+    .fc-event-time{
+      .pull-right;
+    }
+  }
   &.game{
     //background-color: darken(@alert-success-bg, 30%);
     &:hover{
