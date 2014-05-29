@@ -16,7 +16,11 @@
   {% endif %}
 
   <h3>{{ object.title }}</h3>
-  {{ object.content_html|safe }}
+  <div class='content'>
+    {{ object.content_html|safe }}
+    <hr />
+  </div>
+
   {% if comments %}
     <center>
     <div class="comments">
