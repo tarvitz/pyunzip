@@ -175,6 +175,7 @@ class ProfileSelfView(generic.TemplateView):
 class ProfileView(generic.DetailView):
     template_name = 'accounts/profile.html'
     model = User
+    slug_field = 'nickname'
 
     def get_queryset(self):
         if 'nickname' in self.kwargs:
