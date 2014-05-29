@@ -14,7 +14,7 @@
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     <li class="active">{% trans "events" %}</li>
-    {% if perms.news.event_add %}
+    {% if perms.news.add_event %}
       <li class="pull-right">
         <a href="{% url "news:event-create" %}">{% trans "Create event" %}</a></li>
     {% endif %}
