@@ -1,0 +1,10 @@
+{% extends "base_template.html" %}{% load i18n %}
+{% block content %}
+
+  <form class="form-horizontal" action="{{ request.path }}" method="POST"
+        enctype="multipart/form-data">
+    {% csrf_token %}{% trans "Update" as save_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
+  </form>
+{% endblock %}
