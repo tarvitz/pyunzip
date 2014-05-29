@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-29 18:31+0400\n"
-"PO-Revision-Date: 2014-05-29 18:31+0400\n"
+"POT-Creation-Date: 2014-05-29 19:38+0400\n"
+"PO-Revision-Date: 2014-05-29 19:39+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -28,8 +28,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:30
-#: apps/accounts/forms.py:69 apps/wh/forms.py:396
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:31
+#: apps/accounts/forms.py:90 apps/wh/forms.py:396
 #: templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
@@ -45,8 +45,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:33
-#: apps/accounts/forms.py:72 apps/wh/forms.py:596
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:34
+#: apps/accounts/forms.py:93 apps/wh/forms.py:596
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -73,31 +73,35 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:19
+#: apps/accounts/forms.py:20
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:44
+#: apps/accounts/forms.py:45
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:55 apps/news/forms.py:237 apps/pybb/forms.py:173
+#: apps/accounts/forms.py:56 apps/news/forms.py:237 apps/pybb/forms.py:173
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:75 apps/wh/forms.py:599
+#: apps/accounts/forms.py:68
+msgid "Another user with user nickname exists."
+msgstr "Другой пользователь с таким ником уже существует."
+
+#: apps/accounts/forms.py:96 apps/wh/forms.py:599
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:78 apps/wh/forms.py:580
+#: apps/accounts/forms.py:99 apps/wh/forms.py:580
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:81
+#: apps/accounts/forms.py:102
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:84
+#: apps/accounts/forms.py:105
 msgid "Captcha"
 msgstr "Капча"
 
@@ -206,13 +210,13 @@ msgstr "временная зона"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:232 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/accounts/models.py:235 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:182 apps/pybb/models.py:264 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:233 apps/pybb/templates/pybb/head.html:16
+#: apps/accounts/models.py:236 apps/pybb/templates/pybb/head.html:16
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
 msgid "Users"
@@ -3749,6 +3753,10 @@ msgstr "Поиск пользователя"
 msgid "Message wasn't deleted"
 msgstr "Сообщение не было удалено"
 
+#: apps/wh/templates/accounts/profile.html:8
+msgid "update profile"
+msgstr "обновить профиль"
+
 #: apps/wh/templates/accounts/registered.html:3
 msgid "Successfully registered"
 msgstr "Успешно зарегистрирован"
@@ -3853,6 +3861,10 @@ msgstr "Вы действительно хотите выполнить это �
 msgid "no"
 msgstr "нет"
 
+#: templates/accounts/banned.html:3
+msgid "Your account have been banned, sorry :)"
+msgstr "Вас забанили :), приносим свои извинения."
+
 #: templates/accounts/password_change.html:3
 msgid "Password change"
 msgstr "Смена пароля"
@@ -3872,6 +3884,10 @@ msgstr "Процедура восстановления пароля"
 #: templates/accounts/password_restore_initiate.html:7
 msgid "Initiate"
 msgstr "Начать"
+
+#: templates/accounts/profile_update.html:6
+msgid "Update"
+msgstr "Обновить"
 
 #: templates/admin/wh/profile/change_form.html:5
 msgid "It is better to manage profile in special form despite using amin one"
