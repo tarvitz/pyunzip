@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-29 20:28+0400\n"
-"PO-Revision-Date: 2014-05-29 20:28+0400\n"
+"POT-Creation-Date: 2014-05-29 21:01+0400\n"
+"PO-Revision-Date: 2014-05-29 21:01+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1783,6 +1783,10 @@ msgstr "Ноя"
 msgid "Dec"
 msgstr "Дек"
 
+#: apps/news/templates/events/calendar.html:94
+msgid "all day"
+msgstr "весь день"
+
 #: apps/news/templates/events/event.html:25
 msgid "Mark that I would come to this event"
 msgstr "Заявить об участвии в этом событии (я приду)"
@@ -2951,7 +2955,7 @@ msgstr ""
 
 #: apps/tabletop/models.py:623
 msgid "short title"
-msgstr ""
+msgstr "короткий заголовок"
 
 #: apps/tabletop/models.py:632
 msgid "points cost for one wargear title"
@@ -2959,7 +2963,7 @@ msgstr ""
 
 #: apps/tabletop/models.py:635
 msgid "limit"
-msgstr ""
+msgstr "лимит"
 
 #: apps/tabletop/models.py:635
 msgid "limit gear to take on the battlefield"
@@ -2993,15 +2997,15 @@ msgstr ""
 
 #: apps/tabletop/models.py:683
 msgid "Wargear"
-msgstr ""
+msgstr "Вооружение"
 
 #: apps/tabletop/models.py:684
 msgid "Wargears"
-msgstr ""
+msgstr "Вооружения"
 
 #: apps/tabletop/templates/add_old_battle_report.html:11
 msgid "Tilte"
-msgstr ""
+msgstr "Заголовок"
 
 #: apps/tabletop/templates/add_old_battle_report.html:17
 msgid "Rosters' ids"
@@ -3013,11 +3017,11 @@ msgstr "Ростер был успешно опубликован"
 
 #: apps/tabletop/templates/add_roster_old.html:34
 msgid "Roster"
-msgstr ""
+msgstr "Ростер"
 
 #: apps/tabletop/templates/add_roster_old.html:37
 msgid "Race"
-msgstr ""
+msgstr "Раса"
 
 #: apps/tabletop/templates/add_roster_old.html:40
 msgid "Custom Race"
@@ -3026,7 +3030,7 @@ msgstr ""
 #: apps/tabletop/templates/reports.html:8
 #: apps/tabletop/templates/user_rosters.html:15
 msgid "Add"
-msgstr ""
+msgstr "Добавить"
 
 #: apps/tabletop/templates/reports.html:31
 msgid "Pts"
@@ -3160,15 +3164,15 @@ msgstr ""
 
 #: apps/tagging/models.py:460 apps/wh/models.py:214
 msgid "name"
-msgstr ""
+msgstr "имя"
 
 #: apps/tagging/models.py:466 apps/tagging/models.py:476
 msgid "tag"
-msgstr ""
+msgstr "таг"
 
 #: apps/tagging/models.py:467
 msgid "tags"
-msgstr ""
+msgstr "тэги"
 
 #: apps/tagging/models.py:486
 msgid "tagged item"
@@ -3979,6 +3983,8 @@ msgstr "Отказано в доступе"
 #: templates/static/timeout.html:5
 msgid "operation you requested is restricted in time use"
 msgstr ""
+"операция, которую вы запросили имеет ограничение по использованию в "
+"определенный промежуток времени"
 
 #: templates/static/timeout.html:7
 msgid "Timeout, please wait for your turn ;)"

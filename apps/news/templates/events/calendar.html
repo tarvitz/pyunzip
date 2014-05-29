@@ -91,6 +91,10 @@
           "{{ sunday }}", "{{ monday }}", "{{ tuesday }}", "{{ wednesday }}",
           "{{ thursday }}", "{{ friday }}", "{{ saturday}}"
         ],
+        allDayText: "{% trans "all day" %}",
+        axisFormat: "H:mm",
+        firstHour: 11,
+        minTime: 9,
         events: function(start, end, callback){
           $.ajax({
             url: "{% url "news:event-list" %}",
