@@ -17,7 +17,7 @@
             {% endif %}
             <span class='karma_comment'>{% if k.url %}<a href='{{ k.url }}'>{{ k.comment }}</a> {% else %}{{ k.comment }}{% endif %}</span>
             <span class='karma_date'>({{ k.date|date:"Y/M/d, H:m:s" }})</span>
-            <span class='karma_voter'>[<a href="{% url "accounts:profile-by-nick" nickname=k.voter.get_username %}">{{ k.voter.get_nickname|safe }}</a>]</span>
+            <span class='karma_voter'>[<a href="{% url "accounts:profile-by-nick" k.voter.get_username %}">{{ k.voter.get_nickname|safe }}</a>]</span>
             <br>
           {% endspaceless %}
         {% endfor %}
