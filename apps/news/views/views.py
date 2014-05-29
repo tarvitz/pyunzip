@@ -9,6 +9,7 @@ from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.core import get_skin_template
 from apps.core.models import Announcement
 from apps.core.shortcuts import direct_to_template
+from apps.core.helpers import get_content_type, get_int_or_zero
 from apps.core.forms import ApproveActionForm
 
 from django.core.paginator import InvalidPage, EmptyPage
@@ -416,6 +417,19 @@ class EventView(generic.DetailView):
     model = Event
     template_name = 'events/event.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(EventView, self).get_context_data(**kwargs)
+        event_ct = get_content_type(Event)
+        comments = Comment.objects.filter(content_type=event_ct,
+                                          object_pk=self.get_object().pk)
+        comments = paginate(
+            comments, get_int_or_zero(self.request.GET.get('page', 1) or 1),
+            pages=settings.OBJECTS_ON_PAGE
+        )
+        context.update({
+            'comments': comments
+        })
+        return context
 
 class EventUpdateView(EventPermissionMixin, generic.UpdateView):
     model = Event

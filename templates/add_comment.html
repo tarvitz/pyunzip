@@ -1,19 +1,20 @@
 <center>
-<div class='comment form col-lg-10 no-left'>
+  <div class='comment form col-lg-10 no-left'>
     <form class='comment-form' action='{% url "core:comment-add" %}' method='POST' id='id-comment-form'>
-        {% csrf_token %}
-        <textarea id='id_comment' name='comment' class='span6' rows='10'></textarea>
-        <div class='hide'>
-            <input type='hidden' name='content_type' value='{{ object.content_type.pk }}' id='id_content_type'>
-            <input type='hidden' name='object_pk' value='{{ object.id }}' id='id_object_id'>
-            <input type='hidden' name='syntax' value='{{ gs.DEFAULT_SYNTAX|default_if_none:"textile" }}' id='id_syntax'>
-            <input type='hidden' name='site' id='id_site'>
-            <input type='hidden' name='url' id='id_url' value='{{ current_referer }}'>
-        </div>
-        <div class=''>
-            <input type='submit' value='Отправить' class='btn btn-inverse btn-medium' />
-        </div>
+      {% csrf_token %}
+      <textarea id='id_comment' name='comment' class='span6' rows='10'></textarea>
+      <div class='hide'>
+        <input type='hidden' name='content_type' value='{{ object.content_type.pk }}' id='id_content_type'>
+        <input type='hidden' name='object_pk' value='{{ object.id }}' id='id_object_id'>
+        <input type='hidden' name='syntax' value='{{ gs.DEFAULT_SYNTAX|default_if_none:"textile" }}' id='id_syntax'>
+        <input type='hidden' name='site' id='id_site'>
+        <input type='hidden' name='url' id='id_url' value='{{ current_referer }}'>
+      </div>
+      <div class=''>
+        <input type='submit' value='Отправить'
+               class='btn btn-{{ user.get_forum_theme|default:"default" }}' />
+      </div>
     </form>
-</div>
+  </div>
 </center>
 {% include "js/comments.html" %}

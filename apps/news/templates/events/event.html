@@ -1,5 +1,5 @@
 {% extends "base_template.html" %}
-{% load i18n %}
+{% load i18n coretags %}
 {% block content %}
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
@@ -17,4 +17,20 @@
 
   <h3>{{ object.title }}</h3>
   {{ object.content_html|safe }}
+  {% if comments %}
+    <center>
+    <div class="comments">
+      {% for comment in comments.object_list %}
+        {% include "generic/comment.html" with c=comment %}
+      {% endfor %}
+    </div>
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
+    </center>
+  {% endif %}
+  <br />
+
+  {% if user.is_authenticated %}
+    {% get_content_type object as object_ct %}
+    {% include settings.document.comments_form with object=object_ct gs=gs %}
+  {% endif %}
 {% endblock %}
