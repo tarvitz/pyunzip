@@ -315,6 +315,7 @@ class Image(models.Model):
         )
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
+        ordering = ['-id', ]
         
     get_title = lambda self: self.title
      
