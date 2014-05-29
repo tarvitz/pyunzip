@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-05-29 16:39+0400\n"
-"PO-Revision-Date: 2014-05-29 17:24+0400\n"
+"PO-Revision-Date: 2014-05-29 17:27+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1604,7 +1604,7 @@ msgstr "Статус вашей статьи был изменен"
 #: apps/news/templates/events/event_form.html:6
 #: apps/news/templates/events/events.html:6
 msgid "events"
-msgstr "События"
+msgstr "события"
 
 #: apps/news/templates/events/calendar.html:19
 #: apps/news/templates/events/events.html:9
