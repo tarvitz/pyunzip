@@ -324,6 +324,24 @@ EVENT_TYPE_CHOICES = (
 )
 
 
+class EventPlace(models.Model):
+    title = models.CharField(_("title"), max_length=512,
+                             help_text=_("event place title"))
+    address = models.CharField(_("address"), max_length=1024,
+                               help_text=_("event place address"),
+                               blank=True, null=True)
+    contacts = models.CharField(_("contacts"), max_length=256,
+                                help_text=_("contacts/help who to find it"),
+                                blank=True, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Event Place")
+        verbose_name_plural = _("Event Places")
+
+
 class Event(models.Model):
     """ different events model container for all-people notification usage
     """
@@ -349,6 +367,10 @@ class Event(models.Model):
     type = models.CharField(
         _("type"), max_length=16,
         choices=EVENT_TYPE_CHOICES
+    )
+    place = models.ForeignKey(
+        'news.EventPlace', related_name='event_place_set',
+        blank=True, null=True
     )
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='event_users_sets',

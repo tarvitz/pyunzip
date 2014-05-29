@@ -1,6 +1,9 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
-from apps.news.models import News,ArchivedNews,Category, MeatingType, Meating
+from apps.news.models import (
+    News, ArchivedNews, Category, MeatingType, Meating, EventPlace
+)
+from apps.news.adminforms import EventPlaceForm
 #Actions
 def make_approved_action(modeladmin,request,queryset):
     queryset.update(approved=True)
@@ -51,6 +54,13 @@ class CategoryAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_per_page = 40
 
+
+class EventPlaceAdmin(admin.ModelAdmin):
+    list_display = ('title', 'address', 'contacts',     )
+    form = EventPlaceForm
+
+
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(MeatingType)
 admin.site.register(Meating)
+admin.site.register(EventPlace, EventPlaceAdmin)

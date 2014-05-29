@@ -431,6 +431,7 @@ class EventView(generic.DetailView):
         })
         return context
 
+
 class EventUpdateView(EventPermissionMixin, generic.UpdateView):
     model = Event
     form_class = EventForm
