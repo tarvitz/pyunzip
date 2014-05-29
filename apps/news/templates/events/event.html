@@ -20,7 +20,7 @@
 
 
   <div class="pull-right">
-    {% if user.is_authetnicated and user not in object.participants.all %}
+    {% if user.is_authenticated and user not in object.participants.all %}
       <a href="{{ object.get_join_url }}" rel="tooltip"
          data-title="{% trans "Mark that I would come to this event" %}">
           <i class="glyphicon glyphicon-ok icon-ok"></i></a>

@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from django.contrib.contenttypes import generic
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
@@ -320,7 +320,7 @@ class Meating(models.Model):
 EVENT_TYPE_CHOICES = (
     ('game', _("Game")),
     ('tournament', _("Tournament")),
-    ('order', _("Order"))
+    ('order', pgettext_lazy("cart order", "Order"))
 )
 
 
