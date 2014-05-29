@@ -18,16 +18,30 @@
     </div>
   {% endif %}
 
-  {% if perms.news.change_event %}
+
   <div class="pull-right">
-    {% include "generic/actions.html" with object=object %}
+    {% if user.is_authetnicated and user not in object.participants.all %}
+      <a href="{{ object.get_join_url }}" rel="tooltip"
+         data-title="{% trans "Mark that I would come to this event" %}">
+          <i class="glyphicon glyphicon-ok icon-ok"></i></a>
+    {% endif %}
+    {% if perms.news.change_event %}
+      {% include "generic/actions.html" with object=object %}
+    {% endif %}
   </div>
-  {% endif %}
+
 
   <h3>{{ object.title }}</h3>
   <div class='content'>
     {{ object.content_html|safe }}
     <hr />
+    {% if object.participants.count %}
+      {% trans "Participants" %}:
+      {% for person in object.participants.all %}
+        {{ person.get_nickname|safe }} {% if not forloop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+
   </div>
 
   {% if comments %}

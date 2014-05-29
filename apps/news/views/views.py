@@ -3,7 +3,8 @@
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.news.models import News, Meating, ArchivedNews, Event
 from apps.news.forms import (
-    ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm
+    ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm,
+    EventParticipateForm
 )
 from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.core import get_skin_template
@@ -443,3 +444,18 @@ class EventDeleteView(EventPermissionMixin, generic.DeleteView):
     form_class = EventForm
     template_name = 'events/event_confirm_delete.html'
     success_url = reverse_lazy('news:events')
+
+
+class EventParticipateView(generic.UpdateView):
+    model = Event
+    form_class = EventParticipateForm
+    template_name = 'events/event_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EventParticipateView, self).get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        form.instance.participants.add(self.request.user)
+        form.instance.save()
+        return redirect(self.get_success_url())

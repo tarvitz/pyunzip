@@ -397,6 +397,9 @@ class Event(models.Model):
     def get_delete_url(self):
         return reverse('news:event-delete', args=(self.pk, ))
 
+    def get_join_url(self):
+        return reverse('news:event-join', args=(self.pk, ))
+
     def render_content(self, field='content'):
         """
         renders content into html for better performance and security issues

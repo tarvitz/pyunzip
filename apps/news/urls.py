@@ -54,7 +54,10 @@ urlpatterns = patterns('apps.news.views',
         name='event-update'),
     url(r'^events/(?P<pk>\d+)/delete/$',
         login_required(views.EventDeleteView.as_view()),
-        name='event-delete')
+        name='event-delete'),
+    url(r'^events/(?P<pk>\d+)/join/$',
+        login_required(views.EventParticipateView.as_view()),
+        name='event-join')
 )
 
 urlpatterns += patterns(

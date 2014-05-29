@@ -231,3 +231,11 @@ class EventForm(forms.ModelForm):
                 "bootstrap-datetimepicker.min.css",
             )
         }
+
+
+class EventParticipateForm(forms.ModelForm):
+    agree = forms.BooleanField(label=_("Yes, I agree"), required=True)
+
+    class Meta:
+        model = Event
+        fields = ()

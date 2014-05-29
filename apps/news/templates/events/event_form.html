@@ -9,8 +9,7 @@
     {% endif %}
     <li class="active">{% trans "create new event" %}</li>
   </ul>
-  <form {% if form.instance.pk %}action='{{ form.instance.get_edit_url }}'{% else %}action="{% url "news:event-create" %}"{% endif %}
-        method="POST" class="form-horizontal">
+  <form action="{{ request.path }}" method="POST" class="form-horizontal">
     {% csrf_token %}{% trans "Save" as save_i18n %}
     {% include "forms/bootstrap_horizontal.html" with form=form %}
     {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
