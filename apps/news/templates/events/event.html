@@ -9,6 +9,15 @@
     <li class="active">{{ object.title|lower }}</li>
   </ul>
 
+  {% if object.place %}
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>{{ object.place.title }}</strong>,
+      {{ object.place.address }}{% spaceless %}
+      {% if object.place.contacts %}, {{ object.place.contacts }}{% endif %}{% endspaceless %}
+    </div>
+  {% endif %}
+
   {% if perms.news.change_event %}
   <div class="pull-right">
     {% include "generic/actions.html" with object=object %}
