@@ -128,12 +128,20 @@ class LoginView(generic.FormView):
     template_name = 'accounts/login.html'
 
     def get_success_url(self):
-        return self.request.META.get('HTTP_REFERER', '/')
+        return reverse_lazy('pybb:index')
 
     def form_valid(self, form):
         user = form.cleaned_data['user']
         auth.login(self.request, user)
         return redirect(self.get_success_url())
+
+
+class LogoutView(generic.View):
+    template_name = 'accounts/login.html'
+
+    def get(self, request, *args, **kwargs):
+        auth.logout(self.request)
+        return redirect(reverse_lazy('accounts:login'))
 
 
 class RegisterView(generic.FormView):
