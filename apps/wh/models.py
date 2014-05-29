@@ -6,10 +6,15 @@ from django.db import models
 from django.db.models import Q, Sum
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
-
 from django.contrib.contenttypes import generic
+from django.conf import settings
 
 from apps.core.helpers import safe_ret
 from picklefield import PickledObjectField
@@ -22,7 +27,8 @@ from apps.core.helpers import post_markup_filter, render_filter
 
 class Universe(models.Model):
     codename = models.CharField(
-        _('сodename'), max_length=100, unique=True, primary_key=True
+        _('сodename'), max_length=100, unique=True,
+        primary_key=True
     )
     title = models.CharField(
         _('title'), max_length=100)
@@ -146,11 +152,11 @@ class Expression(models.Model):
 
 class PM(models.Model):
     sender = models.ForeignKey(
-        User, related_name='sender',
+        settings.AUTH_USER_MODEL, related_name='sender',
         verbose_name=_("sender")
     )
     addressee = models.ForeignKey(
-        User, related_name='addressee',
+        settings.AUTH_USER_MODEL, related_name='addressee',
         verbose_name=_("addressee")
     )
     title = models.CharField(
@@ -208,7 +214,8 @@ class Skin(models.Model):
     name = models.CharField(_('name'), max_length=40)
     description = models.TextField(_('description'))
     fraction = models.ManyToManyField(Fraction, blank=True)
-    is_general = models.BooleanField(_('is general'), blank=True, default=False)
+    is_general = models.BooleanField(_('is general'), blank=True,
+                                     default=False)
 
     def __unicode__(self):
         return self.name.lower()
@@ -227,7 +234,8 @@ class RankType(models.Model):
         _('CSS Style'), max_length=1024, null=True, blank=True)
     css_class = models.CharField(
         _('CSS class'), max_length=64, null=True, blank=True)
-    css_id = models.CharField(_('CSS id'), max_length=64, null=True, blank=True)
+    css_id = models.CharField(_('CSS id'), max_length=64, null=True,
+                              blank=True)
     group = models.ForeignKey(Group, null=True, blank=True)
 
     def __unicode__(self):
@@ -286,7 +294,7 @@ class AbstractActivity(models.Model):
 
 
 class UserActivity(AbstractActivity):
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
     is_logout = models.NullBooleanField(_('is logout'))
     last_action_time = models.DateTimeField(
         _('Last action time'),
@@ -342,11 +350,11 @@ class WarningType(models.Model):
 # noinspection PyShadowingBuiltins
 class Warning(models.Model):
     style = models.CharField(_('style'), max_length=200)
-    type  = models.ForeignKey(WarningType)
+    type = models.ForeignKey(WarningType)
     level = models.IntegerField(
         _('sign'), max_length=10, choices=settings.SIGN_CHOICES
     )
-    user = models.ForeignKey(User, primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, primary_key=True)
     expired = models.DateTimeField(_('expired'))
     comments = generic.GenericRelation(
         'comments.Comment', object_id_field='object_pk'
@@ -369,105 +377,6 @@ class Warning(models.Model):
     show_nickname.short_description = _('User')
 
 
-class IPBan(models.Model):
-    ip_address = models.IPAddressField(_('ip address'))
-    description = models.CharField(_('description'))
-    user = models.ForeignKey(User)
-
-    class Meta:
-        abstract = True
-
-
-class RangeIPBan(models.Model):
-    ip_range = models.IPAddressField(_('ip range address'))
-
-    class Meta:
-        abstract = True
-
-
-TZ_CHOICES = [(float(x[0]), x[1]) for x in (
-    (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
-    (-8.5, '-08.5'), (-8, '-08 PST'), (-7, '-07 MST'), (-6, '-06 CST'),
-    (-5, '-05 EST'), (-4, '-04 AST'), (-3.5, '-03.5'), (-3, '-03 ADT'),
-    (-2, '-02'), (-1, '-01'), (0, '00 GMT'), (1, '+01 CET'), (2, '+02'),
-    (3, '+03'), (3.5, '+03.5'), (4, '+04'), (4.5, '+04.5'), (5, '+05'),
-    (5.5, '+05.5'), (6, '+06'), (6.5, '+06.5'), (7, '+07'), (8, '+08'),
-    (9, '+09'), (9.5, '+09.5'), (10, '+10'), (10.5, '+10.5'), (11, '+11'),
-    (11.5, '+11.5'), (12, '+12'), (13, '+13'), (14, '+14'),
-)]
-
-
-#monkey patching
-
-User.__unicode__ = lambda x: x.nickname or x.username
-User.add_to_class(
-    'nickname',
-    models.CharField(
-        _('nickname'), max_length=30, null=False, unique=True, default=None
-    )
-)
-User.add_to_class(
-    'photo', models.ImageField(
-        _('photo'), upload_to=os.path.join(
-            settings.MEDIA_ROOT + 'photos/'
-        ),
-        blank=True
-    )
-)
-User.add_to_class(
-    'avatar', models.ImageField(
-        _('Avatar'), upload_to=os.path.join(
-            settings.MEDIA_ROOT + 'avatars/'
-        ),
-        blank=True)
-)
-User.add_to_class(
-    'plain_avatar', models.ImageField(
-        _('plain Avatar'), upload_to=os.path.join(
-            settings.MEDIA_ROOT + 'avatars/'),
-        blank=True
-    )
-)
-User.add_to_class(
-    'gender', models.CharField(
-        _('gender'), default='n', max_length=1,
-        choices=[
-            ('m', _('male')),
-            ('f', _('female')),
-            ('n', _('not identified'))
-        ]
-    )
-)
-User.add_to_class(
-    'jid', models.CharField(
-        _('jabber id'), max_length=255, blank=True, null=True)
-)
-User.add_to_class(
-    'uin', models.IntegerField(
-        _('uin (icq number)'), max_length=12, blank=True, null=True)
-)
-User.add_to_class(
-    'about', models.CharField(
-        _('about myself'), max_length=512, blank=True)
-)
-User.add_to_class(
-    'skin', models.ForeignKey(
-        Skin, null=True, blank=True)
-)
-User.add_to_class(
-    'ranks',
-    models.ManyToManyField(Rank, null=True, blank=True)
-)
-User.add_to_class(
-    'army', models.ForeignKey(Army, null=True, blank=True)
-)
-User.add_to_class(
-    'tz', models.FloatField(
-        _('time zone'), choices=TZ_CHOICES, default=0)
-)
-User.add_to_class(
-    'settings', PickledObjectField(_('Settings'), null=True, blank=True)
-)
 Comment.add_to_class(
     'syntax', models.CharField(
         _('Syntax'), max_length=50, null=True, blank=True,
@@ -480,27 +389,6 @@ Comment.add_to_class(
     )
 )
 
-
-# UserAdmin import should be placed heres
-from django.contrib.auth.admin import UserAdmin
-UserAdmin.raw_id_fields += ('ranks',)
-UserAdmin.fieldsets += (
-    (
-        _('Profile'),
-        {
-            'fields': (
-                'nickname', 'photo', 'avatar', 'plain_avatar', 'army',
-                'gender', 'jid', 'uin', 'about', 'skin', 'ranks', 'tz'
-            ),
-            #'list_display': (
-            #   'nickname', 'photo', 'avatar', 'army', 'gender',
-            #   'jid', 'uin', 'about', 'skin'
-            # )
-        }
-    ),
-)
-creation_fields = ('username', 'nickname', 'password1', 'password2')
-UserAdmin.add_fieldsets[0][1]['fields'] = creation_fields
 from django.contrib.comments.admin import CommentsAdmin
 CommentsAdmin.fieldsets += (
     (
@@ -659,28 +547,6 @@ class CommentExtension(object):
         else:
             return self.comment
 
-#class UserProfile(object):
-    #def _get_comments(self):
-    #    return Comment.object.get(user=self,
-    #        is_public=True)
-    #public_comments = property(_get_comments)
-    #del _get_comments
-    #
-    #def _show_user(self):
-    #    return self.username
-    #show_user = _show_user
-    #del _show_user
-#    def __unicode__(self):
-#        return self.username
-#
-#    class Meta:
-#        permissions = USERPERMS
-#
-#May conflict with apache =\
-#User.__bases__      = User.__bases__ + (UserExtension,)
-# THIS IS BRAINS SCREW DO NOT REPEAT IT IN YOUR HOME
-User.__bases__ = (UserExtension,) + User.__bases__
-#User.__bases__     = User.__bases__ + (UserProfile,)
 Comment.__bases__ = Comment.__bases__ + (CommentExtension,)
 from apps.wh.signals import setup_signals
 setup_signals()

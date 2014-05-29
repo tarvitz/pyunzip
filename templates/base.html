@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>{% load newsfilters i18n cache coretags whfilters votetags %}
+<html>{% load newsfilters i18n cache coretags whfilters votetags static %}
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf8">
   <!-- wot -->
@@ -51,7 +51,7 @@
     <div class='menu'>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border pull-right'>
             {% if user.is_authenticated %}
-            <li><a href='{% url "wh:profile" %}'><img src='{% url "wh:avatar" user.nickname %}' class='top bar avatar'></a></li>
+            <li><a href='{% url "wh:profile" %}'><img src='{{ user.get_avatar_url }}' class='top bar avatar'></a></li>
             {% endif %}
             {% if user.is_superuser %}
             <li><a href="{% url "wh:superlogin" %}">&nbsp;<img width='16px' src='/media/icons/white/old_man.png'>&nbsp;</a></li>
@@ -62,7 +62,7 @@
             {% if user.is_authenticated %}
             <li><a href="/logout/" title="logout">&nbsp;<img width='16px' src='/media/icons/white/circle_remove.png'>&nbsp;</a></li>
             {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;<img width='16px' src='/media/icons/white/user.png'>&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
-            {% if not user.is_authenticated %}<li><a href="{% url "wh:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
+            {% if not user.is_authenticated %}<li><a href="{% url "accounts:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
             <li><a href="/faq/" title="FAQ">&nbsp;<img width='16px' src='/media/icons/white/circle_question_mark.png'>&nbsp;</a></li>
         </ul>
         <ul class='nav nav-tabs main-tabs no-margin no-bottom-border'>
@@ -151,134 +151,84 @@
 {% include "js/expressions.html" %}
 
 <script language='javascript' type='text/javascript'>
-    var current_referer = "{{ current_referer }}";
-    var setTabs = function(src){
-        document.cookie = 'mainTab=' + src;
-    }
-    var updateTabs = function(){
-        kookie = document.cookie.split('; ');
-        match = document.cookie.match(/mainTab=(\w+)/);
-        tabValue = (match) ? match[1] : -1;
-        if (tabValue != -1){
-            $('.tab-content').find('.tab-pane').removeClass('active');
-            $(".tab-content").find('#' + tabValue).addClass('active');
-            $('.nav-tabs').find('li').removeClass('active');
-            blk = $('.nav-tabs').find('[href=#' + tabValue + ']');
-            blk.parents('li').addClass('active');
-        }
-    }
-
-    miniquote = $('#horizontal_line > div > span');
-    $(document).ready(function(){
-        //setInterval(update_miniquote, 60*1000);
-        setInterval(update_bootstrap_miniquote, 60 * 1000);
-
-        $('li.required label').attr({'data-original-title': "{% trans 'Required field' %}"});
-        $('li.required label').tooltip({live: true, placement: 'right', delay: 500});
-        updateTabs();
-        $('.nav-tabs a[data-toggle]').click(function(e){
-            setTabs($(this).attr('href').replace('#', ''));
-        });
-
-        $("select.chosen").chosen();
-        $.get("{% url 'json:wh:pm-unread' %}", {}, function(response){
-            if (response.pm_unread){
-                $(".pm.count").text(" [" + response.pm_unread+ "]");
-                noty({
-                    text: "{% trans 'You have unread messages' %}: " + response.pm_unread,
-                    type: "success",
-                    dismissQueue: true
-                    //timeout: 5000,
-                });
-            }
-        });
-    });
-
-    {% comment %}
-    function update_miniquote(){
-        $.getJSON('{% url "json:wh:miniquote" %}', function(data){
-            if (data){
-                if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 15px 1px #ADD8E6",}, 1500);
-                miniquote.fadeOut(isFireFox ? 'normal':1500, function(){
-                    miniquote.text(data[0].fields['content']);
-                    miniquote.fadeIn(isFireFox ?1000 :1500);
-                    if (isFireFox)$("#horizontal_line").animate({boxShadow:"0 0 0px 0px #ADD8E6",}, 1500);
-                });
-            }//if data
-        });
-    }
-    {% endcomment %}
-    var update_bootstrap_miniquote = function(){
-        $.getJSON('{% url "json:wh:miniquote" %}', function(data){
-            mquote = $('#miniquote .content');
-            mquote.fadeOut(1500, function(){
-                mquote.text(data[0].fields.content);
-                mquote.fadeIn(1500);
-            });
-        });
-    };
-
-    /*$('a[rel=twipsy]').tooltip({ live: true, placement: 'below', delayIn: 1000 });*/
-    $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
-    $('a[href=#]').click(function(e){ e.preventDefault();});
-
-    $('#login-modal .postAjax').click(function(e){
-        form = $(this).parents('form');
-        $(form).find('ul.errors').detach().remove();
-        postFormAjax({
-            form: form,
-            successMsg: "Успешно авторизован ;)",
-            reloadPage: true,
-            reloadTimeout: 2000
-        });
-        return false;
-    });
-    $('#login-modal form').submit(function(e){ return false;});
-    $.each($('a.user.image'), function(idx, img){
-        $(img).attr({'rel': 'gal'});
-    });
-    $("a.user.image, a[rel=gal]").colorbox({rel: "gal"});
-
-    markupSettings = myMarkupSettings['textile'];
-    markupSettings['previewParserPath'] = '{% url "news:markup-preview" %}?markup=textile&template=article';
-    $('textarea.markitup').markItUp(markupSettings);
-
-    $('.noty.confirm').click(function(e){
-        var self = this;
-        var text = $(self).data('text') || "{% trans 'Do you really want to approve this action?' %}";
-        var type = $(self).data('type') || "confirm";
-        var layout = $(self).data('layout') || 'center';
-        var yes_btn_class = $(self).data('yes-btn-class') || "btn";
-        var no_btn_class = $(self).data('no-btn-class') || "btn";
-        var yesBtn = $(self).data('yes-btn') || "{% trans 'Yes' %}";
-        var noBtn = $(self).data('no-btn') || "{% trans 'no' %}";
-
-        noty({
-            text: text,
-            type: type,
-            layout: layout,
-            dismissQueue: true,
-            buttons: [
-                {
-                    addClass: yes_btn_class,
-                    text: yesBtn,
-                    onClick: function($noty){
-                        document.location.href = $(self).attr('data-href') || $(self).attr('href');
-                        $noty.close();
-                    }
-                },
-                {
-                    addClass: no_btn_class,
-                    text: noBtn,
-                    onClick: function($noty){
-                        $noty.close();
-                    }
-                }
-            ]
-        });
-        return false;
-    });
 </script>
+
+<script type="text/javascript">
+  var current_referer = "{{ current_referer }}";
+  var markupPreviewURL = '{% url "news:markup-preview" %}';
+  $(document).ready(function(){
+      //setInterval(update_miniquote, 60*1000);
+      setInterval(update_bootstrap_miniquote, 60 * 1000);
+
+      $('li.required label').attr({'data-original-title': "{% trans 'Required field' %}"});
+      $('li.required label').tooltip({live: true, placement: 'right', delay: 500});
+      updateTabs();
+      $('.nav-tabs a[data-toggle]').click(function(e){
+          setTabs($(this).attr('href').replace('#', ''));
+      });
+
+      $("select.chosen").chosen();
+      $.get("{% url 'json:wh:pm-unread' %}", {}, function(response){
+          if (response.pm_unread){
+              $(".pm.count").text(" [" + response.pm_unread+ "]");
+              noty({
+                  text: "{% trans 'You have unread messages' %}: " + response.pm_unread,
+                  type: "success",
+                  dismissQueue: true
+                  //timeout: 5000,
+              });
+          }
+      });
+  });
+  $('.noty.confirm').click(function(e){
+      var self = this;
+      var text = $(self).data('text') || "{% trans 'Do you really want to approve this action?' %}";
+      var type = $(self).data('type') || "confirm";
+      var layout = $(self).data('layout') || 'center';
+      var yes_btn_class = $(self).data('yes-btn-class') || "btn";
+      var no_btn_class = $(self).data('no-btn-class') || "btn";
+      var yesBtn = $(self).data('yes-btn') || "{% trans 'Yes' %}";
+      var noBtn = $(self).data('no-btn') || "{% trans 'no' %}";
+
+      noty({
+          text: text,
+          type: type,
+          layout: layout,
+          dismissQueue: true,
+          buttons: [
+              {
+                  addClass: yes_btn_class,
+                  text: yesBtn,
+                  onClick: function($noty){
+                      document.location.href = $(self).attr('data-href') || $(self).attr('href');
+                      $noty.close();
+                  }
+              },
+              {
+                  addClass: no_btn_class,
+                  text: noBtn,
+                  onClick: function($noty){
+                      $noty.close();
+                  }
+              }
+          ]
+      });
+      return false;
+  });
+  miniquote = $('#horizontal_line > div > span');
+
+  var update_bootstrap_miniquote = function(){
+      $.getJSON('{% url "json:wh:miniquote" %}', function(data){
+          mquote = $('#miniquote .content');
+          mquote.fadeOut(1500, function(){
+              mquote.text(data[0].fields.content);
+              mquote.fadeIn(1500);
+          });
+      });
+  };
+</script>
+<script type="text/javascript" src="{% static "js/load.js" %}"></script>
+
 <!-- noty -->
 <script type="text/javascript" src="/media/components/noty/js/noty/jquery.noty.js"></script>
 <script type="text/javascript" src="/media/components/noty/js/noty/promise.js"></script>

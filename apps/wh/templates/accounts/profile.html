@@ -1,69 +1,60 @@
-{% extends base_template %}
-{% load kamwhfilters %}{% load i18n %}{% load comments coretags %}
-{% block css %}
-	{{ block.super }}
-	<link rel='stylesheet' href='/styles/message.css' media='screen' type='text/css'>
-{% endblock %}
-{% block text_content %}
-{% if usr.errors %}
- {{ usr.errors }}
-{% else %}
+{% extends "base_template.html" %}
+{% load kamwhfilters i18n comments coretags %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li class="active">{% trans "profile" %}</li>
+  </ul>
 
-{% comment %}<div id='headline'>
-	 <img id='avatar' src='{% url apps.wh.views.get_user_avatar nickname=usr.nickname %}'>
-	 {# {% img id='army' src='{% url apps.wh.views.get_user_army_picture nickname=usr.nickname %}'> #}
-	 <img id='army' src="/media/avatars/space marines/default.jpg">
-</div>
-<div id='headline_space'>&nbsp;</div>
-{% endcomment %}
+  {% if usr.errors %}
+    {{ usr.errors }}
+  {% else %}
+    <center>
+      <div class='message'>
+        <div class='message-headline'>
+          <div class='transparency' id='black'></div>
+          <b>Профиль</b>
+        </div> <!-- msg_headline -->
+        <div class='message-content'>
+          <div class='transparency'></div>
+          <div class='reflects_down'></div>
+          <div class='reflects_left'></div>
 
-<center>
-<div class='message'>
-	<div class='message-headline'>
-		<div class='transparency' id='black'></div>
-		<b>Профиль</b>
-	</div> <!-- msg_headline -->
-	<div class='message-content'>
-	<div class='transparency'></div>
-	<div class='reflects_down'></div>
-	<div class='reflects_left'></div>
-	
-	<div class='avatar'>
-		{% include "msg/avatar.html" %}	
-	</div> <!-- msg_avatar -->
-	<div class='text'>
-		<div id='profile_data'>
-			<b>Имя</b> <span class='notice'>(никнейм)</span>: {{ usr.get_nickname|safe }}<br>
-			{% spaceless %}
-			{% if usr.first_name or usr.last_name %}
-			<b>Реальное имя</b>: {{ usr.first_name }} {{ usr.last_name }}<br>
-			{% endif %}{% endspaceless %}
-			{% ifnotequal usr.army.side.name "None" %}<b>Состоит на службе у</b> {{ usr.army.side.name }}<br>
-			<b>Приписан к</b>: {{ usr.army.name }}<br> {% endifnotequal %}
-			<b>Пол</b>: {{ usr.gender|gender_transform }}<br>
-			<br><b>Координаты на просторах галлактики:</b><br>
-			{% if usr.uin and not usr.settings.hide_uin %}<b>uin</b>: {{ usr.uin }}<br>{% endif %}
-			{% if usr.jid and not usr.settings.hide_jid %}<b>jid</b>: {{ usr.jid }}<br>{% endif %}
-			{% if usr.email and not usr.settings.hide_email %}<b>email</b>: {{ usr.email }}<br> {% endif %}
-			<br>
-			<a href='{% url "files:replays" usr.get_username %}'>Реплеи автора</a>: {% get_author_replays_count for usr as rep_count %} {{ rep_count }}<br>
-			<a href='{% url "tabletop:rosters" usr.get_username %}'>Ростеры автора</a><br>
-			Количество коментариев: {{ usr.comments_count }}<br>
-			{% if usr.about %}<b>{{ usr.get_nickname|safe }} о себе</b>: {{ usr.about }}<br>{% endif %}
-		</div> <!-- profile_data -->
-	</div> <!-- msg_text -->
-	</div> <!-- msg_content -->
-	<br clear='all'>
-	<div class='message-footer' style='text-align: left'>
-		{% comment %}[<a class='act_link' href="{% url "wh:pm-send-nick" usr.get_username %}" title='отправить лс'>pm</a>]{% endcomment %}
-                {% if user == usr %}[<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
+          <div class='avatar'>
+            {% include "msg/avatar.html" %}
+          </div> <!-- msg_avatar -->
+          <div class='text'>
+            <div id='profile_data'>
+              <b>Имя</b> <span class='notice'>(никнейм)</span>: {{ usr.get_nickname|safe }}<br>
+              {% spaceless %}
+                {% if usr.first_name or usr.last_name %}
+                  <b>Реальное имя</b>: {{ usr.first_name }} {{ usr.last_name }}<br>
+                {% endif %}{% endspaceless %}
+              {% ifnotequal usr.army.side.name "None" %}<b>Состоит на службе у</b> {{ usr.army.side.name }}<br>
+                <b>Приписан к</b>: {{ usr.army.name }}<br> {% endifnotequal %}
+              <b>Пол</b>: {{ usr.gender|gender_transform }}<br>
+              <br><b>Координаты на просторах галлактики:</b><br>
+              {% if usr.uin and not usr.settings.hide_uin %}<b>uin</b>: {{ usr.uin }}<br>{% endif %}
+              {% if usr.jid and not usr.settings.hide_jid %}<b>jid</b>: {{ usr.jid }}<br>{% endif %}
+              {% if usr.email and not usr.settings.hide_email %}<b>email</b>: {{ usr.email }}<br> {% endif %}
+              <br>
+              <!-- <a href='{% url "tabletop:rosters" usr.get_username %}'>Ростеры автора</a><br> -->
+              Количество коментариев: {{ usr.comments_count }}<br>
+              {% if usr.about %}<b>{{ usr.get_nickname|safe }} о себе</b>: {{ usr.about }}<br>{% endif %}
+            </div> <!-- profile_data -->
+          </div> <!-- msg_text -->
+        </div> <!-- msg_content -->
+        <br clear='all'>
+        <div class='message-footer' style='text-align: left'>
+          {% comment %}[<a class='act_link' href="{% url "wh:pm-send-nick" usr.get_username %}" title='отправить лс'>pm</a>]{% endcomment %}
+          {% if user == usr %}[<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
 
-                {% if user.is_staff %}[{{ usr.username }}]{% endif %}
+          {% if user.is_staff %}[{{ usr.username }}]{% endif %}
 
-	</div><!-- msg_footer -->
-</div> <!-- message -->
-</center>
+        </div><!-- msg_footer -->
+      </div> <!-- message -->
+    </center>
 
-{% endif %}
+  {% endif %}
 
 {% endblock %}

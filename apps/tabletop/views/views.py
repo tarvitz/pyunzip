@@ -9,7 +9,7 @@ from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
     AddRosterModelForm
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import (
     get_settings, get_comments, get_content_type,
     get_object_or_none, paginate, can_act, render_to,
@@ -23,7 +23,11 @@ from apps.core.forms import CommentForm, SphinxSearchForm
 #from django.views.generic.simple import direct_to_template
 from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.http import (
     HttpResponse, HttpResponseRedirect, HttpResponseServerError,
     Http404
@@ -38,6 +42,7 @@ from apps.core import benchmark
 from apps.wh.models import Side
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.comments.models import Comment
+from django.views import generic
 # -- helpers
 from apps.tabletop.helpers import process_roster_query
 from django.core import serializers
@@ -762,3 +767,38 @@ def show_codexes(request):
     codexes = paginate(codexes, page, pages=_pages_)
     return direct_to_template(request, template,
         {'codexes': codexes})
+
+
+# cbv
+class RostersListView(generic.ListView):
+    """ Everyone rosters list with pagination"""
+    model = Roster
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'tabletop/roster_list.html'
+
+
+class UserRosterListView(RostersListView):
+    """ Users rosters list with pagination """
+    def get_queryset(self):
+        return super(UserRosterListView, self).get_queryset().filter(
+            owner=self.request.user
+        )
+
+
+class RosterDetailView(generic.DetailView):
+    """ Single Roster show"""
+    model = Roster
+    template_name = 'tabletop/roster.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(RosterDetailView, self).get_context_data(**kwargs)
+        comments = get_comments(self.model, object_pk=self.kwargs.get('pk', 0))
+        comments = paginate(
+            comments, self.request.GET.get('page', 1),
+            pages=settings.OBJECTS_ON_PAGE
+        )
+        context.update({
+            'comments': comments
+        })
+        return context

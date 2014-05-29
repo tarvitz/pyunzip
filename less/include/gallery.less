@@ -1,0 +1,26 @@
+@import "../bootstrap/variables";
+@import "../bootstrap/mixins";
+
+.gallery-image{
+  border: 1px solid @panel-default-border;
+  border-radius: @border-radius-large;
+  padding: 2px 5px 0px;
+  vertical-align: top;
+  > .image{
+    padding: 10px 15px;
+    img{
+      display: block;
+      margin-right: auto;
+      margin-left: auto;
+    }
+  }
+  width: 300px;
+  height: 330px;
+  margin: 3px 5px;
+  display: inline-block;
+  .actions{
+    .delete{
+      color: @alert-danger-text;
+    }
+  }
+}

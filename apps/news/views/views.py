@@ -1,14 +1,16 @@
 # Create your views here.
 # coding: utf-8
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from apps.news.models import News, Meating, ArchivedNews
+from apps.news.models import News, Meating, ArchivedNews, Event
 from apps.news.forms import (
-    ArticleModelForm, AddMeatingForm, ArticleStatusForm
+    ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm,
+    EventParticipateForm
 )
 from apps.core.forms import CommentForm, SphinxSearchForm
 from apps.core import get_skin_template
 from apps.core.models import Announcement
 from apps.core.shortcuts import direct_to_template
+from apps.core.helpers import get_content_type, get_int_or_zero
 from apps.core.forms import ApproveActionForm
 
 from django.core.paginator import InvalidPage, EmptyPage
@@ -20,12 +22,12 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 from django.db.models import Q
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from datetime import datetime,timedelta
 
 from apps.tracker.decorators import user_visit
 from apps.core.helpers import (
-    get_settings, paginate,can_act, render_to,
+    get_settings, paginate, can_act, render_to,
     get_int_or_zero
 )
 from apps.core.decorators import (
@@ -39,6 +41,7 @@ from django.views import generic
 from apps.core.views import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
+
 
 
 @benchmarking
@@ -388,3 +391,71 @@ def article_status_set(request, pk):
                 'redirect-args': (form.instance.pk, )
             }
     return {'form': form}
+
+
+class EventPermissionMixin(object):
+    @method_decorator(has_permission('news.change_event'))
+    def dispatch(self, request, *args, **kwargs):
+        return super(EventPermissionMixin, self).dispatch(request, *args,
+                                                          **kwargs)
+
+
+# CBV
+class EventCreateView(EventPermissionMixin, generic.CreateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_form.html'
+
+
+class EventListView(EventPermissionMixin, generic.ListView):
+    model = Event
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'events/events.html'
+
+
+class EventView(generic.DetailView):
+    model = Event
+    template_name = 'events/event.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EventView, self).get_context_data(**kwargs)
+        event_ct = get_content_type(Event)
+        comments = Comment.objects.filter(content_type=event_ct,
+                                          object_pk=self.get_object().pk)
+        comments = paginate(
+            comments, get_int_or_zero(self.request.GET.get('page', 1) or 1),
+            pages=settings.OBJECTS_ON_PAGE
+        )
+        context.update({
+            'comments': comments
+        })
+        return context
+
+
+class EventUpdateView(EventPermissionMixin, generic.UpdateView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_form.html'
+
+
+class EventDeleteView(EventPermissionMixin, generic.DeleteView):
+    model = Event
+    form_class = EventForm
+    template_name = 'events/event_confirm_delete.html'
+    success_url = reverse_lazy('news:events')
+
+
+class EventParticipateView(generic.UpdateView):
+    model = Event
+    form_class = EventParticipateForm
+    template_name = 'events/event_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(EventParticipateView, self).get_context_data(**kwargs)
+        return context
+
+    def form_valid(self, form):
+        form.instance.participants.add(self.request.user)
+        form.instance.save()
+        return redirect(self.get_success_url())

@@ -1,11 +1,15 @@
 from datetime import datetime
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from django.contrib.contenttypes import generic
 from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
 from utils.models import copy_fields
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -84,7 +88,7 @@ class AbstractNews(models.Model):
     attachment = models.ForeignKey(Attachment, blank=True, null=True)
     reason = models.CharField(_('reason'), max_length=1024, blank=True, null=True)
     owner = models.ForeignKey(
-        'auth.User', verbose_name='owner',
+        settings.AUTH_USER_MODEL, verbose_name='owner',
         related_name='%(class)s', default=1
     )
     status = models.CharField(
@@ -311,6 +315,103 @@ class Meating(models.Model):
         verbose_name = _("Meating")
         verbose_name_plural = _("Meatings")
         ordering = ['created_on', '-id', ]
+
+
+EVENT_TYPE_CHOICES = (
+    ('game', _("Game")),
+    ('tournament', _("Tournament")),
+    ('order', pgettext_lazy("cart order", "Order"))
+)
+
+
+class EventPlace(models.Model):
+    title = models.CharField(_("title"), max_length=512,
+                             help_text=_("event place title"))
+    address = models.CharField(_("address"), max_length=1024,
+                               help_text=_("event place address"),
+                               blank=True, null=True)
+    contacts = models.CharField(_("contacts"), max_length=256,
+                                help_text=_("contacts/help who to find it"),
+                                blank=True, null=True)
+
+    def __unicode__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = _("Event Place")
+        verbose_name_plural = _("Event Places")
+
+
+class Event(models.Model):
+    """ different events model container for all-people notification usage
+    """
+    title = models.CharField(_("title"), help_text=_("event title"),
+                             max_length=256)
+    content = models.CharField(
+        _("content"),
+        help_text=_(
+            "content event text, description, further manual and so on"),
+        max_length=settings.MAX_DOCUMENT_SIZE
+    )
+    content_html = models.TextField(
+        _("content html"),
+        help_text=_("rendered html content"), blank=True, null=True
+    )
+    date_start = models.DateTimeField(
+        _("date start"), help_text=_("when event date starts")
+    )
+    date_end = models.DateTimeField(
+        _("date end"), help_text=_("when event date ends"),
+        blank=True, null=True
+    )
+    type = models.CharField(
+        _("type"), max_length=16,
+        choices=EVENT_TYPE_CHOICES
+    )
+    place = models.ForeignKey(
+        'news.EventPlace', related_name='event_place_set',
+        blank=True, null=True
+    )
+    participants = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='event_users_sets',
+        help_text=_("participants would take a part in the event"),
+        blank=True, null=True
+    )
+    is_finished = models.BooleanField(
+        _('is finished'), default=False
+    )
+    is_all_day = models.BooleanField(
+        _('is all day'), default=False,
+        help_text=_("marks if event could place whole day"),
+    )
+
+    def __unicode__(self):
+        return u'%s [%s]' % (self.title, self.type)
+
+    def get_absolute_url(self):
+        return reverse('news:event', args=(self.pk, ))
+
+    def get_edit_url(self):
+        return reverse('news:event-update', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('news:event-delete', args=(self.pk, ))
+
+    def get_join_url(self):
+        return reverse('news:event-join', args=(self.pk, ))
+
+    def render_content(self, field='content'):
+        """
+        renders content into html for better performance and security issues
+        """
+        out = post_markup_filter(getattr(self, field))
+        return render_filter(out, settings.DEFAULT_SYNTAX)
+
+    class Meta:
+        ordering = ['-is_finished', 'date_start', ]
+        verbose_name = _("Event")
+        verbose_name_plural = _("Events")
+
 
 from signals import setup_signals
 setup_signals()

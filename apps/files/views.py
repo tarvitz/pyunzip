@@ -5,14 +5,19 @@ from django.template import RequestContext
 from django.contrib import auth
 from django.db.models import get_model,Q, Sum
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
-from django.core.urlresolvers       import reverse
+from django.views import generic
+from django.core.urlresolvers import reverse
 from django.core import serializers
-#from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect, Http404
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
@@ -1000,3 +1005,24 @@ def file_delete(request, pk, nickname=''):
     return {
         'redirect': 'files:files'
     }
+
+
+class GalleryListView(generic.ListView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_list.html'
+    paginate_by = settings.OBJECTS_ON_PAGE
+    paginator_class = Paginator
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk', 0)
+        if pk:
+            return super(GalleryListView, self).get_queryset().filter(
+                gallery__pk=pk)
+        return super(GalleryListView, self).get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super(GalleryListView, self).get_context_data(**kwargs)
+        pk = self.kwargs.get('pk', 0)
+        if pk:
+            context.update({'gallery': get_object_or_404(Gallery, pk=pk)})
+        return context

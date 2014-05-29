@@ -1,5 +1,9 @@
 # coding: utf-8
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.http import HttpResponse, Http404
 from django.core import serializers
 from django.contrib.auth.decorators import login_required

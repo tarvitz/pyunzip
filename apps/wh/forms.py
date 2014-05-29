@@ -1,11 +1,15 @@
-# ^^, coding: utf-8 ^^,
+# -*- coding: utf-8 -*-
 from django import forms
 from django.conf import settings
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from cStringIO import StringIO
 from PIL import Image
-from apps.wh.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.wh.models import Side, RegisterSid, Skin, Army, PM
 from apps.core.models import UserSID
 from apps.core.helpers import get_object_or_None
@@ -27,11 +31,11 @@ class WarningForm(RequestFormMixin, forms.Form):
     next = forms.CharField(required=False, widget=forms.HiddenInput())
     
     def clean_level(self):
-        from django.conf import settings
         level = int(self.cleaned_data.get('level', 1))
         if level > len(settings.SIGN_CHOICES) or level <= 0:
             raise forms.ValidationError(
-                _('Level should not be greater than %i' % len(settings.SIGN_CHOICES))
+                _('Level should not be greater than %i' % (
+                    len(settings.SIGN_CHOICES)))
             )
         return level
 
@@ -40,11 +44,11 @@ class UploadAvatarForm(forms.Form):
     avatar = forms.ImageField()
 
     def clean_avatar(self):
-        value = self.cleaned_data.get('avatar','')
-        file = ''
-        for i in value.chunks(): file += i
-        #content = value.read()
-        content = file
+        value = self.cleaned_data.get('avatar', '')
+        bulk = ''
+        for i in value.chunks():
+            bulk += i
+        content = bulk
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
@@ -53,7 +57,7 @@ class UploadAvatarForm(forms.Form):
                 )
         try:
             img = Image.open(StringIO(content))
-            x,y = img.size
+            x, y = img.size
         except:
             raise forms.ValidationError(
                 _(
@@ -80,11 +84,13 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
     )
     side = forms.ModelChoiceField(
         queryset=Side.objects, required=False,
-        widget=forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'})
+        widget=forms.Select(
+            attrs={'class': 'form-control', 'data-class': 'chosen'})
     )
     army = forms.ModelChoiceField(
         queryset=Army.objects.none(), required=True,
-        widget=forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'})
+        widget=forms.Select(
+            attrs={'class': 'form-control', 'data-class': 'chosen'})
     )
 
     def __init__(self, *args, **kwargs):
@@ -114,25 +120,30 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
         if not user:
             return nick
 
-        user_nickname = getattr(user, 'nickname') if hasattr(user, 'nickname') else None
+        user_nickname = (
+            getattr(user, 'nickname')
+            if hasattr(user, 'nickname') else None
+        )
         if not user_nickname == current_nickname and user != self.request.user:
             raise forms.ValidationError(
                 _('Another user with %s nickname exists.' % nick)
             )
         return nick
 
-
     def clean_avatar(self):
-        value = self.cleaned_data.get('avatar','')
-        if not value: return None
-        file = ''
+        value = self.cleaned_data.get('avatar', '')
+        if not value:
+            return None
+        bulk = ''
         for i in value.chunks():
-            file += i
-        content = file
+            bulk += i
+        content = bulk
+
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise forms.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(
+                    _('jpeg, png, gif, jpg image only'))
         try:
             img = Image.open(StringIO(content))
             x, y = img.size
@@ -141,34 +152,12 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
                 'Upload a valid avatar. The file you uploaded was either'
                 'not an image or a corrupted image.'
             ))
-        if y > 100 or x >100:
+        if y > 100 or x > 100:
             raise forms.ValidationError(_(
                 'Upload a valid avatar. Avatar\'s size should not be '
                 'greater than 100x100 pixels'
             ))
         return value
-    """
-    def clean_photo(self):
-        value = self.cleaned_data.get('photo','')
-        if not value: return None
-        file = ''
-        for i in value.chunks(): file += i
-        #content = value.read()
-        content = file
-        if 'content-type' in value:
-            main, sub = value['content-type'].split('/')
-            if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise forms.ValidationError(_('jpeg, png, gif, jpg image only'))
-        try:
-            img = Image.open(StringIO(content))
-            x,y = img.size
-        except:
-            raise forms.ValidationError(_(
-                'Upload a valid avatar. The file you uploaded was either not '
-                'an image or a corrupted image.'
-            ))
-        return value
-    """
 
     def clean_jid(self):
         jid = self.cleaned_data['jid']
@@ -177,89 +166,103 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
             u = self.request.user
             user = get_object_or_none(User, jid__iexact=jid)
             if user and user != u:
-                raise forms.ValidationError(_('User with such JID already exists'))
+                raise forms.ValidationError(
+                    _('User with such JID already exists'))
         return "".join(jid).lower()
 
     class Meta:
         model = User
         fields = [
             'first_name', 'last_name', 'email', 'nickname', 'avatar',
-            #'photo',
             'gender', 'jid', 'uin', 'about', 'skin', 'side', 'army', 'tz'
         ]
         exclude = [
-            'password', 'username', 'groups', 'ranks', 'user_permissions', 'is_staff',
-            'is_superuser', 'is_active', 'last_login', 'date_joined', 'plain_avatar',
+            'password', 'username', 'groups', 'ranks', 'user_permissions',
+            'is_staff', 'is_superuser', 'is_active', 'last_login',
+            'date_joined', 'plain_avatar',
         ]
 
         widgets = {
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.TextInput(attrs={'class': 'form-control'}),
-            'nickname': forms.TextInput(attrs={'class': 'form-control'}),
-            'gender': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
-            'jid': forms.TextInput(attrs={'class': 'form-control'}),
-            'uin': forms.TextInput(attrs={'class': 'form-control'}),
-            'about': forms.TextInput(attrs={'class': 'form-control'}),
-            'skin': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
-            'first_name': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
-            'tz': forms.Select(attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'last_name': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'email': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'nickname': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'gender': forms.Select(
+                attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'jid': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'uin': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'about': forms.TextInput(
+                attrs={'class': 'form-control'}),
+            'skin': forms.Select(
+                attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'first_name': forms.Select(
+                attrs={'class': 'form-control', 'data-class': 'chosen'}),
+            'tz': forms.Select(
+                attrs={'class': 'form-control', 'data-class': 'chosen'}),
 
         }
+
 
 #obsolete
 class UpdateProfileForm(RequestForm):
     #TODO: make something with None fraction, delete it or not?
-    #sides = Side.objects.exclude(fraction__title__iexact='None').order_by('id')
     sides = Side.objects.all().order_by('id').exclude(name__iexact='None')
     skins = Skin.objects.all()
     SIDES_CHOICE, SKIN_CHOICES = list(), list()
-    SKIN_CHOICES.append([0,_('-----')])
+    SKIN_CHOICES.append([0, _('-----')])
     n = 0
     for side in sides:
-            SIDES_CHOICE.append([side.id,side.name])
-            n += 1
-            #print side.name
-    for skin in skins: SKIN_CHOICES.append([skin.id, skin.name])
+        SIDES_CHOICE.append([side.id, side.name])
+        n += 1
+
+    for skin in skins:
+        SKIN_CHOICES.append([skin.id, skin.name])
     GENDER_FIELD = (
-        ('m',_('Male')),
-        ('f',_('Female')),
-        ('n',_('Not identified')),
+        ('m', _('Male')),
+        ('f', _('Female')),
+        ('n', _('Not identified')),
 
     )
     avatar = forms.ImageField(required=False)
     photo = forms.ImageField(required=False)
     nickname = forms.CharField(required=False)
-    side =    forms.ChoiceField(choices=SIDES_CHOICE,required=False)
-    #army = forms.ChoiceField(choices=((0,_('Choose Side')),), required=False)
+    side = forms.ChoiceField(choices=SIDES_CHOICE, required=False)
     gender = forms.ChoiceField(choices=GENDER_FIELD, required=False)
-    jid    = forms.EmailField(required=False)
-    uin    = forms.IntegerField(required=False)
-    about    = forms.CharField(widget=forms.Textarea(), required=False)
-    email   = forms.EmailField(required=False)
-    skin    = forms.ChoiceField(choices=SKIN_CHOICES)
+    jid = forms.EmailField(required=False)
+    uin = forms.IntegerField(required=False)
+    about = forms.CharField(widget=forms.Textarea(), required=False)
+    email = forms.EmailField(required=False)
+    skin = forms.ChoiceField(choices=SKIN_CHOICES)
     first_name = forms.CharField(required=False)
     last_name = forms.CharField(required=False)
 
     def clean_avatar(self):
-        value = self.cleaned_data.get('avatar','')
-        if not value: return None
-        file = ''
-        for i in value.chunks(): file += i
-        #content = value.read()
-        content = file
+        value = self.cleaned_data.get('avatar', '')
+        if not value:
+            return None
+        bulk = ''
+        for i in value.chunks():
+            bulk += i
+        content = bulk
+
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(
+                    _('jpeg, png, gif, jpg image only'))
         try:
             img = Image.open(StringIO(content))
-            x,y = img.size
+            x, y = img.size
         except:
             raise forms.ValidationError(_(
                 'Upload a valid avatar. The file you uploaded '
                 'was either not an image or a corrupted image.'
             ))
-        if y>100 or x >100:
+        if y > 100 or x > 100:
             raise forms.ValidationError(_(
                 'Upload a valid avatar. Avatar\'s size should not'
                 ' be greater than 100x100 pixels'
@@ -267,19 +270,24 @@ class UpdateProfileForm(RequestForm):
         return value
 
     def clean_photo(self):
-        value = self.cleaned_data.get('photo','')
-        if not value: return None
-        file = ''
-        for i in value.chunks(): file += i
-        #content = value.read()
-        content = file
+        value = self.cleaned_data.get('photo', '')
+        if not value:
+            return None
+
+        bulk = ''
+        for i in value.chunks():
+            bulk += i
+        content = bulk
+
         if 'content-type' in value:
             main, sub = value['content-type'].split('/')
             if not (main == 'image' and sub in ['jpeg', 'gif', 'png', 'jpg']):
-                raise form.ValidationError(_('jpeg, png, gif, jpg image only'))
+                raise forms.ValidationError(
+                    _('jpeg, png, gif, jpg image only')
+                )
         try:
             img = Image.open(StringIO(content))
-            x,y = img.size
+            x, y = img.size
         except:
             raise forms.ValidationError(_(
                 'Upload a valid avatar. The file you uploaded was '
@@ -291,44 +299,44 @@ class UpdateProfileForm(RequestForm):
         jid = self.cleaned_data['jid']
         from apps.core.helpers import get_object_or_none
         u = self.request.user
-	user = get_object_or_none(User,jid__iexact=jid)
+        user = get_object_or_none(User, jid__iexact=jid)
         if user and user != u:
             raise forms.ValidationError(_('User with such JID already exists'))
         return "".join(jid).lower()
     
     def clean_nickname(self):
         current_nickname = self.request.user.nickname
-        value = self.cleaned_data.get('nickname','')
-        r = re.compile('[\w\s-]+',re.U)
+        value = self.cleaned_data.get('nickname', '')
+        user = get_object_or_None(User, nickname__exact=value)
+        if user:
+            if not user.nickname == current_nickname:
+                raise forms.ValidationError(
+                    _('Another user with %s nickname exists.' % value)
+                )
+        r = re.compile('[\w\s-]+', re.U)
         if r.match(value):
             return r.match(value).group()
         else:
-            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
-        try:
-            user = User.objects.get(nickname__exact=value)
-            if not user.nickname == current_nickname:
-                raise forms.ValidationError(_('Another user with %s nickname exists.' % (value)))
-            else:
-                return value
-        except User.DoesNotExist:
-            return value
+            raise forms.ValidationError(
+                _('You can not use additional symbols in you nickname')
+            )
 
     def clean_skin(self):
         value = self.cleaned_data.get('skin', '')
-        try:
-            skin = Skin.objects.get(id=int(value))
-            return value
-        except Skin.DoesNotExist:
+        skin = get_object_or_None(Skin, id=int(value))
+        if not skin:
             raise forms.ValidationError(_(
                 'There\'s no any mention for this skin, try to update page'
                 'and upload profile one more time'
             ))
-    
+        return value
+
     #self limit is on the 512 value, but there is some issues
     def clean_about(self):
-        value = self.cleaned_data.get('about','')
-        if len(value)> 200:
-            raise forms.ValidationError(_('Your about field should not be greater than 200 chars'))
+        value = self.cleaned_data.get('about', '')
+        if len(value) > 200:
+            raise forms.ValidationError(
+                _('Your about field should not be greater than 200 chars'))
         else:
             return value
 
@@ -359,7 +367,7 @@ class PMForm(RequestModelForm):
     def clean(self):
         cleaned_data = self.cleaned_data
         sender = self.request.user
-        addressee = cleaned_data.get('addressee','')
+        addressee = cleaned_data.get('addressee', '')
         try:
             a = User.objects.get(nickname=addressee)
             if sender == a:
@@ -382,15 +390,19 @@ class PMForm(RequestModelForm):
             'title': forms.TextInput(attrs={'class': 'form-control'})
         }
 
+
 class RegisterForm(forms.Form):
     username = forms.RegexField(
         label=_("Username"),
         regex=re.compile(r'^[A-z][\w\d\._-]+\w+$'),
         max_length=32,
         min_length=3,
-        error_message=_('Try to pass only latin symbols, numbers and underscores with your nickname'),
-        help_text=_('Only latin symbols and numbers and underscore are allowed'),
-
+        error_message=_(
+            'Try to pass only latin symbols, '
+            'numbers and underscores with your nickname'),
+        help_text=_(
+            'Only latin symbols and numbers and underscore are allowed'
+        )
     )
     nickname = forms.CharField(required=True)
     password1 = forms.CharField(widget=forms.PasswordInput())
@@ -403,137 +415,135 @@ class RegisterForm(forms.Form):
  
     def clean_username(self):
         value = self.cleaned_data.get('username', '')
-        try:
-            u = User.objects.get(username=value)
-            raise forms.ValidationError(_('There\'s already user with such login here'))
-        except User.DoesNotExist:
-            return value
+        user = get_object_or_None(User, username=value)
+        if user:
+            raise forms.ValidationError(
+                _('There\'s already user with such login here'))
+        return value
 
     def clean_email(self):
         value = self.cleaned_data.get('email', '')
-        try:
-            u = User.objects.get(email=value)
-            raise forms.ValidationError(_('User with such email already exists'))
-        except User.DoesNotExist:
-            return value
+
+        user = get_object_or_None(User, email=value)
+        if user:
+            raise forms.ValidationError(
+                _('User with such email already exists'))
+        return value
 
     def clean_nickname(self):
         value = self.cleaned_data.get('nickname', '')
-        if not value: return value
+        if not value:
+            return value
+        r = re.compile('[\w\s-]+', re.U)
 
-        r = re.compile('[\w\s-]+',re.U)
-        
+        is_busy = get_object_or_None(User, nickname=value)
+        if is_busy:
+            raise forms.ValidationError(_('This nick is busy, sorry'))
+
         if r.match(value):
             return r.match(value).group()
         else:
-            raise forms.ValidationError(_('You can not use additional symbols in you nickname'))
-        
-        try:
-            if_busy = User.objects.get(nickname=value)
-            raise forms.ValidationError(_('This nick is busy, sorry'))
-        except User.DoesNotExist:
-            return value
+            raise forms.ValidationError(
+                _('You can not use additional symbols in you nickname')
+            )
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        password1 = cleaned_data.get('password1','')
-        password2 = cleaned_data.get('password2','')
-        sid = cleaned_data.get('sid','')
-        answ = cleaned_data.get('answ','')
+        password1 = cleaned_data.get('password1', '')
+        password2 = cleaned_data.get('password2', '')
+        sid = cleaned_data.get('sid', '')
+        answ = cleaned_data.get('answ', '')
         if password1 != password2:
             msg = _('Passwords ain\'t matching')
             self._errors['password1'] = ErrorList([msg])
             self._errors['password2'] = ErrorList([msg])
-            del cleaned_data['password1']
-            del cleaned_data['password2']
+            cleaned_data.pop('password1')
+            cleaned_data.pop('password2')
         try:
             rsid = RegisterSid.objects.get(sid=sid)
             if rsid.value != answ:
-                msg=_('You\'ve type wrong answer')
+                msg = _('You\'ve type wrong answer')
                 self._errors['answ'] = ErrorList([msg])
-                if answ: del cleaned_data['answ']
+                if answ:
+                    cleaned_data.pop('answ')
         except RegisterSid.DoesNotExist:
-            #it should not happen, besides do nothing
+            #it should not happen, in case if it would happen: do nothing
             msg = _('Something went wrong :(, please try again')
             self._errors['answ'] = ErrorList([msg])
-            if answ: del cleaned_data['answ']
+            if answ:
+                cleaned_data.pop('answ')
         return cleaned_data
+
 
 class RecoverForm(forms.Form):
     email = forms.EmailField()
     
+
 class AddWishForm(forms.Form):
     post = forms.CharField(widget=forms.Textarea())
+
 
 class PasswordChangeForm(RequestForm):
     old_password = forms.CharField(widget=forms.PasswordInput())
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 
-    #def __init__(self, *args, **kwargs):
-    #    if 'request' in kwargs:
-    #        self.request = kwargs['request']
-    #        del kwargs['request']
-    #    super(PasswordChangeForm, self).__init__(*args, **kwargs)
-    
     def clean(self):
         cleaned_data = self.cleaned_data
-        old_password = cleaned_data.get('old_password','')
-        password1 = cleaned_data.get('password1','')
-        password2 = cleaned_data.get('password2','')
+        old_password = cleaned_data.get('old_password', '')
+        password1 = cleaned_data.get('password1', '')
+        password2 = cleaned_data.get('password2', '')
         current_user = self.request.user
         if current_user.check_password(old_password):
             if password1 != password2:
-                msg =_('Password1 and Password2 does not match')
+                msg = _('Password1 and Password2 does not match')
                 self._errors['password1'] = ErrorList([msg])
-                if password1: del cleaned_data['password1']
-                if password2: del cleaned_data['password2']
-                if old_password: del cleaned_data['old_password']
+                if password1:
+                    cleaned_data.pop('password1')
+                if password2:
+                    cleaned_data.pop('password2')
+                if old_password:
+                    cleaned_data.pop('old_password')
         else:
-            msg = _('Your current password does not match with one you\'ve input')
+            msg = _(
+                'Your current password does not match with one you\'ve input'
+            )
             self._errors['old_password'] = ErrorList([msg])
-            if old_password: del cleaned_data['old_password']
-            if password1: del cleaned_data['password1']
-            if password2: del cleaned_data['password2']
+            if old_password:
+                cleaned_data.pop('old_password')
+            if password1:
+                cleaned_data.pop('password1')
+            if password2:
+                cleaned_data.pop('password2')
         return cleaned_data
 
-#class PwdRecoverForm(forms.Form):
 
 class PasswordRecoverForm(RequestForm):
-        email = forms.EmailField()
-        login = forms.CharField()
+    email = forms.EmailField()
+    login = forms.CharField()
 
-        #def __init__(self, *args, **kwargs):
-        #        if 'request' in kwargs:
-        #                self.request = kwargs['request']
-        #                del kwargs['request']
-        #        super(PasswordRecoverForm, self).__init__(*args, **kwargs)
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        email = self.cleaned_data.get('email', '')
+        login = self.cleaned_data.get('login', '')
 
-        def clean(self):
-                cleaned_data = self.cleaned_data
-                email = self.cleaned_data.get('email','')
-                login = self.cleaned_data.get('login','')
-                try:
-                        u = User.objects.get(username__iexact=login,email__iexact=email)
-                except User.DoesNotExist:
-                        if login: del cleaned_data['login']
-                        if email: del cleaned_data['email']
-                        msg = _('No such user with such email')
-                        self._errors['login'] = ErrorList([msg])
-                return cleaned_data
+        user = get_object_or_None(User, username__iexact=login,
+                                  email__iexact=email)
+        if not user:
+            msg = _('No such user with such email')
+            self._errors['login'] = ErrorList([msg])
+        return cleaned_data
 
 
 class SuperUserLoginForm(forms.ModelForm):
     username = forms.CharField(label=_('username'))
+
     class Meta:
         model = User
         fields = []
 
 
 class LoginForm(forms.ModelForm):
-    #username = forms.CharField(
-    #    label=_('username'), required=True
-    #)
     password = forms.CharField(
         label=_('password'), widget=forms.PasswordInput(
             attrs={'class': 'form-control'}
@@ -596,66 +606,24 @@ class PasswordRestoreForm(RequestModelForm, BruteForceCheck):
         if all((password, password2) or (None, )):
             if password != password2:
                 msg = _("Passwords don't match")
+                self._errors['password'] = ErrorList([msg])
         return cd
 
     def save(self, commit=True):
+        instance = self.instance
         user = self.instance.user
         user.set_password(self.cleaned_data['password'])
         user.save()
         if commit:
-            self.instance.expired = True
-            self.instance.save()
-            instance = self.instance
+            instance.expired = True
+            instance.save()
         else:
             instance.expired = True
-            instance = super(Password, self).save(commit=commit)
+            instance = super(PasswordRestoreForm, self).save(
+                commit=commit)
 
         return instance
 
     class Meta:
         model = UserSID
         exclude = ('expired_date', 'expired', 'sid', 'user')
-
-"""
-class PasswordChangeForm(forms.ModelForm):
-    old_password = forms.CharField(
-        label=_("Old password"), widget=forms.PasswordInput()
-    )
-    new_password = forms.CharField(
-        label=_("New password"), widget=forms.PasswordInput()
-    )
-    new_password_repeat = forms.CharField(
-        label=_("New password repeat"), widget=forms.PasswordInput()
-    )
-
-    def clean(self):
-        cd = self.cleaned_data
-        old_password = cd['old_password']
-        new_pwd = cd['new_password']
-        new_pwd_repeat = cd['new_password_repeat']
-        user = auth.authenticate(
-            username=self.instance.username, password=old_password
-        )
-        if not user:
-            msg = _("Old password does not match")
-            self._errors['password'] = ErrorMsg([msg])
-            if 'password' in cd:
-                del cd['password']
-        if all((new_pwd, new_pwd_repeat) or (None, )):
-            if new_pwd != new_pwd_repeat:
-                msg = _("Passwords don't match")
-                self._errors['new_password'] = ErrorList([msg])
-                if 'new_password' in cd:
-                    del cd['new_password']
-        return cd
-
-    def save(self, commit=True):
-        self.instance.set_password(self.cleaned_data['new_password'])
-        self.instance.save()
-        super(PasswordChangeForm, self).save(commit)
-
-
-    class Meta:
-        model = User
-        fields = []
-"""

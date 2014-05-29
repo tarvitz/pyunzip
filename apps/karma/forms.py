@@ -1,7 +1,11 @@
 from apps.karma.models import Karma
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.core.helpers import get_object_or_None
 
 ALTER_CHOICES = (
@@ -9,12 +13,10 @@ ALTER_CHOICES = (
     ('down', _('down'))
 )
 
+
 class AlterKarmaForm(forms.Form):
-    #choice = forms.ChoiceField(widget=forms.RadioSelect(),choices=((-1,'+1'),(1,'-1')))
     comment = forms.CharField(widget=forms.Textarea(), max_length=512)
-    hidden_nickname = forms.CharField(widget=forms.HiddenInput())
-    referer = forms.CharField(widget=forms.HiddenInput())
-    url =   forms.CharField(widget=forms.HiddenInput(),required=False)
+    url = forms.CharField(widget=forms.HiddenInput(),required=False)
 
 
 class KarmaModelForm(forms.ModelForm):

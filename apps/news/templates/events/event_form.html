@@ -1,0 +1,17 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
+    {% if object %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+    {% endif %}
+    <li class="active">{% trans "create new event" %}</li>
+  </ul>
+  <form action="{{ request.path }}" method="POST" class="form-horizontal">
+    {% csrf_token %}{% trans "Save" as save_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
+  </form>
+{% endblock %}

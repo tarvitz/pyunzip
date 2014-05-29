@@ -5,7 +5,11 @@ from apps.core.helpers import (
 ) 
 from django.core.urlresolvers import reverse
 from apps.news.models import News
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
 

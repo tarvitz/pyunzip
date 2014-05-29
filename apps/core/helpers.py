@@ -4,7 +4,9 @@ import os
 from functools import wraps
 from datetime import datetime, date, time
 from functools import partial
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.core.exceptions import MultipleObjectsReturned
+from django.shortcuts import get_object_or_404 as _get_object_or_404
 from apps.core import get_skin_template
 from django.shortcuts import (
     render_to_response, redirect
@@ -12,7 +14,12 @@ from django.shortcuts import (
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib.comments.models import Comment
-from django.contrib.auth.models import User, AnonymousUser
+try:
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import AnonymousUser
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User, AnonymousUser
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -161,6 +168,26 @@ def get_object_or_none(Object, **kwargs):
         return None
     return None
 get_object_or_None = get_object_or_none
+
+
+def get_object_or_None(Object, *args, **kwargs):
+    try:
+        return _get_object_or_404(Object, *args, **kwargs)
+    except (Http404, MultipleObjectsReturned):
+        return None
+
+
+def get_object_or_404(Object, *args, **kwargs):
+    """Retruns object or raise Http404 if it does not exist"""
+    try:
+        if hasattr(Object, 'objects'):
+            return Object.objects.get(*args, **kwargs)
+        elif hasattr(Object, 'get'):
+            return Object.get(*args, **kwargs)
+        else:
+            raise Http404("Giving object has no manager instance")
+    except (Object.DoesNotExist, Object.MultipleObjectReturned):
+        raise Http404("Object does not exist or multiple object returned")
 
 
 def get_settings(user,settings,default=False):

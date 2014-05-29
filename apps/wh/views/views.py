@@ -1,8 +1,13 @@
 # Create your views here.
 # ^^, coding: utf-8 ^^,
 from django.conf import settings
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.wh.models import (
-    Side, Army, PM, RegisterSid, Skin, Rank, User
+    Side, Army, PM, RegisterSid, Skin, Rank
 )
 from apps.core.models import UserSID
 from django.db.models import Q

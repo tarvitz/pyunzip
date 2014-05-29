@@ -6,8 +6,6 @@ from django.db.models.signals import (
     post_save, pre_save, post_delete, pre_delete
 )
 from django.db.models import F
-
-from django.contrib.auth.models import User
 from apps.tabletop.models import (
     WargearContainer, UnitContainer, Wargear, BattleReport
 )

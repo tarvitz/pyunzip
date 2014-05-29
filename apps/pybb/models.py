@@ -55,7 +55,7 @@ class Forum(models.Model):
     name = models.CharField(_('Name'), max_length=80)
     position = models.IntegerField(_('Position'), blank=True, default=0)
     description = models.TextField(_('Description'), blank=True, default='')
-    moderators = models.ManyToManyField(User, blank=True, null=True,
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True,
                                         verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
@@ -64,7 +64,7 @@ class Forum(models.Model):
     is_hidden = models.BooleanField(_('is hidden'), default=False)
     is_private = models.BooleanField(_('is private'), default=False)
     participants = models.ManyToManyField(
-        'auth.User', related_name='forum_user_sets',
+        settings.AUTH_USER_MODEL, related_name='forum_user_sets',
         help_text=_("private participants list"),
         blank=True, null=True)
 
@@ -101,12 +101,12 @@ class Topic(models.Model):
     name = models.CharField(_('Subject'), max_length=255)
     created = models.DateTimeField(_('Created'), null=True)
     updated = models.DateTimeField(_('Updated'), null=True)
-    user = models.ForeignKey(User, verbose_name=_('User'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'))
     views = models.IntegerField(_('Views count'), blank=True, default=0)
     sticky = models.BooleanField(_('Sticky'), blank=True, default=False)
     closed = models.BooleanField(_('Closed'), blank=True, default=False)
     subscribers = models.ManyToManyField(
-        User, related_name='subscriptions', verbose_name=_('Subscribers'),
+        settings.AUTH_USER_MODEL, related_name='subscriptions', verbose_name=_('Subscribers'),
         blank=True
     )
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
@@ -178,7 +178,7 @@ class AnonymousPost(models.Model):
 class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts',
                               verbose_name=_('Topic'))
-    user = models.ForeignKey(User, related_name='posts',
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='posts',
                              verbose_name=_('User'))
     created = models.DateTimeField(_('Created'), blank=True,
                                    default=datetime.now)
@@ -407,7 +407,8 @@ class PollAnswer(models.Model):
     poll = models.ForeignKey(Poll, related_name='answer_poll_set')
     poll_item = models.ForeignKey(PollItem,
                                   related_name='answer_poll_item_set')
-    user = models.ForeignKey('auth.User', related_name='answer_user_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='answer_user_set')
 
     def __unicode__(self):
         return u'%s: %s' % (self.user.get_username(), self.poll_item.title)

@@ -1,0 +1,122 @@
+{% extends "base_template.html" %}
+{% load i18n static %}
+{% block css %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static "components/fullcalendar/fullcalendar.css" %}"
+        media="screen" type="text/css">
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script type="text/javascript" src="{% static "components/fullcalendar/fullcalendar.min.js" %}"></script>
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "events" %}</li>
+    {% if perms.news.event_add %}
+      <li class="pull-right">
+        <a href="{% url "news:event-create" %}">{% trans "Create event" %}</a></li>
+    {% endif %}
+  </ul>
+
+  <h3>{% trans "Events" %}</h3>
+  <div id="events"></div>
+  {# i18n #}
+  {% spaceless %}
+    {% trans "January" as january %} {% trans "February" as february %} {% trans "March" as march %}
+    {% trans "April" as april %} {% trans "May" as may %} {% trans "June" as june %}
+    {% trans "July" as july %} {% trans "August" as august %} {% trans "September" as september %}
+    {% trans "October" as october %} {% trans "November" as november %}
+    {% trans "December" as december %}
+
+    {% trans "Mon" as mon_i18n %} {% trans "Tue" as tue_i18n %} {% trans "Wed" as wed_i18n %}
+    {% trans "Thu" as thu_i18n %} {% trans "Fri" as fri_i18n %} {% trans "Sat" as sat_i18n %}
+    {% trans "Sun" as sun_i18n %}
+
+    {% trans "Monday" as monday %} {% trans "Tuesday" as tuesday %} {% trans "Wednesday" as wednesday %}
+    {% trans "Thursday" as thursday %} {% trans "Friday" as friday %} {% trans "Saturday" as saturday %}
+    {% trans "Sunday" as sunday %}
+  {% endspaceless %}
+  {# end i18n #}
+  <script type="text/javascript">
+    var processDate = function(d){
+      var day = parseInt(d.getUTCDate()) + 1;
+      var month = parseInt(d.getUTCMonth()) + 1;
+      var year = parseInt(d.getUTCFullYear());
+      return year + "-" + month + "-" + day;
+    }
+
+    $(document).ready(function(){
+      $('#events').fullCalendar({
+        timeFormat: "H:mm{ - H:mm}",
+        firstDay: 1,
+        weekMode: "liquid",
+        weekNumbers: "W",
+        height: 400,
+        defaultView: "month",
+        titleFormat: {
+              month: "MMMM yyyy",
+              week: "MMMM d[yyyy] { '&#8212;' [MMMM d yyyy]",
+              day: "dddd, MMMM d, yyyy"
+        },
+        header: {
+                'left': 'prev, next today',
+                'center': 'title',
+                'right': 'month, basicWeek, basicDay'
+        },
+        buttonText: {
+                today: '{% trans "Today" %}',
+                month: '{% trans "month" %}',
+                week: '{% trans "week" %}',
+                day: '{% trans "day" %}'
+	      },
+        monthNames: [
+            "{{ january }}", "{{ february }}", "{{ march }}",
+            "{{ april }}", "{{ may }}", "{{ june }}", "{{ july }}",
+            "{{ august }}", "{{ september }}", "{{ october }}", "{{ november }}",
+            "{{ december }}"
+        ],
+        monthNamesShort: [
+                "{% trans "Jan" %}", "{% trans "Feb" %}", "{% trans "Mar" %}",
+                "{% trans "Apr" %}", "{% trans "Jun" %}", "{% trans "Jun" %}",
+                "{% trans "Jul" %}", "{% trans "Aug" %}", "{% trans "Sep" %}",
+                "{% trans "Oct" %}", "{% trans "Nov" %}", "{% trans "Dec" %}"
+        ],
+        dayNamesShort: [
+            "{{ sun_i18n }}", "{{ mon_i18n }}", "{{ tue_i18n }}", "{{ wed_i18n }}", "{{ thu_i18n }}",
+            "{{ fri_i18n }}", "{{ sat_i18n }}"
+        ],
+        dayNames: [
+          "{{ sunday }}", "{{ monday }}", "{{ tuesday }}", "{{ wednesday }}",
+          "{{ thursday }}", "{{ friday }}", "{{ saturday}}"
+        ],
+        events: function(start, end, callback){
+          $.ajax({
+            url: "{% url "news:event-list" %}",
+            dataType: "json",
+            data: {
+                // our hypothetical feed requires UNIX timestamps
+                date_start: processDate(start),
+                date_end: processDate(end)
+            },
+            success: function(json){
+              var events = [];
+              json.results.map(function(item){
+                events.push({
+                  title: item.title,
+                  url: item.url || '',
+                  start: item.date_start,
+                  end: item.date_end,
+                  allDay: item.is_all_day || false,
+                  className: item.type || ''
+                });
+              });
+              callback(events);
+            }
+          })
+        }
+      });
+    });
+  </script>
+{% endblock %}

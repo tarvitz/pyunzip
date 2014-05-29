@@ -3,18 +3,26 @@
 import os
 import re
 from django.test import TestCase
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.wh.models import (
     Side, RegisterSid, Rank, RankType, PM
 )
 from apps.core.models import UserSID
 from apps.core.tests import TestHelperMixin
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy, NoReverseMatch
 from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
 import simplejson as json
+
+
+class ImplementMe(Exception):
+    pass
 
 
 class JustTest(TestHelperMixin, TestCase):
@@ -44,16 +52,23 @@ class JustTest(TestHelperMixin, TestCase):
             logged = self.client.login(username=user, password='123456')
             self.assertEqual(logged, True)
             for url in self.urls_registered:
-                response = self.client.get(url, follow=True)
                 try:
-                    self.assertEqual(response.status_code, 200)
-                except AssertionError as err:
+                    response = self.client.get(url, follow=True)
+                    try:
+                        self.assertEqual(response.status_code, 200)
+                    except AssertionError as err:
+                        messages.append({
+                            'user': user, 'err': err, 'url': url,
+                            'type': 'Assertion'
+                        })
+                except NoReverseMatch as err:
                     messages.append({
-                        'user': user, 'err': err, 'url': url
+                        'user': user, 'err': err, 'url': url,
+                        'type': 'NoReverseMatch'
                     })
         if messages:
             for msg in messages:
-                print "Got assertion on %(url)s with %(user)s: %(err)s" % msg
+                print "Got %(type)s on %(url)s with %(user)s: %(err)s" % msg
             raise AssertionError
 
     def tearDown(self):
@@ -415,12 +430,6 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.get('Content-Type'), 'application/json')
 
-    def test_favicon(self):
-        url = reverse('wh:favicon')
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get('Content-Type'), 'image/vnd.microsoft.icon')
-
     def test_send_pm(self):
         admin = User.objects.get(username='admin')
         post = {
@@ -446,7 +455,7 @@ class JustTest(TestHelperMixin, TestCase):
         self.check_state(pm, edit, check=self.assertEqual)
 
     def test_delete_pm(self):
-        raise "Implement me"
+        self.assertEqual("", "Implement me")
 
     def test_json_pm_fetch(self):
         logged = self.client.login(username='user', password='123456')

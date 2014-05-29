@@ -1,0 +1,44 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "events" %}</li>
+    {% if perms.news.event_add %}
+      <li class="pull-right">
+        <a href="{% url "news:event-create" %}">{% trans "Create event" %}</a></li>
+    {% endif %}
+  </ul>
+
+  <h3>{% trans "Events" %}</h3>
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Type" %}</th>
+        <th>{% trans "Date start" %}</th>
+        <th>{% trans "Date end" %}</th>
+        <th>{% trans "Queued" %}</th>
+        <th>&nbsp;</th>
+      </tr>
+      {% for object in object_list %}
+        <tr>
+          <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
+          <td>{{ object.type }}</td>
+          <td>{{ object.date_start|date:"Y, M d H:i" }}</td>
+          <td>{{ object.date_end|date:"Y, M d H:i" }}</td>
+          <td><i class="icon-{{ object.is_finished|yesno:"ban-circle,ok-circle" }}"></i></td>
+          <td>
+            {% if perms.news.change_event %}
+              {% include "generic/actions.html" with object=object %}
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    {% include "generic/paginator.html" %}
+  {% else %}
+    <h4>{% trans "No events created" %}</h4>
+  {% endif %}
+{% endblock %}

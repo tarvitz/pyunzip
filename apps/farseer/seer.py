@@ -247,7 +247,11 @@ class SeerBot(sleekxmpp.ClientXMPP):
         #    self.send_authorized_message('chat', 'test message')
 
         elif '!whoami' in msg['body']:
-            from django.contrib.auth.models import User
+            try:
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+            except ImportError:
+                from django.contrib.auth.models import User
             m = {'mto':msg['from'],'mfrom':self.JID,'mtype':'chat'}
             jid = msg['from']._jid #<-- nya?
             if '/' in jid: jid = until(jid,'/')

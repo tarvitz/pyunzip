@@ -4,7 +4,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 import cPickle as pickle
-from django.contrib.auth.models import User
+#try:
+#    from django.contrib.auth import get_user_model
+#    User = get_user_model()
+#except ImportError:
+#    from django.contrib.auth.models import User
 import base64
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
@@ -31,8 +35,10 @@ class SettingsManager(models.Manager):
         return s
 
 """
+
+
 class Css(models.Model):
-    user = models.ForeignKey(User,primary_key=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, primary_key=True)
     css = models.TextField(_('CSS'),help_text=_('Cascade Style Sheets'))
     class Meta:
         verbose_name = _('CSS')
@@ -44,8 +50,8 @@ class Announcement(models.Model):
         related_name=_('content_type_set_for_%(class)s'))
     object_pk = models.TextField(_('object id'))
     content_object = generic.GenericForeignKey(ct_field='content type',fk_field='object_pk')
-    users = models.ManyToManyField(User,related_name='users',blank=True)
-    notified_users = models.ManyToManyField(User,related_name='notified_users',blank=True)
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users',blank=True)
+    notified_users = models.ManyToManyField(settings.AUTH_USER_MODEL,related_name='notified_users',blank=True)
     actions = [common_delete_action, ]
     #what else ?
     #subscribe the user to get notifications
@@ -62,7 +68,7 @@ class Announcement(models.Model):
     #unsubscribe the user refuse of getting notifications
     def unsubscribe(self,user):
         self.users.remove(user)
-        self.notified_users.remove(users)
+        self.notified_users.remove(user)
         self.save()
         return self
 
@@ -134,7 +140,7 @@ class Announcement(models.Model):
 
 #obsolete
 class Settings(models.Model):
-    user = models.ForeignKey(User, primary_key=True, related_name='user_settings_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, primary_key=True, related_name='user_settings_set')
     data = models.TextField(_('Decoded Data'),blank=True,null=True)
     #objects = SettingsManager()
 
@@ -181,7 +187,7 @@ class Settings(models.Model):
         verbose_name_plural = _("Settings")
 
 class UserSID(models.Model):
-    user = models.ForeignKey(User, related_name='user_sid_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='user_sid_set')
     sid = models.CharField(_("SID"), unique=True, max_length=512)
     # additional fields ?
     expired_date = models.DateTimeField(

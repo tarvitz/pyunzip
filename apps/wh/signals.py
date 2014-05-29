@@ -3,7 +3,11 @@ from django.db.models.signals import (
 )
 from apps.wh.actions import rank_scheme_alter
 from apps.wh.models import RankType, PM
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.core.cache import get_cache, cache
 from django.dispatch import receiver

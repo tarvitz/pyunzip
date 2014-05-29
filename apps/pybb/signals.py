@@ -1,5 +1,9 @@
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 
 from apps.pybb.gravatar import check_gravatar
 from apps.pybb.subscription import (
@@ -7,8 +11,8 @@ from apps.pybb.subscription import (
 from apps.pybb.models import Post
 
 
-def user_saved(instance, **kwargs):
-    check_gravatar(instance)
+#def user_saved(instance, **kwargs):
+#    check_gravatar(instance)
 
 def post_saved(instance, **kwargs):
     notify_topic_subscribers(instance)

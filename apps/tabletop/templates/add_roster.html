@@ -1,4 +1,4 @@
-{% extends base_template %} {% load i18n %}
+{% extends "base_template.html" %} {% load i18n %}
 {% block css %}
     {{ block.super }}
 {% endblock %}
@@ -11,6 +11,7 @@
             {% include "forms/bootstrap_horizontal.html" with form=form %}
             {% include "forms/submit.html" with class='btn btn-success' text=save_text %}
         </form>
+        {% if form.media %}{{ form.media }}{% endif %}
     </div>
 
 <script language='javascript'>

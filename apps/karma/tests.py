@@ -3,7 +3,11 @@
 import os
 from django.test import TestCase
 from apps.karma.models import KarmaStatus
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import model_json_encoder

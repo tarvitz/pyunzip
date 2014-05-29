@@ -1,23 +1,15 @@
-{% extends "login.html" %}
+{% extends "base_template.html" %}{% load i18n %}
 {% block title %} {{ block.super }}:Вход пользователя{% endblock %}
-{% block text_content %}
-
-<center>
-<div id="headline">
-<div class='transparency tr_black'></div>
-Вход|<a href='/register'>Регистрация</a>
-</div>
-<div id="content" align="left">
-<div class='transparency tr_blue'></div>
-<div class='reflects_up'></div>
-<div class='reflects_left'></div>
-<div class='reflects_right'></div>
-<!-- login required -->
-<form action='.' method='POST'>
-    {% csrf_token %}
-    {{ form.as_ul }}
-	<center><input type="submit" value="Войти"></center>
-</form>
-</div>
-</center>
+{% block content %}
+  <div id="headline">
+    Вход|<a href='/register'>Регистрация</a>
+  </div>
+  <div id="content" align="left" class="col-lg-8">
+    <!-- login required -->
+    <form action='.' method='POST' class="form-horizontal">
+      {% csrf_token %}{% trans "Login" as submit_i18n %}
+      {% include "forms/bootstrap_horizontal.html" with form=form %}
+      {% include "forms/submit.html" with save_text=submit_i18n %}
+    </form>
+  </div>
 {% endblock %}

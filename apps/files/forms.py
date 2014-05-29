@@ -1,7 +1,11 @@
 from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from apps.files.models import Version, Gallery, File, Image as ModelImage, \
     Replay, Game, UserFile
 from apps.core import get_safe_message
@@ -46,6 +50,12 @@ class UploadImageModelForm(forms.ModelForm):
     class Meta:
         model = ModelImage
         exclude = ['thumbnail', 'owner', 'alias']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'comments': forms.TextInput(attrs={'class': 'form-control'}),
+            'gallery': forms.Select(attrs={'class': 'form-control chosen'}),
+        }
+
 
 class ImageModelForm(UploadImageModelForm):
     required_css_class='required'

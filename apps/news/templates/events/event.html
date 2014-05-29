@@ -1,0 +1,63 @@
+{% extends "base_template.html" %}
+{% load i18n coretags %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    {% if perms.news.change_event %}
+    <li><a href="{% url "news:events" %}">{% trans "events" %}</a></li>
+    {% endif %}
+    <li class="active">{{ object.title|lower }}</li>
+  </ul>
+
+  {% if object.place %}
+    <div class="alert alert-success">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <strong>{{ object.place.title }}</strong>,
+      {{ object.place.address }}{% spaceless %}
+      {% if object.place.contacts %}, {{ object.place.contacts }}{% endif %}{% endspaceless %}
+    </div>
+  {% endif %}
+
+
+  <div class="pull-right">
+    {% if user.is_authenticated and user not in object.participants.all %}
+      <a href="{{ object.get_join_url }}" rel="tooltip"
+         data-title="{% trans "Mark that I would come to this event" %}">
+          <i class="glyphicon glyphicon-ok icon-ok"></i></a>
+    {% endif %}
+    {% if perms.news.change_event %}
+      {% include "generic/actions.html" with object=object %}
+    {% endif %}
+  </div>
+
+
+  <h3>{{ object.title }}</h3>
+  <div class='content'>
+    {{ object.content_html|safe }}
+    <hr />
+    {% if object.participants.count %}
+      {% trans "Participants" %}:
+      {% for person in object.participants.all %}
+        {{ person.get_nickname|safe }} {% if not forloop.last %},{% endif %}
+      {% endfor %}
+    {% endif %}
+
+  </div>
+
+  {% if comments %}
+    <center>
+    <div class="comments">
+      {% for comment in comments.object_list %}
+        {% include "generic/comment.html" with c=comment %}
+      {% endfor %}
+    </div>
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
+    </center>
+  {% endif %}
+  <br />
+
+  {% if user.is_authenticated %}
+    {% get_content_type object as object_ct %}
+    {% include settings.document.comments_form with object=object_ct gs=gs %}
+  {% endif %}
+{% endblock %}

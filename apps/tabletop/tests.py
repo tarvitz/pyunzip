@@ -1,7 +1,11 @@
 # coding: utf-8
 from django.test import TestCase
 from apps.tabletop.models import Codex, Roster, Mission, BattleReport
-from django.contrib.auth.models import User
+try:
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _

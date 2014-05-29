@@ -1,32 +1,32 @@
 {% load coretags %}{% spaceless %}
-<div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ usr.date_joined|timesince }}</div>
-<span class='ranks'>
+  <div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ usr.date_joined|timesince }}</div>
+  <span class='ranks'>
 {% if usr.ranks %}статус:
-{% if usr.ranks.values %}
-	{% for rank in usr.ranks.values %}
-		<a href="{% url "wh:rank" codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
-	{% endfor %}
-</span>
-{% endif %}
+  {% if usr.ranks.values %}
+    {% for rank in usr.ranks.values %}
+      <a href="{% url "wh:rank" codename=rank.codename %}">{{ rank.short_name|lower }}{% if not forloop.last %}, {% endif %}</a>
+    {% endfor %}
+    </span>
+  {% endif %}
 {% endif %}{% endspaceless %}
 
 <a href="{% url "wh:profile-by-nick" usr.get_username %}">
-    <img class='avatar' src="{% url "wh:avatar" nickname=usr.get_username %}">
+  <img class='avatar' src="{{ usr.get_avatar_url }}">
 </a>
 <center>
-	{% with usr as warn_user %}
-		{% include "warnings/warning.html" %}
-	{% endwith %}
-	{% comment %}{% if usr.settings.show_karma_block %}{% endcomment %}
-    {% include "karma_power.html" with karma_user=usr %}
-	{% comment %}{% endif %}{% endcomment %}
+  {% with usr as warn_user %}
+    {% include "warnings/warning.html" %}
+  {% endwith %}
+  {% comment %}{% if usr.settings.show_karma_block %}{% endcomment %}
+  {% include "karma_power.html" with karma_user=usr %}
+  {% comment %}{% endif %}{% endcomment %}
 </center>
 
 {% if not usr.settings.invisible %}
-	{% check_if_online usr as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
+  {% check_if_online usr as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
 {% else %}&nbsp;{% endif %}
-	{% if user.is_authenticated %} {# current user #}
-	{% if usr.jid and not usr.settings.hide_jid %}<a href="xmpp:{{ usr.jid }}">[jid]</a>{% endif %}
-	{% if usr.uin and not usr.settings.hide_uin %}<a href="icq:{{ usr.uin }}">[icq]</a>{% endif %}
-	{% if usr.email and not usr.settings.hide_email %}<a href="mailto:{{ usr.email }}">[mail]</a>{% endif %}
+{% if user.is_authenticated %} {# current user #}
+  {% if usr.jid and not usr.settings.hide_jid %}<a href="xmpp:{{ usr.jid }}">[jid]</a>{% endif %}
+  {% if usr.uin and not usr.settings.hide_uin %}<a href="icq:{{ usr.uin }}">[icq]</a>{% endif %}
+  {% if usr.email and not usr.settings.hide_email %}<a href="mailto:{{ usr.email }}">[mail]</a>{% endif %}
 {% endif %}

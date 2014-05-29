@@ -1,0 +1,24 @@
+.form-group{
+  &.required{
+    > label{
+      &:before{
+        content: "(*) ";
+        color: lighten(@text-color, 30%);
+        font-size: @font-size-small;
+      }
+      &:hover{
+        &:before{
+          color: @alert-danger-text;
+        }
+      }
+    }
+  }
+}
+.icon-delete[class^=icon-],
+.icon-delete[class^=glyphicon-],{
+    color: @alert-danger-text;
+}
+.icon-ok[class^=icon-],
+.icon-ok[class^=glyphicon]{
+  color: @alert-success-text;
+}

@@ -1,0 +1,20 @@
+@tournament-text: darken(@alert-warning-bg, 45%);
+
+.fc-event{
+  &.game{
+    //background-color: darken(@alert-success-bg, 30%);
+    &:hover{
+      color: lighten(@alert-info-text, 35%);
+    }
+  }
+  &.tournament{
+    border: 1px solid darken(@tournament-text, 10%);
+    background-color: @tournament-text;
+    &:hover{
+      color: @text-color;
+    }
+  }
+  &.order{
+    background-color: darken(@alert-info-bg, 30%);
+  }
+}

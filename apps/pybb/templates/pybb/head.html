@@ -11,6 +11,7 @@
             <a class='navbar-brand brand' href="{% url "pybb:index" %}">Tessera  Форум</a>
             <div class='nav-collapse pull-right'>
                 <ul class="nav navbar-nav">
+                    <li><a href="{% url "news:calendar" %}">{% trans "Calendar" %}</a></li>
                     <li><a href="{% url "news:news" %}">{% trans "News" %}</a></li>
                     <li><a href="{% url "wh:users" %}">{% trans "Users" %}</a></li>
                     {% if user.is_authenticated %}
@@ -20,10 +21,19 @@
                             <span class='caret'></span>
                         </a>
                         <ul class='dropdown-menu pull-right' role="menu">
+                            {% if perms.news.change_event or perms.news.add_event%}
+                              <li><a href="{% url "news:events" %}">{% trans "Events" %}</a></li>
+                            {% endif %}
                             <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
-                            <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>{% trans "My reports" %}</a></li>
+                            {% comment %}
+                              <li class=''><a href='{% url "tabletop:battle-reports-self" %}'>
+                                {% trans "My reports" %}</a></li>
+                            {% endcomment %}
                             <li class=''><a href='{% url "files:files" %}'>{% trans "My files" %}</a></li>
-                            <li class=''><a href='{% url "wh:profile" %}'>{% trans "My profile" %}</a></li> 
+                            <li class=''><a href='{% url "wh:profile" %}'>{% trans "My profile" %}</a></li>
+                            <li class=""><a href="{% url "files:galleries" %}">{% trans "Gallery" %}</a></li>
+                            <li><a rel='tooltip' href='{% url "wh:pm" %}'
+                                   title='Личные сообщения'>{% trans "Private messages" %}<span class='pm count'></span></a></li>
                             <li class='divider divide'></li>
                             {% if user.is_superuser %}
                             <li><a href="/admin/">{% trans "Admincp" %}</a></li>
@@ -43,8 +53,8 @@
                         </ul>
                     </li>
                     {% else %}
-                    <li><a href="{% url "wh:register" %}">{% trans "Register" %}</a></li>
-                    <li><a href="#login-modal" data-toggle='modal'>{% trans "Log in" %}</a></li>
+                    <li><a href="{% url "accounts:register" %}">{% trans "Register" %}</a></li>
+                    <li><a href="{% url "accounts:login" %}">{% trans "Log in" %}</a></li>
                     {% endif %}
                 </ul>
             </div>

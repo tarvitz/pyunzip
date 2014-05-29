@@ -3,8 +3,14 @@
 from django.test import TestCase
 #import unittest
 #from django.test.client import RequestFactory, Client
-from apps.news.models import Category, News
-from django.contrib.auth.models import User, AnonymousUser
+from apps.core.tests import TestHelperMixin
+from apps.news.models import Category, News, Event, EVENT_TYPE_CHOICES
+try:
+    from django.contrib.auth import get_user_model
+    from django.contrib.auth.models import AnonymousUser
+    User = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
 #from django.test.client import RequestFactory, Client
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
@@ -18,7 +24,7 @@ from django.template.loader import get_template
 from django.template import Context, Template
 from apps.core.helpers import paginate
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class JustTest(TestCase):
@@ -632,3 +638,29 @@ class CacheTest(TestCase):
             for msg in messages:
                 print "Got %(err)s with '%(user)s' in %(key)s" % msg
             raise AssertionError
+
+
+class EventTest(TestHelperMixin, TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+    ]
+    post = {
+        'title': u'Новое событие',
+        'content': u'Текст содержания',
+        'date_start': datetime.now(),
+        'date_end': datetime.now() + timedelta(hours=24),
+        'type': EVENT_TYPE_CHOICES[0][0]
+    }
+
+    def setUp(self):
+        pass
+
+    def test_event_create(self):
+        self.login('user')
+        url = reverse('news:event-create')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        count = Event.objects.count()
+        response = self.client.post(url, self.post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Event.objects.count(), count + 1)
