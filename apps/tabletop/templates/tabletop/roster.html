@@ -9,8 +9,9 @@
     <li class="active">{{ roster.title }}</li>
   </ul>
 
-  <div class='message message-center'>
+  <div class='round message message-center'>
     <div class='message-headline'>
+      <div class='transparency grey'></div>
       {% if user == roster.owner or perms.tabletop.edit_roster %}
         <a href='{% url "tabletop:roster-edit" roster.id %}' class='msg_button'>[править]</a>
       {% else %}
@@ -28,7 +29,6 @@
 
     </div> <!-- msg_headline -->
     <div class='message-content'>
-      <div class='transparency'></div>
       <div class='avatar'>
         {% include "msg/avatar.html" with object=roster.user %}
       </div>
@@ -53,6 +53,7 @@
     </div> <!-- msg_content -->
     <br clear='all'>
     <div class='message-footer'>
+      <div class='transparency grey'></div>
       {% spaceless %}
         {% if roster.user != roster.owner %}
           [добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'>
@@ -66,7 +67,9 @@
   </div> <!-- message -->
 
   {% if comments.object_list %}
-    {% include settings.document.comments %}
+    {% for comment in comments.object_list %}
+      {% include "generic/comment_new.html"%}
+    {% endfor %}
     {% with comments as page %}
       {% include settings.document.links %}
     {% endwith %}
