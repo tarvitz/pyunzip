@@ -46,4 +46,13 @@ $('textarea.markitup').markItUp(markupSettings);
       language: 'ru'
     });
   });
+  $("[data-toggle=quote]").click(function(e){
+    var text = (window.getSelection) ?
+        window.getSelection().toString() :
+        document.getSelection().toString();
+    var user = $(this).parents('.message').data('nickname');
+    var quote = '(' + user + ')' + '{' + text + '}';
+    text = $('form').find('textarea').val();
+    $('form').find('textarea').val(text + '\n' + quote);
+  });
 })();

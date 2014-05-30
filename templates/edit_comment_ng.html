@@ -1,19 +1,10 @@
-{% extends base_template %}{% load newsfilters %}{% load kamwhfilters %}
-{% block head_content %}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}' type='text/css' media='screen'>{% endblock %}
-{% block text_content %}
-<center>
-<form action='{% url "core:comment-edit" form.instance.pk %}' method='post' id='id-comment-form'>
-    {% csrf_token %}
-    {{ form.as_ul }}
-	<input class='btn btn-inverse' type='submit' value='Изменить' id='id_submit'>
-</form>
-</center>
-{% include "js/comments.html" with syntax=form.instance.syntax %}
+{% extends "base_template.html" %}{% load i18n newsfilters kamwhfilters %}
+{% block content %}
 
-<script type='text/javascript'>
-    $(document).ready(function(){
-        $("label[for=id_comment]").detach().remove();
-    });
-</script>
+<form action='{{ request.path }}' method='post' class='form-horizontal' id='id-comment-form'>
+  {% csrf_token %}{% trans "Update" as save_i18n %}
+  {% include "forms/bootstrap_horizontal.html" with form=form %}
+  {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
+</form>
+{% include "js/comments.html" with syntax=form.instance.syntax %}
 {% endblock %}

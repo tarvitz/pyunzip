@@ -67,10 +67,10 @@ SettingsForm.__bases__ = SettingsForm.__bases__ + (SettingsFormOverload,)
 #duplicates with files.forms need more 'usable' interface for comments
 class CommentForm(forms.ModelForm):
     syntax = forms.ChoiceField(
-        choices=settings.SYNTAX,required=False, widget=forms.HiddenInput,
+        choices=settings.SYNTAX, required=False, widget=forms.HiddenInput,
         initial='textile'
     )
-    comment = forms.CharField(widget=forms.Textarea)
+    comment = forms.CharField(label=_("Comment"), widget=forms.Textarea)
     url = forms.CharField(required=False, widget=forms.HiddenInput)
     # TODO: clean it up
     #hidden_syntax = forms.CharField(widget=forms.HiddenInput(),required=False)

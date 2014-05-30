@@ -45,14 +45,14 @@
   </div>
 
   {% if comments %}
-    <center>
+
     <div class="comments">
       {% for comment in comments.object_list %}
-        {% include "generic/comment.html" with c=comment %}
+        {% include "generic/comment_new.html" with comment=comment %}
       {% endfor %}
     </div>
     {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
-    </center>
+
   {% endif %}
   <br />
 

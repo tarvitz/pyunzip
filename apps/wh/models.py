@@ -534,6 +534,12 @@ class UserExtension(object):
 
 # noinspection PyUnresolvedReferences
 class CommentExtension(object):
+    def get_edit_url(self):
+        return reverse('core:comment-edit', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('core:comment-delete', args=(self.pk, ))
+
     def render_comment(self):
         """ renturns comment in render"""
         return render_filter(post_markup_filter(self.comment), self.syntax or 'textile')
