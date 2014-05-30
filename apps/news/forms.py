@@ -209,10 +209,11 @@ class EventForm(forms.ModelForm):
             ),
             'title': forms.TextInput(attrs),
             'type': forms.Select(attrs={'class': 'form-control chosen'}),
+            'league': forms.Select(attrs={'class': 'form-control chosen'}),
             'place': forms.Select(attrs={'class': 'form-control chosen'}),
         }
         fields = ('title', 'content', 'place', 'date_start', 'date_end',
-                  'type', 'is_all_day')
+                  'league', 'type', 'is_all_day')
 
     class Media:
         js = (

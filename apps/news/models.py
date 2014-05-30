@@ -320,7 +320,14 @@ class Meating(models.Model):
 EVENT_TYPE_CHOICES = (
     ('game', _("Game")),
     ('tournament', _("Tournament")),
-    ('order', pgettext_lazy("cart order", "Order"))
+    ('order', pgettext_lazy("cart order", "Order")),
+)
+
+EVENT_LEAGUE_CHOICES = (
+    ('wh40k', _("Warhammer 40000")),
+    #('whfb', _("Warhammer fantasy battle"))
+    ('mtg', _("Magic the gathering")),
+    ('board', _("Board gaming"))
 )
 
 
@@ -366,7 +373,12 @@ class Event(models.Model):
     )
     type = models.CharField(
         _("type"), max_length=16,
-        choices=EVENT_TYPE_CHOICES
+        choices=EVENT_TYPE_CHOICES, default='game'
+    )
+    league = models.CharField(
+        _("league"), max_length=32,
+        help_text=_("game league"),
+        choices=EVENT_LEAGUE_CHOICES, default='wh40k'
     )
     place = models.ForeignKey(
         'news.EventPlace', related_name='event_place_set',
