@@ -31,7 +31,7 @@
     <div class='message-footer'>
         <div class='transparency grey'></div>
         <div class='links'>
-            {% if moderator or comment.user == user %}
+            {% if perms.comments.change_comment or comment.user == user %}
                  <span><a href="{{ comment.get_edit_url }}">{% trans "Edit" %}</a></span>
             {% endif %}
             <span><a class='forum quote' href="#"
