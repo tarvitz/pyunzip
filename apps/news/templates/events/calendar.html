@@ -108,7 +108,7 @@
               var events = [];
               json.results.map(function(item){
                 events.push({
-                  title: item.title,
+                  title: item.title + ' [' + item.league + ']',
                   url: item.url || '',
                   start: item.date_start,
                   end: item.date_end,
