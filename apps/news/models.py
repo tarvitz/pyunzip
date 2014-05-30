@@ -378,7 +378,8 @@ class Event(models.Model):
     league = models.CharField(
         _("league"), max_length=32,
         help_text=_("game league"),
-        choices=EVENT_LEAGUE_CHOICES, default='wh40k'
+        choices=EVENT_LEAGUE_CHOICES, default='wh40k',
+        blank=True, null=True
     )
     place = models.ForeignKey(
         'news.EventPlace', related_name='event_place_set',
