@@ -8,7 +8,7 @@
 
   <div class="control pull-right">
     <a href="{% url "tabletop:roster-add" %}"
-       class="btn btn-sm btn-{{ user.get_color_theme }}">{% trans "Add roster" %}</a>
+       class="btn btn-sm btn-{{ user.get_color_theme|default:"default" }}">{% trans "Add roster" %}</a>
   </div>
   <h3>{% trans "Rosters" %}</h3>
 

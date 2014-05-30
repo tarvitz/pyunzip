@@ -2,6 +2,7 @@
 <center>
   <div class='round message' id='roster_{{ r.id }}'>
     <div class='message-headline'>
+      <div class="transparency grey"></div>
       <div class='links'>
         {% if user == r.owner or perms.tabletop.edit_user_rosters %}
             <span class='first'>
@@ -72,6 +73,7 @@
     </div><!-- msg_content -->
     <br clear='all'>
     <div class='message-footer'>
+      <div class="transparency grey"></div>
       <div class='links'>
         {% comment %}<span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}'{% spaceless %}
                  title='{{ r.revision }}-я редакция кодекса'
