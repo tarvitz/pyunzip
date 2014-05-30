@@ -9,10 +9,12 @@
     {% include "comments.html" with comments=comments page_obj=comments %}
     {% include "generic/pages.html" with page=paginator %}
 {% endif %}
+{% comment %}
 {% if user.is_authenticated and article.approved %}
     {% get_content_type article as object %}
     {% include settings.document.comments_form with object=object gs=gs %}
 {% endif %}
+{% endcomment %}
 {% else %}
 <div align='center' class='block_notice'>
     <div class='transparent tr_black'></div>
