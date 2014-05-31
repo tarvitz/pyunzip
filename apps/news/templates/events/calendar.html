@@ -22,6 +22,13 @@
 
   <h3>{% trans "Events" %}</h3>
   <div id="events"></div>
+  <br />
+  <div class="legend">
+    <strong>{% trans "Legend" %}</strong>:
+    <i class="fc-event game">&nbsp;{% trans "game" %}&nbsp;</i>
+    <i class="fc-event tournament">&nbsp;{% trans "tournament" %}&nbsp;</i>
+    <i class="fc-event order">&nbsp;{% trans "order" context "card order" %}&nbsp;</i>
+  </div>
   {# i18n #}
   {% spaceless %}
     {% trans "January" as january %} {% trans "February" as february %} {% trans "March" as march %}
