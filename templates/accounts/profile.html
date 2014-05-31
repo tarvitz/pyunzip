@@ -36,7 +36,9 @@
           <b>{% trans "Gender" %}</b>: {{ object.gender|gender_transform }}<br>
           {% if object.uin %}<b>{% trans "ICQ" %}</b>: {{ object.uin }}<br>{% endif %}
           {% if object.jid %}<b>{% trans "Jabber/Google talk" %}</b>: {{ object.jid }}<br>{% endif %}
-          {% if object.email %}<b>{% trans "Email" %}</b>: {{ object.email }}<br> {% endif %}
+          {% if perms.accounts.change_user or object == user %}
+            {% if object.email %}<b>{% trans "Email" %}</b>: {{ object.email }}<br> {% endif %}
+          {% endif %}
           {% if object.about %}<b>{% trans "Signature" %}</b>: {{ object.about }}<br>{% endif %}
         </div> <!-- msg_text -->
       </div> <!-- msg_content -->
