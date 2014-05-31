@@ -1,19 +1,16 @@
-<div class='quote_content'>{% load newsfilters %}{% spaceless %}
-	<div class='quote_headline'>
-		<div class='transparency' id='black'></div>
-		{% if quote_user.nickname %}<a href="{% url "accounts:profile-by-nick" nickname=quote_user.get_username %}">
-			{{ quote_user.get_nickname|safe }} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
-		{% else %}
-			{{ quote_user }} писал(а): 
-		{% endif %}
-		</div>
-	<div class='quote_txt'>
-		<div class='transparency tr_black'></div>
-		<div class='reflects_up'></div> 
-		<div class='reflects_down'></div>
-		<div class='reflects_left'></div>
-		{% if quote_user.nickname %}<img class='quote_avatar'
-                                     src='{{ quote_user.get_avatar_url }}'> {% endif %}
-		{{ quote_text|safe }}
-	</div>
+<div class='quote-content'>{% load newsfilters %}{% spaceless %}
+  <div class='quote-headline'>
+    <div class='transparency' id='black'></div>
+    {% if quote_user.nickname %}<a href="{% url "accounts:profile-by-nick" quote_user.get_username %}">
+      {{ quote_user.get_nickname|safe }} писал{% ifequal quote_user.gender "f" %}а{% endifequal %}:</a>
+    {% else %}
+      {{ quote_user }} писал(а):
+    {% endif %}
+  </div>
+  <div class='quote-body'>
+    <div class='transparency grey'></div>
+    {% if quote_user.nickname %}
+      <img class='quote-avatar' src='{{ quote_user.get_avatar_url }}'> {% endif %}
+    {{ quote_text|safe }}
+  </div>
 {% endspaceless %}</div>
