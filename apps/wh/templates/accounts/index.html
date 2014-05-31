@@ -7,6 +7,7 @@
     <center>
       <div class='round message'>
         <div class='message-headline'>
+          <div class="transparency grey"></div>
           <a href='{% url "accounts:profile-by-nick" user.get_username %}'>
             {% if user.nickname %}
               {{ user.get_nickname|safe }}
@@ -38,6 +39,7 @@
         </div><!-- msg_content -->
         <br clear='all'>
         <div class='message-footer'>
+          <div class="transparency grey"></div>
           <div class='links'>
             <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>{% trans "profile" %}</a></span>
             {% if user.army.side.name %}
