@@ -12,11 +12,11 @@
   <center>{% include settings.document.image_inc %}</center>
   <br clear='all'>
   <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
-  <center>
-    {% for comment in img_comments %}
-      {% include "generic/comment.html" with c=comment %}
-    {% endfor %}
-  </center>
+
+  {% for comment in img_comments %}
+    {% include "generic/comment_new.html" %}
+  {% endfor %}
+
   {% include settings.document.links %}
 
   {% if user.is_authenticated %}
