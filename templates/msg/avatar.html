@@ -1,5 +1,7 @@
 {% load coretags %}{% spaceless %}
-  <div class='since' title='Обитает на ресурсе уже вот такое количество времени'>{{ object.date_joined|timesince }}</div>
+  <div class='since'
+       title='Обитает на ресурсе уже вот такое количество времени'>{{ object.date_joined|timesince }}
+  </div>
   <span class='ranks'>
 {% if object.ranks %}статус:
   {% if object.ranks.values %}

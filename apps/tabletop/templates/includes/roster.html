@@ -19,7 +19,7 @@
       <a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a>
     </div><!-- msg_headline -->
     <div class='message-content'>
-      <div class='avatar'>
+      <div class='avatar text-center'>
         {% spaceless %}
           <img src='{% url "wh:avatar" r.show_player %}'><br>
           {% if r.user %}
