@@ -1,11 +1,6 @@
 {% extends "base_template.html" %}
-{% load coretags %}
+{% load coretags i18n %}
 {% block title %}Пользователи{% endblock %}
-{% block css %}
-  {{ block.super }}
-  <link rel='stylesheet' href='/styles/profileng.css' media='screen'
-        type='text/css'>
-{% endblock %}
 
 {% block content %}
   {% for user in users.object_list %}
@@ -44,7 +39,7 @@
         <br clear='all'>
         <div class='message-footer'>
           <div class='links'>
-            <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>profile</a></span>
+            <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>{% trans "profile" %}</a></span>
             {% if user.army.side.name %}
               <span>{{ user.army.side.name }}</span>
             {% endif %}
