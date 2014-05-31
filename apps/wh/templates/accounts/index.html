@@ -45,11 +45,10 @@
         <div class='message-footer'>
           <div class='links'>
             <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>profile</a></span>
-            {% comment %}<span><a href='{% url "wh:pm-send-nick" user.get_username %}'>pm</a></span>{% endcomment %}
-            <span>{{ user.army.side.name|default_if_none:"" }}</span>
-            {% if not user.settings.hide_jid %} <span><a href='xmpp://{{ user.jid }}'>{{ user.jid|default_if_none:"" }}</a></span>{% endif %}
-            {% if not user.settings.hide_uin %} <span><a href='icq://{{ user.uin }}'>{{ user.uin|default_if_none:"" }}</a></span>{% endif %}
-            {% if not user.settings.hide_email %} <span><a href='mailto://{{ user.email }}'>{{ user.email|default_if_none:"" }}</a></span>{% endif %}
+            <span>{{ user.army.side|default_if_none:"" }}</span>
+            <span><a href='xmpp://{{ user.jid }}'>{{ user.jid|default_if_none:"" }}</a></span>
+            <span><a href='icq://{{ user.uin }}'>{{ user.uin|default_if_none:"" }}</a></span>
+            <span><a href='mailto://{{ user.email }}'>{{ user.email|default_if_none:"" }}</a></span>
           </div>
           <br clear='all'>
         </div> <!-- msg_footer -->
