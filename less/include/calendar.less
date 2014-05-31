@@ -1,3 +1,41 @@
+.event-variant(@color; @background; @border) {
+  color: @color;
+  background-color: @background;
+  border-color: @border;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    color: @color;
+    background-color: darken(@background, 8%);
+        border-color: darken(@border, 12%);
+  }
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    background-image: none;
+  }
+  &.disabled,
+  &[disabled],
+  fieldset[disabled] & {
+    &,
+    &:hover,
+    &:focus,
+    &:active,
+    &.active {
+      background-color: @background;
+          border-color: @border;
+    }
+  }
+
+  .badge {
+    color: @background;
+    background-color: @color;
+  }
+}
+
 @tournament-text: darken(@alert-warning-bg, 45%);
 
 .fc-event{
@@ -7,19 +45,12 @@
     }
   }
   &.game{
-    //background-color: darken(@alert-success-bg, 30%);
-    &:hover{
-      color: lighten(@alert-info-text, 35%);
-    }
+    .event-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border);
   }
   &.tournament{
-    border: 1px solid darken(@tournament-text, 10%);
-    background-color: @tournament-text;
-    &:hover{
-      color: @text-color;
-    }
+    .event-variant(@btn-success-color; @btn-success-bg; @btn-success-border);
   }
   &.order{
-    background-color: darken(@alert-info-bg, 30%);
+    .event-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border);
   }
 }
