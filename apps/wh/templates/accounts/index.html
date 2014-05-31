@@ -45,7 +45,9 @@
         <div class='message-footer'>
           <div class='links'>
             <span class='first'><a href='{% url "accounts:profile-by-nick" user.get_username %}'>profile</a></span>
-            <span>{{ user.army.side|default_if_none:"" }}</span>
+            {% if user.army.side %}
+              <span>{{ user.army.side|default_if_none:"" }}</span>
+            {% endif %}
             <span><a href='xmpp://{{ user.jid }}'>{{ user.jid|default_if_none:"" }}</a></span>
             <span><a href='icq://{{ user.uin }}'>{{ user.uin|default_if_none:"" }}</a></span>
             <span><a href='mailto://{{ user.email }}'>{{ user.email|default_if_none:"" }}</a></span>
