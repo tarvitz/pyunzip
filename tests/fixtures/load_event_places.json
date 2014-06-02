@@ -1,0 +1,20 @@
+[
+{
+    "pk": 1, 
+    "model": "news.eventplace", 
+    "fields": {
+        "address": "\u0443\u043b. \u041f\u0435\u043f\u044f\u0447\u043d\u0430\u044f \u0434. 36", 
+        "contacts": "\u0442\u0435\u043b\u0435\u0444\u043e\u043d +7-900-123-00-01", 
+        "title": "\u041a\u043b\u0443\u0431 40\u043a"
+    }
+},
+{
+    "pk": 2, 
+    "model": "news.eventplace", 
+    "fields": {
+        "address": "", 
+        "contacts": "", 
+        "title": "\u041c\u0435\u0441\u0442\u043d\u0430\u044f \u0442\u0443\u0441\u043e\u0432\u043a\u0430"
+    }
+}
+]

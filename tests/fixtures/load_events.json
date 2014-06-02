@@ -1,0 +1,55 @@
+[
+{
+    "pk": 1, 
+    "model": "news.event", 
+    "fields": {
+        "league": "wh40k", 
+        "title": "\u041a\u043b\u0435\u0432\u043e\u0435 \u0441\u043e\u0431\u044b\u0442\u0438\u0435", 
+        "date_end": "2014-05-31T10:00:00", 
+        "date_start": "2014-05-31T12:00:00", 
+        "content": "p. \u0431\u0443\u0445\u0430\u0435\u043c, \u043d\u0435 \u0431\u0443\u0445\u0430\u0435\u043c \u0432\u0441\u0435 \u0434\u0435\u043b\u0430 dadasd", 
+        "participants": [], 
+        "place": null, 
+        "is_all_day": false, 
+        "is_finished": false, 
+        "type": "order", 
+        "content_html": "\t<p>\u0431\u0443\u0445\u0430\u0435\u043c, \u043d\u0435 \u0431\u0443\u0445\u0430\u0435\u043c \u0432\u0441\u0435 \u0434\u0435\u043b\u0430 dadasd</p>"
+    }
+},
+{
+    "pk": 2, 
+    "model": "news.event", 
+    "fields": {
+        "league": null, 
+        "title": "\u0415\u0449\u0435 \u043e\u0434\u043d\u043e \u0441\u043e\u0431\u044b\u0442\u0438\u0435", 
+        "date_end": "2014-05-29T23:59:00", 
+        "date_start": "2014-05-28T10:21:00", 
+        "content": "*13123*", 
+        "participants": [], 
+        "place": null, 
+        "is_all_day": true, 
+        "is_finished": false, 
+        "type": "game", 
+        "content_html": "\t<p><strong>13123</strong></p>"
+    }
+},
+{
+    "pk": 3, 
+    "model": "news.event", 
+    "fields": {
+        "league": "wh40k", 
+        "title": "\u0415\u0449\u0435 \u0447\u0442\u043e-\u0442\u043e", 
+        "date_end": "2014-05-31T22:37:00", 
+        "date_start": "2014-05-31T11:36:00", 
+        "content": "\u0447\u0442\u043e-\u0442\u043e", 
+        "participants": [
+            1
+        ], 
+        "place": 1, 
+        "is_all_day": false, 
+        "is_finished": true, 
+        "type": "tournament", 
+        "content_html": "\t<p>\u0447\u0442\u043e-\u0442\u043e</p>"
+    }
+}
+]
