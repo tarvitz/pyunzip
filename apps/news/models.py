@@ -403,6 +403,7 @@ class Event(models.Model):
     def __unicode__(self):
         return u'%s [%s]' % (self.title, self.type)
 
+    # urls
     def get_absolute_url(self):
         return reverse('news:event', args=(self.pk, ))
 
@@ -414,6 +415,11 @@ class Event(models.Model):
 
     def get_join_url(self):
         return reverse('news:event-join', args=(self.pk, ))
+
+    # properties
+    def get_type(self):
+        idx = [self.type in i[0] for i in EVENT_TYPE_CHOICES].index(True)
+        return EVENT_TYPE_CHOICES[idx][1]
 
     def render_content(self, field='content'):
         """
