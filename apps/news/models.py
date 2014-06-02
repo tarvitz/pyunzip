@@ -13,6 +13,8 @@ except ImportError:
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
+from django.contrib.contenttypes import generic
+
 from apps.djangosphinx.models import SphinxSearch
 from apps.core.helpers import post_markup_filter, render_filter
 
@@ -398,6 +400,11 @@ class Event(models.Model):
     is_all_day = models.BooleanField(
         _('is all day'), default=False,
         help_text=_("marks if event could place whole day"),
+    )
+
+    comments = generic.GenericRelation(
+        'comments.Comment',
+        object_id_field='object_pk'
     )
 
     def __unicode__(self):

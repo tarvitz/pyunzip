@@ -47,7 +47,7 @@ class Css(models.Model):
 class Announcement(models.Model):
     content_type = models.ForeignKey(ContentType,
         verbose_name=_('content type'),
-        related_name=_('content_type_set_for_%(class)s'))
+        related_name='content_type_set_for_%(class)s')
     object_pk = models.TextField(_('object id'))
     content_object = generic.GenericForeignKey(ct_field='content type',fk_field='object_pk')
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='users',blank=True)

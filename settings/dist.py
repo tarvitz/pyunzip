@@ -198,8 +198,9 @@ INSTALLED_APPS = (
     'django.contrib.comments',
     'apps.accounts',
     'apps.core',
+    'apps.comments',
     'apps.jsonapp',
-
+    #
     'apps.wh',
     'apps.news',
     'apps.files',
@@ -225,6 +226,10 @@ INSTALLED_APPS = (
     'django_cron',
     'django_select2',
 )
+
+SOUTH_MIGRATION_MODULES = {
+    'comments': 'apps.comments.migrations',
+}
 
 AUTH_USER_MODEL = (
     'accounts.User' if 'apps.accounts' in INSTALLED_APPS else 'auth.User'

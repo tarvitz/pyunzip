@@ -1,0 +1,6 @@
+{% load i18n %}
+<form action="{{ request.path }}" method="POST" class="form-horizontal">
+  {% csrf_token %}{% if not save_i18n %}{% trans "Submit" as save_i18n %}{% endif %}
+  {% include "forms/bootstrap_horizontal.html" with form=form %}
+  {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
+</form>

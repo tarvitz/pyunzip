@@ -1,0 +1,27 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "subscription list" %}</li>
+  </ul>
+  <h3>{% trans "Subscription list" %}</h3>
+  <table class="table">
+    <tr>
+      <th>{% trans "Title" %}</th>
+      <th>{% trans "New comments" %}</th>
+    </tr>
+    {% for object in object_list %}
+      <tr>
+        <td>
+          <a href='{{ object.object.get_absolute_url }}'>
+            {{ object.object.title }}</a>
+        </td>
+        <td>
+          <i class='icon-comment'></i> {{ object.get_new_comments.count }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  {% include "generic/paginator.html" %}
+{% endblock %}

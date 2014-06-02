@@ -20,7 +20,12 @@
 
 
   <div class="pull-right">
-    {% if user.is_authenticated and user not in object.participants.all %}
+    {% if gs.DEVELOPMENT user.is_authenticated and user not in object.participants.all %}
+      {% get_content_type object as object_ct %}
+      <a href="{% url "comments:subscribe" object_ct.content_type.pk object.pk %}" rel="tooltip"
+         data-title="{% trans "Subscribe for a new comments" %}">
+        <i class="icon-addcomment"></i>
+      </a>
       <a href="{{ object.get_join_url }}" rel="tooltip"
          data-title="{% trans "Mark that I would come to this event" %}">
           <i class="glyphicon glyphicon-ok icon-ok"></i></a>

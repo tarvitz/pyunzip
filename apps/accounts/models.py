@@ -5,7 +5,8 @@ import os
 from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, UserManager, PermissionsMixin)
-from django.contrib.comments.models import Comment
+
+#from django.contrib.comments.models import Comment
 from picklefield import PickledObjectField
 from django.db.models import Q, Sum
 from django.core import validators
@@ -173,6 +174,7 @@ class User(PermissionsMixin, AbstractBaseUser):
         return nickname
 
     def get_comments_count(self):
+        from apps.comments.models import Comment
         return Comment.objects.filter(user=self).count()
 
     def get_karma_value(self):

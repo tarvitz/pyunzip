@@ -377,29 +377,6 @@ class Warning(models.Model):
     show_nickname.short_description = _('User')
 
 
-Comment.add_to_class(
-    'syntax', models.CharField(
-        _('Syntax'), max_length=50, null=True, blank=True,
-        choices=settings.SYNTAX)
-)
-Comment.add_to_class('search', SphinxSearch(weights={'comment': 100}))
-Comment.add_to_class(
-    'cache_comment', models.TextField(
-        _("cache comment"), null=True, blank=True
-    )
-)
-
-from django.contrib.comments.admin import CommentsAdmin
-CommentsAdmin.fieldsets += (
-    (
-        _('Overload'),
-        {
-            'fields': ('syntax',)
-        }
-    )
-)
-
-
 # noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyShadowingBuiltins
 class UserExtension(object):
     @property
@@ -532,27 +509,5 @@ class UserExtension(object):
         )
 
 
-# noinspection PyUnresolvedReferences
-class CommentExtension(object):
-    def get_edit_url(self):
-        return reverse('core:comment-edit', args=(self.pk, ))
-
-    def get_delete_url(self):
-        return reverse('core:comment-delete', args=(self.pk, ))
-
-    def render_comment(self):
-        """ renturns comment in render"""
-        return render_filter(post_markup_filter(self.comment), self.syntax or 'textile')
-
-    def get_content(self):
-        return self.comment
-
-    def get_title(self):
-        if len(self.comment) > 100:
-            return "%s ..." % self.comment[0:100]
-        else:
-            return self.comment
-
-Comment.__bases__ = Comment.__bases__ + (CommentExtension,)
 from apps.wh.signals import setup_signals
 setup_signals()

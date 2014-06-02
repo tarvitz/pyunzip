@@ -1,0 +1,21 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    {% if object %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|default_if_none:object }}</a></li>
+    {% endif %}
+    <li class="active">{% trans "subscribe for new comments" %}</li>
+  </ul>
+  <h3>{% trans "Approve subscription" %}</h3>
+  <div class="alert alert-success">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    {% trans "You want to approve subscription for a new comments on" %}: <strong>{{ object.title }}</strong>
+  </div>
+  <form action="{{ request.path }}" method="POST" class="form-horizontal">
+    {% csrf_token %}{% trans "Save" as save_i18n %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
+  </form>
+{% endblock %}

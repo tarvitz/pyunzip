@@ -1,0 +1,19 @@
+from django.conf.urls import patterns, include, url
+from django.contrib.auth.decorators import login_required
+from apps.comments import views
+
+
+urlpatterns = patterns(
+    '',
+    url(r'^comments/add/$', login_required(views.CommentCreateView.as_view()),
+        name='comment-add'),
+    url(r'^comments/(?P<pk>\d+)/update/$',
+        login_required(views.CommentUpdateView.as_view()),
+        name='comment-update'),
+    url(r'^comments/(?P<content_type>\d+)/(?P<object_pk>\d+)/subscribe/$',
+        login_required(views.SubscribeCommentWatchView.as_view()),
+        name='subscribe'),
+    url(r'^subscriptions/$',
+        login_required(views.CommentWatchListView.as_view()),
+        name='subscriptions'),
+)
