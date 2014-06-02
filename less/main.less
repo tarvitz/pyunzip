@@ -28,10 +28,11 @@
     vertical-align: middle;
   }
 }
+@navbar-avatar-size: (@navbar-height / 2) - 1;
 .navbar{
   img.avatar{
-    max-width: @navbar-height / 2;
-    max-height: @navbar-height / 2;
-    border-radius: @navbar-height / 4;
+    max-width: @navbar-avatar-size;
+    max-height: @navbar-avatar-size;
+    border-radius: @navbar-avatar-size / 2;
   }
 }

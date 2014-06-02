@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 06:34+0400\n"
-"PO-Revision-Date: 2014-05-31 04:28+0400\n"
+"POT-Creation-Date: 2014-06-02 17:47+0400\n"
+"PO-Revision-Date: 2014-06-02 17:48+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -242,7 +242,7 @@ msgid "Another user with %s nickname exists."
 msgstr "Другой пользователь с ником %s уже существует."
 
 #: apps/blogs/admin.py:13 apps/news/models.py:43 apps/news/models.py:72
-#: apps/news/models.py:286 apps/news/models.py:358 apps/wh/models.py:83
+#: apps/news/models.py:286 apps/news/models.py:360 apps/wh/models.py:83
 #: apps/wh/models.py:128
 msgid "content"
 msgstr "контент"
@@ -912,7 +912,7 @@ msgid "Replays"
 msgstr "Реплеи"
 
 #: apps/files/models.py:279 apps/files/templates/gallery/gallery_list.html:22
-#: apps/pybb/templates/pybb/head.html:46
+#: apps/pybb/templates/pybb/head.html:47
 msgid "Gallery"
 msgstr "Галерея"
 
@@ -956,7 +956,7 @@ msgstr "Файлы"
 
 #: apps/files/models.py:376 apps/menu/models.py:8 apps/news/models.py:41
 #: apps/news/models.py:58 apps/news/models.py:266 apps/news/models.py:277
-#: apps/news/models.py:335 apps/news/models.py:355 apps/pybb/models.py:286
+#: apps/news/models.py:337 apps/news/models.py:357 apps/pybb/models.py:286
 #: apps/pybb/models.py:371 apps/tabletop/models.py:59
 #: apps/tabletop/models.py:91 apps/tabletop/models.py:207
 #: apps/tabletop/models.py:335 apps/tabletop/models.py:347
@@ -1030,7 +1030,7 @@ msgid "You used"
 msgstr "Вы испольщовали"
 
 #: apps/files/templates/files/user_files.html:31
-#: apps/pybb/templates/pybb/head.html:44
+#: apps/pybb/templates/pybb/head.html:45
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -1487,7 +1487,7 @@ msgstr "Тип встреч"
 msgid "Meating Types"
 msgstr "Типы встреч"
 
-#: apps/news/models.py:278 apps/news/models.py:375 apps/wh/models.py:229
+#: apps/news/models.py:278 apps/news/models.py:377 apps/wh/models.py:229
 msgid "type"
 msgstr "тип"
 
@@ -1516,114 +1516,124 @@ msgctxt "cart order"
 msgid "Order"
 msgstr "Заказ"
 
-#: apps/news/models.py:327
+#: apps/news/models.py:324
+msgctxt "pre-release of smth"
+msgid "Pre-release"
+msgstr "Пререлиз"
+
+#: apps/news/models.py:325
+msgctxt "release of smth"
+msgid "Release"
+msgstr "Релиз"
+
+#: apps/news/models.py:329
 msgid "Warhammer 40000"
 msgstr "Warhammer 40000"
 
-#: apps/news/models.py:329
+#: apps/news/models.py:331
 msgid "Magic the gathering"
 msgstr "Magic the gathering"
 
-#: apps/news/models.py:330
+#: apps/news/models.py:332
 msgid "Board gaming"
 msgstr "Настольные игры"
 
-#: apps/news/models.py:336
+#: apps/news/models.py:338
 msgid "event place title"
 msgstr "название места ивента"
 
-#: apps/news/models.py:337
+#: apps/news/models.py:339
 msgid "address"
 msgstr "адрес"
 
-#: apps/news/models.py:338
+#: apps/news/models.py:340
 msgid "event place address"
 msgstr "адрес места события"
 
-#: apps/news/models.py:340
+#: apps/news/models.py:342
 msgid "contacts"
 msgstr "контакты"
 
-#: apps/news/models.py:341
+#: apps/news/models.py:343
 msgid "contacts/help who to find it"
 msgstr "контакты/помощь где, кого искать"
 
-#: apps/news/models.py:348
+#: apps/news/models.py:350
 msgid "Event Place"
 msgstr "Место события"
 
-#: apps/news/models.py:349
+#: apps/news/models.py:351
 msgid "Event Places"
 msgstr "Места событий"
 
-#: apps/news/models.py:355
+#: apps/news/models.py:357
 msgid "event title"
 msgstr "название события"
 
-#: apps/news/models.py:360
+#: apps/news/models.py:362
 msgid "content event text, description, further manual and so on"
 msgstr "текст события, описания, инструкции и так далее"
 
-#: apps/news/models.py:364
+#: apps/news/models.py:366
 msgid "content html"
 msgstr "html контент"
 
-#: apps/news/models.py:365
+#: apps/news/models.py:367
 msgid "rendered html content"
 msgstr "html рендер контента"
 
-#: apps/news/models.py:368
+#: apps/news/models.py:370
 msgid "date start"
 msgstr "дата начала"
 
-#: apps/news/models.py:368
+#: apps/news/models.py:370
 msgid "when event date starts"
 msgstr "когда событие начинается"
 
-#: apps/news/models.py:371
+#: apps/news/models.py:373
 msgid "date end"
 msgstr "дата окончания"
 
-#: apps/news/models.py:371
+#: apps/news/models.py:373
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:379
+#: apps/news/models.py:381
 msgid "league"
 msgstr "лига"
 
-#: apps/news/models.py:380
+#: apps/news/models.py:382
 msgid "game league"
 msgstr "игровая лига"
 
-#: apps/news/models.py:386
+#: apps/news/models.py:388
 msgid "event place"
 msgstr "место проведения"
 
-#: apps/news/models.py:390
+#: apps/news/models.py:392
 msgid "participants would take a part in the event"
 msgstr "участники, которые будут принимать участие в событии"
 
-#: apps/news/models.py:394 apps/pybb/models.py:307
+#: apps/news/models.py:396 apps/pybb/models.py:307
 msgid "is finished"
 msgstr "завершен"
 
-#: apps/news/models.py:397
+#: apps/news/models.py:399
 msgid "is all day"
 msgstr "весь день"
 
-#: apps/news/models.py:398
+#: apps/news/models.py:400
 msgid "marks if event could place whole day"
 msgstr ""
 "отмечает, если событие будет проходить весь день (убирает временные отметки)"
 
-#: apps/news/models.py:425
+#: apps/news/models.py:427
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:426 apps/news/templates/events/calendar.html:23
+#: apps/news/models.py:428 apps/news/templates/events/calendar.html:23
 #: apps/news/templates/events/events.html:13
-#: apps/pybb/templates/pybb/head.html:39
+#: apps/pybb/templates/pybb/head.html:40
 msgid "Events"
 msgstr "События"
 
@@ -2219,36 +2229,36 @@ msgstr "Предстоящие события"
 msgid "Calendar"
 msgstr "Календарь"
 
-#: apps/pybb/templates/pybb/head.html:41
+#: apps/pybb/templates/pybb/head.html:42
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: apps/pybb/templates/pybb/head.html:43
+#: apps/pybb/templates/pybb/head.html:44
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: apps/pybb/templates/pybb/head.html:48
+#: apps/pybb/templates/pybb/head.html:49
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/head.html:51
+#: apps/pybb/templates/pybb/head.html:52
 msgid "Admincp"
 msgstr "Админка"
 
-#: apps/pybb/templates/pybb/head.html:53
+#: apps/pybb/templates/pybb/head.html:54
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:58
+#: apps/pybb/templates/pybb/head.html:59
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:68
+#: apps/pybb/templates/pybb/head.html:69
 #: apps/wh/templates/accounts/register.html:6
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:69
+#: apps/pybb/templates/pybb/head.html:70
 msgid "Log in"
 msgstr "Войти"
 
