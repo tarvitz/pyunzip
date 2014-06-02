@@ -20,9 +20,10 @@ class CommentCreateView(generic.CreateView):
     template_name = 'comments/comment_form.html'
 
     def get_success_url(self, form):
+        addon = '?page=%s' % 'last'
         if hasattr(form.instance.content_object, 'get_absolute_url'):
-            return form.instance.content_object.get_absolute_url()
-        return redirect(form.cleaned_data['url'] or '/')
+            return form.instance.content_object.get_absolute_url() + addon
+        return redirect((form.cleaned_data['url'] or '/') + addon)
 
     def form_valid(self, form):
         form.instance.site_id = 1
