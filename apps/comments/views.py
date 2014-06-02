@@ -59,9 +59,11 @@ class CommentUpdateView(generic.UpdateView):
 
     def get_success_url(self, form):
         form.save()
+        addon = '#c%s' % form.instance.pk
+        url = '/'
         if hasattr(self.get_object().content_object, 'get_absolute_url'):
-            return self.get_object().content_object.get_absolute_url()
-        return form.cleaned_data.get('url', '/')
+            url = self.get_object().content_object.get_absolute_url()
+        return form.cleaned_data.get('url', url) + addon
 
     def form_valid(self, form):
         return redirect(self.get_success_url(form))
