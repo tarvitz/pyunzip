@@ -20,7 +20,7 @@
 
 
   <div class="pull-right">
-    {% if gs.DEVELOPMENT user.is_authenticated and user not in object.participants.all %}
+    {% if gs.DEVELOPMENT and user.is_authenticated and user not in object.participants.all %}
       {% get_content_type object as object_ct %}
       <a href="{% url "comments:subscribe" object_ct.content_type.pk object.pk %}" rel="tooltip"
          data-title="{% trans "Subscribe for a new comments" %}">
