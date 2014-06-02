@@ -31,6 +31,7 @@
                     {% if user.is_authenticated %}
                     <li class='dropdown'>
                         <a class='dropdown-toggle' role='button' data-toggle="dropdown" href='#'>
+                            <img src="{{ user.get_avatar_url }}" class="avatar" />
                             {{ user.get_nickname|safe }}
                             <span class='caret'></span>
                         </a>
