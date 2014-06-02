@@ -5,9 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from apps.accounts.models import User
 from apps.core.forms import RequestFormMixin
 from django.contrib import auth
+from django.conf import settings
 
 from captcha.fields import ReCaptchaField
-
+from django_select2.widgets import Select2Widget
 
 #mixins
 class CleanPasswordMixin(object):
@@ -71,7 +72,8 @@ class ProfileForm(RequestFormMixin, forms.ModelForm):
     class Meta:
         attrs = {'class': 'form-control'}
         model = User
-        fields = ('first_name', 'last_name', 'nickname', 'avatar', 'gender',
+        fields = ('first_name', 'last_name', 'nickname', 'avatar', 'army',
+                  'gender',
                   'jid',
                   'about')
         widgets = {
@@ -80,7 +82,9 @@ class ProfileForm(RequestFormMixin, forms.ModelForm):
             'nickname': forms.TextInput(attrs),
             'gender': forms.Select(attrs),
             'jid': forms.EmailInput(attrs),
-            'about': forms.TextInput(attrs)
+            'about': forms.TextInput(attrs),
+            'army': Select2Widget(
+                attrs={'data-toggle': 'select2'})
         }
 
 

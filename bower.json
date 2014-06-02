@@ -21,7 +21,8 @@
     "noty": ">=2.1.0",
     "eonasdan-bootstrap-datetimepicker": "~3.0.0",
     "momentjs": ">=2.5.1",
-    "fullcalendar": "~1.6.4"
+    "fullcalendar": "~1.6.4",
+    "select2": "~3.4.8"
   },
   "devDependencies": {
     "select2": ">=3.4.3"

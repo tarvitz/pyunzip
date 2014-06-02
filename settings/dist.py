@@ -221,6 +221,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gunicorn',
     'django_cron',
+    'django_select2',
 )
 
 AUTH_USER_MODEL = (
