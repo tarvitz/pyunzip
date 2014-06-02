@@ -7,6 +7,7 @@ from django.conf import settings
 from django.utils.translation import ugettext as _
 from django.core.exceptions import ImproperlyConfigured
 
+from apps.core.widgets import DateTimePickerInput
 from apps.pybb.models import (
     Topic, Post, Poll, PollAnswer, PollItem
 )
@@ -119,12 +120,8 @@ class AddPollForm(forms.ModelForm):
         fields = ('title', 'items_amount', 'is_multiple', 'date_expire', )
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'date_expire': forms.TextInput(
-                attrs={
-                    'class': 'datetimepicker form-control',
-                    'data-format': 'YYYY-MM-DD HH:mm'
-                }
-            )
+            'date_expire': DateTimePickerInput(
+                attrs={'class': 'form-control', 'klass': 'col-lg-4'})
         }
 
     class Media:
