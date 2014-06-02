@@ -1,7 +1,7 @@
 # Create your views here.
 # coding: utf-8
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from apps.news.models import News, Meating, ArchivedNews, Event
+from apps.news.models import News, Meating, ArchivedNews, Event, EventWatch
 from apps.news.forms import (
     ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm,
     EventParticipateForm
@@ -420,6 +420,11 @@ class EventView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
+        # create watch instance to mark this event is watched by user
+        if self.request.user.is_authenticated():
+            watch, created = EventWatch.objects.get_or_create(
+                event=self.object,
+                user=self.request.user)
         event_ct = get_content_type(Event)
         comments = Comment.objects.filter(content_type=event_ct,
                                           object_pk=self.get_object().pk)

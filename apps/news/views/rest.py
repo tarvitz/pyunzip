@@ -12,6 +12,7 @@ class EventFilterSet(django_filters.FilterSet):
     class Meta:
         model = Event
 
+
 class EventViewSet(viewsets.ModelViewSet):
     """
     API viewpoint for event

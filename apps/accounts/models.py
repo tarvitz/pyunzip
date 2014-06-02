@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
+from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
 
@@ -178,6 +179,15 @@ class User(PermissionsMixin, AbstractBaseUser):
         amount = self.karma_owner_set.aggregate(Sum('value'))
         amount = amount.items()[0][1] or 0
         return amount
+
+    def get_unwatched_events(self):
+        from apps.news.models import Event, EventWatch
+        time_offset = datetime.now() - timedelta(days=31)
+        exclude_qs = EventWatch.objects.filter(created_on__gte=time_offset,
+                                               user=self)
+        self._unwatched_events = Event.objects.filter(
+            is_finished=False).exclude(event_watch_set=exclude_qs)
+        return self._unwatched_events
 
     @property
     def karma(self):

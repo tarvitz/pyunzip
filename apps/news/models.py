@@ -428,5 +428,23 @@ class Event(models.Model):
         verbose_name_plural = _("Events")
 
 
+class EventWatch(models.Model):
+    event = models.ForeignKey('news.Event', related_name='event_watch_set',
+                              verbose_name=_("event"))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='event_watch_user_set',
+                             verbose_name=_("user"))
+    created_on = models.DateTimeField(_('created on'), auto_now=True,
+                                      default=datetime.now)
+
+    def __unicode__(self):
+        return self.event.title + " " + self.user.get_username()
+
+    class Meta:
+        verbose_name = _("Event watch")
+        verbose_name_plural = _("Event watches")
+        unique_together = (('event', 'user'), )
+
+
 from signals import setup_signals
 setup_signals()

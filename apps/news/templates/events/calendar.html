@@ -28,6 +28,8 @@
     <i class="fc-event game">&nbsp;{% trans "game" %}&nbsp;</i>
     <i class="fc-event tournament">&nbsp;{% trans "tournament" %}&nbsp;</i>
     <i class="fc-event order">&nbsp;{% trans "order" context "card order" %}&nbsp;</i>
+    <br />
+    <i class="glyphicon glyphicon-asterisk"></i><em>{% trans "marks new event" %}</em>
   </div>
   {# i18n #}
   {% spaceless %}
@@ -115,8 +117,9 @@
               var events = [];
               json.results.map(function(item){
                 var _league = (item.league) ? ' [' + item.league + ']' : '';
+                var is_new = (item.is_new) ? '<i class="glyphicon glyphicon-asterisk"></i> ' : '';
                 events.push({
-                  title: item.title + _league,
+                  title: is_new + item.title + _league,
                   url: item.url || '',
                   start: item.date_start,
                   end: item.date_end,
@@ -127,6 +130,9 @@
               callback(events);
             }
           })
+        },
+        eventRender: function(event, element){
+          element.find('.fc-event-title').html(event.title);
         }
       });
     });

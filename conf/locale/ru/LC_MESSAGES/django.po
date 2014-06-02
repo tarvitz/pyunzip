@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-02 17:47+0400\n"
-"PO-Revision-Date: 2014-06-02 17:48+0400\n"
+"POT-Creation-Date: 2014-06-02 18:37+0400\n"
+"PO-Revision-Date: 2014-06-02 18:38+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1189,7 +1189,7 @@ msgstr "вверх"
 msgid "down"
 msgstr "вниз"
 
-#: apps/karma/forms.py:27
+#: apps/karma/forms.py:27 apps/news/models.py:436
 msgid "user"
 msgstr "пользователь"
 
@@ -1637,6 +1637,18 @@ msgstr "Событие"
 msgid "Events"
 msgstr "События"
 
+#: apps/news/models.py:433
+msgid "event"
+msgstr "событие"
+
+#: apps/news/models.py:442
+msgid "Event watch"
+msgstr "Просмотр события"
+
+#: apps/news/models.py:443
+msgid "Event watches"
+msgstr "Просмотр событий"
+
 #: apps/news/signals.py:26
 msgid "Your article changed status"
 msgstr "Статус вашей статьи был изменен"
@@ -1671,171 +1683,175 @@ msgctxt "card order"
 msgid "order"
 msgstr "заказ"
 
-#: apps/news/templates/events/calendar.html:34
+#: apps/news/templates/events/calendar.html:32
+msgid "marks new event"
+msgstr "отметка для нового события"
+
+#: apps/news/templates/events/calendar.html:36
 msgid "January"
 msgstr "Январь"
 
-#: apps/news/templates/events/calendar.html:34
+#: apps/news/templates/events/calendar.html:36
 msgid "February"
 msgstr "Февраль"
 
-#: apps/news/templates/events/calendar.html:34
+#: apps/news/templates/events/calendar.html:36
 msgid "March"
 msgstr "Март"
 
-#: apps/news/templates/events/calendar.html:35
+#: apps/news/templates/events/calendar.html:37
 msgid "April"
 msgstr "Апрель"
 
-#: apps/news/templates/events/calendar.html:35
+#: apps/news/templates/events/calendar.html:37
 msgid "May"
 msgstr "Май"
 
-#: apps/news/templates/events/calendar.html:35
+#: apps/news/templates/events/calendar.html:37
 msgid "June"
 msgstr "Июнь"
 
-#: apps/news/templates/events/calendar.html:36
+#: apps/news/templates/events/calendar.html:38
 msgid "July"
 msgstr "Июль"
 
-#: apps/news/templates/events/calendar.html:36
+#: apps/news/templates/events/calendar.html:38
 msgid "August"
 msgstr "Август"
 
-#: apps/news/templates/events/calendar.html:36
+#: apps/news/templates/events/calendar.html:38
 msgid "September"
 msgstr "Сентябрь"
 
-#: apps/news/templates/events/calendar.html:37
+#: apps/news/templates/events/calendar.html:39
 msgid "October"
 msgstr "Октябрь"
 
-#: apps/news/templates/events/calendar.html:37
+#: apps/news/templates/events/calendar.html:39
 msgid "November"
 msgstr "Ноябрь"
 
-#: apps/news/templates/events/calendar.html:38
+#: apps/news/templates/events/calendar.html:40
 msgid "December"
 msgstr "Декабрь"
 
-#: apps/news/templates/events/calendar.html:40
+#: apps/news/templates/events/calendar.html:42
 msgid "Mon"
 msgstr "Пн"
 
-#: apps/news/templates/events/calendar.html:40
+#: apps/news/templates/events/calendar.html:42
 msgid "Tue"
 msgstr "Вт"
 
-#: apps/news/templates/events/calendar.html:40
+#: apps/news/templates/events/calendar.html:42
 msgid "Wed"
 msgstr "Ср"
 
-#: apps/news/templates/events/calendar.html:41
+#: apps/news/templates/events/calendar.html:43
 msgid "Thu"
 msgstr "Чт"
 
-#: apps/news/templates/events/calendar.html:41
+#: apps/news/templates/events/calendar.html:43
 msgid "Fri"
 msgstr "Пт"
 
-#: apps/news/templates/events/calendar.html:41
+#: apps/news/templates/events/calendar.html:43
 msgid "Sat"
 msgstr "Сб"
 
-#: apps/news/templates/events/calendar.html:42
+#: apps/news/templates/events/calendar.html:44
 msgid "Sun"
 msgstr "Вс"
 
-#: apps/news/templates/events/calendar.html:44
+#: apps/news/templates/events/calendar.html:46
 msgid "Monday"
 msgstr "Понедельник"
 
-#: apps/news/templates/events/calendar.html:44
+#: apps/news/templates/events/calendar.html:46
 msgid "Tuesday"
 msgstr "Вторник"
 
-#: apps/news/templates/events/calendar.html:44
+#: apps/news/templates/events/calendar.html:46
 msgid "Wednesday"
 msgstr "Среда"
 
-#: apps/news/templates/events/calendar.html:45
+#: apps/news/templates/events/calendar.html:47
 msgid "Thursday"
 msgstr "Четверг"
 
-#: apps/news/templates/events/calendar.html:45
+#: apps/news/templates/events/calendar.html:47
 msgid "Friday"
 msgstr "Пятница"
 
-#: apps/news/templates/events/calendar.html:45
+#: apps/news/templates/events/calendar.html:47
 msgid "Saturday"
 msgstr "Суббота"
 
-#: apps/news/templates/events/calendar.html:46
+#: apps/news/templates/events/calendar.html:48
 msgid "Sunday"
 msgstr "Воскресенье"
 
-#: apps/news/templates/events/calendar.html:76
+#: apps/news/templates/events/calendar.html:78
 msgid "Today"
 msgstr "Сегодня"
 
-#: apps/news/templates/events/calendar.html:77
+#: apps/news/templates/events/calendar.html:79
 msgid "month"
 msgstr "месяц"
 
-#: apps/news/templates/events/calendar.html:78
+#: apps/news/templates/events/calendar.html:80
 msgid "week"
 msgstr "неделя"
 
-#: apps/news/templates/events/calendar.html:79
+#: apps/news/templates/events/calendar.html:81
 msgid "day"
 msgstr "день"
 
-#: apps/news/templates/events/calendar.html:88
+#: apps/news/templates/events/calendar.html:90
 msgid "Jan"
 msgstr "Янв"
 
-#: apps/news/templates/events/calendar.html:88
+#: apps/news/templates/events/calendar.html:90
 msgid "Feb"
 msgstr "Фев"
 
-#: apps/news/templates/events/calendar.html:88
+#: apps/news/templates/events/calendar.html:90
 msgid "Mar"
 msgstr "Мар"
 
-#: apps/news/templates/events/calendar.html:89
+#: apps/news/templates/events/calendar.html:91
 msgid "Apr"
 msgstr "Апр"
 
-#: apps/news/templates/events/calendar.html:89
+#: apps/news/templates/events/calendar.html:91
 msgid "Jun"
 msgstr "Июн"
 
-#: apps/news/templates/events/calendar.html:90
+#: apps/news/templates/events/calendar.html:92
 msgid "Jul"
 msgstr "Июл"
 
-#: apps/news/templates/events/calendar.html:90
+#: apps/news/templates/events/calendar.html:92
 msgid "Aug"
 msgstr "Авг"
 
-#: apps/news/templates/events/calendar.html:90
+#: apps/news/templates/events/calendar.html:92
 msgid "Sep"
 msgstr "Сен"
 
-#: apps/news/templates/events/calendar.html:91
+#: apps/news/templates/events/calendar.html:93
 msgid "Oct"
 msgstr "Окт"
 
-#: apps/news/templates/events/calendar.html:91
+#: apps/news/templates/events/calendar.html:93
 msgid "Nov"
 msgstr "Ноя"
 
-#: apps/news/templates/events/calendar.html:91
+#: apps/news/templates/events/calendar.html:93
 msgid "Dec"
 msgstr "Дек"
 
-#: apps/news/templates/events/calendar.html:101
+#: apps/news/templates/events/calendar.html:103
 msgid "all day"
 msgstr "весь день"
 
