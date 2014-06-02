@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-31 04:27+0400\n"
+"POT-Creation-Date: 2014-06-02 06:34+0400\n"
 "PO-Revision-Date: 2014-05-31 04:28+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -28,8 +28,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:31
-#: apps/accounts/forms.py:90 apps/wh/forms.py:396
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:32
+#: apps/accounts/forms.py:94 apps/wh/forms.py:396
 #: templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
@@ -45,8 +45,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:34
-#: apps/accounts/forms.py:93 apps/wh/forms.py:596
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:35
+#: apps/accounts/forms.py:97 apps/wh/forms.py:596
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -73,36 +73,36 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:20
+#: apps/accounts/forms.py:21
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:45
+#: apps/accounts/forms.py:46
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:56 apps/news/forms.py:238 apps/pybb/forms.py:173
+#: apps/accounts/forms.py:57 apps/news/forms.py:238 apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:68
+#: apps/accounts/forms.py:69
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:96 apps/wh/forms.py:599
+#: apps/accounts/forms.py:100 apps/wh/forms.py:599
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:99 apps/wh/forms.py:580
-#: templates/accounts/profile.html:39
+#: apps/accounts/forms.py:103 apps/wh/forms.py:580
+#: templates/accounts/profile.html:40
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:102 templates/accounts/profile.html:32
+#: apps/accounts/forms.py:106 templates/accounts/profile.html:32
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:105
+#: apps/accounts/forms.py:109
 msgid "Captcha"
 msgstr "Капча"
 
@@ -175,49 +175,53 @@ msgstr "обычный аватар"
 msgid "photo"
 msgstr "фото"
 
-#: apps/accounts/models.py:84
+#: apps/accounts/models.py:82 apps/wh/models.py:63
+msgid "army"
+msgstr "армия"
+
+#: apps/accounts/models.py:85
 msgid "gender"
 msgstr "пол"
 
-#: apps/accounts/models.py:86
+#: apps/accounts/models.py:87
 msgid "male"
 msgstr "мужской"
 
-#: apps/accounts/models.py:87
+#: apps/accounts/models.py:88
 msgid "female"
 msgstr "женский"
 
-#: apps/accounts/models.py:88
+#: apps/accounts/models.py:89
 msgid "not identified"
 msgstr "не определен"
 
-#: apps/accounts/models.py:91
+#: apps/accounts/models.py:92
 msgid "jabber id"
 msgstr "jabber ID"
 
-#: apps/accounts/models.py:94
+#: apps/accounts/models.py:95
 msgid "uin (icq number)"
 msgstr "uin (номер аськи)"
 
-#: apps/accounts/models.py:96
+#: apps/accounts/models.py:97
 msgid "about myself"
 msgstr "о себе"
 
-#: apps/accounts/models.py:99
+#: apps/accounts/models.py:100
 msgid "time zone"
 msgstr "временная зона"
 
-#: apps/accounts/models.py:100 apps/core/models.py:186 apps/core/models.py:187
+#: apps/accounts/models.py:101 apps/core/models.py:186 apps/core/models.py:187
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:238 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/accounts/models.py:239 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:182 apps/pybb/models.py:264 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:239 apps/pybb/templates/pybb/head.html:30
+#: apps/accounts/models.py:240 apps/pybb/templates/pybb/head.html:30
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
 msgid "Users"
@@ -244,7 +248,7 @@ msgid "content"
 msgstr "контент"
 
 #: apps/blogs/models.py:26 apps/files/models.py:290 apps/menu/models.py:42
-#: apps/news/templates/events/events.html:18 apps/pybb/forms.py:85
+#: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
 #: apps/tabletop/forms.py:279 apps/tabletop/models.py:188
 #: apps/tabletop/models.py:198 apps/tabletop/templates/add_roster_old.html:23
 #: apps/tabletop/templates/reports.html:30
@@ -908,7 +912,7 @@ msgid "Replays"
 msgstr "Реплеи"
 
 #: apps/files/models.py:279 apps/files/templates/gallery/gallery_list.html:22
-#: apps/pybb/templates/pybb/head.html:49
+#: apps/pybb/templates/pybb/head.html:46
 msgid "Gallery"
 msgstr "Галерея"
 
@@ -1026,7 +1030,7 @@ msgid "You used"
 msgstr "Вы испольщовали"
 
 #: apps/files/templates/files/user_files.html:31
-#: apps/pybb/templates/pybb/head.html:47
+#: apps/pybb/templates/pybb/head.html:44
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -1895,20 +1899,20 @@ msgstr "Последние посты на форуме"
 msgid "Latest topics on forum"
 msgstr "Последние топики на форуме"
 
-#: apps/pybb/forms.py:17 apps/pybb/models.py:101
+#: apps/pybb/forms.py:18 apps/pybb/models.py:101
 #: apps/wh/templates/accounts/pm.html:42
 msgid "Subject"
 msgstr "Тема"
 
-#: apps/pybb/forms.py:108 apps/pybb/forms.py:144
+#: apps/pybb/forms.py:109 apps/pybb/forms.py:141
 msgid "Poll items amount"
 msgstr "Количество элементов опроса"
 
-#: apps/pybb/forms.py:109 apps/pybb/forms.py:145
+#: apps/pybb/forms.py:110 apps/pybb/forms.py:142
 msgid "poll items amount for voting"
 msgstr "количество элементов опроса для голосования"
 
-#: apps/pybb/forms.py:156
+#: apps/pybb/forms.py:153
 msgid ""
 "You can not set items amount less than the variants to select or variants "
 "already have been created."
@@ -1916,24 +1920,24 @@ msgstr ""
 "Вы не можете установить количество меньше количества вариантов для "
 "голосвания."
 
-#: apps/pybb/forms.py:172
+#: apps/pybb/forms.py:169
 msgid "Delete?"
 msgstr "Удалить?"
 
-#: apps/pybb/forms.py:179
+#: apps/pybb/forms.py:176
 msgid "Poll item title"
 msgstr "Заголовок элемента"
 
-#: apps/pybb/forms.py:180
+#: apps/pybb/forms.py:177
 msgid "poll item title users would vote on"
 msgstr "название элемента для пользовательского голосвания"
 
-#: apps/pybb/forms.py:197 apps/pybb/tests/polls.py:156
+#: apps/pybb/forms.py:194 apps/pybb/tests/polls.py:156
 #: apps/pybb/tests/polls.py:177
 msgid "Title should be set"
 msgstr "Поле должно быть не пустым"
 
-#: apps/pybb/forms.py:218 apps/pybb/forms.py:234
+#: apps/pybb/forms.py:215 apps/pybb/forms.py:231
 msgid "Your option"
 msgstr "Ваш выбор"
 
@@ -2216,35 +2220,35 @@ msgid "Calendar"
 msgstr "Календарь"
 
 #: apps/pybb/templates/pybb/head.html:41
+msgid "My profile"
+msgstr "Мой профиль"
+
+#: apps/pybb/templates/pybb/head.html:43
 msgid "My rosters"
 msgstr "Мои ростеры"
 
 #: apps/pybb/templates/pybb/head.html:48
-msgid "My profile"
-msgstr "Мой профиль"
-
-#: apps/pybb/templates/pybb/head.html:51
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/head.html:54
+#: apps/pybb/templates/pybb/head.html:51
 msgid "Admincp"
 msgstr "Админка"
 
-#: apps/pybb/templates/pybb/head.html:56
+#: apps/pybb/templates/pybb/head.html:53
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:61
+#: apps/pybb/templates/pybb/head.html:58
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:71
+#: apps/pybb/templates/pybb/head.html:68
 #: apps/wh/templates/accounts/register.html:6
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:72
+#: apps/pybb/templates/pybb/head.html:69
 msgid "Log in"
 msgstr "Войти"
 
@@ -3525,10 +3529,6 @@ msgstr "фракция"
 msgid "side"
 msgstr "сторона"
 
-#: apps/wh/models.py:63
-msgid "army"
-msgstr "армия"
-
 #: apps/wh/models.py:90
 msgid "Mini Quote"
 msgstr "Мини цитата"
@@ -3730,7 +3730,7 @@ msgid "[everban]"
 msgstr "[навекибан]"
 
 #: apps/wh/templates/accounts/change_password.html:7
-#: templates/accounts/profile.html:6
+#: apps/wh/templates/accounts/index.html:44 templates/accounts/profile.html:6
 msgid "profile"
 msgstr "профиль"
 
@@ -3958,7 +3958,7 @@ msgstr "ICQ"
 msgid "Jabber/Google talk"
 msgstr "Jabber/Google talk"
 
-#: templates/accounts/profile.html:40
+#: templates/accounts/profile.html:42
 msgid "Signature"
 msgstr "Подпись"
 

@@ -78,7 +78,8 @@ class User(PermissionsMixin, AbstractBaseUser):
     )
     # TODO: refactor, redo, recode
     ranks = models.ManyToManyField('wh.Rank', null=True, blank=True)
-    army = models.ForeignKey('wh.Army', null=True, blank=True)
+    army = models.ForeignKey('wh.Army', null=True, blank=True,
+                             verbose_name=_("army"))
 
     gender = models.CharField(
         _('gender'), default='n', max_length=1,

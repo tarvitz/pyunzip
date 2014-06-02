@@ -1,5 +1,6 @@
 BeautifulSoup==3.2.1
 Django==1.6.2
+Django-Select2==4.2.2
 PIL==1.1.7
 Pillow==2.3.0
 South==0.8.4
