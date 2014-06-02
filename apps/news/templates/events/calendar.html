@@ -117,14 +117,15 @@
               var events = [];
               json.results.map(function(item){
                 var _league = (item.league) ? ' [' + item.league + ']' : '';
-                var is_new = (item.is_new) ? '<i class="glyphicon glyphicon-asterisk"></i> ' : '';
+                var isNew = (item.is_new) ? '<i class="glyphicon glyphicon-asterisk"></i> ' : '';
+                var isFinishedClass = (item.is_finished) ? ' is-finished' : '';
                 events.push({
-                  title: is_new + item.title + _league,
+                  title: isNew + item.title + _league,
                   url: item.url || '',
                   start: item.date_start,
                   end: item.date_end,
                   allDay: item.is_all_day || false,
-                  className: item.type || ''
+                  className: item.type + isFinishedClass || ''
                 });
               });
               callback(events);
