@@ -48,6 +48,8 @@ LOCALE_PATHS = (
 # to load the internationalization machinery.
 USE_I18N = True
 
+_ = lambda s: s
+
 # TODO: cleanup
 STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
@@ -273,11 +275,11 @@ NULL_AVATAR_URL = os.path.join(MEDIA_URL, 'avatars/none.png')
 FORUM_THEME_DEFAULT = 'primary'
 FORUM_THEMES = (
     # <name>, panel-<class>
-    ('winter', 'primary'),
-    ('summer', 'warning'),
-    ('autumn', 'danger'),
-    ("spring", 'success'),
-    ("void", 'default')
+    (_('winter'), 'primary'),
+    (_('summer'), 'warning'),
+    (_('autumn'), 'danger'),
+    (_("spring"), 'success'),
+    (_("void"), 'default')
 )
 # TEMPLATES INCLUES
 DOCUMENT = {

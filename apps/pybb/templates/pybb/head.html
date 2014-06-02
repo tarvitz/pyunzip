@@ -64,7 +64,8 @@
                         </a>
                         <ul class='dropdown-menu pull-right' role='menu'>
                             {% for theme in gs.FORUM_THEMES %}
-                                <li><a href='{% url "pybb:theme-switch" theme.0 %}'>{% trans theme.0 %}</a></li>
+                                <li><a href='{% url "pybb:theme-switch" theme.0 %}'>
+                                  {% trans theme.0 %}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
