@@ -421,7 +421,8 @@ class EventView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
         # create watch instance to mark this event is watched by user
-        if self.request.user.is_authenticated():
+        if (not self.object.is_finished
+                and self.request.user.is_authenticated()):
             watch, created = EventWatch.objects.get_or_create(
                 event=self.object,
                 user=self.request.user)
