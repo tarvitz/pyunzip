@@ -543,6 +543,20 @@ class GalleryListView(generic.ListView):
         return context
 
 
+class GalleryImageDetailView(generic.DetailView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_image.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(GalleryImageDetailView, self).get_context_data(
+            **kwargs)
+        page = get_int_or_zero(self.request.GET.get('page', 1)) or 1
+        comments = paginate(self.object.comment_objects.all(), page,
+                            pages=settings.OBJECTS_ON_PAGE)
+        context.update({'comments': comments})
+        return context
+
+
 class GalleryImageCreateView(generic.CreateView):
     model = GalleryImage
     template_name = 'gallery/gallery_image_form.html'

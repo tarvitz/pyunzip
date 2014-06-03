@@ -1,5 +1,6 @@
 import os
 
+from django.contrib.contenttypes import generic
 from django.conf import settings
 from django.db import models
 try:
@@ -302,6 +303,10 @@ class Image(models.Model):
         upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/")
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
+    comment_objects = generic.GenericRelation(
+        'comments.Comment',
+        object_id_field='object_pk'
+    )
 
     actions = []
 
@@ -347,8 +352,7 @@ class Image(models.Model):
         self.save()
     
     def get_absolute_url(self):
-        #return "/image/%i/" % self.id
-        return reverse('files:image', kwargs={'number': self.id})
+        return reverse('files:image', args=(self.pk, ))
 
     def get_edit_url(self):
         return reverse('files:image-edit', args=(self.pk, ))
