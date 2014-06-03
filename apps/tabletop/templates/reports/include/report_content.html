@@ -85,7 +85,7 @@
         </div>
         <div class='message-body'>
             <div class='avatar'>
-                <img src='{% url "wh:avatar" report.owner.nickname %}'>
+                <img src='{{  report.owner.get_avatar_url }}'>
                 {{ report.owner.get_nickname|safe }}
             </div>
             <div class='text'><div class='transparency'></div>

@@ -21,7 +21,9 @@
     <div class='message-content'>
       <div class='avatar text-center'>
         {% spaceless %}
-          <img src='{% url "wh:avatar" r.show_player %}'><br>
+          {% if r.owner %}
+            <img src='{{ r.owner.get_avatar_url }}'><br>
+          {% endif %}
           {% if r.user %}
             <a href='{% url "tabletop:rosters" r.user.get_username %}'>
               {{ r.user.get_nickname|safe }}</a>
