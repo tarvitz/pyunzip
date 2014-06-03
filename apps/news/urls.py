@@ -2,12 +2,7 @@ from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
 from apps.news import views
-from apps.news.views.rest import EventViewSet
 
-from rest_framework import routers
-
-router = routers.DefaultRouter()
-router.register(r'events', EventViewSet)
 
 urlpatterns = patterns('apps.news.views',
     #url(r'^$', 'news', name='index'),
@@ -58,9 +53,4 @@ urlpatterns = patterns('apps.news.views',
     url(r'^events/(?P<pk>\d+)/join/$',
         login_required(views.EventParticipateView.as_view()),
         name='event-join')
-)
-
-urlpatterns += patterns(
-    '',
-    url(r'^api/', include(router.urls)),
 )

@@ -18,7 +18,7 @@
     "jquery": "=1.8.3",
     "jquery-colorbox": ">=1.4.33",
     "jquery-tmpl": "",
-    "noty": ">=2.1.0",
+    "noty": "~2.2.5",
     "eonasdan-bootstrap-datetimepicker": "~3.0.0",
     "momentjs": ">=2.5.1",
     "fullcalendar": "~1.6.4",

@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from django.views import generic
 
-from apps.comments.forms import CommentForm
+from apps.comments.forms import CommentForm, SubscriptionRemoveForm
 from apps.comments.models import CommentWatch
 from apps.comments.forms import CommentWatchSubscribeForm
 from apps.core.helpers import get_object_or_404, get_object_or_None
@@ -9,7 +9,7 @@ from apps.helpers.diggpaginator import DiggPaginator as Paginator
 
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.comments.models import Comment
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.conf import settings
 # Create your views here.
 
@@ -34,12 +34,31 @@ class CommentCreateView(generic.CreateView):
             content_type=form.cleaned_data['content_type'],
             object_pk=form.cleaned_data['object_pk']
         ).order_by('-submit_date')
+        instance = form.instance
         if comments.count() and comments[0].user == self.request.user:
             comment = comments[0]
             comment.comment += '\n' + form.cleaned_data['comment']
+            instance = comment
             comment.save()
         else:
             form.save()
+
+        # comment watch actions
+        CommentWatch.objects.filter(
+            content_type=form.instance.content_type,
+            object_pk=form.instance.object_pk, is_updated=False).exclude(
+            user=self.request.user).update(is_updated=True)
+
+        comment_watch = get_object_or_None(
+            CommentWatch, user=self.request.user,
+            content_type=form.instance.content_type,
+            object_pk=form.instance.object_pk
+        )
+        if comment_watch:
+            comment_watch.comment = instance
+            comment_watch.is_updated = False
+            comment_watch.save()
+
         return redirect(self.get_success_url(form))
 
 
@@ -92,7 +111,8 @@ class SubscribeCommentWatchView(generic.FormView):
             **kwargs)
 
         context.update({
-            'object': self.get_content_object()
+            'content_object': self.get_content_object(),
+            'subscribe': True
         })
         return context
 
@@ -129,6 +149,17 @@ class SubscribeCommentWatchView(generic.FormView):
         return redirect(self.get_success_url())
 
 
+class RemoveSubscriptionView(generic.UpdateView):
+    model = CommentWatch
+    success_url = reverse_lazy('comments:subscriptions')
+    form_class = SubscriptionRemoveForm
+    template_name = 'comments/subscribe_form.html'
+
+    def form_valid(self, form):
+        form.instance.is_disabled = True
+        return super(RemoveSubscriptionView, self).form_valid(form)
+
+
 class CommentWatchListView(generic.ListView):
     model = CommentWatch
     paginate_by = settings.OBJECTS_ON_PAGE
@@ -138,4 +169,4 @@ class CommentWatchListView(generic.ListView):
     def get_queryset(self):
         qs = super(CommentWatchListView, self).get_queryset()
         return qs.filter(user=self.request.user,
-                         is_disabled=False)
+                         is_disabled=False, is_updated=True)

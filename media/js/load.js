@@ -40,6 +40,12 @@ markupSettings = myMarkupSettings['textile'];
 markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&template=comment';
 $('textarea.markitup').markItUp(markupSettings);
 
+function getCookie(name){
+  var reg = RegExp('(' + name + ')=([\\w\\d\\_\\- ]+)');
+  var out = document.cookie.match(reg);
+  return (out) ? out[2] : '';
+}
+
 (function(){
   $.each($('[data-toggle=date-time-picker]'), function(idx, item){
     $(item).datetimepicker({

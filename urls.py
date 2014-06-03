@@ -7,6 +7,16 @@ from django.contrib import admin
 admin.autodiscover()
 from apps.core.feeds import *
 
+from apps.news.views.rest import EventViewSet
+from apps.comments.views.rest import CommentWatchViewSet
+
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'events', EventViewSet)
+router.register(r'commentwatch', CommentWatchViewSet)
+
+
 urlpatterns = patterns('',
     # Example:
     # (r'^warmist/', include('warmist.foo.urls')),
@@ -51,6 +61,7 @@ urlpatterns = patterns('',
     (r'^forum/', include('apps.pybb.urls', namespace='pybb')),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
+    url(r'^api/', include(router.urls, namespace='api')),
     #(r'^devblog/', include('apps.blogs.urls', namespace='blog')),
     #(r'^whadmin/', include('apps.whadmin.urls')),
     #(r'^test/test/$', direct_to_template,{'template': 'test.html'}), 

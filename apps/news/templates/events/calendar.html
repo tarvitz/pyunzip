@@ -106,7 +106,7 @@
         minTime: 9,
         events: function(start, end, callback){
           $.ajax({
-            url: "{% url "news:event-list" %}",
+            url: "{% url "api:event-list" %}",
             dataType: "json",
             data: {
                 // our hypothetical feed requires UNIX timestamps

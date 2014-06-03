@@ -77,8 +77,8 @@ class CommentWatch(models.Model):
     created_on = models.DateTimeField(_('created on'), auto_now=True,
                                       default=datetime.now)
     is_disabled = models.BooleanField(
-        _("is disabled", default=False,
-        help_text=_("marks if watch is disabled for present moment")))
+        _("is disabled"), default=False,
+        help_text=_("marks if watch is disabled for present moment"))
     is_updated = models.BooleanField(
         _("is updated"), default=False,
         help_text=_("marks if comment watch was updated for new comments")
@@ -88,6 +88,13 @@ class CommentWatch(models.Model):
         title = (self.object.title if hasattr(self.object, 'title')
                     else self.object.__unicode__())
         return title + " " + self.user.get_username()
+
+    # urls
+    def get_subscription_remove_url(self):
+        return reverse('comments:subscription-remove', args=(self.pk, ))
+
+    def get_api_subscription_read(self):
+        return reverse('api:commentwatch-detail', args=(self.pk, ))
 
     def get_new_comments(self):
         qset = Q()

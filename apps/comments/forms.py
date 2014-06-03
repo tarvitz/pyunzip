@@ -35,3 +35,11 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'comment': forms.Textarea(attrs={'class': 'markitup'})
         }
+
+
+class SubscriptionRemoveForm(forms.ModelForm):
+    agree = forms.BooleanField(label=_("Yes, I agree"), required=True)
+
+    class Meta:
+        model = CommentWatch
+        fields = ()

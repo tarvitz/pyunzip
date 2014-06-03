@@ -1,5 +1,5 @@
 {% extends "base_template.html" %}
-{% load i18n coretags %}
+{% load i18n coretags comments_extra %}
 {% block content %}
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
@@ -20,12 +20,23 @@
 
 
   <div class="pull-right">
-    {% if gs.DEVELOPMENT and user.is_authenticated and user not in object.participants.all %}
-      {% get_content_type object as object_ct %}
-      <a href="{% url "comments:subscribe" object_ct.content_type.pk object.pk %}" rel="tooltip"
-         data-title="{% trans "Subscribe for a new comments" %}">
-        <i class="icon-addcomment"></i>
-      </a>
+    {% get_comment_watch object as comment_watch %}
+
+    {% if user.is_authenticated %}
+      {% if comment_watch %}
+        <a href="{{ comment_watch.get_subscription_remove_url }}" rel="tooltip"
+           data-title="{% trans "Remove subscription" %}">
+            <i class="icon-remove icon-delete"></i></a>
+      {% else %}
+        {% get_content_type object as object_ct %}
+        <a href="{% url "comments:subscription-add" object_ct.content_type.pk object.pk %}" rel="tooltip"
+           data-title="{% trans "Subscribe for a new comments" %}">
+          <i class="icon-addcomment"></i>
+        </a>
+      {% endif %}
+    {% endif %}
+
+    {% if user.is_authenticated and user not in object.participants.all %}
       <a href="{{ object.get_join_url }}" rel="tooltip"
          data-title="{% trans "Mark that I would come to this event" %}">
           <i class="glyphicon glyphicon-ok icon-ok"></i></a>
@@ -53,7 +64,7 @@
 
     <div class="comments">
       {% for comment in comments.object_list %}
-        {% include "generic/comment_new.html" with comment=comment %}
+        {% include "generic/comment_new.html" with comment=comment comment_watch=comment_watch %}
       {% endfor %}
     </div>
     {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
