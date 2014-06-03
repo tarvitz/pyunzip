@@ -268,13 +268,16 @@ class MetaGallery(models.Model):
         abstract = True
 
 class Gallery(MetaGallery):
-    #name = models.CharField(_('Name'), max_length=100)
-    #owner = models.ForeignKey(settings.AUTH_USER_MODEL) #common gallery does not include owner
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('files:galleries', args=(self.pk, ))
+
     class Meta:
         verbose_name = _('Gallery')
         verbose_name_plural = _('Galleries')
+
 
 class Image(models.Model): 
     #def upload_to(self, filename):
@@ -285,36 +288,35 @@ class Image(models.Model):
             return value
         raise ValidationError("You should use only letters, digits and _")
     title = models.CharField(_('Title'), max_length=100)
-    alias = models.CharField(_('Alias'), max_length=32, blank=True,
+    alias = models.CharField(
+        _('Alias'), max_length=32, blank=True,
         unique=True,
         null=True,
         help_text=_('Fast name to access unit'),
         validators=[valid_alias]) #shorter, wiser
     comments = models.TextField(_('Comments'))
-    gallery = models.ForeignKey(Gallery)
-    image = models.ImageField(_('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (str(s.owner.id), fn))
-    #os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
-    thumbnail = models.ImageField(_('Thumbnail'), upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/"))
+    gallery = models.ForeignKey(Gallery, verbose_name=_("gallery"))
+    image = models.ImageField(
+        _('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (str(s.owner.id), fn)
+    )
+    thumbnail = models.ImageField(
+        _('Thumbnail'),
+        upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/")
+    )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-    seen_objects = generic.GenericRelation(
-        'tracker.SeenObject', object_id_field='object_pk'
-    )
-
     actions = [common_delete_action, ]
+
     class Meta:
         permissions = (
-         ('can_upload', 'Can upload images'),
-         ('delete_images', 'Can delete images'),
+            ('can_upload', 'Can upload images'),
+            ('delete_images', 'Can delete images'),
         )
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
         ordering = ['-id', ]
         
     get_title = lambda self: self.title
-     
-    def get_seen_users(self):
-        return [i.user for i in self.seen_objects.all()]
 
     def generate_thumbnail(self,size=(200,200)):
         if not self.image:

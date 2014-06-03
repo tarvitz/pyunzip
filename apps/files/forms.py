@@ -448,3 +448,29 @@ class UploadFileForm(RequestModelForm):
     class Meta:
         model = UserFile
         fields = ('file', 'title')
+
+
+class GalleryImageForm(forms.ModelForm):
+    required_css_class = 'required'
+    class Meta:
+        attrs = {'class': 'form-control'}
+        model = ModelImage
+        fields = ('title', 'gallery', 'comments', 'image')
+        widgets = {
+            'title': forms.TextInput(attrs=attrs),
+            'gallery': forms.Select(attrs=attrs),
+            'comments': forms.Textarea(attrs=attrs),
+        }
+
+
+class GalleryImageUpdateForm(GalleryImageForm):
+    class Meta:
+        attrs = {'class': 'form-control'}
+        model = ModelImage
+        fields = ('title', 'comments', )
+        widgets = {
+            'title': forms.TextInput(attrs=attrs),
+            'comments': forms.Textarea(
+                attrs={'class': 'form-control'}
+            )
+        }

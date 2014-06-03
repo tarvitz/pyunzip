@@ -104,9 +104,7 @@ class AbstractNews(models.Model):
         help_text=_("marks if news notification should resend"),
         default=False
     )
-    seen_objects = generic.GenericRelation(
-        'tracker.SeenObject', object_id_field='object_pk'
-    )
+
 
     get_title = lambda self: self.title
     get_content = lambda self: self.content
@@ -133,8 +131,6 @@ class AbstractNews(models.Model):
     def get_comments_count(self):
         return self.get_comments().count()
 
-    def get_seen_users(self):
-        return [i.user for i in self.seen_objects.all()]
 
     @property
     def head_content(self):

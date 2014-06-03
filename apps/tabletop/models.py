@@ -221,9 +221,7 @@ class BattleReport(models.Model):
     approved = models.BooleanField(_('approved'), default=False, blank=True)
     ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
     syntax = models.CharField(_('syntax'), max_length=20, choices=settings.SYNTAX)
-    seen_objects = generic.GenericRelation(
-        'tracker.SeenObject', object_id_field='object_pk'
-    )
+
 
     actions = [common_delete_action, ]
 
@@ -238,8 +236,6 @@ class BattleReport(models.Model):
         return reverse('tabletop:report', args=(self.id,))
         #return reverse('tabletop:battle-report',args=[self.id,])
 
-    def get_seen_users(self):
-        return [i.user for i in self.seen_objects.all()]
 
     def get_title(self):
         return self.title

@@ -23,7 +23,7 @@ from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
     ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm, \
-    UploadFileForm
+    UploadFileForm, GalleryImageForm, GalleryImageUpdateForm
 from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment, UserFile
 from apps.files.models import Image as GalleryImage
@@ -1025,3 +1025,25 @@ class GalleryListView(generic.ListView):
         if pk:
             context.update({'gallery': get_object_or_404(Gallery, pk=pk)})
         return context
+
+
+class GalleryImageCreateView(generic.CreateView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_image_form.html'
+    form_class = GalleryImageForm
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(GalleryImageCreateView, self).form_valid(form)
+
+
+class GalleryImageUpdateView(generic.UpdateView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_image_form.html'
+    form_class = GalleryImageUpdateForm
+
+    def get_queryset(self):
+        qs = super(GalleryImageUpdateView, self).get_queryset()
+        if self.request.user.has_perm('files.change_image'):
+            return qs
+        return qs.filter(owner=self.request.user)

@@ -1,4 +1,6 @@
 from django.conf.urls import *
+from django.contrib.auth.decorators import login_required
+
 from apps.core.shortcuts import direct_to_template
 from apps.files import views
 
@@ -68,7 +70,10 @@ urlpatterns = patterns('apps.files.views',
         {'template': 'gallery/created.html'}),
     #deprecated, cleanse
     #(r'^gallery/upload/$', 'upload_image'),
-    url(r'^gallery/upload/$', 'upload_image',
+    #url(r'^gallery/upload/$', 'upload_image',
+    #    name='image-upload'),
+    url(r'^galleries/images/upload/$',
+        login_required(views.GalleryImageCreateView.as_view()),
         name='image-upload'),
     url(r'^gallery/(?P<gallery_name>[\w\s]+)/$', 'show_gallery'),
     #can delete both way: via url address and delete_function:
@@ -84,7 +89,10 @@ urlpatterns = patterns('apps.files.views',
         name='url_show_raw_image'),
     url(r'^ti/(?P<alias>[\w\d_]+)/$', 'show_raw_image', {'thumbnail': True},
         name='url_show_raw_image'),
-    url(r'^image/edit/(?P<id>\d+)/$', 'action_image', {'action': 'edit'},
+    #url(r'^image/edit/(?P<id>\d+)/$', 'action_image', {'action': 'edit'},
+    #    name='image-edit'),
+    url(r'^images/(?P<pk>\d+)/edit/$',
+        login_required(views.GalleryImageUpdateView.as_view()),
         name='image-edit'),
     #url(r'^files/$', 'show_files',
     #    name='files-index'),
