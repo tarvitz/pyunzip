@@ -50,12 +50,10 @@
                     </li>
                 <li class='lvl2'><a href='{% url "wh:password-restore-initiate" %}'>востановление пароля</a></li>{% endif %}
                 <li><a rel='twipsy' href='{% url "wh:users" %}' title='Обитатели ресурса'>Участники</a></li>
-                <li><a rel='twipsy' href="{% url "news:news" %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
+                <li><a rel='twipsy' href="{% url 'news:index' %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
                 <span class='feeds'><a href="{% url "feed-news-atom" %}">[atom</a>|
                     <a href="{% url "feed-news" %}">rss]</a></span>
                 </li>
-                <li class='lvl2'><a rel='twipsy' href='{% url "news:archived-news" %}' title='Ранее опубликованные новости старше года от сегодня ;)'>Архив</a></li>
-                {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a href='{% url "news:article-add" %}'>Добавить</a></li>{% endif %}
                 <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
                 <li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
@@ -81,14 +79,6 @@
     </div>
     <div class='menu bar'>
         <div class="transparency"><!-- wise transparency --></div>
-            {% get_unread news.News as unread_news %}
-            {% get_unread wh.WishList as unread_wishes %}
-            {% if unread_news %}<span class='attention'><a rel='twipsy' class='attention' href="{% url news:news approved='unapproved' %}">Непрочтенных новостей: <b>
-                {{ unread_news }}</a></b></span>{% else %}
-            Напоминаний пока нет{% endif %}
-            {% if perms.wh.can_approve and unread_wishes %}
-            <span class='attention'>Непрочитанных пожеланий: {{ unread_wishes }}</span>
-            {% endif %}
     </div>
 </div>
 {% endif %}{% endspaceless %}

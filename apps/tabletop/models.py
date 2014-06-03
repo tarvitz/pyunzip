@@ -16,9 +16,8 @@ from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
-from apps.core.actions import common_delete_action
+
 from apps.core.helpers import render_filter, post_markup_filter
-from apps.tabletop.actions import alter_codex_action
 from django.contrib.contenttypes import generic
 
 
@@ -117,7 +116,7 @@ class Roster(models.Model):
     wins = models.PositiveIntegerField(_('wins'), default=0, blank=True)
     defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
 
-    actions = [common_delete_action, alter_codex_action]
+    actions = []
 
     def show_player(self):
         if hasattr(self.user, 'nickname'):
@@ -154,14 +153,7 @@ class Roster(models.Model):
         return "%s [%s:%s:%i] [%i]" % (self.title, player_name, codex, self.pts, self.revision)
 
     def save(self,*args,**kwargs):
-        from apps.core.helpers import get_user
-        if not self.player:
-            self.user = self.owner
-        else:
-            user = get_user(nickname=self.player)
-            if user:
-                self.user = user
-        super(Roster,self).save(*args,**kwargs)
+        super(Roster,self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('tabletop:roster',args=[self.id])
@@ -222,8 +214,7 @@ class BattleReport(models.Model):
     ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
     syntax = models.CharField(_('syntax'), max_length=20, choices=settings.SYNTAX)
 
-
-    actions = [common_delete_action, ]
+    actions = []
 
     def __unicode__(self):
         return "%s [%s:%s]" % (

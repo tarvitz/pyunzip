@@ -1,26 +1,23 @@
-# Create your views here.
 # coding: utf-8
-from django.utils.translation import ugettext_lazy as _
 from apps.tabletop.models import (
-    Roster, Mission, Game, BattleReport, Codex
+    Roster, BattleReport, Codex
 )
-from apps.tabletop.forms import AddRosterForm,DeepSearchRosterForm,\
-    AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,\
-    AddRosterModelForm
-from django.core.paginator import InvalidPage, EmptyPage
+from apps.tabletop.forms import (
+    AddRosterForm,
+    AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,
+    AddRosterModelForm)
+
 from django.core.urlresolvers import reverse
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import (
-    get_settings, get_comments, get_content_type,
-    get_object_or_none, paginate, can_act, render_to,
-    safe_ret, get_int_or_zero
+    get_comments, get_content_type,
+    get_object_or_None, paginate, can_act, render_to, get_int_or_zero
 )
 
 from django.conf import settings
-from django.shortcuts import render_to_response, get_object_or_404
-from apps.core import pages, get_skin_template
-from apps.core.forms import CommentForm, SphinxSearchForm
-#from django.views.generic.simple import direct_to_template
+from django.shortcuts import get_object_or_404
+from apps.core import get_skin_template
+
 from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
 try:
@@ -29,22 +26,21 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.http import (
-    HttpResponse, HttpResponseRedirect, HttpResponseServerError,
+    HttpResponse, HttpResponseRedirect,
     Http404
 )
-from django.contrib.auth.decorators import login_required, permission_required
-from django.template import RequestContext
+from django.contrib.auth.decorators import login_required
+
 from django.db.models import Q
-from apps.core.decorators import benchmarking, has_permission, \
-    lock_with_dev as unlock_for
-from apps.core.forms import ApproveActionForm, action_formset_ng
-from apps.core import benchmark
+from apps.core.decorators import (
+    has_permission
+)
+
 from apps.wh.models import Side
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.comments.models import Comment
 from django.views import generic
-# -- helpers
-from apps.tabletop.helpers import process_roster_query
+
 from django.core import serializers
 import simplejson as json
 from django.core.cache import cache
@@ -53,7 +49,6 @@ from datetime import datetime
 
 
 @login_required
-@benchmarking
 @render_to('reports.html')
 def reports(request):
     reports = request.user.battle_report_set.all()
@@ -65,7 +60,6 @@ def reports(request):
         'form': form
     }
 
-@benchmarking
 @render_to('reports/reports.html')
 def battle_reports(request):
     page = get_int_or_zero(request.GET.get('page', 1)) or 1
@@ -128,274 +122,14 @@ def report_approve(request, pk, approved=True):
         'redirect-args': (report.id, )
     }
 
-@unlock_for({'DEVELOPMENT': True})
-@benchmarking
-@csrf_protect
-def index(request):
-    template = get_skin_template(request.user,'battle_report_index.html')
-    battlereps = BattleReport.objects.all()
-    _pages_ = get_settings(request.user,'objects_on_page',20)
-    page = request.GET.get('page',1)
-    formclass = action_formset_ng(request, battlereps, BattleReport,
-        permissions=['tabletop.delete_battlereport', 'tabletop.change_battlereport'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('tabletop:battle-report'))
-        else:
-            return direct_to_template(request, template,
-                {'battlereps': battlereps,
-                'form': form}, processors=[benchmark])
-    form = formclass()
-    battlereps = paginate(battlereps,page,pages=_pages_)
-    return direct_to_template(request, template,
-        {'battlereps': battlereps,
-        'form': form},
-        processors=[benchmark])
-
-@benchmarking
-@unlock_for({'DEVELOPMENT': True})
-def show_battle_report(request,id):
-    template = get_skin_template(request.user,'battle_report.html')
-    battle_report = get_object_or_404(BattleReport,id=id)
-    comments = get_comments(BattleReport,object_pk=str(id))
-    _pages_ = get_settings(request.user,'comments_on_page',20)
-    page = request.GET.get('page',1)
-    comments = paginate(comments,page,pages=_pages_,jump='#comments')
-
-    ct = get_content_type(BattleReport)
-    #kind a huge one, we need to cut it up ^^
-    #upd: we 'ud it up!
-    form = CommentForm(request=request,initial={'app_n_model':'tabletop.battlereport','obj_id': id,'url':
-                request.META.get('PATH_INFO','')})
-    return render_to_response(template,
-        {
-            'battle_report':battle_report,
-            'comments':comments,
-            'form': form,
-        },context_instance=RequestContext(request,processors=[benchmark])
-    )
-
-@benchmarking
-def index_rosters(request):
-    template = get_skin_template(request.user,'user_rosters.html')
-    rosters = Roster.objects.all()
-    _pages_ = get_settings(request.user,'rosters_on_page',20)
-    page = request.GET.get('page',1)
-    formclass = action_formset_ng(request, rosters, Roster,
-        permissions=['tabletop.change_roster', 'tabletop.delete_roster'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('tabletop:rosters'))
-        else:
-            return direct_to_template(request, template,
-                {'rosters': rosters, 'form': form},
-                processors=[benchmark])
-    rosters = paginate(rosters,page,pages=_pages_)
-    form = formclass()
-    return direct_to_template(request, template,
-        {'rosters': rosters, 'form': form},
-        processors=[benchmark])
-    #render_to_response(template,{'rosters':rosters},
-    #    context_instance=RequestContext(request,processors=[benchmark]))
-
-@login_required
-@benchmarking
-def user_rosters(request,nickname='', pts=''):
-    kw = dict()
-    #if race and 'all' not in race : kw.update({'race__name__iexact': race })
-    #elif race and 'all' in race: pass
-
-    if pts: kw.update({'pts':pts})
-    
-    if not nickname: 
-        user = request.user
-    else:
-        user = get_object_or_404(User,nickname__iexact=nickname)
-    show_deleted = get_settings(request.user,'show_deleted_rosters',False)
-    if not show_deleted: kw.update({'is_orphan': False})
-
-    template = get_skin_template(request.user,'user_rosters.html')
-    _pages_ = get_settings(request.user, 'objects_on_page',20)
-    if nickname:    qset_nicks = Q(owner=user)|Q(user=user)|Q(player__iexact=user.nickname)
-    elif not nickname and pts: qset_nicks = Q()
-    else: qset_nicks = Q(owner=request.user)
-    rosters = Roster.objects.filter(qset_nicks,Q(**kw))
-    page = request.GET.get('page',1)
-    formclass = action_formset_ng(request, rosters, Roster,
-        permissions=['tabletop.delete_roster', 'tabletop.change_roster'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('tabletop:rosters'))
-        else:
-            return direct_to_template(request, template,
-                {'rosters': rosters, 'form': form},
-                processors=[benchmark])
-    form = formclass()
-    rosters = paginate(rosters,page,pages=_pages_)
-    return direct_to_template(request, template,
-        {'rosters': rosters, 'form': form},
-        processors=[benchmark])
-    #render_to_response(template,{'rosters': rosters},
-        #context_instance=RequestContext(request,processors=[benchmark]))
-
-@login_required
-@benchmarking
-def codex_rosters(request, id, revision):
-    template = get_skin_template(request.user, 'user_rosters.html')
-    codex = get_object_or_404(Codex, id=id)
-    rosters = Roster.objects.filter(codex=codex)
-    page = request.GET.get('page', 1)
-    _pages_ = get_settings(request.user, 'rosters_on_page', 20)
-    formclass = action_formset_ng(request, rosters, Roster,
-        permissions=['tabletop.delete_roster', 'tabletop.change_roster'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(reverse('reverse:rosters'))
-        else:
-            return direct_to_template(request, template,
-                {'rosters': rosters, 'form': form},
-                processors=[benchmark])
-    form = formclass()
-    rosters = paginate(rosters, page, pages=_pages_)
-    return direct_to_template(request, template, {'rosters': rosters, 'form': form},
-        processors=[benchmark])
-
-@benchmarking
-def search_rosters(request):
-    template = get_skin_template(request.user,'search_rosters.html')
-    kw = dict()
-    kw_own = dict()
-    roster_query = None
-    if 'roster_query' in request.session:
-        if reverse('tabletop:rosters-search') == request.get_full_path():
-            del request.session['roster_query']
-        else:
-            roster_query = request.session.get('roster_query',None)
-    if request.method == 'POST':
-        form = DeepSearchRosterForm(request.POST,request=request)
-        if form.is_valid():
-            player = form.cleaned_data['player']
-            title = form.cleaned_data['title']
-            race = form.cleaned_data['race']
-            raw_pts = form.cleaned_data['pts']
-            import re
-            r = re.compile('(<|>|>=|<=|==|)(\d{1,5})')
-            #>,1000 for example :)
-            try:
-                sign,pts = r.findall(raw_pts)[0]
-            except (IndexError):
-                sign,pts = None,None
-               
-            roster_query = {'player': player, 'title': title, 'race':race,'pts':pts,'pts_sign':sign}
-            #print roster_query
-            request.session['roster_query'] = roster_query
-            #processing query with helper-function
-            qset = process_roster_query(roster_query)
-            #getting da rosters 
-            #rosters = Roster.objects.filter(qset_nicks,qset,qset_race)
-            rosters = Roster.objects.filter(*qset)
-            #print rosters,"\n" 
-            #print "first call: ",qset_nicks,qset
-            _pages_ = get_settings(request.user,'rosters_on_page',20)
-            page = request.GET.get('page',1)
-            rosters = paginate(rosters,page,pages=_pages_)
-
-            return render_to_response(template,{'rosters':rosters,'form':form,'query':True},
-                context_instance=RequestContext(request,processors=[benchmark]))
-        else:                    
-            return render_to_response(template,{'form':form,'query':False},
-                context_instance=RequestContext(request,processors=[benchmark]))
-    else:
-        rosters = None
-        form = DeepSearchRosterForm()
-        if roster_query:
-            qset = process_roster_query(roster_query)
-            #getting the rosters
-            rosters = Roster.objects.filter(*qset)
-            _pages_ = get_settings(request.user,'rosters_on_page',20)
-            page = request.GET.get('page',1)
-            rosters = paginate(rosters,page,pages=_pages_)
-            form.fields['player'].initial = roster_query['player']
-        
-            if 'pts_sign' in roster_query:
-                form.fields['pts'].initial = "%s%s" % ( roster_query['pts_sign'], roster_query['pts'] )
-            else:
-                form.fields['pts'].initial = roster_query['pts']
-
-            form.fields['title'].initial = roster_query['title']
-            form.fields['race'].initial = roster_query['race']
-        return render_to_response(template,{'form':form,'rosters':rosters,'query':roster_query},
-            context_instance=RequestContext(request,processors=[benchmark]))
-
-@benchmarking
-def sphinx_search_rosters(request):
-    template = get_skin_template(request.user, "includes/sphinx_search_roster.html")
-    if request.method == 'POST':
-        form = SphinxSearchForm(request.POST)
-        if form.is_valid():
-            rosters = Roster.search.query(form.cleaned_data['query'])
-            _pages_ = get_settings(request.user, 'rosters_on_page', 20)
-            page = request.GET.get('page', 1)
-            rosters = paginate(rosters, page, pages=_pages_)
-            return direct_to_template(request, template,
-                {'form': form, 'objects': rosters, 'search_query': True},
-                processors=[benchmark])
-        else:
-            return direct_to_template(request, template,
-                {'form': form, 'search_query': True}, processors=[benchmark])
-    form = SphinxSearchForm()
-    return direct_to_template(request, template, {'form': form},
-        processors=[benchmark])
 
 @login_required
 def unorphan(request,id):
-    roster = get_object_or_none(Roster,id=id)
+    roster = get_object_or_None(Roster,id=id)
     if roster:
         roster.is_orphan = False
         roster.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER','/'))
-
-@login_required
-@permission_required('tabletop.delete_roster')
-def delete_roster(request,id=None,action=''):
-    roster = get_object_or_none(Roster,id__exact=id)
-    if roster:
-        if request.user.has_perm('purge_roster')\
-        or request.user == roster.owner\
-        or request.user.is_superuser:
-            brs = BattleReport.objects.filter(users=roster)
-            if len(brs)>0:
-                #unlink owner if there is battlereports
-                roster.is_orphan = True
-                roster.save()
-            else:
-                #deletes roster if there's no battelreport mention
-                roster.delete()
-    #referer = '/roster/purged'
-    #deleting via approve_action
-    if request.method == 'POST':
-        form = ApproveActionForm(request.POST)
-        if form.is_valid():
-            #todo: make this hotfix more flexible
-            referer = reverse('tabletop:rosters')
-            #form.cleaned_data['url'] 
-    return HttpResponseRedirect(referer)
 
 
 @login_required
@@ -439,15 +173,15 @@ def action_roster_old(request, id=None, action=''):
             player = form.cleaned_data['player']
             custom_race = form.cleaned_data['custom_race']
             pts = form.cleaned_data['pts']
-            user = get_object_or_none(User,nickname__iexact=player)
+            user = get_object_or_None(User,nickname__iexact=player)
             referer = form.cleaned_data['referer']
 
             if not user: roster_user = None
             else: roster_user = user
-            race = get_object_or_none(Side,id__exact=int(race_raw))
+            race = get_object_or_None(Side,id__exact=int(race_raw))
             
             if action == 'edit': #edit roster
-                roster = get_object_or_none(Roster,id__exact=id)
+                roster = get_object_or_None(Roster,id__exact=id)
                 if roster:
                 #replace it with more clear and brilliant code
                     roster.title = title
@@ -481,7 +215,7 @@ def action_roster_old(request, id=None, action=''):
         referer = request.META.get('HTTP_REFERER','/')
         form.fields['referer'].initial = referer
         
-        roster = get_object_or_none(Roster,id__exact=id)
+        roster = get_object_or_None(Roster,id__exact=id)
         #action edit
         if action == 'edit':
             if roster:
@@ -513,24 +247,6 @@ def action_roster_old(request, id=None, action=''):
                     return HttpResponseRedirect('/permission/denied/')
     return direct_to_template(request,template,{'form':form})
 
-@benchmarking
-def show_roster(request,id):
-    roster = get_object_or_404(Roster,id=id)
-    template = get_skin_template(request.user, 'roster.html')
-    #should we implement functionallity to support
-    #comments within rosters?
-    ct = get_content_type(Roster)
-    comments = get_comments(Roster,object_pk=str(id))
-    _pages_ = get_settings(request.user,'comments_on_page',20)
-    page = request.GET.get('page',1)
-    comments = paginate(comments,page,pages=_pages_,jump='#comments')
-
-    form = CommentForm(request=request,initial={'app_n_model':'tabletop.roster','obj_id': id,'url':
-                request.META.get('PATH_INFO','')})
-
-    return render_to_response(template,
-        {'roster':roster,'form':form,'comments':comments},
-        context_instance=RequestContext(request,processors=[benchmark]))
 
 #obsolete
 @login_required
@@ -555,13 +271,13 @@ def add_old_battle_report(request,id=None,action=''):
             if action == 'edit':
                 map = ['title','mission','layout','syntax','comment',
                     'winner']
-                br = get_object_or_none(BattleReport,id=id)
+                br = get_object_or_None(BattleReport,id=id)
                 if not br:
                     return HttpResponseRedirect('/report/does/not/exist')
                 for m in map: setattr(br,m,locals()[m])
                 br.clean_rosters()
                 for rst in rosters:
-                    r = get_object_or_none(Roster,id=rst)
+                    r = get_object_or_None(Roster,id=rst)
                     if r:
                         br.users.add(r)
                     else:
@@ -576,7 +292,7 @@ def add_old_battle_report(request,id=None,action=''):
                     published=published,ip_address=ip_address,approved=True)
                 br.save()
                 for rst in rosters:
-                    r = get_object_or_none(Roster,id=rst)
+                    r = get_object_or_None(Roster,id=rst)
                     if r:
                         br.users.add(r)
                     else:
@@ -591,7 +307,7 @@ def add_old_battle_report(request,id=None,action=''):
     form = AddBattleReportForm(request=request)
     form.fields['next'].initial = request.META.get('HTTP_REFERER','/')
     if action == 'edit': #lets go fieled the form :)
-        br = get_object_or_none(BattleReport,id=id)
+        br = get_object_or_None(BattleReport,id=id)
         if br:
             map = ['title','layout','comment']
             for m in map:
@@ -607,7 +323,6 @@ def add_old_battle_report(request,id=None,action=''):
     return direct_to_template(request,template,{'form':form})
 
 #@todo: may be should be MORE CLEAN?
-@unlock_for({'DEVELOPMENT': True})
 @login_required
 @can_act
 def add_battle_report(request, action=None, id=None):
@@ -683,7 +398,7 @@ def xhr_get_roster(request, id):
     from django.utils.safestring import mark_safe
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
-    roster = get_object_or_none(Roster, id=id)
+    roster = get_object_or_None(Roster, id=id)
     if roster:
         roster.roster = render_filter(
             post_markup_filter(roster.roster),
@@ -697,7 +412,7 @@ def xhr_get_roster(request, id):
 def xhr_get_codex_revisions(request, id=None):
     response = HttpResponse()
     response['Content-Type'] = 'text/javascript'
-    codex = get_object_or_none(Codex, id=id)
+    codex = get_object_or_None(Codex, id=id)
     if codex:
         response.write(json.dumps(
             {
@@ -709,11 +424,10 @@ def xhr_get_codex_revisions(request, id=None):
         response.write('[]')
     return response
 
-@unlock_for({'DEVELOPMENT': True})
 @login_required
 @can_act
 def delete_battle_report(request,id,approve=''):
-    br = get_object_or_none(BattleReport,id=id)
+    br = get_object_or_None(BattleReport,id=id)
     if br.owner == request.user or request.user.is_superuser or\
         request.user.has_perm('tabletop.delete_battlereports'):
         if br:
@@ -756,16 +470,6 @@ def show_codex(request, id):
     template = get_skin_template(request.user, 'show_codex.html')
     codex = get_object_or_404(Codex, id=id)
     return direct_to_template(request, template, {'codex': codex})
-
-@login_required
-def show_codexes(request):
-    template = get_skin_template(request.user, 'show_codexes.html')
-    codexes = Codex.objects.all()
-    _pages_ = get_settings(request.user, 'objects_on_page', 20)
-    page = request.GET.get('page', 1)
-    codexes = paginate(codexes, page, pages=_pages_)
-    return direct_to_template(request, template,
-        {'codexes': codexes})
 
 
 # cbv

@@ -96,7 +96,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'apps.core.middleware.BanMiddleware',
-    'apps.core.middleware.ChecksMiddleware',
     'apps.wh.middleware.WarningsMiddleware',
 )
 

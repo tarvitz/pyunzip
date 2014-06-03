@@ -6,7 +6,6 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, UserManager, PermissionsMixin)
 
-#from django.contrib.comments.models import Comment
 from picklefield import PickledObjectField
 from django.db.models import Q, Sum
 from django.core import validators
@@ -21,7 +20,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Create your models here.
-
+GENDER_CHOICES = (
+    ('m', _('male')),
+    ('f', _('female')),
+    ('n', _('not identified'))
+)
 
 TZ_CHOICES = [(float(x[0]), x[1]) for x in (
     (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
@@ -85,11 +88,7 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     gender = models.CharField(
         _('gender'), default='n', max_length=1,
-        choices=[
-            ('m', _('male')),
-            ('f', _('female')),
-            ('n', _('not identified'))
-        ]
+        choices=GENDER_CHOICES
     )
     jid = models.EmailField(_('jabber id'), max_length=255,
                             blank=True, null=True)
@@ -147,6 +146,10 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     def get_username(self):
         return self.nickname or self.username
+
+    def get_gender(self):
+        idx = [self.gender in i[0] for i in GENDER_CHOICES].index(True)
+        return GENDER_CHOICES[idx][1]
 
     def get_nickname(self, no_cache=False):
         nickname = (

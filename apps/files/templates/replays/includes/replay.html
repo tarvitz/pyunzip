@@ -1,4 +1,4 @@
-{% load kamwhfilters %}{% load newsfilters %}
+{% load newsfilters %}
 {% if r %}
 {# {% cycle one,two %} #}
 {% comment %}
@@ -14,8 +14,6 @@
         {% endif %}{% endspaceless %}
         {% endif %}
         <span class="comment-date">[{{ r.upload_date|date:"Y/M/d H:m:s" }}]</span>
-		<span class="msg_replay_name"><span class='replay_name'>
-        {% if replays %} <a href="{% url apps.files.views.show_replay number=r.id %}">{{ r.name }}</a>{% else %} {{ r.name }}{% endif %}</span></span>
 	</div> {# headline #}
 	<div class='message-content'>
 		<div class='transparency'></div>
@@ -27,9 +25,6 @@
 		</div>{# avatar #}
 		<div class='text'>
 		<span class="msg_right_icon">
-		<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower %}">
-		<img src='/media/images/replays/{{ r.version.game.short_name}}_{{ r.version.name|lower }}.png'>
-		</a></span>
 			<div class='msg_replay_info'>
 				{% if r.is_set %}
 				{# set it hide #}
@@ -76,22 +71,18 @@
 				</div>
 
 				<div class='version'>{% spaceless %}
-					<span class="title">Версия игры</span>:<span class="info"> 
-					<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower %}">
-					{{ r.version.game }}: {{ r.version.name }}</a>
-					[<a href="{% url apps.files.views.all_replays type=r.version.game.short_name version=r.version.name|lower patch=r.version.patch %}">{{ r.version.patch }}</a>]
+					<span class="title">Версия игры</span>:<span class="info">
+					[]
 					</span>
 				{% endspaceless %}
 				</div> {# version #}
 				<div class='type'>{% spaceless %}
 				{% ifequal r.type "0" %}
 					<span class="title">Тип игры</span>:<span class="info">
-					<a href="{% url apps.files.views.all_replays gametype=r.type %}">
-					{{ r.nonstd_layout }}</a></span>
+					</span>
 				{% else %}
 					<span class="title">Тип игры</span>:<span class="info"> 
-					<a href="{% url apps.files.views.all_replays gametype=r.type %}">
-					{{ r.get_type }}</a></span>
+					</span>
 				{% endifequal %}
 				{% endspaceless %}
 				</div> {# type #}
@@ -127,7 +118,6 @@
 		{% if replays %} {# actions if we're listing whole replays #}
         {% load comments %}
         {% get_comment_count for r as comment_counts %}
-        <a href="{% url apps.files.views.show_replay number=r.id %}">Комментариев: {{ comment_counts }}</a>
         {% else %}
         <a href="{% url apps.files.views.edit_replay id=r.id %}">[править]</a>
 		 {# | [скрыть] |  #}

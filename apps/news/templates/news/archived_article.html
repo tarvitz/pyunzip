@@ -1,4 +1,4 @@
-{% extends base_template  %}{% load newsfilters %}{% load kamwhfilters coretags %}
+{% extends base_template  %}{% load newsfilters %}{% load coretags %}
 {% block head_content %}<link rel='stylesheet' href='/styles/news.css' type='text/css' media='screen'>
 {# <link rel='stylesheet' href='/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}comments.css' type='text/css' media='screen'> #}
 {% endblock %}
@@ -29,8 +29,8 @@
  <br clear='all'>
  <div id='read'><a href='{{ global_referer }}'>назад</a></div>
  <hr>
- <div class='footer'> (by {% get_raw_nickname article.author %}), published {{ article.date }}</div>
- {% if article.editor %}<div class='footer'>(edited by {% get_raw_nickname  article.editor %})</div>{% endif %}
+ <div class='footer'> (by {{ article.author }}), published {{ article.date }}</div>
+ {% if article.editor %}<div class='footer'>(edited by {{ article.editor }})</div>{% endif %}
  {% if article.url %}<div id='footer url'><a href='{{ article.url }}'>оригинал</a></div>{% endif %}
  </div>
  {% if comments.object_list %}

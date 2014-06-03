@@ -24,9 +24,6 @@
   {% comment %}{% endif %}{% endcomment %}
 </center>
 
-{% if not object.settings.invisible %}
-  {% check_if_online object as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
-{% else %}&nbsp;{% endif %}
 {% if user.is_authenticated %} {# current user #}
   {% if object.jid and not object.settings.hide_jid %}<a href="xmpp:{{ object.jid }}">[jid]</a>{% endif %}
   {% if object.uin and not object.settings.hide_uin %}<a href="icq:{{ object.uin }}">[icq]</a>{% endif %}

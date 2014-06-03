@@ -1,15 +1,15 @@
 # coding: utf-8
+import re
+
 from apps.news.models import Category as NewsCategory, Meating, Event
-from apps.core import get_safe_message
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-from apps.core.forms import RequestForm, RequestModelForm
+from apps.core.forms import RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget, DateTimePickerInput
 from apps.news.models import News
 from django.core.exceptions import ImproperlyConfigured
-from django.contrib.contenttypes.models import ContentType
-import re
 
 
 class AddNewsForm(forms.Form):
@@ -114,7 +114,7 @@ class ArticleForm(forms.Form):
 
     def clean_content(self):
         content = self.cleaned_data.get('content','')
-        content = get_safe_message(content)
+        #content = get_safe_message(content)
         if len(content) > 20000:
             raise forms.ValidationError(_("You can not use more then 20000 symbols while you post article"))
         return content

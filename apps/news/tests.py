@@ -14,7 +14,7 @@ except ImportError:
     from django.contrib.auth.models import User
 
 from django.core.urlresolvers import reverse
-from apps.core.models import Announcement
+
 from django.contrib.contenttypes.models import ContentType
 from apps.core.helpers import get_object_or_None
 
@@ -188,11 +188,6 @@ class JustTest(TestCase):
             app_label=article._meta.app_label,
             model=article._meta.module_name
         )
-
-        announcement = Announcement.objects.filter(
-            object_pk=article.pk, content_type=ct
-        )
-        self.assertEqual(len(announcement), 1)
 
     def test_news_post_super_user(self):
         # superuser posts article with approval
@@ -562,27 +557,6 @@ class BenchmarkTemplatesTest(TestCase):
             else:
                 self.client.logout()
             print "Testing for '%s': " % user or 'Anonymous'
-            self.benchmark(template, context)
-
-    @skipIf(True, 'broken mark for deletion')
-    def test_news_page_full(self):
-        print "Testing news page with news render, only news fetched"
-        from apps.news.views import news
-        url = reverse('wh:login')
-        template = get_template('news.html')
-        for user in ('admin', 'user', None):
-            if user:
-                logged = self.client.login(username=user, password='123456')
-                self.assertEqual(logged, True)
-            else:
-                self.client.logout()
-            print "Testing for '%s': " % user or 'Anonymous'
-            context = self.client.get(url).context
-            news = News.objects.all()
-            news = paginate(news, 1, pages=20)
-            context = context[0]
-            context['news'] = news
-            context['page'] = news
             self.benchmark(template, context)
 
 

@@ -1,10 +1,9 @@
-# Create your views here.
+# coding: utf-8
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
-from apps.core.decorators import null_function
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse_lazy
+
 from django.shortcuts import redirect
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import get_object_or_404
@@ -16,19 +15,18 @@ try:
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-from django.core.paginator import EmptyPage, InvalidPage
+
 from datetime import datetime
 from apps.karma.decorators import (
     day_expired, amount_comments_required,
-    twenty_comments_required
+
 )
-from random import randint
-from apps.karma.helpers import check_fraction
-from apps.core.helpers import get_settings, paginate
-from django.conf import settings
+
+from apps.core.helpers import paginate
 from apps.core.helpers import can_act, render_to
 from django.views import generic
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 
 #old and deprecated
@@ -137,8 +135,8 @@ def show_karma(request, user=None, type='', group=False):
     elif 'zero' in type:
         karmas = karmas.filter(value=0)
     #settings
-    show_null = get_settings(request.user, 'show_null_karma', True)
-    show_self_null = get_settings(request.user, 'show_self_null_karma', True)
+    show_null = False
+    show_self_null = False
     if user is not None:
         if not show_null:
             karmas = karmas.exclude(value=0)
@@ -147,7 +145,7 @@ def show_karma(request, user=None, type='', group=False):
             karmas = karmas.exclude(value=0)
     if group:
         pass
-    _pages_ = get_settings(request.user, 'karmas_on_page', 50)
+    _pages_ = settings.OBJECTS_ON_PAGE
     #paginator = Paginator(karmas, _pages_)
     #try:
     page = request.GET.get('page', 1)

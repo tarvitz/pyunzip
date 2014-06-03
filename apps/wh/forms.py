@@ -14,7 +14,7 @@ from apps.wh.models import Side, RegisterSid, Skin, Army, PM
 from apps.core.models import UserSID
 from apps.core.helpers import get_object_or_None
 from apps.core.forms import (
-    RequestModelForm, RequestForm, BruteForceCheck,
+    RequestModelForm, RequestForm,
     RequestFormMixin
 )
 from django.core.urlresolvers import reverse
@@ -162,9 +162,9 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
     def clean_jid(self):
         jid = self.cleaned_data['jid']
         if jid:
-            from apps.core.helpers import get_object_or_none
+            from apps.core.helpers import get_object_or_None
             u = self.request.user
-            user = get_object_or_none(User, jid__iexact=jid)
+            user = get_object_or_None(User, jid__iexact=jid)
             if user and user != u:
                 raise forms.ValidationError(
                     _('User with such JID already exists'))
@@ -297,9 +297,9 @@ class UpdateProfileForm(RequestForm):
     
     def clean_jid(self):
         jid = self.cleaned_data['jid']
-        from apps.core.helpers import get_object_or_none
+        from apps.core.helpers import get_object_or_None
         u = self.request.user
-        user = get_object_or_none(User, jid__iexact=jid)
+        user = get_object_or_None(User, jid__iexact=jid)
         if user and user != u:
             raise forms.ValidationError(_('User with such JID already exists'))
         return "".join(jid).lower()
@@ -591,7 +591,7 @@ class PasswordRestoreInitiateForm(forms.Form):
         return email
 
 
-class PasswordRestoreForm(RequestModelForm, BruteForceCheck):
+class PasswordRestoreForm(RequestModelForm):
     password = forms.CharField(
         label=_("Password"), widget=forms.PasswordInput()
     )

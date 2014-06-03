@@ -60,42 +60,6 @@ class NonUserMixin(object):
         )
 
 
-# plain views
-@render_to('accounts/login.html')
-def login(request, form_class=LoginForm):
-    form = form_class(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            user = form.cleaned_data['user']
-            auth.login(request, user)
-            nxt = request.POST.get('next', request.GET.get('next', None))
-            return {'redirect': nxt or 'core:index'}
-    return {
-        'form': form
-    }
-
-
-@render_to('index.html')
-def logout(request):
-    auth.logout(request)
-    return {}
-
-
-@login_required
-@render_to('index.html')
-def user_set_context(request, context):
-    request.user.set_context(context)
-    return {'redirect': request.META.get('HTTP_REFERER', '/')}
-
-
-@login_required
-def user_switch_context(request):
-    context = request.GET.get('role', '')
-    return user_set_context(
-        request, context=request.user.get_context_id(context)
-    )
-
-
 class ProfileView(LoginRequiredMixin, generic.TemplateView):
     model = User
     template_name = 'accounts/profile.html'

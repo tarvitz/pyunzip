@@ -20,11 +20,6 @@ urlpatterns = patterns('apps.accounts.views',
     url(r'^register/success/$', direct_to_template,
         {'template': 'accounts/register_success.html'},
         name='register-success'),
-    url(r'^context/(?P<context>\d+)/set/$', 'user_set_context',
-        name='context-set'),
-    url(r'^context/switch/$', 'user_switch_context',
-        name='context-switch'),
-
     url(r'^accounts/banned/$', direct_to_template,
         {'template': 'accounts/banned.html'}, name='banned')
 )

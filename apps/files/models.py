@@ -8,14 +8,12 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.contenttypes import generic
-#from apps.bincase.fields import BinCaseField as BinCaseFileField
-from cStringIO import StringIO
+
 from apps.files.helpers import ZipPack
 from apps.files import actions
-from apps.core.actions import common_delete_action
+
 from django.core.urlresolvers import reverse
-from apps.core.models import Announcement
+
 
 from django.core.exceptions import ValidationError
 from django.http import Http404
@@ -105,7 +103,7 @@ class Replay(models.Model):
     is_set = models.BooleanField(_('is set'), blank=True, default=False)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True) 
 
-    actions = [common_delete_action, ]
+    actions = []
     get_title = lambda self: self.name
     get_content = lambda self: self.comments
     owner = lambda self: self.author
@@ -305,7 +303,7 @@ class Image(models.Model):
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
 
-    actions = [common_delete_action, ]
+    actions = []
 
     class Meta:
         permissions = (
@@ -385,7 +383,7 @@ class UserFile(models.Model):
         max_length=256, default='octet/stream',
         blank=True, null=True
     )
-    actions = [common_delete_action, ]
+    actions = []
     size = models.PositiveIntegerField(_('size'), help_text=_('file size'), default=0)
 
     def get_file_link(self):

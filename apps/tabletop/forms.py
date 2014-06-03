@@ -1,30 +1,28 @@
 # coding: utf-8
-from apps.core import get_safe_message
-from apps.core.helpers import get_object_or_none
 from django import forms
 from django.utils.translation import (
     ugettext_lazy as _,
     pgettext_lazy
 )
-from django.conf import settings
+
 from apps.core.forms import RequestForm, RequestModelForm
 from django.conf import settings
 from apps.core.widgets import TinyMkWidget
-from apps.core.helpers import get_content_type
-from apps.core.forms import ActionForm
-from apps.wh.models import Side
+
+
 from django.forms.util import ErrorList
 from apps.tabletop.models import Mission, Roster, BattleReport, Codex
-from apps.tabletop import fields
+
 import re
 
-from apps.wh.models import Fraction, Side, Army
+from apps.wh.models import Side, Army
+
 
 class AddCodexModelForm(forms.ModelForm):
     required_css_class = 'required'
     side = forms.ModelChoiceField(queryset=Side.objects)
     army = forms.ModelChoiceField(queryset=Army.objects.none(),
-        required=False)
+                                  required=False)
 
     class Meta:
         model = Codex
@@ -391,9 +389,3 @@ class AddRosterModelForm(RequestModelForm):
         if not player:
             player = self.request.user.nickname
         return player
-
-
-class ActionAlterRosterCodex(ActionForm):
-    required_css_class='required'
-    codex = forms.ModelChoiceField(queryset=Codex.objects)
-    revision = forms.CharField(label=_('Revision'), required=False)

@@ -8,7 +8,7 @@ except ImportError:
     from django.contrib.auth.models import User
 from apps.files.models import Version, Gallery, File, Image as ModelImage, \
     Replay, Game, UserFile
-from apps.core import get_safe_message
+
 from apps.files.helpers import is_zip_file
 from PIL import Image
 from cStringIO import StringIO
@@ -185,8 +185,8 @@ class ActionReplayForm(forms.Form):
     hidden_syntax = forms.CharField(required=False,widget=forms.HiddenInput())
 
     def clean_comments(self):
-        comments = self.cleaned_data.get('comments','')
-        comments = get_safe_message(comments)
+        comments = self.cleaned_data.get('comments', '')
+        #comments = get_safe_message(comments)
         return comments
 
     #always set it to default
@@ -357,7 +357,7 @@ class UploadImageForm(RequestForm):
     
     def clean_comments(self):
         comments = self.cleaned_data.get('comments','')
-        comments = get_safe_message(comments)
+        #comments = get_safe_message(comments)
         return comments
 
     def clean_image(self):
@@ -393,7 +393,7 @@ class CommentForm(RequestForm):
 
     def clean_comment(self):
         comment = self.cleaned_data['comment']
-        comment = get_safe_message(comment)
+        #comment = get_safe_message(comment)
         if not comment:
             raise forms.ValidationError(_('You should write something'))
         user = self.request.user

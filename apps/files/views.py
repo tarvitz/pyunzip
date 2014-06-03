@@ -1,52 +1,46 @@
 # Create your views here.
+# coding: utf-8
 from django.shortcuts import render_to_response
-from apps.core.shortcuts import direct_to_template
+
 from django.template import RequestContext
-from django.contrib import auth
-from django.db.models import get_model,Q, Sum
+
+from django.db.models import get_model, Sum
 from django.contrib.auth.decorators import login_required
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-from django.contrib.comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
-from django.utils.translation import ugettext_lazy as _
-from django.core.paginator import InvalidPage, EmptyPage
+
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core import serializers
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from django.http import HttpResponse,HttpResponseRedirect, Http404
+
 from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
-    ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm, \
-    UploadFileForm, GalleryImageForm, GalleryImageUpdateForm, AgreeForm
-from apps.core.forms import CommentForm, action_formset, action_formset_ng
+    ActionReplayModelForm, ImageModelForm, \
+    UploadFileForm, GalleryImageForm, GalleryImageUpdateForm
+
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment, UserFile
 from apps.files.models import Image as GalleryImage
-from apps.files.helpers import save_uploaded_file as save_file,save_thmb_image, is_zip_file
+from apps.files.helpers import save_uploaded_file as save_file, save_thmb_image, is_zip_file
 from apps.core.helpers import (
-    can_act, handle_uploaded_file, render_to, render_to_json, get_int_or_zero
+    can_act, render_to, render_to_json, get_int_or_zero
 )
 from apps.files.decorators import *
-from apps.core.decorators import update_subscription,update_subscription_new,benchmarking, \
-    check_user_fields
 
-from apps.core import make_links_from_pages as make_links
-from apps.core import pages,benchmark, get_skin_template
-from apps.core.forms import ApproveActionForm,SearchForm
-#from settings import MEDIA_ROOT
+from apps.core import get_skin_template
+
 from django.conf import settings
 from datetime import datetime
-from os import mkdir,stat
+
 from cStringIO import StringIO
-from apps.core.helpers import get_settings, paginate
+from apps.core.helpers import paginate
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_protect
-import zipfile
+
 import bz2
 import os
 
@@ -68,26 +62,6 @@ def upload_replay(request):
     form = UploadReplayModelForm()
     return direct_to_template(request, template, {'form': form})
 
-@login_required
-@can_act
-@csrf_protect
-@check_user_fields({'is_staff': True})
-def upload_file(request):
-    template = get_skin_template(request.user, 'files/upload_file.html')
-    if request.method == 'POST':
-        form = UploadFileModelForm(request.POST, request.FILES)
-        if form.is_valid():
-            file = handle_uploaded_file(request.FILES['file'],
-                'files/%s' % request.user.id)
-            form.instance.file = file
-            form.instance.owner = request.user
-            form.instance.upload_date = datetime.now()
-            form.save()
-            return HttpResponseRedirect(reverse('files:files'))
-        else:
-            return direct_to_template(request, template, {'form': form})
-    form = UploadFileModelForm()
-    return direct_to_template(request, template, {'form': form})
 
 @login_required
 @can_act
@@ -193,132 +167,6 @@ def edit_replay_old(request,id=0):
             'edit_flag': True},
             context_instance=RequestContext(request))
 
-@login_required
-@can_act
-@benchmarking
-def upload_replay_old(request,game):
-    template = get_skin_template(request.user, 'replays/upload_replay_old.html')
-    if request.method == 'POST':
-        form = UploadReplayForm(request.POST, request.FILES)
-        if form.is_valid():
-            name = form.cleaned_data['name']
-            type = form.cleaned_data.get('type',0)
-            nonstd_layout = form.cleaned_data['nonstd_layout']
-            teams = form.cleaned_data.get('teams','Just a lot of players')
-            winners = form.cleaned_data['winners']
-            version = form.cleaned_data['version']
-            comments = form.cleaned_data['comments']
-            replay_data = form.cleaned_data['replay']
-            races = form.cleaned_data['races']
-            is_set = form.cleaned_data['is_set']
-            syntax = form.cleaned_data['hidden_syntax']
-	    if is_set:
-                type = 5
-            if (replay_data.size/1024/1024)>5: #5mb replay
-                return HttpResponseRedirect('/upload/size/overlimited')
-            path = os.path.join(settings.MEDIA_ROOT,"replays/")+str(request.user.id)
-            compress = False
-            if not is_zip_file(replay_data): compress = True
-            replay_db = save_file(replay_data, path,compress=compress)
-            #already've been downloaded
-            if not replay_db:
-                return HttpResponseRedirect('/replay/already/downloaded')
-            upload_date = datetime.now()
-            r = Replay(name=name, type=type, nonstd_layout=nonstd_layout, teams = teams,
-                winner = winners, version=version,comments=comments,replay=replay_db,
-                #adv fields
-                upload_date=datetime.now(),
-                author=request.user, races=races, is_set=is_set,syntax=syntax)
-            r.save()
-        
-        else:
-            return render_to_response(template,
-                {'form': form},
-                context_instance=RequestContext(request,processors=[benchmark]))
-    #settings overriding
-    version_choices = list()
-    version_choices.append((0,'---------'))
-    versions = Version.objects.filter(game__short_name=game).order_by(
-        '-release_number','-patch')
-    for v in versions:
-        msg = "%s: %s %s" % (v.game.name,v.name,v.patch)
-        version_choices.append((v.id, msg))
-
-    form = UploadReplayForm()
-    form.fields['version'].choices = version_choices
-    form.fields['hidden_syntax'].initial = settings.SYNTAX[0][0]
-    #form.fields['version']._choices = version_choices 
-    return render_to_response(template,
-        {'form': form},
-        context_instance=RequestContext(request,processors=[benchmark]))
-
-@benchmarking
-@update_subscription_new(app_model='files.replay',pk_field='number')
-def show_replay(request, number=1,object_model='files.replay'):
-    """ shows a replay, number is replays's id, object_model passes through update_subscription
-    decorator to update its notification status for a selected user (request.user) """
-    template_err = get_skin_template(request.user, 'replays/404.html')
-    template = get_skin_template(request.user, 'replays/all.html')
-    try:
-        replay = Replay.objects.get(id__exact=number)
-    except Replay.DoesNotExist:
-        return render_to_response(template_err,
-            {},
-            context_instance=RequestContext(request))
-    #Comments
-    replay_type = ContentType.objects.get(app_label='files', model='replay')
-    #Pages
-    comments = Comment.objects.filter(content_type = replay_type.id, object_pk = str(replay.id))
-    _pages_ = get_settings(request.user,'comments_on_page',30)
-    #paginator = Paginator(comments, _pages_)
-    #num_pages = paginator.num_pages
-    page = request.GET.get('page',1)
-    #try:
-    #    comments = paginator.page(page)
-    #    paginator.number = int(page)
-    #except (EmptyPage, InvalidPage):
-    #    comments = paginator.page(1)
-    #    paginator.number = int(1)
-    #links = make_links(paginator.num_pages,'')
-    #links = paginator.page_range
-    comments = paginate(comments,page,pages=_pages_,jump='#comments')
-    """ #old, ugly and not wise code block 
-    #saving comments with all validations
-    #if authenticated ;)
-    if hasattr(request.user,'nickname'):
-        redirect = save_comment(request=request,template=template,
-            vars={'replay': replay,
-            'comments': comments,
-            'page':comments}, #replace it withing template
-            ct=replay_type,
-            object_pk=str(replay.id)
-        )
-        #success
-        if 'success' in redirect:
-            if redirect['success']:
-                return HttpResponseRedirect(redirect['redirect'])
-            #failed
-            else:
-                #without comments it looks MUCH BETTER :)
-                return render_to_response(template,
-                    {'replay':replay,
-                    'form':redirect['form'],
-                    'page':comments
-                    },
-                    context_instance=RequestContext(request,
-                        processors=[benchmark]))
-    """
-
-    form = CommentForm(request=request,initial={'app_n_model':'files.replay','obj_id': number,
-    'url': request.META.get('PATH_INFO','')})
-    return render_to_response(template,
-        {'replay':replay,
-        'comments': comments,
-        'form': form,
-        'page': comments
-        },
-        context_instance=RequestContext(request,
-            processors=[pages,benchmark]))
 
 def show_replays(request):
     template = get_skin_template(request.user,'replays/categories.html')
@@ -362,112 +210,6 @@ def show_categories(request,type=''):
         'games': games},
         context_instance=RequestContext(request))
 
-@csrf_protect
-@benchmarking
-def all_replays(request,type='',version='',patch='',gametype=''):
-    template = get_skin_template(request.user, 'replays/all.html')
-    page = request.GET.get('page',1)
-    #if gametype:
-    #    replays = Replay.objects.all().filter(type__icontains=gametype)
-    if type or gametype:
-        replays = Replay.objects.all().filter(type__icontains=gametype,
-            version__game__short_name__iexact=type, #type shoud be checked with 'stricted logic rule'
-            version__name__icontains=version,
-            version__patch__icontains=patch).order_by('-id')
-    else: replays = Replay.objects.all().order_by('-id')
-    _pages_ = get_settings(request.user,'replays_on_page',20)
-    formclass = action_formset_ng(request, replays, Replay,
-        permissions=['files.delete_replay', 'files.change_replay'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(request.get_full_path())
-        else:
-            return direct_to_template(request, template,
-                {'form': form, 'replays': replays, 'page': page},
-                processors=[benchmark])
-    #paginator = Paginator(replays,_pages_)
-    #links = make_links(paginator.num_pages,'')
-    #links = paginator.page_range
-    #try:
-    #    replays = paginator.page(page)
-    #    paginator.number = int(page)
-    #except (EmptyPage,InvalidPage):
-    #    replays = paginator.page(1)
-    #    paginator.number = int(1)
-    form = formclass()
-    replays = paginate(replays,page,pages=_pages_)
-    return render_to_response(template,
-        {'replays': replays,
-        'page': replays, 'form': form},
-        context_instance=RequestContext(request,
-            processors=[benchmark]))
-
-@csrf_protect
-@benchmarking
-def replays_by_author(request,nickname,game='',version='',patch=''):
-    template = get_skin_template(request.user,'replays/all.html')
-    user = get_object_or_404(User,nickname__exact=nickname)
-    query_args = {'author':user,'version__name__icontains':version,'version__patch__icontains':patch }
-    if game: query_args.update( {'version__game__short_name':game } )
-    replays = Replay.objects.filter(**query_args)
-    
-    _pages_ = get_settings(request.user,'replays_on_page',30)
-    page = int(request.GET.get('page',1))
-    formclass = action_formset_ng(request, replays, Replay,
-        permissions=['files.delete_replay', 'files.change_replay'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            return HttpResponseRedirect(request.get_full_path())
-        else:
-            return direct_to_template(request, template,
-                {'form': form, 'replays': replays, 'page': page},
-                processors=[benchmark])
-    
-    form = formclass()
-    replays = paginate(replays,page,pages=_pages_)
-    return render_to_response(template,{'replays':replays,'page':replays, 'form': form},
-        context_instance=RequestContext(request,processors=[benchmark]))
-
-#TODO: rewrite it, version__game__short_name=bla-bla gives an logical breaks
-def category_replays(request,type='',gametype='',version='',patch=''):
-    template = get_skin_template(request.user,'replays/all.html')
-    #1 - duel, 0 - std, others - team
-    page = request.GET.get('page',1)
-    if gametype:
-        if type == 1:
-            replays = Replay.objects.filter(type='1', version__game__short_name=gametype,
-                version__name__icontains=version,
-                version__patch__icontains=patch).order_by('-id')
-        elif type == 0:
-            replays = Replay.objects.filter(type='0',version__game__short_name=gametype,
-                version__name__icontains=version,
-                version__patch__icontains=patch).order_by('-id')
-        else:
-            replays = Replay.objects.exclude(type='1').exclude(type='0').filter(version__game__short_name=gametype,
-                version__name__icontains=version,
-                version__patch__icontains=patch)
-    else:
-        if type == 1:
-            replays = Replay.objects.filter(type='1').order_by('-id')
-        elif type == 0:
-            replays = Replay.objects.filter(type='0').order_by('-id')
-        else:
-            replays = Replay.objects.exclude(type='1').exclude(type='0')
-    _pages_ = get_settings(request.user,'replays_on_page',20)
-    replays = paginate(replays,page,pages=_pages_)
-    return render_to_response(template,
-        {'replays': replays,
-        'page': replays},
-        context_instance=RequestContext(request,
-            processors=[pages]))
 
 @csrf_protect
 @login_required
@@ -487,24 +229,6 @@ def upload_image(request):
     return direct_to_template(request, template,
         {'form': form})
 
-@csrf_protect
-@login_required
-@render_to('gallery/action_image.html')
-def action_image(request, id, action=None):
-    instance = get_object_or_404(GalleryImage, id=id)
-    if action == 'delete':
-        instance.delete()
-        return {'redirect': 'files:galleries'}
-    form = ImageModelForm(request.POST or None, instance=instance)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return {
-                'redirect': 'files:image',
-                'redirect-args': (form.instance.pk,)
-            }
-    form = ImageModelForm(instance=instance)
-    return {'form': form}
 
 @login_required
 @can_act
@@ -552,160 +276,6 @@ def upload_image_old(request):
         {'form': form},
         context_instance=RequestContext(request))
 
-@benchmarking
-def show_all_images(request, id=None, action=None):
-    template = get_skin_template(request, 'gallery/gallery.html')
-    galleries = Gallery.objects.filter(type='global').order_by('-id')
-    qset = Q(gallery__type='global')
-    if id: qset = qset & Q(gallery__id=id)
-    images = GalleryImage.objects.filter(qset).order_by('-id')
-    page = request.GET.get('page', 1)
-    _pages_ = get_settings(request.user, 'objects_on_page', 27)
-    formclass = action_formset_ng(request, images, GalleryImage,
-        permissions=['files.delete_image', 'files.change_image'])
-    if request.method == 'POST':
-        form = formclass(request.POST)
-        if form.is_valid():
-            qset = form.act(form.cleaned_data['action'],
-                form.cleaned_data['items'])
-            if 'response' in qset: return qset['response']
-            #action = form.cleaned_data['action']
-            #qset = form.cleaned_data['items']
-            #if action == 'delete':
-            #    if request.user.is_superuser or request.user.has_permissions('files.delete_images'):
-            #        qset.delete()
-            return HttpResponseRedirect(reverse('files:galleries'))
-        else:
-            return direct_to_template(request, template,
-                {
-                    'galleries': galleries, 'images': images,
-                    'form': form
-                }, processors=[benchmark]
-            )
-    form = formclass()
-    images = paginate(images, page, pages=_pages_)
-    return direct_to_template(request, template,
-        {'galleries': galleries, 'images': images,
-        'form': form},
-        processors=[benchmark])
-
-#ITZ FUCKING UGLY!!!!
-@benchmarking
-def show_all_images_old(request,id=''):
-    template = get_skin_template(request.user,'gallery/gallery.html')
-    try:
-        page = int(request.GET.get('page',1))
-    except:
-        page = 1
-    galleries = Gallery.objects.filter(type__exact='global').order_by('-id')
-    images = GalleryImage.objects.filter(gallery__type__exact='global').order_by('-id')
-    if id:
-        try:
-            id = int(id)
-            images = images.filter(gallery__id__exact=id)
-        except:
-            pass
-    _pages_ = get_settings(request.user,'objects_on_page',27)
-    images = paginate(images,page,pages=_pages_)
-    return render_to_response(template,
-        {'images': images,
-        'galleries': galleries,
-        'page': images,
-        'gallery_id': id},
-        context_instance=RequestContext(request,
-            processors=[pages,benchmark]))
-
-
-@benchmarking
-def show_gallery(request,gallery=1,gallery_name=None):
-    template = get_skin_template(request.user,'gallery/gallery.html')
-    template_err = get_skin_template(request.user,'gallery/404.html')
-    gallery = int(gallery)
-    try:
-        if gallery_name is not None:
-            g = Gallery.objects.get(name__iexact=gallery_name)
-        else:
-            g = Gallery.objects.get(id=gallery)
-        images = GalleryImage.objects.filter(gallery=g)
-        try:
-            page = int(request.GET.get('page',1))
-        except ValueError:
-            page = 1
-        _pages_ = get_settings(request.user,'objects_on_page',12)
-        images = paginate(images,page,pages=_pages_)
-    except:    
-        return render_to_response(template_err, {},
-            context_instance=RequestContext(request))
-    
-    return render_to_response(template,
-        {'gallery': g,
-        'images': images,
-        'page': images},
-        context_instance=RequestContext(request,
-            processors=[benchmark]))
-
-@login_required
-@can_act
-def action_image_old(request, id, action):
-    next = ''
-    if request.method == 'POST':
-        form = ApproveActionForm(request.POST)
-        if form.is_valid():
-            next = form.cleaned_data['url']
-    can_delete = request.user.user_permissions.filter(codename='delete_images')
-    try:
-        img = GalleryImage.objects.get(id=id)
-        img_path = img.image.path
-        thmb_path = img.thumbnail.path
-        #broken code FIX IT IMMIDIATELY
-        if img.owner == request.user or can_delete or request.user.is_superuser\
-            or request.user.is_staff:
-            from os import remove as delete
-            delete(thmb_path)
-            delete(img_path)
-            img.delete()
-            if next:
-                return HttpResponseRedirect(next)
-            return HttpResponseRedirect('/gallery/image/deleted')
-        else:
-            return HttpResponseRedirect('/gallery/images/undeletable')
-    except GalleryImage.DoesNotExist:
-        return HttpResponseRedirect('/gallery/image/undeletable')
-
-@update_subscription
-def show_image(request, number=None,object_model='files.image', alias=None):
-    template_err = get_skin_template(request.user, 'gallery/404.html')
-    template = get_skin_template(request.user, 'gallery/image.html')
-    if number:
-        image = get_object_or_404(GalleryImage, id=number)
-    elif alias:
-        image = get_object_or_404(GalleryImage, alias__iexact=alias)
-    else:
-        raise Http404("No data was passed")
-    #try:
-    #    image = GalleryImage.objects.get(id__exact=number)
-    #except GalleryImage.DoesNotExist:
-    #    return render_to_response(template_err,
-    #        {},
-    #        context_instance=RequestContext(request))
-    #
-    #Comments
-    image_type = ContentType.objects.get(app_label='files', model='image')
-    #Pages
-    comments = Comment.objects.filter(content_type = image_type.id, object_pk = str(image.id))
-    _pages_ = get_settings(request.user,'comments_on_page',20)
-    page = request.GET.get('page',1)
-    comments = paginate(comments,page,pages=_pages_) 
-    #Form for authenticated user to leave their's comments
-    form = CommentForm(request=request,initial={'app_n_model':'files.image','obj_id': number,'url':
-                request.META.get('PATH_INFO','')})
-    return render_to_response(template,
-        {'image':image,
-        'img_comments': comments,
-        'form': form,
-        'page': comments},
-        context_instance=RequestContext(request,
-            processors=[pages]))
 
 def show_raw_image(request, alias, thumbnail=False):
     from PIL import Image
@@ -857,61 +427,7 @@ def purge_replay(request,id=0,approve='force'):
 @login_required
 def purge_replay(request,id=0,approve='force'):
     pass
-    
-def search_replay(request):
-    template = get_skin_template(request.user, 'replays/search.html')
-    template_found = get_skin_template(request.user, 'replays/search.html')
-    
-    query = request.POST.get('query','') 
 
-    if query is None:
-            request.session['search_q'] = query
-    
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-    else:
-        #fp = request.get_full_path()
-        #r_url = reverse('apps.files.views.search_replay')
-        if request.get_full_path() == reverse('files:replay-search'):
-            if 'search_q' in request.session:
-                del request.session['search_q']
-    
-    query = query or request.session.get('search_q', '')
-    if query == '':
-            form = SearchForm()
-            return render_to_response(template,
-                {'form': form},
-                 context_instance=RequestContext(request))
-
-    #q = (
-    #    Q(author__nickname__icontains=query)|Q(comments__icontains=query)|
-    #    Q(name__icontains=query)|Q(races__icontains=query)
-    #)     
-    kw_search = dict()
-    q = None
-    map = ['author__nickname__icontains','comments__icontains','name__icontains','races__icontains']
-    for m in map: 
-        kw_search[m] = query
-        if not q:
-                q=Q(**kw_search)
-        else:
-                q = q|Q(**kw_search)
-        kw_search = {}
-    replays = Replay.objects.filter(q)
-    _pages_ = get_settings(request.user,'replays_on_page',40)
-    page = request.GET.get('page',1)
-    replays = paginate(replays,page,pages=_pages_) 
-    form = SearchForm()
-    form.fields['query'].initial = query
-    return render_to_response(template_found,
-        {
-        'replays': replays,
-        'page': replays,
-        'form': form,
-        'query': query},
-        context_instance=RequestContext(request))
 
 def xhr_get_replay_versions(request, id=None):
     response = HttpResponse()

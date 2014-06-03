@@ -1,5 +1,5 @@
 {% extends "base_template.html" %}
-{% load kamwhfilters i18n comments coretags %}
+{% load i18n comments coretags %}
 {% block content %}
   <ul class="breadcrumb">
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
@@ -33,7 +33,7 @@
           {% if object.first_name or object.last_name %}
             <b>{% trans "Real name" %}</b>: {{ object.first_name }} {{ object.last_name }}<br>
           {% endif %}
-          <b>{% trans "Gender" %}</b>: {{ object.gender|gender_transform }}<br>
+          <b>{% trans "Gender" %}</b>: {{ object.get_gender }}<br>
           {% if object.uin %}<b>{% trans "ICQ" %}</b>: {{ object.uin }}<br>{% endif %}
           {% if object.jid %}<b>{% trans "Jabber/Google talk" %}</b>: {{ object.jid }}<br>{% endif %}
           {% if perms.accounts.change_user or object == user %}

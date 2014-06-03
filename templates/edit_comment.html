@@ -1,7 +1,7 @@
-{% extends user.skin.name|getskin:"base.html" %}{% load newsfilters %}{% load kamwhfilters %}
+{% extends base_template %}{% load newsfilters %}
 {# NOW edit_comment_ng.html IN USE, this is not important #}
 {% block head_content %}
-<link rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"comments.css" }}' type='text/css' media='screen'>{% endblock %}
+<link rel='stylesheet' href='/styles/{{ user.skin.name }}' type='text/css' media='screen'>{% endblock %}
 {% block text_content %}
 <center>
 <form id='comment' action='.' method='post'>

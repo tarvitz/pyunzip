@@ -1,6 +1,6 @@
 # coding: utf-8
 from apps.wh.models import Rank
-from apps.core.helpers import get_object_or_none
+from apps.core.helpers import get_object_or_None
 from django.db.models import Q
 
 #TODO: FIXME:works INCORRECT,overwrite
@@ -8,7 +8,7 @@ def rank_scheme_alter(instance,**kwargs):
     if instance.pk:
     	ranks = instance.ranks.distinct().order_by('type__magnitude')
     	if not ranks:
-        	first_rank = get_object_or_none(Rank,codename='users')
+        	first_rank = get_object_or_None(Rank,codename='users')
 		if first_rank:
 			instance.ranks.add(Rank.objects.get(codename='users'))
     	#alter user if he or she could be staff or not

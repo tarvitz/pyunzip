@@ -1,6 +1,5 @@
-# Create your views here.
-# ^^, coding: utf-8 ^^,
-from django.conf import settings
+# coding: utf-8
+
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -18,24 +17,23 @@ from django.contrib import auth
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from apps.core.decorators import has_permission, lock_with_dev
+from apps.core.decorators import has_permission
 from apps.wh.decorators import prevent_bruteforce
 
 from django.core import serializers
 from django.core.mail import send_mail
-from django.forms.util import ErrorList
+
 from apps.wh.forms import (
-    UpdateProfileModelForm, PMForm, RegisterForm,
+    PMForm,
     PasswordChangeForm, PasswordRecoverForm, LoginForm,
     SuperUserLoginForm,
     PasswordRestoreForm, PasswordRestoreInitiateForm
 )
 
-from apps.core import pages, get_skin_template
+from apps.core import get_skin_template
 
 from PIL import Image
 from datetime import datetime, timedelta
-from hashlib import sha1
 from random import randint, random
 
 from django.http import Http404
@@ -45,10 +43,11 @@ from django.template.defaultfilters import striptags
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import redirect
 from apps.core.helpers import (
-    get_settings, get_object_or_none, paginate, can_act,
-    handle_uploaded_file, render_to, get_object_or_None,
+    paginate, can_act,
+    render_to, get_object_or_None,
     safe_ret, get_int_or_zero
 )
+from django.conf import settings
 import os
 
 
@@ -185,7 +184,7 @@ def users(request):
     template = get_skin_template(request.user, 'accounts/index.html')
     page = get_int_or_zero(request.GET.get('page')) or 1
     users = User.objects.filter(is_active=True).order_by('date_joined')
-    _pages_ = get_settings(request.user, 'objects_on_page', 30)
+    _pages_ = settings.OBJECTS_ON_PAGE
     users = paginate(users, page, pages=_pages_)
     return render_to_response(
         template,
@@ -195,33 +194,6 @@ def users(request):
         },
         context_instance=RequestContext(request)
     )
-
-
-@login_required
-@render_to('accounts/update_profile.html')
-def update_profile(request):
-    template = get_skin_template(request.user, 'accounts/update_profile.html')
-    form = UpdateProfileModelForm(
-        request.POST or None, request.FILES or None, instance=request.user,
-        request=request
-    )
-    if request.method == 'POST':
-        if form.is_valid():
-            if 'avatar' in request.FILES:
-                avatar = handle_uploaded_file(
-                    request.FILES['avatar'],
-                    'avatars/%s' % request.user.id
-                )
-                form.instance.avatar = avatar
-            if 'photo' in request.FILES:
-                photo = handle_uploaded_file(
-                    request.FILES['photo'],
-                    'photos/%s' % request.user.id
-                )
-                form.instance.photo = photo
-            form.save()
-            return {'redirect': 'accounts:profile'}
-    return {'form': form}
 
 
 @login_required
@@ -272,33 +244,6 @@ def pm_delete(request, pk):
 
 
 @login_required
-def view_pms(request, outcome=False):
-    template = get_skin_template(request.user, 'accounts/pms.html')
-    if outcome:
-        pm = PM.objects.filter(
-            sender=request.user, dbs=False).order_by('-sent')
-    else:
-        pm = PM.objects.filter(
-            addressee=request.user, dba=False
-        ).order_by('-sent')
-    _pages_ = get_settings(request.user, 'pms_on_page', 50)
-    page = request.GET.get('page', 1)
-    pm = paginate(pm, page, pages=_pages_)
-    return render_to_response(
-        template,
-        {
-            'pms': pm,
-            'outcome': outcome,
-            'page': pm
-        },
-        context_instance=RequestContext(
-            request,
-            processors=[pages]
-        )
-    )
-
-
-@login_required
 def view_pm(request, pm_id=0):
     template = get_skin_template(request.user, 'accounts/pm.html')
     pm = get_object_or_404(PM, pk=pm_id)
@@ -335,94 +280,6 @@ def delete_pm(request, pm_id=0):
         return redirect('/pm/deleted')
 
     return redirect('/pm/permissiondenied')
-
-
-@lock_with_dev({'ALLOW_REGISTER': True})
-def onsite_register(request):
-    template = get_skin_template(request.user, 'accounts/register.html')
-    if request.user.username:
-        return redirect('/')
-    #old sids deletion
-    rsids = RegisterSid.objects.all()
-    now = datetime.now()
-    for rsid in rsids:
-        if rsid.expired < now:
-            rsid.delete()
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            sid = form.cleaned_data['sid']
-            password = form.cleaned_data['password1']
-            username = form.cleaned_data['username']
-            nickname = form.cleaned_data['nickname']
-            email = form.cleaned_data['email']
-            newuser = User(username=username, email=email, nickname=nickname)
-            newuser.set_password(password)
-            #a kind of dangerous but ..
-            skin = Skin.objects.get(name__iexact='default')
-            army = Army.objects.get(name__iexact='none')
-            newuser.skin = skin
-            newuser.army = army
-            #saving before applying some ManyToMany data
-            from apps.core.settings import SETTINGS as ONSITE_SETTINGS
-            newuser.settings = ONSITE_SETTINGS
-            newuser.save()
-            #rank
-            try:
-                newuser_rank = Rank.objects.get(codename='users')
-            except Rank.DoesNotExist:
-                newuser_rank = Rank.objects.order_by('id')[0]
-            newuser.ranks.add(newuser_rank)
-            newuser.save()
-            try:
-                rsid = RegisterSid.objects.get(sid=sid)
-                rsid.delete()
-            except RegisterSid.DoesNotExist:
-                #O_O
-                pass
-            return redirect('wh:registered')
-        else:
-            #register denied
-            rsids_byip = RegisterSid.objects.filter(
-                ip=request.META['REMOTE_ADDR']
-            ).count()
-            if rsids_byip > 5:
-                msg = _(
-                    'You\'ve exceeded limit of registration, '
-                    'please wait 10 minutes and try again, thank you'
-                )
-                form._errors['answ'] = ErrorList([msg])
-                return render_to_response(
-                    template,
-                    {'form': form},
-                    context_instance=RequestContext(request)
-                )
-
-            sid = form.data.get('sid')
-            return render_to_response(
-                template,
-                {
-                    'form': form,
-                    'sid': sid
-                },
-                context_instance=RequestContext(request))
-    else:
-        form = RegisterForm()
-        sid = sha1(str(randint(0, 100))).hexdigest()
-        while 1:
-            sid = sha1(str(randint(0, 100))).hexdigest()
-            sids = RegisterSid.objects.filter(sid=sid)
-            if not sids:
-                break
-        form.fields['sid'].initial = sid
-        return render_to_response(
-            template,
-            {
-                'form': form,
-                'sid': sid
-            },
-            context_instance=RequestContext(request)
-        )
 
 
 def get_math_image(request, sid=''):
@@ -656,7 +513,7 @@ def get_user_avatar(request, nickname=''):
 def get_race_icon(request, race):
     response = HttpResponse()
     response['Content-Type'] = 'image/png'
-    race = get_object_or_none(Side, name__iexact=race)
+    race = get_object_or_None(Side, name__iexact=race)
     if race:
         img_path = os.path.join(
             settings.MEDIA_ROOT, 'images/armies/50x50/%s.png' % race.name.lower()

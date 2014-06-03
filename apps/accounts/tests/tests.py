@@ -31,11 +31,8 @@ class JustTest(TestHelperMixin, TestCase):
         ]
         self.urls_registered = [
             reverse_lazy('accounts:profile'),
-            reverse_lazy('accounts:profile-real', args=('user', )),
             reverse_lazy('accounts:profile-by-nick', args=('user', )),
             reverse_lazy('wh:users'),
-            reverse_lazy('wh:pm-sent'),
-            reverse_lazy('wh:pm-income'),
         ]
         self.get_object = get_object_or_None
 

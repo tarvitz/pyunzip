@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load kamwhfilters %}
+
 {% block title %}Приватные сообщения{% endblock %}
 {% block css %}
 {{ block.super }}
@@ -60,7 +60,7 @@
 </div> <!-- message -->
 
 {# {% include settings.document.links|getskin:"links.html" %} #}
-{% include settings.document.links_template|getskin:"links.html" %}
+{% include settings.document.links_template %}
 {% else %}
 	<center><h3>В этой категории нет сообщений</h3></center>
 {% endif %}

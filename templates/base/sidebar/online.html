@@ -12,25 +12,6 @@
             <div class='transparency'></div>
             <span class='reflects_right'></span>
             <span class='reflects_left'></span>
-                {% get_guests_count as guests_count 15 %} {# 15 minutes #}
-                {% get_online_users as online_users 15 %} {# 15 minutes #}
-                    {% for u in online_users %}
-                        {% spaceless %}
-                            {% comment %} {% if forloop.first %}
-                                [{% get_nickname u %}]
-                            {% else %}
-                                [{% get_nickname u %}]
-                            {% endif %}
-                            {% endcomment %}
-                            <span class='nicknames'>[<a rel='twipsy' href="{% url "accounts:profile-by-nick" u.get_username %}" title='thinks: "{{ u.about }}"'>{{ u.get_nickname|safe }}</a>]</span>
-                        {% endspaceless %}
-                    {% endfor %}
-                    {% if online_users %}
-                      {% if guests_count %}, Гостей({{ guests_count }}){% endif %}
-                    {%else%}
-                       {% if guests_count %}Гостей({{ guests_count }}){% endif%}
-                    {% endif %}
-            </div>
         </div>
     </div>
 </div>

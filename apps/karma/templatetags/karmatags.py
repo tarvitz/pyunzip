@@ -1,12 +1,13 @@
-# ^^, coding: utf-8 ^^,
+# coding: utf-8
 from django.template import Library, Node
 from django.template import TemplateSyntaxError
-from apps.karma.models import Karma,KarmaStatus
+from apps.karma.models import Karma, KarmaStatus
 
-from apps.core.helpers import get_settings
 from django.db.models import Q
 
 register = Library()
+
+
 class GetKarmaPowerForUser(Node):
     def __init__(self, user, varname):
         self.varname = varname
@@ -44,7 +45,7 @@ class GetKarmaStatus(Node):
         user = self.user.resolve(context,ignore_failures=True)
         current_user = self.current_user.resolve(context,ignore_failures=True)
         karma = Karma.objects.filter(user=user)
-        is_humor = get_settings(current_user,'karma_humor',True)
+        is_humor = False
         if karma:
             karma = karma[0]
             try:
