@@ -97,6 +97,16 @@ class CommentWatch(models.Model):
         return reverse('api:commentwatch-detail', args=(self.pk, ))
 
     def get_new_comments(self):
+        """ get new comments
+
+        if CommentWatch instance is_disabled, returns blank Comment queryset
+        identifies that subscription has no new comments at all
+
+        :return: Comment queryset
+        :rtype: QuerySet
+        """
+        if self.is_disabled:
+            return Comment.objects.none()
         qset = Q()
         if self.comment:
             qset = Q(submit_date__gt=self.comment.submit_date)
