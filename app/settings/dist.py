@@ -307,7 +307,7 @@ DOCUMENT = {
 
 from apps.vote.settings import *
 from apps.wh.settings import *
-from search_settings import *
+from app.search_settings import *
 from apps.karma.settings import *
 
 #import djcelery
