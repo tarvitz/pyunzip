@@ -4,8 +4,8 @@ from django.contrib.auth.decorators import login_required
 from apps.core.shortcuts import direct_to_template
 from apps.files import views
 
-urlpatterns = patterns('apps.files.views',
-    #(r'^upload/file/$', 'upload_file'),
+urlpatterns = patterns(
+    'apps.files.views',
     url(r'^upload/file/$', 'upload_file',
         name='file-upload'),
     url(r'^replays/$', 'show_replays',
@@ -77,10 +77,13 @@ urlpatterns = patterns('apps.files.views',
         name='image-upload'),
     url(r'^gallery/(?P<gallery_name>[\w\s]+)/$', 'show_gallery'),
     #can delete both way: via url address and delete_function:
-    url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/approve/$','action_image',
+    #url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/approve/$','action_image',
+    #    name='image-delete'),
+    #url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/$','action_image',
+    #    name='image-delete-force'),
+    url(r'^galleries/images/(?P<pk>\d+)/delete/$',
+        login_required(views.GalleryImageDeleteView.as_view()),
         name='image-delete'),
-    url('^gallery/image/(?P<id>\d+)/(?P<action>delete)/$','action_image',
-        name='image-delete-force'),
     url(r'^gallery/image/(?P<number>\d+)/$', 'show_image', {'object_model':'files.image'},
         name='image'),
     url(r'^image/(?P<number>\d+)/$', 'show_image',{'object_model':'files.image'},

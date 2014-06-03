@@ -351,7 +351,13 @@ class Image(models.Model):
     def get_absolute_url(self):
         #return "/image/%i/" % self.id
         return reverse('files:image', kwargs={'number': self.id})
-    
+
+    def get_edit_url(self):
+        return reverse('files:image-edit', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('files:image-delete', args=(self.pk, ))
+
     def __unicode__(self):
         return "Images"
 

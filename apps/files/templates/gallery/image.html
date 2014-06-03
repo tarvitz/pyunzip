@@ -5,8 +5,8 @@
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     <li><a href="{% url "files:galleries" %}">{% trans "gallery" %}</a></li>
-    <li><a href="{% url "files:galleries" image.gallery.pk %}">{{ image.gallery.name }}</a></li>
-    <li class="active">{{ image.title }}</li>
+    <li><a href="{% url "files:galleries" image.gallery.pk %}">{{ image.gallery.name.lower }}</a></li>
+    <li class="active">{{ image.title.lower }}</li>
   </ul>
   <h3>{{ image.title }}</h3>
   <center>{% include settings.document.image_inc %}</center>

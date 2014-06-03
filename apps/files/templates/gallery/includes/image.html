@@ -3,10 +3,10 @@
   <div class="header">
     {% if user == image.owner or perms.files.delete_images %}
       <div class='actions pull-right'>
-        <a class='edit' href='{% url "files:image-edit" image.id %}'
+        <a class='edit' href='{{ image.get_edit_url }}'
            rel="tooltip"
            title='{% trans "edit image" %}'><i class="icon-edit"></i></a>
-        <a class='delete' href='{% url "files:image-delete" image.id 'delete' %}'
+        <a class='delete' href='{{ image.get_delete_url }}'
            rel="tooltip"
            title='{% trans "delete image" %}'><i class="icon-remove"></i></a>
       </div>

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 06:14+0400\n"
-"PO-Revision-Date: 2014-06-03 06:15+0400\n"
+"POT-Creation-Date: 2014-06-03 22:18+0400\n"
+"PO-Revision-Date: 2014-06-03 22:21+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -19,6 +19,94 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 2.91.6\n"
+
+#: app/settings/dist.py:41
+msgid "Russian"
+msgstr "Русский"
+
+#: app/settings/dist.py:42
+msgid "English"
+msgstr "Английский"
+
+#: app/settings/dist.py:280
+msgid "winter"
+msgstr "зимняя"
+
+#: app/settings/dist.py:281
+msgid "summer"
+msgstr "летняя"
+
+#: app/settings/dist.py:282
+msgid "autumn"
+msgstr "осенняя"
+
+#: app/settings/dist.py:283
+msgid "spring"
+msgstr "весенняя"
+
+#: app/settings/dist.py:284
+msgid "void"
+msgstr "пустотная"
+
+#: app/settings/initials.py:3
+msgid ""
+"Here your header content\n"
+"(cut)\n"
+"Here your aftercut content"
+msgstr ""
+"Текст заголовка\n"
+"(cut)\n"
+"Остальное содержание"
+
+#: app/settings/messages.py:3
+#, python-format
+msgid ""
+"\n"
+"    \n"
+"    %(user)s Greatings you and whole blacklibrary administration.\n"
+"    You have been invited to b3ban.blacklibrary.ru.\n"
+"    If you don't know whats this site/service does please ignore it or wait\n"
+"    for explanation from your friends playing in battlefield 3.\n"
+"    Please click follow the %(link)s and follow given instructions\n"
+"    to proceed the registration.\n"
+"\n"
+"    If you got this letter accidently, please ignore it, nothing bad would "
+"happen :)\n"
+"\n"
+"    Sincerely your b3ban.blacklibrary.ru administration\n"
+msgstr ""
+
+#: app/settings/messages.py:16
+#, python-format
+msgid ""
+"\n"
+"    Your or somebody else requested password change for this email account.\n"
+"    If you're not the person who initiated password request procedure, "
+"please ignore\n"
+"    this letter or give a notice for service administration:\n"
+"    http://b3ban.blacklibrary.ru/contacts/\n"
+"\n"
+"    Your password restore link: %(link)s\n"
+msgstr ""
+
+#: app/settings/messages.py:24
+#, python-format
+msgid ""
+"\n"
+"    Article you wrote had been rejected with reason: %(reason)s\n"
+"    Please fix the errors, mistakes and anything that reason says to\n"
+"    get the article posted on title page.\n"
+"\n"
+"    Thank you :)\n"
+msgstr ""
+"\n"
+"   Статья, которую вы написали была отклонена по причине: \n"
+"   '%(reason)s'\n"
+"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан "
+"отказ\n"
+"   для того, чтобы данную статью опубликовали на главной странице.\n"
+"   \n"
+"   Спасибо :)\n"
 
 #: apps/accounts/admin.py:14
 msgid "A user with that username already exists."
@@ -82,7 +170,8 @@ msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
 #: apps/accounts/forms.py:57 apps/comments/forms.py:14
-#: apps/comments/forms.py:41 apps/news/forms.py:238 apps/pybb/forms.py:170
+#: apps/comments/forms.py:41 apps/files/forms.py:480 apps/news/forms.py:238
+#: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
@@ -217,14 +306,14 @@ msgid "Settings"
 msgstr "Настройки"
 
 #: apps/accounts/models.py:251 apps/karma/models.py:44 apps/pybb/models.py:104
-#: apps/pybb/models.py:182 apps/pybb/models.py:264 apps/wh/models.py:306
+#: apps/pybb/models.py:183 apps/pybb/models.py:265 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:252 apps/pybb/templates/pybb/head.html:37
+#: apps/accounts/models.py:252 apps/pybb/templates/pybb/head.html:34
 #: apps/pybb/templates/pybb/quick_access.html:41
-#: apps/pybb/templates/pybb/users.html:6 apps/vote/admin.py:20
+#: apps/pybb/templates/pybb/users.html:6
 msgid "Users"
 msgstr "Пользователи"
 
@@ -236,76 +325,18 @@ msgstr "Пользователь с таким email уже существует
 msgid "You can not override user context"
 msgstr "Вы не можете перезаписать контекст пользователя"
 
-#: apps/accounts/tests/tests.py:196 apps/wh/forms.py:129 apps/wh/forms.py:314
+#: apps/accounts/tests/tests.py:197 apps/wh/forms.py:129 apps/wh/forms.py:314
 #: apps/wh/tests.py:202
 #, python-format
 msgid "Another user with %s nickname exists."
 msgstr "Другой пользователь с ником %s уже существует."
 
-#: apps/blogs/admin.py:13 apps/news/models.py:45 apps/news/models.py:74
-#: apps/news/models.py:288 apps/news/models.py:362 apps/wh/models.py:83
-#: apps/wh/models.py:128
-msgid "content"
-msgstr "контент"
-
-#: apps/blogs/models.py:26
-#: apps/comments/templates/comments/comment_watch_list.html:12
-#: apps/files/models.py:290 apps/menu/models.py:42
-#: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:279 apps/tabletop/models.py:188
-#: apps/tabletop/models.py:198 apps/tabletop/templates/add_roster_old.html:23
-#: apps/tabletop/templates/reports.html:30
-msgid "Title"
-msgstr "Заголовок"
-
-#: apps/blogs/models.py:27 apps/files/models.py:127
-msgid "Author"
-msgstr "Автор"
-
-#: apps/blogs/models.py:29 apps/farseer/models.py:10 apps/karma/models.py:25
-#: apps/menu/models.py:17 apps/menu/models.py:56
-msgid "URL"
-msgstr "УРЛ"
-
-#: apps/blogs/models.py:31 apps/wh/admin.py:25 apps/wh/forms.py:354
-msgid "Content"
-msgstr "Содержимое"
-
-#: apps/blogs/models.py:32
-msgid "DateTime"
-msgstr "ДатаВремя"
-
-#: apps/blogs/models.py:34
-msgid "Approved"
-msgstr "Утверждено"
-
-#: apps/blogs/models.py:35
-msgid "Author IP address"
-msgstr "IP адрес автора"
-
-#: apps/blogs/models.py:42 apps/comments/models.py:19 apps/files/models.py:106
-#: apps/karma/models.py:63 apps/news/models.py:87 apps/tabletop/models.py:115
+#: apps/comments/models.py:19 apps/files/models.py:106 apps/karma/models.py:63
+#: apps/news/models.py:88 apps/tabletop/models.py:111
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44
 msgid "Syntax"
 msgstr "Синтаксис"
-
-#: apps/blogs/models.py:62
-msgid "Archived Post"
-msgstr "Архивный пост"
-
-#: apps/blogs/models.py:63
-msgid "Archived Posts"
-msgstr "Архивные посты"
-
-#: apps/blogs/models.py:102 apps/pybb/models.py:197
-msgid "Post"
-msgstr "Пост"
-
-#: apps/blogs/models.py:103 apps/pybb/models.py:198
-#: apps/pybb/templates/pybb/quick_access.html:38
-msgid "Posts"
-msgstr "Посты"
 
 #: apps/comments/models.py:24
 msgid "cache comment"
@@ -316,8 +347,7 @@ msgid "Overload"
 msgstr "Оверлоад"
 
 #: apps/comments/models.py:65 apps/core/models.py:49
-#: apps/tabletop/models.py:54 apps/tagging/models.py:477
-#: apps/tracker/models.py:17 apps/vote/models.py:17
+#: apps/tabletop/models.py:49 apps/tagging/models.py:477
 msgid "content type"
 msgstr "контент тип"
 
@@ -325,16 +355,16 @@ msgstr "контент тип"
 msgid "object pk"
 msgstr "pk объекта"
 
-#: apps/comments/models.py:72 apps/tabletop/models.py:225
+#: apps/comments/models.py:72 apps/tabletop/models.py:220
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/comments/models.py:76 apps/karma/forms.py:27 apps/news/models.py:449
+#: apps/comments/models.py:76 apps/karma/forms.py:27 apps/news/models.py:431
 msgid "user"
 msgstr "пользователь"
 
-#: apps/comments/models.py:77 apps/core/models.py:200 apps/news/models.py:295
-#: apps/news/models.py:450
+#: apps/comments/models.py:77 apps/core/models.py:200 apps/news/models.py:277
+#: apps/news/models.py:432
 msgid "created on"
 msgstr "создано"
 
@@ -354,11 +384,11 @@ msgstr "обновлен"
 msgid "marks if comment watch was updated for new comments"
 msgstr "отмечает, если экземпляр слежения был обновлен новыми комментариями"
 
-#: apps/comments/models.py:110
+#: apps/comments/models.py:124
 msgid "Comment watch"
 msgstr "Слежение за комментарием"
 
-#: apps/comments/models.py:111
+#: apps/comments/models.py:125
 msgid "Comment watches"
 msgstr "Слежение за комментариями"
 
@@ -367,6 +397,7 @@ msgstr "Слежение за комментариями"
 #: apps/comments/templates/comments/subscribe_form.html:5
 #: apps/files/templates/files/user_files.html:8
 #: apps/files/templates/gallery/action_image.html:4
+#: apps/files/templates/gallery/gallery_image_form.html:5
 #: apps/files/templates/gallery/gallery_list.html:6
 #: apps/files/templates/gallery/image.html:6
 #: apps/files/templates/gallery/upload.html:5
@@ -406,6 +437,15 @@ msgstr "список подписки"
 #: apps/comments/templates/comments/comment_watch_list.html:8
 msgid "Subscription list"
 msgstr "Список подписки"
+
+#: apps/comments/templates/comments/comment_watch_list.html:12
+#: apps/files/models.py:290 apps/menu/models.py:42
+#: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
+#: apps/tabletop/forms.py:279 apps/tabletop/models.py:183
+#: apps/tabletop/models.py:193 apps/tabletop/templates/add_roster_old.html:23
+#: apps/tabletop/templates/reports.html:30
+msgid "Title"
+msgstr "Заголовок"
 
 #: apps/comments/templates/comments/comment_watch_list.html:13
 msgid "New comments"
@@ -455,6 +495,7 @@ msgstr "Вы хотите подписаться на новые коммент�
 
 #: apps/comments/templates/comments/subscribe_form.html:32
 #: apps/files/templates/gallery/action_image.html:13
+#: apps/files/templates/gallery/gallery_image_form.html:33
 #: apps/files/templates/gallery/upload.html:15
 #: apps/news/templates/events/event_form.html:13
 #: apps/pybb/templates/pybb/edit_post.html:20
@@ -474,6 +515,7 @@ msgstr "ядро"
 #: apps/core/actions.py:17 apps/files/actions.py:7 apps/files/forms.py:416
 #: apps/files/templates/files/user_files.html:61
 #: apps/files/templates/files/user_files.html:111
+#: apps/files/templates/gallery/gallery_image_form.html:15
 #: apps/pybb/templates/pybb/edit_profile.html:31
 #: apps/pybb/templates/pybb/poll.html:10
 msgid "delete"
@@ -485,7 +527,6 @@ msgstr "Необходим вход"
 
 #: apps/core/forms.py:73 apps/karma/models.py:19
 #: apps/tabletop/templates/add_old_battle_report.html:40
-#: apps/vote/models.py:28
 msgid "Comment"
 msgstr "Комментарий"
 
@@ -553,7 +594,7 @@ msgstr "истекает"
 msgid "expired?"
 msgstr "истекает?"
 
-#: apps/core/models.py:204 apps/news/models.py:298
+#: apps/core/models.py:204 apps/news/models.py:280
 msgid "updated on"
 msgstr "обновлено"
 
@@ -706,39 +747,39 @@ msgstr "Вы не можете ввести число менее 10"
 msgid "You can not pass number lesser than 40"
 msgstr "Вы не можете ввести число более 40"
 
-#: apps/core/urls.py:40
+#: apps/core/urls.py:41
 msgid "Do you realy want to delete this image?"
 msgstr "Вы действительно хотите удалить это изображение?"
 
-#: apps/core/urls.py:49
+#: apps/core/urls.py:50
 msgid "Do you realy want to delete this article?"
 msgstr "Вы действительно хотите удалить эту статью?"
 
-#: apps/core/urls.py:56
+#: apps/core/urls.py:57
 msgid "Do you realy want to purge this comment? O_O.. realy?"
 msgstr "Вы действительно хотите удалить данный комментарий? Правда O_O..?"
 
-#: apps/core/urls.py:62
+#: apps/core/urls.py:63
 msgid "Do you realy want to purge this replay?"
 msgstr "Вы действительно хотите удалить этот реплей?"
 
-#: apps/core/urls.py:68
+#: apps/core/urls.py:69
 msgid "Do you realy want to delete this comment?"
 msgstr "Вы действительно хотите стереть этот коментарий?"
 
-#: apps/core/urls.py:75
+#: apps/core/urls.py:76
 msgid "Do you realy want to delete this roster?"
 msgstr "Вы действительно хотите удалить этот ростер?"
 
-#: apps/core/urls.py:82
+#: apps/core/urls.py:83
 msgid "Do you realy want to unsubscribe this site object?"
 msgstr "Вы правда хотите отписаться от данного объекта?"
 
-#: apps/core/urls.py:89
+#: apps/core/urls.py:90
 msgid "Do you realy want to delete this battle report?"
 msgstr "Вы правда хотите удалить данный батл репорт?"
 
-#: apps/core/views.py:870
+#: apps/core/views.py:865
 msgid "Do you realy want to PURGE this comment?"
 msgstr "Вы действительно хотите СТЕРЕТЬ этот комментарий?"
 
@@ -758,7 +799,6 @@ msgstr "Вы действительно хотите СТЕРЕТЬ этот к�
 #: apps/tabletop/templates/index.html:15
 #: apps/tabletop/templates/search_rosters.html:35
 #: apps/tabletop/templates/user_rosters.html:26
-#: apps/vote/templates/comment_rate.html:17
 msgid "submit"
 msgstr "отправить"
 
@@ -790,24 +830,12 @@ msgstr "Мужской"
 msgid "Female"
 msgstr "Женский"
 
-#: apps/farseer/models.py:7
-msgid "Game name"
-msgstr "Имя игры"
-
-#: apps/farseer/models.py:8
-msgid "Price"
-msgstr "Цена"
-
-#: apps/farseer/models.py:9
-msgid "Discount"
-msgstr "Скидка"
-
 #: apps/files/__init__.py:3
 msgid "files"
 msgstr "файлы"
 
 #: apps/files/admin.py:24 apps/files/admin.py:78 apps/karma/admin.py:20
-#: apps/news/admin.py:23 apps/vote/admin.py:15 apps/wh/admin.py:21
+#: apps/news/admin.py:23 apps/wh/admin.py:21
 msgid "Base"
 msgstr "Базовый"
 
@@ -965,7 +993,7 @@ msgstr ""
 "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
 "странице управления файлами"
 
-#: apps/files/models.py:26 apps/files/models.py:100 apps/files/models.py:371
+#: apps/files/models.py:26 apps/files/models.py:100 apps/files/models.py:373
 #: apps/files/templates/files/user_files.html:46
 msgid "File"
 msgstr "Файл"
@@ -978,7 +1006,7 @@ msgstr "Описание"
 msgid "Upload date"
 msgstr "Дата загрузки"
 
-#: apps/files/models.py:34 apps/files/models.py:258
+#: apps/files/models.py:34 apps/files/models.py:255
 msgid "Replay"
 msgstr "Реплей"
 
@@ -986,7 +1014,7 @@ msgstr "Реплей"
 msgid "Uploaded date"
 msgstr "Дата загрузки"
 
-#: apps/files/models.py:43 apps/files/models.py:90 apps/files/models.py:269
+#: apps/files/models.py:43 apps/files/models.py:90 apps/files/models.py:266
 #: apps/pybb/models.py:25 apps/pybb/models.py:55 apps/wh/forms.py:81
 msgid "Name"
 msgstr "Имя"
@@ -1023,7 +1051,7 @@ msgstr "Аттачмент"
 msgid "Team"
 msgstr "Команда"
 
-#: apps/files/models.py:93 apps/files/models.py:268
+#: apps/files/models.py:93 apps/files/models.py:265
 #: apps/files/templates/files/user_files.html:45
 #: apps/news/templates/events/events.html:19
 msgid "Type"
@@ -1047,7 +1075,7 @@ msgstr "Расы"
 msgid "Winner"
 msgstr "Победитель"
 
-#: apps/files/models.py:104 apps/files/models.py:296
+#: apps/files/models.py:104 apps/files/models.py:297
 #: apps/tabletop/templates/add_roster_old.html:47
 msgid "Comments"
 msgstr "Комментарии"
@@ -1056,89 +1084,100 @@ msgstr "Комментарии"
 msgid "is set"
 msgstr "сет"
 
-#: apps/files/models.py:259
+#: apps/files/models.py:124
+msgid "Author"
+msgstr "Автор"
+
+#: apps/files/models.py:256
 msgid "Replays"
 msgstr "Реплеи"
 
-#: apps/files/models.py:279 apps/files/templates/gallery/gallery_list.html:22
-#: apps/pybb/templates/pybb/head.html:54
+#: apps/files/models.py:278 apps/files/templates/gallery/gallery_list.html:22
+#: apps/pybb/templates/pybb/head.html:51
 msgid "Gallery"
 msgstr "Галерея"
 
-#: apps/files/models.py:280
+#: apps/files/models.py:279
 msgid "Galleries"
 msgstr "Галереи"
 
-#: apps/files/models.py:291
+#: apps/files/models.py:292
 msgid "Alias"
 msgstr "Алиас"
 
-#: apps/files/models.py:294
+#: apps/files/models.py:295
 msgid "Fast name to access unit"
 msgstr "Имя для быстрого доступа к юниту"
 
-#: apps/files/models.py:298 apps/files/models.py:316
+#: apps/files/models.py:298 apps/files/templates/gallery/action_image.html:5
+#: apps/files/templates/gallery/gallery_list.html:11
+#: apps/files/templates/gallery/image.html:7
+#: apps/files/templates/gallery/upload.html:6
+msgid "gallery"
+msgstr "галерея"
+
+#: apps/files/models.py:300 apps/files/models.py:315
 #: apps/files/templates/files/user_files.html:72
 #: apps/files/templates/files/user_files.html:99
 msgid "Image"
 msgstr "Изображение"
 
-#: apps/files/models.py:300
+#: apps/files/models.py:303
 msgid "Thumbnail"
 msgstr "Эскиз"
 
-#: apps/files/models.py:317
+#: apps/files/models.py:316
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:364
+#: apps/files/models.py:366
 msgid "Original URL"
 msgstr "URL оригинала"
 
-#: apps/files/models.py:368 apps/news/models.py:282
+#: apps/files/models.py:370 apps/news/models.py:264
 msgid "owner"
 msgstr "владелец"
 
-#: apps/files/models.py:372
+#: apps/files/models.py:374
 msgid "Files"
 msgstr "Файлы"
 
-#: apps/files/models.py:376 apps/menu/models.py:8 apps/news/models.py:43
-#: apps/news/models.py:60 apps/news/models.py:268 apps/news/models.py:279
-#: apps/news/models.py:339 apps/news/models.py:359 apps/pybb/models.py:286
-#: apps/pybb/models.py:371 apps/tabletop/models.py:59
-#: apps/tabletop/models.py:91 apps/tabletop/models.py:207
-#: apps/tabletop/models.py:335 apps/tabletop/models.py:347
-#: apps/tabletop/models.py:484 apps/tabletop/models.py:622
+#: apps/files/models.py:378 apps/menu/models.py:8 apps/news/models.py:44
+#: apps/news/models.py:61 apps/news/models.py:250 apps/news/models.py:261
+#: apps/news/models.py:321 apps/news/models.py:341 apps/pybb/models.py:287
+#: apps/pybb/models.py:372 apps/tabletop/models.py:54
+#: apps/tabletop/models.py:87 apps/tabletop/models.py:202
+#: apps/tabletop/models.py:325 apps/tabletop/models.py:337
+#: apps/tabletop/models.py:474 apps/tabletop/models.py:612
 #: apps/wh/models.py:34 apps/wh/models.py:163
 msgid "title"
 msgstr "заголовок"
 
-#: apps/files/models.py:378
+#: apps/files/models.py:380
 msgid "file"
 msgstr "файл"
 
-#: apps/files/models.py:382
+#: apps/files/models.py:384
 msgid "plain type"
 msgstr "простой тип"
 
-#: apps/files/models.py:382
+#: apps/files/models.py:384
 msgid "plain type for "
 msgstr "простой тип для"
 
-#: apps/files/models.py:387
+#: apps/files/models.py:389
 msgid "size"
 msgstr "размер"
 
-#: apps/files/models.py:387
+#: apps/files/models.py:389
 msgid "file size"
 msgstr "размер файла"
 
-#: apps/files/models.py:424
+#: apps/files/models.py:426
 msgid "User file"
 msgstr "Файл пользователя"
 
-#: apps/files/models.py:425
+#: apps/files/models.py:427
 msgid "User files"
 msgstr "Файлы пользователя"
 
@@ -1161,7 +1200,7 @@ msgid "You used"
 msgstr "Вы испольщовали"
 
 #: apps/files/templates/files/user_files.html:31
-#: apps/pybb/templates/pybb/head.html:52
+#: apps/pybb/templates/pybb/head.html:49
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -1259,13 +1298,6 @@ msgstr "успешно загружено, обновите страницу"
 msgid "error while uploading file"
 msgstr "произошла ошибка при загрузке файла"
 
-#: apps/files/templates/gallery/action_image.html:5
-#: apps/files/templates/gallery/gallery_list.html:11
-#: apps/files/templates/gallery/image.html:7
-#: apps/files/templates/gallery/upload.html:6
-msgid "gallery"
-msgstr "галерея"
-
 #: apps/files/templates/gallery/action_image.html:6
 #: apps/files/templates/gallery/upload.html:7
 msgid "upload image"
@@ -1275,9 +1307,29 @@ msgstr "загрузить изображение"
 msgid "Action image"
 msgstr "Действие с изображением"
 
+#: apps/files/templates/gallery/gallery_image_form.html:6
 #: apps/files/templates/gallery/gallery_list.html:8
 msgid "galleries"
 msgstr "галереи"
+
+#: apps/files/templates/gallery/gallery_image_form.html:10
+msgid "update"
+msgstr "обновить"
+
+#: apps/files/templates/gallery/gallery_image_form.html:17
+#: apps/news/templates/events/event_form.html:10
+msgid "create new event"
+msgstr "создать новое событие"
+
+#: apps/files/templates/gallery/gallery_image_form.html:24
+msgid "You are going to delete this image, don't you?"
+msgstr "Вы хотите удалить данное изображение?"
+
+#: apps/files/templates/gallery/gallery_image_form.html:31
+#: apps/pybb/templates/pybb/post_template.html:69
+#: apps/wh/templates/accounts/pm.html:89
+msgid "Delete"
+msgstr "Удалить"
 
 #: apps/files/templates/gallery/gallery_list.html:18
 msgid "Add image"
@@ -1327,7 +1379,11 @@ msgstr "Сила"
 msgid "Date"
 msgstr "Дата"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:189
+#: apps/karma/models.py:25 apps/menu/models.py:17 apps/menu/models.py:56
+msgid "URL"
+msgstr "УРЛ"
+
+#: apps/karma/models.py:55 apps/tabletop/models.py:184
 msgid "Codename"
 msgstr "Кодовое имя"
 
@@ -1474,293 +1530,298 @@ msgstr "Неизвестный тип файла"
 msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
-#: apps/news/models.py:22 apps/news/models.py:81 apps/news/models.py:300
-#: apps/tabletop/models.py:226 apps/tabletop/templates/reports.html:48
+#: apps/news/models.py:23 apps/news/models.py:82 apps/news/models.py:282
+#: apps/tabletop/models.py:221 apps/tabletop/templates/reports.html:48
 msgid "approved"
 msgstr "утверждено"
 
-#: apps/news/models.py:23
+#: apps/news/models.py:24
 msgid "rejeceted"
 msgstr "отклонена"
 
-#: apps/news/models.py:24
+#: apps/news/models.py:25
 msgid "queued"
 msgstr "в очереди"
 
-#: apps/news/models.py:25
+#: apps/news/models.py:26
 msgid "revision"
 msgstr "в доработку"
 
-#: apps/news/models.py:31 apps/news/models.py:37 apps/pybb/models.py:30
+#: apps/news/models.py:32 apps/news/models.py:38 apps/pybb/models.py:30
 #: apps/pybb/models.py:54
 msgid "Category"
 msgstr "Категория"
 
-#: apps/news/models.py:38 apps/pybb/models.py:31
+#: apps/news/models.py:39 apps/pybb/models.py:31
 msgid "Categories"
 msgstr "Категории"
 
-#: apps/news/models.py:44 apps/news/models.py:64 apps/wh/models.py:96
+#: apps/news/models.py:45 apps/news/models.py:65 apps/wh/models.py:96
 #: apps/wh/models.py:138
 msgid "author"
 msgstr "автор"
 
-#: apps/news/models.py:46 apps/tabletop/models.py:227
+#: apps/news/models.py:46 apps/news/models.py:75 apps/news/models.py:270
+#: apps/news/models.py:344 apps/wh/models.py:83 apps/wh/models.py:128
+msgid "content"
+msgstr "контент"
+
+#: apps/news/models.py:47 apps/tabletop/models.py:222
 msgid "ip address"
 msgstr "IP адрес"
 
-#: apps/news/models.py:48 apps/news/models.py:290 apps/tabletop/models.py:228
+#: apps/news/models.py:49 apps/news/models.py:272 apps/tabletop/models.py:223
 #: apps/wh/models.py:176 apps/wh/models.py:260
 msgid "syntax"
 msgstr "синтаксис"
 
-#: apps/news/models.py:68
+#: apps/news/models.py:69
 msgid "editor"
 msgstr "редактор"
 
-#: apps/news/models.py:71
+#: apps/news/models.py:72
 msgid "original URL"
 msgstr "URL оригинала"
 
-#: apps/news/models.py:76 apps/wh/models.py:167
+#: apps/news/models.py:77 apps/wh/models.py:167
 msgid "cache content"
 msgstr "кеш контента"
 
-#: apps/news/models.py:79
+#: apps/news/models.py:80
 msgid "dateTime"
 msgstr "Дата-Время"
 
-#: apps/news/models.py:83 apps/news/models.py:302 apps/news/models.py:306
+#: apps/news/models.py:84 apps/news/models.py:284 apps/news/models.py:288
 msgid "author ip address"
 msgstr "ip адрес автора"
 
-#: apps/news/models.py:85
+#: apps/news/models.py:86
 msgid "is event"
 msgstr "событие"
 
-#: apps/news/models.py:91
+#: apps/news/models.py:92
 msgid "reason"
 msgstr "причина"
 
-#: apps/news/models.py:102
+#: apps/news/models.py:103
 msgid "resend"
 msgstr "отправить"
 
-#: apps/news/models.py:103
+#: apps/news/models.py:104
 msgid "marks if news notification should resend"
 msgstr "да, если нужно отослать оповещение"
 
-#: apps/news/models.py:174
+#: apps/news/models.py:163
 msgid "Archived Article"
 msgstr "Архивная статья"
 
-#: apps/news/models.py:175
+#: apps/news/models.py:164
 msgid "Archived News"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:192
+#: apps/news/models.py:181
 msgid "Can edit archived news"
 msgstr "Может редактировать архивные новости"
 
-#: apps/news/models.py:194 apps/news/models.py:195
+#: apps/news/models.py:183 apps/news/models.py:184
 msgid "Archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:257
+#: apps/news/models.py:239
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:258 apps/pybb/templates/pybb/head.html:36
+#: apps/news/models.py:240
 msgid "News"
 msgstr "Новости"
 
-#: apps/news/models.py:260
+#: apps/news/models.py:242
 msgid "Can edit news"
 msgstr "Может править новости"
 
-#: apps/news/models.py:261
+#: apps/news/models.py:243
 msgid "Can delete and restore comments"
 msgstr "Может удалять и восстанавливать комментарии"
 
-#: apps/news/models.py:262
+#: apps/news/models.py:244
 msgid "Can edit comments"
 msgstr "Может редактировать комментарии"
 
-#: apps/news/models.py:263
+#: apps/news/models.py:245
 msgid "Can purge comments"
 msgstr "Может удалять комментарии"
 
-#: apps/news/models.py:269 apps/wh/models.py:249 apps/wh/models.py:330
+#: apps/news/models.py:251 apps/wh/models.py:249 apps/wh/models.py:330
 msgid "codename"
 msgstr "кодовое имя"
 
-#: apps/news/models.py:273
+#: apps/news/models.py:255
 msgid "Meating Type"
 msgstr "Тип встреч"
 
-#: apps/news/models.py:274
+#: apps/news/models.py:256
 msgid "Meating Types"
 msgstr "Типы встреч"
 
-#: apps/news/models.py:280 apps/news/models.py:379 apps/wh/models.py:229
+#: apps/news/models.py:262 apps/news/models.py:361 apps/wh/models.py:229
 msgid "type"
 msgstr "тип"
 
-#: apps/news/models.py:285
+#: apps/news/models.py:267
 msgid "members"
 msgstr "участники"
 
-#: apps/news/models.py:317
+#: apps/news/models.py:299
 msgid "Meating"
 msgstr "Встреча"
 
-#: apps/news/models.py:318
+#: apps/news/models.py:300
 msgid "Meatings"
 msgstr "Встреча"
 
-#: apps/news/models.py:323
+#: apps/news/models.py:305
 msgid "Game"
 msgstr "Игра"
 
-#: apps/news/models.py:324
+#: apps/news/models.py:306
 msgid "Tournament"
 msgstr "Турнир"
 
-#: apps/news/models.py:325
+#: apps/news/models.py:307
 msgctxt "cart order"
 msgid "Order"
 msgstr "Заказ"
 
-#: apps/news/models.py:326
+#: apps/news/models.py:308
 msgctxt "pre-release of smth"
 msgid "Pre-release"
 msgstr "Пререлиз"
 
-#: apps/news/models.py:327
+#: apps/news/models.py:309
 msgctxt "release of smth"
 msgid "Release"
 msgstr "Релиз"
 
-#: apps/news/models.py:331
+#: apps/news/models.py:313
 msgid "Warhammer 40000"
 msgstr "Warhammer 40000"
 
-#: apps/news/models.py:333
+#: apps/news/models.py:315
 msgid "Magic the gathering"
 msgstr "Magic the gathering"
 
-#: apps/news/models.py:334
+#: apps/news/models.py:316
 msgid "Board gaming"
 msgstr "Настольные игры"
 
-#: apps/news/models.py:340
+#: apps/news/models.py:322
 msgid "event place title"
 msgstr "название места ивента"
 
-#: apps/news/models.py:341
+#: apps/news/models.py:323
 msgid "address"
 msgstr "адрес"
 
-#: apps/news/models.py:342
+#: apps/news/models.py:324
 msgid "event place address"
 msgstr "адрес места события"
 
-#: apps/news/models.py:344
+#: apps/news/models.py:326
 msgid "contacts"
 msgstr "контакты"
 
-#: apps/news/models.py:345
+#: apps/news/models.py:327
 msgid "contacts/help who to find it"
 msgstr "контакты/помощь где, кого искать"
 
-#: apps/news/models.py:352
+#: apps/news/models.py:334
 msgid "Event Place"
 msgstr "Место события"
 
-#: apps/news/models.py:353
+#: apps/news/models.py:335
 msgid "Event Places"
 msgstr "Места событий"
 
-#: apps/news/models.py:359
+#: apps/news/models.py:341
 msgid "event title"
 msgstr "название события"
 
-#: apps/news/models.py:364
+#: apps/news/models.py:346
 msgid "content event text, description, further manual and so on"
 msgstr "текст события, описания, инструкции и так далее"
 
-#: apps/news/models.py:368
+#: apps/news/models.py:350
 msgid "content html"
 msgstr "html контент"
 
-#: apps/news/models.py:369
+#: apps/news/models.py:351
 msgid "rendered html content"
 msgstr "html рендер контента"
 
-#: apps/news/models.py:372
+#: apps/news/models.py:354
 msgid "date start"
 msgstr "дата начала"
 
-#: apps/news/models.py:372
+#: apps/news/models.py:354
 msgid "when event date starts"
 msgstr "когда событие начинается"
 
-#: apps/news/models.py:375
+#: apps/news/models.py:357
 msgid "date end"
 msgstr "дата окончания"
 
-#: apps/news/models.py:375
+#: apps/news/models.py:357
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:383
+#: apps/news/models.py:365
 msgid "league"
 msgstr "лига"
 
-#: apps/news/models.py:384
+#: apps/news/models.py:366
 msgid "game league"
 msgstr "игровая лига"
 
-#: apps/news/models.py:390
+#: apps/news/models.py:372
 msgid "event place"
 msgstr "место проведения"
 
-#: apps/news/models.py:394
+#: apps/news/models.py:376
 msgid "participants would take a part in the event"
 msgstr "участники, которые будут принимать участие в событии"
 
-#: apps/news/models.py:398 apps/pybb/models.py:307
+#: apps/news/models.py:380 apps/pybb/models.py:308
 msgid "is finished"
 msgstr "завершен"
 
-#: apps/news/models.py:401
+#: apps/news/models.py:383
 msgid "is all day"
 msgstr "весь день"
 
-#: apps/news/models.py:402
+#: apps/news/models.py:384
 msgid "marks if event could place whole day"
 msgstr ""
 "отмечает, если событие будет проходить весь день (убирает временные отметки)"
 
-#: apps/news/models.py:440
+#: apps/news/models.py:422
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:441 apps/news/templates/events/calendar.html:23
+#: apps/news/models.py:423 apps/news/templates/events/calendar.html:23
 #: apps/news/templates/events/events.html:13
-#: apps/pybb/templates/pybb/head.html:47
+#: apps/pybb/templates/pybb/head.html:44
 msgid "Events"
 msgstr "События"
 
-#: apps/news/models.py:446
+#: apps/news/models.py:428
 msgid "event"
 msgstr "событие"
 
-#: apps/news/models.py:457
+#: apps/news/models.py:439
 msgid "Event watch"
 msgstr "Просмотр события"
 
-#: apps/news/models.py:458
+#: apps/news/models.py:440
 msgid "Event watches"
 msgstr "Просмотр событий"
 
@@ -1999,10 +2060,6 @@ msgstr "Вы действительно хотитеудалить это соб
 msgid "Yes, delete it"
 msgstr "Да, удалить это"
 
-#: apps/news/templates/events/event_form.html:10
-msgid "create new event"
-msgstr "создать новое событие"
-
 #: apps/news/templates/events/events.html:20
 msgid "Date start"
 msgstr "Дата начала"
@@ -2028,7 +2085,7 @@ msgstr "Вы действительно хотите удалить эту ст�
 msgid "Additional options"
 msgstr "Дополнительные опции"
 
-#: apps/pybb/admin.py:98 apps/pybb/models.py:171 apps/pybb/models.py:189
+#: apps/pybb/admin.py:98 apps/pybb/models.py:172 apps/pybb/models.py:190
 msgid "Message"
 msgstr "Сообщение"
 
@@ -2094,7 +2151,7 @@ msgstr "Позиция"
 msgid "Moderators"
 msgstr "Модераторы"
 
-#: apps/pybb/models.py:60 apps/pybb/models.py:103 apps/pybb/models.py:185
+#: apps/pybb/models.py:60 apps/pybb/models.py:103 apps/pybb/models.py:186
 msgid "Updated"
 msgstr "Обновлено"
 
@@ -2122,7 +2179,7 @@ msgstr "Форум"
 msgid "Forums"
 msgstr "Форумы"
 
-#: apps/pybb/models.py:102 apps/pybb/models.py:167 apps/pybb/models.py:183
+#: apps/pybb/models.py:102 apps/pybb/models.py:168 apps/pybb/models.py:184
 msgid "Created"
 msgstr "Создан"
 
@@ -2142,8 +2199,8 @@ msgstr "Закрытая"
 msgid "Subscribers"
 msgstr "Подписчики"
 
-#: apps/pybb/models.py:116 apps/pybb/models.py:166 apps/pybb/models.py:180
-#: apps/pybb/models.py:265
+#: apps/pybb/models.py:116 apps/pybb/models.py:167 apps/pybb/models.py:181
+#: apps/pybb/models.py:266
 msgid "Topic"
 msgstr "Топик"
 
@@ -2151,126 +2208,134 @@ msgstr "Топик"
 msgid "Topics"
 msgstr "Топики"
 
-#: apps/pybb/models.py:165
+#: apps/pybb/models.py:166
 msgid "Session key"
 msgstr "Сессионный ключ"
 
-#: apps/pybb/models.py:169 apps/pybb/models.py:187
+#: apps/pybb/models.py:170 apps/pybb/models.py:188
 msgid "Markup"
 msgstr "Разметка"
 
-#: apps/pybb/models.py:174
+#: apps/pybb/models.py:175
 msgid "Anonymous post"
 msgstr "Пост анона"
 
-#: apps/pybb/models.py:175
+#: apps/pybb/models.py:176
 msgid "Anonymous posts"
 msgstr "Посты анонов"
 
-#: apps/pybb/models.py:190
+#: apps/pybb/models.py:191
 msgid "HTML version"
 msgstr "HTML версия"
 
-#: apps/pybb/models.py:191
+#: apps/pybb/models.py:192
 msgid "Text version"
 msgstr "Текстовая версия"
 
-#: apps/pybb/models.py:192
+#: apps/pybb/models.py:193
 msgid "User IP"
 msgstr "IP пользователя"
 
-#: apps/pybb/models.py:266
+#: apps/pybb/models.py:198
+msgid "Post"
+msgstr "Пост"
+
+#: apps/pybb/models.py:199 apps/pybb/templates/pybb/quick_access.html:38
+msgid "Posts"
+msgstr "Посты"
+
+#: apps/pybb/models.py:267
 msgid "Time"
 msgstr "Время"
 
-#: apps/pybb/models.py:270
+#: apps/pybb/models.py:271
 msgid "Read"
 msgstr ""
 
-#: apps/pybb/models.py:271
+#: apps/pybb/models.py:272
 msgid "Reads"
 msgstr ""
 
-#: apps/pybb/models.py:287
+#: apps/pybb/models.py:288
 msgid "poll title"
 msgstr "заголовок опроса"
 
-#: apps/pybb/models.py:289 apps/pybb/models.py:373
+#: apps/pybb/models.py:290 apps/pybb/models.py:374
 msgid "voted amount"
 msgstr "количество проголосовавших"
 
-#: apps/pybb/models.py:289 apps/pybb/models.py:373
+#: apps/pybb/models.py:290 apps/pybb/models.py:374
 msgid "amount of voted user, cache field"
 msgstr "количество пользователей, которые проголосвали (кеш поле)"
 
-#: apps/pybb/models.py:293
+#: apps/pybb/models.py:294
 msgid "items amount"
 msgstr "количество элементов"
 
-#: apps/pybb/models.py:294
+#: apps/pybb/models.py:295
 msgid "positive amount of poll items for further creation"
 msgstr ""
 "количество элементов для участия в опросе (количество должно быть "
 "положительным числом)"
 
-#: apps/pybb/models.py:298
+#: apps/pybb/models.py:299
 msgid "is multiple"
 msgstr "множественный выбор"
 
-#: apps/pybb/models.py:298
+#: apps/pybb/models.py:299
 msgid "is multiple select allowed"
 msgstr "позволяет выбрать несколько вариантов для ответа"
 
-#: apps/pybb/models.py:302
+#: apps/pybb/models.py:303
 msgid "is prepared"
 msgstr ""
 
-#: apps/pybb/models.py:303
+#: apps/pybb/models.py:304
 msgid "marks if poll is prepared to rock n roll"
 msgstr "помечает готов ли опрос к старту"
 
-#: apps/pybb/models.py:307
+#: apps/pybb/models.py:308
 msgid "marks if poll is finished"
 msgstr "помечает опрос как завершенный"
 
-#: apps/pybb/models.py:311
+#: apps/pybb/models.py:312
 msgid "date expire"
 msgstr "дата окончания"
 
-#: apps/pybb/models.py:311
+#: apps/pybb/models.py:312
 msgid "date then poll is expired"
 msgstr "дата, когда опрос будет завершен"
 
-#: apps/pybb/models.py:365 apps/pybb/templates/pybb/poll.html:13
+#: apps/pybb/models.py:366 apps/pybb/templates/pybb/poll.html:13
 #: apps/pybb/templates/pybb/include/forum.html:26
 msgid "Poll"
 msgstr "Опрос"
 
-#: apps/pybb/models.py:366
+#: apps/pybb/models.py:367
 msgid "Polls"
 msgstr "Опросы"
 
-#: apps/pybb/models.py:377
+#: apps/pybb/models.py:378
 msgid "score"
 msgstr "счет"
 
-#: apps/pybb/models.py:377
+#: apps/pybb/models.py:378
 msgid "score in percent"
 msgstr "доля в процентах"
 
-#: apps/pybb/models.py:402
+#: apps/pybb/models.py:403
 msgid "Poll item"
 msgstr "Элемент опроса"
 
-#: apps/pybb/models.py:403
+#: apps/pybb/models.py:404
 msgid "Poll items"
 msgstr "Элементы опроса"
 
-#: apps/pybb/models.py:417
+#: apps/pybb/models.py:418
 msgid "Poll answer"
 msgstr "Ответ на опрос"
 
-#: apps/pybb/models.py:418
+#: apps/pybb/models.py:419
 msgid "Poll answers"
 msgstr "Ответы на опрос"
 
@@ -2364,40 +2429,40 @@ msgstr "Предстоящие события"
 msgid "Calendar"
 msgstr "Календарь"
 
-#: apps/pybb/templates/pybb/head.html:33
+#: apps/pybb/templates/pybb/head.html:32
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: apps/pybb/templates/pybb/head.html:49
+#: apps/pybb/templates/pybb/head.html:46
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: apps/pybb/templates/pybb/head.html:51
+#: apps/pybb/templates/pybb/head.html:48
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: apps/pybb/templates/pybb/head.html:56
+#: apps/pybb/templates/pybb/head.html:53
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/head.html:59
+#: apps/pybb/templates/pybb/head.html:56
 msgid "Admincp"
 msgstr "Админка"
 
-#: apps/pybb/templates/pybb/head.html:61
+#: apps/pybb/templates/pybb/head.html:58
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:66
+#: apps/pybb/templates/pybb/head.html:63
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:77
+#: apps/pybb/templates/pybb/head.html:74
 #: apps/wh/templates/accounts/register.html:6
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:78
+#: apps/pybb/templates/pybb/head.html:75
 msgid "Log in"
 msgstr "Войти"
 
@@ -2486,11 +2551,6 @@ msgstr "Цитатировать"
 #: templates/generic/comment_new.html:40
 msgid "Edit"
 msgstr "Правка"
-
-#: apps/pybb/templates/pybb/post_template.html:69
-#: apps/wh/templates/accounts/pm.html:89
-msgid "Delete"
-msgstr "Удалить"
 
 #: apps/pybb/templates/pybb/quick_access.html:4
 msgid "Last topics"
@@ -2743,7 +2803,7 @@ msgstr ""
 "Количество участников и формат должны совпадать с общим количеством "
 "участников"
 
-#: apps/tabletop/forms.py:155 apps/tabletop/tests.py:284
+#: apps/tabletop/forms.py:155 apps/tabletop/tests.py:289
 #, python-format
 msgid "You can not add more winners than %(amount)s"
 msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
@@ -2828,372 +2888,372 @@ msgstr ""
 msgid "Revision"
 msgstr "Ревизия"
 
-#: apps/tabletop/models.py:31
+#: apps/tabletop/models.py:26
 msgid "hq"
 msgstr "хк"
 
-#: apps/tabletop/models.py:32
+#: apps/tabletop/models.py:27
 msgid "troops"
 msgstr "трупса"
 
-#: apps/tabletop/models.py:33
+#: apps/tabletop/models.py:28
 msgid "elite"
 msgstr "элита"
 
-#: apps/tabletop/models.py:34
+#: apps/tabletop/models.py:29
 msgid "fast"
 msgstr "фаст"
 
-#: apps/tabletop/models.py:35
+#: apps/tabletop/models.py:30
 msgid "heavy support"
 msgstr "тяж поддержка"
 
-#: apps/tabletop/models.py:38
+#: apps/tabletop/models.py:33
 msgid "infantry"
 msgstr "пехота"
 
-#: apps/tabletop/models.py:39
+#: apps/tabletop/models.py:34
 msgid "vehicle"
 msgstr "техника"
 
-#: apps/tabletop/models.py:40
+#: apps/tabletop/models.py:35
 msgid "bike"
 msgstr "байк"
 
-#: apps/tabletop/models.py:41
+#: apps/tabletop/models.py:36
 msgid "jetbike"
 msgstr "джет байк"
 
-#: apps/tabletop/models.py:42
+#: apps/tabletop/models.py:37
 msgid "flyer"
 msgstr "флаер"
 
-#: apps/tabletop/models.py:43
+#: apps/tabletop/models.py:38
 msgid "artilery"
 msgstr "артилерия"
 
-#: apps/tabletop/models.py:47
+#: apps/tabletop/models.py:42
 msgid "Dawn of War"
 msgstr "Рассвет войны"
 
-#: apps/tabletop/models.py:48
+#: apps/tabletop/models.py:43
 msgid "Hammer and Anvil"
 msgstr "Молот и наковальня"
 
-#: apps/tabletop/models.py:49
+#: apps/tabletop/models.py:44
 msgid "Vanguard Strike"
 msgstr "Вангард страйк"
 
-#: apps/tabletop/models.py:60
+#: apps/tabletop/models.py:55
 msgid "plain side"
 msgstr "простая сторона"
 
-#: apps/tabletop/models.py:61
+#: apps/tabletop/models.py:56
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:93
+#: apps/tabletop/models.py:89
 msgid "player"
 msgstr "автор"
 
-#: apps/tabletop/models.py:94
+#: apps/tabletop/models.py:90
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:97
+#: apps/tabletop/models.py:93
 msgid "comments"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:101
+#: apps/tabletop/models.py:97
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:104
+#: apps/tabletop/models.py:100
 msgid "custom Codex"
 msgstr "кастом кодекс"
 
-#: apps/tabletop/models.py:108
+#: apps/tabletop/models.py:104
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:110
+#: apps/tabletop/models.py:106
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:113 apps/tabletop/models.py:358
-#: apps/tabletop/models.py:394 apps/tabletop/models.py:435
-#: apps/tabletop/models.py:494 apps/tabletop/models.py:632
+#: apps/tabletop/models.py:109 apps/tabletop/models.py:348
+#: apps/tabletop/models.py:384 apps/tabletop/models.py:425
+#: apps/tabletop/models.py:484 apps/tabletop/models.py:622
 #: apps/tabletop/templates/add_roster_old.html:26
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:113
+#: apps/tabletop/models.py:109
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:120
+#: apps/tabletop/models.py:116
 msgid "Orphan"
 msgstr "Орфан"
 
-#: apps/tabletop/models.py:121
+#: apps/tabletop/models.py:117
 msgid "wins"
 msgstr "побед"
 
-#: apps/tabletop/models.py:122
+#: apps/tabletop/models.py:118
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:134 apps/tabletop/templates/add_roster_old.html:30
+#: apps/tabletop/models.py:129 apps/tabletop/templates/add_roster_old.html:30
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:210
+#: apps/tabletop/models.py:205
 msgid "published"
 msgstr "опубликовано"
 
-#: apps/tabletop/models.py:213 apps/tabletop/templates/tabletop/roster.html:8
+#: apps/tabletop/models.py:208 apps/tabletop/templates/tabletop/roster.html:8
 #: apps/tabletop/templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:216
+#: apps/tabletop/models.py:211
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:219
+#: apps/tabletop/models.py:214
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:220
+#: apps/tabletop/models.py:215
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:222
+#: apps/tabletop/models.py:217
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:277
+#: apps/tabletop/models.py:267
 msgid "[fuzzy] "
 msgstr "[плавающий]"
 
-#: apps/tabletop/models.py:339 apps/wh/models.py:76
+#: apps/tabletop/models.py:329 apps/wh/models.py:76
 msgid "Army"
 msgstr "Армия"
 
-#: apps/tabletop/models.py:340 apps/wh/admin.py:49 apps/wh/models.py:77
+#: apps/tabletop/models.py:330 apps/wh/admin.py:49 apps/wh/models.py:77
 msgid "Armies"
 msgstr "Армии"
 
-#: apps/tabletop/models.py:352 apps/tabletop/models.py:486
-#: apps/tabletop/models.py:624 apps/wh/models.py:215 apps/wh/models.py:252
+#: apps/tabletop/models.py:342 apps/tabletop/models.py:476
+#: apps/tabletop/models.py:614 apps/wh/models.py:215 apps/wh/models.py:252
 #: apps/wh/models.py:333
 msgid "description"
 msgstr "описание"
 
-#: apps/tabletop/models.py:358
+#: apps/tabletop/models.py:348
 msgid "roster points cache"
 msgstr "количество очков ростера"
 
-#: apps/tabletop/models.py:386
+#: apps/tabletop/models.py:376
 msgid "Auto roster"
 msgstr "Авто ростер"
 
-#: apps/tabletop/models.py:387
+#: apps/tabletop/models.py:377
 msgid "Auto rosters"
 msgstr "Авто ростеры"
 
-#: apps/tabletop/models.py:391 apps/tabletop/models.py:429
-#: apps/tabletop/models.py:553 apps/tabletop/models.py:587
+#: apps/tabletop/models.py:381 apps/tabletop/models.py:419
+#: apps/tabletop/models.py:543 apps/tabletop/models.py:577
 msgid "amount"
 msgstr "количество"
 
-#: apps/tabletop/models.py:391
+#: apps/tabletop/models.py:381
 msgid "wargear amount"
 msgstr "количество варгира"
 
-#: apps/tabletop/models.py:394
+#: apps/tabletop/models.py:384
 msgid "points cache for wargear"
 msgstr "кеш очков для вооружения"
 
-#: apps/tabletop/models.py:423
+#: apps/tabletop/models.py:413
 msgid "Wargear container"
 msgstr "Контейнер вооружения"
 
-#: apps/tabletop/models.py:424
+#: apps/tabletop/models.py:414
 msgid "Wargear containers"
 msgstr "Контейнеры вооружения"
 
-#: apps/tabletop/models.py:429 apps/tabletop/models.py:647
+#: apps/tabletop/models.py:419 apps/tabletop/models.py:637
 msgid "unit amount"
 msgstr "количество юнитов"
 
-#: apps/tabletop/models.py:435
+#: apps/tabletop/models.py:425
 msgid "points cache for unit"
 msgstr "кеш очков для юнита"
 
-#: apps/tabletop/models.py:440
+#: apps/tabletop/models.py:430
 msgid "unit_containers"
 msgstr ""
 
-#: apps/tabletop/models.py:463
+#: apps/tabletop/models.py:453
 msgid "Unit container"
 msgstr "Юнит конейтенры"
 
-#: apps/tabletop/models.py:464
+#: apps/tabletop/models.py:454
 msgid "Unit containers"
 msgstr "Юнит контейнеры"
 
-#: apps/tabletop/models.py:480
+#: apps/tabletop/models.py:470
 msgid "is dedicated"
 msgstr "приписанная"
 
-#: apps/tabletop/models.py:481
+#: apps/tabletop/models.py:471
 msgid "marks if transport could be dedicated"
 msgstr "отмететь как приписанный транспорт"
 
-#: apps/tabletop/models.py:492
+#: apps/tabletop/models.py:482
 msgid "is unique?"
 msgstr "уникальный"
 
-#: apps/tabletop/models.py:492
+#: apps/tabletop/models.py:482
 msgid "marks if its unique"
 msgstr "отмечает, как уникального"
 
-#: apps/tabletop/models.py:494
+#: apps/tabletop/models.py:484
 msgid "points per model unit"
 msgstr "очков на каждую модель юнита"
 
-#: apps/tabletop/models.py:498
+#: apps/tabletop/models.py:488
 msgid "min"
 msgstr "мин"
 
-#: apps/tabletop/models.py:498
+#: apps/tabletop/models.py:488
 msgid "minumal models allowed be taken within squad"
 msgstr "минимальное количество моделей, которые можно взять в сквад"
 
-#: apps/tabletop/models.py:502
+#: apps/tabletop/models.py:492
 msgid "max"
 msgstr "макс"
 
-#: apps/tabletop/models.py:502
+#: apps/tabletop/models.py:492
 msgid "maximum models allowed be taken within squad"
 msgstr ""
 "максимальное количество моделей нужное для того, чтобы их можно было взять "
 "как отряд"
 
-#: apps/tabletop/models.py:506
+#: apps/tabletop/models.py:496
 msgid "mwr amount"
 msgstr "mwr количество"
 
-#: apps/tabletop/models.py:506
+#: apps/tabletop/models.py:496
 msgid "must take wargear amount"
 msgstr "должен взять вооружение в количестве"
 
-#: apps/tabletop/models.py:516
+#: apps/tabletop/models.py:506
 msgid "Model unit"
 msgstr "Модель юнита"
 
-#: apps/tabletop/models.py:517
+#: apps/tabletop/models.py:507
 msgid "Model units"
 msgstr "Модели юнитов"
 
-#: apps/tabletop/models.py:534 apps/tabletop/models.py:605
-#: apps/tabletop/models.py:639
+#: apps/tabletop/models.py:524 apps/tabletop/models.py:595
+#: apps/tabletop/models.py:629
 msgid "threshold"
 msgstr "граница"
 
-#: apps/tabletop/models.py:534
+#: apps/tabletop/models.py:524
 msgid "every threshold number you should take an upgrade"
 msgstr "при каждом достижении границы вы должны взять по апгрейду"
 
-#: apps/tabletop/models.py:546
+#: apps/tabletop/models.py:536
 msgid "MWRUnit"
 msgstr "MWRЮнит"
 
-#: apps/tabletop/models.py:547
+#: apps/tabletop/models.py:537
 msgid "MWRUnits"
 msgstr "MWRЮниты"
 
-#: apps/tabletop/models.py:553 apps/tabletop/models.py:587
+#: apps/tabletop/models.py:543 apps/tabletop/models.py:577
 msgid "requirement require amount"
 msgstr ""
 
-#: apps/tabletop/models.py:557 apps/tabletop/models.py:591
+#: apps/tabletop/models.py:547 apps/tabletop/models.py:581
 msgid "amount target"
 msgstr "количество цели"
 
-#: apps/tabletop/models.py:557 apps/tabletop/models.py:591
+#: apps/tabletop/models.py:547 apps/tabletop/models.py:581
 msgid "wargear requirement target amount"
 msgstr ""
 
-#: apps/tabletop/models.py:580
+#: apps/tabletop/models.py:570
 msgid "Unit wargear requirement"
 msgstr ""
 
-#: apps/tabletop/models.py:581
+#: apps/tabletop/models.py:571
 msgid "Unit wargear requirements"
 msgstr ""
 
-#: apps/tabletop/models.py:605
+#: apps/tabletop/models.py:595
 msgid "every threshold number"
 msgstr ""
 
-#: apps/tabletop/models.py:618
+#: apps/tabletop/models.py:608
 msgid "Wargear requirement"
 msgstr ""
 
-#: apps/tabletop/models.py:619
+#: apps/tabletop/models.py:609
 msgid "Wargear requirements"
 msgstr ""
 
-#: apps/tabletop/models.py:623
+#: apps/tabletop/models.py:613
 msgid "short title"
 msgstr "короткий заголовок"
 
-#: apps/tabletop/models.py:632
+#: apps/tabletop/models.py:622
 msgid "points cost for one wargear title"
 msgstr ""
 
-#: apps/tabletop/models.py:635
+#: apps/tabletop/models.py:625
 msgid "limit"
 msgstr "лимит"
 
-#: apps/tabletop/models.py:635
+#: apps/tabletop/models.py:625
 msgid "limit gear to take on the battlefield"
 msgstr ""
 
-#: apps/tabletop/models.py:639
+#: apps/tabletop/models.py:629
 msgid "models amount threshould alowed take this wargear upgrade"
 msgstr ""
 
-#: apps/tabletop/models.py:643
+#: apps/tabletop/models.py:633
 msgid "is squad only?"
 msgstr ""
 
-#: apps/tabletop/models.py:643
+#: apps/tabletop/models.py:633
 msgid "marks if upgrade allowed for entire squad only"
 msgstr ""
 
-#: apps/tabletop/models.py:648
+#: apps/tabletop/models.py:638
 msgid ""
 "sets as additional unit model, for example: Runthred casts on gretchin unit "
 "as additional model, not an upgrade"
 msgstr ""
 
-#: apps/tabletop/models.py:653
+#: apps/tabletop/models.py:643
 msgid "marks what gear blocks given one"
 msgstr ""
 
-#: apps/tabletop/models.py:657
+#: apps/tabletop/models.py:647
 msgid "marks what gear combines with each other for example: 2 bsh or 2 rkkt"
 msgstr ""
 
-#: apps/tabletop/models.py:683
+#: apps/tabletop/models.py:673
 msgid "Wargear"
 msgstr "Вооружение"
 
-#: apps/tabletop/models.py:684
+#: apps/tabletop/models.py:674
 msgid "Wargears"
 msgstr "Вооружения"
 
@@ -3315,7 +3375,7 @@ msgstr "Спрятать блок с аватаркой"
 msgid "Comments count"
 msgstr "Комментариев"
 
-#: apps/tabletop/templates/reports/include/report_header.html:45
+#: apps/tabletop/templates/reports/include/report_header.html:44
 msgid "read report"
 msgstr "прочесть репорт"
 
@@ -3487,42 +3547,17 @@ msgstr ""
 msgid "fourth argument to %s tag must be 'as'"
 msgstr ""
 
-#: apps/tracker/models.py:19
-msgid "Object ID"
-msgstr ""
-
-#: apps/tracker/templates/tracker/is_new.html:5
-msgctxt "new comments marker"
-msgid "new"
-msgstr "новый"
-
-#: apps/vote/__init__.py:3
-msgid "votes"
-msgstr "оценки"
-
-#: apps/vote/forms.py:23
-msgid "You can not pass value greater than '5' or lesser than '1'"
-msgstr "Вы не можете ввести значения больше чем 5 или меньге чем 1"
-
-#: apps/vote/models.py:19
-msgid "object ID"
-msgstr ""
-
-#: apps/vote/models.py:26
-msgid "Rate"
-msgstr "Рейт"
-
-#: apps/vote/models.py:33
-msgid "Votes"
-msgstr "Оценки"
-
-#: apps/vote/models.py:34
-msgid "Vote score"
-msgstr ""
+#: apps/utils/translations.py:4
+msgid "Misc"
+msgstr "Другое"
 
 #: apps/wh/__init__.py:3
 msgid "wh40k"
 msgstr ""
+
+#: apps/wh/admin.py:25 apps/wh/forms.py:354
+msgid "Content"
+msgstr "Содержимое"
 
 #: apps/wh/forms.py:37
 #, python-format
@@ -3967,94 +4002,6 @@ msgstr ""
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
-#: settings/dist.py:41
-msgid "Russian"
-msgstr "Русский"
-
-#: settings/dist.py:42
-msgid "English"
-msgstr "Английский"
-
-#: settings/dist.py:283
-msgid "winter"
-msgstr "зимняя"
-
-#: settings/dist.py:284
-msgid "summer"
-msgstr "летняя"
-
-#: settings/dist.py:285
-msgid "autumn"
-msgstr "осенняя"
-
-#: settings/dist.py:286
-msgid "spring"
-msgstr "весенняя"
-
-#: settings/dist.py:287
-msgid "void"
-msgstr "пустотная"
-
-#: settings/initials.py:3
-msgid ""
-"Here your header content\n"
-"(cut)\n"
-"Here your aftercut content"
-msgstr ""
-"Текст заголовка\n"
-"(cut)\n"
-"Остальное содержание"
-
-#: settings/messages.py:3
-#, python-format
-msgid ""
-"\n"
-"    \n"
-"    %(user)s Greatings you and whole blacklibrary administration.\n"
-"    You have been invited to b3ban.blacklibrary.ru.\n"
-"    If you don't know whats this site/service does please ignore it or wait\n"
-"    for explanation from your friends playing in battlefield 3.\n"
-"    Please click follow the %(link)s and follow given instructions\n"
-"    to proceed the registration.\n"
-"\n"
-"    If you got this letter accidently, please ignore it, nothing bad would "
-"happen :)\n"
-"\n"
-"    Sincerely your b3ban.blacklibrary.ru administration\n"
-msgstr ""
-
-#: settings/messages.py:16
-#, python-format
-msgid ""
-"\n"
-"    Your or somebody else requested password change for this email account.\n"
-"    If you're not the person who initiated password request procedure, "
-"please ignore\n"
-"    this letter or give a notice for service administration:\n"
-"    http://b3ban.blacklibrary.ru/contacts/\n"
-"\n"
-"    Your password restore link: %(link)s\n"
-msgstr ""
-
-#: settings/messages.py:24
-#, python-format
-msgid ""
-"\n"
-"    Article you wrote had been rejected with reason: %(reason)s\n"
-"    Please fix the errors, mistakes and anything that reason says to\n"
-"    get the article posted on title page.\n"
-"\n"
-"    Thank you :)\n"
-msgstr ""
-"\n"
-"   Статья, которую вы написали была отклонена по причине: \n"
-"   '%(reason)s'\n"
-"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан "
-"отказ\n"
-"   для того, чтобы данную статью опубликовали на главной странице.\n"
-"   \n"
-"   Спасибо :)\n"
-
 #: templates/base.html:164
 msgid "Required field"
 msgstr "Обязательное поле"
@@ -4212,9 +4159,45 @@ msgstr ""
 msgid "Timeout, please wait for your turn ;)"
 msgstr ""
 
-#: utils/translations.py:4
-msgid "Misc"
-msgstr "Другое"
+#~ msgid "DateTime"
+#~ msgstr "ДатаВремя"
+
+#~ msgid "Approved"
+#~ msgstr "Утверждено"
+
+#~ msgid "Author IP address"
+#~ msgstr "IP адрес автора"
+
+#~ msgid "Archived Post"
+#~ msgstr "Архивный пост"
+
+#~ msgid "Archived Posts"
+#~ msgstr "Архивные посты"
+
+#~ msgid "Game name"
+#~ msgstr "Имя игры"
+
+#~ msgid "Price"
+#~ msgstr "Цена"
+
+#~ msgid "Discount"
+#~ msgstr "Скидка"
+
+#~ msgctxt "new comments marker"
+#~ msgid "new"
+#~ msgstr "новый"
+
+#~ msgid "votes"
+#~ msgstr "оценки"
+
+#~ msgid "You can not pass value greater than '5' or lesser than '1'"
+#~ msgstr "Вы не можете ввести значения больше чем 5 или меньге чем 1"
+
+#~ msgid "Rate"
+#~ msgstr "Рейт"
+
+#~ msgid "Votes"
+#~ msgstr "Оценки"
 
 #~ msgid "Recipient"
 #~ msgstr "Рецепиент"

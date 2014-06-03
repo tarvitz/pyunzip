@@ -474,3 +474,7 @@ class GalleryImageUpdateForm(GalleryImageForm):
                 attrs={'class': 'form-control'}
             )
         }
+
+
+class AgreeForm(forms.Form):
+    agree = forms.BooleanField(label=_("Yes, I agree"), required=True)

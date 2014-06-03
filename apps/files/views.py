@@ -15,7 +15,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import InvalidPage, EmptyPage
 from django.views import generic
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.core import serializers
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.http import HttpResponse,HttpResponseRedirect, Http404
@@ -23,7 +23,7 @@ from apps.files.forms import UploadReplayForm,\
     EditReplayForm, UploadImageForm, CreateGalleryForm, FileUploadForm, \
     UploadFileModelForm, UploadImageModelForm, UploadReplayModelForm,\
     ActionReplayModelForm, SimpleFilesActionForm, ImageModelForm, \
-    UploadFileForm, GalleryImageForm, GalleryImageUpdateForm
+    UploadFileForm, GalleryImageForm, GalleryImageUpdateForm, AgreeForm
 from apps.core.forms import CommentForm, action_formset, action_formset_ng
 from apps.files.models import Replay, Gallery, Version, Game, File, Attachment, UserFile
 from apps.files.models import Image as GalleryImage
@@ -1037,13 +1037,21 @@ class GalleryImageCreateView(generic.CreateView):
         return super(GalleryImageCreateView, self).form_valid(form)
 
 
-class GalleryImageUpdateView(generic.UpdateView):
+class GalleryImageOwnerMixin(object):
+    def get_queryset(self):
+        qs = super(GalleryImageOwnerMixin, self).get_queryset()
+        if self.request.user.has_perm('files.change_image'):
+            return qs
+        return qs.filter(owner=self.request.user)
+
+
+class GalleryImageUpdateView(GalleryImageOwnerMixin, generic.UpdateView):
     model = GalleryImage
     template_name = 'gallery/gallery_image_form.html'
     form_class = GalleryImageUpdateForm
 
-    def get_queryset(self):
-        qs = super(GalleryImageUpdateView, self).get_queryset()
-        if self.request.user.has_perm('files.change_image'):
-            return qs
-        return qs.filter(owner=self.request.user)
+
+class GalleryImageDeleteView(GalleryImageOwnerMixin, generic.DeleteView):
+    model = GalleryImage
+    template_name = 'gallery/gallery_image_form.html'
+    success_url = reverse_lazy('files:galleries')

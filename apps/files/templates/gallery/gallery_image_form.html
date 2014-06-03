@@ -4,17 +4,32 @@
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     <li><a href="{% url "files:galleries" %}">{% trans "galleries" %}</a></li>
-    {% if form.instance.pk %}
-      <li><a href="{{ form.instance.gallery.get_absolute_url }}">{{ form.instance.gallery.name|lower }}</a></li>
-      <li><a href="{{ form.instance.get_absolute_url }}">{{ form.instance.title|lower }}</a></li>
-      <li class="active">{% trans "update" %}</li>
+    {% if object %}
+      <li><a href="{{ object.gallery.get_absolute_url }}">{{ object.gallery.name|lower }}</a></li>
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+      {% if 'delete' in request.path %}
+        <li class="active">{% trans 'delete' %}</li>
+      {% else %}
+        <li class="active">{% trans "update" %}</li>
+      {% endif %}
     {% else %}
       <li class="active">{% trans "create new event" %}</li>
     {% endif %}
   </ul>
+  {% if 'delete' in request.path %}
+    <div class="alert alert-danger">
+      <button data-dismiss="alert" class="close">&times;</button>
+      {% trans "You are going to delete this image, don't you?" %}
+    </div>
+  {% endif %}
   <form action="{{ request.path }}" method="POST" class="form-horizontal"
         enctype="multipart/form-data">
-    {% csrf_token %}{% trans "Save" as save_i18n %}
+    {% csrf_token %}
+    {% if 'delete' in request.path %}
+      {% trans "Delete" as save_i18n %}
+    {% else %}
+      {% trans "Save" as save_i18n %}
+    {% endif %}
     {% include "forms/bootstrap_horizontal.html" with form=form %}
     {% include "forms/submit.html" with save_text=save_i18n klass=user.get_forum_theme %}
   </form>

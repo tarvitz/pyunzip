@@ -6,7 +6,7 @@
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
     {% if gallery %}
       <li><a href="{% url "files:galleries" %}">{% trans "galleries" %}</a></li>
-      <li>{{ gallery.name }}</li>
+      <li>{{ gallery.name.lower }}</li>
     {% else %}
       <li class="active">{% trans "gallery" %}</li>
     {% endif %}
