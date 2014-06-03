@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 22:18+0400\n"
-"PO-Revision-Date: 2014-06-03 22:21+0400\n"
+"POT-Creation-Date: 2014-06-03 22:28+0400\n"
+"PO-Revision-Date: 2014-06-03 22:28+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -495,7 +495,7 @@ msgstr "Вы хотите подписаться на новые коммент�
 
 #: apps/comments/templates/comments/subscribe_form.html:32
 #: apps/files/templates/gallery/action_image.html:13
-#: apps/files/templates/gallery/gallery_image_form.html:33
+#: apps/files/templates/gallery/gallery_image_form.html:31
 #: apps/files/templates/gallery/upload.html:15
 #: apps/news/templates/events/event_form.html:13
 #: apps/pybb/templates/pybb/edit_post.html:20
@@ -515,7 +515,7 @@ msgstr "ядро"
 #: apps/core/actions.py:17 apps/files/actions.py:7 apps/files/forms.py:416
 #: apps/files/templates/files/user_files.html:61
 #: apps/files/templates/files/user_files.html:111
-#: apps/files/templates/gallery/gallery_image_form.html:15
+#: apps/files/templates/gallery/gallery_image_form.html:11
 #: apps/pybb/templates/pybb/edit_profile.html:31
 #: apps/pybb/templates/pybb/poll.html:10
 msgid "delete"
@@ -1312,20 +1312,20 @@ msgstr "Действие с изображением"
 msgid "galleries"
 msgstr "галереи"
 
-#: apps/files/templates/gallery/gallery_image_form.html:10
+#: apps/files/templates/gallery/gallery_image_form.html:13
 msgid "update"
 msgstr "обновить"
 
-#: apps/files/templates/gallery/gallery_image_form.html:17
+#: apps/files/templates/gallery/gallery_image_form.html:16
 #: apps/news/templates/events/event_form.html:10
 msgid "create new event"
 msgstr "создать новое событие"
 
-#: apps/files/templates/gallery/gallery_image_form.html:24
+#: apps/files/templates/gallery/gallery_image_form.html:22
 msgid "You are going to delete this image, don't you?"
 msgstr "Вы хотите удалить данное изображение?"
 
-#: apps/files/templates/gallery/gallery_image_form.html:31
+#: apps/files/templates/gallery/gallery_image_form.html:29
 #: apps/pybb/templates/pybb/post_template.html:69
 #: apps/wh/templates/accounts/pm.html:89
 msgid "Delete"
@@ -4001,6 +4001,10 @@ msgstr ""
 #: apps/wh/views/views.py:911
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
+
+#: templates/404.html:6
+msgid "Page not found"
+msgstr "Страница не найдена"
 
 #: templates/base.html:164
 msgid "Required field"
