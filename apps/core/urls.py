@@ -8,6 +8,7 @@ urlpatterns = patterns('apps.core.views',
 
     #url(r'^search/(?P<model>\w+)/$', 'sphinx_search_model',
     #    name='search-sph-model'),
+    url(r'^$', 'index', name='index'),
     url(r'^search/$', 'sphinx_search',
         name='search-sph'),
 

@@ -37,6 +37,7 @@ from django.template.defaultfilters import striptags
 # todo: move to core
 from apps.news.templatetags.newsfilters import spadvfilter,bbfilter
 from apps.core.helpers import render_filter, post_markup_filter
+from django.shortcuts import redirect
 import simplejson
 import logging
 from django.utils.decorators import method_decorator
@@ -888,6 +889,9 @@ def purge_comment(request,id=0,approve='force'):
     else:
         raise Http404("not found")
 
+
+def index(request):
+    return redirect(reverse('pybb:index'))
 
 # CBV Mixins
 class RequestMixin(object):

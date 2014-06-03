@@ -6,7 +6,7 @@ from apps.news import views
 
 urlpatterns = patterns('apps.news.views',
     #url(r'^$', 'news', name='index'),
-    url('^$', views.NewsListView.as_view(), name='index'),
+    #url('^$', views.NewsListView.as_view(), name='index'),
     url(r'^news/(?P<pk>\d+)/$', views.NewsDetail.as_view(), name='article'),
     url(r'^news/(?P<approved>(unapproved|approved))/$', 'news', name='news'), #this is somekind of brainfuck!
     url(r'^news/$', views.NewsListView.as_view(), name='news'),
