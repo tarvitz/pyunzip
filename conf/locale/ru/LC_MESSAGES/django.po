@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 22:28+0400\n"
-"PO-Revision-Date: 2014-06-03 22:28+0400\n"
+"POT-Creation-Date: 2014-06-03 22:33+0400\n"
+"PO-Revision-Date: 2014-06-03 22:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -4005,6 +4005,14 @@ msgstr "Поступил запрос на изменение вашего па�
 #: templates/404.html:6
 msgid "Page not found"
 msgstr "Страница не найдена"
+
+#: templates/500.html:6
+msgid ""
+"Internal server error happend, service administration will be notified about "
+"this"
+msgstr ""
+"Ошибка сервера, администрация будет уведомлена о произошедшем и исправит все "
+"в ближайшее время."
 
 #: templates/base.html:164
 msgid "Required field"
