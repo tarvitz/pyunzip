@@ -132,7 +132,8 @@ class Topic(models.Model):
         return self.posts.all().order_by('-created').select_related()[0]
 
     def get_last_page(self):
-        return self.posts.count() / settings.OBJECTS_ON_PAGE
+        mod = self.post.count() % settings.OBJECTS_ON_PAGE
+        return (self.posts.count() / settings.OBJECTS_ON_PAGE) + mod and 1
 
     @property
     def poll(self):
