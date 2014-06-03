@@ -31,7 +31,6 @@
                     <li>
                       <a href="{% url "comments:subscriptions" %}">{% trans "Subscriptions" %}</a>
                     </li>
-                    <li><a href="{% url "news:news" %}">{% trans "News" %}</a></li>
                     <li><a href="{% url "wh:users" %}">{% trans "Users" %}</a></li>
                     {% if user.is_authenticated %}
                     <li class='dropdown'>
