@@ -1,10 +1,8 @@
 # ^^, coding: utf-8 ^^,
 from django.template import Library, Node
-from django.db.models import get_model
 from django.template import TemplateSyntaxError
 from apps.karma.models import Karma,KarmaStatus
-from django.contrib.contenttypes.models import ContentType
-from apps.vote.helpers import vote_stars_calculate as stars_calculate
+
 from apps.core.helpers import get_settings
 from django.db.models import Q
 

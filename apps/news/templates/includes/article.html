@@ -53,9 +53,7 @@
   {% spaceless %}
     {% get_comment_count for n as comments %}
     <div class='footer'>Коментариев: <a href='{% url "news:article" number=n.id %}?page=last'>{{ comments }}</a>
-      {% with n as object %}
-        {% include "tracker/is_new.html" %}
-      {% endwith %}
+      {% with n as object %}{% endwith %}
     </div>
   {% endspaceless %}
 </div>

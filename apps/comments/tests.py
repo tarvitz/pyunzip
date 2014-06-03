@@ -166,6 +166,7 @@ class CommentWatchApiTest(TestHelperMixin, CommentWatchBase, APITestCase):
 
         self.assertEqual(comment_watch.get_new_comments().count(),
                          cw_count + 1)
+        self.login('user')
         url = reverse('api:commentwatch-detail', args=(comment_watch.pk, ))
         response = self.client.patch(url, self.post_update_subscription,
                                      format='json',

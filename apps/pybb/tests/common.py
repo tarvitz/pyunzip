@@ -104,7 +104,8 @@ class PostTest(TestHelperMixin, JustTest):
         url = reverse('pybb:post-add', args=(self.topic.pk, ))
         count = self.topic.posts.count()
         response = self.client.post(url, self.add_post, follow=True)
-        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(response.status_code, 404)
         self.proceed_form_errors(response.context)
         self.assertEqual(self.topic.posts.count(), count)
 

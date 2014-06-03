@@ -30,9 +30,7 @@
       {% get_comment_count for image as comments %}
       {% if gallery_general %}
         {% spaceless %}
-          <small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>&nbsp;
-            {% include "tracker/is_new.html" with object=image %}
-          </small>
+          <small><a href="{{ image.get_absolute_url }}" class='act_link'>коментарии: <b>{{ comments }}</b></a>&nbsp;</small>
         {% endspaceless %}
       {% else %}
         {% spaceless %}

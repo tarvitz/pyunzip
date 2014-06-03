@@ -15,7 +15,7 @@ from apps.core.helpers import (
     get_object_or_none, paginate, can_act, render_to,
     safe_ret, get_int_or_zero
 )
-from apps.tracker.decorators import mark_read
+
 from django.conf import settings
 from django.shortcuts import render_to_response, get_object_or_404
 from apps.core import pages, get_skin_template
@@ -82,7 +82,6 @@ def battle_reports(request):
 
 
 @render_to('reports/report.html')
-@mark_read(object_pk='pk', app='tabletop', module='BattleReport')
 def report(request, pk):
     can_edit = False
     if request.user.is_authenticated():

@@ -205,12 +205,9 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    'apps.vote',
     'apps.tagging',
     'apps.utils',
     'apps.karma',
-    'apps.tracker',
-    'apps.farseer',
     'apps.pybb',
     'apps.menu',
     'extwidgets',
@@ -305,7 +302,7 @@ DOCUMENT = {
     'sph_search_inc': 'includes/sphinx_search.html'
 }
 
-from apps.vote.settings import *
+
 from apps.wh.settings import *
 from app.search_settings import *
 from apps.karma.settings import *

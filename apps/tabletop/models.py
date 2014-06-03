@@ -13,7 +13,7 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.conf import settings
-from apps.djangosphinx.models import SphinxSearch
+
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
@@ -59,10 +59,11 @@ class Codex(models.Model):
         try:
             return self.content_type.model_class().objects.get(pk=self.object_id)
         except:
-            return None
+            return u''
 
     def __unicode__(self):
-        return self.bound().__unicode__()
+        bound = self.bound()
+        return bound.__unicode__() if bound else u''
 
     def save(self, *args, **kwargs):
         #write plain_side for better search withing sphinx
@@ -116,7 +117,6 @@ class Roster(models.Model):
     wins = models.PositiveIntegerField(_('wins'), default=0, blank=True)
     defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
 
-    search = SphinxSearch(weights={'title': 30, 'comments': 30})
     actions = [common_delete_action, alter_codex_action]
 
     def show_player(self):
@@ -224,7 +224,6 @@ class BattleReport(models.Model):
     seen_objects = generic.GenericRelation(
         'tracker.SeenObject', object_id_field='object_pk'
     )
-    search = SphinxSearch(weights={'title': 30, 'comment': 30})
 
     actions = [common_delete_action, ]
 

@@ -1,8 +1,0 @@
-{% load trackertags i18n %}
-{% if user.is_authenticated %}
-    {% if not user in object.get_seen_users %}
-        <span class='is_new' id='id_new_{% get_app_n_model for object %}_{{ object.id }}'>
-        [{% trans "new" context "new comments marker" %}]
-        </span>
-    {% endif %}
-{% endif %}

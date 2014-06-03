@@ -44,10 +44,6 @@ from django.utils.decorators import method_decorator
 
 logger = logging.getLogger(__name__)
 
-#simple
-
-#additional modules
-#from apps.tracker.decorators import user_add_content
 
 def action_approve_simple(request,url,message):
     if not url:
@@ -506,11 +502,9 @@ def get_ip_address(request):
     response.write(ip or 'none detected')
     return response
 
-from apps.tracker.decorators import new_comment
 
 @transaction.commit_on_success
 @login_required
-@new_comment
 @render_to('core/add_comment.html')
 def save_comment(request):
     #obj_id could cause a lot of problems if it would have much bigger blocks

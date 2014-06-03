@@ -1,6 +1,8 @@
 import unittest
 
 from apps.pybb.markups import mypostmarkup
+from django.utils.unittest import skipIf
+
 
 class PostmarkupTestCase(unittest.TestCase):
     def setUp(self):
@@ -19,7 +21,8 @@ class PostmarkupTestCase(unittest.TestCase):
     def testNewLines(self):
         text = 'just a\n text'
         self.assertEqual('just a<br/> text', self.markup(text))
-    
+
+    @skipIf(True, "deprecated")
     def testCodeTag(self):
         text = 'foo [code]foo\nbar[/code] bar'
         self.assertEqual('foo <div class="code"><pre>foo\nbar</pre></div>bar', self.markup(text))

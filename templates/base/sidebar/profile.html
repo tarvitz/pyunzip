@@ -59,7 +59,6 @@
                 <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
                 <li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
-                <li class='lvl2'><a href="{% url "vote:best" "image" %}">лучшие</a></li>
                 {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url "files:image-upload" %}' title='загрузить изображение в галерею'>добавить</a></li>
                 {% comment %}{% if user.is_staff %}
                 <li><a rel='twipsy' href="{% url "files:files-index" %}" title='Небольшое хранилище файлов'>Файлы</a></li>

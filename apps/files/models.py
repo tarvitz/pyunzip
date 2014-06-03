@@ -16,7 +16,7 @@ from apps.files import actions
 from apps.core.actions import common_delete_action
 from django.core.urlresolvers import reverse
 from apps.core.models import Announcement
-from apps.djangosphinx.models import SphinxSearch
+
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
@@ -104,10 +104,7 @@ class Replay(models.Model):
     comments = models.TextField(_('Comments'),blank=True)
     is_set = models.BooleanField(_('is set'), blank=True, default=False)
     syntax = models.CharField(_('Syntax'),max_length=20,choices=settings.SYNTAX,blank=True,null=True) 
-    search = SphinxSearch(weights={
-        'title': 30,
-        'comment': 40,
-    })
+
     actions = [common_delete_action, ]
     get_title = lambda self: self.name
     get_content = lambda self: self.comments
@@ -299,10 +296,7 @@ class Image(models.Model):
     #os.path.join(settings.MEDIA_ROOT, 'images/galleries/'))
     thumbnail = models.ImageField(_('Thumbnail'), upload_to=os.path.join(settings.MEDIA_ROOT,"images/galleries/thumbnails/"))
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    search = SphinxSearch(weights={
-        'title': 40,
-        'comments': 30,
-    })
+
     seen_objects = generic.GenericRelation(
         'tracker.SeenObject', object_id_field='object_pk'
     )

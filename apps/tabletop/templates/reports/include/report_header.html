@@ -41,7 +41,6 @@
                 <span class='txt info pull-right' style='text-align: right;'>
                     {% get_comment_count for report as comments %}
                     <span class='txt'>{% trans "Comments count" %}: {{ comments }}</span>
-                    {% include 'tracker/is_new.html' with object=report %}<br>
                     <a href="{{ report.get_absolute_url }}">{% trans "read report" %}</a>
                 </span>
             </div>

@@ -25,7 +25,6 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse, reverse_lazy
 from datetime import datetime,timedelta
 
-from apps.tracker.decorators import user_visit
 from apps.core.helpers import (
     get_settings, paginate, can_act, render_to,
     get_int_or_zero
@@ -136,7 +135,6 @@ def search_article(request):
     context_instance=RequestContext(request))
 
 @render_to('news/article.html')
-@user_visit(object_pk='number', ct='news.news')
 @update_subscription_new(app_model='news.news', pk_field='number')
 def article(request, number=1, object_model='news.news'):
     #template = get_skin_template(request.user,'news/article.html')
@@ -197,7 +195,6 @@ class NewsDetail(generic.DetailView):
         })
         return context
 
-    @method_decorator(user_visit(object_pk='pk', ct='news.news'))
     @method_decorator(update_subscription_new(app_model='news.news',
                                               pk_field='pk'))
     def dispatch(self, request, *args, **kwargs):

@@ -19,7 +19,7 @@ from django.conf import settings
 from apps.core.helpers import safe_ret
 from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
-from apps.djangosphinx.models import SphinxSearch
+
 from django.core.cache import cache
 from datetime import datetime
 from apps.core.helpers import post_markup_filter, render_filter

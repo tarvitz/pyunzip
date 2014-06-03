@@ -1,4 +1,4 @@
-from django.conf.urls import url, include
+from django.conf.urls import url, include, patterns
 from apps.core.shortcuts import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
@@ -35,10 +35,7 @@ urlpatterns = patterns(
     (r'^', include('apps.files.urls', namespace='files')),
     (r'^', include('apps.news.urls', namespace='news')),
     (r'^', include('apps.tabletop.urls', namespace='tabletop')),
-    (r'^', include('apps.vote.urls', namespace='vote')),
     (r'^', include('apps.karma.urls', namespace='karma')),
-    (r'^', include('apps.farseer.urls', namespace='farseer')),
-    (r'^', include('apps.tracker.urls', namespace='tracker')),
     (r'^', include('apps.comments.urls', namespace='comments')),
     (r'^forum/', include('apps.pybb.urls', namespace='pybb')),
     url(r'^api-auth/', include('rest_framework.urls',

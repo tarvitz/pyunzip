@@ -345,6 +345,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         user = User.objects.filter(qset)[0]
         user.user_permissions.add(perm)
         user.save()
+
+        self.login(user=user.username)
         response = self.client.get(self.poll.get_update_url(), follow=True)
         self.assertEqual(response.status_code, 200)
 
@@ -368,6 +370,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         user = User.objects.filter(qset)[0]
         user.user_permissions.add(perm)
         user.save()
+
+        self.login(user=user.username)
         response = self.client.get(self.poll.get_configure_url(), follow=True)
         self.assertEqual(response.status_code, 200)
 

@@ -17,7 +17,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.contrib.contenttypes import generic
 
-from apps.djangosphinx.models import SphinxSearch
 from apps.core.helpers import post_markup_filter, render_filter
 
 NEWS_STATUSES = (
@@ -164,14 +163,6 @@ class AbstractNews(models.Model):
 
 
 class ArchivedNews(AbstractNews):
-    search = SphinxSearch(
-        weights={
-            'title': 100,
-            'head_content': 100,
-            'content': 100,
-        }
-    )
-
     class Meta:
         verbose_name = _('Archived Article')
         verbose_name_plural = _('Archived News')
@@ -198,13 +189,6 @@ class ArchivedNews(AbstractNews):
 
 
 class News(AbstractNews):
-    search = SphinxSearch(
-        weights={
-            'title': 100,
-            'head_content': 100,
-            'content': 100,
-        }
-    )
     comments = generic.GenericRelation(
         Comment,
         content_type_field='content_type',

@@ -1,6 +1,7 @@
 # coding: utf-8
 from django.test import TestCase
 from apps.tabletop.models import Codex, Roster, Mission, BattleReport
+from apps.core.tests import TestHelperMixin
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -11,11 +12,12 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.cache import cache
+from django.utils.unittest import skipIf
+
 from copy import deepcopy
-from apps.core.helpers import get_object_or_None
 
 
-class JustTest(TestCase):
+class JustTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
         'tests/fixtures/load_games.json',
@@ -31,7 +33,7 @@ class JustTest(TestCase):
             reverse('tabletop:roster', args=(1, )),
             reverse('tabletop:roster', args=(2, )),
             reverse('tabletop:roster', args=(3, )),
-            reverse('tabletop:battle-reports-self'),
+            #reverse('tabletop:battle-reports-self'),
             reverse('tabletop:rosters-index')
         ]
         self.urls_registered = [
@@ -66,6 +68,7 @@ class JustTest(TestCase):
                 print msg
             raise AssertionError
 
+    #@skipIf(True, 'broken')
     def test_urls(self):
         # test void urls
         for user in ('user', 'admin', None):
@@ -99,12 +102,12 @@ class JustTest(TestCase):
             'pts': 555,
             'title': u'Тесты, ростер',
             'codex': codex.id,
-            'revision': codex.revisions.split(',')[-1] #last revision
+            'revision': codex.revisions.split(',')[-1]  # last revision
         }
 
         count = Roster.objects.count()
         response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(count, Roster.objects.count())
 
         # user and admin can post normally
@@ -132,7 +135,7 @@ class JustTest(TestCase):
         }
         count = BattleReport.objects.count()
         response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
         self.assertEqual(count, BattleReport.objects.count())
 
         # testing for user
@@ -171,6 +174,7 @@ class JustTest(TestCase):
                 print "Got %(err)s in %(key)s" % msg
             raise AssertionError
 
+    #@skipIf(True, "broken")
     def test_battle_report_edit(self):
         self.test_battle_report_add()
         report = BattleReport.objects.all()[0]
@@ -204,7 +208,7 @@ class JustTest(TestCase):
             if user:
                 self.assertEqual(response.status_code, 404)
             else:  # anonymous got redirect for login
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 404)
             report = BattleReport.objects.get(id=report.id)
             self.check_changes(report, edit, check=self.assertNotEqual)
 
@@ -218,6 +222,7 @@ class JustTest(TestCase):
         report = BattleReport.objects.get(id=report.id)
         self.check_changes(report, edit, check=self.assertEqual)
 
+    #@skipIf(True, "broken")
     def test_battle_report_approve_disapprove(self):
         # only admin can approve/disapprove
         self.test_battle_report_add()
@@ -235,14 +240,14 @@ class JustTest(TestCase):
             if user:
                 self.assertEqual(response.status_code, 404)
             else:
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 404)
             report = BattleReport.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
             response = self.client.get(disapprove_url, follow=True)
             if user:
                 self.assertEqual(response.status_code, 404)
             else:
-                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.status_code, 404)
             report = BattleReport.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
         # admin can approve
@@ -286,6 +291,7 @@ class JustTest(TestCase):
             )
         )
 
+    #@skipIf(True, 'broken')
     def test_roster_win_defeats(self):
         report = BattleReport.objects.filter(layout='1vs1')[0]
         logged = self.client.login(username='user', password='123456')
@@ -322,6 +328,7 @@ class JustTest(TestCase):
         self.assertEqual(response.status_code, 200)
         winner = Roster.objects.get(pk=winner.pk)
         self.assertEqual(winner.wins, wins + 1)
+
 
 class CacheTest(TestCase):
     fixtures = [
