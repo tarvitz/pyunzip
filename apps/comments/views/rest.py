@@ -28,6 +28,12 @@ class CommentWatchViewSet(viewsets.ModelViewSet):
     filter_class = CommentWatchFilterSet
     filter_fields = ('is_updated', 'is_disabled', 'id')
 
+    def get_queryset(self):
+        qs = super(CommentWatchViewSet, self).get_queryset()
+        if self.request.user.is_authenticated():
+            return qs.filter(user=self.request.user)
+        return CommentWatch.objects.none()
+
 
 class CommentWatchDetail(APIView):
     """

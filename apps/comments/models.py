@@ -90,6 +90,10 @@ class CommentWatch(models.Model):
         return title + " " + self.user.get_username()
 
     # urls
+    @staticmethod
+    def get_absolute_url():
+        return '/'
+
     def get_subscription_remove_url(self):
         return reverse('comments:subscription-remove', args=(self.pk, ))
 
