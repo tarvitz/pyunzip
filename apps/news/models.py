@@ -1,10 +1,12 @@
 from datetime import datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
-from django.contrib.contenttypes import generic
-from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
-from utils.models import copy_fields
+
+from apps.files.models import Attachment
+from apps.utils.models import copy_fields
+
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()

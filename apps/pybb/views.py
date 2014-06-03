@@ -1,5 +1,4 @@
 import math
-import datetime
 
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
@@ -30,7 +29,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
-from utils.paginator import DiggPaginator as Paginator
+from apps.utils.paginator import DiggPaginator as Paginator
 
 
 def index_ctx(request):

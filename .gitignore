@@ -13,9 +13,9 @@
 /media/files/
 /media/pybb/avatars/
 /reload
-/settings/local.py
+/app/settings/local.py
 /ve
-/working
+/data/working
 /*.sqlite
 /*.db
 /media/admin
@@ -38,4 +38,6 @@ django.mo
 /media/css/bootstrap.css
 /media/components
 /data/plop
-/uploads/*
+/db/uploads/*
+/db/*.sqlite
+/db/*.db

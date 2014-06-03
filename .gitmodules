@@ -1,6 +1,3 @@
-[submodule "less/bootstrap-chosen"]
-	path = less/bootstrap-chosen
+[submodule "media/less/bootstrap-chosen"]
+	path = media/less/bootstrap-chosen
 	url = https://github.com/alxlit/bootstrap-chosen.git
-[submodule "less/select2-bootstrap-css"]
-	path = less/select2-bootstrap-css
-	url = https://github.com/fk/select2-bootstrap-css.git

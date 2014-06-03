@@ -3,23 +3,18 @@ from django.db import models
 from django.db.models import Min
 from django.utils.translation import (
     ugettext_lazy as _, ugettext as tr,
-    pgettext_lazy, pgettext
+    pgettext
 )
-from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
-from utils.models import copy_fields
+
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-from django.contrib.comments.models import Comment
-from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from apps.wh.models import Side
 from apps.djangosphinx.models import SphinxSearch
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes import generic
 from django.core.exceptions import ValidationError
 from apps.core.actions import common_delete_action
 from apps.core.helpers import render_filter, post_markup_filter

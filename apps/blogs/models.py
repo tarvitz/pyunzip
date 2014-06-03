@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from apps.files.models import Attachment
 from django.core.urlresolvers import reverse
-from utils.models import copy_fields
 from django.contrib.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-import apps.tagging.fields
 from django.conf import settings
+
+from apps.files.models import Attachment
+from apps.utils.models import copy_fields
+import apps.tagging.fields
+
 
 # Create your models here.
 """

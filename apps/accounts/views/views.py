@@ -1,22 +1,22 @@
 # Create your views here.
 # -*- coding: utf-8 -*-
-from apps.core.helpers import render_to, get_object_or_404
-from utils.paginator import DiggPaginator as Paginator
-from apps.core.views import (
-    RequestMixin, LoginRequiredMixin
-)
-from apps.accounts.forms import (
-    LoginForm, ProfileForm, RegisterForm
-)
-
-from apps.accounts.models import (
-    User
-)
 from django.views import generic
 from django.contrib import auth
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
+
+from apps.core.helpers import render_to
+from apps.core.views import (
+    LoginRequiredMixin
+)
+from apps.accounts.forms import (
+    LoginForm, ProfileForm, RegisterForm
+)
+from apps.accounts.models import (
+    User
+)
+
 
 
 #mixins
