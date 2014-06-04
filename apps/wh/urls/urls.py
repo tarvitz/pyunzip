@@ -9,14 +9,14 @@ urlpatterns = patterns('apps.wh.views.views',
     #url('^accounts/login/$', 'login', name='login'),
     #url('^accounts/logout/$', 'logout', name='logout'),
     url('^logout/$', 'logout', name='logout'),
-    url('^accounts/password/change/$', 'change_password', name='password-change'),
-    url(r'password/(?P<sid>[\w\d]+)/restore/$', 'password_restore',
-        name='password-restore'),
-    url(r'password/restore/initiate/$', 'password_restore_initiate',
-        name='password-restore-initiate'),
-    url(r'password/changed/$', direct_to_template,
-        {'template': 'accounts/password_changed.html'},
-        name='password-changed'),
+    #url('^accounts/password/change/$', 'change_password', name='password-change'),
+    #url(r'password/(?P<sid>[\w\d]+)/restore/$', 'password_restore',
+    #    name='password-restore'),
+    #url(r'password/restore/initiate/$', 'password_restore_initiate',
+    #    name='password-restore-initiate'),
+    #url(r'password/changed/$', direct_to_template,
+    #    {'template': 'accounts/password_changed.html'},
+    #    name='password-changed'),
     # end of new password restore
     url(r'^accounts/profile/$', 'profile', name='profile'),
     url('^accounts/profile/real/(?P<account_name>[\w\s-]+)/$', 'profile',
@@ -62,8 +62,8 @@ urlpatterns = patterns('apps.wh.views.views',
     url(r'^registered/$', direct_to_template,
         {'template': 'accounts/registered.html'}, name='registered'
     ),
-    url(r'password/recovered/$', direct_to_template,
-        {'template': 'accounts/password_changed.html'},
-        name='password-changed'
-    )
+    #url(r'password/recovered/$', direct_to_template,
+    #    {'template': 'accounts/password_changed.html'},
+    #    name='password-changed'
+    #)
 )

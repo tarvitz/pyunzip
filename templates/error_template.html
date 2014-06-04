@@ -1,0 +1,37 @@
+<!doctype html>{% load i18n static %}
+<html>
+<head>
+    <title>Tessera Forum</title>
+    <meta name="description" content="Tessera Forum" />
+    <meta name="keywords" content="pybb" />
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <script type='text/javascript' src='{% static "js/core.js" %}'></script>
+    <script type="text/javascript" src="{% static "components/jquery/jquery.min.js" %}"></script>
+    <script type='text/javascript' src='{% static "js/jquery.tmpl.min.js" %}'></script>
+    <script type='text/javascript' src='{% static "js/jquery.html5_upload.js" %}'></script>
+
+    <link rel='stylesheet' href='{% static "css/bootstrap-forum.css" %}'>
+    <link rel='stylesheet' href='{% static "css/whhg.css" %}'>
+    <link type='text/css' rel='stylesheet'
+          href='{% static "bootstrap3/css/bootstrap-glyphicons.css" %}'>
+    {% block css %}{% endblock %}
+    <script type='text/javascript' src='{% static "bootstrap3/js/bootstrap.min.js" %}'></script>
+    <!-- colorbox -->
+    <script type='text/javascript' src='{% static "js/jq_base.js" %}'></script>
+    {% block js %}{% endblock %}
+    {% block extra_meta %}{% endblock %}
+</head>
+<body id='document'>
+{% trans "open text" as i18n_open %}{% trans "close text" as i18n_close %}
+<div id='wrap'>
+    {% include 'pybb/head.html' %}
+    <div class='container'>
+        {% block content %}{% endblock %}
+    </div>
+    <div id='push'></div>
+</div>
+{% include 'pybb/footer.html' %}
+
+</body>
+</html>

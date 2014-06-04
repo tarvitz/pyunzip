@@ -134,12 +134,17 @@ class User(PermissionsMixin, AbstractBaseUser):
             'accounts:profile-by-nick', args=(
                 self.nickname or self.username, )
         )
-
-    def get_profile_url(self):
+    @staticmethod
+    def get_profile_url():
         return reverse('accounts:profile')
 
-    def get_update_profile_url(self):
+    @staticmethod
+    def get_update_profile_url():
         return reverse('accounts:profile-update')
+
+    @staticmethod
+    def get_password_change_url():
+        return reverse('accounts:password-change')
 
     def get_color_theme(self):
         return self.get_forum_theme()

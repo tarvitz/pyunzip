@@ -1,22 +1,27 @@
 # Create your views here.
 # -*- coding: utf-8 -*-
 from django.views import generic
+from django.conf import settings
 from django.contrib import auth
 from django.shortcuts import redirect
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
+from django.core.mail import send_mail
+from django.utils.translation import ugettext_lazy as _
+from django.http import Http404
 
-from apps.core.helpers import render_to
+from apps.core.models import UserSID
+from apps.core.helpers import get_object_or_None
 from apps.core.views import (
     LoginRequiredMixin
 )
 from apps.accounts.forms import (
-    LoginForm, ProfileForm, RegisterForm
+    LoginForm, ProfileForm, RegisterForm,
+    PasswordChangeForm, PasswordRecoverForm,
+    PasswordRestoreForm, PasswordRestoreInitiateForm
 )
 from apps.accounts.models import (
     User
 )
-
 
 
 #mixins
@@ -147,3 +152,79 @@ class ProfileView(generic.DetailView):
                 nickname__iexact=self.kwargs.get('nickname', '!void')
             )
         return super(ProfileView, self).get_queryset()
+
+
+class PasswordRestoreInitiateView(generic.FormView):
+    form_class = PasswordRestoreInitiateForm
+    success_url = reverse_lazy('core:password-restore-initiated')
+    template_name = 'accounts/password_restore_initiate.html'
+
+    def form_valid(self, form):
+        users = form.cleaned_data['users']
+        sids = UserSID.objects.filter(user__in=users, expired=True)
+        sids = list(sids)
+        if not sids:
+            for user in users:
+                sid = UserSID.objects.create(user)
+                sids.append(sid)
+        else:
+            for user in users:
+                sid = UserSID.objects.filter(
+                    user=self.request.user).order_by('-id')[0]
+                sids.append(sid)
+                (lambda x: x)(user)
+
+        for sid in sids:
+            msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
+                'link': settings.DOMAIN + "%s" % reverse_lazy(
+                'accounts:password-restore', args=(sid.sid, ))
+            }
+            if settings.SEND_MESSAGES:
+                send_mail(
+                    subject=unicode(
+                        _('Your password requested to change')
+                    ),
+                    message=unicode(msg),
+                    from_email=settings.FROM_EMAIL,
+                    recipient_list=[sid.user.email]
+                )
+        return redirect(self.get_success_url())
+
+
+class PasswordRestoreView(generic.FormView):
+    form_class = PasswordRestoreForm
+    success_url = reverse_lazy('core:password-restored')
+
+    def get_form_kwargs(self):
+        kwargs = super(PasswordRestoreView, self).get_form_kwargs()
+        sid = self.kwargs.get('sid', 0)
+        instance = get_object_or_None(UserSID, sid=sid, expired=False)
+        if not instance:
+            raise Http404
+        kwargs.update({
+            'instance': instance,
+            'request': self.request
+        })
+        return kwargs
+
+    def form_valid(self, form):
+        form.save()
+        return redirect(self.get_success_url())
+
+
+class PasswordChangeView(generic.FormView):
+    form_class = PasswordChangeForm
+    template_name = 'accounts/password_change.html'
+    success_url = reverse_lazy('accounts:password-changed')
+
+    def get_form_kwargs(self):
+        kwargs = super(PasswordChangeView, self).get_form_kwargs()
+        kwargs.update({'request': self.request})
+        return kwargs
+
+    def form_valid(self, form):
+        user = self.request.user
+        password = form.cleaned_data['password1']
+        user.set_password(password)
+        user.save()
+        return redirect(self.get_success_url())

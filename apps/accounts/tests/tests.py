@@ -1,12 +1,12 @@
 # coding: utf-8
 #from django.utils import unittest
 import os
-import re
+
 from django.test import TestCase
 from django.utils.unittest import skipIf
 from apps.accounts.models import User
 from apps.wh.models import (
-    Side, RegisterSid, Rank, RankType, PM
+    Side, Rank, RankType
 )
 from apps.core.models import UserSID
 from apps.core.tests import TestHelperMixin
@@ -15,7 +15,7 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
-import simplejson as json
+
 
 
 class JustTest(TestHelperMixin, TestCase):
@@ -127,7 +127,7 @@ class JustTest(TestHelperMixin, TestCase):
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
 
-        url = reverse('wh:password-change')
+        url = reverse('accounts:password-change')
         new_password = '654321'
         post = {
             'password1': new_password,
@@ -143,28 +143,32 @@ class JustTest(TestHelperMixin, TestCase):
 
     def test_password_recover(self):
         # user@blacklibrary.ru == user
-        init_url = reverse('wh:password-restore-initiate')
+        self.client.logout()
+        init_url = reverse('accounts:password-restore-initiate')
 
         count = UserSID.objects.count()
         post = {
             'email': 'user@blacklibrary.ru'
         }
+
         response = self.client.post(init_url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         new_count = UserSID.objects.count()
-        users_amount = UserSID.objects.filter(user__email='user@blacklibrary.ru').count()
+        users_amount = UserSID.objects.filter(
+            user__email='user@blacklibrary.ru').count()
         self.assertEqual(count + users_amount, new_count)
         sid = UserSID.objects.filter(user__email='user@blacklibrary.ru')[0]
-        post_url = reverse('wh:password-restore', args=(sid.sid, ))
+        post_url = reverse('accounts:password-restore', args=(sid.sid, ))
         update = {
             'password': 'new_pass',
             'password2': 'new_pass'
         }
+
         response = self.client.post(post_url, update, follow=True)
         self.assertEqual(response.status_code, 200)
-        logged = self.client.login(username=sid.user.username, password='new_pass')
+        logged = self.client.login(username=sid.user.username,
+                                   password='new_pass')
         self.assertEqual(logged, True)
-        #   self.client.post(url, post, follow=True)
 
     def test_duplicate_nick_update(self):
         # can update self nickname for current nickname
@@ -281,8 +285,8 @@ class JustTest(TestHelperMixin, TestCase):
         for usern in usernames:
             post = {
                 'username':  usern[0],  # 'test_user',
-                'email': usern[1],  #'test@blacklibrary.ru',
-                'nickname': usern[2],  #'test_nickname',
+                'email': usern[1],      # 'test@blacklibrary.ru',
+                'nickname': usern[2],   # 'test_nickname',
                 'password': '123456',
                 'password_repeat': '123456',
                 'recaptcha_response_field': 'PASSED'

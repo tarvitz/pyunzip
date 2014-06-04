@@ -47,7 +47,7 @@
         <div class="transparency grey"></div>
         <div class="pull-left">
           {% if user == object %}
-            [<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
+            [<a class='act_link' href='{{ user.get_password_change_url }}' title='сменить пароль'>***</a>]{% endif %}
             {% if user.is_staff %}[{{ object.username }}]{% endif %}
         </div>
       </div><!-- msg_footer -->

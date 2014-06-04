@@ -316,6 +316,7 @@ GLOBAL_SITE_NAME = 'http://w40k.net'
 KARMA_COMMENTS_COUNT = 1
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
 MAX_DOCUMENT_SIZE = 1024 * 4
+FROM_EMAIL = 'AstroPath (no replay) <astropath@blacklibrary.ru>'
 
 DEBUG_TOOLBAR = False
 
