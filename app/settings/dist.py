@@ -207,7 +207,6 @@ INSTALLED_APPS = (
     'apps.karma',
     'apps.pybb',
     'apps.menu',
-    'extwidgets',
     'django_extensions',
     'south',
     'rest_framework',
@@ -314,27 +313,13 @@ SIGN_CHOICES = (
     (8, _('[everban]')),
 )
 
-#OTHER SETTINGS
+
 READONLY_LEVEL = 5
 GLOBAL_SITE_NAME = 'http://w40k.net'
 
-
-#import djcelery
-#djcelery.setup_loader()
-# Celery settings
-# Time after task will be expired, 5 hours
-#CELERY_TASK_RESULT_EXPIRES = 18000
-# Send notifications for admins if troubles would happen
-#CELERND_TASK_ERROR_EMAILS = True
-#CELERY_RESULT_BACKEND = "redis"
-#CELERY_REDIS_HOST = "redis"
-#CELERY_REDIS_PORT = 6379
-#CELERY_REDIS_DB = 0
-#BROKER_URL = "redis://redis:6379/0"
-
 KARMA_COMMENTS_COUNT = 1
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
-MAX_DOCUMENT_SIZE = 1024 * 4  # 4096 bytes
+MAX_DOCUMENT_SIZE = 1024 * 4
 
 DEBUG_TOOLBAR = False
 
