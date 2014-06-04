@@ -63,7 +63,6 @@ ADMIN_MEDIA = rel_path('admin_media')
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/media/'
-STYLES_URL = '/styles/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -75,9 +74,6 @@ MEDIA_ROOT = rel_path('db/uploads')
 
 STATICFILES_DIRS = (
     rel_path('media'),
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
 )
 
 STATICFILES_FINDERS = (
@@ -249,16 +245,15 @@ REST_FRAMEWORK = {
 #settings
 DOMAIN = 'w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
-APP_VOTE_ENABLED = True
+
 PRODUCTION = True
 DEVELOPMENT = False
 YANDEX_METRICA_ENABLED = False
-BOOTSTRAP_VERSION = ''
-ENABLE_500_TEST = False
+
 SERVER_EMAIL = 'noreply@w40k.net'
 DEV_SERVER = True
 GRAPPELLI_ADMIN_TITLE = 'w40k.net'
-USE_OLD_THUMBNAIL_IMAGE_SCHEME = False
+
 DEFAULT_TEMPLATE = 'base.html'
 DEFAULT_SYNTAX = 'textile'
 IMAGE_THUMBNAIL_SIZE = '200x200'
@@ -266,7 +261,7 @@ BRUTEFORCE_ITER = 10
 SEND_MESSAGES = True
 OBJECTS_ON_PAGE = 20
 EXPEREMENTAL = False
-USER_FILES_LIMIT = 100*1024*1024
+USER_FILES_LIMIT = 100 * 1024 * 1024
 MAXIMUM_POLL_ITEMS_AMOUNT = 10
 NULL_AVATAR_URL = os.path.join(MEDIA_URL, 'avatars/none.png')
 
@@ -279,7 +274,8 @@ FORUM_THEMES = (
     (_("spring"), 'success'),
     (_("void"), 'default')
 )
-# TEMPLATES INCLUES
+
+# TEMPLATES INCLUDES, todo: cleanup
 DOCUMENT = {
     'links': 'links.html',
     'pages': 'pages.html',

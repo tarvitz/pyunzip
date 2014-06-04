@@ -72,12 +72,8 @@ class PybbTimeNode(template.Node):
             return dateformat.format(time, 'd M, Y H:i')
 
 
-# TODO: this old code requires refactoring
-pagination = (
-    'pybb/pagination.html'
-    if gs.BOOTSTRAP_VERSION != '3'
-    else 'pybb/pagination_bs3.html'
-)
+pagination = 'pybb/pagination.html'
+
 @register.inclusion_tag(pagination, takes_context=True)
 def pybb_pagination(context, adjacent_pages=5):
     """
