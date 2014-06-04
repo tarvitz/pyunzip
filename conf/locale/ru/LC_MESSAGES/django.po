@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-04 06:55+0400\n"
-"PO-Revision-Date: 2014-06-04 06:57+0400\n"
+"POT-Creation-Date: 2014-06-04 07:00+0400\n"
+"PO-Revision-Date: 2014-06-04 07:00+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1939,8 +1939,7 @@ msgstr "Выйти"
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:74
-#: apps/wh/templates/accounts/register.html:6
+#: apps/pybb/templates/pybb/head.html:74 templates/accounts/register.html:11
 msgid "Register"
 msgstr "Регистрация"
 
@@ -3025,14 +3024,21 @@ msgid "Your account have been banned, sorry :)"
 msgstr "Вас забанили :), приносим свои извинения."
 
 #: templates/accounts/login.html:6
+#: templates/accounts/password_restore_initiate.html:6
+#: templates/accounts/register.html:6
 msgid "Sign in"
 msgstr "Войти"
 
 #: templates/accounts/login.html:7
+#: templates/accounts/password_restore_initiate.html:7
+#: templates/accounts/register.html:7
+msgctxt "register"
 msgid "Sign up"
-msgstr "Подписаться"
+msgstr "Зарегистрироваться"
 
 #: templates/accounts/login.html:8
+#: templates/accounts/password_restore_initiate.html:8
+#: templates/accounts/register.html:8
 msgid "Passowrd recover"
 msgstr "Восстановление пароля"
 
@@ -3057,7 +3063,7 @@ msgstr "Ваш пароль был успешно изменен"
 msgid "Password recover initiate procedure"
 msgstr "Процедура восстановления пароля"
 
-#: templates/accounts/password_restore_initiate.html:5
+#: templates/accounts/password_restore_initiate.html:11
 msgid "Initiate"
 msgstr "Начать"
 

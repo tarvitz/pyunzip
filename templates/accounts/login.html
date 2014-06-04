@@ -4,7 +4,7 @@
   <div class="alert alert-success">
     <button class="close" data-dismiss="alert">&times;</button>
     {% trans "Sign in" %} |
-    <a href='{% url "accounts:register" %}'>{% trans "Sign up" %}</a> |
+    <a href='{% url "accounts:register" %}'>{% trans "Sign up" context "register" %}</a> |
     <a href="{% url "accounts:password-restore-initiate" %}">{% trans "Passowrd recover" %}</a>
   </div>
 
