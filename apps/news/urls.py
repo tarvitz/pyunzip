@@ -4,23 +4,20 @@ from django.contrib.auth.decorators import login_required
 from apps.news import views
 
 
-urlpatterns = patterns('apps.news.views',
-    #url(r'^$', 'news', name='index'),
+urlpatterns = patterns(
+    'apps.news.views',
     url('^$', views.NewsListView.as_view(), name='index'),
     url(r'^news/(?P<pk>\d+)/$', views.NewsDetail.as_view(), name='article'),
     url(r'^news/(?P<pk>\d+)/edit/$', views.NewsUpdateView.as_view(),
         name='news-update'),
     url(r'^news/user/$', 'news_user', name='news-user'),
-
-    #url(r'^article/(?P<number>\d+)/$', 'article', {'object_model':'news.news'}),
     url(r'^article/edit/(?P<id>\d+)/$','add_article', {'edit_flag':'True'},
         name='article-edit'),
-    #url(r'^sphinx/news/$', 'sphinx_search_news', name='news-sph'),
     url('^markup/preview/$', 'markup_preview', name='markup-preview'),
     url(r'article/created/$', direct_to_template,
         {'template': 'news/article_created.html'},
         name='article-created'),
-    # cbv
+    # CBV
     url(r'^calendar/$', direct_to_template,
         {'template': 'events/calendar.html'}, name='calendar'),
     url(r'^events/$', views.EventListView.as_view(), name='events'),

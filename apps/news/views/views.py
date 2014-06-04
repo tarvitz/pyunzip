@@ -1,40 +1,24 @@
 # coding: utf-8
+from datetime import datetime
 
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
-from apps.news.models import News, Meating, ArchivedNews, Event, EventWatch
+from apps.news.models import News, Event, EventWatch
 from apps.news.forms import (
-    ArticleModelForm, AddMeatingForm, ArticleStatusForm, EventForm,
-    EventParticipateForm
-)
+    ArticleModelForm, EventForm, EventParticipateForm, )
+from apps.core.helpers import paginate, can_act, get_int_or_zero
+from apps.core.decorators import has_permission
+from apps.core.helpers import render_to
+from apps.core.views import LoginRequiredMixin
+
 from apps.comments.forms import CommentForm
-
-from apps.core import get_skin_template
-
-from apps.core.shortcuts import direct_to_template
 from apps.core.helpers import get_content_type
-
 from django.core.paginator import InvalidPage, EmptyPage
 from django.conf import settings
-from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404, redirect
-
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.comments.models import Comment
-
 from django.core.urlresolvers import reverse, reverse_lazy
-from datetime import datetime,timedelta
-
-from apps.core.helpers import (
-    paginate, can_act, get_int_or_zero
-)
-from apps.core.decorators import (
-    has_permission,
-)
-from apps.core.helpers import render_to, get_object_or_None
-
 from django.views import generic
-from apps.core.views import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.utils.decorators import method_decorator
 
@@ -62,12 +46,8 @@ class NewsListView(generic.ListView):
         })
         return context
 
-def search_article(request):
-    template = get_skin_template(request.user, "news/search.html")
-    return render_to_response(template, {'form':''},
-    context_instance=RequestContext(request))
 
-
+# noinspection PyArgumentList
 class NewsDetail(generic.DetailView):
     template_name = 'news/article.html'
     model = News
@@ -127,9 +107,9 @@ class NewsUpdateView(LoginRequiredMixin, generic.UpdateView):
 @login_required
 @can_act
 @render_to('news/add.html')
-def add_article(request, id=None, edit_flag=False):
-    can_edit =  request.user.has_perm('news.edit_news') #if smb can edit news
-    instance = get_object_or_404(News, pk=id) if edit_flag else None
+def add_article(request, pk=None, edit_flag=False):
+    # can_edit = request.user.has_perm('news.edit_news')
+    instance = get_object_or_404(News, pk=pk) if edit_flag else None
 
     form = ArticleModelForm(
         request.POST, request.FILES, request=request, instance=instance
@@ -138,20 +118,19 @@ def add_article(request, id=None, edit_flag=False):
         if form.is_valid():
             article = form.save(commit=False)
             user = request.user
-            has_useractivity = hasattr(user, 'useractivity')
-            last_action_time = getattr(user.useractivity, 'last_action_time') if has_useractivity else None
-            if last_action_time is not None and not user.is_superuser:
-                if last_action_time > datetime.now() - timedelta(minutes=2):
-                    return {'redirect': '/article/add/timeout'}
             article.owner = request.user
             article.save()
             user.useractivity.last_action_time = datetime.now()
             user.useractivity.save()
-            redirect_path = article.get_absolute_url() if article.is_approved else reverse('news:article-created')
+            redirect_path = (
+                article.get_absolute_url() if article.is_approved
+                else reverse('news:article-created')
+            )
 
             return {'redirect': redirect_path}
 
     return {'form': form, 'edit_flag': edit_flag}
+
 
 @login_required
 @render_to('news/news_user.html')
@@ -160,30 +139,7 @@ def news_user(request):
     return {'news': news}
 
 
-def view_meatings(request):
-    template = 'meatings.html'
-    meatings = Meating.objects.all()
-    meatings = paginate(meatings, request.GET.get('page', 1), pages=20)
-    return direct_to_template(request, template, {'meatings': meatings})
-
-def view_meating(request, id):
-    template = 'meating.html'
-    meating = get_object_or_None(Meating, id=id)
-    return direct_to_template(request, template, {'meating': meating})
-
-@has_permission('news.add_meating')
-def add_meating(request):
-    template = 'add_meating.html'
-    form = AddMeatingForm(request.POST or None, request=request)
-    if request.method == 'POST':
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.save()
-            form.save_m2m()
-            return HttpResponseRedirect(reverse('news:index'))
-    return direct_to_template(request, template, {'form': form})
-
-
+# noinspection PyUnresolvedReferences
 class EventPermissionMixin(object):
     @method_decorator(has_permission('news.change_event'))
     def dispatch(self, request, *args, **kwargs):
