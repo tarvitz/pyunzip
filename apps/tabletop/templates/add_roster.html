@@ -1,69 +1,16 @@
 {% extends "base_template.html" %} {% load i18n %}
 {% block css %}
-    {{ block.super }}
+  {{ block.super }}
 {% endblock %}
 {% block content %}
 
-    {% trans "Save" as save_text %}
-    <div class='forms form-horizontal'>
-        <form id='id_add_roster_form' action='.' method='post'>
-            {% csrf_token %}
-            {% include "forms/bootstrap_horizontal.html" with form=form %}
-            {% include "forms/submit.html" with class='btn btn-success' text=save_text %}
-        </form>
-        {% if form.media %}{{ form.media }}{% endif %}
-    </div>
-
-<script language='javascript'>
-var _xhr_get_codex_revisions = '{% url "json:tabletop:codex-revisions" %}';
-var revision = document.getElementById('id_revision');
-var codex = document.getElementById('id_codex');
-</script>
-<script language='javascript' src='/media/js/jq_tabletop.js'></script>
-<script language='javascript'>
-var revision = function(){
-    var id = $("#id_codex option:selected").val();
-    var url = "{% url 'json:tabletop:codex-revisions' 0 %}".replace(0, id);
-    return getRevision({
-        url: url,
-        success: function(json){
-            $('#id_revision').find('option').remove();
-            json.revlist.map(function(option){
-               option = $("<option>").attr({
-                   value: option
-               }).text(option);
-               option.appendTo($("#id_revision"));
-            });
-            $('#id_revision option:last').attr({'selected': true});
-            $('#id_revision').trigger('chosen:updated');
-        }
-    })
-}
-var postRoster = function(form){
-    postFormAjax({
-        form: form,
-        successMsg: "{% trans 'Roster was successfully posted' %}",
-        success: function(json){
-            setTimeout(function(){
-                document.location.href = '{% url "tabletop:rosters" %}';
-            }, 3000);
-        }
-    });
-}
-$(document).ready(function(){
-    revision();
-    $('#id_codex').change(function(){
-        revision();
-    });
-
-    $("input[type=submit]").click(function(e){
-        postRoster($(this).parents('form'));
-        return false;
-    });
-    $("form").submit(function(e){
-        postRoster($(this));
-        return false;
-    });
-});
-</script>
+  {% trans "Save" as save_text %}
+  <div class='forms form-horizontal'>
+    <form id='id_add_roster_form' action='.' method='post'>
+      {% csrf_token %}
+      {% include "forms/bootstrap_horizontal.html" with form=form %}
+      {% include "forms/submit.html" with class='btn btn-success' text=save_text %}
+    </form>
+    {% if form.media %}{{ form.media }}{% endif %}
+  </div>
 {% endblock %}

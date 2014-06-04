@@ -103,7 +103,7 @@
 
         $('#id_rosters').ajaxChosen({
             type: 'GET',
-            url: '{% url 'json:tabletop:roster-search' %}',
+            url: '/', {#% url 'json:tabletop:roster-search' %#}
             dataType: 'json',
             jsonTermKey: 'q',
             keepTypingMsg: '{% trans "Please, keep typing ..." %}',

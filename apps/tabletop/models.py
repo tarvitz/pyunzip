@@ -81,7 +81,6 @@ class Codex(models.Model):
 
 
 class Roster(models.Model):
-    @staticmethod
     def valid_revision(value):
         if not 0 < value < 15:
             raise ValidationError(tr('should be with range of 0 to 100'))

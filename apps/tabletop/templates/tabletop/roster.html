@@ -24,13 +24,12 @@
           </a>
         {% endif %}
       {% endif %}
-      {{ roster.title }}:
-        <a href='{% url "tabletop:rosters-pts" pts=roster.pts %}'>{{ roster.pts }} pts</a>
+      {{ roster.title }}: {{ roster.pts }} pts
 
     </div> <!-- msg_headline -->
     <div class='message-content'>
       <div class='avatar'>
-        {% include "msg/avatar.html" with object=roster.user %}
+        {% include "msg/avatar.html" with object=roster.owner %}
       </div>
       <div class='text'>
         <div class='roster_info'>{# places with tabletop.css #}
@@ -56,11 +55,10 @@
       <div class='transparency grey'></div>
       {% spaceless %}
         {% if roster.user != roster.owner %}
-          [добавлено: <a href='{% url "tabletop:rosters" roster.owner.get_username %}'>
-            {{ roster.owner.get_nickname|safe }}</a>]
+          [добавлено: {{ roster.owner.get_nickname|safe }}]
         {% endif %}
         {% if perms.tabletop.edit_roster or roster.owner == user %}
-            [<a href='{% url "tabletop:roster-delete" roster.id "approve" %}'>удалить</a>]
+            [<a href='{{ r.get_delete_url }}'>удалить</a>]
         {% endif %}
       {% endspaceless %}
     </div> <!-- msg_footer -->

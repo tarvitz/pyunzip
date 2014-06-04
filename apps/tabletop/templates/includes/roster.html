@@ -6,7 +6,7 @@
       <div class='links'>
         {% if user == r.owner or perms.tabletop.edit_user_rosters %}
             <span class='first'>
-               <a href='{% url "tabletop:roster-delete" r.id "approve" %}'
+               <a href='{{ r.get_delete_url }}'
                   title='удалить' class='del_link' rel="tooltip">[x]</a>
             </span>
           <span>
@@ -24,12 +24,7 @@
           {% if r.owner %}
             <img src='{{ r.owner.get_avatar_url }}'><br>
           {% endif %}
-          {% if r.user %}
-            <a href='{% url "tabletop:rosters" r.user.get_username %}'>
-              {{ r.user.get_nickname|safe }}</a>
-          {% else %}
-            {{ r.show_player }}
-          {% endif %}
+          {{ r.user.get_nickname|safe }}
         {% endspaceless %}
       </div> <!-- msg_avatar -->
       <div class='text'>
@@ -56,7 +51,6 @@
         {% else %}
           <div class='txt' id='id_roster_{{ r.id }}'>
             Ростер:
-            <!--<a class='lister' href='#roster_{{ r.id }}' onClick="get_roster('{% url "json:tabletop:roster" r.id %}', 'id_roster_{{ r.id }}');" alt='[+]' title='Раскрыть ростер'>[+]</a>-->
             <span class='roster'>
               {{ r.render_roster|safe }}
             </span>

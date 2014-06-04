@@ -133,7 +133,7 @@ def unorphan(request, pk):
 @render_to('add_roster.html', allow_xhr=True)
 def action_roster(request, pk=None, action=None):
     instance = None
-    if id:
+    if pk:
         instance = get_object_or_404(Roster, pk=pk)
 
     form = AddRosterModelForm(

@@ -33,7 +33,6 @@ class JustTest(TestHelperMixin, TestCase):
             reverse('tabletop:roster', args=(1, )),
             reverse('tabletop:roster', args=(2, )),
             reverse('tabletop:roster', args=(3, )),
-            #reverse('tabletop:battle-reports-self'),
             reverse('tabletop:rosters-index')
         ]
         self.urls_registered = [
@@ -291,7 +290,6 @@ class JustTest(TestHelperMixin, TestCase):
             )
         )
 
-    #@skipIf(True, 'broken')
     def test_roster_win_defeats(self):
         report = BattleReport.objects.filter(layout='1vs1')[0]
         logged = self.client.login(username='user', password='123456')

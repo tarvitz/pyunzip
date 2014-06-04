@@ -4,19 +4,13 @@ from apps.core.helpers import (
     post_markup_filter,
 ) 
 from django.core.urlresolvers import reverse
-from apps.news.models import News
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-from django.contrib.contenttypes.models import ContentType
-from django.contrib.comments.models import Comment
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from django.template import Context, Template
 from django.template.loader import get_template
 from datetime import datetime
-from django.shortcuts import RequestContext
+
 
 class JustTest(TestCase):
     fixtures = [
@@ -48,19 +42,6 @@ class JustTest(TestCase):
                 })
         return messages
 
-    def create_comment(self):
-        n = News.objects.all()[0]
-        ct = ContentType.objects.get(
-            app_label=n._meta.app_label,
-            model=n._meta.module_name
-        )
-        user = User.objects.get(username='user')
-        comment = Comment(
-            user=user, comment='user comment',
-            content_type=ct, object_pk=n.id, site_id=1
-        )
-        comment.save()
-        return comment
 
     """ testing helpers module """
     def test_urls(self):
@@ -68,14 +49,9 @@ class JustTest(TestCase):
         urls = [
             'password-restored',
             'password-restore-initiated',
-            'css-db',
-            'css-edit',
-            'ip-get-address',
             'permission-denied',
             'currently-unavailable',
             'wot_verification',
-            'url_robots',
-            'subscription',
             # static
             'vote-invalid-object',
             'karma-self-alter',
@@ -144,205 +120,6 @@ class JustTest(TestCase):
                 print msg
             raise AssertionError
 
-    def test_submit_comment(self):
-        # anonymous could not post comments
-        url = reverse('core:comment-add')
-        n = News.objects.all()[0]
-        ct = ContentType.objects.get(
-            app_label=n._meta.app_label,
-            model=n._meta.module_name
-        )
-
-        post = {
-            'content_type': ct.pk,
-            'object_pk': str(n.pk),
-            'syntax': 'textile',
-            'comment': 'The faith without deeds is worthless'
-        }
-
-        count = Comment.objects.count()
-        response = self.client.post(url, post, follow=True)
-        self.assertEquals(response.status_code, 200)
-        self.assertEqual(count, Comment.objects.count())
-        logged = self.client.login(username='user', password='123456')
-        self.assertEqual(logged, True)
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.filter(user__username='user', comment=post['comment'])
-        self.assertNotEqual(comment.count, 0)
-        comment = comment[0]
-        messages = self.process_messages(comment, post, fx={'content_type': ContentType})
-
-        if messages:
-            for msg in messages:
-                print "Got error saving with %(key)s, %(err)s" % msg
-            raise AssertionError
-
-    def test_posting_comment_twice(self):
-        # deny of twice posting, just ignore second one
-        logged = self.client.login(username='user', password='123456')
-        self.assertEqual(logged, True)
-
-        url = reverse('core:comment-add')
-        n = News.objects.all()[0]
-        ct = ContentType.objects.get(
-            app_label=n._meta.app_label,
-            model=n._meta.module_name
-        )
-
-        post = {
-            'content_type': ct.pk,
-            'object_pk': str(n.pk),
-            'syntax': 'textile',
-            'comment': 'The faith without deeds is worthless'
-        }
-        count = Comment.objects.count()
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-
-        self.assertEqual(count + 1, Comment.objects.count())
-
-        # do not create another object just ignore
-        for i in range(10):
-            response = self.client.post(url, post, follow=True)
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(count + 1, Comment.objects.count())
-            comment = Comment.objects.all()[0]
-            self.assertEqual(comment.comment, post['comment'])
-        # but we can append another data
-        post.update({'comment': 'Faith is internal'})
-
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 1, Comment.objects.count())
-        comment = Comment.objects.order_by('-submit_date')[0]
-        # test for information append, not overwrite!
-        self.assertIn(post['comment'], comment.comment)
-        self.assertNotEqual(comment, comment.comment)
-
-        # admin can post the same comment
-        logged = self.client.login(username='admin', password='123456')
-        self.assertEqual(logged, True)
-        count = Comment.objects.count()
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 1, Comment.objects.count())
-        # than user can post new comment with the same text, it's not
-        # restricted
-        self.client.login(username='user', password='123456')
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 2, Comment.objects.count())
-        last_comment = Comment.objects.order_by('-submit_date')[0]
-        self.assertEqual(last_comment.comment, post['comment'])
-        self.assertEqual(last_comment.user.username, 'user')
-
-    def test_admin_edit_comment(self):
-        self.client.login(username='admin', password='123456')
-        user = User.objects.get(username='admin')
-        self.assertEqual(user.has_perm('news.edit_comments'), True)
-        comment = self.create_comment()
-        post = {
-            'comment': 'Admin edit and on',
-            'content_type': comment.content_type.pk,
-            'object_pk': comment.object_pk
-        }
-        url = reverse('core:comment-edit', args=(comment.id, ))
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.comment, post['comment'])
-
-
-    def test_admin_purge_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='admin', password='123456')
-        url = reverse('core:comment-purge', args=(comment.id, 'approve'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.filter(id=comment.id)
-        self.assertEqual(len(comment), 0)
-
-
-    def test_admin_hide_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='admin', password='123456')
-        url = reverse('core:comment-del-restore', args=(comment.id, 'delete'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.is_removed, True)
-        url = reverse('core:comment-del-restore', args=(comment.id, 'restore'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.is_removed, False)
-
-    def test_admin_quick_edit_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='admin', password='123456')
-        url = reverse('core:comment-edit-ajax', args=(comment.id, ))
-        post = {
-            'comment': 'new comment edit',
-            'content_type': comment.content_type.pk,
-            'object_pk': comment.object_pk
-        }
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.comment, post['comment'])
-
-    def test_self_quick_edit_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='admin', password='123456')
-        url = reverse('core:comment-edit-ajax', args=(comment.id, ))
-        post = {
-            'comment': 'new comment edit',
-            'content_type': comment.content_type.pk,
-            'object_pk': comment.object_pk
-        }
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.comment, post['comment'])
-
-    def test_self_hide_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='user', password='123456')
-        url = reverse('core:comment-del-restore', args=(comment.id, 'delete'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.is_removed, True)
-        url = reverse('core:comment-del-restore', args=(comment.id, 'restore'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.is_removed, False)
-
-    def test_self_purge_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='admin', password='123456')
-        url = reverse('core:comment-purge', args=(comment.id, 'approve'))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.filter(id=comment.id)
-        self.assertEqual(len(comment), 0)
-
-    def test_self_edit_comment(self):
-        comment = self.create_comment()
-        self.client.login(username='user', password='123456')
-        url = reverse('core:comment-edit', args=(comment.id, ))
-        post = {
-            'comment': 'new comment 111',
-            'content_type': comment.content_type.pk,
-            'object_pk': comment.object_pk
-        }
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment = Comment.objects.get(id=comment.id)
-        self.assertEqual(comment.comment, post['comment'])
-
     def test_css_edit(self):
         pass
 
@@ -354,6 +131,7 @@ class JustTest(TestCase):
 
     def test_settings_store(self):
         pass
+
 
 class BenchmarkTemplatesTest(TestCase):
     fixtures = [
@@ -386,7 +164,7 @@ class BenchmarkTemplatesTest(TestCase):
         }
     def test_benchmark_get_form_tag(self):
         template = """{% load coretags %}
-        {% get_form 'apps.core.forms.CommentForm' as form %}
+        {% get_form 'apps.comments.forms.CommentForm' as form %}
         <form class='' method='POST'>
         {% csrf_token %}
         {{ form.as_ul }}
@@ -401,10 +179,9 @@ class BenchmarkTemplatesTest(TestCase):
                 self.assertEqual(logged, True)
             else:
                 self.client.logout()
-            template = get_template('base.html')
+            template = get_template('error_template.html')
             out = template.render(Context(self.client.request().context))
-            self.assertIn('/forum/', out)
-            self.assertIn('var current_referer = "/";', out)
+
             print "Testing for '%s': " % user or "Anonymous"
             self.benchmark(
                 template,

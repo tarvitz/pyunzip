@@ -16,9 +16,7 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.contrib.comments.models import Comment
 
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AnonymousUser
-User = get_user_model()
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -26,6 +24,7 @@ from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
+from django.db.models import get_model
 
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Context
@@ -65,6 +64,8 @@ get_int_or_zero = lambda x: int(x) if (
 
 # noinspection PyPep8Naming
 def get_object_or_None(object_source, *args, **kwargs):
+    if isinstance(object_source, six.string_types):
+        object_source = get_model(*object_source.split('.'))
     try:
         return _get_object_or_404(object_source, *args, **kwargs)
     except (Http404, MultipleObjectsReturned):
@@ -394,7 +395,8 @@ def post_markup_filter(string):
     for (username, text) in result:
         if text:
             user = (
-                get_object_or_None(User, nickname__iexact=username)
+                get_object_or_None(settings.AUTH_USER_MODEL,
+                                   nickname__iexact=username)
                 or AnonymousUser()
             )
             html = render_to_string(

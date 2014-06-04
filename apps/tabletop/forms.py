@@ -371,9 +371,19 @@ class AddRosterForm(RequestForm):
             raise forms.ValidationError(_(
                 'The common pts should be greater than 500'))
 
+REVISION_CHOICES = (
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4),
+    (5, 5),
+    (6, 6),
+)
 
 class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
+    revision = forms.ChoiceField(label=_("Revision"),
+                                 choices=REVISION_CHOICES)
     codex = forms.ModelChoiceField(
         queryset=Codex.objects, required=True, empty_label=None,
         widget=forms.Select(attrs={'class': 'span5 chosen form-control'}),
@@ -382,7 +392,7 @@ class AddRosterModelForm(RequestModelForm):
 
     class Meta:
         model = Roster
-        exclude = ['owner', 'user', 'is_orphan', 'plain_side']
+        exclude = ['owner', 'user', 'is_orphan', 'plain_side', ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'span5 form-control'}),
             'pts': forms.TextInput(attrs={'class': 'span5 form-control'}),
