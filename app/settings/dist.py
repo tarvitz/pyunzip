@@ -120,6 +120,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'apps.core.context_processors.core',
     'apps.menu.context_processors.menu',
     'apps.news.context_processors.weekly_events',
+    'apps.comments.context_processors.comment_watches'
 )
 
 TEMPLATE_DIRS = (
