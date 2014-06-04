@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-03 22:33+0400\n"
-"PO-Revision-Date: 2014-06-03 22:34+0400\n"
+"POT-Creation-Date: 2014-06-04 04:48+0400\n"
+"PO-Revision-Date: 2014-06-04 04:48+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -28,23 +28,23 @@ msgstr "Русский"
 msgid "English"
 msgstr "Английский"
 
-#: app/settings/dist.py:280
+#: app/settings/dist.py:278
 msgid "winter"
 msgstr "зимняя"
 
-#: app/settings/dist.py:281
+#: app/settings/dist.py:279
 msgid "summer"
 msgstr "летняя"
 
-#: app/settings/dist.py:282
+#: app/settings/dist.py:280
 msgid "autumn"
 msgstr "осенняя"
 
-#: app/settings/dist.py:283
+#: app/settings/dist.py:281
 msgid "spring"
 msgstr "весенняя"
 
-#: app/settings/dist.py:284
+#: app/settings/dist.py:282
 msgid "void"
 msgstr "пустотная"
 
@@ -170,7 +170,7 @@ msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
 #: apps/accounts/forms.py:57 apps/comments/forms.py:14
-#: apps/comments/forms.py:41 apps/files/forms.py:480 apps/news/forms.py:238
+#: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:238
 #: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
@@ -196,48 +196,60 @@ msgstr "Никнейм"
 msgid "Captcha"
 msgstr "Капча"
 
-#: apps/accounts/models.py:40 apps/wh/forms.py:539
+#: apps/accounts/models.py:24
+msgid "male"
+msgstr "мужской"
+
+#: apps/accounts/models.py:25
+msgid "female"
+msgstr "женский"
+
+#: apps/accounts/models.py:26
+msgid "not identified"
+msgstr "не определен"
+
+#: apps/accounts/models.py:43 apps/wh/forms.py:539
 msgid "username"
 msgstr "имя пользователя"
 
-#: apps/accounts/models.py:41
+#: apps/accounts/models.py:44
 msgid ""
 "Required. 38 characters or fewer. Letters, numbers and @/./+/-/_ characters"
 msgstr ""
 "Обязательное поле. 38 символов или менее. Разрешены только буквы, цифры и "
 "символы @/./+/-/_."
 
-#: apps/accounts/models.py:45
+#: apps/accounts/models.py:48
 msgid "Enter a valid username."
 msgstr "Введите правильное имя пользователя."
 
-#: apps/accounts/models.py:47
+#: apps/accounts/models.py:50
 msgid "first name"
 msgstr "имя"
 
-#: apps/accounts/models.py:48
+#: apps/accounts/models.py:51
 msgid "last name"
 msgstr "фамилия"
 
-#: apps/accounts/models.py:49
+#: apps/accounts/models.py:52
 msgid "email address"
 msgstr "адрес эл. почты"
 
-#: apps/accounts/models.py:51
+#: apps/accounts/models.py:54
 msgid "staff status"
 msgstr "статус персонала"
 
-#: apps/accounts/models.py:52
+#: apps/accounts/models.py:55
 msgid "Designates whether the user can log into this admin site."
 msgstr ""
 "Указывает может ли пользователь совершить вход в администраторскую часть "
 "сайта."
 
-#: apps/accounts/models.py:55
+#: apps/accounts/models.py:58
 msgid "active"
 msgstr "активный"
 
-#: apps/accounts/models.py:56
+#: apps/accounts/models.py:59
 msgid ""
 "Designates whether this user should be treated as active. Unselect this "
 "instead of deleting accounts."
@@ -245,73 +257,61 @@ msgstr ""
 "Указывается будет ли пользователь считаться активным. Снимите флажок для "
 "удаление учетных записей."
 
-#: apps/accounts/models.py:59
+#: apps/accounts/models.py:62
 msgid "date joined"
 msgstr "дата вступления"
 
-#: apps/accounts/models.py:63
+#: apps/accounts/models.py:66
 msgid "nickname"
 msgstr "никнейм"
 
-#: apps/accounts/models.py:67
+#: apps/accounts/models.py:70
 msgid "Avatar"
 msgstr "Аватар"
 
-#: apps/accounts/models.py:73
+#: apps/accounts/models.py:76
 msgid "plain Avatar"
 msgstr "обычный аватар"
 
-#: apps/accounts/models.py:78
+#: apps/accounts/models.py:81
 msgid "photo"
 msgstr "фото"
 
-#: apps/accounts/models.py:84 apps/wh/models.py:63
+#: apps/accounts/models.py:87 apps/wh/models.py:63
 msgid "army"
 msgstr "армия"
 
-#: apps/accounts/models.py:87
+#: apps/accounts/models.py:90
 msgid "gender"
 msgstr "пол"
 
-#: apps/accounts/models.py:89
-msgid "male"
-msgstr "мужской"
-
-#: apps/accounts/models.py:90
-msgid "female"
-msgstr "женский"
-
-#: apps/accounts/models.py:91
-msgid "not identified"
-msgstr "не определен"
-
-#: apps/accounts/models.py:94
+#: apps/accounts/models.py:93
 msgid "jabber id"
 msgstr "jabber ID"
 
-#: apps/accounts/models.py:97
+#: apps/accounts/models.py:96
 msgid "uin (icq number)"
 msgstr "uin (номер аськи)"
 
-#: apps/accounts/models.py:99
+#: apps/accounts/models.py:98
 msgid "about myself"
 msgstr "о себе"
 
-#: apps/accounts/models.py:102
+#: apps/accounts/models.py:101
 msgid "time zone"
 msgstr "временная зона"
 
-#: apps/accounts/models.py:103 apps/core/models.py:186 apps/core/models.py:187
+#: apps/accounts/models.py:102
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:251 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/accounts/models.py:254 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:183 apps/pybb/models.py:265 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:252 apps/pybb/templates/pybb/head.html:34
+#: apps/accounts/models.py:255 apps/pybb/templates/pybb/head.html:35
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6
 msgid "Users"
@@ -325,14 +325,14 @@ msgstr "Пользователь с таким email уже существует
 msgid "You can not override user context"
 msgstr "Вы не можете перезаписать контекст пользователя"
 
-#: apps/accounts/tests/tests.py:197 apps/wh/forms.py:129 apps/wh/forms.py:314
+#: apps/accounts/tests/tests.py:194 apps/wh/forms.py:129 apps/wh/forms.py:314
 #: apps/wh/tests.py:202
 #, python-format
 msgid "Another user with %s nickname exists."
 msgstr "Другой пользователь с ником %s уже существует."
 
-#: apps/comments/models.py:19 apps/files/models.py:106 apps/karma/models.py:63
-#: apps/news/models.py:88 apps/tabletop/models.py:111
+#: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:88
+#: apps/tabletop/models.py:116
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44
 msgid "Syntax"
@@ -346,8 +346,7 @@ msgstr "кэш комментарий"
 msgid "Overload"
 msgstr "Оверлоад"
 
-#: apps/comments/models.py:65 apps/core/models.py:49
-#: apps/tabletop/models.py:49 apps/tagging/models.py:477
+#: apps/comments/models.py:65 apps/tabletop/models.py:48
 msgid "content type"
 msgstr "контент тип"
 
@@ -355,7 +354,7 @@ msgstr "контент тип"
 msgid "object pk"
 msgstr "pk объекта"
 
-#: apps/comments/models.py:72 apps/tabletop/models.py:220
+#: apps/comments/models.py:72 apps/tabletop/models.py:218
 msgid "comment"
 msgstr "комментарии"
 
@@ -363,7 +362,7 @@ msgstr "комментарии"
 msgid "user"
 msgstr "пользователь"
 
-#: apps/comments/models.py:77 apps/core/models.py:200 apps/news/models.py:277
+#: apps/comments/models.py:77 apps/core/models.py:23 apps/news/models.py:277
 #: apps/news/models.py:432
 msgid "created on"
 msgstr "создано"
@@ -397,6 +396,7 @@ msgstr "Слежение за комментариями"
 #: apps/comments/templates/comments/subscribe_form.html:5
 #: apps/files/templates/files/user_files.html:8
 #: apps/files/templates/gallery/action_image.html:4
+#: apps/files/templates/gallery/gallery_image.html:6
 #: apps/files/templates/gallery/gallery_image_form.html:5
 #: apps/files/templates/gallery/gallery_list.html:6
 #: apps/files/templates/gallery/image.html:6
@@ -439,10 +439,10 @@ msgid "Subscription list"
 msgstr "Список подписки"
 
 #: apps/comments/templates/comments/comment_watch_list.html:12
-#: apps/files/models.py:290 apps/menu/models.py:42
+#: apps/files/models.py:55 apps/menu/models.py:42
 #: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:279 apps/tabletop/models.py:183
-#: apps/tabletop/models.py:193 apps/tabletop/templates/add_roster_old.html:23
+#: apps/tabletop/forms.py:312 apps/tabletop/models.py:178
+#: apps/tabletop/models.py:189 apps/tabletop/templates/add_roster_old.html:23
 #: apps/tabletop/templates/reports.html:30
 msgid "Title"
 msgstr "Заголовок"
@@ -508,280 +508,37 @@ msgstr "Вы хотите подписаться на новые коммент�
 msgid "Save"
 msgstr "Сохранить"
 
-#: apps/core/__init__.py:11
+#: apps/core/__init__.py:5
 msgid "core"
 msgstr "ядро"
 
-#: apps/core/actions.py:17 apps/files/actions.py:7 apps/files/forms.py:416
-#: apps/files/templates/files/user_files.html:61
-#: apps/files/templates/files/user_files.html:111
-#: apps/files/templates/gallery/gallery_image_form.html:11
-#: apps/pybb/templates/pybb/edit_profile.html:31
-#: apps/pybb/templates/pybb/poll.html:10
-msgid "delete"
-msgstr "удалить"
-
-#: apps/core/decorators.py:210
+#: apps/core/decorators.py:40
 msgid "Login required"
 msgstr "Необходим вход"
 
-#: apps/core/forms.py:73 apps/karma/models.py:19
-#: apps/tabletop/templates/add_old_battle_report.html:40
-msgid "Comment"
-msgstr "Комментарий"
-
-#: apps/core/forms.py:112 apps/files/forms.py:398
-msgid "You should write something"
-msgstr "Вы должны что-нибудь написать"
-
-#: apps/core/forms.py:115
-msgid "You can not post over 10000 symbols within your comment!"
-msgstr "Вы не можете запостить более 10.000 символов в ваш комментарий"
-
-#: apps/core/forms.py:164
-msgid "app_n_model has invalid format"
-msgstr "в app_n_model был введен неправильный формат данных"
-
-#: apps/core/forms.py:166
-msgid "app_n_model should be written in right order: 'app.model'"
-msgstr "app_n_model должн быть написан в правильном порядке: 'app.model'"
-
-#: apps/core/forms.py:291
-msgid "Approve"
-msgstr "Утвердить"
-
-#: apps/core/forms.py:292
-msgid "Yes, i approve"
-msgstr "Да, я подтверждаю"
-
-#: apps/core/helpers.py:117
-msgid "WarMist no-replay notification"
-msgstr "WarMist оповещение"
-
-#: apps/core/helpers.py:556
-msgid "Not found"
-msgstr "Не найден"
-
-#: apps/core/models.py:42 apps/core/models.py:44
-msgid "CSS"
-msgstr "CSS"
-
-#: apps/core/models.py:42
-msgid "Cascade Style Sheets"
-msgstr "Каскадные таблицы стилей"
-
-#: apps/core/models.py:45
-msgid "CSSes"
-msgstr "CSSки"
-
-#: apps/core/models.py:51 apps/tagging/models.py:478
-msgid "object id"
-msgstr "тип объекта"
-
-#: apps/core/models.py:144
-msgid "Decoded Data"
-msgstr "Декодированные данные"
-
-#: apps/core/models.py:191 apps/wh/models.py:201
+#: apps/core/models.py:14 apps/wh/models.py:201
 msgid "SID"
 msgstr "СИД"
 
-#: apps/core/models.py:194
+#: apps/core/models.py:17
 msgid "Expires"
 msgstr "истекает"
 
-#: apps/core/models.py:197
+#: apps/core/models.py:20
 msgid "expired?"
 msgstr "истекает?"
 
-#: apps/core/models.py:204 apps/news/models.py:280
+#: apps/core/models.py:27 apps/news/models.py:280
 msgid "updated on"
 msgstr "обновлено"
 
-#: apps/core/models.py:213
+#: apps/core/models.py:36
 msgid "UserSID"
 msgstr "UserSID"
 
-#: apps/core/models.py:214
+#: apps/core/models.py:37
 msgid "UserSIDs"
 msgstr "UserSID'ы"
-
-#: apps/core/settings.py:70
-msgid "The Objects on page"
-msgstr "Объектов на страницу"
-
-#: apps/core/settings.py:71
-msgid "Comments on page"
-msgstr "Комментариев на страницу"
-
-#: apps/core/settings.py:72
-msgid "Replays on page"
-msgstr "Реплеев на страницу"
-
-#: apps/core/settings.py:73
-msgid "Rosters on page"
-msgstr "Ростеров на страницу"
-
-#: apps/core/settings.py:74
-msgid "News on page"
-msgstr "Новостей на страницу"
-
-#: apps/core/settings.py:75
-msgid "Private messages on page"
-msgstr "Приватных сообщений на страницу"
-
-#: apps/core/settings.py:76
-msgid "Karma objects on page"
-msgstr "Кармы на страницу"
-
-#: apps/core/settings.py:77
-msgid "Rates objects on page"
-msgstr "Рейтов на страницу"
-
-#: apps/core/settings.py:78
-msgid "Hide JID from viewing by another users"
-msgstr "Спрятать JID от просмотра другими пользователями"
-
-#: apps/core/settings.py:79
-msgid "Hide Email from viewing by another users"
-msgstr "Спрятать Email от просмотра другими пользователями"
-
-#: apps/core/settings.py:80
-msgid "Hide UIN from viewing by another users"
-msgstr "Спрятать UIN от просмотра другими пользователями"
-
-#: apps/core/settings.py:81
-msgid "Show karma values which equal to zero"
-msgstr "Показывать значения кармы с отрицательным и нулевым показателем"
-
-#: apps/core/settings.py:82
-msgid "Show karma values which equal to zero only for your karma list"
-msgstr ""
-"Показывать значения кармы с показателем равным нулю только для вашего карма "
-"листа"
-
-#: apps/core/settings.py:83
-msgid "Show humor status for users karma highness"
-msgstr "Показывать статусы с юмором кармических велечин"
-
-#: apps/core/settings.py:84
-msgid "If you do not want to show your precense on the site check this on"
-msgstr ""
-"Если вы не хотите показывать вашего присутствия на сайте установите "
-"включенным"
-
-#: apps/core/settings.py:85
-msgid ""
-"Auto updates your subscription if you are reading the comments or object you "
-"have been subscribed"
-msgstr ""
-"Автоматически обновляет вашу подписку, если вы читаете комментарии или что-"
-"либо на что были подписаны"
-
-#: apps/core/settings.py:86
-msgid "Show Last News block"
-msgstr "Показывать блок последних новостей"
-
-#: apps/core/settings.py:87
-msgid "Show Last Replays block"
-msgstr "Показывать блок последних реплеев"
-
-#: apps/core/settings.py:88
-msgid "Show Quotes block"
-msgstr "Показывать блок цитат"
-
-#: apps/core/settings.py:89
-msgid "Show Online Users block"
-msgstr "Показывать блок онлайн пользователей"
-
-#: apps/core/settings.py:90
-msgid "Show deleted rosters"
-msgstr "Показывать удаленные ростеры"
-
-#: apps/core/settings.py:91
-msgid "Last Replays block objects amount"
-msgstr "Количество последних реплеев в блоке"
-
-#: apps/core/settings.py:92
-msgid "Last News block objects amount"
-msgstr "Количество последних новостей в блоке"
-
-#: apps/core/settings.py:93
-msgid "Show karma block"
-msgstr "Показывать блок кармы"
-
-#: apps/core/settings.py:94
-msgid "Enables autocomplete on site"
-msgstr "Включить автокомплит на сайте"
-
-#: apps/core/settings.py:95
-msgid "Enables user css styles hosted in database"
-msgstr "Включить пользовательский css хранимый в базе данных"
-
-#: apps/core/settings.py:96
-msgid "If it's on you will recieve email notifications"
-msgstr "Если включено вы будете получать уведомления на почту"
-
-#: apps/core/settings.py:97
-msgid ""
-"If it's on you will recieve jabber notifications (remember need subscription)"
-msgstr ""
-"Если включено вы будете получать уведомления в jabber (помните о подписке)"
-
-#: apps/core/settings.py:100
-msgid "Show L4D stats block"
-msgstr "Показывать l4d блок статистики"
-
-#: apps/core/settings.py:125 apps/core/settings.py:131
-msgid "You can not pass number lesser than 5 and greater than 15"
-msgstr "Вы не можете вводить число меньше 5 или более 15"
-
-#: apps/core/settings.py:135 apps/core/settings.py:139
-#: apps/core/settings.py:143 apps/core/settings.py:147
-#: apps/core/settings.py:151 apps/core/settings.py:155
-#: apps/core/settings.py:159
-msgid "You can not pass number lesser than 10"
-msgstr "Вы не можете ввести число менее 10"
-
-#: apps/core/settings.py:164
-msgid "You can not pass number lesser than 40"
-msgstr "Вы не можете ввести число более 40"
-
-#: apps/core/urls.py:41
-msgid "Do you realy want to delete this image?"
-msgstr "Вы действительно хотите удалить это изображение?"
-
-#: apps/core/urls.py:50
-msgid "Do you realy want to delete this article?"
-msgstr "Вы действительно хотите удалить эту статью?"
-
-#: apps/core/urls.py:57
-msgid "Do you realy want to purge this comment? O_O.. realy?"
-msgstr "Вы действительно хотите удалить данный комментарий? Правда O_O..?"
-
-#: apps/core/urls.py:63
-msgid "Do you realy want to purge this replay?"
-msgstr "Вы действительно хотите удалить этот реплей?"
-
-#: apps/core/urls.py:69
-msgid "Do you realy want to delete this comment?"
-msgstr "Вы действительно хотите стереть этот коментарий?"
-
-#: apps/core/urls.py:76
-msgid "Do you realy want to delete this roster?"
-msgstr "Вы действительно хотите удалить этот ростер?"
-
-#: apps/core/urls.py:83
-msgid "Do you realy want to unsubscribe this site object?"
-msgstr "Вы правда хотите отписаться от данного объекта?"
-
-#: apps/core/urls.py:90
-msgid "Do you realy want to delete this battle report?"
-msgstr "Вы правда хотите удалить данный батл репорт?"
-
-#: apps/core/views.py:865
-msgid "Do you realy want to PURGE this comment?"
-msgstr "Вы действительно хотите СТЕРЕТЬ этот комментарий?"
 
 #: apps/core/templates/css_edit.html:15
 #: apps/core/templates/subscription.html:13
@@ -798,7 +555,7 @@ msgstr "Вы действительно хотите СТЕРЕТЬ этот к�
 #: apps/tabletop/templates/battle_report_index.html:15
 #: apps/tabletop/templates/index.html:15
 #: apps/tabletop/templates/search_rosters.html:35
-#: apps/tabletop/templates/user_rosters.html:26
+#: apps/tabletop/templates/user_rosters.html:25
 msgid "submit"
 msgstr "отправить"
 
@@ -815,177 +572,15 @@ msgstr "Выбрать все дни"
 msgid "Select all"
 msgstr "Выбрать все"
 
-#: apps/core/templatetags/kamwhfilters.py:76
-#: apps/wh/templatetags/whfilters.py:25
-msgid "Not Identified"
-msgstr "Не опознан"
-
-#: apps/core/templatetags/kamwhfilters.py:77 apps/wh/forms.py:225
-#: apps/wh/templatetags/whfilters.py:26
-msgid "Male"
-msgstr "Мужской"
-
-#: apps/core/templatetags/kamwhfilters.py:78 apps/wh/forms.py:226
-#: apps/wh/templatetags/whfilters.py:27
-msgid "Female"
-msgstr "Женский"
-
 #: apps/files/__init__.py:3
 msgid "files"
 msgstr "файлы"
 
-#: apps/files/admin.py:24 apps/files/admin.py:78 apps/karma/admin.py:20
-#: apps/news/admin.py:23 apps/wh/admin.py:21
-msgid "Base"
-msgstr "Базовый"
-
-#: apps/files/admin.py:35 apps/files/admin.py:84 apps/karma/admin.py:32
-msgid "Additional"
-msgstr "Дополнительный"
-
-#: apps/files/admin.py:43 apps/news/admin.py:37
-msgid "Stuff"
-msgstr "Стафф"
-
-#: apps/files/forms.py:104 apps/files/forms.py:124
-msgid ""
-"You should use the same number of players as the number you've passed via "
-"type or layout"
-msgstr ""
-"Вы должны ввести тоже количество игроков что и количество, которое вы ввели "
-"в типе или схеме"
-
-#: apps/files/forms.py:108
-msgid ""
-"You can choose only team1 or team2 as no more team are exist in this type"
-msgstr ""
-"Вы можете использовать только команда1 или комманда2, так как других команд "
-"не присутствуют в указанном типе"
-
-#: apps/files/forms.py:112 apps/files/forms.py:132
-#, python-format
-msgid "You can not pass more than '%i' races, less is available"
-msgstr "Вы не можете ввести более '%i' рас, менее возможно"
-
-#: apps/files/forms.py:117
-msgid "Required"
-msgstr "Обязательное поле"
-
-#: apps/files/forms.py:128
-#, python-format
-msgid "You can not choose team which is about '%i' number"
-msgstr "Вы не можете выбрать команду чей номер '%i'"
-
-#: apps/files/forms.py:168
-msgid "set"
-msgstr "сет"
-
-#: apps/files/forms.py:169
-msgid "non standard"
-msgstr "не стандартный"
-
-#: apps/files/forms.py:214
-#, python-format
-msgid "You should type exact %i nicks separated with commas arranged by team."
-msgstr ""
-"Вы должны указать точное число %i ников, разделенных запятой упорядоченных "
-"по команде"
-
-#: apps/files/forms.py:220
-msgid "You should choose team 1 or team 2 as winners"
-msgstr "Вы должны выбрать команду 1 или команду 2 в качестве победителя"
-
-#: apps/files/forms.py:225
-msgid "This field should be filled with layout"
-msgstr "Данное пое должно быть заполнено схемой"
-
-#: apps/files/forms.py:230
-msgid ""
-"You should choose team which is lesser one you've chosen, for example team 1"
-msgstr ""
-"Вы должны выбрать команду чей номер меньше выбранного вами, например команда "
-"1"
-
-#: apps/files/forms.py:239
-msgid ""
-"The number of nicks is greater than the number of players. The should be "
-"equal"
-msgstr ""
-"Количество ников больше чем количество игроков. Количество ников должно "
-"совпадать с количеством игроков"
-
-#: apps/files/forms.py:244
-msgid ""
-"The number of players is greater then the number of nicks. The should be "
-"equal"
-msgstr "Количество игроков больше чем количество ников. Они должны совпадать"
-
-#: apps/files/forms.py:257
-msgid "Field should contain string with number of player separated with vs"
-msgstr ""
-"Поле должно содержать строку с количеством игроков, разделенных через vs"
-
-#: apps/files/forms.py:261
-msgid "It seems string value or null stands before or after 'vs' delimiter"
-msgstr "Кажется строковое значение или null стоит перед vs разделителем"
-
-#: apps/files/forms.py:263
-#, python-format
-msgid ""
-"The game does not support more than 8 players, and your amount of them "
-"equals %i"
-msgstr ""
-"Игра не поддерживает более 8 игрков, количество указанное вами равно: %i"
-
-#: apps/files/forms.py:281
-msgid ""
-"The field should be at least includes one race, for example space marines"
-msgstr "Поле должно включать как минимум одну расу, например космодесант"
-
-#: apps/files/forms.py:310
-msgid "Replay field should be set"
-msgstr "Поле реплея должно быть установлено"
-
-#: apps/files/forms.py:367
-msgid "Uploaded file should not be larger than 1Mb size"
-msgstr "Загружаемый файл не должен превышать размер в 1 Мегабайт"
-
-#: apps/files/forms.py:374
-msgid "Jpeg, gif, png, jpg image only"
-msgstr "Только jpeg, gif, png, jpg изрбражения"
-
-#: apps/files/forms.py:379
-msgid ""
-"Upload a valid image. The file you uploaded was either not an image or a "
-"corrupted image."
-msgstr ""
-"Зашруженный вами файл был поврежден или не является изображением. Загрузите "
-"правильное изображение"
-
-#: apps/files/forms.py:382
-msgid "Uploaded image should not be larger than 2048x1024 pixels"
-msgstr ""
-"Загружаемое изображение не должно быть более 2048x1024 пикселей по размеру"
-
-#: apps/files/forms.py:388
-msgid "Field should't be clean, if you have no gallery yet, please create one"
-msgstr ""
-"Поле не должно быть пустым, если у вас нет галереи еще, пожалуйста, создайте "
-"её"
-
-#: apps/files/forms.py:403
-msgid "You should write more than 10 words for a comment"
-msgstr "Вы должны написать как минимум 10 слов для комментария"
-
-#: apps/files/forms.py:412
-msgid "The length of gallery name was exceeded"
-msgstr "Длина имени галереи превышена"
-
-#: apps/files/forms.py:423
+#: apps/files/forms.py:21
 msgid "Not authorized"
 msgstr "Не авторизован"
 
-#: apps/files/forms.py:431
+#: apps/files/forms.py:29
 msgid ""
 "You are exceeded the limits, please visit your files page and delete the old "
 "ones"
@@ -993,191 +588,96 @@ msgstr ""
 "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
 "странице управления файлами"
 
-#: apps/files/models.py:26 apps/files/models.py:100 apps/files/models.py:373
-#: apps/files/templates/files/user_files.html:46
-msgid "File"
-msgstr "Файл"
-
-#: apps/files/models.py:27 apps/karma/models.py:59 apps/pybb/models.py:57
-msgid "Description"
-msgstr "Описание"
-
-#: apps/files/models.py:29 apps/files/models.py:92
-msgid "Upload date"
-msgstr "Дата загрузки"
-
-#: apps/files/models.py:34 apps/files/models.py:255
-msgid "Replay"
-msgstr "Реплей"
-
-#: apps/files/models.py:36
-msgid "Uploaded date"
-msgstr "Дата загрузки"
-
-#: apps/files/models.py:43 apps/files/models.py:90 apps/files/models.py:266
-#: apps/pybb/models.py:25 apps/pybb/models.py:55 apps/wh/forms.py:81
-msgid "Name"
-msgstr "Имя"
-
-#: apps/files/models.py:44
-msgid "Short name"
-msgstr "Короткое имя"
-
-#: apps/files/models.py:50
-msgid "Addon name"
-msgstr "Имя аддона"
-
-#: apps/files/models.py:51
-msgid "Patch version"
-msgstr "Версия патча"
-
-#: apps/files/models.py:52
-msgid "Release Number"
-msgstr "Номер релиза"
-
-#: apps/files/models.py:63
-msgid "Addon version"
-msgstr "Версия аддона"
-
-#: apps/files/models.py:64
-msgid "Addon versions"
-msgstr "Версии аддонов"
-
-#: apps/files/models.py:67
+#: apps/files/models.py:17
 msgid "Attachment"
 msgstr "Аттачмент"
 
-#: apps/files/models.py:89
-msgid "Team"
-msgstr "Команда"
-
-#: apps/files/models.py:93 apps/files/models.py:265
-#: apps/files/templates/files/user_files.html:45
+#: apps/files/models.py:28 apps/files/templates/files/user_files.html:45
 #: apps/news/templates/events/events.html:19
 msgid "Type"
 msgstr "Тип"
 
-#: apps/files/models.py:94
-msgid "Non Std layout"
-msgstr "Не стандартная схема"
+#: apps/files/models.py:30 apps/pybb/models.py:25 apps/pybb/models.py:55
+#: apps/wh/forms.py:81
+msgid "Name"
+msgstr "Имя"
 
-#: apps/files/models.py:95
-msgid "Teams"
-msgstr "Команды"
-
-#: apps/files/models.py:96
-msgid "Races"
-msgstr "Расы"
-
-#: apps/files/models.py:97
-#: apps/tabletop/templates/add_old_battle_report.html:22
-#: apps/tabletop/templates/reports/include/report_content.html:16
-msgid "Winner"
-msgstr "Победитель"
-
-#: apps/files/models.py:104 apps/files/models.py:297
-#: apps/tabletop/templates/add_roster_old.html:47
-msgid "Comments"
-msgstr "Комментарии"
-
-#: apps/files/models.py:105
-msgid "is set"
-msgstr "сет"
-
-#: apps/files/models.py:124
-msgid "Author"
-msgstr "Автор"
-
-#: apps/files/models.py:256
-msgid "Replays"
-msgstr "Реплеи"
-
-#: apps/files/models.py:278 apps/files/templates/gallery/gallery_list.html:22
+#: apps/files/models.py:44 apps/files/templates/gallery/gallery_list.html:22
 #: apps/pybb/templates/pybb/head.html:51
 msgid "Gallery"
 msgstr "Галерея"
 
-#: apps/files/models.py:279
+#: apps/files/models.py:45
 msgid "Galleries"
 msgstr "Галереи"
 
-#: apps/files/models.py:292
+#: apps/files/models.py:57
 msgid "Alias"
 msgstr "Алиас"
 
-#: apps/files/models.py:295
+#: apps/files/models.py:60
 msgid "Fast name to access unit"
 msgstr "Имя для быстрого доступа к юниту"
 
-#: apps/files/models.py:298 apps/files/templates/gallery/action_image.html:5
+#: apps/files/models.py:62 apps/tabletop/templates/add_roster_old.html:47
+msgid "Comments"
+msgstr "Комментарии"
+
+#: apps/files/models.py:63 apps/files/templates/gallery/action_image.html:5
 #: apps/files/templates/gallery/gallery_list.html:11
 #: apps/files/templates/gallery/image.html:7
 #: apps/files/templates/gallery/upload.html:6
 msgid "gallery"
 msgstr "галерея"
 
-#: apps/files/models.py:300 apps/files/models.py:315
+#: apps/files/models.py:65 apps/files/models.py:84
 #: apps/files/templates/files/user_files.html:72
 #: apps/files/templates/files/user_files.html:99
 msgid "Image"
 msgstr "Изображение"
 
-#: apps/files/models.py:303
+#: apps/files/models.py:69
 msgid "Thumbnail"
 msgstr "Эскиз"
 
-#: apps/files/models.py:316
+#: apps/files/models.py:85
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:366
-msgid "Original URL"
-msgstr "URL оригинала"
-
-#: apps/files/models.py:370 apps/news/models.py:264
-msgid "owner"
-msgstr "владелец"
-
-#: apps/files/models.py:374
-msgid "Files"
-msgstr "Файлы"
-
-#: apps/files/models.py:378 apps/menu/models.py:8 apps/news/models.py:44
+#: apps/files/models.py:104 apps/menu/models.py:8 apps/news/models.py:44
 #: apps/news/models.py:61 apps/news/models.py:250 apps/news/models.py:261
 #: apps/news/models.py:321 apps/news/models.py:341 apps/pybb/models.py:287
-#: apps/pybb/models.py:372 apps/tabletop/models.py:54
-#: apps/tabletop/models.py:87 apps/tabletop/models.py:202
-#: apps/tabletop/models.py:325 apps/tabletop/models.py:337
-#: apps/tabletop/models.py:474 apps/tabletop/models.py:612
-#: apps/wh/models.py:34 apps/wh/models.py:163
+#: apps/pybb/models.py:372 apps/tabletop/models.py:53
+#: apps/tabletop/models.py:91 apps/tabletop/models.py:200 apps/wh/models.py:34
+#: apps/wh/models.py:163
 msgid "title"
 msgstr "заголовок"
 
-#: apps/files/models.py:380
+#: apps/files/models.py:107
 msgid "file"
 msgstr "файл"
 
-#: apps/files/models.py:384
+#: apps/files/models.py:113
 msgid "plain type"
 msgstr "простой тип"
 
-#: apps/files/models.py:384
+#: apps/files/models.py:113
 msgid "plain type for "
 msgstr "простой тип для"
 
-#: apps/files/models.py:389
+#: apps/files/models.py:118
 msgid "size"
 msgstr "размер"
 
-#: apps/files/models.py:389
+#: apps/files/models.py:118
 msgid "file size"
 msgstr "размер файла"
 
-#: apps/files/models.py:426
+#: apps/files/models.py:156
 msgid "User file"
 msgstr "Файл пользователя"
 
-#: apps/files/models.py:427
+#: apps/files/models.py:157
 msgid "User files"
 msgstr "Файлы пользователя"
 
@@ -1212,6 +712,10 @@ msgstr "Все файлы"
 msgid "Pictures"
 msgstr "Картинки"
 
+#: apps/files/templates/files/user_files.html:46
+msgid "File"
+msgstr "Файл"
+
 #: apps/files/templates/files/user_files.html:47
 msgid "Link"
 msgstr "Ссылка"
@@ -1230,6 +734,14 @@ msgstr "Действия"
 #: apps/files/templates/files/user_files.html:109
 msgid "Do you want to delete this file?"
 msgstr "Вы действительно хотите удалить этот файл?"
+
+#: apps/files/templates/files/user_files.html:61
+#: apps/files/templates/files/user_files.html:111
+#: apps/files/templates/gallery/gallery_image_form.html:11
+#: apps/pybb/templates/pybb/edit_profile.html:31
+#: apps/pybb/templates/pybb/poll.html:10
+msgid "delete"
+msgstr "удалить"
 
 #: apps/files/templates/files/user_files.html:73
 msgid "Links"
@@ -1307,6 +819,7 @@ msgstr "загрузить изображение"
 msgid "Action image"
 msgstr "Действие с изображением"
 
+#: apps/files/templates/gallery/gallery_image.html:7
 #: apps/files/templates/gallery/gallery_image_form.html:6
 #: apps/files/templates/gallery/gallery_list.html:8
 msgid "galleries"
@@ -1347,9 +860,17 @@ msgstr "правка изображения"
 msgid "delete image"
 msgstr "удалить изображение"
 
+#: apps/karma/admin.py:20 apps/news/admin.py:23 apps/wh/admin.py:21
+msgid "Base"
+msgstr "Базовый"
+
 #: apps/karma/admin.py:26
 msgid "Side"
 msgstr "Сторона"
+
+#: apps/karma/admin.py:32
+msgid "Additional"
+msgstr "Дополнительный"
 
 #: apps/karma/forms.py:12
 msgid "up"
@@ -1371,6 +892,11 @@ msgstr "Подобного пользователя не существует"
 msgid "You can not alter karma for yourself"
 msgstr "Нельзя менять карму самим себе"
 
+#: apps/karma/models.py:19
+#: apps/tabletop/templates/add_old_battle_report.html:40
+msgid "Comment"
+msgstr "Комментарий"
+
 #: apps/karma/models.py:20
 msgid "Power"
 msgstr "Сила"
@@ -1383,7 +909,7 @@ msgstr "Дата"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:184
+#: apps/karma/models.py:55 apps/tabletop/models.py:179
 msgid "Codename"
 msgstr "Кодовое имя"
 
@@ -1398,6 +924,10 @@ msgstr "Значение"
 #: apps/karma/models.py:58
 msgid "Humor"
 msgstr "Юмор"
+
+#: apps/karma/models.py:59 apps/pybb/models.py:57
+msgid "Description"
+msgstr "Описание"
 
 #: apps/karma/models.py:61 apps/wh/models.py:258
 msgid "is General"
@@ -1498,6 +1028,10 @@ msgstr "Подтвержденные новости"
 msgid "Revert approved flag"
 msgstr "Поменять флаг подтвержденности"
 
+#: apps/news/admin.py:37
+msgid "Stuff"
+msgstr "Стафф"
+
 #: apps/news/forms.py:30
 msgid "approved?"
 msgstr "утверждено?"
@@ -1531,7 +1065,7 @@ msgid "Only zip files supported"
 msgstr "Только zip файлы поддерживаются"
 
 #: apps/news/models.py:23 apps/news/models.py:82 apps/news/models.py:282
-#: apps/tabletop/models.py:221 apps/tabletop/templates/reports.html:48
+#: apps/tabletop/models.py:219 apps/tabletop/templates/reports.html:48
 msgid "approved"
 msgstr "утверждено"
 
@@ -1566,11 +1100,11 @@ msgstr "автор"
 msgid "content"
 msgstr "контент"
 
-#: apps/news/models.py:47 apps/tabletop/models.py:222
+#: apps/news/models.py:47 apps/tabletop/models.py:220
 msgid "ip address"
 msgstr "IP адрес"
 
-#: apps/news/models.py:49 apps/news/models.py:272 apps/tabletop/models.py:223
+#: apps/news/models.py:49 apps/news/models.py:272 apps/tabletop/models.py:221
 #: apps/wh/models.py:176 apps/wh/models.py:260
 msgid "syntax"
 msgstr "синтаксис"
@@ -1666,6 +1200,10 @@ msgstr "Типы встреч"
 #: apps/news/models.py:262 apps/news/models.py:361 apps/wh/models.py:229
 msgid "type"
 msgstr "тип"
+
+#: apps/news/models.py:264
+msgid "owner"
+msgstr "владелец"
 
 #: apps/news/models.py:267
 msgid "members"
@@ -2429,7 +1967,7 @@ msgstr "Предстоящие события"
 msgid "Calendar"
 msgstr "Календарь"
 
-#: apps/pybb/templates/pybb/head.html:32
+#: apps/pybb/templates/pybb/head.html:33
 msgid "Subscriptions"
 msgstr "Подписки"
 
@@ -2635,106 +2173,6 @@ msgstr "вчера, %s"
 msgid "This field is required."
 msgstr "Обязательное поле."
 
-#: apps/tabletop/actions.py:21
-msgid "alter codex"
-msgstr "изменить кодекс"
-
-#: apps/tabletop/admin.py:102
-msgid "blocks"
-msgstr "блокирует"
-
-#: apps/tabletop/admin.py:109
-msgid "depends"
-msgstr "зависит"
-
-#: apps/tabletop/admin.py:116
-msgid "combines"
-msgstr "комбинирует"
-
-#: apps/tabletop/admin.py:125
-msgid "Units"
-msgstr "Юниты"
-
-#: apps/tabletop/admin.py:131
-msgid "Rebuild points"
-msgstr "Пересчитать очки (pts)"
-
-#: apps/tabletop/adminforms.py:47 apps/tabletop/adminforms.py:127
-#, python-format
-msgid "You can not link '%(src)s %(link)s' with '%(target)s' unit"
-msgstr "Вы не можете соединить '%(src)s %(link)s' вместе с %(target)s' юнитом"
-
-#: apps/tabletop/adminforms.py:54 apps/tabletop/adminforms.py:134
-#, python-format
-msgid "You can not set amount more than its wargear limit with '%s'"
-msgstr "Вы не можете установить количество больше чем лимит вооружения в '%s'"
-
-#: apps/tabletop/adminforms.py:73 apps/tabletop/adminforms.py:212
-#, python-format
-msgid ""
-"You can not add this wargear or upgrade before your add '%s' to given unit"
-msgstr ""
-"Вы не можете добавить это вооружение или апгрейд перед тем, как взять '%s' "
-"юнита"
-
-#: apps/tabletop/adminforms.py:89 apps/tabletop/adminforms.py:243
-#, python-format
-msgid "You can not add any of these titles: '%(dst)s' before delete '%(src)s'"
-msgstr ""
-"Вы не можете добавить следующие тайтлы: '%(dst)s' до удаления '%(src)s'"
-
-#: apps/tabletop/adminforms.py:143
-#, python-format
-msgid ""
-"You can not take '%(gear_amount)s' number(s) of wargear, because it depends "
-"on unit models amount, one point of wargear each '%(threshold)s' models in "
-"unit"
-msgstr ""
-"Вы не можете взять '%(gear_amount)s' число(а) вооружения, потому что оно "
-"зависит от количество моделей юнита, очки вооружения каждый по "
-"'%(threshold)s' моделей в юните"
-
-#: apps/tabletop/adminforms.py:227
-#, python-format
-msgid ""
-"You can not add this wargear or upgrade before add '%s' to your army list "
-"(roster)"
-msgstr ""
-"Вы не можете добавить это вооружение или апгрейд до того как добавите '%s' в "
-"ваш ростер"
-
-#: apps/tabletop/adminforms.py:271
-#, python-format
-msgid "Combines weapon reach its limits, please add weapons below '%s' limit"
-msgstr ""
-"Комбинированное оружие достигло своих лимитов, пожалуйста, добавьте оружие "
-"ниже лимита в '%s'"
-
-#: apps/tabletop/adminforms.py:302
-#, python-format
-msgid ""
-"You can not add more models than its limit allows, min: '%(min)s', max: "
-"'%(max)s'"
-msgstr ""
-"Вы не можете добавить больше моделей чем позволяет их лимит, мин: '%(min)s', "
-"макс: '%(max)s'"
-
-#: apps/tabletop/adminforms.py:336
-#, python-format
-msgid "This unit requires wargear includes: '%s' to proceed, please add them"
-msgstr ""
-"Данный юнит требует наличие вооружение, которое включает '%s' для того чтобы "
-"пройти, пожалуйста добавьте его"
-
-#: apps/tabletop/adminforms.py:346
-#, python-format
-msgid ""
-"Every '%(threshold)s' models you should append 1 additionalto your "
-"%(wargear)s link"
-msgstr ""
-"Каждой '%(threshold)s' модели вы должны добавить 1-у дополнитеьную "
-"%(wargear)s связь"
-
 #: apps/tabletop/forms.py:52
 msgctxt "Title"
 msgid "battle report title"
@@ -2744,92 +2182,92 @@ msgstr "Заголовок"
 msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
-#: apps/tabletop/forms.py:57 apps/tabletop/forms.py:184
+#: apps/tabletop/forms.py:57 apps/tabletop/forms.py:199
 #: apps/tabletop/templates/tabletop/roster_list.html:13
 msgid "Rosters"
 msgstr "Ростеры"
 
-#: apps/tabletop/forms.py:59
+#: apps/tabletop/forms.py:60
 msgid "user rosters participating in the battle you want to describe"
 msgstr ""
 "пользовательские ростеры, которые принимают участие в битве, которую вы "
 "описываете"
 
-#: apps/tabletop/forms.py:65
+#: apps/tabletop/forms.py:66
 msgid "Winners"
 msgstr "Победители"
 
-#: apps/tabletop/forms.py:67
+#: apps/tabletop/forms.py:68
 msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
-#: apps/tabletop/forms.py:74
+#: apps/tabletop/forms.py:75
 #: apps/tabletop/templates/add_old_battle_report.html:29
 msgid "Mission"
 msgstr "Миссия"
 
-#: apps/tabletop/forms.py:76
+#: apps/tabletop/forms.py:77
 msgid "mission you played"
 msgstr "миссия, в которую вы играли"
 
-#: apps/tabletop/forms.py:83
+#: apps/tabletop/forms.py:84
 #: apps/tabletop/templates/add_old_battle_report.html:32
 msgid "Layout"
 msgstr "Формат"
 
-#: apps/tabletop/forms.py:84
+#: apps/tabletop/forms.py:86
 msgid "how much players participated in the game, 1vs1, 2vs2 and so on"
 msgstr "сколько игроков принимало участие в игре, 1vs1, 2vs2 и так далее"
 
-#: apps/tabletop/forms.py:92
+#: apps/tabletop/forms.py:93
 msgctxt "Content"
 msgid "battle report content"
 msgstr "Содержание"
 
-#: apps/tabletop/forms.py:125
+#: apps/tabletop/forms.py:126
 msgid ""
 "You can not write battle reports which has rosters that differ with pts field"
 msgstr ""
 "Вы не можете написать батлрепорт с ростерами, которые различны по количеству "
 "очков"
 
-#: apps/tabletop/forms.py:140
+#: apps/tabletop/forms.py:142
 msgid "You must choose winner's roster id within rosters' ids you passed"
 msgstr "Вы обязаны выбрать ростер победителя"
 
-#: apps/tabletop/forms.py:147
+#: apps/tabletop/forms.py:152
 msgid "Number of players and layout must exact by the amount of whole players"
 msgstr ""
 "Количество участников и формат должны совпадать с общим количеством "
 "участников"
 
-#: apps/tabletop/forms.py:155 apps/tabletop/tests.py:289
+#: apps/tabletop/forms.py:162 apps/tabletop/tests.py:289
 #, python-format
 msgid "You can not add more winners than %(amount)s"
 msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
 
-#: apps/tabletop/forms.py:175
+#: apps/tabletop/forms.py:187
 msgid "Search rosters"
 msgstr "Поиск ростеров"
 
-#: apps/tabletop/forms.py:176
+#: apps/tabletop/forms.py:189
 msgid "If you do not see rosters you need below you may search them"
 msgstr ""
 "Если вы не видете ростеры ниже, которые вам нужны, вы можете их поискать"
 
-#: apps/tabletop/forms.py:179
+#: apps/tabletop/forms.py:193
 msgid "You can add this rosters to battle report"
 msgstr "Вы можете добавить данный ростер в батл-репорт"
 
-#: apps/tabletop/forms.py:180
+#: apps/tabletop/forms.py:194
 msgid "Available rosters"
 msgstr "Доступные ростеры"
 
-#: apps/tabletop/forms.py:187
+#: apps/tabletop/forms.py:205
 msgid "Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc."
 msgstr "Игровая схема, например 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 и так далее."
 
-#: apps/tabletop/forms.py:228
+#: apps/tabletop/forms.py:248
 msgid ""
 "You should set right layout, for example 2vs2, 3vs1, number of players "
 "should be equal to number of rosters you've passed"
@@ -2837,45 +2275,45 @@ msgstr ""
 "В должны установить верную схему, например 2vs2, 3vs1, количество игроков "
 "должно быть равным количеству ростеров, которые вы предоставляете"
 
-#: apps/tabletop/forms.py:241
+#: apps/tabletop/forms.py:261
 msgid ""
 "10 players is absolute maximum, do not try to add layout with more players, "
 "it's strickly forbidden"
 msgstr "10 игроков - абсолютный максимум, не пытайтесь добавить в схему больше"
 
-#: apps/tabletop/forms.py:269
+#: apps/tabletop/forms.py:294
 msgid "Where is no such rosters which have more than 20k points"
 msgstr "Ростеров более 20к очков не существует"
 
-#: apps/tabletop/forms.py:274
+#: apps/tabletop/forms.py:303
 msgid "You should pass only int values through \"pts\" field"
 msgstr "Вы должны предоставить только целые числа в \"pts\" поле"
 
-#: apps/tabletop/forms.py:295
+#: apps/tabletop/forms.py:334
 msgid "Race field should contain exact value"
 msgstr "Поле расы должно содержать точное значение"
 
-#: apps/tabletop/forms.py:299
+#: apps/tabletop/forms.py:339
 msgid ""
 "You should to select one race from the race select field or type custom_race "
 "by your own"
 msgstr "Вы должны выбрать одну расу из списка или выбрать \"друая раса\""
 
-#: apps/tabletop/forms.py:314 apps/tabletop/forms.py:389
-msgid "You can not pass player's name that contains more than 64 symbols"
+#: apps/tabletop/forms.py:358
+msgid "You can not pass player's name that containsmore than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
 
-#: apps/tabletop/forms.py:324 apps/tabletop/forms.py:383
+#: apps/tabletop/forms.py:372 apps/tabletop/forms.py:423
 msgid "The common pts should be greater than 500"
 msgstr "Количество pts должно быть больше 500"
 
-#: apps/tabletop/forms.py:332
+#: apps/tabletop/forms.py:380
 msgid "Codex"
 msgstr "Кодекс"
 
-#: apps/tabletop/forms.py:368
+#: apps/tabletop/forms.py:407
 #, python-format
 msgid ""
 "There is no such revision in \"%(unicode)s\", try to pass %(revisions)s as "
@@ -2884,63 +2322,65 @@ msgstr ""
 "Ревизии в \"%(unicode)s\" не существует, пожалуйста предоставьте "
 "%(revisions)s верным значением"
 
-#: apps/tabletop/forms.py:399
-msgid "Revision"
-msgstr "Ревизия"
+#: apps/tabletop/forms.py:430
+msgid "You can not pass player's name that contains more than 64 symbols"
+msgstr ""
+"Вы не можете ввести имя пользователя, количество символов которого превышает "
+"64"
 
-#: apps/tabletop/models.py:26
+#: apps/tabletop/models.py:24
 msgid "hq"
 msgstr "хк"
 
-#: apps/tabletop/models.py:27
+#: apps/tabletop/models.py:25
 msgid "troops"
 msgstr "трупса"
 
-#: apps/tabletop/models.py:28
+#: apps/tabletop/models.py:26
 msgid "elite"
 msgstr "элита"
 
-#: apps/tabletop/models.py:29
+#: apps/tabletop/models.py:27
 msgid "fast"
 msgstr "фаст"
 
-#: apps/tabletop/models.py:30
+#: apps/tabletop/models.py:28
 msgid "heavy support"
 msgstr "тяж поддержка"
 
-#: apps/tabletop/models.py:33
+#: apps/tabletop/models.py:31
 msgid "infantry"
 msgstr "пехота"
 
-#: apps/tabletop/models.py:34
+#: apps/tabletop/models.py:32
 msgid "vehicle"
 msgstr "техника"
 
-#: apps/tabletop/models.py:35
+#: apps/tabletop/models.py:33
 msgid "bike"
 msgstr "байк"
 
-#: apps/tabletop/models.py:36
+#: apps/tabletop/models.py:34
 msgid "jetbike"
 msgstr "джет байк"
 
-#: apps/tabletop/models.py:37
+#: apps/tabletop/models.py:35
 msgid "flyer"
 msgstr "флаер"
 
-#: apps/tabletop/models.py:38
+#: apps/tabletop/models.py:36
 msgid "artilery"
 msgstr "артилерия"
 
-#: apps/tabletop/models.py:42
+#: apps/tabletop/models.py:40
 msgid "Dawn of War"
 msgstr "Рассвет войны"
 
-#: apps/tabletop/models.py:43
+#: apps/tabletop/models.py:41
 msgid "Hammer and Anvil"
 msgstr "Молот и наковальня"
 
-#: apps/tabletop/models.py:44
+#: apps/tabletop/models.py:42
 msgid "Vanguard Strike"
 msgstr "Вангард страйк"
 
@@ -2952,310 +2392,87 @@ msgstr "простая сторона"
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:89
+#: apps/tabletop/models.py:94
 msgid "player"
 msgstr "автор"
 
-#: apps/tabletop/models.py:90
+#: apps/tabletop/models.py:95
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:93
+#: apps/tabletop/models.py:97
 msgid "comments"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:97
+#: apps/tabletop/models.py:102
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:100
+#: apps/tabletop/models.py:105
 msgid "custom Codex"
 msgstr "кастом кодекс"
 
-#: apps/tabletop/models.py:104
+#: apps/tabletop/models.py:109
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:106
+#: apps/tabletop/models.py:111
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:109 apps/tabletop/models.py:348
-#: apps/tabletop/models.py:384 apps/tabletop/models.py:425
-#: apps/tabletop/models.py:484 apps/tabletop/models.py:622
-#: apps/tabletop/templates/add_roster_old.html:26
+#: apps/tabletop/models.py:114 apps/tabletop/templates/add_roster_old.html:26
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:109
+#: apps/tabletop/models.py:114
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:116
+#: apps/tabletop/models.py:119
 msgid "Orphan"
 msgstr "Орфан"
 
-#: apps/tabletop/models.py:117
+#: apps/tabletop/models.py:120
 msgid "wins"
 msgstr "побед"
 
-#: apps/tabletop/models.py:118
+#: apps/tabletop/models.py:121
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:129 apps/tabletop/templates/add_roster_old.html:30
+#: apps/tabletop/models.py:130 apps/tabletop/templates/add_roster_old.html:30
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:205
+#: apps/tabletop/models.py:203
 msgid "published"
 msgstr "опубликовано"
 
-#: apps/tabletop/models.py:208 apps/tabletop/templates/tabletop/roster.html:8
+#: apps/tabletop/models.py:206 apps/tabletop/templates/tabletop/roster.html:8
 #: apps/tabletop/templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:211
+#: apps/tabletop/models.py:209
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:214
+#: apps/tabletop/models.py:212
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:215
+#: apps/tabletop/models.py:213
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:217
+#: apps/tabletop/models.py:215
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:267
+#: apps/tabletop/models.py:263
 msgid "[fuzzy] "
 msgstr "[плавающий]"
-
-#: apps/tabletop/models.py:329 apps/wh/models.py:76
-msgid "Army"
-msgstr "Армия"
-
-#: apps/tabletop/models.py:330 apps/wh/admin.py:49 apps/wh/models.py:77
-msgid "Armies"
-msgstr "Армии"
-
-#: apps/tabletop/models.py:342 apps/tabletop/models.py:476
-#: apps/tabletop/models.py:614 apps/wh/models.py:215 apps/wh/models.py:252
-#: apps/wh/models.py:333
-msgid "description"
-msgstr "описание"
-
-#: apps/tabletop/models.py:348
-msgid "roster points cache"
-msgstr "количество очков ростера"
-
-#: apps/tabletop/models.py:376
-msgid "Auto roster"
-msgstr "Авто ростер"
-
-#: apps/tabletop/models.py:377
-msgid "Auto rosters"
-msgstr "Авто ростеры"
-
-#: apps/tabletop/models.py:381 apps/tabletop/models.py:419
-#: apps/tabletop/models.py:543 apps/tabletop/models.py:577
-msgid "amount"
-msgstr "количество"
-
-#: apps/tabletop/models.py:381
-msgid "wargear amount"
-msgstr "количество варгира"
-
-#: apps/tabletop/models.py:384
-msgid "points cache for wargear"
-msgstr "кеш очков для вооружения"
-
-#: apps/tabletop/models.py:413
-msgid "Wargear container"
-msgstr "Контейнер вооружения"
-
-#: apps/tabletop/models.py:414
-msgid "Wargear containers"
-msgstr "Контейнеры вооружения"
-
-#: apps/tabletop/models.py:419 apps/tabletop/models.py:637
-msgid "unit amount"
-msgstr "количество юнитов"
-
-#: apps/tabletop/models.py:425
-msgid "points cache for unit"
-msgstr "кеш очков для юнита"
-
-#: apps/tabletop/models.py:430
-msgid "unit_containers"
-msgstr ""
-
-#: apps/tabletop/models.py:453
-msgid "Unit container"
-msgstr "Юнит конейтенры"
-
-#: apps/tabletop/models.py:454
-msgid "Unit containers"
-msgstr "Юнит контейнеры"
-
-#: apps/tabletop/models.py:470
-msgid "is dedicated"
-msgstr "приписанная"
-
-#: apps/tabletop/models.py:471
-msgid "marks if transport could be dedicated"
-msgstr "отмететь как приписанный транспорт"
-
-#: apps/tabletop/models.py:482
-msgid "is unique?"
-msgstr "уникальный"
-
-#: apps/tabletop/models.py:482
-msgid "marks if its unique"
-msgstr "отмечает, как уникального"
-
-#: apps/tabletop/models.py:484
-msgid "points per model unit"
-msgstr "очков на каждую модель юнита"
-
-#: apps/tabletop/models.py:488
-msgid "min"
-msgstr "мин"
-
-#: apps/tabletop/models.py:488
-msgid "minumal models allowed be taken within squad"
-msgstr "минимальное количество моделей, которые можно взять в сквад"
-
-#: apps/tabletop/models.py:492
-msgid "max"
-msgstr "макс"
-
-#: apps/tabletop/models.py:492
-msgid "maximum models allowed be taken within squad"
-msgstr ""
-"максимальное количество моделей нужное для того, чтобы их можно было взять "
-"как отряд"
-
-#: apps/tabletop/models.py:496
-msgid "mwr amount"
-msgstr "mwr количество"
-
-#: apps/tabletop/models.py:496
-msgid "must take wargear amount"
-msgstr "должен взять вооружение в количестве"
-
-#: apps/tabletop/models.py:506
-msgid "Model unit"
-msgstr "Модель юнита"
-
-#: apps/tabletop/models.py:507
-msgid "Model units"
-msgstr "Модели юнитов"
-
-#: apps/tabletop/models.py:524 apps/tabletop/models.py:595
-#: apps/tabletop/models.py:629
-msgid "threshold"
-msgstr "граница"
-
-#: apps/tabletop/models.py:524
-msgid "every threshold number you should take an upgrade"
-msgstr "при каждом достижении границы вы должны взять по апгрейду"
-
-#: apps/tabletop/models.py:536
-msgid "MWRUnit"
-msgstr "MWRЮнит"
-
-#: apps/tabletop/models.py:537
-msgid "MWRUnits"
-msgstr "MWRЮниты"
-
-#: apps/tabletop/models.py:543 apps/tabletop/models.py:577
-msgid "requirement require amount"
-msgstr ""
-
-#: apps/tabletop/models.py:547 apps/tabletop/models.py:581
-msgid "amount target"
-msgstr "количество цели"
-
-#: apps/tabletop/models.py:547 apps/tabletop/models.py:581
-msgid "wargear requirement target amount"
-msgstr ""
-
-#: apps/tabletop/models.py:570
-msgid "Unit wargear requirement"
-msgstr ""
-
-#: apps/tabletop/models.py:571
-msgid "Unit wargear requirements"
-msgstr ""
-
-#: apps/tabletop/models.py:595
-msgid "every threshold number"
-msgstr ""
-
-#: apps/tabletop/models.py:608
-msgid "Wargear requirement"
-msgstr ""
-
-#: apps/tabletop/models.py:609
-msgid "Wargear requirements"
-msgstr ""
-
-#: apps/tabletop/models.py:613
-msgid "short title"
-msgstr "короткий заголовок"
-
-#: apps/tabletop/models.py:622
-msgid "points cost for one wargear title"
-msgstr ""
-
-#: apps/tabletop/models.py:625
-msgid "limit"
-msgstr "лимит"
-
-#: apps/tabletop/models.py:625
-msgid "limit gear to take on the battlefield"
-msgstr ""
-
-#: apps/tabletop/models.py:629
-msgid "models amount threshould alowed take this wargear upgrade"
-msgstr ""
-
-#: apps/tabletop/models.py:633
-msgid "is squad only?"
-msgstr ""
-
-#: apps/tabletop/models.py:633
-msgid "marks if upgrade allowed for entire squad only"
-msgstr ""
-
-#: apps/tabletop/models.py:638
-msgid ""
-"sets as additional unit model, for example: Runthred casts on gretchin unit "
-"as additional model, not an upgrade"
-msgstr ""
-
-#: apps/tabletop/models.py:643
-msgid "marks what gear blocks given one"
-msgstr ""
-
-#: apps/tabletop/models.py:647
-msgid "marks what gear combines with each other for example: 2 bsh or 2 rkkt"
-msgstr ""
-
-#: apps/tabletop/models.py:673
-msgid "Wargear"
-msgstr "Вооружение"
-
-#: apps/tabletop/models.py:674
-msgid "Wargears"
-msgstr "Вооружения"
 
 #: apps/tabletop/templates/add_old_battle_report.html:11
 msgid "Tilte"
@@ -3264,6 +2481,11 @@ msgstr "Заголовок"
 #: apps/tabletop/templates/add_old_battle_report.html:17
 msgid "Rosters' ids"
 msgstr ""
+
+#: apps/tabletop/templates/add_old_battle_report.html:22
+#: apps/tabletop/templates/reports/include/report_content.html:16
+msgid "Winner"
+msgstr "Победитель"
 
 #: apps/tabletop/templates/add_roster.html:45
 msgid "Roster was successfully posted"
@@ -3387,166 +2609,6 @@ msgstr "Добавить ростер"
 msgid "No rosters found"
 msgstr "Ростеров не найдено"
 
-#: apps/tagging/fields.py:69
-#, python-format
-msgid "%s can only be set on instances."
-msgstr ""
-
-#: apps/tagging/forms.py:19
-msgid "Multiple tags were given."
-msgstr ""
-
-#: apps/tagging/forms.py:22
-#, python-format
-msgid "A tag may be no more than %s characters long."
-msgstr ""
-
-#: apps/tagging/forms.py:38
-#, python-format
-msgid "Each tag may be no more than %s characters long."
-msgstr ""
-
-#: apps/tagging/models.py:58
-#, python-format
-msgid "No tags were given: \"%s\"."
-msgstr ""
-
-#: apps/tagging/models.py:60
-#, python-format
-msgid "Multiple tags were given: \"%s\"."
-msgstr ""
-
-#: apps/tagging/models.py:460 apps/wh/models.py:214
-msgid "name"
-msgstr "имя"
-
-#: apps/tagging/models.py:466 apps/tagging/models.py:476
-msgid "tag"
-msgstr "таг"
-
-#: apps/tagging/models.py:467
-msgid "tags"
-msgstr "тэги"
-
-#: apps/tagging/models.py:486
-msgid "tagged item"
-msgstr ""
-
-#: apps/tagging/models.py:487
-msgid "tagged items"
-msgstr ""
-
-#: apps/tagging/utils.py:189
-msgid ""
-"If a list or tuple of tags is provided, they must all be tag names, Tag "
-"objects or Tag ids."
-msgstr ""
-
-#: apps/tagging/utils.py:191
-msgid "The tag input given was invalid."
-msgstr ""
-
-#: apps/tagging/utils.py:236
-#, python-format
-msgid "Invalid distribution algorithm specified: %s."
-msgstr ""
-
-#: apps/tagging/views.py:33
-msgid "tagged_object_list must be called with a queryset or a model."
-msgstr ""
-
-#: apps/tagging/views.py:39
-msgid "tagged_object_list must be called with a tag."
-msgstr ""
-
-#: apps/tagging/views.py:43
-#, python-format
-msgid "No Tag found matching \"%s\"."
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:19
-#, python-format
-msgid "tags_for_model tag was given an invalid model: %s"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:32
-#, python-format
-msgid "tag_cloud_for_model tag was given an invalid model: %s"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:56
-#, python-format
-msgid "tagged_objects tag was given an invalid model: %s"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:89
-#, python-format
-msgid "%s tag requires either three or five arguments"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:91
-#: apps/tagging/templatetags/tagging_tags.py:143
-#: apps/tagging/templatetags/tagging_tags.py:198
-#, python-format
-msgid "second argument to %s tag must be 'as'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:94
-#: apps/tagging/templatetags/tagging_tags.py:147
-#, python-format
-msgid "if given, fourth argument to %s tag must be 'with'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:96
-#, python-format
-msgid "if given, fifth argument to %s tag must be 'counts'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:141
-#, python-format
-msgid "%s tag requires either three or between five and seven arguments"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:155
-#, python-format
-msgid "%(tag)s tag's '%(option)s' option was not a valid integer: '%(value)s'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:164
-#, python-format
-msgid "%(tag)s tag's '%(option)s' option was not a valid choice: '%(value)s'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:170
-#, python-format
-msgid "%(tag)s tag was given an invalid option: '%(option)s'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:175
-#, python-format
-msgid "%(tag)s tag was given a badly formatted option: '%(option)s'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:196
-#, python-format
-msgid "%s tag requires exactly three arguments"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:221
-#, python-format
-msgid "%s tag requires exactly five arguments"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:223
-#, python-format
-msgid "second argument to %s tag must be 'in'"
-msgstr ""
-
-#: apps/tagging/templatetags/tagging_tags.py:225
-#, python-format
-msgid "fourth argument to %s tag must be 'as'"
-msgstr ""
-
 #: apps/utils/translations.py:4
 msgid "Misc"
 msgstr "Другое"
@@ -3558,6 +2620,10 @@ msgstr ""
 #: apps/wh/admin.py:25 apps/wh/forms.py:354
 msgid "Content"
 msgstr "Содержимое"
+
+#: apps/wh/admin.py:49 apps/wh/models.py:77
+msgid "Armies"
+msgstr "Армии"
 
 #: apps/wh/forms.py:37
 #, python-format
@@ -3599,6 +2665,14 @@ msgstr "Пользователь с таким JID'ом уже существу�
 #: apps/wh/forms.py:216
 msgid "-----"
 msgstr "----"
+
+#: apps/wh/forms.py:225 apps/wh/templatetags/whfilters.py:26
+msgid "Male"
+msgstr "Мужской"
+
+#: apps/wh/forms.py:226 apps/wh/templatetags/whfilters.py:27
+msgid "Female"
+msgstr "Женский"
 
 #: apps/wh/forms.py:227
 msgid "Not identified"
@@ -3709,6 +2783,10 @@ msgstr "фракция"
 msgid "side"
 msgstr "сторона"
 
+#: apps/wh/models.py:76
+msgid "Army"
+msgstr "Армия"
+
 #: apps/wh/models.py:90
 msgid "Mini Quote"
 msgstr "Мини цитата"
@@ -3800,6 +2878,14 @@ msgstr "Регистрационный SID"
 #: apps/wh/models.py:210
 msgid "RegisterSIDs"
 msgstr "Регистрационные SID'ы"
+
+#: apps/wh/models.py:214
+msgid "name"
+msgstr "имя"
+
+#: apps/wh/models.py:215 apps/wh/models.py:252 apps/wh/models.py:333
+msgid "description"
+msgstr "описание"
 
 #: apps/wh/models.py:217 apps/wh/models.py:340
 msgid "is general"
@@ -3986,19 +3072,15 @@ msgstr "Успешно зарегистрирован"
 msgid "Alter"
 msgstr "Изменить"
 
-#: apps/wh/views/views.py:132
+#: apps/wh/templatetags/whfilters.py:25
+msgid "Not Identified"
+msgstr "Не опознан"
+
+#: apps/wh/views/views.py:131
 msgid "There is no such user"
 msgstr "Такого пользователя нет"
 
-#: apps/wh/views/views.py:391
-msgid ""
-"You've exceeded limit of registration, please wait 10 minutes and try again, "
-"thank you"
-msgstr ""
-"Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 минут "
-"и попробуйте снова"
-
-#: apps/wh/views/views.py:911
+#: apps/wh/views/views.py:768
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
@@ -4170,6 +3252,541 @@ msgstr ""
 #: templates/static/timeout.html:7
 msgid "Timeout, please wait for your turn ;)"
 msgstr ""
+
+#~ msgid "You should write something"
+#~ msgstr "Вы должны что-нибудь написать"
+
+#~ msgid "You can not post over 10000 symbols within your comment!"
+#~ msgstr "Вы не можете запостить более 10.000 символов в ваш комментарий"
+
+#~ msgid "app_n_model has invalid format"
+#~ msgstr "в app_n_model был введен неправильный формат данных"
+
+#~ msgid "app_n_model should be written in right order: 'app.model'"
+#~ msgstr "app_n_model должн быть написан в правильном порядке: 'app.model'"
+
+#~ msgid "Approve"
+#~ msgstr "Утвердить"
+
+#~ msgid "Yes, i approve"
+#~ msgstr "Да, я подтверждаю"
+
+#~ msgid "WarMist no-replay notification"
+#~ msgstr "WarMist оповещение"
+
+#~ msgid "Not found"
+#~ msgstr "Не найден"
+
+#~ msgid "CSS"
+#~ msgstr "CSS"
+
+#~ msgid "Cascade Style Sheets"
+#~ msgstr "Каскадные таблицы стилей"
+
+#~ msgid "CSSes"
+#~ msgstr "CSSки"
+
+#~ msgid "object id"
+#~ msgstr "тип объекта"
+
+#~ msgid "Decoded Data"
+#~ msgstr "Декодированные данные"
+
+#~ msgid "The Objects on page"
+#~ msgstr "Объектов на страницу"
+
+#~ msgid "Comments on page"
+#~ msgstr "Комментариев на страницу"
+
+#~ msgid "Replays on page"
+#~ msgstr "Реплеев на страницу"
+
+#~ msgid "Rosters on page"
+#~ msgstr "Ростеров на страницу"
+
+#~ msgid "News on page"
+#~ msgstr "Новостей на страницу"
+
+#~ msgid "Private messages on page"
+#~ msgstr "Приватных сообщений на страницу"
+
+#~ msgid "Karma objects on page"
+#~ msgstr "Кармы на страницу"
+
+#~ msgid "Rates objects on page"
+#~ msgstr "Рейтов на страницу"
+
+#~ msgid "Hide JID from viewing by another users"
+#~ msgstr "Спрятать JID от просмотра другими пользователями"
+
+#~ msgid "Hide Email from viewing by another users"
+#~ msgstr "Спрятать Email от просмотра другими пользователями"
+
+#~ msgid "Hide UIN from viewing by another users"
+#~ msgstr "Спрятать UIN от просмотра другими пользователями"
+
+#~ msgid "Show karma values which equal to zero"
+#~ msgstr "Показывать значения кармы с отрицательным и нулевым показателем"
+
+#~ msgid "Show karma values which equal to zero only for your karma list"
+#~ msgstr ""
+#~ "Показывать значения кармы с показателем равным нулю только для вашего "
+#~ "карма листа"
+
+#~ msgid "Show humor status for users karma highness"
+#~ msgstr "Показывать статусы с юмором кармических велечин"
+
+#~ msgid "If you do not want to show your precense on the site check this on"
+#~ msgstr ""
+#~ "Если вы не хотите показывать вашего присутствия на сайте установите "
+#~ "включенным"
+
+#~ msgid ""
+#~ "Auto updates your subscription if you are reading the comments or object "
+#~ "you have been subscribed"
+#~ msgstr ""
+#~ "Автоматически обновляет вашу подписку, если вы читаете комментарии или "
+#~ "что-либо на что были подписаны"
+
+#~ msgid "Show Last News block"
+#~ msgstr "Показывать блок последних новостей"
+
+#~ msgid "Show Last Replays block"
+#~ msgstr "Показывать блок последних реплеев"
+
+#~ msgid "Show Quotes block"
+#~ msgstr "Показывать блок цитат"
+
+#~ msgid "Show Online Users block"
+#~ msgstr "Показывать блок онлайн пользователей"
+
+#~ msgid "Show deleted rosters"
+#~ msgstr "Показывать удаленные ростеры"
+
+#~ msgid "Last Replays block objects amount"
+#~ msgstr "Количество последних реплеев в блоке"
+
+#~ msgid "Last News block objects amount"
+#~ msgstr "Количество последних новостей в блоке"
+
+#~ msgid "Show karma block"
+#~ msgstr "Показывать блок кармы"
+
+#~ msgid "Enables autocomplete on site"
+#~ msgstr "Включить автокомплит на сайте"
+
+#~ msgid "Enables user css styles hosted in database"
+#~ msgstr "Включить пользовательский css хранимый в базе данных"
+
+#~ msgid "If it's on you will recieve email notifications"
+#~ msgstr "Если включено вы будете получать уведомления на почту"
+
+#~ msgid ""
+#~ "If it's on you will recieve jabber notifications (remember need "
+#~ "subscription)"
+#~ msgstr ""
+#~ "Если включено вы будете получать уведомления в jabber (помните о подписке)"
+
+#~ msgid "Show L4D stats block"
+#~ msgstr "Показывать l4d блок статистики"
+
+#~ msgid "You can not pass number lesser than 5 and greater than 15"
+#~ msgstr "Вы не можете вводить число меньше 5 или более 15"
+
+#~ msgid "You can not pass number lesser than 10"
+#~ msgstr "Вы не можете ввести число менее 10"
+
+#~ msgid "You can not pass number lesser than 40"
+#~ msgstr "Вы не можете ввести число более 40"
+
+#~ msgid "Do you realy want to delete this image?"
+#~ msgstr "Вы действительно хотите удалить это изображение?"
+
+#~ msgid "Do you realy want to delete this article?"
+#~ msgstr "Вы действительно хотите удалить эту статью?"
+
+#~ msgid "Do you realy want to purge this comment? O_O.. realy?"
+#~ msgstr "Вы действительно хотите удалить данный комментарий? Правда O_O..?"
+
+#~ msgid "Do you realy want to purge this replay?"
+#~ msgstr "Вы действительно хотите удалить этот реплей?"
+
+#~ msgid "Do you realy want to delete this comment?"
+#~ msgstr "Вы действительно хотите стереть этот коментарий?"
+
+#~ msgid "Do you realy want to delete this roster?"
+#~ msgstr "Вы действительно хотите удалить этот ростер?"
+
+#~ msgid "Do you realy want to unsubscribe this site object?"
+#~ msgstr "Вы правда хотите отписаться от данного объекта?"
+
+#~ msgid "Do you realy want to delete this battle report?"
+#~ msgstr "Вы правда хотите удалить данный батл репорт?"
+
+#~ msgid "Do you realy want to PURGE this comment?"
+#~ msgstr "Вы действительно хотите СТЕРЕТЬ этот комментарий?"
+
+#~ msgid ""
+#~ "You should use the same number of players as the number you've passed via "
+#~ "type or layout"
+#~ msgstr ""
+#~ "Вы должны ввести тоже количество игроков что и количество, которое вы "
+#~ "ввели в типе или схеме"
+
+#~ msgid ""
+#~ "You can choose only team1 or team2 as no more team are exist in this type"
+#~ msgstr ""
+#~ "Вы можете использовать только команда1 или комманда2, так как других "
+#~ "команд не присутствуют в указанном типе"
+
+#~ msgid "You can not pass more than '%i' races, less is available"
+#~ msgstr "Вы не можете ввести более '%i' рас, менее возможно"
+
+#~ msgid "Required"
+#~ msgstr "Обязательное поле"
+
+#~ msgid "You can not choose team which is about '%i' number"
+#~ msgstr "Вы не можете выбрать команду чей номер '%i'"
+
+#~ msgid "set"
+#~ msgstr "сет"
+
+#~ msgid "non standard"
+#~ msgstr "не стандартный"
+
+#~ msgid ""
+#~ "You should type exact %i nicks separated with commas arranged by team."
+#~ msgstr ""
+#~ "Вы должны указать точное число %i ников, разделенных запятой "
+#~ "упорядоченных по команде"
+
+#~ msgid "You should choose team 1 or team 2 as winners"
+#~ msgstr "Вы должны выбрать команду 1 или команду 2 в качестве победителя"
+
+#~ msgid "This field should be filled with layout"
+#~ msgstr "Данное пое должно быть заполнено схемой"
+
+#~ msgid ""
+#~ "You should choose team which is lesser one you've chosen, for example "
+#~ "team 1"
+#~ msgstr ""
+#~ "Вы должны выбрать команду чей номер меньше выбранного вами, например "
+#~ "команда 1"
+
+#~ msgid ""
+#~ "The number of nicks is greater than the number of players. The should be "
+#~ "equal"
+#~ msgstr ""
+#~ "Количество ников больше чем количество игроков. Количество ников должно "
+#~ "совпадать с количеством игроков"
+
+#~ msgid ""
+#~ "The number of players is greater then the number of nicks. The should be "
+#~ "equal"
+#~ msgstr ""
+#~ "Количество игроков больше чем количество ников. Они должны совпадать"
+
+#~ msgid "Field should contain string with number of player separated with vs"
+#~ msgstr ""
+#~ "Поле должно содержать строку с количеством игроков, разделенных через vs"
+
+#~ msgid "It seems string value or null stands before or after 'vs' delimiter"
+#~ msgstr "Кажется строковое значение или null стоит перед vs разделителем"
+
+#~ msgid ""
+#~ "The game does not support more than 8 players, and your amount of them "
+#~ "equals %i"
+#~ msgstr ""
+#~ "Игра не поддерживает более 8 игрков, количество указанное вами равно: %i"
+
+#~ msgid ""
+#~ "The field should be at least includes one race, for example space marines"
+#~ msgstr "Поле должно включать как минимум одну расу, например космодесант"
+
+#~ msgid "Replay field should be set"
+#~ msgstr "Поле реплея должно быть установлено"
+
+#~ msgid "Uploaded file should not be larger than 1Mb size"
+#~ msgstr "Загружаемый файл не должен превышать размер в 1 Мегабайт"
+
+#~ msgid "Jpeg, gif, png, jpg image only"
+#~ msgstr "Только jpeg, gif, png, jpg изрбражения"
+
+#~ msgid ""
+#~ "Upload a valid image. The file you uploaded was either not an image or a "
+#~ "corrupted image."
+#~ msgstr ""
+#~ "Зашруженный вами файл был поврежден или не является изображением. "
+#~ "Загрузите правильное изображение"
+
+#~ msgid "Uploaded image should not be larger than 2048x1024 pixels"
+#~ msgstr ""
+#~ "Загружаемое изображение не должно быть более 2048x1024 пикселей по размеру"
+
+#~ msgid ""
+#~ "Field should't be clean, if you have no gallery yet, please create one"
+#~ msgstr ""
+#~ "Поле не должно быть пустым, если у вас нет галереи еще, пожалуйста, "
+#~ "создайте её"
+
+#~ msgid "You should write more than 10 words for a comment"
+#~ msgstr "Вы должны написать как минимум 10 слов для комментария"
+
+#~ msgid "The length of gallery name was exceeded"
+#~ msgstr "Длина имени галереи превышена"
+
+#~ msgid "Upload date"
+#~ msgstr "Дата загрузки"
+
+#~ msgid "Replay"
+#~ msgstr "Реплей"
+
+#~ msgid "Uploaded date"
+#~ msgstr "Дата загрузки"
+
+#~ msgid "Short name"
+#~ msgstr "Короткое имя"
+
+#~ msgid "Addon name"
+#~ msgstr "Имя аддона"
+
+#~ msgid "Patch version"
+#~ msgstr "Версия патча"
+
+#~ msgid "Release Number"
+#~ msgstr "Номер релиза"
+
+#~ msgid "Addon version"
+#~ msgstr "Версия аддона"
+
+#~ msgid "Addon versions"
+#~ msgstr "Версии аддонов"
+
+#~ msgid "Team"
+#~ msgstr "Команда"
+
+#~ msgid "Non Std layout"
+#~ msgstr "Не стандартная схема"
+
+#~ msgid "Teams"
+#~ msgstr "Команды"
+
+#~ msgid "Races"
+#~ msgstr "Расы"
+
+#~ msgid "is set"
+#~ msgstr "сет"
+
+#~ msgid "Author"
+#~ msgstr "Автор"
+
+#~ msgid "Replays"
+#~ msgstr "Реплеи"
+
+#~ msgid "Original URL"
+#~ msgstr "URL оригинала"
+
+#~ msgid "Files"
+#~ msgstr "Файлы"
+
+#~ msgid "alter codex"
+#~ msgstr "изменить кодекс"
+
+#~ msgid "blocks"
+#~ msgstr "блокирует"
+
+#~ msgid "depends"
+#~ msgstr "зависит"
+
+#~ msgid "combines"
+#~ msgstr "комбинирует"
+
+#~ msgid "Units"
+#~ msgstr "Юниты"
+
+#~ msgid "Rebuild points"
+#~ msgstr "Пересчитать очки (pts)"
+
+#~ msgid "You can not link '%(src)s %(link)s' with '%(target)s' unit"
+#~ msgstr ""
+#~ "Вы не можете соединить '%(src)s %(link)s' вместе с %(target)s' юнитом"
+
+#~ msgid "You can not set amount more than its wargear limit with '%s'"
+#~ msgstr ""
+#~ "Вы не можете установить количество больше чем лимит вооружения в '%s'"
+
+#~ msgid ""
+#~ "You can not add this wargear or upgrade before your add '%s' to given unit"
+#~ msgstr ""
+#~ "Вы не можете добавить это вооружение или апгрейд перед тем, как взять "
+#~ "'%s' юнита"
+
+#~ msgid ""
+#~ "You can not add any of these titles: '%(dst)s' before delete '%(src)s'"
+#~ msgstr ""
+#~ "Вы не можете добавить следующие тайтлы: '%(dst)s' до удаления '%(src)s'"
+
+#~ msgid ""
+#~ "You can not take '%(gear_amount)s' number(s) of wargear, because it "
+#~ "depends on unit models amount, one point of wargear each '%(threshold)s' "
+#~ "models in unit"
+#~ msgstr ""
+#~ "Вы не можете взять '%(gear_amount)s' число(а) вооружения, потому что оно "
+#~ "зависит от количество моделей юнита, очки вооружения каждый по "
+#~ "'%(threshold)s' моделей в юните"
+
+#~ msgid ""
+#~ "You can not add this wargear or upgrade before add '%s' to your army list "
+#~ "(roster)"
+#~ msgstr ""
+#~ "Вы не можете добавить это вооружение или апгрейд до того как добавите "
+#~ "'%s' в ваш ростер"
+
+#~ msgid ""
+#~ "Combines weapon reach its limits, please add weapons below '%s' limit"
+#~ msgstr ""
+#~ "Комбинированное оружие достигло своих лимитов, пожалуйста, добавьте "
+#~ "оружие ниже лимита в '%s'"
+
+#~ msgid ""
+#~ "You can not add more models than its limit allows, min: '%(min)s', max: "
+#~ "'%(max)s'"
+#~ msgstr ""
+#~ "Вы не можете добавить больше моделей чем позволяет их лимит, мин: "
+#~ "'%(min)s', макс: '%(max)s'"
+
+#~ msgid ""
+#~ "This unit requires wargear includes: '%s' to proceed, please add them"
+#~ msgstr ""
+#~ "Данный юнит требует наличие вооружение, которое включает '%s' для того "
+#~ "чтобы пройти, пожалуйста добавьте его"
+
+#~ msgid ""
+#~ "Every '%(threshold)s' models you should append 1 additionalto your "
+#~ "%(wargear)s link"
+#~ msgstr ""
+#~ "Каждой '%(threshold)s' модели вы должны добавить 1-у дополнитеьную "
+#~ "%(wargear)s связь"
+
+#~ msgid "Revision"
+#~ msgstr "Ревизия"
+
+#~ msgid "roster points cache"
+#~ msgstr "количество очков ростера"
+
+#~ msgid "Auto roster"
+#~ msgstr "Авто ростер"
+
+#~ msgid "Auto rosters"
+#~ msgstr "Авто ростеры"
+
+#~ msgid "amount"
+#~ msgstr "количество"
+
+#~ msgid "wargear amount"
+#~ msgstr "количество варгира"
+
+#~ msgid "points cache for wargear"
+#~ msgstr "кеш очков для вооружения"
+
+#~ msgid "Wargear container"
+#~ msgstr "Контейнер вооружения"
+
+#~ msgid "Wargear containers"
+#~ msgstr "Контейнеры вооружения"
+
+#~ msgid "unit amount"
+#~ msgstr "количество юнитов"
+
+#~ msgid "points cache for unit"
+#~ msgstr "кеш очков для юнита"
+
+#~ msgid "Unit container"
+#~ msgstr "Юнит конейтенры"
+
+#~ msgid "Unit containers"
+#~ msgstr "Юнит контейнеры"
+
+#~ msgid "is dedicated"
+#~ msgstr "приписанная"
+
+#~ msgid "marks if transport could be dedicated"
+#~ msgstr "отмететь как приписанный транспорт"
+
+#~ msgid "is unique?"
+#~ msgstr "уникальный"
+
+#~ msgid "marks if its unique"
+#~ msgstr "отмечает, как уникального"
+
+#~ msgid "points per model unit"
+#~ msgstr "очков на каждую модель юнита"
+
+#~ msgid "min"
+#~ msgstr "мин"
+
+#~ msgid "minumal models allowed be taken within squad"
+#~ msgstr "минимальное количество моделей, которые можно взять в сквад"
+
+#~ msgid "max"
+#~ msgstr "макс"
+
+#~ msgid "maximum models allowed be taken within squad"
+#~ msgstr ""
+#~ "максимальное количество моделей нужное для того, чтобы их можно было "
+#~ "взять как отряд"
+
+#~ msgid "mwr amount"
+#~ msgstr "mwr количество"
+
+#~ msgid "must take wargear amount"
+#~ msgstr "должен взять вооружение в количестве"
+
+#~ msgid "Model unit"
+#~ msgstr "Модель юнита"
+
+#~ msgid "Model units"
+#~ msgstr "Модели юнитов"
+
+#~ msgid "threshold"
+#~ msgstr "граница"
+
+#~ msgid "every threshold number you should take an upgrade"
+#~ msgstr "при каждом достижении границы вы должны взять по апгрейду"
+
+#~ msgid "MWRUnit"
+#~ msgstr "MWRЮнит"
+
+#~ msgid "MWRUnits"
+#~ msgstr "MWRЮниты"
+
+#~ msgid "amount target"
+#~ msgstr "количество цели"
+
+#~ msgid "short title"
+#~ msgstr "короткий заголовок"
+
+#~ msgid "limit"
+#~ msgstr "лимит"
+
+#~ msgid "Wargear"
+#~ msgstr "Вооружение"
+
+#~ msgid "Wargears"
+#~ msgstr "Вооружения"
+
+#~ msgid "tag"
+#~ msgstr "таг"
+
+#~ msgid "tags"
+#~ msgstr "тэги"
+
+#~ msgid ""
+#~ "You've exceeded limit of registration, please wait 10 minutes and try "
+#~ "again, thank you"
+#~ msgstr ""
+#~ "Вы исчерпали свой лимит попыток регистрации, пожалуйста, подождите 10 "
+#~ "минут и попробуйте снова"
 
 #~ msgid "DateTime"
 #~ msgstr "ДатаВремя"

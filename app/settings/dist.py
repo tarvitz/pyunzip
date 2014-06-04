@@ -2,6 +2,7 @@
 # Django settings for WarMist project.
 import os
 from settings_path import rel_path
+
 try:
     import psycopg2
 except ImportError:
@@ -37,6 +38,7 @@ LANGUAGE_CODE = 'ru'
 SITE_ID = 1
 
 _ = lambda s: s
+
 LANGUAGES = (
     ('ru', _('Russian')),
     ('en', _('English')),
@@ -130,15 +132,17 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': (
+                '%(levelname)s %(asctime)s %(module)s '
+                '%(process)d %(thread)d %(message)s')
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'filters': {
-         'require_debug_false': {
-             '()': 'django.utils.log.RequireDebugFalse'
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
@@ -147,9 +151,9 @@ LOGGING = {
             'filters': ['require_debug_false', ],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
     },
@@ -159,30 +163,25 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'apps.files':{
+        'apps.files': {
             'level': "INFO",
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.core':{
+        'apps.core': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.farseer':{
+        'apps.thirdpaty.sleekxmpp.basexmpp': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.thirdpaty.sleekxmpp.basexmpp':{
+        'apps.thirdpaty.sleekxmpp.xmlstream.xmlstream': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
-        },
-        'apps.thirdpaty.sleekxmpp.xmlstream.xmlstream':{
-            'level': 'INFO',
-            'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
     },
 
@@ -300,10 +299,25 @@ DOCUMENT = {
     'sph_search_inc': 'includes/sphinx_search.html'
 }
 
+SYNTAX = (
+    ('textile', 'textile'), ('bb-code', 'bb-code'),
+)
 
-from apps.wh.settings import *
-from app.search_settings import *
-from apps.karma.settings import *
+SIGN_CHOICES = (
+    (1, '[*]'),
+    (2, '[*][*]'),
+    (3, '[+]'),
+    (4, '[+][+]'),
+    (5, '[x]'),
+    (6, '[x][x]'),
+    (7, _('[ban]')),
+    (8, _('[everban]')),
+)
+
+#OTHER SETTINGS
+READONLY_LEVEL = 5
+GLOBAL_SITE_NAME = 'http://w40k.net'
+
 
 #import djcelery
 #djcelery.setup_loader()
@@ -318,11 +332,12 @@ from apps.karma.settings import *
 #CELERY_REDIS_DB = 0
 #BROKER_URL = "redis://redis:6379/0"
 
+KARMA_COMMENTS_COUNT = 1
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
 MAX_DOCUMENT_SIZE = 1024 * 4  # 4096 bytes
 
 DEBUG_TOOLBAR = False
-DEBUG = True
+
 if DEBUG and DEBUG_TOOLBAR:
     INTERNAL_IPS = ('127.0.0.1',)
     INSTALLED_APPS += (
