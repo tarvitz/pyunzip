@@ -204,7 +204,6 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    'apps.tagging',
     'apps.utils',
     'apps.karma',
     'apps.pybb',
