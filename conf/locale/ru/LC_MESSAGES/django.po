@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-04 04:48+0400\n"
-"PO-Revision-Date: 2014-06-04 04:48+0400\n"
+"POT-Creation-Date: 2014-06-04 06:55+0400\n"
+"PO-Revision-Date: 2014-06-04 06:57+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -20,93 +20,61 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: app/settings/dist.py:41
+#: app/settings/dist.py:43
 msgid "Russian"
 msgstr "Русский"
 
-#: app/settings/dist.py:42
+#: app/settings/dist.py:44
 msgid "English"
 msgstr "Английский"
 
-#: app/settings/dist.py:278
+#: app/settings/dist.py:271
 msgid "winter"
 msgstr "зимняя"
 
-#: app/settings/dist.py:279
+#: app/settings/dist.py:272
 msgid "summer"
 msgstr "летняя"
 
-#: app/settings/dist.py:280
+#: app/settings/dist.py:273
 msgid "autumn"
 msgstr "осенняя"
 
-#: app/settings/dist.py:281
+#: app/settings/dist.py:274
 msgid "spring"
 msgstr "весенняя"
 
-#: app/settings/dist.py:282
+#: app/settings/dist.py:275
 msgid "void"
 msgstr "пустотная"
 
-#: app/settings/initials.py:3
-msgid ""
-"Here your header content\n"
-"(cut)\n"
-"Here your aftercut content"
-msgstr ""
-"Текст заголовка\n"
-"(cut)\n"
-"Остальное содержание"
+#: app/settings/dist.py:308
+msgid "[ban]"
+msgstr "[бан]"
 
-#: app/settings/messages.py:3
+#: app/settings/dist.py:309
+msgid "[everban]"
+msgstr "[навекибан]"
+
+#: app/settings/messages.py:4
 #, python-format
 msgid ""
 "\n"
-"    \n"
-"    %(user)s Greatings you and whole blacklibrary administration.\n"
-"    You have been invited to b3ban.blacklibrary.ru.\n"
-"    If you don't know whats this site/service does please ignore it or wait\n"
-"    for explanation from your friends playing in battlefield 3.\n"
-"    Please click follow the %(link)s and follow given instructions\n"
-"    to proceed the registration.\n"
+"  Your or somebody else requested password change for this email account.\n"
+"  If you're not the person who initiated password request procedure, please "
+"ignore\n"
+"  this letter or give a notice for service administration:\n"
+"  http://b3ban.blacklibrary.ru/contacts/\n"
 "\n"
-"    If you got this letter accidently, please ignore it, nothing bad would "
-"happen :)\n"
-"\n"
-"    Sincerely your b3ban.blacklibrary.ru administration\n"
-msgstr ""
-
-#: app/settings/messages.py:16
-#, python-format
-msgid ""
-"\n"
-"    Your or somebody else requested password change for this email account.\n"
-"    If you're not the person who initiated password request procedure, "
-"please ignore\n"
-"    this letter or give a notice for service administration:\n"
-"    http://b3ban.blacklibrary.ru/contacts/\n"
-"\n"
-"    Your password restore link: %(link)s\n"
-msgstr ""
-
-#: app/settings/messages.py:24
-#, python-format
-msgid ""
-"\n"
-"    Article you wrote had been rejected with reason: %(reason)s\n"
-"    Please fix the errors, mistakes and anything that reason says to\n"
-"    get the article posted on title page.\n"
-"\n"
-"    Thank you :)\n"
+"  Your password restore link: %(link)s\n"
 msgstr ""
 "\n"
-"   Статья, которую вы написали была отклонена по причине: \n"
-"   '%(reason)s'\n"
-"   Пожалуйста, исправьте все ошибки, а также причины по которым был дан "
-"отказ\n"
-"   для того, чтобы данную статью опубликовали на главной странице.\n"
-"   \n"
-"   Спасибо :)\n"
+"  Вы или кто-то еще запросили смену пароля на ваш почтовый адрес.\n"
+"  Если это не вы, пожалуйста проигнорируйте данное письмо или дайте знать о "
+"случившемся\n"
+"  администрации.\n"
+"\n"
+"  Ваша ссылка на восстановление пароля: %(link)s\n"
 
 #: apps/accounts/admin.py:14
 msgid "A user with that username already exists."
@@ -116,8 +84,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:32
-#: apps/accounts/forms.py:94 apps/wh/forms.py:396
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:35
+#: apps/accounts/forms.py:97 apps/wh/forms.py:396
 #: templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
@@ -133,8 +101,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:35
-#: apps/accounts/forms.py:97 apps/wh/forms.py:596
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:38
+#: apps/accounts/forms.py:100 apps/accounts/forms.py:201 apps/wh/forms.py:596
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -161,40 +129,64 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:21
+#: apps/accounts/forms.py:24
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:46
+#: apps/accounts/forms.py:49
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:57 apps/comments/forms.py:14
-#: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:238
+#: apps/accounts/forms.py:60 apps/comments/forms.py:14
+#: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:109
 #: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:69
+#: apps/accounts/forms.py:72
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:100 apps/wh/forms.py:599
+#: apps/accounts/forms.py:103 apps/accounts/forms.py:204 apps/wh/forms.py:599
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:103 apps/wh/forms.py:580
+#: apps/accounts/forms.py:106 apps/accounts/forms.py:184 apps/wh/forms.py:580
 #: templates/accounts/profile.html:40
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:106 templates/accounts/profile.html:32
+#: apps/accounts/forms.py:109 templates/accounts/profile.html:32
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:109
+#: apps/accounts/forms.py:112
 msgid "Captcha"
 msgstr "Капча"
+
+#: apps/accounts/forms.py:138 apps/wh/forms.py:499
+msgid "Password1 and Password2 does not match"
+msgstr "Пароли не совпадают"
+
+#: apps/accounts/forms.py:148 apps/wh/forms.py:509
+msgid "Your current password does not match with one you've input"
+msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
+
+#: apps/accounts/forms.py:177 apps/wh/forms.py:533
+msgid "No such user with such email"
+msgstr "Такого пользователя с данным email'ом нет"
+
+#: apps/accounts/forms.py:184 apps/wh/forms.py:580
+msgid "Your email"
+msgstr "Ваш email"
+
+#: apps/accounts/forms.py:193 apps/wh/forms.py:588
+msgid "Users with given email does not exists"
+msgstr "Пользователя с данным email не существует"
+
+#: apps/accounts/forms.py:213 apps/wh/forms.py:608
+msgid "Passwords don't match"
+msgstr "Пароли не совпадают"
 
 #: apps/accounts/models.py:24
 msgid "male"
@@ -305,13 +297,13 @@ msgstr "временная зона"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:254 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/accounts/models.py:259 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:183 apps/pybb/models.py:265 apps/wh/models.py:306
 #: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:255 apps/pybb/templates/pybb/head.html:35
+#: apps/accounts/models.py:260 apps/pybb/templates/pybb/head.html:35
 #: apps/pybb/templates/pybb/quick_access.html:41
 #: apps/pybb/templates/pybb/users.html:6
 msgid "Users"
@@ -325,13 +317,17 @@ msgstr "Пользователь с таким email уже существует
 msgid "You can not override user context"
 msgstr "Вы не можете перезаписать контекст пользователя"
 
-#: apps/accounts/tests/tests.py:194 apps/wh/forms.py:129 apps/wh/forms.py:314
+#: apps/accounts/tests/tests.py:198 apps/wh/forms.py:129 apps/wh/forms.py:314
 #: apps/wh/tests.py:202
 #, python-format
 msgid "Another user with %s nickname exists."
 msgstr "Другой пользователь с ником %s уже существует."
 
-#: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:88
+#: apps/accounts/views/views.py:185 apps/wh/views/views.py:768
+msgid "Your password requested to change"
+msgstr "Поступил запрос на изменение вашего пароля"
+
+#: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:87
 #: apps/tabletop/models.py:116
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44
@@ -358,12 +354,11 @@ msgstr "pk объекта"
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/comments/models.py:76 apps/karma/forms.py:27 apps/news/models.py:431
+#: apps/comments/models.py:76 apps/karma/forms.py:27 apps/news/models.py:369
 msgid "user"
 msgstr "пользователь"
 
-#: apps/comments/models.py:77 apps/core/models.py:23 apps/news/models.py:277
-#: apps/news/models.py:432
+#: apps/comments/models.py:77 apps/core/models.py:23 apps/news/models.py:370
 msgid "created on"
 msgstr "создано"
 
@@ -409,7 +404,8 @@ msgstr "Слежение за комментариями"
 #: apps/tabletop/templates/tabletop/roster.html:7
 #: apps/tabletop/templates/tabletop/roster_list.html:5
 #: apps/wh/templates/accounts/change_password.html:6
-#: apps/wh/templates/accounts/pm.html:11 templates/accounts/profile.html:5
+#: apps/wh/templates/accounts/pm.html:11
+#: templates/accounts/password_change.html:4 templates/accounts/profile.html:5
 #: templates/accounts/profile_update.html:4 templates/static/timeout.html:4
 msgid "forum"
 msgstr "форум"
@@ -528,7 +524,7 @@ msgstr "истекает"
 msgid "expired?"
 msgstr "истекает?"
 
-#: apps/core/models.py:27 apps/news/models.py:280
+#: apps/core/models.py:27
 msgid "updated on"
 msgstr "обновлено"
 
@@ -644,10 +640,9 @@ msgstr "Эскиз"
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:104 apps/menu/models.py:8 apps/news/models.py:44
-#: apps/news/models.py:61 apps/news/models.py:250 apps/news/models.py:261
-#: apps/news/models.py:321 apps/news/models.py:341 apps/pybb/models.py:287
-#: apps/pybb/models.py:372 apps/tabletop/models.py:53
+#: apps/files/models.py:104 apps/menu/models.py:8 apps/news/models.py:43
+#: apps/news/models.py:60 apps/news/models.py:259 apps/news/models.py:279
+#: apps/pybb/models.py:287 apps/pybb/models.py:372 apps/tabletop/models.py:53
 #: apps/tabletop/models.py:91 apps/tabletop/models.py:200 apps/wh/models.py:34
 #: apps/wh/models.py:163
 msgid "title"
@@ -860,7 +855,7 @@ msgstr "правка изображения"
 msgid "delete image"
 msgstr "удалить изображение"
 
-#: apps/karma/admin.py:20 apps/news/admin.py:23 apps/wh/admin.py:21
+#: apps/karma/admin.py:20 apps/news/admin.py:30 apps/wh/admin.py:21
 msgid "Base"
 msgstr "Базовый"
 
@@ -1020,120 +1015,96 @@ msgstr "Вертикальные меню"
 msgid "news"
 msgstr "новости"
 
-#: apps/news/admin.py:10
+#: apps/news/admin.py:11
 msgid "Approved news"
 msgstr "Подтвержденные новости"
 
-#: apps/news/admin.py:15
+#: apps/news/admin.py:18
 msgid "Revert approved flag"
 msgstr "Поменять флаг подтвержденности"
 
-#: apps/news/admin.py:37
+#: apps/news/admin.py:43
 msgid "Stuff"
 msgstr "Стафф"
 
-#: apps/news/forms.py:30
+#: apps/news/forms.py:21
 msgid "approved?"
 msgstr "утверждено?"
 
-#: apps/news/forms.py:31
+#: apps/news/forms.py:22
 msgid "marks if the article would be approved"
 msgstr "помечает статью как утвержденную по умолчанию"
 
-#: apps/news/forms.py:73
-msgid "send notification"
-msgstr "отослать оповещение"
-
-#: apps/news/forms.py:74
-msgid "sends notification to user email"
-msgstr "отсылает оповещение через email"
-
-#: apps/news/forms.py:119
-msgid "You can not use more then 20000 symbols while you post article"
-msgstr "Вы не можете использовать более 20.000 символов на статью =)"
-
-#: apps/news/forms.py:140
-msgid "You can only use symbols spaces and \"-\" sign"
-msgstr "Вы можете использовать только пробелы и знак \"-\" (минус)"
-
-#: apps/news/forms.py:153
-msgid "Unknow type of file"
-msgstr "Неизвестный тип файла"
-
-#: apps/news/forms.py:155
-msgid "Only zip files supported"
-msgstr "Только zip файлы поддерживаются"
-
-#: apps/news/models.py:23 apps/news/models.py:82 apps/news/models.py:282
-#: apps/tabletop/models.py:219 apps/tabletop/templates/reports.html:48
+#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:219
+#: apps/tabletop/templates/reports.html:48
 msgid "approved"
 msgstr "утверждено"
 
-#: apps/news/models.py:24
+#: apps/news/models.py:22
 msgid "rejeceted"
 msgstr "отклонена"
 
-#: apps/news/models.py:25
+#: apps/news/models.py:23
 msgid "queued"
 msgstr "в очереди"
 
-#: apps/news/models.py:26
+#: apps/news/models.py:24
 msgid "revision"
 msgstr "в доработку"
 
-#: apps/news/models.py:32 apps/news/models.py:38 apps/pybb/models.py:30
+#: apps/news/models.py:30 apps/news/models.py:37 apps/pybb/models.py:30
 #: apps/pybb/models.py:54
 msgid "Category"
 msgstr "Категория"
 
-#: apps/news/models.py:39 apps/pybb/models.py:31
+#: apps/news/models.py:38 apps/pybb/models.py:31
 msgid "Categories"
 msgstr "Категории"
 
-#: apps/news/models.py:45 apps/news/models.py:65 apps/wh/models.py:96
+#: apps/news/models.py:44 apps/news/models.py:64 apps/wh/models.py:96
 #: apps/wh/models.py:138
 msgid "author"
 msgstr "автор"
 
-#: apps/news/models.py:46 apps/news/models.py:75 apps/news/models.py:270
-#: apps/news/models.py:344 apps/wh/models.py:83 apps/wh/models.py:128
+#: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:282
+#: apps/wh/models.py:83 apps/wh/models.py:128
 msgid "content"
 msgstr "контент"
 
-#: apps/news/models.py:47 apps/tabletop/models.py:220
+#: apps/news/models.py:46 apps/tabletop/models.py:220
 msgid "ip address"
 msgstr "IP адрес"
 
-#: apps/news/models.py:49 apps/news/models.py:272 apps/tabletop/models.py:221
-#: apps/wh/models.py:176 apps/wh/models.py:260
+#: apps/news/models.py:48 apps/tabletop/models.py:221 apps/wh/models.py:176
+#: apps/wh/models.py:260
 msgid "syntax"
 msgstr "синтаксис"
 
-#: apps/news/models.py:69
+#: apps/news/models.py:68
 msgid "editor"
 msgstr "редактор"
 
-#: apps/news/models.py:72
+#: apps/news/models.py:71
 msgid "original URL"
 msgstr "URL оригинала"
 
-#: apps/news/models.py:77 apps/wh/models.py:167
+#: apps/news/models.py:76 apps/wh/models.py:167
 msgid "cache content"
 msgstr "кеш контента"
 
-#: apps/news/models.py:80
+#: apps/news/models.py:79
 msgid "dateTime"
 msgstr "Дата-Время"
 
-#: apps/news/models.py:84 apps/news/models.py:284 apps/news/models.py:288
+#: apps/news/models.py:83
 msgid "author ip address"
 msgstr "ip адрес автора"
 
-#: apps/news/models.py:86
+#: apps/news/models.py:85
 msgid "is event"
 msgstr "событие"
 
-#: apps/news/models.py:92
+#: apps/news/models.py:91
 msgid "reason"
 msgstr "причина"
 
@@ -1145,225 +1116,197 @@ msgstr "отправить"
 msgid "marks if news notification should resend"
 msgstr "да, если нужно отослать оповещение"
 
-#: apps/news/models.py:163
+#: apps/news/models.py:164
 msgid "Archived Article"
 msgstr "Архивная статья"
 
-#: apps/news/models.py:164
+#: apps/news/models.py:165
 msgid "Archived News"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:181
+#: apps/news/models.py:173
 msgid "Can edit archived news"
 msgstr "Может редактировать архивные новости"
 
-#: apps/news/models.py:183 apps/news/models.py:184
+#: apps/news/models.py:175 apps/news/models.py:176
 msgid "Archived news"
 msgstr "Архивные новости"
 
-#: apps/news/models.py:239
+#: apps/news/models.py:232
 msgid "Article"
 msgstr "Статья"
 
-#: apps/news/models.py:240
+#: apps/news/models.py:233
 msgid "News"
 msgstr "Новости"
 
-#: apps/news/models.py:242
+#: apps/news/models.py:235
 msgid "Can edit news"
 msgstr "Может править новости"
 
-#: apps/news/models.py:243
+#: apps/news/models.py:236
 msgid "Can delete and restore comments"
 msgstr "Может удалять и восстанавливать комментарии"
 
-#: apps/news/models.py:244
+#: apps/news/models.py:237
 msgid "Can edit comments"
 msgstr "Может редактировать комментарии"
 
-#: apps/news/models.py:245
+#: apps/news/models.py:238
 msgid "Can purge comments"
 msgstr "Может удалять комментарии"
 
-#: apps/news/models.py:251 apps/wh/models.py:249 apps/wh/models.py:330
-msgid "codename"
-msgstr "кодовое имя"
-
-#: apps/news/models.py:255
-msgid "Meating Type"
-msgstr "Тип встреч"
-
-#: apps/news/models.py:256
-msgid "Meating Types"
-msgstr "Типы встреч"
-
-#: apps/news/models.py:262 apps/news/models.py:361 apps/wh/models.py:229
-msgid "type"
-msgstr "тип"
-
-#: apps/news/models.py:264
-msgid "owner"
-msgstr "владелец"
-
-#: apps/news/models.py:267
-msgid "members"
-msgstr "участники"
-
-#: apps/news/models.py:299
-msgid "Meating"
-msgstr "Встреча"
-
-#: apps/news/models.py:300
-msgid "Meatings"
-msgstr "Встреча"
-
-#: apps/news/models.py:305
+#: apps/news/models.py:243
 msgid "Game"
 msgstr "Игра"
 
-#: apps/news/models.py:306
+#: apps/news/models.py:244
 msgid "Tournament"
 msgstr "Турнир"
 
-#: apps/news/models.py:307
+#: apps/news/models.py:245
 msgctxt "cart order"
 msgid "Order"
 msgstr "Заказ"
 
-#: apps/news/models.py:308
+#: apps/news/models.py:246
 msgctxt "pre-release of smth"
 msgid "Pre-release"
 msgstr "Пререлиз"
 
-#: apps/news/models.py:309
+#: apps/news/models.py:247
 msgctxt "release of smth"
 msgid "Release"
 msgstr "Релиз"
 
-#: apps/news/models.py:313
+#: apps/news/models.py:251
 msgid "Warhammer 40000"
 msgstr "Warhammer 40000"
 
-#: apps/news/models.py:315
+#: apps/news/models.py:253
 msgid "Magic the gathering"
 msgstr "Magic the gathering"
 
-#: apps/news/models.py:316
+#: apps/news/models.py:254
 msgid "Board gaming"
 msgstr "Настольные игры"
 
-#: apps/news/models.py:322
+#: apps/news/models.py:260
 msgid "event place title"
 msgstr "название места ивента"
 
-#: apps/news/models.py:323
+#: apps/news/models.py:261
 msgid "address"
 msgstr "адрес"
 
-#: apps/news/models.py:324
+#: apps/news/models.py:262
 msgid "event place address"
 msgstr "адрес места события"
 
-#: apps/news/models.py:326
+#: apps/news/models.py:264
 msgid "contacts"
 msgstr "контакты"
 
-#: apps/news/models.py:327
+#: apps/news/models.py:265
 msgid "contacts/help who to find it"
 msgstr "контакты/помощь где, кого искать"
 
-#: apps/news/models.py:334
+#: apps/news/models.py:272
 msgid "Event Place"
 msgstr "Место события"
 
-#: apps/news/models.py:335
+#: apps/news/models.py:273
 msgid "Event Places"
 msgstr "Места событий"
 
-#: apps/news/models.py:341
+#: apps/news/models.py:279
 msgid "event title"
 msgstr "название события"
 
-#: apps/news/models.py:346
+#: apps/news/models.py:284
 msgid "content event text, description, further manual and so on"
 msgstr "текст события, описания, инструкции и так далее"
 
-#: apps/news/models.py:350
+#: apps/news/models.py:288
 msgid "content html"
 msgstr "html контент"
 
-#: apps/news/models.py:351
+#: apps/news/models.py:289
 msgid "rendered html content"
 msgstr "html рендер контента"
 
-#: apps/news/models.py:354
+#: apps/news/models.py:292
 msgid "date start"
 msgstr "дата начала"
 
-#: apps/news/models.py:354
+#: apps/news/models.py:292
 msgid "when event date starts"
 msgstr "когда событие начинается"
 
-#: apps/news/models.py:357
+#: apps/news/models.py:295
 msgid "date end"
 msgstr "дата окончания"
 
-#: apps/news/models.py:357
+#: apps/news/models.py:295
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:365
+#: apps/news/models.py:299 apps/wh/models.py:229
+msgid "type"
+msgstr "тип"
+
+#: apps/news/models.py:303
 msgid "league"
 msgstr "лига"
 
-#: apps/news/models.py:366
+#: apps/news/models.py:304
 msgid "game league"
 msgstr "игровая лига"
 
-#: apps/news/models.py:372
+#: apps/news/models.py:310
 msgid "event place"
 msgstr "место проведения"
 
-#: apps/news/models.py:376
+#: apps/news/models.py:314
 msgid "participants would take a part in the event"
 msgstr "участники, которые будут принимать участие в событии"
 
-#: apps/news/models.py:380 apps/pybb/models.py:308
+#: apps/news/models.py:318 apps/pybb/models.py:308
 msgid "is finished"
 msgstr "завершен"
 
-#: apps/news/models.py:383
+#: apps/news/models.py:321
 msgid "is all day"
 msgstr "весь день"
 
-#: apps/news/models.py:384
+#: apps/news/models.py:322
 msgid "marks if event could place whole day"
 msgstr ""
 "отмечает, если событие будет проходить весь день (убирает временные отметки)"
 
-#: apps/news/models.py:422
+#: apps/news/models.py:360
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:423 apps/news/templates/events/calendar.html:23
+#: apps/news/models.py:361 apps/news/templates/events/calendar.html:23
 #: apps/news/templates/events/events.html:13
 #: apps/pybb/templates/pybb/head.html:44
 msgid "Events"
 msgstr "События"
 
-#: apps/news/models.py:428
+#: apps/news/models.py:366
 msgid "event"
 msgstr "событие"
 
-#: apps/news/models.py:439
+#: apps/news/models.py:377
 msgid "Event watch"
 msgstr "Просмотр события"
 
-#: apps/news/models.py:440
+#: apps/news/models.py:378
 msgid "Event watches"
 msgstr "Просмотр событий"
 
-#: apps/news/signals.py:26
+#: apps/news/signals.py:24
 msgid "Your article changed status"
 msgstr "Статус вашей статьи был изменен"
 
@@ -1903,11 +1846,12 @@ msgstr "Новый ответ"
 
 #: apps/pybb/templates/pybb/base.html:53
 #: apps/pybb/templates/pybb/post_template.html:33
-#: templates/base_template.html:53
+#: templates/base_template.html:53 templates/error_template.html:26
 msgid "open text"
 msgstr "показать"
 
 #: apps/pybb/templates/pybb/base.html:53 templates/base_template.html:53
+#: templates/error_template.html:26
 msgid "close text"
 msgstr "скрыть"
 
@@ -2735,18 +2679,6 @@ msgstr "Вы ввели не верный ответ"
 msgid "Something went wrong :(, please try again"
 msgstr "Что-то пошло не так как планировалось =("
 
-#: apps/wh/forms.py:499
-msgid "Password1 and Password2 does not match"
-msgstr "Пароли не совпадают"
-
-#: apps/wh/forms.py:509
-msgid "Your current password does not match with one you've input"
-msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
-
-#: apps/wh/forms.py:533
-msgid "No such user with such email"
-msgstr "Такого пользователя с данным email'ом нет"
-
 #: apps/wh/forms.py:548
 msgid "password"
 msgstr "пароль"
@@ -2758,18 +2690,6 @@ msgstr "Пользователь или пароль не совпадают"
 #: apps/wh/forms.py:566
 msgid "You have been banned ;)"
 msgstr "Вас забанили :)"
-
-#: apps/wh/forms.py:580
-msgid "Your email"
-msgstr "Ваш email"
-
-#: apps/wh/forms.py:588
-msgid "Users with given email does not exists"
-msgstr "Пользователя с данным email не существует"
-
-#: apps/wh/forms.py:608
-msgid "Passwords don't match"
-msgstr "Пароли не совпадают"
 
 #: apps/wh/models.py:30
 msgid "сodename"
@@ -2915,6 +2835,10 @@ msgstr "CSS id"
 msgid "short name"
 msgstr "короткое имя"
 
+#: apps/wh/models.py:249 apps/wh/models.py:330
+msgid "codename"
+msgstr "кодовое имя"
+
 #: apps/wh/models.py:254
 msgid "Lower magnitude more powerfull"
 msgstr "Меньше величина более мощна"
@@ -2979,27 +2903,15 @@ msgstr ""
 msgid "Can set warnings"
 msgstr "Может устанавливать предупреждения"
 
-#: apps/wh/settings.py:15
-msgid "[ban]"
-msgstr "[бан]"
-
-#: apps/wh/settings.py:16
-msgid "[everban]"
-msgstr "[навекибан]"
-
 #: apps/wh/templates/accounts/change_password.html:7
-#: apps/wh/templates/accounts/index.html:44 templates/accounts/profile.html:6
+#: apps/wh/templates/accounts/index.html:44
+#: templates/accounts/password_change.html:5 templates/accounts/profile.html:6
 msgid "profile"
 msgstr "профиль"
 
 #: apps/wh/templates/accounts/change_password.html:8
 msgid "change password"
 msgstr "сменить пароль"
-
-#: apps/wh/templates/accounts/login.html:10
-#: templates/forms/login_modal.html:11 templates/forms/login_modal.html:38
-msgid "Login"
-msgstr "Логин"
 
 #: apps/wh/templates/accounts/password_changed.html:3
 msgid "Successfully changed"
@@ -3080,10 +2992,6 @@ msgstr "Не опознан"
 msgid "There is no such user"
 msgstr "Такого пользователя нет"
 
-#: apps/wh/views/views.py:768
-msgid "Your password requested to change"
-msgstr "Поступил запрос на изменение вашего пароля"
-
 #: templates/404.html:6
 msgid "Page not found"
 msgstr "Страница не найдена"
@@ -3116,11 +3024,28 @@ msgstr "Обновить"
 msgid "Your account have been banned, sorry :)"
 msgstr "Вас забанили :), приносим свои извинения."
 
-#: templates/accounts/password_change.html:3
+#: templates/accounts/login.html:6
+msgid "Sign in"
+msgstr "Войти"
+
+#: templates/accounts/login.html:7
+msgid "Sign up"
+msgstr "Подписаться"
+
+#: templates/accounts/login.html:8
+msgid "Passowrd recover"
+msgstr "Восстановление пароля"
+
+#: templates/accounts/login.html:14 templates/forms/login_modal.html:11
+#: templates/forms/login_modal.html:38
+msgid "Login"
+msgstr "Логин"
+
+#: templates/accounts/password_change.html:8
 msgid "Password change"
 msgstr "Смена пароля"
 
-#: templates/accounts/password_change.html:7
+#: templates/accounts/password_change.html:10
 msgid "Change"
 msgstr "Изменить"
 
@@ -3132,7 +3057,7 @@ msgstr "Ваш пароль был успешно изменен"
 msgid "Password recover initiate procedure"
 msgstr "Процедура восстановления пароля"
 
-#: templates/accounts/password_restore_initiate.html:7
+#: templates/accounts/password_restore_initiate.html:5
 msgid "Initiate"
 msgstr "Начать"
 
@@ -3252,6 +3177,68 @@ msgstr ""
 #: templates/static/timeout.html:7
 msgid "Timeout, please wait for your turn ;)"
 msgstr ""
+
+#~ msgid ""
+#~ "Here your header content\n"
+#~ "(cut)\n"
+#~ "Here your aftercut content"
+#~ msgstr ""
+#~ "Текст заголовка\n"
+#~ "(cut)\n"
+#~ "Остальное содержание"
+
+#~ msgid ""
+#~ "\n"
+#~ "    Article you wrote had been rejected with reason: %(reason)s\n"
+#~ "    Please fix the errors, mistakes and anything that reason says to\n"
+#~ "    get the article posted on title page.\n"
+#~ "\n"
+#~ "    Thank you :)\n"
+#~ msgstr ""
+#~ "\n"
+#~ "   Статья, которую вы написали была отклонена по причине: \n"
+#~ "   '%(reason)s'\n"
+#~ "   Пожалуйста, исправьте все ошибки, а также причины по которым был дан "
+#~ "отказ\n"
+#~ "   для того, чтобы данную статью опубликовали на главной странице.\n"
+#~ "   \n"
+#~ "   Спасибо :)\n"
+
+#~ msgid "send notification"
+#~ msgstr "отослать оповещение"
+
+#~ msgid "sends notification to user email"
+#~ msgstr "отсылает оповещение через email"
+
+#~ msgid "You can not use more then 20000 symbols while you post article"
+#~ msgstr "Вы не можете использовать более 20.000 символов на статью =)"
+
+#~ msgid "You can only use symbols spaces and \"-\" sign"
+#~ msgstr "Вы можете использовать только пробелы и знак \"-\" (минус)"
+
+#~ msgid "Unknow type of file"
+#~ msgstr "Неизвестный тип файла"
+
+#~ msgid "Only zip files supported"
+#~ msgstr "Только zip файлы поддерживаются"
+
+#~ msgid "Meating Type"
+#~ msgstr "Тип встреч"
+
+#~ msgid "Meating Types"
+#~ msgstr "Типы встреч"
+
+#~ msgid "owner"
+#~ msgstr "владелец"
+
+#~ msgid "members"
+#~ msgstr "участники"
+
+#~ msgid "Meating"
+#~ msgstr "Встреча"
+
+#~ msgid "Meatings"
+#~ msgstr "Встреча"
 
 #~ msgid "You should write something"
 #~ msgstr "Вы должны что-нибудь написать"
@@ -3888,9 +3875,6 @@ msgstr ""
 #~ msgid "Logged in as "
 #~ msgstr "Выполнен вход под"
 
-#~ msgid "Sign up"
-#~ msgstr "Подписаться"
-
 #~ msgid "Search powered by Google"
 #~ msgstr "Поиск"
 
@@ -3914,9 +3898,6 @@ msgstr ""
 
 #~ msgid "Expired"
 #~ msgstr "Истекает"
-
-#~ msgid "Sign"
-#~ msgstr "Знак"
 
 #~ msgid ""
 #~ "You can not use more than 1000 symbols within headline news editing, "
