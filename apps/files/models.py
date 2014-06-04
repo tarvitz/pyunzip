@@ -45,8 +45,7 @@ class Gallery(MetaGallery):
         verbose_name_plural = _('Galleries')
 
 
-class Image(models.Model): 
-    @staticmethod
+class Image(models.Model):
     def valid_alias(val):
         if val.replace('_', '').isalnum():
             return val
