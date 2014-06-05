@@ -55,7 +55,7 @@
                             {% if user.is_superuser %}
                             <li><a href="/admin/">{% trans "Admincp" %}</a></li>
                             {% endif %}
-                            <li><a href="{% url "wh:logout" %}">{% trans "Log out" %}</a></li>
+                            <li><a href="{% url "accounts:logout" %}">{% trans "Log out" %}</a></li>
                         </ul>
                     </li>
                     <li class='dropdown'>

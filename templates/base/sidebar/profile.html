@@ -23,17 +23,10 @@
                         <a class='icon-edit tiny' data-title="Редактировать свой профиль" rel='tooltip'
                            href='{% url "accounts:profile-update" %}'></a>
                     </li>
-                    {% comment %}
-                    <li class='lvl2'><a rel='twipsy' href='{% url "accounts:profile-update" %}' title='Настройки профиля'>Править</a></li>
-                    <li class='lvl2'><a rel='twipsy' href='{% url "core:settings" %}' title='Пользовательские настройки,experemental'>Настройки</a></li>
-                    <li class='lvl2'><a rel='twipsy' href='{% url "core:subscription" %}' title='Пользовательские подписки,experemental'>Подписка</a></li>
-                    {% endcomment %}
                     <li><a rel='twipsy' href='{% url "karma:self" %}' title='Сила вашей положительности или отрицательности в глазах других обитателей ресурса'>Моя карма</a>
                     <li><a rel='twipsy' href='{% url "tabletop:rosters" %}' title='Ваши расписки армий по настолке'>Мои ростеры</a>
                         <!--<a rel='twipsy' href='{% url "tabletop:roster-add" %}' data-title='Добавить ростер'>[<i class='icon-plus icon-white'></i>]</a></li>-->
-                    <li><a rel='twipsy' href='{% url "news:news-user" %}'>Мои новости</a></li>
                     <li><a rel='twipsy' href='{% url "files:files" %}'>Мои файлы</a></li>
-                    <li><a rel='twipsy' href='{% url "tabletop:battle-reports-self" %}'>Мои репорты</a></li>
                 </ul>
         </div>
         {% endif %}
@@ -45,24 +38,17 @@
             <span class='reflects_left'></span>
             <ul>
                 {% if not user.is_authenticated %}
-                    <li><a data-href="{% url "wh:login" %}" href='#login-modal' data-toggle='modal'>Логин</a> |
+                    <li><a data-href="{% url "accounts:login" %}" href='#login-modal' data-toggle='modal'>Логин</a> |
                         <a href='{% url "accounts:register" %}'>Регистрация</a>
                     </li>
-                <li class='lvl2'><a href='{% url "wh:password-restore-initiate" %}'>востановление пароля</a></li>{% endif %}
+                <li class='lvl2'><a href='{% url "accounts:password-restore-initiate" %}'>востановление пароля</a></li>{% endif %}
                 <li><a rel='twipsy' href='{% url "wh:users" %}' title='Обитатели ресурса'>Участники</a></li>
                 <li><a rel='twipsy' href="{% url 'news:index' %}" title='Новости, что тут еще сказать - читаем'>Новости</a>
-                <span class='feeds'><a href="{% url "feed-news-atom" %}">[atom</a>|
-                    <a href="{% url "feed-news" %}">rss]</a></span>
                 </li>
                 <li><a rel='twipsy' title='Пользовательские расписки армий' href="{% url "tabletop:rosters-index" %}">Ростеры</a></li>
                 <li><a rel='twipsy' title='Батл репорты с полей сражений' href='{% url "tabletop:battle-reports" %}'>Батл репорты</a></li>
                 <li><a rel='twipsy' href='{% url "files:galleries" %}' title='Простенькая галерея ;)'>Галерея</a></li>
-                {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url "files:image-upload" %}' title='загрузить изображение в галерею'>добавить</a></li>
-                {% comment %}{% if user.is_staff %}
-                <li><a rel='twipsy' href="{% url "files:files-index" %}" title='Небольшое хранилище файлов'>Файлы</a></li>
-                {% endif %}{% endcomment %}
-                {% comment %}<li><a href='{% url apps.wh.views.view_wish_list %}'>Пожелания</a></li>
-                <li class='lvl2'><a href='{% url apps.wh.views.add_wish %}'>добавить</a></li>{% endcomment %}{% endif %}
+                {% if user.is_authenticated and user.is_active %}<li class='lvl2'><a rel='twipsy' href='{% url "files:image-upload" %}' title='загрузить изображение в галерею'>добавить</a></li>{% endif %}
             </ul>
         </div>
      </div>

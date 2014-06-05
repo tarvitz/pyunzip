@@ -7,6 +7,7 @@ from apps.accounts import views
 urlpatterns = patterns(
     'apps.accounts.views',
     url(r'^login/$', views.LoginView.as_view(), name='login'),
+    url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^profile/$',
         login_required(views.ProfileSelfView.as_view()), name='profile'),
     url(r'^profiles/(?P<pk>\d+)/$',
@@ -26,8 +27,6 @@ urlpatterns = patterns(
         name='password-change',
     ),
     url(r'^register/$', views.RegisterView.as_view(), name='register'),
-
-    url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^profile/update/$', views.ProfileUpdateView.as_view(),
         name='profile-update'),
     url(r'^register/success/$', direct_to_template,
