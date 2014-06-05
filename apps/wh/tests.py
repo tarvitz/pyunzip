@@ -1,7 +1,5 @@
 # coding: utf-8
-#from django.utils import unittest
 
-import re
 from django.test import TestCase
 try:
     from django.contrib.auth import get_user_model
@@ -9,9 +7,9 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from apps.wh.models import (
-    Side, RegisterSid, Rank, RankType, PM
+    Rank, RankType, PM
 )
-from apps.core.models import UserSID
+
 from apps.core.tests import TestHelperMixin
 from django.core.urlresolvers import reverse, reverse_lazy, NoReverseMatch
 from django.utils.unittest import skipIf
@@ -117,21 +115,6 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('image', response.get('Content-Type'))
 
-    def test_race_icon(self):
-        messages = []
-        for side in Side.objects.all():
-            url = reverse('wh:race-icon', args=(side.name, ))
-            response = self.client.get(url, follow=True)
-            self.assertEqual(response.status_code, 200)
-            try:
-                self.assertEqual(response.get('Content-Type'), 'image/png')
-            except AssertionError as err:
-                messages.append({'err': err})
-        if messages:
-            for msg in messages:
-                print "Race icon failed: %(err)s" % msg
-            raise AssertionError
-
     def test_get_armies(self):
         # TODO: refactor this functional
         url = reverse('json:wh:armies', args=(1, ))
@@ -161,7 +144,8 @@ class JustTest(TestHelperMixin, TestCase):
         count = u.warning_set.count()
         self.assertEqual(count, 0)
         # could not alter warning for user which is not exists
-        increase_url = reverse('wh:warning-alter', args=('not_existing_user', 'increase'))
+        increase_url = reverse('wh:warning-alter', args=('not_existing_user',
+                                                         'increase'))
         response = self.client.get(increase_url)
         self.assertEqual(response.status_code, 404)
 
@@ -228,7 +212,6 @@ class JustTest(TestHelperMixin, TestCase):
         edit = deepcopy(post)
         edit.update({'addressee': admin})
         self.check_state(pm, edit, check=self.assertEqual)
-
 
     def test_json_pm_fetch(self):
         logged = self.client.login(username='user', password='123456')

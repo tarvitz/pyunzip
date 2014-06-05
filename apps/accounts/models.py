@@ -97,7 +97,6 @@ class User(PermissionsMixin, AbstractBaseUser):
                               blank=True, null=True, default=0)
     about = models.CharField(_('about myself'), max_length=512, blank=True,
                              null=True)
-    skin = models.ForeignKey('wh.Skin', null=True, blank=True)
     tz = models.FloatField(_('time zone'), choices=TZ_CHOICES, default=0)
     settings = PickledObjectField(_('Settings'), null=True, blank=True)
     # managers

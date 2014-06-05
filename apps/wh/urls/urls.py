@@ -2,14 +2,10 @@ from django.conf.urls import *
 from apps.core.shortcuts import direct_to_template
 #from django.utils.translation import ugettext_lazy as _
 
-urlpatterns = patterns('apps.wh.views.views',
-    url('^login/$', 'login', name='login'),
+urlpatterns = patterns(
+    'apps.wh.views.views',
     url('^sulogin/$', 'sulogin',
         name='superlogin'),
-    url('^accounts/profile/real/(?P<account_name>[\w\s-]+)/$', 'profile',
-        name='profile-real'),
-    url('^accounts/profile/(?P<nickname>[\w\s-]+)/$', 'profile_by_nick',
-        name='profile-by-nick'),
     url(r'^accounts/$', 'users', name='users'),
     #todo: move to json
     url('^accounts/get/users/$','x_get_users_list',
@@ -21,19 +17,14 @@ urlpatterns = patterns('apps.wh.views.views',
         {'template': 'accounts/updated.html'}),
     url('^accounts/get/avatar/(?P<nickname>[\w\s-]+)/$', 'get_user_avatar',
         name='avatar'),
-    url('^get/race/icon/(?P<race>[\w\s-]+)/$','get_race_icon',
-        name='race-icon'),
-    url(r'^accounts/get/side/icon/(?P<nickname>[\w\s-]+)/$','get_user_side_icon',
-        name='user-side-icon'),
+
     url(r'^pm/$','pm', name='pm'),
     url(r'^pm/send/$', 'pm_send', name='pm-send'),
     url(r'^pm/(?P<pk>\d+)/delete/$', 'pm_delete', name='pm-delete'),
     url(r'^pm/(?P<pm_id>\d+)/$', 'view_pm', name='pm-view'),
     url(r'^pm/(?P<pm_id>\d+)/delete/(?P<approve>(approve|force))/$', 'delete_pm', name='pm-delete'),
     url(r'^pm/(?P<pm_id>\d+)/delete/$', 'delete_pm', name='pm-delete'),
-    #url(r'^register/$', 'onsite_register', name='register'),
-    url(r'^register/get_math_image/$', 'get_math_image', name='math-image'), #for joke sake
-    url(r'^register/get_math_image/(?P<sid>\w+)/$','get_math_image', name='math-image'),
+
     url(r'^ranks/(?P<pk>\d+)/$', 'show_rank', name='ranks'),
     url('^ranks/(?P<codename>[\w\s]+)/$', 'show_rank',
         name='rank'),

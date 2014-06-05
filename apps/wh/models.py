@@ -1,26 +1,13 @@
 # coding: utf-8
 
-import os
-
 from django.db import models
-from django.db.models import Q, Sum
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-from django.contrib.comments.models import Comment
+
 from django.contrib.contenttypes import generic
 from django.conf import settings
-
-from apps.core.helpers import safe_ret
-from picklefield import PickledObjectField
 from django.core.urlresolvers import reverse
 
-from django.core.cache import cache
 from datetime import datetime
 from apps.core.helpers import post_markup_filter, render_filter
 
@@ -196,32 +183,6 @@ class PM(models.Model):
             self.syntax
         )
 
-class RegisterSid(models.Model):
-    sid = models.CharField(
-        _('SID'),
-        max_length=40, primary_key=True
-    )
-    ip = models.CharField(_('IP'), max_length=16)
-    value = models.CharField(_('value'), max_length=10)
-    expired = models.DateTimeField(_('expired'))
-
-    class Meta:
-        verbose_name = _("RegisterSID")
-        verbose_name_plural = _("RegisterSIDs")
-
-
-class Skin(models.Model):
-    name = models.CharField(_('name'), max_length=40)
-    description = models.TextField(_('description'))
-    fraction = models.ManyToManyField(Fraction, blank=True)
-    is_general = models.BooleanField(_('is general'), blank=True,
-                                     default=False)
-
-    def __unicode__(self):
-        return self.name.lower()
-
-    def __repr__(self):
-        return self.name.lower()
 
 
 # noinspection PyShadowingBuiltins
@@ -255,7 +216,8 @@ class Rank(models.Model):
         blank=True, null=True
     )
     side = models.ManyToManyField(Side, blank=True)
-    is_general = models.BooleanField(_('is General'), blank=True, default=False)
+    is_general = models.BooleanField(_('is General'), blank=True,
+                                     default=False)
     syntax = models.CharField(
         _('syntax'), max_length=50, choices=settings.SYNTAX,
         blank=True, null=True
@@ -310,21 +272,6 @@ class UserActivity(AbstractActivity):
         verbose_name_plural = _('User Activities')
 
 
-class GuestActivity(AbstractActivity):
-    activity_date_prev = models.DateTimeField(
-        _('prev datetime activity'), blank=True, null=True
-    )
-
-    class Meta:
-        verbose_name = _('Guest Activity')
-        verbose_name_plural = _('Guest Activities')
-
-
-class Settings(models.Model):
-    class Meta:
-        abstract = True
-
-
 class WarningType(models.Model):
     codename = models.CharField(
         _('codename'), max_length=30, unique=True
@@ -375,138 +322,6 @@ class Warning(models.Model):
     def show_nickname(self):
         return self.user.nickname
     show_nickname.short_description = _('User')
-
-
-# noinspection PyUnresolvedReferences,PyUnresolvedReferences,PyUnresolvedReferences,PyShadowingBuiltins
-class UserExtension(object):
-    @property
-    def files(self):
-        return self.user_file_set
-
-    def get_absolute_url(self):
-        return reverse(
-            'accounts:profile-by-nick', args=(
-                self.nickname or self.username, )
-        )
-
-    def __repr__(self):
-        return '<User: %s>' % (self.nickname or self.username)
-
-    def __unicode__(self):
-        return self.nickname or self.username
-
-    def get_avatar_url(self):
-        avatar = None
-        real_avatar = safe_ret(self, 'avatar.url') or ''
-        if not real_avatar:
-            avatar = os.path.join(settings.MEDIA_URL, 'avatars/none.png')
-        avatar = avatar or real_avatar
-        return avatar
-
-    def get_username(self):
-        return self.nickname or self.username
-
-    def get_nickname(self, no_cache=False):
-        nickname = (
-            cache.get('nick:%s' % self.username)
-            if not no_cache else None
-        )
-        if not nickname:
-            if self.ranks.all():
-                rank = self.ranks.order_by('-magnitude')[0]
-                span = (
-                    "<span class='%(class)s' id='%(id)s' "
-                    "style='%(style)s'>%(nickname)s</span>" % {
-                        'class': rank.type.css_class,
-                        'id': rank.type.css_id,
-                        'style': rank.type.style,
-                        'nickname': self.nickname or self.username
-                    }
-                )
-                if not no_cache:
-                    cache.set('nick:%s' % self.username, span)
-                return span
-            if not no_cache:
-                cache.set('nick:%s' % self.username, self.nickname or self.username)
-            return self.nickname or self.username
-        return nickname
-
-    def get_ranks_groups(self):
-        tuple = list()
-        for rank in self.ranks.distinct():
-            if rank.type.group:
-                tuple.append(rank.type.group)
-        return tuple
-
-    def get_fraction(self):
-        return self.army.side.fraction.title
-
-    def get_comments_count(self):
-        return Comment.objects.filter(user=self).count()
-
-    def get_replays_count(self):
-        return self.replay_set.count()
-
-    def get_karma_value(self):
-        amount = self.karma_owner_set.aggregate(Sum('value'))
-        amount = amount.items()[0][1] or 0
-        return amount
-
-    @property
-    def karma(self):
-        return self.get_karma_value()
-
-    def get_karma_status(self):
-        # returns a karma status instance
-        from apps.karma.models import KarmaStatus
-        config = self.settings or {}
-        is_humor = config.get('karma_humor', False)
-        qset = Q(is_general=True)
-        order_by = ['-value', ] if self.karma > 0 else ['value', ]
-        kw = dict()
-
-        if self.karma > 0:
-            kw.update({'value__lte': int(self.karma)})
-        else:
-            kw.update({'value__gte': int(self.karma)})
-
-        if is_humor:
-            order_by += ['is_humor', ]
-        if safe_ret(self, 'army.side'):
-            qset = qset | Q(side=self.army.side)
-
-        status = KarmaStatus.objects.order_by(*order_by).filter(
-            Q(**kw) & qset
-        )
-        return status[0] if len(status) else None
-
-    def get_magnitude(self):
-        if self.is_superuser:
-            return 0
-
-        if not self.ranks:
-            return 1000000  # extreamly high magnitude
-
-        mag = 100000000
-        for r in self.ranks.distinct():
-            if r.type.magnitude < mag:
-                mag = r.type.magnitude
-        return mag
-
-    def get_forum_theme(self):
-        if isinstance(self.settings, dict):
-            return self.settings.get('forum_theme',
-                                     settings.FORUM_THEME_DEFAULT)
-        else:
-            return settings.FORUM_THEME_DEFAULT
-
-    def get_private_forums(self):
-        pass
-
-    class Meta:
-        permissions = (
-            ('can_test', 'Can test functional')
-        )
 
 
 from apps.wh.signals import setup_signals

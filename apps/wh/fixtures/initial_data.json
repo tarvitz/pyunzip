@@ -2132,61 +2132,6 @@
   }
  }, 
  {
-  "pk": "b37f6ddcefad7e8657837d3177f9ef2462f98acf", 
-  "model": "wh.registersid", 
-  "fields": {
-   "ip": "127.0.0.1", 
-   "expired": "2010-11-08 17:33:50", 
-   "value": "22"
-  }
- }, 
- {
-  "pk": 1, 
-  "model": "wh.skin", 
-  "fields": {
-   "is_general": true, 
-   "name": "Default", 
-   "fraction": [], 
-   "description": "Default Resource skin"
-  }
- }, 
- {
-  "pk": 4, 
-  "model": "wh.skin", 
-  "fields": {
-   "is_general": false, 
-   "name": "Inquisitor", 
-   "fraction": [
-    1
-   ], 
-   "description": "Inquisitor Skin"
-  }
- }, 
- {
-  "pk": 3, 
-  "model": "wh.skin", 
-  "fields": {
-   "is_general": false, 
-   "name": "Slaanesh", 
-   "fraction": [
-    5
-   ], 
-   "description": "Slaanesh Champion Skin"
-  }
- }, 
- {
-  "pk": 2, 
-  "model": "wh.skin", 
-  "fields": {
-   "is_general": false, 
-   "name": "EC", 
-   "fraction": [
-    1
-   ], 
-   "description": "pre herecy Emperor's Children skin"
-  }
- }, 
- {
   "pk": 1, 
   "model": "wh.warningtype", 
   "fields": {

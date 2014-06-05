@@ -6,35 +6,24 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from apps.wh.models import (
-    Side, Army, PM, RegisterSid, Skin, Rank
-)
-from apps.core.models import UserSID
+    PM, Rank)
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseServerError
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib import auth
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from apps.core.decorators import has_permission
-from apps.wh.decorators import prevent_bruteforce
 
 from django.core import serializers
-from django.core.mail import send_mail
 
 from apps.wh.forms import (
-    PMForm,
-    PasswordChangeForm, PasswordRecoverForm, LoginForm,
-    SuperUserLoginForm,
-    PasswordRestoreForm, PasswordRestoreInitiateForm
+    PMForm, SuperUserLoginForm,
 )
 
 from apps.core import get_skin_template
-
-from PIL import Image
 from datetime import datetime, timedelta
-from random import randint, random
+
 
 from django.http import Http404
 from apps.news.templatetags.newsfilters import spadvfilter
@@ -61,22 +50,6 @@ def superuser_required(func):
     return wrapper
 
 
-@render_to('accounts/login.html', allow_xhr=True)
-def login(request):
-    referer = request.GET.get('next', '/')
-    form = LoginForm(request.POST or None)
-    if request.method == 'POST':
-        referer = request.POST.get('next', referer)
-        if form.is_valid():
-            auth.login(request, form.cleaned_data['user'])
-            if referer:
-                return {'redirect': referer}
-            referer = request.META.get('HTTP_REFERER', '/')
-            return {'redirect': referer}
-    return {'form': form}
-
-
-#KIND A HACK o_O
 @superuser_required
 def sulogin(request):
     referer = request.META.get('HTTP_REFERER', '/')
@@ -100,85 +73,7 @@ def sulogin(request):
     )
 
 
-def logout(request):
-    if hasattr(request.user, 'useractivity'):
-        #do not display users whom logged out
-        request.user.useractivity.is_logout = True
-        request.user.useractivity.save()
-    auth.logout(request)
-    return redirect('/')
-
-
-#Поиск по имени рега
-#Переписать все это нахуй, стремно как-то выглядит
-#upd: 06.10.2010 - внатуре, сижу ржу над топорностью,
-#     надо бы переписать и вправду
-#upd: 22.04.2013 - надо бы не ругаться :)
-@login_required
-def profile(request, account_name='self'):
-    template = get_skin_template(request.user, 'accounts/profile.html')
-    if account_name == 'self':
-        return render_to_response(
-            template, {
-                'usr': request.user,
-                '__galleries': '#'
-            },  # still not implemented
-            context_instance=RequestContext(request))
-    try:
-        user = User.objects.get(username__exact=account_name)
-        permissions = user.user_permissions.all()
-    except User.DoesNotExist:
-        user = {'errors': _('There is no such user')}
-        permissions = {}
-    return render_to_response(
-        template,
-        {
-            'usr': user,
-            'userperms': permissions
-        },
-        context_instance=RequestContext(request)
-    )
-
-
-#Поиск по имени ника
-@login_required
-def profile_by_nick(request, nickname='self'):
-    template = get_skin_template(request.user, 'accounts/profile.html')
-    from apps.files.models import Gallery
-    if nickname == 'self':
-        galleries = Gallery.objects.all()
-        return render_to_response(
-            'accounts/profile.html',
-            {
-                'usr': request.user,
-                'galleries': galleries
-            },
-            context_instance=RequestContext(request))
-    try:
-        user = User.objects.get(nickname__exact=nickname)
-        galleries = Gallery.objects.filter()
-        if not user.is_active:
-            return redirect('/user/does/not/exist')
-    except User.DoesNotExist:
-            return redirect('/user/does/not/exist')
-
-    if hasattr(user, 'user_permissions'):
-        permissions = user.user_permissions.all()
-    else:
-        permissions = dict()
-
-    return render_to_response(
-        template,
-        {
-            'usr': user,
-            'userperms': permissions,
-            'galleries': galleries
-        },
-        context_instance=RequestContext(request)
-    )
-
-
-#Все пользователи
+# todo: move to accounts
 @login_required
 def users(request):
     template = get_skin_template(request.user, 'accounts/index.html')
@@ -199,15 +94,9 @@ def users(request):
 @login_required
 @render_to('accounts/pm.html')
 def pm(request):
-    #_sent = PM.objects.filter(sender=request.user, dbs=False).count()
-    #recv = PM.objects.filter(addressee=request.user, dba=False).count()
-    #msg = int(_sent) + int(recv)
     form = PMForm()
     return {
         'form': form,
-        #'pm_sent': _sent,
-        #'pm_recv': recv,
-        #'pm_all_count': msg
     }
 
 
@@ -280,107 +169,6 @@ def delete_pm(request, pm_id=0):
         return redirect('/pm/deleted')
 
     return redirect('/pm/permissiondenied')
-
-
-def get_math_image(request, sid=''):
-    from PIL import ImageFont
-    from PIL import ImageDraw
-    #for joke sake
-    if not sid:
-        image = Image.new('RGBA', (630, 40), (0, 0, 0))
-        #print os.path.join(settings.MEDIA_ROOT,'arial.ttf')
-        ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'arial.ttf'), 24)
-        draw = ImageDraw.Draw(image)
-        draw.text((2, 0), 'Hope is the first step on the road to the disappointment', font=ifo)
-        img_path = os.path.join(settings.MEDIA_ROOT, 'tmp/bannerimage.png')
-        image.save(img_path, 'PNG')
-        image = open(img_path).read()
-        os.remove(img_path)
-        return HttpResponse(image, mimetype='image/png')
-    #end for joke sake
-    f = 0
-    s = 0
-    while 1:
-        f = randint(10, 98)
-        s = randint(2, 9)
-        if f % s == 0:
-            break
-    t = randint(0, 20)
-    image = Image.new('RGBA', (95, 40), (0, 0, 0))
-    ifo = ImageFont.truetype(os.path.join(settings.MEDIA_ROOT, 'arial.ttf'), 24)
-    #print ifo
-    draw = ImageDraw.Draw(image)
-    draw.text(
-        (2, 0),
-        str(f) + '/' + str(s) + '-' + str(t),
-        font=ifo
-    )
-    fp_name = '%s/tmp/%s_math_image.png' % (settings.MEDIA_ROOT, str(random())[2:6])
-    image.save(fp_name, 'PNG')
-    image = open(fp_name, 'r').read()
-    os.remove(fp_name)
-    answ = f / s - t
-    #if sid:
-    offset = int(8)
-    expired = datetime.now() + timedelta(minutes=offset)
-    ip = request.META['REMOTE_ADDR']
-    rsid = RegisterSid(sid=sid, expired=expired, ip=ip, value=answ)
-    rsid.save()
-    return HttpResponse(image, mimetype='image/png')
-
-
-@login_required
-def change_password(request):
-    template = get_skin_template(request.user, 'accounts/change_password.html')
-    form = PasswordChangeForm(request.POST or None, request=request)
-    if request.method == 'POST':
-        if form.is_valid():
-            user = request.user
-            password = form.cleaned_data['password1']
-            user.set_password(password)
-            user.save()
-            return redirect('wh:password-changed')
-
-    return render_to_response(
-        template,
-        {'form': form},
-        context_instance=RequestContext(request)
-    )
-
-
-@render_to('accounts/password_recovery.html')
-def password_recover(request):
-    form = PasswordRecoverForm(request.POST or None, request=request)
-    if request.method == 'POST':
-        if form.is_valid():
-            from hashlib import sha1
-            from random import random
-            new_pass = sha1(str(random())).hexdigest()[4:13]
-            u = form.cleaned_data['login']
-            email = form.cleaned_data['email']
-            user = User.objects.get(username__exact=u)
-            user.set_password(new_pass)
-            text_content = (
-                "Your login name is %s and your "
-                "password have changed to %s "
-                "Please keep your password with safty, "
-                "don't declare it to anyone "
-                "even to administration of the resourse."
-                "Remember, that administration never request "
-                "your password from you."
-                "Thank you for using our service."
-            ) % (request.user.username, new_pass)
-            if settings.SEND_MESSAGES:
-                send_mail(
-                    'Password Changed',
-                    text_content, settings.FROM_EMAIL,
-                    [email], fail_silently=False,
-                    auth_user=settings.EMAIL_HOST_USER,
-                    auth_password=settings.EMAIL_HOST_PASSWORD
-                )
-            user.save()
-            return {'redirect': '/accounts/password/changed/successful'}
-    return {'form': form}
 
 
 def show_rank(request, pk=None, codename=None):
@@ -462,22 +250,6 @@ def x_get_users_list(request, nick_part=''):
     return response
 
 
-def get_skins_raw(request, pk):
-    response = HttpResponse()
-    response['Content-Type'] = 'application/json'
-    try:
-        side = Side.objects.get(pk=pk)
-        skins = Skin.objects.filter(
-            Q(is_general=True) |
-            Q(fraction__id__exact=side.fraction.id)
-        ).order_by('id')
-        response.write(serializers.serialize("json", skins))
-    except Side.DoesNotExist:
-        #skins = []
-        response.write('[failed]')
-    return response
-
-
 #TODO: rewrite
 def get_user_avatar(request, nickname=''):
     response = HttpResponse()
@@ -507,80 +279,6 @@ def get_user_avatar(request, nickname=''):
         img_path = os.path.join(settings.MEDIA_ROOT, 'avatars/none.png')
         img = open(img_path, 'rb')
         response.write(img.read())
-    return response
-
-
-def get_race_icon(request, race):
-    response = HttpResponse()
-    response['Content-Type'] = 'image/png'
-    race = get_object_or_None(Side, name__iexact=race)
-    if race:
-        img_path = os.path.join(
-            settings.MEDIA_ROOT, 'images/armies/50x50/%s.png' % race.name.lower()
-        )
-    else:
-        img_path = os.path.join(
-            settings.MEDIA_ROOT, 'images/armies/50x50/none.png'
-        )
-    try:
-        img = open(img_path, 'rb')
-    except IOError:
-        img_path = os.path.join(
-            settings.MEDIA_ROOT, 'images/armies/50x50/none.png'
-        )
-        img = open(img_path, 'rb')
-    response.write(img.read())
-    return response
-
-
-def get_user_side_icon(request, nickname=''):
-    response = HttpResponse()
-    response['Content-Type'] = 'image/png'
-    try:
-        user = User.objects.get(nickname__iexact=nickname)
-        if hasattr(user.army, 'side'):
-            img_path = os.path.join(
-                settings.MEDIA_ROOT,
-                'accounts/50x50/%s.png' % user.army.side.name.lower()
-            )
-            try:
-                os.stat(img_path)
-            except OSError:
-                img_path = os.path.join(
-                    settings.MEDIA_ROOT, 'accounts/50x50/none.png'
-                )
-            img = open(img_path, 'rb')
-        else:
-            img_path = os.path.join(
-                settings.MEDIA_ROOT, 'accounts/50x50/none.png'
-            )
-            img = open(img_path, 'rb')
-        response.write(img.read())
-        del img
-    except User.DoesNotExist:
-        img_path = os.path.join(
-            settings.MEDIA_ROOT,
-            'accounts/50x50/none.png'
-        )
-        img = open(img_path, 'rb')
-        response.write(img.read())
-        del img
-    return response
-
-
-def favicon(request):
-    response = HttpResponse()
-    response['Content-Type'] = 'image/vnd.microsoft.icon'
-    if hasattr(request.user, 'nickname'):
-        try:
-            file_name = 'images/armies/%s/title_16x16.png' % (request.user.army.side.name.lower())
-            #file_path = os.path.join(settings.MEDIA_ROOT,file_name)
-            _file = open(os.path.join(settings.MEDIA_ROOT, file_name), 'rb')
-        except:
-            _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
-    else:
-        _file = open(os.path.join(settings.MEDIA_ROOT, 'favicon.ico'), 'rb')
-    response.write(_file.read())
     return response
 
 
@@ -734,61 +432,3 @@ def alter_warning_form(request, nickname):
         form.fields['nickname'].initial = warn_user.nickname
         form.fields['next'].initial = request.META.get('HTTP_REFERER', '/')
     return direct_to_template(request, template, {'form': form})
-
-
-# noinspection PyUnresolvedReferences
-@render_to('accounts/password_restore_initiate.html')
-def password_restore_initiate(request):
-    form = PasswordRestoreInitiateForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            users = form.cleaned_data['users']
-            #sids = []
-            sids = UserSID.objects.filter(user__in=users, expired=True)
-            sids = list(sids)
-            if not sids:
-                for user in users:
-                    sid = UserSID.objects.create(user)
-                    sids.append(sid)
-            else:
-                for user in users:
-                    sid = UserSID.objects.filter(
-                        user=request.user).order_by('-id')[0]
-                    sids.append(sid)
-                    (lambda x: x)(user)
-
-            for sid in sids:
-                msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
-                    'link': settings.DOMAIN + "%s" % reverse(
-                    'wh:password-restore', args=(sid.sid, ))
-                }
-                if settings.SEND_MESSAGES:
-                    send_mail(
-                        subject=unicode(
-                            _('Your password requested to change')
-                        ),
-                        message=unicode(msg),
-                        from_email=settings.FROM_EMAIL,
-                        recipient_list=[sid.user.email]
-                    )
-            return {'redirect': 'core:password-restore-initiated'}
-    return {'form': form}
-
-
-@prevent_bruteforce
-@render_to('accounts/password_restore.html')
-def password_restore(request, sid):
-    instance = get_object_or_None(UserSID, sid=sid, expired=False)
-    if not instance:
-        request.session['brute_force_iter'] \
-            = request.session.get('brute_force_iter', 0) + 1
-        raise Http404("not found")
-
-    form = PasswordRestoreForm(
-        request.POST or None, instance=instance, request=request
-    )
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return {'redirect': 'core:password-restored'}
-    return {'form': form}
