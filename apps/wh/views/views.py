@@ -1,12 +1,9 @@
 # coding: utf-8
 
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-from apps.wh.models import (
-    PM, Rank)
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+from apps.wh.models import Rank
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseServerError
 from django.template import RequestContext
@@ -17,9 +14,7 @@ from apps.core.decorators import has_permission
 
 from django.core import serializers
 
-from apps.wh.forms import (
-    PMForm, SuperUserLoginForm,
-)
+from apps.wh.forms import SuperUserLoginForm
 
 from apps.core import get_skin_template
 from datetime import datetime, timedelta
@@ -32,12 +27,10 @@ from django.template.defaultfilters import striptags
 from apps.core.shortcuts import direct_to_template
 from django.shortcuts import redirect
 from apps.core.helpers import (
-    paginate, can_act,
-    render_to, get_object_or_None,
+    paginate, can_act, get_object_or_None,
     safe_ret, get_int_or_zero
 )
 from django.conf import settings
-import os
 
 
 def superuser_required(func):
@@ -89,86 +82,6 @@ def users(request):
         },
         context_instance=RequestContext(request)
     )
-
-
-@login_required
-@render_to('accounts/pm.html')
-def pm(request):
-    form = PMForm()
-    return {
-        'form': form,
-    }
-
-
-@login_required
-@render_to('accounts/pm_send.html', allow_xhr=True)
-def pm_send(request):
-    form = PMForm(request.POST or None, request=request)
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return {
-                'success': True
-            }
-    return {'form': form}
-
-
-@login_required
-@render_to('accounts/pm_delete.html', allow_xhr=True)
-def pm_delete(request, pk):
-    message = get_object_or_404(PM, pk=pk)
-    if request.user not in (message.addressee, message.sender):
-        raise Http404("hands off")
-    if request.user == message.addressee:
-        message.dba = True
-    elif request.user == message.sender:
-        message.dbs = True
-    else:
-        pass
-    if message.dbs and message.dba:
-        message.delete()
-    else:
-        message.save()
-    return {'message': message or None, 'success': True}
-
-
-@login_required
-def view_pm(request, pm_id=0):
-    template = get_skin_template(request.user, 'accounts/pm.html')
-    pm = get_object_or_404(PM, pk=pm_id)
-    user = request.user
-    if (user.id != pm.sender.id) and (user.id != pm.addressee.id):
-        raise Http404("go away")
-    if user == pm.addressee:
-        pm.is_read = True
-        pm.save()
-    return render_to_response(
-        template,
-        {'pmsg': pm},
-        context_instance=RequestContext(request)
-    )
-
-
-@login_required
-def delete_pm(request, pm_id=0):
-    user = request.user
-    pm = get_object_or_404(PM, id=pm_id)
-    if pm.sender == user:
-        if pm.dba:
-            pm.delete()
-        else:
-            pm.dbs = True
-            pm.save()
-        return redirect('/pm/deleted')
-    elif pm.addressee == user:
-        if pm.dbs:
-            pm.delete()
-        else:
-            pm.dba = True
-            pm.save()
-        return redirect('/pm/deleted')
-
-    return redirect('/pm/permissiondenied')
 
 
 def show_rank(request, pk=None, codename=None):
@@ -225,61 +138,6 @@ def get_rank(request, codename=None, pk=None, raw=True):
     except Rank.DoesNotExist:
         msg_error = u"no rank"
         return HttpResponseServerError(msg_error)
-
-
-#@has_permission('wh.can_test')
-#x means ajaX
-@login_required
-def x_get_users_list(request, nick_part=''):
-    nick = nick_part or ''
-    response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
-    if len(nick_part) < 2:
-        response.write('[]')
-        return response
-
-    users = User.objects.filter(nickname__icontains=nick, is_active=True)
-    if users:
-        #response.write(serializers.serialize('json',users))
-        us = [i.nickname for i in users]
-        #simplejson needs
-        from simplejson import dumps
-        response.write(dumps(us))
-    else:
-        response.write('[]')
-    return response
-
-
-#TODO: rewrite
-def get_user_avatar(request, nickname=''):
-    response = HttpResponse()
-    response['Content-Type'] = 'image/png'
-    try:
-        user = User.objects.get(nickname__iexact=nickname)
-        if user.avatar:
-            response.write(user.avatar.read())
-        else:
-            if hasattr(user.army, 'side'):
-                img_path = os.path.join(
-                    settings.MEDIA_ROOT,
-                    "avatars/%s/default.png" % (user.army.side.name.lower())
-                )
-            else:
-                img_path = os.path.join(
-                    settings.MEDIA_ROOT,
-                    "avatars/default.png"
-                )
-            try:
-                img = open(img_path, 'rb')
-            except IOError:
-                img_path = os.path.join(settings.MEDIA_ROOT, 'avatars/none.png')
-                img = open(img_path, 'rb')
-            response.write(img.read())
-    except User.DoesNotExist:
-        img_path = os.path.join(settings.MEDIA_ROOT, 'avatars/none.png')
-        img = open(img_path, 'rb')
-        response.write(img.read())
-    return response
 
 
 @has_permission('wh.set_warnings')

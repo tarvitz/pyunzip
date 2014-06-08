@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from apps.wh.models import (
-    Expression, Fraction, Side, Army, PM, Rank,
+    Expression, Fraction, Side, Army, Rank,
     RankType, UserActivity, Warning, WarningType,
     Universe
 )
@@ -50,13 +50,6 @@ class ArmyAdmin(admin.ModelAdmin):
     )
     list_filter = ['side']
 admin.site.register(Army, ArmyAdmin)
-
-
-class PMAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'title', 'is_read', 'dbs', 'dba', 'sent'
-    )
-admin.site.register(PM, PMAdmin)
 
 
 class RankAdmin(admin.ModelAdmin):

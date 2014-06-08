@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from apps.accounts.models import User
+from apps.accounts.models import User, PM
 from apps.core.forms import RequestFormMixin
 from apps.core.helpers import get_object_or_None
 from apps.core.models import UserSID
@@ -7,6 +7,8 @@ from apps.core.models import UserSID
 from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
+
+from django.conf import settings
 from django.contrib import auth
 
 from captcha.fields import ReCaptchaField
@@ -232,3 +234,68 @@ class PasswordRestoreForm(RequestFormMixin, forms.ModelForm):
     class Meta:
         model = UserSID
         exclude = ('expired_date', 'expired', 'sid', 'user')
+
+
+class PMReplyForm(RequestFormMixin, forms.ModelForm):
+    class Meta:
+        attrs = {'class': 'form-control'}
+        model = PM
+        widgets = {
+            'content': forms.Textarea(
+                attrs={'class': 'form-control markitup'}),
+            'title': forms.TextInput(attrs=attrs)
+        }
+        fields = ('title', 'content')
+
+
+class PMForm(RequestFormMixin, forms.ModelForm):
+    required_css_class = 'required'
+    addressee = forms.ModelChoiceField(
+        label=_("Addressee"),
+        queryset=User.objects,
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'data-toggle': 'select2'
+            }
+        ),
+    )
+    content = forms.CharField(
+        label=_("Content"),
+        widget=forms.Textarea(attrs={'class': 'markitup form-control'})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super(PMForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        sender = self.request.user
+        addressee = cleaned_data.get('addressee', '')
+        try:
+            a = User.objects.get(nickname=addressee)
+            if sender == a:
+                msg = _('You can not send private messages to yourself')
+                self._errors['addressee'] = ErrorList([msg])
+        except User.DoesNotExist:
+            msg = _('There\'s no user with such nickname, sorry')
+            self._errors['addressee'] = ErrorList([msg])
+        return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.sender = self.request.user
+        self.instance.addressee = self.cleaned_data['addressee']
+        return super(PMForm, self).save(commit)
+
+    class Meta:
+        model = PM
+        fields = ('addressee', 'title', 'content')
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'})
+        }
+
+    class Media:
+        js = (
+            settings.STATIC_URL + 'components/select2/select2.min.js',
+            settings.STATIC_URL + 'js/select2_load.js',
+        )

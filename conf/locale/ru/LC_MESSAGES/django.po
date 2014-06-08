@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-04 07:00+0400\n"
-"PO-Revision-Date: 2014-06-04 07:00+0400\n"
+"POT-Creation-Date: 2014-06-08 02:12+0400\n"
+"PO-Revision-Date: 2014-06-08 02:14+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -84,9 +84,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:35
-#: apps/accounts/forms.py:97 apps/wh/forms.py:396
-#: templates/forms/login_modal.html:15
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:36
+#: apps/accounts/forms.py:98 templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -101,8 +100,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:38
-#: apps/accounts/forms.py:100 apps/accounts/forms.py:201 apps/wh/forms.py:596
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:39
+#: apps/accounts/forms.py:101 apps/accounts/forms.py:202 apps/wh/forms.py:329
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -129,64 +128,80 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:24
+#: apps/accounts/forms.py:25
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:49
+#: apps/accounts/forms.py:50
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:60 apps/comments/forms.py:14
+#: apps/accounts/forms.py:61 apps/comments/forms.py:14
 #: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:109
 #: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:72
+#: apps/accounts/forms.py:73
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:103 apps/accounts/forms.py:204 apps/wh/forms.py:599
+#: apps/accounts/forms.py:104 apps/accounts/forms.py:205 apps/wh/forms.py:332
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:106 apps/accounts/forms.py:184 apps/wh/forms.py:580
+#: apps/accounts/forms.py:107 apps/accounts/forms.py:185 apps/wh/forms.py:313
 #: templates/accounts/profile.html:40
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:109 templates/accounts/profile.html:32
+#: apps/accounts/forms.py:110 templates/accounts/profile.html:32
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:112
+#: apps/accounts/forms.py:113
 msgid "Captcha"
 msgstr "Капча"
 
-#: apps/accounts/forms.py:138 apps/wh/forms.py:499
+#: apps/accounts/forms.py:139 apps/wh/forms.py:232
 msgid "Password1 and Password2 does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:148 apps/wh/forms.py:509
+#: apps/accounts/forms.py:149 apps/wh/forms.py:242
 msgid "Your current password does not match with one you've input"
 msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
 
-#: apps/accounts/forms.py:177 apps/wh/forms.py:533
+#: apps/accounts/forms.py:178 apps/wh/forms.py:266
 msgid "No such user with such email"
 msgstr "Такого пользователя с данным email'ом нет"
 
-#: apps/accounts/forms.py:184 apps/wh/forms.py:580
+#: apps/accounts/forms.py:185 apps/wh/forms.py:313
 msgid "Your email"
 msgstr "Ваш email"
 
-#: apps/accounts/forms.py:193 apps/wh/forms.py:588
+#: apps/accounts/forms.py:194 apps/wh/forms.py:321
 msgid "Users with given email does not exists"
 msgstr "Пользователя с данным email не существует"
 
-#: apps/accounts/forms.py:213 apps/wh/forms.py:608
+#: apps/accounts/forms.py:214 apps/wh/forms.py:341
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
+
+#: apps/accounts/forms.py:251
+msgid "Addressee"
+msgstr "Адресат"
+
+#: apps/accounts/forms.py:259 apps/wh/admin.py:23
+msgid "Content"
+msgstr "Содержимое"
+
+#: apps/accounts/forms.py:279
+msgid "You can not send private messages to yourself"
+msgstr "Вам нельзя слать самим себе сообщения"
+
+#: apps/accounts/forms.py:282
+msgid "There's no user with such nickname, sorry"
+msgstr "Такого пользователя нет"
 
 #: apps/accounts/models.py:24
 msgid "male"
@@ -200,7 +215,7 @@ msgstr "женский"
 msgid "not identified"
 msgstr "не определен"
 
-#: apps/accounts/models.py:43 apps/wh/forms.py:539
+#: apps/accounts/models.py:43 apps/wh/forms.py:272
 msgid "username"
 msgstr "имя пользователя"
 
@@ -269,7 +284,7 @@ msgstr "обычный аватар"
 msgid "photo"
 msgstr "фото"
 
-#: apps/accounts/models.py:87 apps/wh/models.py:63
+#: apps/accounts/models.py:87 apps/wh/models.py:50
 msgid "army"
 msgstr "армия"
 
@@ -289,25 +304,78 @@ msgstr "uin (номер аськи)"
 msgid "about myself"
 msgstr "о себе"
 
-#: apps/accounts/models.py:101
+#: apps/accounts/models.py:100
 msgid "time zone"
 msgstr "временная зона"
 
-#: apps/accounts/models.py:102
+#: apps/accounts/models.py:101
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:259 apps/karma/models.py:44 apps/pybb/models.py:104
-#: apps/pybb/models.py:183 apps/pybb/models.py:265 apps/wh/models.py:306
-#: apps/wh/models.py:377 apps/wh/templates/accounts/password_restore.html:5
+#: apps/accounts/models.py:269 apps/karma/models.py:44 apps/pybb/models.py:104
+#: apps/pybb/models.py:183 apps/pybb/models.py:265 apps/wh/models.py:267
+#: apps/wh/models.py:323 apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:260 apps/pybb/templates/pybb/head.html:35
+#: apps/accounts/models.py:270 apps/pybb/templates/pybb/head.html:35
 #: apps/pybb/templates/pybb/quick_access.html:41
-#: apps/pybb/templates/pybb/users.html:6
+#: apps/pybb/templates/pybb/users.html:6 templates/accounts/users.html:3
 msgid "Users"
 msgstr "Пользователи"
+
+#: apps/accounts/models.py:276
+msgid "sender"
+msgstr "отправитель"
+
+#: apps/accounts/models.py:280
+msgid "addressee"
+msgstr "адресат"
+
+#: apps/accounts/models.py:283 apps/files/models.py:100 apps/menu/models.py:8
+#: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
+#: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
+#: apps/tabletop/models.py:53 apps/tabletop/models.py:90
+#: apps/tabletop/models.py:199 apps/wh/models.py:21
+msgid "title"
+msgstr "заголовок"
+
+#: apps/accounts/models.py:285
+msgid "text"
+msgstr "текст"
+
+#: apps/accounts/models.py:287 apps/news/models.py:76
+msgid "cache content"
+msgstr "кеш контента"
+
+#: apps/accounts/models.py:289
+msgid "is read"
+msgstr "прочтено?"
+
+#: apps/accounts/models.py:291
+msgid "sent"
+msgstr "отосланно"
+
+#: apps/accounts/models.py:293
+msgid "deleted by sendr"
+msgstr "удалено отправителем"
+
+#: apps/accounts/models.py:294
+msgid "deleted by addr"
+msgstr "удалено адресатом"
+
+#: apps/accounts/models.py:296 apps/news/models.py:48
+#: apps/tabletop/models.py:220 apps/wh/models.py:221
+msgid "syntax"
+msgstr "синтаксис"
+
+#: apps/accounts/models.py:303
+msgid "Private Message"
+msgstr "Приватные сообщения"
+
+#: apps/accounts/models.py:304
+msgid "Private Messages"
+msgstr "Приватные сообщения"
 
 #: apps/accounts/resources.py:21
 msgid "User with such email exists"
@@ -317,18 +385,17 @@ msgstr "Пользователь с таким email уже существует
 msgid "You can not override user context"
 msgstr "Вы не можете перезаписать контекст пользователя"
 
-#: apps/accounts/tests/tests.py:198 apps/wh/forms.py:129 apps/wh/forms.py:314
-#: apps/wh/tests.py:202
+#: apps/accounts/tests/tests.py:198 apps/wh/forms.py:130
 #, python-format
 msgid "Another user with %s nickname exists."
 msgstr "Другой пользователь с ником %s уже существует."
 
-#: apps/accounts/views/views.py:185 apps/wh/views/views.py:768
+#: apps/accounts/views/views.py:187
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
 #: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:87
-#: apps/tabletop/models.py:116
+#: apps/tabletop/models.py:115
 #: apps/tabletop/templates/add_old_battle_report.html:37
 #: apps/tabletop/templates/add_roster_old.html:44
 msgid "Syntax"
@@ -350,7 +417,7 @@ msgstr "контент тип"
 msgid "object pk"
 msgstr "pk объекта"
 
-#: apps/comments/models.py:72 apps/tabletop/models.py:218
+#: apps/comments/models.py:72 apps/tabletop/models.py:217
 msgid "comment"
 msgstr "комментарии"
 
@@ -405,7 +472,9 @@ msgstr "Слежение за комментариями"
 #: apps/tabletop/templates/tabletop/roster_list.html:5
 #: apps/wh/templates/accounts/change_password.html:6
 #: apps/wh/templates/accounts/pm.html:11
-#: templates/accounts/password_change.html:4 templates/accounts/profile.html:5
+#: templates/accounts/password_change.html:4
+#: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
+#: templates/accounts/pm_list.html:5 templates/accounts/profile.html:5
 #: templates/accounts/profile_update.html:4 templates/static/timeout.html:4
 msgid "forum"
 msgstr "форум"
@@ -435,11 +504,11 @@ msgid "Subscription list"
 msgstr "Список подписки"
 
 #: apps/comments/templates/comments/comment_watch_list.html:12
-#: apps/files/models.py:55 apps/menu/models.py:42
+#: apps/files/models.py:51 apps/menu/models.py:42
 #: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:312 apps/tabletop/models.py:178
-#: apps/tabletop/models.py:189 apps/tabletop/templates/add_roster_old.html:23
-#: apps/tabletop/templates/reports.html:30
+#: apps/tabletop/forms.py:312 apps/tabletop/models.py:177
+#: apps/tabletop/models.py:188 apps/tabletop/templates/add_roster_old.html:23
+#: apps/tabletop/templates/reports.html:30 templates/accounts/pm_list.html:23
 msgid "Title"
 msgstr "Заголовок"
 
@@ -512,7 +581,7 @@ msgstr "ядро"
 msgid "Login required"
 msgstr "Необходим вход"
 
-#: apps/core/models.py:14 apps/wh/models.py:201
+#: apps/core/models.py:14
 msgid "SID"
 msgstr "СИД"
 
@@ -584,95 +653,87 @@ msgstr ""
 "Вы исчерпали лимит на загрузку, пожалуйста, удалите ненужные файлы на вашей "
 "странице управления файлами"
 
-#: apps/files/models.py:17
+#: apps/files/models.py:14
 msgid "Attachment"
 msgstr "Аттачмент"
 
-#: apps/files/models.py:28 apps/files/templates/files/user_files.html:45
+#: apps/files/models.py:25 apps/files/templates/files/user_files.html:45
 #: apps/news/templates/events/events.html:19
 msgid "Type"
 msgstr "Тип"
 
-#: apps/files/models.py:30 apps/pybb/models.py:25 apps/pybb/models.py:55
-#: apps/wh/forms.py:81
+#: apps/files/models.py:27 apps/pybb/models.py:25 apps/pybb/models.py:55
+#: apps/wh/forms.py:82
 msgid "Name"
 msgstr "Имя"
 
-#: apps/files/models.py:44 apps/files/templates/gallery/gallery_list.html:22
+#: apps/files/models.py:41 apps/files/templates/gallery/gallery_list.html:22
 #: apps/pybb/templates/pybb/head.html:51
 msgid "Gallery"
 msgstr "Галерея"
 
-#: apps/files/models.py:45
+#: apps/files/models.py:42
 msgid "Galleries"
 msgstr "Галереи"
 
-#: apps/files/models.py:57
+#: apps/files/models.py:53
 msgid "Alias"
 msgstr "Алиас"
 
-#: apps/files/models.py:60
+#: apps/files/models.py:56
 msgid "Fast name to access unit"
 msgstr "Имя для быстрого доступа к юниту"
 
-#: apps/files/models.py:62 apps/tabletop/templates/add_roster_old.html:47
+#: apps/files/models.py:58 apps/tabletop/templates/add_roster_old.html:47
 msgid "Comments"
 msgstr "Комментарии"
 
-#: apps/files/models.py:63 apps/files/templates/gallery/action_image.html:5
+#: apps/files/models.py:59 apps/files/templates/gallery/action_image.html:5
 #: apps/files/templates/gallery/gallery_list.html:11
 #: apps/files/templates/gallery/image.html:7
 #: apps/files/templates/gallery/upload.html:6
 msgid "gallery"
 msgstr "галерея"
 
-#: apps/files/models.py:65 apps/files/models.py:84
+#: apps/files/models.py:61 apps/files/models.py:80
 #: apps/files/templates/files/user_files.html:72
 #: apps/files/templates/files/user_files.html:99
 msgid "Image"
 msgstr "Изображение"
 
-#: apps/files/models.py:69
+#: apps/files/models.py:65
 msgid "Thumbnail"
 msgstr "Эскиз"
 
-#: apps/files/models.py:85
+#: apps/files/models.py:81
 msgid "Images"
 msgstr "Изображения"
 
-#: apps/files/models.py:104 apps/menu/models.py:8 apps/news/models.py:43
-#: apps/news/models.py:60 apps/news/models.py:259 apps/news/models.py:279
-#: apps/pybb/models.py:287 apps/pybb/models.py:372 apps/tabletop/models.py:53
-#: apps/tabletop/models.py:91 apps/tabletop/models.py:200 apps/wh/models.py:34
-#: apps/wh/models.py:163
-msgid "title"
-msgstr "заголовок"
-
-#: apps/files/models.py:107
+#: apps/files/models.py:103
 msgid "file"
 msgstr "файл"
 
-#: apps/files/models.py:113
+#: apps/files/models.py:109
 msgid "plain type"
 msgstr "простой тип"
 
-#: apps/files/models.py:113
+#: apps/files/models.py:109
 msgid "plain type for "
 msgstr "простой тип для"
 
-#: apps/files/models.py:118
+#: apps/files/models.py:114
 msgid "size"
 msgstr "размер"
 
-#: apps/files/models.py:118
+#: apps/files/models.py:114
 msgid "file size"
 msgstr "размер файла"
 
-#: apps/files/models.py:156
+#: apps/files/models.py:152
 msgid "User file"
 msgstr "Файл пользователя"
 
-#: apps/files/models.py:157
+#: apps/files/models.py:153
 msgid "User files"
 msgstr "Файлы пользователя"
 
@@ -783,7 +844,7 @@ msgstr ""
 msgid "You are trying to upload the file. Do you want to proceed"
 msgstr "Вы хотите загрузить файл, продолжить?"
 
-#: apps/files/templates/files/user_files.html:197 templates/base.html:191
+#: apps/files/templates/files/user_files.html:197 templates/base.html:186
 msgid "Yes"
 msgstr "Да"
 
@@ -855,7 +916,7 @@ msgstr "правка изображения"
 msgid "delete image"
 msgstr "удалить изображение"
 
-#: apps/karma/admin.py:20 apps/news/admin.py:30 apps/wh/admin.py:21
+#: apps/karma/admin.py:20 apps/news/admin.py:30 apps/wh/admin.py:19
 msgid "Base"
 msgstr "Базовый"
 
@@ -897,6 +958,7 @@ msgid "Power"
 msgstr "Сила"
 
 #: apps/karma/models.py:21 apps/wh/templates/accounts/pm.html:43
+#: templates/accounts/pm_list.html:24
 msgid "Date"
 msgstr "Дата"
 
@@ -904,7 +966,7 @@ msgstr "Дата"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:179
+#: apps/karma/models.py:55 apps/tabletop/models.py:178
 msgid "Codename"
 msgstr "Кодовое имя"
 
@@ -924,7 +986,7 @@ msgstr "Юмор"
 msgid "Description"
 msgstr "Описание"
 
-#: apps/karma/models.py:61 apps/wh/models.py:258
+#: apps/karma/models.py:61 apps/wh/models.py:218
 msgid "is General"
 msgstr "генеральный?"
 
@@ -1035,7 +1097,7 @@ msgstr "утверждено?"
 msgid "marks if the article would be approved"
 msgstr "помечает статью как утвержденную по умолчанию"
 
-#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:219
+#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:218
 #: apps/tabletop/templates/reports.html:48
 msgid "approved"
 msgstr "утверждено"
@@ -1061,24 +1123,19 @@ msgstr "Категория"
 msgid "Categories"
 msgstr "Категории"
 
-#: apps/news/models.py:44 apps/news/models.py:64 apps/wh/models.py:96
-#: apps/wh/models.py:138
+#: apps/news/models.py:44 apps/news/models.py:64 apps/wh/models.py:83
+#: apps/wh/models.py:125
 msgid "author"
 msgstr "автор"
 
 #: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:282
-#: apps/wh/models.py:83 apps/wh/models.py:128
+#: apps/wh/models.py:70 apps/wh/models.py:115
 msgid "content"
 msgstr "контент"
 
-#: apps/news/models.py:46 apps/tabletop/models.py:220
+#: apps/news/models.py:46 apps/tabletop/models.py:219
 msgid "ip address"
 msgstr "IP адрес"
-
-#: apps/news/models.py:48 apps/tabletop/models.py:221 apps/wh/models.py:176
-#: apps/wh/models.py:260
-msgid "syntax"
-msgstr "синтаксис"
 
 #: apps/news/models.py:68
 msgid "editor"
@@ -1087,10 +1144,6 @@ msgstr "редактор"
 #: apps/news/models.py:71
 msgid "original URL"
 msgstr "URL оригинала"
-
-#: apps/news/models.py:76 apps/wh/models.py:167
-msgid "cache content"
-msgstr "кеш контента"
 
 #: apps/news/models.py:79
 msgid "dateTime"
@@ -1251,7 +1304,7 @@ msgstr "дата окончания"
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:299 apps/wh/models.py:229
+#: apps/news/models.py:299 apps/wh/models.py:189
 msgid "type"
 msgstr "тип"
 
@@ -1855,7 +1908,7 @@ msgstr "показать"
 msgid "close text"
 msgstr "скрыть"
 
-#: apps/pybb/templates/pybb/base.html:91 templates/base.html:176
+#: apps/pybb/templates/pybb/base.html:91 templates/base.html:171
 #: templates/base_template.html:91
 msgid "You have unread messages"
 msgstr "У вас есть непрочтенные сообщения"
@@ -1892,6 +1945,8 @@ msgid "Inbox"
 msgstr "Входящие"
 
 #: apps/pybb/templates/pybb/edit_profile.html:15
+#: templates/accounts/pm_detail.html:9 templates/accounts/pm_detail.html:14
+#: templates/accounts/pm_list.html:8 templates/accounts/pm_list.html.py:12
 msgid "outbox"
 msgstr "исходящие"
 
@@ -1923,27 +1978,28 @@ msgstr "Мой профиль"
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: apps/pybb/templates/pybb/head.html:53
+#: apps/pybb/templates/pybb/head.html:53 templates/accounts/pm_detail.html:18
+#: templates/accounts/pm_list.html:15
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
-#: apps/pybb/templates/pybb/head.html:56
+#: apps/pybb/templates/pybb/head.html:59
 msgid "Admincp"
 msgstr "Админка"
 
-#: apps/pybb/templates/pybb/head.html:58
+#: apps/pybb/templates/pybb/head.html:61
 msgid "Log out"
 msgstr "Выйти"
 
-#: apps/pybb/templates/pybb/head.html:63
+#: apps/pybb/templates/pybb/head.html:66
 msgid "Themes"
 msgstr "Темы"
 
-#: apps/pybb/templates/pybb/head.html:74 templates/accounts/register.html:11
+#: apps/pybb/templates/pybb/head.html:77 templates/accounts/register.html:11
 msgid "Register"
 msgstr "Регистрация"
 
-#: apps/pybb/templates/pybb/head.html:75
+#: apps/pybb/templates/pybb/head.html:78
 msgid "Log in"
 msgstr "Войти"
 
@@ -2184,7 +2240,7 @@ msgstr ""
 "Количество участников и формат должны совпадать с общим количеством "
 "участников"
 
-#: apps/tabletop/forms.py:162 apps/tabletop/tests.py:289
+#: apps/tabletop/forms.py:162 apps/tabletop/tests.py:288
 #, python-format
 msgid "You can not add more winners than %(amount)s"
 msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
@@ -2248,15 +2304,19 @@ msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
 
-#: apps/tabletop/forms.py:372 apps/tabletop/forms.py:423
+#: apps/tabletop/forms.py:372 apps/tabletop/forms.py:433
 msgid "The common pts should be greater than 500"
 msgstr "Количество pts должно быть больше 500"
 
-#: apps/tabletop/forms.py:380
+#: apps/tabletop/forms.py:385
+msgid "Revision"
+msgstr "Ревизия"
+
+#: apps/tabletop/forms.py:390
 msgid "Codex"
 msgstr "Кодекс"
 
-#: apps/tabletop/forms.py:407
+#: apps/tabletop/forms.py:417
 #, python-format
 msgid ""
 "There is no such revision in \"%(unicode)s\", try to pass %(revisions)s as "
@@ -2265,7 +2325,7 @@ msgstr ""
 "Ревизии в \"%(unicode)s\" не существует, пожалуйста предоставьте "
 "%(revisions)s верным значением"
 
-#: apps/tabletop/forms.py:430
+#: apps/tabletop/forms.py:440
 msgid "You can not pass player's name that contains more than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
@@ -2335,85 +2395,85 @@ msgstr "простая сторона"
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:94
+#: apps/tabletop/models.py:93
 msgid "player"
 msgstr "автор"
 
-#: apps/tabletop/models.py:95
+#: apps/tabletop/models.py:94
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:97
+#: apps/tabletop/models.py:96
 msgid "comments"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:102
+#: apps/tabletop/models.py:101
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:105
+#: apps/tabletop/models.py:104
 msgid "custom Codex"
 msgstr "кастом кодекс"
 
-#: apps/tabletop/models.py:109
+#: apps/tabletop/models.py:108
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:111
+#: apps/tabletop/models.py:110
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:114 apps/tabletop/templates/add_roster_old.html:26
+#: apps/tabletop/models.py:113 apps/tabletop/templates/add_roster_old.html:26
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:114
+#: apps/tabletop/models.py:113
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:119
+#: apps/tabletop/models.py:118
 msgid "Orphan"
 msgstr "Орфан"
 
-#: apps/tabletop/models.py:120
+#: apps/tabletop/models.py:119
 msgid "wins"
 msgstr "побед"
 
-#: apps/tabletop/models.py:121
+#: apps/tabletop/models.py:120
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:130 apps/tabletop/templates/add_roster_old.html:30
+#: apps/tabletop/models.py:129 apps/tabletop/templates/add_roster_old.html:30
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:203
+#: apps/tabletop/models.py:202
 msgid "published"
 msgstr "опубликовано"
 
-#: apps/tabletop/models.py:206 apps/tabletop/templates/tabletop/roster.html:8
+#: apps/tabletop/models.py:205 apps/tabletop/templates/tabletop/roster.html:8
 #: apps/tabletop/templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:209
+#: apps/tabletop/models.py:208
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:212
+#: apps/tabletop/models.py:211
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:213
+#: apps/tabletop/models.py:212
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:215
+#: apps/tabletop/models.py:214
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:263
+#: apps/tabletop/models.py:262
 msgid "[fuzzy] "
 msgstr "[плавающий]"
 
@@ -2429,10 +2489,6 @@ msgstr ""
 #: apps/tabletop/templates/reports/include/report_content.html:16
 msgid "Winner"
 msgstr "Победитель"
-
-#: apps/tabletop/templates/add_roster.html:45
-msgid "Roster was successfully posted"
-msgstr "Ростер был успешно опубликован"
 
 #: apps/tabletop/templates/add_roster_old.html:34
 msgid "Roster"
@@ -2560,351 +2616,207 @@ msgstr "Другое"
 msgid "wh40k"
 msgstr ""
 
-#: apps/wh/admin.py:25 apps/wh/forms.py:354
-msgid "Content"
-msgstr "Содержимое"
-
-#: apps/wh/admin.py:49 apps/wh/models.py:77
+#: apps/wh/admin.py:47 apps/wh/models.py:64
 msgid "Armies"
 msgstr "Армии"
 
-#: apps/wh/forms.py:37
+#: apps/wh/forms.py:38
 #, python-format
 msgid "Level should not be greater than %i"
 msgstr "Уровень не должен превышать %i"
 
-#: apps/wh/forms.py:56 apps/wh/forms.py:146 apps/wh/forms.py:256
-#: apps/wh/forms.py:286
+#: apps/wh/forms.py:57 apps/wh/forms.py:147
 msgid "jpeg, png, gif, jpg image only"
 msgstr "только jpeg, png, gif, jpg изображения"
 
-#: apps/wh/forms.py:64 apps/wh/forms.py:262 apps/wh/forms.py:293
+#: apps/wh/forms.py:65
 msgid ""
 "Upload a valid avatar. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr "Ваш аватар испорчен богами хаоса. Загрузите нормальный"
 
-#: apps/wh/forms.py:71 apps/wh/forms.py:157 apps/wh/forms.py:267
+#: apps/wh/forms.py:72 apps/wh/forms.py:158
 msgid ""
 "Upload a valid avatar. Avatar's size should not be greater than 100x100 "
 "pixels"
 msgstr ""
 
-#: apps/wh/forms.py:115 apps/wh/forms.py:321 apps/wh/forms.py:447
+#: apps/wh/forms.py:116
 msgid "You can not use additional symbols in you nickname"
 msgstr "Вы не можете использовать дополнительные символы в вашем нике"
 
-#: apps/wh/forms.py:152
+#: apps/wh/forms.py:153
 #, fuzzy
 msgid ""
 "Upload a valid avatar. The file you uploaded was eithernot an image or a "
 "corrupted image."
 msgstr "Ваш аватар испорчен богами хаоса. Загрузите нормальный"
 
-#: apps/wh/forms.py:170 apps/wh/forms.py:304
+#: apps/wh/forms.py:171
 msgid "User with such JID already exists"
 msgstr "Пользователь с таким JID'ом уже существует"
 
-#: apps/wh/forms.py:216
-msgid "-----"
-msgstr "----"
-
-#: apps/wh/forms.py:225 apps/wh/templatetags/whfilters.py:26
-msgid "Male"
-msgstr "Мужской"
-
-#: apps/wh/forms.py:226 apps/wh/templatetags/whfilters.py:27
-msgid "Female"
-msgstr "Женский"
-
-#: apps/wh/forms.py:227
-msgid "Not identified"
-msgstr "Не определен"
-
-#: apps/wh/forms.py:329
-msgid ""
-"There's no any mention for this skin, try to update pageand upload profile "
-"one more time"
-msgstr ""
-"Никакого упоминаний о таком скине нет, попробуйте перезагрузить страницу и "
-"перезалить данные профиля еще раз"
-
-#: apps/wh/forms.py:339
-msgid "Your about field should not be greater than 200 chars"
-msgstr "Поле 'о себе' не должно включать более 200 символов"
-
-#: apps/wh/forms.py:346
-msgid "Addressee"
-msgstr "Адресат"
-
-#: apps/wh/forms.py:374
-msgid "You can not send private messages to yourself"
-msgstr "Вам нельзя слать самим себе сообщения"
-
-#: apps/wh/forms.py:377
-msgid "There's no user with such nickname, sorry"
-msgstr "Такого пользователя нет"
-
-#: apps/wh/forms.py:401
-msgid ""
-"Try to pass only latin symbols, numbers and underscores with your nickname"
-msgstr "Только латинские символы, цифры и символ подчеркивания разрешены"
-
-#: apps/wh/forms.py:404
-msgid "Only latin symbols and numbers and underscore are allowed"
-msgstr "Только латинские символы, цифры и символ подчеркивания разрешены"
-
-#: apps/wh/forms.py:421
-msgid "There's already user with such login here"
-msgstr "Такой пользователь уже есть"
-
-#: apps/wh/forms.py:430
-msgid "User with such email already exists"
-msgstr "Пользователь с таким email уже существует"
-
-#: apps/wh/forms.py:441
-msgid "This nick is busy, sorry"
-msgstr "Ник уже занят"
-
-#: apps/wh/forms.py:457
-msgid "Passwords ain't matching"
-msgstr "Пароли не совпадают"
-
-#: apps/wh/forms.py:465
-msgid "You've type wrong answer"
-msgstr "Вы ввели не верный ответ"
-
-#: apps/wh/forms.py:471
-msgid "Something went wrong :(, please try again"
-msgstr "Что-то пошло не так как планировалось =("
-
-#: apps/wh/forms.py:548
+#: apps/wh/forms.py:281
 msgid "password"
 msgstr "пароль"
 
-#: apps/wh/forms.py:561
+#: apps/wh/forms.py:294
 msgid "No user or password match"
 msgstr "Пользователь или пароль не совпадают"
 
-#: apps/wh/forms.py:566
+#: apps/wh/forms.py:299
 msgid "You have been banned ;)"
 msgstr "Вас забанили :)"
 
-#: apps/wh/models.py:30
+#: apps/wh/models.py:17
 msgid "сodename"
 msgstr "кодовое имя"
 
-#: apps/wh/models.py:42
+#: apps/wh/models.py:29
 msgid "fraction"
 msgstr "фракция"
 
-#: apps/wh/models.py:53
+#: apps/wh/models.py:40
 msgid "side"
 msgstr "сторона"
 
-#: apps/wh/models.py:76
+#: apps/wh/models.py:63
 msgid "Army"
 msgstr "Армия"
 
-#: apps/wh/models.py:90
+#: apps/wh/models.py:77
 msgid "Mini Quote"
 msgstr "Мини цитата"
 
-#: apps/wh/models.py:91
+#: apps/wh/models.py:78
 msgid "Mini Quotes"
 msgstr "Мини цитаты"
 
-#: apps/wh/models.py:99
+#: apps/wh/models.py:86
 msgid "original"
 msgstr "оригинал"
 
-#: apps/wh/models.py:100
+#: apps/wh/models.py:87
 msgid "Original text of expression"
 msgstr "Оригинал текста цитаты"
 
-#: apps/wh/models.py:104
+#: apps/wh/models.py:91
 msgid "translation"
 msgstr "перевод"
 
-#: apps/wh/models.py:105
+#: apps/wh/models.py:92
 msgid "translation of original sentence"
 msgstr "перевод оригинального предложения"
 
-#: apps/wh/models.py:118
+#: apps/wh/models.py:105
 msgid "original content"
 msgstr "оригинальный контент"
 
-#: apps/wh/models.py:149
+#: apps/wh/models.py:136
 msgid "expression"
 msgstr "цитата"
 
-#: apps/wh/models.py:150
+#: apps/wh/models.py:137
 msgid "expressions"
 msgstr "цитаты"
 
-#: apps/wh/models.py:156
-msgid "sender"
-msgstr "отправитель"
-
-#: apps/wh/models.py:160
-msgid "addressee"
-msgstr "адресат"
-
-#: apps/wh/models.py:165
-msgid "text"
-msgstr "текст"
-
-#: apps/wh/models.py:169
-msgid "is read"
-msgstr "прочтено?"
-
-#: apps/wh/models.py:171
-msgid "sent"
-msgstr "отосланно"
-
-#: apps/wh/models.py:173
-msgid "deleted by sendr"
-msgstr "удалено отправителем"
-
-#: apps/wh/models.py:174
-msgid "deleted by addr"
-msgstr "удалено адресатом"
-
-#: apps/wh/models.py:182
-msgid "Private Message"
-msgstr "Приватные сообщения"
-
-#: apps/wh/models.py:183
-msgid "Private Messages"
-msgstr "Приватные сообщения"
-
-#: apps/wh/models.py:204
-msgid "IP"
-msgstr "IP"
-
-#: apps/wh/models.py:205
-msgid "value"
-msgstr "значение"
-
-#: apps/wh/models.py:206 apps/wh/models.py:358
-msgid "expired"
-msgstr "истекает"
-
-#: apps/wh/models.py:209
-msgid "RegisterSID"
-msgstr "Регистрационный SID"
-
-#: apps/wh/models.py:210
-msgid "RegisterSIDs"
-msgstr "Регистрационные SID'ы"
-
-#: apps/wh/models.py:214
-msgid "name"
-msgstr "имя"
-
-#: apps/wh/models.py:215 apps/wh/models.py:252 apps/wh/models.py:333
-msgid "description"
-msgstr "описание"
-
-#: apps/wh/models.py:217 apps/wh/models.py:340
-msgid "is general"
-msgstr "общий?"
-
-#: apps/wh/models.py:231 apps/wh/models.py:254
+#: apps/wh/models.py:191 apps/wh/models.py:214
 msgid "magnitude"
 msgstr "величина"
 
-#: apps/wh/models.py:231
+#: apps/wh/models.py:191
 msgid "lower magnitude id more powerfull"
 msgstr "чем величина меньше тем более мощная"
 
-#: apps/wh/models.py:234
+#: apps/wh/models.py:194
 msgid "CSS Style"
 msgstr "CSS стиль"
 
-#: apps/wh/models.py:236
+#: apps/wh/models.py:196
 msgid "CSS class"
 msgstr "CSS класс"
 
-#: apps/wh/models.py:237
+#: apps/wh/models.py:197
 msgid "CSS id"
 msgstr "CSS id"
 
-#: apps/wh/models.py:247
+#: apps/wh/models.py:207
 msgid "short name"
 msgstr "короткое имя"
 
-#: apps/wh/models.py:249 apps/wh/models.py:330
+#: apps/wh/models.py:209 apps/wh/models.py:276
 msgid "codename"
 msgstr "кодовое имя"
 
-#: apps/wh/models.py:254
+#: apps/wh/models.py:212 apps/wh/models.py:279
+msgid "description"
+msgstr "описание"
+
+#: apps/wh/models.py:214
 msgid "Lower magnitude more powerfull"
 msgstr "Меньше величина более мощна"
 
-#: apps/wh/models.py:282
+#: apps/wh/models.py:243
 msgid "Rank"
 msgstr "Ранг"
 
-#: apps/wh/models.py:283
+#: apps/wh/models.py:244
 msgid "Ranks"
 msgstr "Ранги"
 
-#: apps/wh/models.py:288
+#: apps/wh/models.py:249
 msgid "dateTime activity"
 msgstr "дата-время активности"
 
-#: apps/wh/models.py:290
+#: apps/wh/models.py:251
 msgid "IP address"
 msgstr "IP адрес"
 
-#: apps/wh/models.py:298
+#: apps/wh/models.py:259
 msgid "is logout"
 msgstr "вышел?"
 
-#: apps/wh/models.py:300
+#: apps/wh/models.py:261
 msgid "Last action time"
 msgstr "Последнее время действия"
 
-#: apps/wh/models.py:309
+#: apps/wh/models.py:270
 msgid "User Activity"
 msgstr "Пользовательская активность"
 
-#: apps/wh/models.py:310
+#: apps/wh/models.py:271
 msgid "User Activities"
 msgstr "Пользовательские активности"
 
-#: apps/wh/models.py:315
-msgid "prev datetime activity"
-msgstr "предыдущая ДатаВремя активности"
-
-#: apps/wh/models.py:319
-msgid "Guest Activity"
-msgstr "Гостевая активность"
-
-#: apps/wh/models.py:320
-msgid "Guest Activities"
-msgstr "Гостевые активности"
-
-#: apps/wh/models.py:336
+#: apps/wh/models.py:282
 msgid "level"
 msgstr "уровень"
 
-#: apps/wh/models.py:352
+#: apps/wh/models.py:286
+msgid "is general"
+msgstr "общий?"
+
+#: apps/wh/models.py:298
 msgid "style"
 msgstr "стиль"
 
-#: apps/wh/models.py:355
+#: apps/wh/models.py:301
 msgid "sign"
 msgstr ""
 
-#: apps/wh/models.py:372
+#: apps/wh/models.py:304
+msgid "expired"
+msgstr "истекает"
+
+#: apps/wh/models.py:318
 msgid "Can set warnings"
 msgstr "Может устанавливать предупреждения"
 
 #: apps/wh/templates/accounts/change_password.html:7
-#: apps/wh/templates/accounts/index.html:44
-#: templates/accounts/password_change.html:5 templates/accounts/profile.html:6
+#: templates/accounts/password_change.html:5
+#: templates/accounts/pm_detail.html:6 templates/accounts/pm_form.html:6
+#: templates/accounts/pm_list.html:6 templates/accounts/profile.html:6
+#: templates/accounts/users.html:43
 msgid "profile"
 msgstr "профиль"
 
@@ -2920,7 +2832,8 @@ msgstr "Успешно изменен"
 msgid "Change password"
 msgstr "Сменить пароль"
 
-#: apps/wh/templates/accounts/pm.html:12
+#: apps/wh/templates/accounts/pm.html:12 templates/accounts/pm_detail.html:2
+#: templates/accounts/pm_list.html:2
 msgid "private messages"
 msgstr "личные сообщения"
 
@@ -2938,15 +2851,16 @@ msgstr "Отослать"
 msgid "State"
 msgstr "Статус"
 
-#: apps/wh/templates/accounts/pm.html:40
+#: apps/wh/templates/accounts/pm.html:40 templates/accounts/pm_list.html:21
 msgid "From"
 msgstr "Источник"
 
-#: apps/wh/templates/accounts/pm.html:41
+#: apps/wh/templates/accounts/pm.html:41 templates/accounts/pm_list.html:22
 msgid "To"
 msgstr "Адресат"
 
-#: apps/wh/templates/accounts/pm.html:103
+#: apps/wh/templates/accounts/pm.html:103 templates/accounts/pm_detail.html:43
+#: templates/accounts/pm_form.html:11
 msgid "Reply"
 msgstr "Ответить"
 
@@ -2987,9 +2901,13 @@ msgstr "Изменить"
 msgid "Not Identified"
 msgstr "Не опознан"
 
-#: apps/wh/views/views.py:131
-msgid "There is no such user"
-msgstr "Такого пользователя нет"
+#: apps/wh/templatetags/whfilters.py:26
+msgid "Male"
+msgstr "Мужской"
+
+#: apps/wh/templatetags/whfilters.py:27
+msgid "Female"
+msgstr "Женский"
 
 #: templates/404.html:6
 msgid "Page not found"
@@ -3003,15 +2921,15 @@ msgstr ""
 "Ошибка сервера, администрация будет уведомлена о произошедшем и исправит все "
 "в ближайшее время."
 
-#: templates/base.html:164
+#: templates/base.html:159
 msgid "Required field"
 msgstr "Обязательное поле"
 
-#: templates/base.html:186
+#: templates/base.html:181
 msgid "Do you really want to approve this action?"
 msgstr "Вы действительно хотите выполнить это действие?"
 
-#: templates/base.html:192
+#: templates/base.html:187
 msgid "no"
 msgstr "нет"
 
@@ -3024,20 +2942,20 @@ msgid "Your account have been banned, sorry :)"
 msgstr "Вас забанили :), приносим свои извинения."
 
 #: templates/accounts/login.html:6
-#: templates/accounts/password_restore_initiate.html:6
+#: templates/accounts/password_restore_initiate.html:5
 #: templates/accounts/register.html:6
 msgid "Sign in"
 msgstr "Войти"
 
 #: templates/accounts/login.html:7
-#: templates/accounts/password_restore_initiate.html:7
+#: templates/accounts/password_restore_initiate.html:6
 #: templates/accounts/register.html:7
 msgctxt "register"
 msgid "Sign up"
 msgstr "Зарегистрироваться"
 
 #: templates/accounts/login.html:8
-#: templates/accounts/password_restore_initiate.html:8
+#: templates/accounts/password_restore_initiate.html:7
 #: templates/accounts/register.html:8
 msgid "Passowrd recover"
 msgstr "Восстановление пароля"
@@ -3059,13 +2977,30 @@ msgstr "Изменить"
 msgid "Your password was changed successfully"
 msgstr "Ваш пароль был успешно изменен"
 
-#: templates/accounts/password_restore_initiate.html:3
-msgid "Password recover initiate procedure"
-msgstr "Процедура восстановления пароля"
-
-#: templates/accounts/password_restore_initiate.html:11
+#: templates/accounts/password_restore_initiate.html:10
 msgid "Initiate"
 msgstr "Начать"
+
+#: templates/accounts/pm_detail.html:8 templates/accounts/pm_form.html:7
+msgid "pm inbox"
+msgstr "входящие"
+
+#: templates/accounts/pm_detail.html:10 templates/accounts/pm_detail.html:13
+#: templates/accounts/pm_list.html:9 templates/accounts/pm_list.html.py:11
+msgid "inbox"
+msgstr "входящие"
+
+#: templates/accounts/pm_detail.html:12
+msgid "pm outox"
+msgstr "исходящие"
+
+#: templates/accounts/pm_detail.html:37 templates/accounts/pm_form.html:9
+msgid "reply"
+msgstr "ответить"
+
+#: templates/accounts/pm_list.html:49
+msgid "No private messages was found"
+msgstr "Личных сообщений не найдено"
 
 #: templates/accounts/profile.html:8 templates/accounts/profile.html.py:22
 msgid "update profile"
@@ -3183,6 +3118,80 @@ msgstr ""
 #: templates/static/timeout.html:7
 msgid "Timeout, please wait for your turn ;)"
 msgstr ""
+
+#~ msgid "Roster was successfully posted"
+#~ msgstr "Ростер был успешно опубликован"
+
+#~ msgid "-----"
+#~ msgstr "----"
+
+#~ msgid "Not identified"
+#~ msgstr "Не определен"
+
+#~ msgid ""
+#~ "There's no any mention for this skin, try to update pageand upload "
+#~ "profile one more time"
+#~ msgstr ""
+#~ "Никакого упоминаний о таком скине нет, попробуйте перезагрузить страницу "
+#~ "и перезалить данные профиля еще раз"
+
+#~ msgid "Your about field should not be greater than 200 chars"
+#~ msgstr "Поле 'о себе' не должно включать более 200 символов"
+
+#~ msgid ""
+#~ "Try to pass only latin symbols, numbers and underscores with your nickname"
+#~ msgstr "Только латинские символы, цифры и символ подчеркивания разрешены"
+
+#~ msgid "Only latin symbols and numbers and underscore are allowed"
+#~ msgstr "Только латинские символы, цифры и символ подчеркивания разрешены"
+
+#~ msgid "There's already user with such login here"
+#~ msgstr "Такой пользователь уже есть"
+
+#~ msgid "User with such email already exists"
+#~ msgstr "Пользователь с таким email уже существует"
+
+#~ msgid "This nick is busy, sorry"
+#~ msgstr "Ник уже занят"
+
+#~ msgid "Passwords ain't matching"
+#~ msgstr "Пароли не совпадают"
+
+#~ msgid "You've type wrong answer"
+#~ msgstr "Вы ввели не верный ответ"
+
+#~ msgid "Something went wrong :(, please try again"
+#~ msgstr "Что-то пошло не так как планировалось =("
+
+#~ msgid "IP"
+#~ msgstr "IP"
+
+#~ msgid "value"
+#~ msgstr "значение"
+
+#~ msgid "RegisterSID"
+#~ msgstr "Регистрационный SID"
+
+#~ msgid "RegisterSIDs"
+#~ msgstr "Регистрационные SID'ы"
+
+#~ msgid "name"
+#~ msgstr "имя"
+
+#~ msgid "prev datetime activity"
+#~ msgstr "предыдущая ДатаВремя активности"
+
+#~ msgid "Guest Activity"
+#~ msgstr "Гостевая активность"
+
+#~ msgid "Guest Activities"
+#~ msgstr "Гостевые активности"
+
+#~ msgid "There is no such user"
+#~ msgstr "Такого пользователя нет"
+
+#~ msgid "Password recover initiate procedure"
+#~ msgstr "Процедура восстановления пароля"
 
 #~ msgid ""
 #~ "Here your header content\n"
@@ -3660,9 +3669,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Каждой '%(threshold)s' модели вы должны добавить 1-у дополнитеьную "
 #~ "%(wargear)s связь"
-
-#~ msgid "Revision"
-#~ msgstr "Ревизия"
 
 #~ msgid "roster points cache"
 #~ msgstr "количество очков ростера"

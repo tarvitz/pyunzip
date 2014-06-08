@@ -1,0 +1,48 @@
+{% extends "base_template.html" %}{% load i18n %}
+{% block title %}{% trans "private messages" %}{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{{ user.get_profile_url }}">{% trans "profile" %}</a></li>
+    {% if box == 'inbox' %}
+      <li><a href="{{ user.get_pm_inbox_url }}">{% trans "pm inbox" %}</a></li>
+      <li class="pull-right"><a href="{{ user.get_pm_outbox_url }}">{% trans "outbox" %}</a></li>
+      <li class="active">{% trans "inbox" %}</li>
+    {% else %}
+      <li><a href="{{ user.get_pm_outbox_url }}">{% trans "pm outox" %}</a></li>
+      <li class="pull-right"><a href="{{ user.get_pm_inbox_url }}">{% trans "inbox" %}</a></li>
+      <li class="active">{% trans "outbox" %}</li>
+    {% endif %}
+  </ul>
+
+  <h3>{% trans "Private messages" %}</h3>
+  <div class="message round">
+    <div class="message-headline text-center">
+        {{ object.title }}
+        <div class="pull-left">
+          {{ object.sent|date:"F/m/d H:i" }}
+        </div>
+    </div>
+    <div class="message-body">
+      <div class="avatar text-center">
+        <img src="{{ object.sender.get_avatar_url }}" /><br />
+        {{ object.sender.get_nickname|safe }}
+      </div>
+      <div class='text'>{{ object.cache_content|safe }}</div>
+    </div>
+    <div class="message-footer">
+      <span>&nbsp;</span>
+      <div class="pull-right links">
+        {% if box == 'inbox' %}
+          <span><a href="{{ object.get_reply_url }}">{% trans "reply" %}</a></span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <h3>{% trans "Reply" %}</h3>
+  <form class="form-horizontal" action="{{ object.get_reply_url }}" method="POST">
+    {% csrf_token %}
+    {% include "generic/form.html" with form=form %}
+  </form>
+{% endblock %}

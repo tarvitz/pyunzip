@@ -145,6 +145,14 @@ class User(PermissionsMixin, AbstractBaseUser):
     def get_password_change_url():
         return reverse('accounts:password-change')
 
+    @staticmethod
+    def get_pm_inbox_url():
+        return reverse('accounts:pm-inbox')
+
+    @staticmethod
+    def get_pm_outbox_url():
+        return reverse('accounts:pm-outbox')
+
     def get_color_theme(self):
         return self.get_forum_theme()
 
@@ -197,6 +205,9 @@ class User(PermissionsMixin, AbstractBaseUser):
         self._unwatched_events = Event.objects.filter(
             is_finished=False).exclude(event_watch_set=exclude_qs)
         return self._unwatched_events
+
+    def get_new_pm(self):
+        return self.addressee.filter(is_read=False, dba=False)
 
     @property
     def karma(self):
@@ -258,6 +269,61 @@ class User(PermissionsMixin, AbstractBaseUser):
         verbose_name = _("User")
         verbose_name_plural = _("Users")
 
+
+class PM(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='sender',
+        verbose_name=_("sender")
+    )
+    addressee = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='addressee',
+        verbose_name=_("addressee")
+    )
+    title = models.CharField(
+        _('title'), max_length=50
+    )
+    content = models.TextField(_('text'))
+    cache_content = models.TextField(
+        _("cache content"), blank=True, null=True
+    )
+    is_read = models.BooleanField(_('is read'), default=False)
+    sent = models.DateTimeField(
+        _('sent'), auto_now=True, default=datetime.now
+    )
+    dbs = models.BooleanField(_('deleted by sendr'), default=False)
+    dba = models.BooleanField(_('deleted by addr'), default=False)
+    syntax = models.CharField(
+        _('syntax'), max_length=50,
+        choices=settings.SYNTAX, blank=True, null=True,
+        default=settings.DEFAULT_SYNTAX
+    )
+
+    class Meta:
+        ordering = ['-sent', ]
+        verbose_name = _('Private Message')
+        verbose_name_plural = _('Private Messages')
+
+    def purge_msg(self):
+        if self.dbs and self.dba:
+            self.remove()
+        return
+
+    def __unicode__(self):
+        return self.title
+
+    def render(self, field):
+        from apps.core.helpers import render_filter, post_markup_filter
+        return render_filter(
+            post_markup_filter(getattr(self, field)),
+            self.syntax
+        )
+
+    # urls
+    def get_absolute_url(self):
+        return reverse('accounts:pm-detail', args=(self.pk, ))
+
+    def get_reply_url(self):
+        return reverse('accounts:pm-reply', args=(self.pk, ))
 
 from apps.accounts import signals
 signals.setup_run()

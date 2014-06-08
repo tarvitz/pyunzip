@@ -5,7 +5,7 @@ User = get_user_model()
 from django.http import HttpResponse, Http404
 from django.core import serializers
 from django.contrib.auth.decorators import login_required
-from apps.wh.models import MiniQuote, Army, Expression, PM
+from apps.wh.models import MiniQuote, Army, Expression
 from django.shortcuts import get_object_or_404
 from apps.core.helpers import render_to_json, get_int_or_zero
 from apps.core.decorators import login_required_json

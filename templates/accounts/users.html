@@ -1,12 +1,11 @@
 {% extends "base_template.html" %}
 {% load coretags i18n %}
-{% block title %}Пользователи{% endblock %}
+{% block title %}{% trans "Users" %}{% endblock %}
 
 {% block content %}
-  {% for user in users.object_list %}
-    <center>
+  {% for user in object_list %}
       <div class='round message'>
-        <div class='message-headline'>
+        <div class='message-headline text-center'>
           <div class="transparency grey"></div>
           <a href='{% url "accounts:profile-by-nick" user.get_username %}'>
             {% if user.nickname %}
@@ -54,8 +53,7 @@
           <br clear='all'>
         </div> <!-- msg_footer -->
       </div> <!-- message -->
-    </center>
   {% endfor %}
 
-  {% include settings.document.links %}
+  {% include "generic/paginator.html" %}
 {% endblock %}

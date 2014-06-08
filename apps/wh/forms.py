@@ -10,7 +10,7 @@ try:
     User = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
-from apps.wh.models import Side, Army, PM
+from apps.wh.models import Side, Army
 from apps.core.models import UserSID
 from apps.core.helpers import get_object_or_None
 from apps.core.forms import (
@@ -205,56 +205,6 @@ class UpdateProfileModelForm(RequestFormMixin, forms.ModelForm):
             'tz': forms.Select(
                 attrs={'class': 'form-control', 'data-class': 'chosen'}),
 
-        }
-
-
-class PMForm(RequestModelForm):
-    addressee = forms.ModelChoiceField(
-        label=_("Addressee"),
-        widget=forms.Select(attrs={
-            'class': 'ajax-chosen form-control',
-            'url': reverse('json:wh:users')
-        }),
-        queryset=User.objects.none()
-    )
-    content = forms.CharField(
-        label=_("Content"),
-        widget=forms.Textarea(attrs={'class': 'markitup form-control'})
-    )
-
-    def __init__(self, *args, **kwargs):
-        super(PMForm, self).__init__(*args, **kwargs)
-        if all(self.data or [None, ]):
-            self.base_fields['addressee'].queryset = User.objects
-            self.fields['addressee'].queryset = User.objects
-        else:
-            self.base_fields['addressee'].queryset = User.objects.none()
-            self.fields['addressee'].queryset = User.objects.none()
-
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        sender = self.request.user
-        addressee = cleaned_data.get('addressee', '')
-        try:
-            a = User.objects.get(nickname=addressee)
-            if sender == a:
-                msg = _('You can not send private messages to yourself')
-                self._errors['addressee'] = ErrorList([msg])
-        except User.DoesNotExist:
-            msg = _('There\'s no user with such nickname, sorry')
-            self._errors['addressee'] = ErrorList([msg])
-        return cleaned_data
-
-    def save(self, commit=True):
-        self.instance.sender = self.request.user
-        self.instance.addressee = self.cleaned_data['addressee']
-        return super(PMForm, self).save(commit)
-
-    class Meta:
-        model = PM
-        fields = ('addressee', 'title', 'content')
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'})
         }
 
 

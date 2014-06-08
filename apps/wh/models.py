@@ -137,54 +137,6 @@ class Expression(models.Model):
         verbose_name_plural = _('expressions')
 
 
-class PM(models.Model):
-    sender = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='sender',
-        verbose_name=_("sender")
-    )
-    addressee = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='addressee',
-        verbose_name=_("addressee")
-    )
-    title = models.CharField(
-        _('title'), max_length=50
-    )
-    content = models.TextField(_('text'))
-    cache_content = models.TextField(
-        _("cache content"), blank=True, null=True
-    )
-    is_read = models.BooleanField(_('is read'), default=False)
-    sent = models.DateTimeField(
-        _('sent'), auto_now=True, default=datetime.now
-    )
-    dbs = models.BooleanField(_('deleted by sendr'), default=False)
-    dba = models.BooleanField(_('deleted by addr'), default=False)
-    syntax = models.CharField(
-        _('syntax'), max_length=50,
-        choices=settings.SYNTAX, blank=True, null=True
-    )
-    #TODO: Do we need files in PM ?
-
-    class Meta:
-        verbose_name = _('Private Message')
-        verbose_name_plural = _('Private Messages')
-
-    def purge_msg(self):
-        if self.dbs and self.dba:
-            self.remove()
-        return
-
-    def __unicode__(self):
-        return self.title
-
-    def render(self, field):
-        return render_filter(
-            post_markup_filter(getattr(self, field)),
-            self.syntax
-        )
-
-
-
 # noinspection PyShadowingBuiltins
 class RankType(models.Model):
     type = models.CharField(_('type'), max_length=100)

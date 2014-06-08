@@ -1,26 +1,29 @@
 # Create your views here.
 # -*- coding: utf-8 -*-
 from django.views import generic
-from django.conf import settings
+
 from django.contrib import auth
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
+from django.conf import settings
 
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.models import UserSID
-from apps.core.helpers import get_object_or_None
+from apps.core.helpers import get_object_or_None, get_object_or_404
 from apps.core.views import (
     LoginRequiredMixin
 )
 from apps.accounts.forms import (
     LoginForm, ProfileForm, RegisterForm,
-    PasswordChangeForm, PasswordRecoverForm,
-    PasswordRestoreForm, PasswordRestoreInitiateForm
+    PasswordChangeForm,
+    PasswordRestoreForm, PasswordRestoreInitiateForm, PMForm, PMReplyForm
 )
+from apps.core.views import RequestMixin
 from apps.accounts.models import (
-    User
+    User, PM
 )
 
 
@@ -228,3 +231,100 @@ class PasswordChangeView(generic.FormView):
         user.set_password(password)
         user.save()
         return redirect(self.get_success_url())
+
+
+class UserListView(generic.ListView):
+    model = User
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'accounts/users.html'
+
+
+class PMMixin(object):
+    model = PM
+    paginate_class = Paginator
+    paginator_by = settings.OBJECTS_ON_PAGE
+    template_name = 'accounts/pm_list.html'
+
+
+class PMInboxListView(PMMixin, generic.ListView):
+    def get_context_data(self, **kwargs):
+        context = super(PMInboxListView, self).get_context_data(**kwargs)
+        context.update({'box': 'inbox'})
+        return context
+
+    def get_queryset(self):
+        qs = super(PMInboxListView, self).get_queryset()
+        return qs.filter(addressee=self.request.user)
+
+
+class PMOutboxListView(PMMixin, generic.ListView):
+    def get_queryset(self):
+        qs = super(PMOutboxListView, self).get_queryset()
+        return qs.filter(sender=self.request.user)
+
+
+class PMDetailView(generic.DetailView):
+    model = PM
+    template_name = 'accounts/pm_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(PMDetailView, self).get_context_data(**kwargs)
+        # update its read
+        obj = context['object']
+        if not obj.is_read and self.request.user == obj.addressee:
+            context['object'].is_read = True
+            context['object'].save()
+        if context['object'].sender == self.request.user:
+            context.update({'box': 'outbox'})
+        else:
+            context.update({'box': 'inbox'})
+        initial = {
+            'title': (
+                obj.title if obj.title.startswith('Re:')
+                else 'Re: ' + obj.title
+            )}
+        context.update({'form': PMReplyForm(initial=initial)})
+        return context
+
+
+class PMReplyView(generic.CreateView):
+    model = PM
+    template_name = 'accounts/pm_form.html'
+    form_class = PMReplyForm
+    success_url = reverse_lazy('accounts:pm-outbox')
+
+    def get_pm_object(self):
+        if hasattr(self, 'pm_object'):
+            return self.pm_object
+        self.pm_object = get_object_or_404(PM, pk=self.kwargs.get('pk', 0))
+
+    def get_context_data(self, **kwargs):
+        context = super(PMReplyView, self).get_context_data(**kwargs)
+        self.get_pm_object()
+        context.update({
+            'object': self.pm_object
+        })
+        return context
+
+    def form_valid(self, form):
+        self.get_pm_object()
+        form.instance.sender = self.request.user
+        form.instance.addressee = self.pm_object.sender
+        form.instance.syntax = settings.DEFAULT_SYNTAX
+        return super(PMReplyView, self).form_valid(form)
+
+
+class PMSendView(RequestMixin, generic.CreateView):
+    model = PM
+    template_name = 'accounts/pm_form.html'
+    form_class = PMForm
+    success_url = reverse_lazy('accounts:pm-outbox')
+
+
+    def get_context_data(self, **kwargs):
+        context = super(PMSendView, self).get_context_data(**kwargs)
+        context.update({
+            'action': 'send'
+        })
+        return context

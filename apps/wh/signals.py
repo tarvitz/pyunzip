@@ -2,7 +2,7 @@ from django.db.models.signals import (
     pre_save, post_save, pre_delete
 )
 from apps.wh.actions import rank_scheme_alter
-from apps.wh.models import RankType, PM
+from apps.wh.models import RankType
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -54,10 +54,6 @@ def on_rank_type_change(instance, **kwargs):
 def on_rank_type_delete(instance, **kwargs):
     return on_rank_type_change(instance, **kwargs)
 
-@receiver(pre_save, sender=PM)
-def on_pm_pre_save(instance, **kwargs):
-    instance.cache_content = instance.render("content")
-    return instance
 
 @receiver(pre_save, sender=Comment)
 def on_comment_pre_save(instance, **kwargs):

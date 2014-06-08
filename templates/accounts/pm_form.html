@@ -1,0 +1,22 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{{ user.get_profile_url }}">{% trans "profile" %}</a></li>
+    <li><a href="{{ user.get_pm_inbox_url }}">{% trans "pm inbox" %}</a></li>
+    {% if action == 'send' %}
+      <li class="active">{% trans "send" %}</li>
+    {% else %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title.lower }}</a></li>
+      <li class="active">{% trans "reply" %}</li>
+    {% endif %}
+  </ul>
+  {% if action == 'send' %}
+    <h3>{% trans "Send" %}</h3>
+  {% else %}
+    <h3>{% trans "Reply" %}</h3>
+  {% endif %}
+
+  {% include "generic/form.html" with form=form %}
+{% endblock %}
