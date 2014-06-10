@@ -9,6 +9,11 @@
         <div class='transparency grey'></div>
         <span class='links'>
             <a class="permalink" href="{{ post.get_absolute_url }}">#</a>
+            {% if perms.accounts.change_policywarning %}
+              <a class="glyphicon glyphicon-warning-sign text-danger pull-right"
+                 rel="tooltip" href="{{ post.user.get_policy_warning_create_url }}"
+                 data-title="{% trans "Add user policy warning" %}"></a>
+            {% endif %}
         </span>
         <span class="updated">{% pybb_time post.created %}</span>
     </div>

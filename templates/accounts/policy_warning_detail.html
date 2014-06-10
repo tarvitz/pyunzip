@@ -16,6 +16,6 @@
   <strong>{% trans "Level" %}</strong>:
     <span class="level-{{ object.level }}">{{ object.get_level }}</span><br />
   <strong>{% trans "Date expires" %}</strong>: {{ object.date_expired|date:"d/F/Y" }}<br />
-  <strong>{% trans "Date expires" %}</strong>: {{ object.comment }}
+  <strong>{% trans "Comment" %}</strong>: {{ object.comment }}
 
 {% endblock %}

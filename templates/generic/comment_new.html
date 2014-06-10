@@ -6,12 +6,17 @@
     <div class="message-headline">
         <div class='transparency grey'></div>
         <span class='links'>
-            <a class="permalink" href="{{ comment.get_absolute_url }}">#</a>
-            {% if user.is_authenticated and comment_watch %}
-              {% if comment_watch.comment.submit_date < comment.submit_date or not comment_watch.comment %}
-                <i class="glyphicon glyphicon-asterisk"></i>
-              {% endif %}
+          <a class="permalink" href="{{ comment.get_absolute_url }}">#</a>
+          {% if user.is_authenticated and comment_watch %}
+            {% if comment_watch.comment.submit_date < comment.submit_date or not comment_watch.comment %}
+              <i class="glyphicon glyphicon-asterisk"></i>
             {% endif %}
+          {% endif %}
+          {% if perms.accounts.change_policywarning %}
+            <a class="text-danger pull-right glyphicon glyphicon-warning-sign"
+               rel="tooltip" data-title="{% trans "Add user policy warning" %}"
+               href="{{ comment.user.get_policy_warning_create_url }}"></a>
+          {% endif %}
         </span>
         <span class="updated">{{ comment.submit_date|date:"Y/m/d H:i" }}</span>
     </div>
