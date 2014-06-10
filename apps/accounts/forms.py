@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from apps.accounts.models import User, PM
+from apps.accounts.models import User, PM, PolicyWarning
 from apps.core.forms import RequestFormMixin
 from apps.core.helpers import get_object_or_None
+from apps.core.widgets import DatePickerInput
 from apps.core.models import UserSID
 
 from django import forms
@@ -14,6 +15,9 @@ from django.contrib import auth
 from captcha.fields import ReCaptchaField
 from django_select2.widgets import Select2Widget
 
+
+STATIC_URL = settings.STATIC_URL
+COMPONENTS_URL = STATIC_URL + 'components/'
 
 #mixins
 class CleanPasswordMixin(object):
@@ -296,6 +300,32 @@ class PMForm(RequestFormMixin, forms.ModelForm):
 
     class Media:
         js = (
-            settings.STATIC_URL + 'components/select2/select2.min.js',
-            settings.STATIC_URL + 'js/select2_load.js',
+            STATIC_URL + 'components/select2/select2.min.js',
+            STATIC_URL + 'js/select2_load.js',
+        )
+
+
+class PolicyWarningForm(forms.ModelForm):
+    class Meta:
+        attrs = {'class': 'form-control', 'klass': 'col-lg-6'}
+        model = PolicyWarning
+        widgets = {
+            'user': forms.HiddenInput,
+            'date_expired': DatePickerInput(attrs=attrs),
+            'level': forms.Select(attrs=attrs),
+            'comment': forms.Textarea(attrs={'class': 'form-control'})
+        }
+        fields = ('user', 'level', 'date_expired', 'comment', 'is_expired',)
+
+    class Media:
+        css = {
+            'all': (
+                COMPONENTS_URL + 'eonasdan-bootstrap-datetimepicker/build/css'
+                    '/bootstrap-datetimepicker.min.css',
+            )
+        }
+        js = (
+            COMPONENTS_URL + 'eonasdan-bootstrap-datetimepicker/build/js'
+                '/bootstrap-datetimepicker.min.js',
+            STATIC_URL + 'js/datetimepickers.js'
         )

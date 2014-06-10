@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 from django.views import generic
 
+from django.db.models import Q
 from django.contrib import auth
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
+from django.core.exceptions import PermissionDenied
 from django.conf import settings
 
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -19,11 +21,12 @@ from apps.core.views import (
 from apps.accounts.forms import (
     LoginForm, ProfileForm, RegisterForm,
     PasswordChangeForm,
-    PasswordRestoreForm, PasswordRestoreInitiateForm, PMForm, PMReplyForm
+    PasswordRestoreForm, PasswordRestoreInitiateForm, PMForm, PMReplyForm,
+    PolicyWarningForm
 )
 from apps.core.views import RequestMixin
 from apps.accounts.models import (
-    User, PM
+    User, PM, PolicyWarning
 )
 
 
@@ -321,10 +324,98 @@ class PMSendView(RequestMixin, generic.CreateView):
     form_class = PMForm
     success_url = reverse_lazy('accounts:pm-outbox')
 
-
     def get_context_data(self, **kwargs):
         context = super(PMSendView, self).get_context_data(**kwargs)
         context.update({
             'action': 'send'
         })
         return context
+
+
+class PolicyWarningAccessMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('accounts.change_policywarning'):
+            raise PermissionDenied("not allowed")
+        return super(PolicyWarningAccessMixin, self).dispatch(request, *args,
+                                                              **kwargs)
+
+
+class PolicyWarningCreateView(PolicyWarningAccessMixin, generic.CreateView):
+    model = PolicyWarning
+    form_class = PolicyWarningForm
+    template_name = 'accounts/policy_warning_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(PolicyWarningCreateView, self).get_form_kwargs()
+        initial = {
+            'user': get_object_or_404(User, pk=self.kwargs.get('pk', 0))
+        }
+        kwargs.update({
+            'initial': initial
+        })
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        context = super(PolicyWarningCreateView, self).get_context_data(
+            **kwargs)
+        context.update({
+            'usr': get_object_or_404(User, pk=self.kwargs.get('pk', 0))
+        })
+        return context
+
+
+class PolicyWarningUpdateView(PolicyWarningAccessMixin, generic.UpdateView):
+    model = PolicyWarning
+    form_class = PolicyWarningForm
+    template_name = 'accounts/policy_warning_form.html'
+
+
+class PolicyWarningDeleteView(PolicyWarningAccessMixin, generic.DeleteView):
+    model = PolicyWarning
+    template_name = 'accounts/policy_warning_form.html'
+
+    def get_success_url(self):
+        return self.object.user.get_policy_warnings_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(PolicyWarningDeleteView, self).get_context_data(
+            **kwargs)
+        context.update({'delete': True})
+        return context
+
+
+class PolicyWarningListView(generic.ListView):
+    model = PolicyWarning
+    paginator_class = Paginator
+    paginate_by = settings.OBJECTS_ON_PAGE
+    template_name = 'accounts/policy_warning_list.html'
+
+    def get_queryset(self):
+        qs = super(PolicyWarningListView, self).get_queryset()
+        if self.request.user.has_perm('accounts.change_policywarning'):
+            user_pk = self.kwargs.get('pk', None)
+            if user_pk:
+                qset = Q(user__pk=user_pk)
+                qs = qs.filter(qset)
+            return qs
+        return qs.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super(PolicyWarningListView, self).get_context_data(**kwargs)
+        user_pk = self.kwargs.get('pk', None)
+        if user_pk:
+            context.update({
+                'usr': get_object_or_404(User, pk=user_pk)
+            })
+        return context
+
+
+class PolicyWarningDetailView(generic.DetailView):
+    model = PolicyWarning
+    template_name = 'accounts/policy_warning_detail.html'
+
+    def get_queryset(self):
+        qs = super(PolicyWarningDetailView, self).get_queryset()
+        if self.request.user.has_perm('accounts.change_policywarning'):
+            return qs
+        return qs.filter(user=self.request.user)

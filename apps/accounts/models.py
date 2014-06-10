@@ -133,6 +133,7 @@ class User(PermissionsMixin, AbstractBaseUser):
             'accounts:profile-by-nick', args=(
                 self.nickname or self.username, )
         )
+
     @staticmethod
     def get_profile_url():
         return reverse('accounts:profile')
@@ -152,6 +153,12 @@ class User(PermissionsMixin, AbstractBaseUser):
     @staticmethod
     def get_pm_outbox_url():
         return reverse('accounts:pm-outbox')
+
+    def get_policy_warnings_url(self):
+        return reverse('accounts:warning-list', args=(self.pk, ))
+
+    def get_policy_warning_create_url(self):
+        return reverse('accounts:warning-create', args=(self.pk, ))
 
     def get_color_theme(self):
         return self.get_forum_theme()
@@ -184,7 +191,8 @@ class User(PermissionsMixin, AbstractBaseUser):
                     cache.set('nick:%s' % self.username, span)
                 return span
             if not no_cache:
-                cache.set('nick:%s' % self.username, self.nickname or self.username)
+                cache.set('nick:%s' % self.username, self.nickname or
+                          self.username)
             return self.nickname or self.username
         return nickname
 
@@ -260,7 +268,7 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     @property
     def files(self):
-        return  self.user_file_set
+        return self.user_file_set
 
     def __unicode__(self):
         return self.nickname or self.username
@@ -322,8 +330,73 @@ class PM(models.Model):
     def get_absolute_url(self):
         return reverse('accounts:pm-detail', args=(self.pk, ))
 
+    @staticmethod
+    def get_delete_url():
+        return ''
+
     def get_reply_url(self):
         return reverse('accounts:pm-reply', args=(self.pk, ))
+
+
+POLICY_WARNING_LEVEL_CHOICES = (
+    (1, "*"),
+    (2, "**"),
+    (3, "+"),
+    (4, "++"),
+    (5, "x"),  # READONLY
+    (6, _('ban')),
+    (7, _('perm ban'))
+)
+
+
+class PolicyWarning(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='warning_user_set',
+        verbose_name=_('user')
+    )
+    comment = models.CharField(_('comment'), max_length=4096,
+                               blank=True, null=True)
+    level = models.PositiveIntegerField(_("level"), default=1,
+                                        choices=POLICY_WARNING_LEVEL_CHOICES)
+    created_on = models.DateTimeField(_("created on"), auto_now=True,
+                                      default=datetime.now)
+    updated_on = models.DateTimeField(_("updated on"), default=datetime.now)
+    date_expired = models.DateField(
+        _('date expired'), default=datetime.now,
+        help_text=_("date then warning is expired")
+    )
+    is_expired = models.BooleanField(
+        _('is expired'), default=False,
+        help_text=_("marks if warning is expired for this user")
+    )
+
+    # urls
+    def get_absolute_url(self):
+        return reverse('accounts:warning-detail', args=(self.pk, ))
+
+    def get_edit_url(self):
+        return reverse('accounts:warning-update', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('accounts:warning-delete', args=(self.pk, ))
+
+    # methods
+    def get_level(self):
+        idx = [
+            self.level in i for i in POLICY_WARNING_LEVEL_CHOICES].index(True)
+        return POLICY_WARNING_LEVEL_CHOICES[idx][1]
+
+    def __unicode__(self):
+        return '[%(level)s] %(date)s' % {
+            'level': self.get_level(),
+            'date': self.date_expired.strftime('%d-%m-%Y')
+        }
+
+    class Meta:
+        ordering = ['-date_expired', ]
+        verbose_name = _("Policy warning")
+        verbose_name_plural = _("Policy warnings")
+
 
 from apps.accounts import signals
 signals.setup_run()

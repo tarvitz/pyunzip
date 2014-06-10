@@ -1,0 +1,36 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    {% if object %}
+      <li><a href="{{ object.user.get_absolute_url }}">{{ object.user.get_nickname|safe }}</a></li>
+      <li><a href="{{ object.user.get_policy_warnings_url }}">{% trans "policy warnings" %}</a></li>
+      <li><a href="{{ object.get_absolute_url }}">{{ object|lower }}</a></li>
+    {% else %}
+      <li><a href="{{ usr.get_absolute_url }}">{{ usr.get_nickname|safe }}</a></li>
+    {% endif %}
+    {% if not delete %}
+      {% if object %}
+        <li class="active">{% trans "update policy warning" %}</li>
+      {% else %}
+        <li class="active">{% trans "add policy warning" %}</li>
+      {% endif %}
+    {% else %}
+       <li class="active">{% trans 'confirm policy warning deletion' %}</li>
+    {% endif %}
+  </ul>
+  {% if not delete %}
+    {% if object %}
+      <h3>{% trans "Update policy warning" %}</h3>
+      {% trans "Update" as save_i18n %}
+    {% else %}
+      <h3>{% trans "Add policy warning" %}</h3>
+      {% trans "Save" as save_i18n %}
+    {% endif %}
+  {% else %}
+    <h3>{% trans "Confirm deletion policy warning" %}</h3>
+    {% trans "I confirm" as save_i18n %}
+  {% endif %}
+  {% include "generic/form.html" with form=form save_i18n=save_i18n %}
+{% endblock %}

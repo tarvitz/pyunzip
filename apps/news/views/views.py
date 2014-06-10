@@ -206,6 +206,7 @@ class EventParticipateView(generic.UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(EventParticipateView, self).get_context_data(**kwargs)
+        context.update({'join_event': True})
         return context
 
     def form_valid(self, form):
