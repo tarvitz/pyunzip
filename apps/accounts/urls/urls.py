@@ -71,4 +71,6 @@ urlpatterns = patterns(
     url(r'password/changed/$', direct_to_template,
         {'template': 'accounts/password_changed.html'},
         name='password-changed'),
+    url(r'^accounts/read/only/$', direct_to_template,
+        {'template': 'accounts/read_only.html'}, name='read-only'),
 )

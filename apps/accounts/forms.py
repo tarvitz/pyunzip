@@ -307,7 +307,7 @@ class PMForm(RequestFormMixin, forms.ModelForm):
 
 class PolicyWarningForm(forms.ModelForm):
     class Meta:
-        attrs = {'class': 'form-control', 'klass': 'col-lg-6'}
+        attrs = {'class': 'form-control', 'klass': 'col-lg-2'}
         model = PolicyWarning
         widgets = {
             'user': forms.HiddenInput,

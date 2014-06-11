@@ -160,6 +160,17 @@ class User(PermissionsMixin, AbstractBaseUser):
     def get_policy_warning_create_url(self):
         return reverse('accounts:warning-create', args=(self.pk, ))
 
+    def get_policy_warnings(self):
+        return self.warning_user_set.filter(
+            is_expired=False)
+
+    def get_active_read_only_policy_warnings(self):
+        return self.warnings.filter(level=settings.READONLY_LEVEL)
+
+    @property
+    def warnings(self):
+        return self.get_policy_warnings()
+
     def get_color_theme(self):
         return self.get_forum_theme()
 
@@ -343,9 +354,9 @@ POLICY_WARNING_LEVEL_CHOICES = (
     (2, "**"),
     (3, "+"),
     (4, "++"),
-    (5, "x"),  # READONLY
-    (6, _('ban')),
-    (7, _('perm ban'))
+    (settings.READONLY_LEVEL, _("read only")),
+    #(6, _('ban')),
+    #(7, _('perm ban'))
 )
 
 

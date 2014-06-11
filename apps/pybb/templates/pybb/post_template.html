@@ -23,6 +23,20 @@
             <div>
                 <a href="{% url "accounts:profile-by-nick" post.user %}">{{ post.user.get_nickname|safe }} </a>
             </div>
+            {% if user.is_authenticated and post.user.warnings.count %}
+              {% with warn=post.user.warnings.0 %}
+                <span class="policy-warnings level-{{ warn.level }}">{% spaceless %}
+                  [
+                  {% if warn.user == user or perms.accounts.change_policywarning %}
+                    <a href="{{ warn.get_absolute_url }}">{{ warn.get_level }}</a>
+                  {% else %}
+                    {{ warn.get_level }}
+                  {% endif %}
+                  ]
+                {% endspaceless %}
+                </span>
+              {% endwith %}
+            {% endif %}
             <div class="bottom">
             </div>
             <div class="post-controls">

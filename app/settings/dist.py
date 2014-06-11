@@ -94,7 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'apps.core.middleware.BanMiddleware',
-    'apps.wh.middleware.WarningsMiddleware',
+    'apps.accounts.middleware.ReadOnlyMiddleware',
 )
 
 CACHES = {
@@ -230,7 +230,8 @@ AUTHENTICATION_BACKENDS = (
 
 CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
-    'apps.news.cron.EventsMarkFinishedCronJob'
+    'apps.news.cron.EventsMarkFinishedCronJob',
+    'apps.accounts.cron.PolicyWarningsMarkExpireCronJob',
 )
 
 
@@ -310,7 +311,7 @@ SIGN_CHOICES = (
 )
 
 
-READONLY_LEVEL = 5
+READONLY_LEVEL = 40000
 GLOBAL_SITE_NAME = 'http://w40k.net'
 
 KARMA_COMMENTS_COUNT = 1

@@ -4,10 +4,12 @@ import os
 
 from django.test import TestCase
 from django.utils.unittest import skipIf
-from apps.accounts.models import User
+from django.conf import settings
+
+from apps.accounts.models import User, PolicyWarning, PM
+from apps.accounts.cron import PolicyWarningsMarkExpireCronJob
 from apps.wh.models import (
-    Side, Rank, RankType
-)
+    Rank, RankType)
 from apps.core.models import UserSID
 from apps.core.tests import TestHelperMixin
 from django.core.urlresolvers import reverse, reverse_lazy, NoReverseMatch
@@ -16,6 +18,7 @@ from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
 
+from datetime import datetime, timedelta, date
 
 
 class JustTest(TestHelperMixin, TestCase):
@@ -51,7 +54,7 @@ class JustTest(TestHelperMixin, TestCase):
                         messages.append({
                             'user': user, 'err': err, 'url': url,
                             'type': 'Assertion'
-                      })
+                        })
                 except NoReverseMatch as err:
                     messages.append({
                         'user': user, 'err': err, 'url': url,
@@ -196,13 +199,14 @@ class JustTest(TestHelperMixin, TestCase):
         form = response.context['form']
         self.assertEqual(
             form.errors['nickname'][0],
-            unicode(_('Another user with %s nickname exists.' % post['nickname']))
+            unicode(_('Another user with %s nickname exists.' %
+                      post['nickname']))
         )
 
     def test_profile_update(self):
-        avatar_name = 'avatar.jpg'
+        #avatar_name = 'avatar.jpg'
         avatar = open('tests/fixtures/avatar.jpg')
-        edit = {
+        edit_post = {
             'first_name': 'edited',
             'last_name': 'editor',
             'gender': 'm',  # (f)emale, (n)ot identified
@@ -218,7 +222,7 @@ class JustTest(TestHelperMixin, TestCase):
             #'army': 1,
             'avatar': avatar,
         }
-        post.update(edit)
+        post.update(edit_post)
 
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
@@ -236,7 +240,7 @@ class JustTest(TestHelperMixin, TestCase):
         messages = []
 
         user = User.objects.get(username='user')
-        for (key, value) in edit.items():
+        for (key, value) in edit_post.items():
             try:
                 self.assertEqual(getattr(user, key), value)
             except AssertionError as err:
@@ -259,7 +263,6 @@ class JustTest(TestHelperMixin, TestCase):
         os.environ['RECAPTCHA_TESTING'] = 'True'
         usernames = (
             ('test_user', 'test@blacklibrary.ru', 'test_nickname'),
-            # (u'человек', 'test1@blacklibrary.ru', u'человек_человек') - not allowed
             ('test_user_2', 'test2@blacklibrary.ru', 'test_nickname_2')
         )
         for usern in usernames:
@@ -324,7 +327,8 @@ class JustTest(TestHelperMixin, TestCase):
         count = u.warning_set.count()
         self.assertEqual(count, 0)
         # could not alter warning for user which is not exists
-        increase_url = reverse('wh:warning-alter', args=('not_existing_user', 'increase'))
+        increase_url = reverse('wh:warning-alter', args=('not_existing_user',
+                                                         'increase'))
         response = self.client.get(increase_url)
         self.assertEqual(response.status_code, 404)
 
@@ -402,3 +406,189 @@ class CacheTest(TestCase):
         user = User.objects.get(pk=user.pk)
         user.save()
         self.assertEqual(self.cache_get_nickname(user), nickname)
+
+
+class PolicyWarningTest(TestHelperMixin, TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+    ]
+
+    def setUp(self):
+        self.policy_warning = None
+        self.user = User.objects.get(username='user')
+        self.admin = User.objects.get(username='admin')
+
+        self.create_url = reverse('accounts:warning-create',
+                                  args=(self.user.pk, ))
+        self.update_url = reverse('accounts:warning-update',
+                                  args=(self.user.pk, ))
+        self.delete_url = reverse('accounts:warning-delete',
+                                  args=(self.user.pk, ))
+
+        self.date_expired = datetime.now() + timedelta(weeks=1)
+        self.policy_warning_comment = u'Просто потому что'
+
+        self.post = {
+            'user': self.user.pk,
+            'comment': self.policy_warning_comment,
+            'date_expired': self.date_expired.strftime('%Y-%m-%d'),
+            'is_expired': False,
+            'level': 1,
+        }
+        self.post_update = {
+            'user': self.user.pk,
+            'comment': u'Новый комментарий',
+            'date_expired': (
+                self.date_expired + timedelta(days=2)).strftime('%Y-%m-%d'),
+            'is_expired': False,
+            'level': settings.READONLY_LEVEL
+        }
+        self.post_pm = {
+            'addressee': self.admin.pk,
+            'title': u'Заголовок сообщения',
+            'content': u'Текст письма'
+        }
+
+    def add_policy_warning(self):
+        self.policy_warning = PolicyWarning.objects.create(
+            user=self.user, date_expired=self.date_expired,
+            is_expired=False, comment=self.policy_warning_comment,
+        )
+
+    # CRUD tests
+    def test_policy_warning_create(self, role='admin'):
+        self.login(role)
+        count = PolicyWarning.objects.count()
+        response = self.client.post(self.create_url, self.post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.proceed_form_errors(response.context)
+
+        self.assertEqual(PolicyWarning.objects.count(), count + 1)
+        policy_warning = PolicyWarning.objects.latest('pk')
+        post = deepcopy(self.post)
+        date_expired = date(*[int(i) for i in
+                              self.post['date_expired'].split('-')])
+        post.update({
+            'user': self.user,
+            'date_expired': date_expired
+        })
+        self.check_state(policy_warning, post, self.assertEqual)
+
+    def test_policy_warning_create_failure(self, role='user'):
+        self.login(role)
+        count = PolicyWarning.objects.count()
+        response = self.client.get(self.create_url, follow=True)
+        self.assertEqual(response.status_code, 403)
+        response = self.client.post(self.create_url, self.post, follow=True)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(PolicyWarning.objects.count(), count)
+
+    def test_policy_warning_update(self, role='admin'):
+        self.add_policy_warning()
+        self.assertNotEqual(PolicyWarning.objects.count(), 0)
+        self.login(role)
+        response = self.client.post(self.policy_warning.get_edit_url(),
+                                    self.post_update, follow=True)
+        self.proceed_form_errors(response.context)
+
+        self.assertEqual(response.status_code, 200)
+        policy_warning = PolicyWarning.objects.get(pk=self.policy_warning.pk)
+        post = deepcopy(self.post_update)
+        date_expired = self.post_update['date_expired']
+        date_expired = date(*[int(i) for i in date_expired.split('-')])
+
+        post.update({
+            'user': self.user,
+            'date_expired': date_expired
+        })
+        self.check_state(policy_warning, post, self.assertEqual)
+
+    def test_policy_warning_update_failure(self, role='user'):
+        self.add_policy_warning()
+        self.assertNotEqual(PolicyWarning.objects.count(), 0)
+        self.login(role)
+        response = self.client.get(self.policy_warning.get_edit_url(),
+                                   follow=True)
+        self.assertEqual(response.status_code, 403)
+        response = self.client.post(self.policy_warning.get_edit_url(),
+                                    self.post_update, follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_policy_warning_delete(self, role='admin'):
+        self.add_policy_warning()
+        self.assertNotEqual(PolicyWarning.objects.count(), 0)
+        self.login(role)
+        count = PolicyWarning.objects.count()
+
+        response = self.client.post(
+            self.policy_warning.get_delete_url(), {}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(PolicyWarning.objects.count(), count - 1)
+
+    def test_policy_warning_delete_failure(self, role='user'):
+        self.add_policy_warning()
+        self.assertNotEqual(PolicyWarning.objects.count(), 0)
+        self.login(role)
+        response = self.client.get(self.policy_warning.get_delete_url(),
+                                   follow=True)
+        self.assertEqual(response.status_code, 403)
+        response = self.client.post(self.policy_warning.get_delete_url(),
+                                    self.post_update, follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    # test read only, cron and other stuff
+    def test_policy_warning_cron_task_expire(self):
+        self.add_policy_warning()
+        self.assertEqual(self.policy_warning.is_expired, False)
+        self.policy_warning.date_expired = datetime.now() - timedelta(hours=24)
+        self.policy_warning.save()
+        job = PolicyWarningsMarkExpireCronJob()
+        job.do()
+        policy_warning = PolicyWarning.objects.get(pk=self.policy_warning.pk)
+        self.assertEqual(policy_warning.is_expired, True)
+
+    def test_post_with_read_only_policy_warning(self):
+        self.add_policy_warning()
+        self.policy_warning.level = settings.READONLY_LEVEL
+        self.policy_warning.save()
+
+        count = PM.objects.count()
+        self.login(self.user.username)  # user
+        self.assertEqual(
+            self.user.get_active_read_only_policy_warnings().count(), 1)
+
+        response = self.client.post(reverse('accounts:pm-create'),
+                                    self.post_pm, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['request'].get_full_path(),
+                         reverse('accounts:read-only'))
+        self.assertEqual(PM.objects.count(), count)
+
+    def test_manual_check_policy_warning_expire(self):
+        self.add_policy_warning()
+        self.policy_warning.level = settings.READONLY_LEVEL
+        self.policy_warning.save()
+
+        self.login('admin')
+        post = deepcopy(self.post_update)
+        post.update({
+            'is_expired': True
+        })
+        response = self.client.post(self.policy_warning.get_edit_url(),
+                                    post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        policy_warning = PolicyWarning.objects.get(pk=self.policy_warning.pk)
+        self.assertEqual(policy_warning.is_expired, True)
+        self.assertEqual(
+            self.user.get_active_read_only_policy_warnings().count(), 0)
+
+        self.login('user')
+        count = PM.objects.count()
+        response = self.client.post(reverse('accounts:pm-create'),
+                                    self.post_pm, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(PM.objects.count(), count + 1)
+
+    @skipIf(True, "Not implemented")
+    def test_policy_warning_immunity(self):
+        pass
