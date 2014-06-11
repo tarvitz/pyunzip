@@ -1,3 +1,12 @@
+// colors
+@pre-release-color: #fff;
+@pre-release-bg: #6F5499;
+@pre-release-border: darken(@pre-release-bg, 10%);
+
+@release-color: @btn-primary-color;
+@release-bg: @btn-primary-bg;
+@release-border: @btn-primary-border;
+
 .event-variant(@color; @background; @border) {
   color: @color;
   background-color: @background;
@@ -55,5 +64,11 @@
   }
   &.order{
     .event-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border);
+  }
+  &.pre-release{
+    .event-variant(@pre-release-color, @pre-release-bg, @pre-release-border);
+  }
+  &.release{
+    .event-variant(@release-color, @release-bg, @release-border);
   }
 }
