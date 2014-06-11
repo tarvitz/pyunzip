@@ -1,11 +1,11 @@
 // colors
-@pre-release-color: #fff;
-@pre-release-bg: #6F5499;
-@pre-release-border: darken(@pre-release-bg, 10%);
+@event-game-color: #fff;
+@event-game-bg: #6F5499;
+@event-game-border: darken(@event-game-bg, 10%);
 
-@release-color: @btn-primary-color;
-@release-bg: @btn-primary-bg;
-@release-border: @btn-primary-border;
+@event-release-color: @btn-primary-color;
+@event-release-bg: @btn-primary-bg;
+@event-release-border: @btn-primary-border;
 
 .event-variant(@color; @background; @border) {
   color: @color;
@@ -56,7 +56,7 @@
       .pull-right;
     }
   }
-  &.game{
+  &.pre-release{
     .event-variant(@btn-warning-color, @btn-warning-bg, @btn-warning-border);
   }
   &.tournament{
@@ -65,10 +65,10 @@
   &.order{
     .event-variant(@btn-danger-color, @btn-danger-bg, @btn-danger-border);
   }
-  &.pre-release{
-    .event-variant(@pre-release-color, @pre-release-bg, @pre-release-border);
+  &.game{
+    .event-variant(@event-game-color, @event-game-bg, @event-game-border);
   }
   &.release{
-    .event-variant(@release-color, @release-bg, @release-border);
+    .event-variant(@event-release-color, @event-release-bg, @event-release-border);
   }
 }
