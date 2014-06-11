@@ -7,17 +7,15 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from apps.wh.models import (
-    Rank, RankType, PM
+    Rank, RankType
 )
 
 from apps.core.tests import TestHelperMixin
-from django.core.urlresolvers import reverse, reverse_lazy, NoReverseMatch
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.utils.unittest import skipIf
 
 from apps.core.helpers import get_object_or_None
-from copy import deepcopy
 from django.core.cache import cache
-import simplejson as json
 
 
 class ImplementMe(Exception):
@@ -36,7 +34,6 @@ class JustTest(TestHelperMixin, TestCase):
         self.urls_void = [
         ]
         self.urls_registered = [
-            reverse_lazy('wh:users'),
         ]
         self.get_object = get_object_or_None
 
@@ -109,138 +106,11 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Permission denied')
 
-    def test_profile_get_avatar(self):
-        avatar_url = reverse('wh:avatar', args=('user', ))
-        response = self.client.get(avatar_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('image', response.get('Content-Type'))
-
-    def test_get_armies(self):
-        # TODO: refactor this functional
-        url = reverse('json:wh:armies', args=(1, ))
-        response = self.client.get(url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get('Content-Type'), 'application/json')
-
     def test_rank_view(self):
         rank = Rank.objects.all()[0]
         url = reverse('wh:ranks', args=(rank.id, ))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
-
-    def test_warning_increase_deacrease(self):
-        logged = self.client.login(username='admin', password='123456')
-        self.assertEqual(logged, True)
-        increase_url = reverse('wh:warning-alter', args=('user', 'increase'))
-        response = self.client.get(increase_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        u = User.objects.get(username='user')
-        count = u.warning_set.filter(level=1).count()
-        self.assertEqual(count, 1)
-        # only admins can cast warnings
-        deacrease_url = reverse('wh:warning-alter', args=('user', 'decrease'))
-        response = self.client.get(deacrease_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        count = u.warning_set.count()
-        self.assertEqual(count, 0)
-        # could not alter warning for user which is not exists
-        increase_url = reverse('wh:warning-alter', args=('not_existing_user',
-                                                         'increase'))
-        response = self.client.get(increase_url)
-        self.assertEqual(response.status_code, 404)
-
-    def test_warning_alter(self):
-        logged = self.client.login(username='admin', password='123456')
-        self.assertEqual(logged, True)
-        url = reverse('wh:warning-alter-form', args=('user', ))
-        edit = {
-            'level': 5
-        }
-        post = {
-            'nickname': 'user',
-            'comment': 'just deal with it'
-        }
-        post.update(edit)
-        response = self.client.post(url, post, follow=True)
-
-        self.assertEqual(response.status_code, 200)
-        u = User.objects.get(username='user')
-        self.assertEqual(u.warning_set.filter(level=1).count(), 0)
-        warning = u.warning_set.filter(level=5)
-        self.assertNotEqual(len(warning), 0)
-        warning = warning[0]
-
-        messages = []
-        for (key, value) in edit.items():
-            try:
-                self.assertEqual(getattr(warning, key), value)
-            except AssertionError as err:
-                messages.append({
-                    'err': err,
-                    'key': key
-                })
-        if messages:
-            for msg in messages:
-                print "Got error assigning: %(key)s with %(err)s" % msg
-            raise AssertionError
-        comment = warning.comments.filter(comment__iexact=post['comment'])
-        self.assertEqual(comment.count(), 1)
-        self.assertEqual(comment[0].comment, post['comment'])
-
-    def test_send_pm(self):
-        admin = User.objects.get(username='admin')
-        post = {
-            'addressee': admin.pk,
-            'title': 'me here',
-            'content': u'Preved medved, waaaGH?'
-        }
-        count = PM.objects.count()
-        url = reverse('wh:pm-send')
-        # anonymous can not post pm
-        response = self.client.post(url, post, follow=True)
-        self.proceed_form_errors(response.context)
-
-        self.assertEqual(response.status_code, 404)
-        self.assertEqual(count, PM.objects.count())
-
-        # user can post private messages
-        self.client.login(username='user', password='123456')
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 1, PM.objects.count())
-        pm = PM.objects.order_by('-id').all()[0]
-        edit = deepcopy(post)
-        edit.update({'addressee': admin})
-        self.check_state(pm, edit, check=self.assertEqual)
-
-    def test_json_pm_fetch(self):
-        logged = self.client.login(username='user', password='123456')
-        user = User.objects.get(username='user')
-
-        self.assertEqual(logged, True)
-
-        # inbox
-        url = reverse('json:wh:pm-view')
-        pm = PM.objects.filter(addressee=user)[0]
-        inbox_url = "%s?pk=%s&folder=inbox" % (url, pm.pk)
-        response = self.client.get(inbox_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get("Content-Type"), 'application/json')
-        js = json.loads(response.content)
-        self.assertEqual(js['to'], user.nickname)
-        sender = User.objects.get(nickname__iexact=js['from'])
-        self.assertIn(sender.nickname, js['nickname'])
-
-        # outbox
-        pm = PM.objects.filter(sender=user)[0]
-        outbox_url = "%s?pk=%s&folder=outbox" % (url, pm.pk)
-        response = self.client.get(outbox_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get("Content-Type"), 'application/json')
-        js = json.loads(response.content)
-        self.assertEqual(js['from'], user.nickname)
-        addressee = User.objects.get(nickname__iexact=js['to'])
-        self.assertIn(addressee.nickname, js['nickname'])
 
 
 class CacheTest(TestCase):

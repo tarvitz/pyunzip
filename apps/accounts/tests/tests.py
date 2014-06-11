@@ -311,26 +311,6 @@ class JustTest(TestHelperMixin, TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-    def test_warning_increase_deacrease(self):
-        logged = self.client.login(username='admin', password='123456')
-        self.assertEqual(logged, True)
-        increase_url = reverse('wh:warning-alter', args=('user', 'increase'))
-        response = self.client.get(increase_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        u = User.objects.get(username='user')
-        count = u.warning_set.filter(level=1).count()
-        self.assertEqual(count, 1)
-        # only admins can cast warnings
-        deacrease_url = reverse('wh:warning-alter', args=('user', 'decrease'))
-        response = self.client.get(deacrease_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        count = u.warning_set.count()
-        self.assertEqual(count, 0)
-        # could not alter warning for user which is not exists
-        increase_url = reverse('wh:warning-alter', args=('not_existing_user',
-                                                         'increase'))
-        response = self.client.get(increase_url)
-        self.assertEqual(response.status_code, 404)
 
     def test_banned_user(self):
         u = User.objects.get(username='user')

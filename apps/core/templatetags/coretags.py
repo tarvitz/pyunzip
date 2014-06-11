@@ -11,48 +11,6 @@ from apps.core.helpers import get_content_type_or_None
 register = Library()
 
 
-# TODO: refactor it
-class GetWarningNode(Node):
-    def __init__(self, user, context_var):
-        self.user = user
-        self.context_var = context_var
-
-    def render(self, context):
-        user = self.user.resolve(context, ignore_failures=True)
-        from apps.wh.models import Warning
-        from django.db.models import Q
-        kw = {}
-        if hasattr(user, 'army'):
-            if hasattr(user.army, 'side'):
-                kw.update({'type__side': user.army.side})
-        warnings = Warning.objects.filter(Q(user=user, **kw))
-        if not warnings:
-            warnings = Warning.objects.filter(user=user)
-            if len(warnings):
-                warning = warnings[0]
-            else:
-                return ''
-        else:
-            warning = warnings[0]
-        context[self.context_var] = warning
-        return ''
-
-
-#{% get_warning for user as warn %}
-def get_warning(parser, token):
-    bits = token.contents.split()
-    if len(bits) != 5:
-        raise TemplateSyntaxError("get_warning should take 4 arguments")
-    if bits[1] != 'for':
-        raise TemplateSyntaxError("second argument should be 'for'")
-    if bits[3] != 'as':
-        raise TemplateSyntaxError("second argument should be 'as'")
-    user = parser.compile_filter(bits[2])
-    context_var = bits[4]
-    return GetWarningNode(user, context_var)
-register.tag(get_warning)
-
-
 class GetObjectMetaNode(Node):
     def __init__(self, var, varname=None):
         self.var = var

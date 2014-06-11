@@ -3,13 +3,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group
-
-from django.contrib.contenttypes import generic
 from django.conf import settings
 from django.core.urlresolvers import reverse
-
-from datetime import datetime
-from apps.core.helpers import post_markup_filter, render_filter
 
 
 class Universe(models.Model):
@@ -190,7 +185,7 @@ class Rank(models.Model):
     get_css_id = lambda self: self.type.css_id
 
     def get_absolute_url(self):
-        return reverse('wh:rank', args=(self.id,))
+        return reverse('wh:rank', args=(self.id, ))
 
     class Meta:
         verbose_name = _("Rank")
@@ -205,75 +200,6 @@ class AbstractActivity(models.Model):
 
     class Meta:
         abstract = True
-
-
-class UserActivity(AbstractActivity):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, primary_key=True)
-    is_logout = models.NullBooleanField(_('is logout'))
-    last_action_time = models.DateTimeField(
-        _('Last action time'),
-        null=True, blank=True
-    )
-
-    def show_nickname(self):
-        return self.user.nickname
-    show_nickname.short_description = _('User')
-
-    class Meta:
-        verbose_name = _('User Activity')
-        verbose_name_plural = _('User Activities')
-
-
-class WarningType(models.Model):
-    codename = models.CharField(
-        _('codename'), max_length=30, unique=True
-    )
-    description = models.CharField(
-        _('description'), max_length=200
-    )
-    level = models.IntegerField(
-        _('level')
-    )
-    side = models.ManyToManyField(Side, blank=True)
-    is_general = models.BooleanField(
-        _('is general'), blank=True, default=False
-    )
-
-    class Meta:
-        pass
-
-    def __unicode__(self):
-        return self.description
-
-
-# noinspection PyShadowingBuiltins
-class Warning(models.Model):
-    style = models.CharField(_('style'), max_length=200)
-    type = models.ForeignKey(WarningType)
-    level = models.IntegerField(
-        _('sign'), max_length=10, choices=settings.SIGN_CHOICES
-    )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, primary_key=True)
-    expired = models.DateTimeField(_('expired'))
-    comments = generic.GenericRelation(
-        'comments.Comment', object_id_field='object_pk'
-    )
-
-    def _get_sign(self):
-        return settings.SIGN_CHOICES[int(self.level)-1][1]
-    sign = property(_get_sign)
-
-    def __unicode__(self):
-        return self.user.nickname
-
-    class Meta:
-        permissions = (
-            (u'set_warnings', _('Can set warnings')),
-        )
-
-    def show_nickname(self):
-        return self.user.nickname
-    show_nickname.short_description = _('User')
 
 
 from apps.wh.signals import setup_signals

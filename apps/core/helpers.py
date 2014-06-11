@@ -5,7 +5,7 @@ import six
 from functools import wraps
 from datetime import datetime, date, time
 from functools import partial
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponse, Http404
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.shortcuts import get_object_or_404 as _get_object_or_404
 from apps.core import get_skin_template
@@ -83,21 +83,6 @@ def get_object_or_404(object_source, *args, **kwargs):
             raise Http404("Giving object has no manager instance")
     except (object_source.DoesNotExist, object_source.MultipleObjectReturned):
         raise Http404("Object does not exist or multiple object returned")
-
-
-# decorator
-def can_act(func):
-    def wrapper(request, *args, **kwargs):
-        user = request.user
-        if user.is_superuser or user.is_staff:
-            return func(request, *args, **kwargs)
-        from apps.wh.models import Warning
-        warning = get_object_or_None(Warning, user=request.user)
-        if warning:
-            if int(warning.level) >= settings.READONLY_LEVEL:
-                return HttpResponseRedirect('/you/can/not/act/')
-        return func(request, *args, **kwargs)
-    return wrapper
 
 
 def get_content_type_or_none(object_source):

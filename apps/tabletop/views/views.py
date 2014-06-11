@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import (
     get_comments, get_content_type,
-    get_object_or_None, paginate, can_act, render_to, get_int_or_zero
+    get_object_or_None, paginate, render_to, get_int_or_zero
 )
 
 from django.conf import settings
@@ -158,7 +158,6 @@ def action_roster(request, pk=None, action=None):
 
 #@todo: may be should be MORE CLEAN?
 @login_required
-@can_act
 def add_battle_report(request, action=None, pk=None):
     template = get_skin_template(request.user, 'add_battle_report.html')
     br = None
@@ -233,7 +232,6 @@ def xhr_rosters(request, search):
 
 
 @login_required
-@can_act
 def delete_battle_report(request, pk, approve=''):
     br = get_object_or_None(BattleReport, pk=pk)
     if (br.owner == request.user or request.user.is_superuser

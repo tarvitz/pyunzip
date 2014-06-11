@@ -1,7 +1,7 @@
 from django.db.models.signals import (
     pre_save, post_save, pre_delete
 )
-from apps.wh.actions import rank_scheme_alter
+
 from apps.wh.models import RankType
 try:
     from django.contrib.auth import get_user_model
@@ -9,26 +9,9 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.contrib.comments.models import Comment
-from django.core.cache import get_cache, cache
+from django.core.cache import cache
 from django.dispatch import receiver
 
-
-def user_saved(instance, **kwargs):
-    #print "user_saved function is active"
-    rank_scheme_alter(instance,**kwargs)
-
-#def user_post_save(instance, **kwargs):
-#    cache.delete('nick:%s' % instance.username)
-#    return instance
-#
-#def rank_type_save(instance, **kwargs):
-#    # drop caches
-#    users = User.objects.filter(
-#        ranks__in=instance.rank_set.all()
-#    )
-#    for user in users:
-#        cache.delete('nick:%s' % user.username)
-#    return instance
 
 @receiver(post_save, sender=User)
 def on_user_change(instance, **kwargs):
@@ -60,7 +43,6 @@ def on_comment_pre_save(instance, **kwargs):
     instance.cache_comment = instance.render_comment()
     return instance
 
+
 def setup_signals():
-    pre_save.connect(rank_scheme_alter,sender=User)
-    #post_save.connect(user_post_save, sender=User)
-    #post_save.connect(rank_type_save, sender=RankType)
+    pass

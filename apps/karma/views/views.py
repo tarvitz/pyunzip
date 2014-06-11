@@ -23,7 +23,7 @@ from apps.karma.decorators import (
 )
 
 from apps.core.helpers import paginate
-from apps.core.helpers import can_act, render_to
+from apps.core.helpers import render_to
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -34,7 +34,6 @@ from django.conf import settings
 @login_required
 @amount_comments_required(settings.KARMA_COMMENTS_COUNT)
 @day_expired
-@can_act
 def alter_karma(request, choice=None, nickname=None):
     #choice may be up|down
     template = get_skin_template(request, 'alter_karma.html')
@@ -101,7 +100,6 @@ def alter_karma(request, choice=None, nickname=None):
 @login_required
 @amount_comments_required(settings.KARMA_COMMENTS_COUNT)
 @day_expired
-@can_act
 @render_to('alter_karma.html')
 def karma_alter(request, choice, nickname):
     user = get_object_or_404(User, nickname__iexact=nickname)

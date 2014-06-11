@@ -29,15 +29,3 @@ def has_permission(perms):
                 return redirect(login)
         return wrapper
     return decorator
-
-
-# TODO: refactor code-elements using this decorator for further cleanse
-def login_required_json(func):
-    def wrapper(request, *args, **kwargs):
-        if not request.user.is_authenticated():
-            response = HttpResponse()
-            response['Content-Type'] = 'application/json'
-            response.write(json.dumps({'error': unicode(_("Login required"))}))
-            return response
-        return func(request, *args, **kwargs)
-    return wrapper

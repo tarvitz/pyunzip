@@ -5,7 +5,7 @@ from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.news.models import News, Event, EventWatch
 from apps.news.forms import (
     ArticleModelForm, EventForm, EventParticipateForm, )
-from apps.core.helpers import paginate, can_act, get_int_or_zero
+from apps.core.helpers import paginate, get_int_or_zero
 from apps.core.decorators import has_permission
 from apps.core.helpers import render_to
 from apps.core.views import LoginRequiredMixin
@@ -105,7 +105,6 @@ class NewsUpdateView(LoginRequiredMixin, generic.UpdateView):
 
 #@obsolete
 @login_required
-@can_act
 @render_to('news/add.html')
 def add_article(request, pk=None, edit_flag=False):
     # can_edit = request.user.has_perm('news.edit_news')

@@ -3,16 +3,15 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from apps.wh.models import (
-    Expression, Fraction, Side, Army, Rank,
-    RankType, UserActivity, Warning, WarningType,
-    Universe
+    Expression, Fraction, Side, Army, Rank, RankType, Universe
 )
 from apps.wh.models import MiniQuote
 
 
 class ExpressionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'show_author', 'show_original_content', 'show_content', 'fraction'
+        'id', 'show_author', 'show_original_content', 'show_content',
+        'fraction'
     )
     fieldsets = (
         (
@@ -26,9 +25,9 @@ class ExpressionAdmin(admin.ModelAdmin):
     )
     ordering = ('id', )
     search_fields = ['author', 'original_content', 'content']
-    #list_filter = ['author']
     list_filter = ['fraction', ]
-    list_display_links = ('show_author', 'show_original_content', 'show_content')
+    list_display_links = ('show_author', 'show_original_content',
+                          'show_content')
     list_per_page = 30
 admin.site.register(Expression, ExpressionAdmin)
 
@@ -69,17 +68,6 @@ admin.site.register(RankType, RankTypeAdmin)
 class MiniQuoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'content')
 admin.site.register(MiniQuote, MiniQuoteAdmin)
-
-
-class UserActivityAdmin(admin.ModelAdmin):
-    list_display = ('show_nickname', 'activity_date', 'activity_ip')
-admin.site.register(UserActivity, UserActivityAdmin)
-
-
-class WarningAdmin(admin.ModelAdmin):
-    list_display = ('show_nickname', 'level', 'type', 'expired',)
-admin.site.register(Warning, WarningAdmin)
-admin.site.register(WarningType)
 
 
 class UniverseAdmin(admin.ModelAdmin):
