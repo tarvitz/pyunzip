@@ -50,7 +50,7 @@
   {# end i18n #}
   <script type="text/javascript">
     var processDate = function(d){
-      var day = parseInt(d.getUTCDate()) + 1;
+      var day = parseInt(d.getUTCDate());
       var month = parseInt(d.getUTCMonth()) + 1;
       var year = parseInt(d.getUTCFullYear());
       return year + "-" + month + "-" + day;
