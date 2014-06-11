@@ -1,0 +1,13 @@
+{% extends 'pybb/base.html' %}
+{% load pybb_extras %}
+
+{% block content %}
+<div class='row'>
+    <div class='col-lg-8'>
+        {% include "pybb/include/index.html" %}
+    </div>
+    <div class='col-lg-4'>
+        {% include "pybb/quick_access.html" %}
+    </div>
+</div>
+{% endblock %}

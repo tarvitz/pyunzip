@@ -1,0 +1,29 @@
+{% load comments %}{% load newsfilters %}
+{% with "True" as news_general %}
+{% if news.object_list %}
+{% for n in news.object_list %}
+    {#% include settings.document.article_inc %#}
+    {% include "includes/../news/include/article.html" %}
+{% endfor %}
+
+<script language='javascript'>
+$('.headline img.right').click(
+    function(){
+        if (this.width == 100){ var width = 60; }
+        else { var width = 100 };
+        $(this).animate({width: width,},1000);
+});
+
+</script>
+
+{% include "generic/pages.html" with page=paginator %}
+
+{% else %}
+	<center>
+	<div class='block_notice'>
+		<div class='transparency tr_black'></div>
+		o_O нет ничего
+	</div>
+	</center>
+{% endif %} {# if news.object_list #}
+{% endwith %}

@@ -1,9 +1,0 @@
-{% extends base_template %}
-{% block text_content %}
-<div align="center" id='headline'>Реплей для какой игры вы хотите загрузить?</div>
-<ul>
-{% for g in games %}
-	<li><a href="{{ g.short_name }}" id="button">{{ g.name }}</a></li>
-{% endfor %}
-</ul>
-{% endblock %}

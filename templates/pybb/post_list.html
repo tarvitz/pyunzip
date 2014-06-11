@@ -1,0 +1,84 @@
+{% extends 'pybb/base.html' %}
+{% load pybb_extras %}
+{% load i18n %}
+
+{% block content %}
+  <ul class='breadcrumb'>
+    <li><a href="{% url "pybb:index" %}">{% trans "Root" %}</a></li>
+    <li>{% pybb_link topic.forum.category %}</li>
+    <li>{% pybb_link topic.forum %}</li>
+    <li><strong>{% pybb_link topic %}</strong></li>
+    {% if topic.owner == user and not topic.poll %}
+      <li class="pull-right">
+        <a href='{{ topic.get_poll_add_url }}' rel="tooltip"
+           data-title="{% trans "Add poll to the topic" %}"
+           data-placement="bottom" data-container="body">{% trans "Add poll" %}</a>
+      </li>
+    {% endif %}
+  </ul>
+
+  {% include "generic/paginator.html" %}
+
+  {% if topic.poll %}
+    {% include "pybb/poll.html" with topic=topic %}
+  {% endif %}
+
+  <div class="posts">
+    {% if page_obj.number != 1 %}
+      {% include "pybb/post_template.html" with page=page_obj.number spoiler='yes' post=topic.head counter=1 %}
+    {% endif %}
+    {% for post in object_list %}
+      {% include "pybb/post_template.html" %}
+    {% endfor %}
+  </div>
+
+  {% include "generic/paginator.html" %}
+
+  <div class="breadcrumb">
+    {% if moderator %}
+      {% if topic.sticky %}
+        <li>
+          <a href="{% url "pybb:topic-unstick" topic.id %}">{% trans "Unstick topic" %}</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url "pybb:topic-stick" topic.id %}">{% trans "Stick topic" %}</a>
+        </li>
+      {% endif %}
+      {% if topic.closed %}
+        <li>
+          <a href="{% url "pybb:topic-open" topic.id %}">{% trans "Open topic" %}</a>
+        </li>
+      {% else %}
+        <li>
+          <a href="{% url "pybb:topic-close" topic.id %}">{% trans "Close topic" %}</a>
+        </li>
+      {% endif %}
+    {% endif %}
+    {% if user.is_authenticated %}
+      {% if subscribed %}
+        <li><a href="{% url "pybb:subscription-delete" topic.id %}?from_topic">{% trans "Unsubscribe" %}</a></li>
+      {% else %}
+        <li><a href="{% url "pybb:subscription-add" topic.id %}">{% trans "Subscribe" %}</a></li>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  {% if not topic.closed and user.is_authenticated %}
+    <form action="{% url "pybb:post-add" topic.id %}" method="post" class='form-horizontal'>
+      {% csrf_token %}
+      <fieldset class='col-lg-10'>
+        <legend>{% trans "New reply" %}</legend>
+        {% include "forms/bootstrap_horizontal.html" with form=form %}
+        <div class='control-group form-group'>
+          <div class='controls col-lg-offset-2 col-lg-10'>
+            <input class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'
+                   type="submit" value="{% trans "Submit" %}" />
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  {% endif %}
+  {% include "pybb/markup.html" %}
+
+{% endblock %}

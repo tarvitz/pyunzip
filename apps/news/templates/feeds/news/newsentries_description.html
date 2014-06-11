@@ -1,6 +1,0 @@
-{% load newsfilters %}
-{% if obj.head_content %} 
-	{{ obj.head_content|render_filter:obj.syntax|striptags }}
-{% else %}
-	{{ obj.cache_content|striptags|newscut:"500" }}
-{% endif %}

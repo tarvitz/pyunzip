@@ -1,0 +1,10 @@
+{% extends base_template %}
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/styles/round_message.css"
+          media='screen' type='text/css'>
+{% endblock %}
+{% block content %}
+    {# {% include "reports/include/report_header.html" %} #}
+    {% include "tabletop/reports/include/report_content.html" %}
+{% endblock %}

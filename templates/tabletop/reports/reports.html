@@ -1,0 +1,18 @@
+{% extends base_template %}
+{% load i18n %}
+{% block css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="/styles/round_message.css"
+          media='screen' type='text/css'>
+{% endblock %}
+{% block content %}
+{% if reports.object_list %}
+    {% for report in reports.object_list %}
+        {% include "tabletop/reports/include/report_header.html" with report=report is_header="True" %}
+    {% endfor %}
+    <div class='space'></div>
+    {% include "generic/paginator.html" with page_obj=reports paginator=reports.paginator %}
+{% else %}
+<h3>{% trans "No reports found" %}</h3>
+{% endif %}
+{% endblock %}

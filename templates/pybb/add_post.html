@@ -1,0 +1,42 @@
+{% extends 'pybb/base.html' %}
+{% load pybb_extras %}
+{% load i18n %}
+
+{% block content %}
+<div class="breadcrumb">
+{% if forum %}
+    <li>
+        <a href="{% url "pybb:index" %}">{% trans "Root" %}</a>
+    </li>
+    <li>
+        {% pybb_link forum.category %} 
+    </li>
+    <li>{% pybb_link forum %}</li>
+{% else %}
+    <li>
+        <a href="{% url "pybb:index" %}">{% trans "Root" %}</a>
+    </li>
+    <li>
+        {% pybb_link topic.forum.category %}
+    </li>
+    <li>
+        {% pybb_link topic.forum %}
+    <li>
+    <li>{% pybb_link topic %}</li>
+{% endif %}
+</div>
+
+<h1>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</h1>
+
+<form action="{% if topic %}{% url "pybb:post-add" topic.id %}{% endif %}" method="post">
+    {% csrf_token %}
+    <fieldset class='col-lg-7'>
+        {# <legend>{% if forum %}{% trans "New topic" %}{% else %}{% trans "New reply" %}{% endif %}</legend> #}
+        {{ form.as_p }}
+        <p><input type="submit" value="{% trans "Submit" %}"
+                  class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'/></p>
+    </fieldset>
+</form>
+
+{% include "pybb/markup.html" %}
+{% endblock %}

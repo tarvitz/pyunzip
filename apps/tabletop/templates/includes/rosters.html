@@ -1,7 +1,0 @@
-{% if rosters.object_list %}
-{% for r in rosters.object_list %}
-	{% include settings.document.roster_inc %}
-{% endfor %}
-{% else %}
-<center><h3>У данного пользователя нет еще ни одной расписки</h3></center>
-{% endif %}

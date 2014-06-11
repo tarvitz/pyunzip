@@ -1,0 +1,99 @@
+{% load pybb_extras i18n %}
+
+<div class="navbar navbar-default">
+    <div class="navbar-inner">
+        <div class='container'>
+            <button type='button' class='btn btn-navbar navbar-toggle' data-toggle='collapse' data-target='.nav-collapse'>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+                <span class='icon-bar'></span>
+            </button>
+            <a class='navbar-brand brand' href="{% url "pybb:index" %}">Tessera  Форум</a>
+            <div class='nav-collapse pull-right'>
+                <ul class="nav navbar-nav">
+                    <li class="social">
+                      <a href="https://vk.com/teccera" rel="tooltip" target="_blank"
+                         data-title="{% trans "VK social page" %}"
+                         data-placement="bottom"><i class="icon icon-vk"></i></a>
+                    </li>
+                    <li>
+                      <a href="{% url "news:calendar" %}" rel="tooltip"
+                         data-title="{% trans "Forthcoming events" %}"
+                         data-placement="bottom">{% trans "Calendar" %}
+                      {% if new_events %}
+                        <span class="label label-{{ user.get_forum_theme|default:"warning" }}">
+                          {{ new_events.count }}
+                          {% if user.is_authenticated and user.get_unwatched_events.count %}
+                            ({{ user.get_unwatched_events.count }})
+                          {% endif %}
+                        </span>{% endif %}</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li>
+                      <a href="{% url "comments:subscriptions" %}">{% trans "Subscriptions" %}
+                      {% if comment_watches.count %}
+                        <span class="label label-{{ user.get_forum_theme|default:"warning" }}">
+                          {{ comment_watches.count }}
+                        </span>{% endif %}
+                      </a>
+                    </li>
+                    <li><a href="{% url "accounts:users" %}">{% trans "Users" %}</a></li>
+                    <li class='dropdown'>
+                        <a class='dropdown-toggle' role='button' data-toggle="dropdown" href='#'>
+                            <img src="{{ user.get_avatar_url }}" class="avatar" />
+                            {{ user.get_nickname|safe }}
+                            <span class='caret'></span>
+                        </a>
+                        <ul class='dropdown-menu pull-right' role="menu">
+                            {% if perms.news.change_event or perms.news.add_event%}
+                              <li><a href="{% url "news:events" %}">{% trans "Events" %}</a></li>
+                            {% endif %}
+                            <li class=''><a href='{% url "accounts:profile" %}'>{% trans "My profile" %}</a></li>
+                            <li class='divider'></li>
+                            <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
+                            <li class=''><a href='{% url "files:files" %}'>{% trans "My files" %}</a></li>
+
+                            <li class=""><a href="{% url "files:galleries" %}">{% trans "Gallery" %}</a></li>
+                            <li><a rel='tooltip' href='{% url "accounts:pm-inbox" %}'
+                                   title='Личные сообщения'>{% trans "Private messages" %}
+                              {% if user.get_new_pm %}
+                              <span class='pm count'>[{{ user.get_new_pm.count|default_if_none:0 }}]</span>
+                              {% endif %}</a></li>
+                            <li class='divider divide'></li>
+                            {% if user.is_superuser %}
+                            <li><a href="/admin/">{% trans "Admincp" %}</a></li>
+                            {% endif %}
+                            <li><a href="{% url "accounts:logout" %}">{% trans "Log out" %}</a></li>
+                        </ul>
+                    </li>
+                    <li class='dropdown'>
+                        <a class='dropdown-toggle' role='button' data-toggle='dropdown' href='#'>
+                            {% trans "Themes" %}
+                            <span class='caret'></span>
+                        </a>
+                        <ul class='dropdown-menu pull-right' role='menu'>
+                            {% for theme in gs.FORUM_THEMES %}
+                                <li><a href='{% url "pybb:theme-switch" theme.0 %}'>
+                                  {% trans theme.0 %}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li><a href="{% url "accounts:register" %}">{% trans "Register" %}</a></li>
+                    <li><a href="{% url "accounts:login" %}">{% trans "Log in" %}</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if "NOTICE"|pybb_setting %}
+<div class="notice_box">
+    <div class="notice main-box">
+        <div class="inner">
+            {{ "NOTICE"|pybb_setting }}
+        </div>
+    </div>
+</div>
+{% endif %}

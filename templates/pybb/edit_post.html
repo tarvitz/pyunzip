@@ -1,0 +1,27 @@
+{% extends 'pybb/base.html' %}
+{% load pybb_extras %}
+{% load i18n %}
+
+{% block content %}
+<div class="breadcrumb">
+  <li><a href="{% url "pybb:index" %}">{% trans "Root" %}</a></li>
+  <li>{% pybb_link post.topic.forum.category %}</li>
+  <li>{% pybb_link post.topic.forum %}</li>
+  <li>{% pybb_link post.topic %}</li>
+</div>
+
+<h1>{% trans "Editing the post" %}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <fieldset class='col-lg-7'>
+        {# <legend>{% trans "Editing the post" %}</legend> #}
+            {{ form.as_p }}
+            <p><input type="submit" value="{% trans "Save" %}"
+                      class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'/></p>
+        </legend>
+    </fieldset>
+</form>
+{% include "pybb/markup.html" %}
+
+{% endblock %}

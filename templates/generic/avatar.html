@@ -1,0 +1,7 @@
+{% spaceless %}
+  <img src='{{ usr.get_avatar_url }}' /><br>
+  <div>
+    <a href="{% url "accounts:profile-by-nick" usr.nickname %}">{{ usr.get_nickname|safe }}</a>
+  </div>
+  {% include "accounts/include/warnings.html" with usr=usr %}
+{% endspaceless %}

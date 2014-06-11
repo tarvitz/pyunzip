@@ -1,0 +1,47 @@
+{% load i18n pybb_extras %}
+
+<div class="controls btn-group" style='margin-bottom: 10px'>
+    <a class='btn btn-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }} btn-mini'
+       href="{% url "pybb:topic-add" forum.id %}">{% trans "New topic" %}</a>
+</div>
+
+<div class='panel panel-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}'>
+    <div class='panel-heading'>
+        <h3 class='panel-title'>{{ forum }}</h3>
+    </div>
+    <div class='panel-body'>
+        <em>{{ forum.description }}</em>
+        <ul class='list-group no-margin-bottom'>
+        {% for topic in topics|pybb_unreads:user %}
+            <li class='list-group-item forum'>
+                <span class='title col-lg-5'>
+                  <a href="{{ topic.get_absolute_url }}">{{ topic.name }}</a>
+                </span>
+                <span class='updated col-lg-4'>{% pybb_time topic.updated %}</span>
+                <span class='icons col-lg-2'>
+                    {% if topic.sticky %}<i class='icon-paperclip' data-title='{% trans "Sticky" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic|pybb_has_unreads:user %}<i class="icon-comment"></i>{% endif %}
+                    {% if topic.closed %}<i class='icon-remove' data-title='{% trans "Closed" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic.sticky %}<i class='icon-flag' data-title='{% trans "Important" %}' rel='tooltip' data-placement='left'></i>{% endif %}
+                    {% if topic.poll %}<i class='icon-check' data-title="{% trans "Poll" %}"
+                                          rel="tooltip" data-placement="left"></i>{% endif %}
+                </span>
+
+                <span class='count'>
+                  <a href='{{ topic.get_absolute_url }}?page={{ topic.get_last_page }}'
+                     rel="tooltip" data-title="{% trans "Posts/Go to last page" %}"
+                     data-container="body">
+                    [{{ topic.post_count }}]</a>
+                </span>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% pybb_pagination %}
+{% comment %}
+<div class="controls">
+    <a href="{% url "pybb:topic-add" forum.id %}">{% trans "New topic" %}</a>
+</div>
+{% endcomment %}
