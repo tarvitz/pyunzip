@@ -1,8 +1,5 @@
 *.py[co]
-/media/avatars
-/media/css/*.css
-/media/images/galleries
-/settings/*_local.py
+/static/css/dist/*.css
 /celery*
 /*shell
 /wsgi_*handler.py

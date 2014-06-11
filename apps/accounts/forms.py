@@ -16,9 +16,6 @@ from captcha.fields import ReCaptchaField
 from django_select2.widgets import Select2Widget
 
 
-STATIC_URL = settings.STATIC_URL
-COMPONENTS_URL = STATIC_URL + 'components/'
-
 #mixins
 class CleanPasswordMixin(object):
     def clean(self):
@@ -300,8 +297,8 @@ class PMForm(RequestFormMixin, forms.ModelForm):
 
     class Media:
         js = (
-            STATIC_URL + 'components/select2/select2.min.js',
-            STATIC_URL + 'js/select2_load.js',
+            'components/select2/select2.min.js',
+            'js/select2_load.js',
         )
 
 
@@ -320,12 +317,12 @@ class PolicyWarningForm(forms.ModelForm):
     class Media:
         css = {
             'all': (
-                COMPONENTS_URL + 'eonasdan-bootstrap-datetimepicker/build/css'
-                    '/bootstrap-datetimepicker.min.css',
+                'components/eonasdan-bootstrap-datetimepicker/build/css'
+                '/bootstrap-datetimepicker.min.css',
             )
         }
         js = (
-            COMPONENTS_URL + 'eonasdan-bootstrap-datetimepicker/build/js'
+            'components/eonasdan-bootstrap-datetimepicker/build/js'
                 '/bootstrap-datetimepicker.min.js',
-            STATIC_URL + 'js/datetimepickers.js'
+            'js/datetimepickers.js'
         )

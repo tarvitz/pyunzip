@@ -1,3 +1,4 @@
+/* todo: refactor */
 $(document).ready(function(){
     $('.message .msg_headline .transparency:even').addClass('tr_navy');
     $('.spoiler_block > a').click(function(e){
@@ -241,4 +242,4 @@ var parseJSONFormFields = function(data, form){
             }// if given
         } // if isarray
     });// each
-}
+};

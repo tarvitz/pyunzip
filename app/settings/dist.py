@@ -24,6 +24,10 @@ DATABASES = {
     }
 }
 
+def rel(path):
+    return os.path.join(
+        os.path.join(os.path.dirname(__file__), '../..'), path)
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -62,7 +66,7 @@ ADMIN_MEDIA = rel_path('admin_media')
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/uploads/'
-STATIC_URL = '/media/'
+STATIC_URL = '/static/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -73,7 +77,8 @@ STATIC_ROOT = ''
 MEDIA_ROOT = rel_path('db/uploads')
 
 STATICFILES_DIRS = (
-    rel_path('media'),
+    'static',
+    rel('static')
 )
 
 STATICFILES_FINDERS = (
@@ -113,6 +118,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static',
     'apps.core.context_processors.global_settings',
     'apps.core.context_processors.core',
     'apps.menu.context_processors.menu',
