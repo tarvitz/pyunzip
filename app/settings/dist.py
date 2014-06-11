@@ -56,8 +56,6 @@ USE_I18N = True
 
 _ = lambda s: s
 
-# TODO: cleanup
-STYLES_ROOT = rel_path('styles')
 ADMIN_MEDIA = rel_path('admin_media')
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"

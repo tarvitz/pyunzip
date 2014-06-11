@@ -14,7 +14,7 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     (r'^admin/', admin.site.urls),
     (r'^you/should/fulfil/your/destiny/$', direct_to_template,
-        {'template': 'get_a_working_browser.html',}),
+        {'template': 'get_a_working_browser.html', }),
 
     url(r'^feeds/news/$', NewsEntries(), name='feed-news'),
     url(r'^feeds/news/atom/$', AtomNewsEntries(), name='feed-news-atom'),
@@ -34,12 +34,11 @@ urlpatterns = patterns(
 
 
 if settings.DEV_SERVER:
-    urlpatterns += patterns('',
-        (r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
-                {'document_root': settings.MEDIA_ROOT ,
-                'show_indexes': True,
-                }),
-        (r'^styles/(?P<path>.*)$', 'django.views.static.serve', {
-            'document_root': settings.STYLES_ROOT,
-            'show_indexes': True}),
+    urlpatterns += patterns(
+        '',
+        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+            {
+                'document_root': settings.MEDIA_ROOT,
+                'show_indexes': True
+            }),
     )
