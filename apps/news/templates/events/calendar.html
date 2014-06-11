@@ -2,13 +2,13 @@
 {% load i18n static %}
 {% block css %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static "components/fullcalendar/fullcalendar.css" %}"
+  <link rel="stylesheet" href="{% static "components/fullcalendar/dist/fullcalendar.css" %}"
         media="screen" type="text/css">
 {% endblock %}
 
 {% block js %}
   {{ block.super }}
-  <script type="text/javascript" src="{% static "components/fullcalendar/fullcalendar.min.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/fullcalendar/dist/fullcalendar.min.js" %}"></script>
 {% endblock %}
 {% block content %}
   <ul class="breadcrumb">
@@ -50,61 +50,72 @@
   {# end i18n #}
   <script type="text/javascript">
     var processDate = function(d){
-      var day = parseInt(d.getUTCDate()) + 1;
-      var month = parseInt(d.getUTCMonth()) + 1;
-      var year = parseInt(d.getUTCFullYear());
+      var date = d._d;
+      var day = parseInt(date.getUTCDate()) + 1;
+      var month = parseInt(date.getUTCMonth()) + 1;
+      var year = parseInt(date.getUTCFullYear());
       return year + "-" + month + "-" + day;
-    }
+    };
 
     $(document).ready(function(){
       $('#events').fullCalendar({
-        timeFormat: "H:mm{ - H:mm}",
+        lang: "ru",
+        buttonIcons: {
+            prev: 'left-single-arrow',
+            next: 'right-single-arrow',
+            prevYear: 'left-double-arrow',
+            nextYear: 'right-double-arrow'
+        },
+        timeFormat: {
+          default: "HH:mm",
+          agenda: "HH:mm"
+        },
         firstDay: 1,
         weekMode: "liquid",
-        weekNumbers: "W",
-        height: 400,
+        weekNumbers: "Wo",
+        height: 540,
         defaultView: "month",
         titleFormat: {
-              month: "MMMM yyyy",
-              week: "MMMM d[yyyy] { '&#8212;' [MMMM d yyyy]",
-              day: "dddd, MMMM d, yyyy"
+          month: "MMMM YYYY",
+          day: "MMMM D, YYYY",
+          week: "MMMM D, YYYY"
         },
         header: {
-                'left': 'prev, next today',
-                'center': 'title',
-                'right': 'month, basicWeek, basicDay, | agendaWeek'
+          'left': 'prev, next today',
+          'center': 'title',
+          'right': 'month, agendaWeek, agendaDay'
         },
         buttonText: {
-                today: '{% trans "Today" %}',
-                month: '{% trans "month" %}',
-                week: '{% trans "week" %}',
-                day: '{% trans "day" %}'
+          today: '{% trans "Today" %}',
+          month: '{% trans "month" %}',
+          week: '{% trans "week" %}',
+          day: '{% trans "day" %}'
 	      },
         monthNames: [
-            "{{ january }}", "{{ february }}", "{{ march }}",
-            "{{ april }}", "{{ may }}", "{{ june }}", "{{ july }}",
-            "{{ august }}", "{{ september }}", "{{ october }}", "{{ november }}",
-            "{{ december }}"
+          "{{ january }}", "{{ february }}", "{{ march }}",
+          "{{ april }}", "{{ may }}", "{{ june }}", "{{ july }}",
+          "{{ august }}", "{{ september }}", "{{ october }}", "{{ november }}",
+          "{{ december }}"
         ],
         monthNamesShort: [
-                "{% trans "Jan" %}", "{% trans "Feb" %}", "{% trans "Mar" %}",
-                "{% trans "Apr" %}", "{% trans "Jun" %}", "{% trans "Jun" %}",
-                "{% trans "Jul" %}", "{% trans "Aug" %}", "{% trans "Sep" %}",
-                "{% trans "Oct" %}", "{% trans "Nov" %}", "{% trans "Dec" %}"
+          "{% trans "Jan" %}", "{% trans "Feb" %}", "{% trans "Mar" %}",
+          "{% trans "Apr" %}", "{% trans "Jun" %}", "{% trans "Jun" %}",
+          "{% trans "Jul" %}", "{% trans "Aug" %}", "{% trans "Sep" %}",
+          "{% trans "Oct" %}", "{% trans "Nov" %}", "{% trans "Dec" %}"
         ],
         dayNamesShort: [
-            "{{ sun_i18n }}", "{{ mon_i18n }}", "{{ tue_i18n }}", "{{ wed_i18n }}", "{{ thu_i18n }}",
-            "{{ fri_i18n }}", "{{ sat_i18n }}"
+          "{{ sun_i18n }}", "{{ mon_i18n }}", "{{ tue_i18n }}", "{{ wed_i18n }}", "{{ thu_i18n }}",
+          "{{ fri_i18n }}", "{{ sat_i18n }}"
         ],
         dayNames: [
           "{{ sunday }}", "{{ monday }}", "{{ tuesday }}", "{{ wednesday }}",
           "{{ thursday }}", "{{ friday }}", "{{ saturday}}"
         ],
         allDayText: "{% trans "all day" %}",
-        axisFormat: "H:mm",
-        firstHour: 11,
-        minTime: 9,
-        events: function(start, end, callback){
+        axisFormat: "HH:mm",
+        scrollTime: "11:00:00",
+        minTime: "09:00:00",
+        events: function(start, end, timezone, callback){
           $.ajax({
             url: "{% url "api:event-list" %}",
             dataType: "json",
