@@ -1,9 +1,13 @@
 {% extends "base_template.html" %}{% load i18n %}
 {% block title %} {{ block.super }}:Вход пользователя{% endblock %}
 {% block content %}
-  <div id="headline">
-    Вход|<a href='/register'>Регистрация</a>
+  <div class="alert alert-success">
+    <button class="close" data-dismiss="alert">&times;</button>
+    {% trans "Sign in" %} |
+    <a href='{% url "accounts:register" %}'>{% trans "Sign up" context "register" %}</a> |
+    <a href="{% url "accounts:password-restore-initiate" %}">{% trans "Passowrd recover" %}</a>
   </div>
+
   <div id="content" align="left" class="col-lg-8">
     <!-- login required -->
     <form action='.' method='POST' class="form-horizontal">

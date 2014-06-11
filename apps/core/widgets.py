@@ -1,7 +1,5 @@
-# input your code here :)
 # coding: utf-8
-#
-# coding: utf-8
+
 from datetime import date, datetime, time
 
 from django.template.loader import get_template
@@ -19,7 +17,6 @@ from itertools import chain
 
 
 class TinyMkWidget(Widget):
-    # 
     def __init__(self,attrs=None):
         default_attrs = {'cols': '40', 'rows': '25'}
         if attrs:

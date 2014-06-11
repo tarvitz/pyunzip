@@ -1,0 +1,46 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    {% if usr %}
+      <li><a href="{{ usr.get_profile_url }}">{{ usr.get_nickname|safe }}</a></li>
+    {% else %}
+      <li><a href="{{ user.get_profile_url }}">{{ user.get_nickname|safe }}</a></li>
+    {% endif %}
+    <li class="active">{% trans "policy warnings" %}</li>
+  </ul>
+  <h3>{% trans "Policy warnings" %}</h3>
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>{% trans "Date expired" %}</th>
+        <th>{% trans "Is expired" %}</th>
+        <th>{% trans "Comment" %}</th>
+        <th>{% trans "Level" %}</th>
+        {% if perms.accounts.change_policywarning %}
+          <th>&nbsp;</th>
+        {% endif %}
+      </tr>
+      {% for object in object_list %}
+        <tr>
+          <td>
+            <a href='{{ object.get_absolute_url }}'>
+              {{ object.date_expired|date:"d/F/Y" }}</a>
+          </td>
+          <td><i class='glyphicon glyphicon-{{ object.is_expired|yesno:"ok-circle,ban-circle" }}'></i></td>
+          <td>{{ object.comment }}</td>
+          <td><span class='policy-warning level-{{ object.level }}'>{{ object.get_level }}</span></td>
+          {% if perms.accounts.change_policywarning %}
+            <td>
+              {% include "generic/actions.html" with object=object %}
+            </td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    </table>
+    {% include "generic/paginator.html" %}
+  {% else %}
+    <h3>{% trans "No warnings found" %}</h3>
+  {% endif %}
+{% endblock %}

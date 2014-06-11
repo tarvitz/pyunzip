@@ -6,7 +6,6 @@ from django.db import models
 from django.contrib.auth.models import (
     AbstractBaseUser, UserManager, PermissionsMixin)
 
-#from django.contrib.comments.models import Comment
 from picklefield import PickledObjectField
 from django.db.models import Q, Sum
 from django.core import validators
@@ -21,7 +20,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 # Create your models here.
-
+GENDER_CHOICES = (
+    ('m', _('male')),
+    ('f', _('female')),
+    ('n', _('not identified'))
+)
 
 TZ_CHOICES = [(float(x[0]), x[1]) for x in (
     (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
@@ -85,11 +88,7 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     gender = models.CharField(
         _('gender'), default='n', max_length=1,
-        choices=[
-            ('m', _('male')),
-            ('f', _('female')),
-            ('n', _('not identified'))
-        ]
+        choices=GENDER_CHOICES
     )
     jid = models.EmailField(_('jabber id'), max_length=255,
                             blank=True, null=True)
@@ -98,7 +97,6 @@ class User(PermissionsMixin, AbstractBaseUser):
                               blank=True, null=True, default=0)
     about = models.CharField(_('about myself'), max_length=512, blank=True,
                              null=True)
-    skin = models.ForeignKey('wh.Skin', null=True, blank=True)
     tz = models.FloatField(_('time zone'), choices=TZ_CHOICES, default=0)
     settings = PickledObjectField(_('Settings'), null=True, blank=True)
     # managers
@@ -136,17 +134,52 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
-    def get_profile_url(self):
+    @staticmethod
+    def get_profile_url():
         return reverse('accounts:profile')
 
-    def get_update_profile_url(self):
+    @staticmethod
+    def get_update_profile_url():
         return reverse('accounts:profile-update')
+
+    @staticmethod
+    def get_password_change_url():
+        return reverse('accounts:password-change')
+
+    @staticmethod
+    def get_pm_inbox_url():
+        return reverse('accounts:pm-inbox')
+
+    @staticmethod
+    def get_pm_outbox_url():
+        return reverse('accounts:pm-outbox')
+
+    def get_policy_warnings_url(self):
+        return reverse('accounts:warning-list', args=(self.pk, ))
+
+    def get_policy_warning_create_url(self):
+        return reverse('accounts:warning-create', args=(self.pk, ))
+
+    def get_policy_warnings(self):
+        return self.warning_user_set.filter(
+            is_expired=False)
+
+    def get_active_read_only_policy_warnings(self):
+        return self.warnings.filter(level=settings.READONLY_LEVEL)
+
+    @property
+    def warnings(self):
+        return self.get_policy_warnings()
 
     def get_color_theme(self):
         return self.get_forum_theme()
 
     def get_username(self):
         return self.nickname or self.username
+
+    def get_gender(self):
+        idx = [self.gender in i[0] for i in GENDER_CHOICES].index(True)
+        return GENDER_CHOICES[idx][1]
 
     def get_nickname(self, no_cache=False):
         nickname = (
@@ -169,7 +202,8 @@ class User(PermissionsMixin, AbstractBaseUser):
                     cache.set('nick:%s' % self.username, span)
                 return span
             if not no_cache:
-                cache.set('nick:%s' % self.username, self.nickname or self.username)
+                cache.set('nick:%s' % self.username, self.nickname or
+                          self.username)
             return self.nickname or self.username
         return nickname
 
@@ -190,6 +224,9 @@ class User(PermissionsMixin, AbstractBaseUser):
         self._unwatched_events = Event.objects.filter(
             is_finished=False).exclude(event_watch_set=exclude_qs)
         return self._unwatched_events
+
+    def get_new_pm(self):
+        return self.addressee.filter(is_read=False, dba=False)
 
     @property
     def karma(self):
@@ -242,7 +279,7 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     @property
     def files(self):
-        return  self.user_file_set
+        return self.user_file_set
 
     def __unicode__(self):
         return self.nickname or self.username
@@ -250,6 +287,126 @@ class User(PermissionsMixin, AbstractBaseUser):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+
+
+class PM(models.Model):
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='sender',
+        verbose_name=_("sender")
+    )
+    addressee = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='addressee',
+        verbose_name=_("addressee")
+    )
+    title = models.CharField(
+        _('title'), max_length=50
+    )
+    content = models.TextField(_('text'))
+    cache_content = models.TextField(
+        _("cache content"), blank=True, null=True
+    )
+    is_read = models.BooleanField(_('is read'), default=False)
+    sent = models.DateTimeField(
+        _('sent'), auto_now=True, default=datetime.now
+    )
+    dbs = models.BooleanField(_('deleted by sendr'), default=False)
+    dba = models.BooleanField(_('deleted by addr'), default=False)
+    syntax = models.CharField(
+        _('syntax'), max_length=50,
+        choices=settings.SYNTAX, blank=True, null=True,
+        default=settings.DEFAULT_SYNTAX
+    )
+
+    class Meta:
+        ordering = ['-sent', ]
+        verbose_name = _('Private Message')
+        verbose_name_plural = _('Private Messages')
+
+    def purge_msg(self):
+        if self.dbs and self.dba:
+            self.remove()
+        return
+
+    def __unicode__(self):
+        return self.title
+
+    def render(self, field):
+        from apps.core.helpers import render_filter, post_markup_filter
+        return render_filter(
+            post_markup_filter(getattr(self, field)),
+            self.syntax
+        )
+
+    # urls
+    def get_absolute_url(self):
+        return reverse('accounts:pm-detail', args=(self.pk, ))
+
+    @staticmethod
+    def get_delete_url():
+        return ''
+
+    def get_reply_url(self):
+        return reverse('accounts:pm-reply', args=(self.pk, ))
+
+
+POLICY_WARNING_LEVEL_CHOICES = (
+    (1, "*"),
+    (2, "**"),
+    (3, "+"),
+    (4, "++"),
+    (settings.READONLY_LEVEL, _("read only")),
+    #(6, _('ban')),
+    #(7, _('perm ban'))
+)
+
+
+class PolicyWarning(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='warning_user_set',
+        verbose_name=_('user')
+    )
+    comment = models.CharField(_('comment'), max_length=4096,
+                               blank=True, null=True)
+    level = models.PositiveIntegerField(_("level"), default=1,
+                                        choices=POLICY_WARNING_LEVEL_CHOICES)
+    created_on = models.DateTimeField(_("created on"), auto_now=True,
+                                      default=datetime.now)
+    updated_on = models.DateTimeField(_("updated on"), default=datetime.now)
+    date_expired = models.DateField(
+        _('date expired'), default=datetime.now,
+        help_text=_("date then warning is expired")
+    )
+    is_expired = models.BooleanField(
+        _('is expired'), default=False,
+        help_text=_("marks if warning is expired for this user")
+    )
+
+    # urls
+    def get_absolute_url(self):
+        return reverse('accounts:warning-detail', args=(self.pk, ))
+
+    def get_edit_url(self):
+        return reverse('accounts:warning-update', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('accounts:warning-delete', args=(self.pk, ))
+
+    # methods
+    def get_level(self):
+        idx = [
+            self.level in i for i in POLICY_WARNING_LEVEL_CHOICES].index(True)
+        return POLICY_WARNING_LEVEL_CHOICES[idx][1]
+
+    def __unicode__(self):
+        return '[%(level)s] %(date)s' % {
+            'level': self.get_level(),
+            'date': self.date_expired.strftime('%d-%m-%Y')
+        }
+
+    class Meta:
+        ordering = ['-date_expired', ]
+        verbose_name = _("Policy warning")
+        verbose_name_plural = _("Policy warnings")
 
 
 from apps.accounts import signals

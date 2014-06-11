@@ -1,6 +1,6 @@
-{% load kamwhfilters %} {% load newsfilters %}
+{% load newsfilters %}
 {% block css %}
-  <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name|getskincss:"message.css" }}" media="screen">
+  <link rel="stylesheet" type="text/css" href="/styles/{{ user.skin.name }}" media="screen">
 {% endblock %}
 {% block js %}
   <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>

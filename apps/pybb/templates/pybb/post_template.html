@@ -9,6 +9,11 @@
         <div class='transparency grey'></div>
         <span class='links'>
             <a class="permalink" href="{{ post.get_absolute_url }}">#</a>
+            {% if perms.accounts.change_policywarning %}
+              <a class="glyphicon glyphicon-warning-sign text-danger pull-right"
+                 rel="tooltip" href="{{ post.user.get_policy_warning_create_url }}"
+                 data-title="{% trans "Add user policy warning" %}"></a>
+            {% endif %}
         </span>
         <span class="updated">{% pybb_time post.created %}</span>
     </div>
@@ -18,6 +23,20 @@
             <div>
                 <a href="{% url "accounts:profile-by-nick" post.user %}">{{ post.user.get_nickname|safe }} </a>
             </div>
+            {% if user.is_authenticated and post.user.warnings.count %}
+              {% with warn=post.user.warnings.0 %}
+                <span class="policy-warnings level-{{ warn.level }}">{% spaceless %}
+                  [
+                  {% if warn.user == user or perms.accounts.change_policywarning %}
+                    <a href="{{ warn.get_absolute_url }}">{{ warn.get_level }}</a>
+                  {% else %}
+                    {{ warn.get_level }}
+                  {% endif %}
+                  ]
+                {% endspaceless %}
+                </span>
+              {% endwith %}
+            {% endif %}
             <div class="bottom">
             </div>
             <div class="post-controls">

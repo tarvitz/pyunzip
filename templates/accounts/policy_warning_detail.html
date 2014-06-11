@@ -1,0 +1,21 @@
+{% extends "base_template.html" %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{{ object.user.get_profile_url }}">{{ object.user.get_nickname|safe }}</a></li>
+    <li><a href="{% url "accounts:warning-list" object.user.pk %}">{% trans "policy warnings" %}</a></li>
+    <li class="active">{{ object|lower }}</li>
+  </ul>
+  {% if perms.accounts.change_policywarning %}
+    <div class="pull-right">
+      {% include "generic/actions.html" with object=object %}
+    </div>
+  {% endif %}
+  <h3>{% trans "Policy warning" %}</h3>
+  <strong>{% trans "Level" %}</strong>:
+    <span class="level-{{ object.level }}">{{ object.get_level }}</span><br />
+  <strong>{% trans "Date expires" %}</strong>: {{ object.date_expired|date:"d/F/Y" }}<br />
+  <strong>{% trans "Comment" %}</strong>: {{ object.comment }}
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base_template.html" %}
+{% load comments i18n coretags %}
+{% block title %}{{ block.super }}:Галерея{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "files:galleries" %}">{% trans "galleries" %}</a></li>
+    <li><a href="{{ object.gallery.get_absolute_url }}">{{ object.gallery.name.lower }}</a></li>
+    <li class="active">{{ object.title.lower }}</li>
+  </ul>
+  <h3>{{ image.title }}</h3>
+
+  <center>{% include "gallery/includes/image.html" %}</center>
+  <br clear='all'>
+  <script language="javascript" type="text/javascript" src="/media/js/jq_comments.js"></script>
+
+  {% for comment in comments.object_list %}
+    {% include "generic/comment_new.html" %}
+  {% endfor %}
+
+  {% include "generic/paginator.html" with paginator=comments.paginator page_obj=comments %}
+
+  {% if user.is_authenticated %}
+    {% get_content_type image as object %}
+    {% include settings.document.comments_form with object=object%}
+  {% endif %}
+
+{% endblock %}
+

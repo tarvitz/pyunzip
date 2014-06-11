@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load newsfilters %}{% load comments %}{% load kamwhfilters %} 
+{% load newsfilters %}{% load comments %}
 {% block head_content %}
 
 {# <link rel='stylesheet' href='/styles/{% if user.skin %}{{ user.skin.name|lower }}/{% endif %}news.css' type='text/css' media='screen'> #}
@@ -44,7 +44,7 @@
  {% if n.editor %}<div id='footer'>(edited by {{ n.editor }})</div>{% endif %}
  {% if n.url %}<div id='footer' class='url'><a href='{{ n.url }}'>оригинал</a></div>{% endif %}
  {% get_comment_count for n as comments %}<div id='footer'>Коментариев: {{ comments }}</div>
- {% if n.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name|namemediacut }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
+ {% if n.attachment %}<div id='footer'>Прикрепленный файл: <a href='{{ n.attachment.attachment.url }}'>{{ n.attachment.attachment.name }}</a> [{{ n.attachment.attachment.size|filesizeformat }}]</div>{% endif %}
  </div>
  
  {% endfor %}

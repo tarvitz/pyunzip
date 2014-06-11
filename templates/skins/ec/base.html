@@ -61,11 +61,6 @@
 	{% if user.is_authenticated %}
 	<div class='none' style="margin-top: 5px;"><span id='label' class='user_profile'>Профиль</span></div>
 	<div class="user_profile"><b>{{ user.nickname }}</b>
-		{%spaceless %}{% if user.plain_avatar %}<img alt="avatar" title="avatar" src='{{ user.plain_avatar.url|avatarcut }}'>
-		{% else %}
-		 <img src='/media/avatars/{{ user.army.side.name|lower }}/default.jpg'>
-		{% endif %}
-		{% endspaceless %}
 		<ul>
 			<li><a href='/pm'>ЛC</a>: {% ifnotequal pm.unread 0 %}{{ pm.unread }}/{% endifnotequal %}{{ pm.all }}</li>
 			<li><a href="/accounts/profile">Профиль</a></li>

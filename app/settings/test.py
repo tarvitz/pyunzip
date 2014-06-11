@@ -1,12 +1,15 @@
 # coding: utf-8
-from settings.dist import *
-from settings.local import *
-from settings.messages import *
-from settings.initials import *
-from settings.dist import INSTALLED_APPS
+#from .dist import *
+#from .local import *
+#from .messages import *
+#from .initials import *
+from app.settings.dist import *
+from app.settings.local import *
+from app.settings.messages import *
+from app.settings.initials import *
 
-DEBUG=True
-DEV_SERVER=True
+DEBUG = TEMPLATE_DEBUG = True
+DEV_SERVER = True
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -18,13 +21,13 @@ CACHES = {
 }
 INSTALLED_APPS += ('tests', )
 INSTALLED_APPS = list(INSTALLED_APPS)
-USER_FILES_LIMIT=1.2*1024*1024
-SEND_MESSAGES=False
+USER_FILES_LIMIT = 1.2 * 1024 * 1024
+SEND_MESSAGES = True
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '_wh.sqlite',
+        'NAME': rel_path('db/_wh.sqlite'),
     }, 
 }
 
@@ -39,16 +42,5 @@ TEST_DATABASE_NAME = DATABASES['default']['NAME'] if \
 
 if 'django_plop.middleware.PlopMiddleware' in MIDDLEWARE_CLASSES:
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
-    MIDDLEWARE_CLASSES.pop(MIDDLEWARE_CLASSES.index('django_plop.middleware.PlopMiddleware'))
-
-#
-def _to_uni(value):
-    try:
-        return str(value)
-    except:
-        try:
-            return str(value.message.encode('utf-8'))
-        except:
-            return '<unprintable %s object>' % type(value).__name__
-import traceback
-traceback._some_str = _to_uni
+    MIDDLEWARE_CLASSES.pop(MIDDLEWARE_CLASSES.index(
+        'django_plop.middleware.PlopMiddleware'))

@@ -1,0 +1,56 @@
+{% extends "base_template.html" %}{% load i18n %}
+{% block title %}{% trans "private messages" %}{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{{ user.get_profile_url }}">{% trans "profile" %}</a></li>
+    {% if box == 'inbox' %}
+      <li class="pull-right"><a href="{{ user.get_pm_outbox_url }}">{% trans "outbox" %}</a></li>
+      <li class="active">{% trans "inbox" %}</li>
+    {% else %}
+      <li class="pull-right"><a href="{{ user.get_pm_inbox_url }}">{% trans "inbox" %}</a></li>
+      <li class="active">{% trans "outbox" %}</li>
+    {% endif %}
+  </ul>
+  <div class="pull-right">
+    <a href="{% url "accounts:pm-create" %}"
+       class="btn btn-{{ user.get_color_theme|default:"primary" }}">{% trans "Send message" %}</a>
+  </div>
+  <h3>{% trans "Private messages" %}</h3>
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>&nbsp;</th>
+        <th>{% trans "From" %}</th>
+        <th>{% trans "To" %}</th>
+        <th>{% trans "Title" %}</th>
+        <th>{% trans "Date" %}</th>
+      </tr>
+    {% for message in object_list %}
+      <tr>
+        <td>
+          {% if not message.is_read %}
+            <i class="icon-comment"></i>
+          {% endif %}
+        </td>
+        <td>
+          <img class='avatar' src='{{ message.sender.get_avatar_url }}' />
+          {{ message.sender.get_nickname|safe }}
+        </td>
+        <td>
+          <img class='avatar' src='{{ message.addressee.get_avatar_url }}' />
+          {{ message.addressee.get_nickname|safe }}
+        </td>
+        <td><a href="{{ message.get_absolute_url }}">{{ message.title }}</a></td>
+        <td>{{ message.sent|date:"d/F/Y H:i" }}</td>
+      </tr>
+    {% endfor %}
+    </table>
+
+    {% include "generic/paginator.html" %}
+  {% else %}
+    <h3>{% trans "No private messages was found" %}</h3>
+  {% endif %}
+
+{% endblock %}

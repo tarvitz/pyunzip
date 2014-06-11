@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load kamwhfilters %} {% load newsfilters coretags %}
+{% load newsfilters coretags %}
 {% block head_content %}
 <link rel="stylesheet" type="text/css" href="/styles/message.css" media="screen">
 <script language="javascript" type="text/javascript" src="/media/js/jquery.js"></script>
@@ -60,9 +60,6 @@
 				{% include "karma_power.html" %}
 			{% endwith %}
 			</center>
-			{% if not r.user.settings.invisible %}
-				{% check_if_online c.user as is_online 15 %} {% if is_online %}[online]{% else %}[offline]{% endif %}
-			{% else %}&nbsp;{% endif %}
 			{% if user.is_authenticated %}
 			{# implement via similar to if block 'coz listed below is really SUCKS!  #}
 			{% comment %}{% get_settings for c.user with hide_jid as hide_jid %}
@@ -76,9 +73,9 @@
 		<div class="text">
 			<div class="transparency" id="txt"></div>
 			<div id="text_{{ c.id }}">
-				{% markdownit %}
+
 					{{ c.comment|render_filter:c.syntax|safe }}
-				{% endmarkdownit %}
+
 			</div>
 			{% if c.user.about %}
 			<small>---<br>{{ c.user.about }}</small>

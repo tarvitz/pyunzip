@@ -61,7 +61,7 @@
             {% endif %}
             {% if user.is_authenticated %}
             <li><a href="/logout/" title="logout">&nbsp;<img width='16px' src='/media/icons/white/circle_remove.png'>&nbsp;</a></li>
-            {% else%}<li><a href="{% url "wh:login" %}" title="login">&nbsp;<img width='16px' src='/media/icons/white/user.png'>&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
+            {% else%}<li><a href="{% url "accounts:login" %}" title="login">&nbsp;<img width='16px' src='/media/icons/white/user.png'>&nbsp;</a></li><!-- для выхода: ⎕ -->{% endif %}
             {% if not user.is_authenticated %}<li><a href="{% url "accounts:register" %}" title="register">&nbsp;<img width='16px' src='/media/icons/white/user_add.png'>&nbsp;</a></li>{% endif %}
             <li><a href="/faq/" title="FAQ">&nbsp;<img width='16px' src='/media/icons/white/circle_question_mark.png'>&nbsp;</a></li>
         </ul>
@@ -69,10 +69,6 @@
             {% for menu in hmenu %}
             <li><a href='{{ menu.get_url }}' {{ menu.attrs|safe }}>{{ menu.title }}</a></li>
             {% endfor %}
-            {% comment %}
-            <li><a href='{% url "pybb_index" %}'>форум</a></li>
-            <li><a href='{% url "blog:index" %}'>блог</a></li>
-            <li><a href='{% url "news:news" %}'>сайт</a></li>{% endcomment %}
         </ul>
     </div>
     <div class='navbar navbar-inverse no-margin-bottom no-padding grey'>
@@ -128,7 +124,7 @@
         </div>
         <div class='modal-body'>
             {% get_form 'apps.wh.forms.LoginForm' as form %}
-            <form class='form-horizontal' action='{% url "wh:login" %}' method='POST'>
+            <form class='form-horizontal' action='{% url "accounts:login" %}' method='POST'>
                 {% csrf_token %}
                 {% include "forms/bootstrap_horizontal.html" with form=form %}
                 {% include "forms/submit.html" with class="btn btn-success postAjax" submit_text="Войти" %}

@@ -36,3 +36,19 @@
     border-radius: @navbar-avatar-size / 2;
   }
 }
+.panel-heading{
+  .avatar{
+    max-width: @navbar-avatar-size - 5;
+    max-height: @navbar-avatar-size - 5;
+  }
+}
+.table{
+  tr{
+    > td{
+      .avatar{
+        max-width: @navbar-avatar-size;
+        max-height: @navbar-avatar-size;
+      }
+    }
+  }
+}

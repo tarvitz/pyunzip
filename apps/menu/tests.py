@@ -7,7 +7,6 @@ from django.conf import settings
 from django.core.cache import cache
 
 
-
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_menus.json',
@@ -64,11 +63,3 @@ class CacheTest(TestCase):
 
     def test_cache_key_prefix(self):
         self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
-
-    def test_hmenu_cache_all(self):
-        self.assertEqual(cache.get('hmenu:all'), None)
-        self.client.get('/')
-        self.assertListEqual(
-            list(cache.get('hmenu:all') or []),
-            list(HMenuItem.objects.all())
-        )

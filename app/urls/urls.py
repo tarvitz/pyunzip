@@ -6,16 +6,6 @@ admin.autodiscover()
 from django.conf import settings
 from apps.core.feeds import *
 
-from apps.news.views.rest import EventViewSet
-from apps.comments.views.rest import CommentWatchViewSet
-
-from rest_framework import routers
-
-router = routers.DefaultRouter()
-router.register(r'events', EventViewSet)
-router.register(r'commentwatch', CommentWatchViewSet)
-
-
 urlpatterns = patterns(
     '',
     url(r'^grappelli/', include('grappelli.urls')),
@@ -40,8 +30,6 @@ urlpatterns = patterns(
     (r'^forum/', include('apps.pybb.urls', namespace='pybb')),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
-    url(r'^api/', include(router.urls)),
-    url(r'^api/', include(router.urls, namespace='api')),
 )
 
 

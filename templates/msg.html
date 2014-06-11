@@ -1,9 +1,4 @@
 {% load newsfilters %}
-{% block css %}
-{{ block.super }}
-<link type='text/css' rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"message.css" }}'>
-<link type='text/css' rel='stylesheet' href='/styles/{{ user.skin.name|getskincss:"replay.css" }}'>
-{% endblock %}
 <div align="center">
 <div class='message'>
 	<div class='message-headline'>

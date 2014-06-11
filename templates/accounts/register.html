@@ -1,7 +1,12 @@
 {% extends "base_template.html" %}{% load i18n %}
 {% block title %}Регистрация{% endblock %}
 {% block content %}
-
+  <div class="alert alert-success">
+    <button class="close" data-dismiss="alert">&times;</button>
+    <a href="{% url "accounts:login" %}">{% trans "Sign in" %}</a> |
+    {% trans "Sign up" context "register" %} |
+    <a href="{% url "accounts:password-restore-initiate" %}">{% trans "Passowrd recover" %}</a>
+  </div>
   <form action='.' method='post' class="form-horizontal">
     {% csrf_token %}{% trans "Register" as submit_i18n %}
     {% include "forms/bootstrap_horizontal.html" with form=form %}

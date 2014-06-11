@@ -2,6 +2,7 @@
 # Django settings for WarMist project.
 import os
 from settings_path import rel_path
+
 try:
     import psycopg2
 except ImportError:
@@ -37,6 +38,7 @@ LANGUAGE_CODE = 'ru'
 SITE_ID = 1
 
 _ = lambda s: s
+
 LANGUAGES = (
     ('ru', _('Russian')),
     ('en', _('English')),
@@ -61,7 +63,6 @@ ADMIN_MEDIA = rel_path('admin_media')
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/media/'
-STYLES_URL = '/styles/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
@@ -73,9 +74,6 @@ MEDIA_ROOT = rel_path('db/uploads')
 
 STATICFILES_DIRS = (
     rel_path('media'),
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
 )
 
 STATICFILES_FINDERS = (
@@ -96,8 +94,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'apps.core.middleware.BanMiddleware',
-    'apps.core.middleware.ChecksMiddleware',
-    'apps.wh.middleware.WarningsMiddleware',
+    'apps.accounts.middleware.ReadOnlyMiddleware',
 )
 
 CACHES = {
@@ -132,15 +129,17 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+            'format': (
+                '%(levelname)s %(asctime)s %(module)s '
+                '%(process)d %(thread)d %(message)s')
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
         },
     },
     'filters': {
-         'require_debug_false': {
-             '()': 'django.utils.log.RequireDebugFalse'
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
         }
     },
     'handlers': {
@@ -149,9 +148,9 @@ LOGGING = {
             'filters': ['require_debug_false', ],
             'class': 'django.utils.log.AdminEmailHandler'
         },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
     },
@@ -161,30 +160,25 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'apps.files':{
+        'apps.files': {
             'level': "INFO",
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.core':{
+        'apps.core': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.farseer':{
+        'apps.thirdpaty.sleekxmpp.basexmpp': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
-        'apps.thirdpaty.sleekxmpp.basexmpp':{
+        'apps.thirdpaty.sleekxmpp.xmlstream.xmlstream': {
             'level': 'INFO',
             'propagate': True,
-            'handlers': ['console',],
-        },
-        'apps.thirdpaty.sleekxmpp.xmlstream.xmlstream':{
-            'level': 'INFO',
-            'propagate': True,
-            'handlers': ['console',],
+            'handlers': ['console', ],
         },
     },
 
@@ -206,12 +200,10 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
-    'apps.tagging',
     'apps.utils',
     'apps.karma',
     'apps.pybb',
     'apps.menu',
-    'extwidgets',
     'django_extensions',
     'south',
     'rest_framework',
@@ -239,7 +231,8 @@ AUTHENTICATION_BACKENDS = (
 
 CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
-    'apps.news.cron.EventsMarkFinishedCronJob'
+    'apps.news.cron.EventsMarkFinishedCronJob',
+    'apps.accounts.cron.PolicyWarningsMarkExpireCronJob',
 )
 
 
@@ -254,24 +247,23 @@ REST_FRAMEWORK = {
 #settings
 DOMAIN = 'w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
-APP_VOTE_ENABLED = True
+
 PRODUCTION = True
 DEVELOPMENT = False
 YANDEX_METRICA_ENABLED = False
-BOOTSTRAP_VERSION = ''
-ENABLE_500_TEST = False
+
 SERVER_EMAIL = 'noreply@w40k.net'
 DEV_SERVER = True
 GRAPPELLI_ADMIN_TITLE = 'w40k.net'
-USE_OLD_THUMBNAIL_IMAGE_SCHEME = False
-DEFAULT_TEMPLATE = 'base.html'
+
+DEFAULT_TEMPLATE = 'base_template.html'
 DEFAULT_SYNTAX = 'textile'
 IMAGE_THUMBNAIL_SIZE = '200x200'
 BRUTEFORCE_ITER = 10
 SEND_MESSAGES = True
 OBJECTS_ON_PAGE = 20
 EXPEREMENTAL = False
-USER_FILES_LIMIT = 100*1024*1024
+USER_FILES_LIMIT = 100 * 1024 * 1024
 MAXIMUM_POLL_ITEMS_AMOUNT = 10
 NULL_AVATAR_URL = os.path.join(MEDIA_URL, 'avatars/none.png')
 
@@ -284,7 +276,8 @@ FORUM_THEMES = (
     (_("spring"), 'success'),
     (_("void"), 'default')
 )
-# TEMPLATES INCLUES
+
+# TEMPLATES INCLUDES, todo: cleanup
 DOCUMENT = {
     'links': 'links.html',
     'pages': 'pages.html',
@@ -303,47 +296,26 @@ DOCUMENT = {
     'sph_search_inc': 'includes/sphinx_search.html'
 }
 
+SYNTAX = (
+    ('textile', 'textile'), ('bb-code', 'bb-code'),
+)
 
-from apps.wh.settings import *
-from app.search_settings import *
-from apps.karma.settings import *
+SIGN_CHOICES = (
+    (1, '[*]'),
+    (2, '[*][*]'),
+    (3, '[+]'),
+    (4, '[+][+]'),
+    (5, '[x]'),
+    (6, '[x][x]'),
+    (7, _('[ban]')),
+    (8, _('[everban]')),
+)
 
-#import djcelery
-#djcelery.setup_loader()
-# Celery settings
-# Time after task will be expired, 5 hours
-#CELERY_TASK_RESULT_EXPIRES = 18000
-# Send notifications for admins if troubles would happen
-#CELERND_TASK_ERROR_EMAILS = True
-#CELERY_RESULT_BACKEND = "redis"
-#CELERY_REDIS_HOST = "redis"
-#CELERY_REDIS_PORT = 6379
-#CELERY_REDIS_DB = 0
-#BROKER_URL = "redis://redis:6379/0"
 
+READONLY_LEVEL = 40000
+GLOBAL_SITE_NAME = 'http://w40k.net'
+
+KARMA_COMMENTS_COUNT = 1
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
-MAX_DOCUMENT_SIZE = 1024 * 4  # 4096 bytes
-
-DEBUG_TOOLBAR = False
-DEBUG = True
-if DEBUG and DEBUG_TOOLBAR:
-    INTERNAL_IPS = ('127.0.0.1',)
-    INSTALLED_APPS += (
-        'debug_toolbar',
-        'debug_toolbar_extra',
-    )
-    MIDDLEWARE_CLASSES += (
-        'debug_toolbar.middleware.DebugToolbarMiddleware',
-    )
-    DEBUG_TOOLBAR_PANELS = (
-        'debug_toolbar.panels.version.VersionDebugPanel',
-        'debug_toolbar.panels.timer.TimerDebugPanel',
-        'debug_toolbar.panels.settings_vars.SettingsVarsDebugPanel',
-        'debug_toolbar.panels.headers.HeaderDebugPanel',
-        'debug_toolbar.panels.request_vars.RequestVarsDebugPanel',
-        'debug_toolbar.panels.template.TemplateDebugPanel',
-        'debug_toolbar.panels.sql.SQLDebugPanel',
-        'debug_toolbar.panels.signals.SignalDebugPanel',
-        'debug_toolbar.panels.logger.LoggingPanel',
-        'debug_toolbar_extra.panels.PrintTemplateNamePanel',
-    )
+MAX_DOCUMENT_SIZE = 1024 * 4
+FROM_EMAIL = 'AstroPath (no replay) <astropath@blacklibrary.ru>'

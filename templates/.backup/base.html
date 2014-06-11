@@ -87,13 +87,6 @@
 	<div class='none'><span id='label' class='logo_admin_block'>Напоминалка</span></div>
 	<div class='admin_block'>
 	<div class="transparency"><!-- wise transparency --></div>
-		{% get_unread news.News as unread_news %}
-		{% get_unread wh.WishList as unread_wishes %}
-		{% if unread_news %}<span id='attention'>Непрочтенных новостей: <b>{{ unread_news }}</b></span>{% else %}
-		Напоминаний пока нет{% endif %}
-		{% if perms.wh.can_approve and unread_wishes %}
-		<span id='attention'>Непрочитанных пожеланий: {{ unread_wishes }}
-		{% endif %}
 	</div>
 	{% endif %}{% endspaceless %}
 	<div class='none' {% if not user.is_authenticated %} style="margin-top: 5px;"{% endif%}><span align="right" id='label' class='logo_content'>Общее</span></div>
@@ -168,18 +161,7 @@
 	</div>
 	<div class='none'><span id='label' class='logo_online_users'>Online</span></div>
 	<div class='online_users'>
-	<div class='transparency'></div>
-		{% get_guests_count as guests_count 15 %} {# 15 minutes #}
-		{% get_online_users as online_users 15 %} {# 15 minutes #}
-			{% for u in online_users %}
-				{% spaceless%}{% if forloop.first %}{{ u.nickname }}{% else %}
-				,{{ u.nickname }}{% endif %}{% endspaceless %}
-			{% endfor %}
-			{% if online_users %}
-			  {% if guests_count %}, Гостей({{ guests_count }}){% endif %}
-			{%else%}
-		  	   {% if guests_count %}Гостей({{ guests_count }}){% endif%}
-			{% endif %}
+	  <div class='transparency'></div>
 	</div>
 	<!--
 	<div class='none'><span id='label' class='common'>Дрезья проекта</span></div>

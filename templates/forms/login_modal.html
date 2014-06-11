@@ -3,7 +3,7 @@
      role="dialog" aria-hidden="true" aria-labelledby="login-lbl">
   <div class="modal-dialog">
     <form class="form-horizontal" role="form" method='POST'
-          action='{% url "wh:login" %}?next={{ current_referer }}'>
+          action='{% url "accounts:login" %}?next={{ current_referer }}'>
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal"

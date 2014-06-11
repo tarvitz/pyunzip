@@ -3,18 +3,15 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from apps.wh.models import (
-    Expression, Fraction, Side, Army, PM, RegisterSid,
-    Skin, Rank,
-    RankType, UserActivity,
-    GuestActivity, Warning, WarningType,
-    Universe
+    Expression, Fraction, Side, Army, Rank, RankType, Universe
 )
 from apps.wh.models import MiniQuote
 
 
 class ExpressionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'show_author', 'show_original_content', 'show_content', 'fraction'
+        'id', 'show_author', 'show_original_content', 'show_content',
+        'fraction'
     )
     fieldsets = (
         (
@@ -28,9 +25,9 @@ class ExpressionAdmin(admin.ModelAdmin):
     )
     ordering = ('id', )
     search_fields = ['author', 'original_content', 'content']
-    #list_filter = ['author']
     list_filter = ['fraction', ]
-    list_display_links = ('show_author', 'show_original_content', 'show_content')
+    list_display_links = ('show_author', 'show_original_content',
+                          'show_content')
     list_per_page = 30
 admin.site.register(Expression, ExpressionAdmin)
 
@@ -54,23 +51,6 @@ class ArmyAdmin(admin.ModelAdmin):
 admin.site.register(Army, ArmyAdmin)
 
 
-class PMAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'title', 'is_read', 'dbs', 'dba', 'sent'
-    )
-admin.site.register(PM, PMAdmin)
-
-
-class RegisterSidAdmin(admin.ModelAdmin):
-    list_display = ('sid', 'ip', 'value', 'expired')
-admin.site.register(RegisterSid, RegisterSidAdmin)
-
-
-class SkinAdmin(admin.ModelAdmin):
-    list_display = ('name', )
-admin.site.register(Skin, SkinAdmin)
-
-
 class RankAdmin(admin.ModelAdmin):
     list_display = ('type', 'short_name', 'codename', 'description')
     list_display_links = ('type', 'short_name', 'codename')
@@ -88,22 +68,6 @@ admin.site.register(RankType, RankTypeAdmin)
 class MiniQuoteAdmin(admin.ModelAdmin):
     list_display = ('id', 'content')
 admin.site.register(MiniQuote, MiniQuoteAdmin)
-
-
-class UserActivityAdmin(admin.ModelAdmin):
-    list_display = ('show_nickname', 'activity_date', 'activity_ip')
-admin.site.register(UserActivity, UserActivityAdmin)
-
-
-class GuestActivityAdmin(admin.ModelAdmin):
-    list_display = ('id', 'activity_date', 'activity_date_prev', 'activity_ip')
-admin.site.register(GuestActivity, GuestActivityAdmin)
-
-
-class WarningAdmin(admin.ModelAdmin):
-    list_display = ('show_nickname', 'level', 'type', 'expired',)
-admin.site.register(Warning, WarningAdmin)
-admin.site.register(WarningType)
 
 
 class UniverseAdmin(admin.ModelAdmin):

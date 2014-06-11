@@ -1,0 +1,9 @@
+{% extends "base_template.html" %}{% load i18n %}
+{% block content %}
+  <h3>{% trans "Read only" %}</h3>
+    <div class="alert alert-warning">
+      <button class="close" data-dismiss="alert">&times;</button>
+    {% blocktrans %}You have read only level policy warnings which is not expired yet.
+      That means you can not post anything, please wait until your punishment is expired.{% endblocktrans %}
+    </div>
+{% endblock %}

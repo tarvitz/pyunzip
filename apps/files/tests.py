@@ -20,21 +20,16 @@ class JustTest(TestCase):
     def setUp(self):
         self.request_factory = RequestFactory()
         self.urls_void = [
-            "/news/",
-            '/news/archived/',
-            '/markup/preview/',
-            '/article/created/'
+
         ]
         self.urls_registered = [
-            '/article/add/',  # 302
-            "/news/user/",  # 302
+
         ]
         self.urls_302 = [
 
         ]
         self.urls_params = [
-            reverse('news:news', args=('testing',)),
-            reverse('news:article', args=(1,)),
+
         ]
         self.unlink_files = []
 
@@ -137,7 +132,7 @@ class JustTest(TestCase):
             self.print_form_errors(js['form'])
         new_count = UserFile.objects.filter(owner__username='user').count()
 
-        print "Got file instance: %s" % js['file']
+        print "\nGot file instance: %s\n" % js['file']
         self.assertIn('avatar.png', js['file']['url'])
         self.assertEqual(count + 1, new_count)
         user_file = UserFile.objects.filter(owner__username='user')[0]

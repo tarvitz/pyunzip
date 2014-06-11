@@ -1,10 +1,6 @@
-from apps.core.helpers import get_object_or_None
-from django.shortcuts import redirect
+# coding: utf-8
 from django.http import Http404
-
 from django.conf import settings
-
-from datetime import datetime
 
 
 def prevent_bruteforce(func):

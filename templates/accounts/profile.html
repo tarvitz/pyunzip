@@ -1,5 +1,5 @@
 {% extends "base_template.html" %}
-{% load kamwhfilters i18n comments coretags %}
+{% load i18n comments coretags %}
 {% block content %}
   <ul class="breadcrumb">
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
@@ -22,6 +22,13 @@
                data-title='{% trans "update profile" %}'
                rel="tooltip"><i class="icon-edit"></i>&nbsp;</a></span>
         {% endif %}
+        {% if perms.accounts.change_policywarning %}
+          <span class="pull-right">
+            <a href="{{ object.get_policy_warning_create_url }}" rel="tooltip"
+              data-title="{% trans "Add policy warning" %}" class="text-danger">
+              <i class="glyphicon glyphicon-warning-sign"></i></a>&nbsp;
+          </span>
+        {% endif %}
       </div> <!-- msg_headline -->
       <div class='message-content'>
         <div class='avatar'>
@@ -33,13 +40,15 @@
           {% if object.first_name or object.last_name %}
             <b>{% trans "Real name" %}</b>: {{ object.first_name }} {{ object.last_name }}<br>
           {% endif %}
-          <b>{% trans "Gender" %}</b>: {{ object.gender|gender_transform }}<br>
+          <b>{% trans "Gender" %}</b>: {{ object.get_gender }}<br>
           {% if object.uin %}<b>{% trans "ICQ" %}</b>: {{ object.uin }}<br>{% endif %}
           {% if object.jid %}<b>{% trans "Jabber/Google talk" %}</b>: {{ object.jid }}<br>{% endif %}
           {% if perms.accounts.change_user or object == user %}
             {% if object.email %}<b>{% trans "Email" %}</b>: {{ object.email }}<br> {% endif %}
           {% endif %}
           {% if object.about %}<b>{% trans "Signature" %}</b>: {{ object.about }}<br>{% endif %}
+          <strong>{% trans "Policy warnings" %}</strong>:
+            <a href='{{ object.get_policy_warnings_url }}'>{{ object.warning_user_set.count }}</a>
         </div> <!-- msg_text -->
       </div> <!-- msg_content -->
       <br clear='all'>
@@ -47,7 +56,7 @@
         <div class="transparency grey"></div>
         <div class="pull-left">
           {% if user == object %}
-            [<a class='act_link' href='{% url "wh:password-change" %}' title='сменить пароль'>***</a>]{% endif %}
+            [<a class='act_link' href='{{ user.get_password_change_url }}' title='сменить пароль'>***</a>]{% endif %}
             {% if user.is_staff %}[{{ object.username }}]{% endif %}
         </div>
       </div><!-- msg_footer -->

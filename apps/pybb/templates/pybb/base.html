@@ -8,6 +8,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <script type='text/javascript' src='{% static "js/core.js" %}'></script>
     <script type="text/javascript" src="{% static "components/jquery/jquery.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "components/moment/min/moment.min.js" %}"></script>
     <script type='text/javascript' src='{% static "js/jquery.tmpl.min.js" %}'></script>
     <script type='text/javascript' src='{% static "js/jquery.html5_upload.js" %}'></script>
     <!-- Highlightjs goodies -->
@@ -20,6 +21,7 @@
           href="{% static "pybb/css/hljs_styles/idea.css" %}" /> -->
     <!--<link rel='stylesheet' href='{% static "css/markitup/skins/bootstrap/style.css" %}'
           type='text/css' media='screen' async> -->
+    <link rel="stylesheet" href="{% static "components/select2/select2.css" %}">
     <link rel='stylesheet' href='{% static "css/bootstrap-forum.css" %}'>
     <link rel='stylesheet' href='{% static "css/whhg.css" %}'>
     <link type='text/css' rel='stylesheet' 
@@ -83,17 +85,6 @@
             : "{{ i18n_open }}"
         );
         $(this).parent().find('.spoiler.block').toggleClass('hide');
-      });
-      $.get("{% url 'json:wh:pm-unread' %}", {}, function(response){
-          if (response.pm_unread){
-              $(".pm.count").text(" [" + response.pm_unread+ "]");
-              noty({
-                  text: "{% trans 'You have unread messages' %}: " + response.pm_unread,
-                  type: "success",
-                  dismissQueue: true
-                  //timeout: 5000,
-              });
-          }
       });
   });
 </script>
