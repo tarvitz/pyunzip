@@ -10,11 +10,6 @@ urlpatterns = patterns(
     url(r'^galleries/(?P<pk>\d+)/$', views.GalleryListView.as_view(),
         name='galleries'),
 
-    url(r'^gallery/exists/$', direct_to_template,
-        {'template': 'gallery/exists.html'}),
-
-    url(r'^gallery/created/$', direct_to_template,
-        {'template': 'gallery/created.html'}),
     url('^galleries/images/(?P<pk>\d+)/$',
         views.GalleryImageDetailView.as_view(), name='image'),
     url(r'^galleries/images/upload/$',

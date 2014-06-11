@@ -4,25 +4,15 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from apps.wh.models import Rank
-from django.db.models import Q
-from django.http import HttpResponse, HttpResponseServerError
+
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib import auth
 
-
-from django.core import serializers
-
 from apps.wh.forms import SuperUserLoginForm
-
 from apps.core import get_skin_template
 
-
-
 from django.http import Http404
-from apps.news.templatetags.newsfilters import spadvfilter
-from django.template.defaultfilters import striptags
-
 from django.shortcuts import redirect
 from apps.core.helpers import (
     get_object_or_None,
@@ -92,28 +82,3 @@ def show_rank(request, pk=None, codename=None):
         },
         context_instance=RequestContext(request)
     )
-
-
-def get_rank(request, codename=None, pk=None, raw=True):
-    response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
-    qset = Q()
-    if codename:
-        qset = Q(codename__exact=codename)
-    elif pk:
-        qset = Q(pk=pk)
-    else:
-        pass
-    try:
-        rank = Rank.objects.get(qset)
-        # FIXME: :(
-        from time import sleep
-        sleep(0.125)
-        if not raw:
-            rank.description = striptags(rank.description)
-            rank.description = spadvfilter(rank.description)
-        response.write(serializers.serialize("json", [rank]))
-        return response
-    except Rank.DoesNotExist:
-        msg_error = u"no rank"
-        return HttpResponseServerError(msg_error)

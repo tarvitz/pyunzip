@@ -24,7 +24,7 @@ from django.utils.decorators import method_decorator
 
 
 class NewsListView(generic.ListView):
-    template_name = 'news.html'
+    template_name = 'news/news.html'
     paginate_by = settings.OBJECTS_ON_PAGE
     paginator_class = Paginator
     model = News
@@ -150,19 +150,19 @@ class EventPermissionMixin(object):
 class EventCreateView(EventPermissionMixin, generic.CreateView):
     model = Event
     form_class = EventForm
-    template_name = 'events/event_form.html'
+    template_name = 'news/events/event_form.html'
 
 
 class EventListView(EventPermissionMixin, generic.ListView):
     model = Event
     paginator_class = Paginator
     paginate_by = settings.OBJECTS_ON_PAGE
-    template_name = 'events/events.html'
+    template_name = 'news/events/events.html'
 
 
 class EventView(generic.DetailView):
     model = Event
-    template_name = 'events/event.html'
+    template_name = 'news/events/event.html'
 
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
@@ -188,20 +188,20 @@ class EventView(generic.DetailView):
 class EventUpdateView(EventPermissionMixin, generic.UpdateView):
     model = Event
     form_class = EventForm
-    template_name = 'events/event_form.html'
+    template_name = 'news/events/event_form.html'
 
 
 class EventDeleteView(EventPermissionMixin, generic.DeleteView):
     model = Event
     form_class = EventForm
-    template_name = 'events/event_confirm_delete.html'
+    template_name = 'news/events/event_confirm_delete.html'
     success_url = reverse_lazy('news:events')
 
 
 class EventParticipateView(generic.UpdateView):
     model = Event
     form_class = EventParticipateForm
-    template_name = 'events/event_form.html'
+    template_name = 'news/events/event_form.html'
 
     def get_context_data(self, **kwargs):
         context = super(EventParticipateView, self).get_context_data(**kwargs)

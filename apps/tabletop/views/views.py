@@ -45,7 +45,7 @@ from datetime import datetime
 
 
 @login_required
-@render_to('reports.html')
+@render_to('tabletop/reports.html')
 def reports(request):
     battle_reps = request.user.battle_report_set.all()
     page = get_int_or_zero(request.GET.get('page')) or 1
@@ -57,7 +57,7 @@ def reports(request):
     }
 
 
-@render_to('reports/reports.html')
+@render_to('tabletop/reports/reports.html')
 def battle_reports(request):
     page = get_int_or_zero(request.GET.get('page', 1)) or 1
     can_edit = request.user.has_perm('tabletop.edit_battle_report')
@@ -73,7 +73,7 @@ def battle_reports(request):
     }
 
 
-@render_to('reports/report.html')
+@render_to('tabletop/reports/report.html')
 def report(request, pk):
     can_edit = False
     if request.user.is_authenticated():
@@ -106,7 +106,7 @@ def report(request, pk):
 
 
 @login_required
-@render_to('reports/report.html')
+@render_to('tabletop/reports/report.html')
 def report_approve(request, pk, approved=True):
     can_edit = request.user.has_perm('tabletop.edit_battle_report')
     if not can_edit:
@@ -130,7 +130,7 @@ def unorphan(request, pk):
 
 
 @login_required
-@render_to('add_roster.html', allow_xhr=True)
+@render_to('tabletop/add_roster.html', allow_xhr=True)
 def action_roster(request, pk=None, action=None):
     instance = None
     if pk:
@@ -181,7 +181,7 @@ def add_battle_report(request, action=None, pk=None):
 
 
 @login_required
-@render_to('reports.html', allow_xhr=True)
+@render_to('tabletop/reports.html', allow_xhr=True)
 def report_add(request, pk=None):
     instance = None
     can_edit = request.user.has_perm('tabletop.edit_battle_report')

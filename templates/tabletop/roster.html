@@ -28,8 +28,8 @@
 
     </div> <!-- msg_headline -->
     <div class='message-content'>
-      <div class='avatar'>
-        {% include "msg/avatar.html" with object=roster.owner %}
+      <div class='avatar text-center'>
+        {% include "generic/avatar.html" with usr=roster.owner %}
       </div>
       <div class='text'>
         <div class='roster_info'>{# places with tabletop.css #}

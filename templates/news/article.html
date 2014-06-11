@@ -2,11 +2,13 @@
 {% block text_content %}
 {% if article %}
 {% with article as n %}
-    {% include "includes/article.html" %}
+    {% include "includes/include/article.html" %}
 {% endwith %}
 {% if comments.object_list %}
     {% include "generic/pages.html" with page=paginator page_obj=comments %}
-    {% include "comments.html" with comments=comments page_obj=comments %}
+    {% for comment in comments %}
+      {% include "generic/comment_new.html" with comment=comment %}
+    {% endfor %}
     {% include "generic/pages.html" with page=paginator %}
 {% endif %}
 {% comment %}

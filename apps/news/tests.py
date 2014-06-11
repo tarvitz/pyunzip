@@ -113,7 +113,7 @@ class BenchmarkTemplatesTest(TestCase):
     @skipIf(True, 'broken mark for deletion')
     def test_news_page_plain(self):
         print "Testing news page without render, only with context processors and stuff"
-        template = get_template('news.html')
+        template = get_template('news/news.html')
         url = reverse('wh:login')  # without anything worthless
         response = self.client.get(url)
         context = response.context[0]

@@ -26,7 +26,7 @@ class TinyMkWidget(Widget):
     def render(self,name,value,attrs=None):
         if value is None: value = ''
         final_attrs = self.build_attrs(attrs, name=name)
-        tinymk_template = get_template('tinymk_widget.html')
+        tinymk_template = get_template('core/widgets/tinymk_widget.html')
         out = tinymk_template.render(Context({'tinymk':final_attrs}))
         out = out+mark_safe(u'<textarea%s>%s</textarea>' % (flatatt(final_attrs),
             conditional_escape(force_unicode(value))))

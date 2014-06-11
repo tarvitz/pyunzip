@@ -279,8 +279,6 @@ FORUM_THEMES = (
 
 # TEMPLATES INCLUDES, todo: cleanup
 DOCUMENT = {
-    'links': 'links.html',
-    'pages': 'pages.html',
     'comments': 'comments.html',
     'comments_form': 'add_comment.html',
     'replay_inc': 'replays/includes/replay.html',

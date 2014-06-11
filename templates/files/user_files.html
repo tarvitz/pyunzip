@@ -63,7 +63,7 @@
               </tr>
             {% endfor %}
           </table>
-          {% include "links.html" with page=files %}
+          {% include "generic/paginator.html" with page_obj=files  paginator=files.paginator %}
         </div>
 
         <div class='tab-pane' id='picts'>
@@ -114,7 +114,7 @@
               {% endthumbnail %}
             {% endfor %}
           </table>
-          {% include "links.html" with page=pictures %}
+          {% include "generic/paginator.html" with page_obj=pictures paginator=picture.paginator %}
         </div>
       </div>
     </div>

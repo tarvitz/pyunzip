@@ -1,7 +1,0 @@
-<video id='{{ ident|default:"embedded-video" }}' class="video-js vjs-default-skin"
-  controls preload="none" width="640" height="320"
-  poster="/media/images/video-preview.png"
-  data-setup="{}">
-  <source src="{{ video_text|safe }}" type='{{ video_type|default:"video/mp4" }}' />
-</video>
-<script>var homePlayer=_V_("{{ ident|default:'embedded-video' }}");</script>

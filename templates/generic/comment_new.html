@@ -22,12 +22,7 @@
     </div>
     <div class='message-body'>
         <div class="avatar">
-            <img src="{{ comment.user.get_avatar_url }}"/>
-            <div>
-                <a href="{% url "accounts:profile-by-nick" comment.user.nickname %}">
-                  {{ comment.user.get_nickname|safe }} </a>
-            </div>
-            {% include "accounts/include/warnings.html" with usr=comment.user %}
+            {% include "generic/avatar.html" with usr=comment.user %}
             <div class="bottom"></div>
             <div class="post-controls"></div>
         </div>

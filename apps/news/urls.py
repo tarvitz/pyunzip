@@ -19,7 +19,7 @@ urlpatterns = patterns(
         name='article-created'),
     # CBV
     url(r'^calendar/$', direct_to_template,
-        {'template': 'events/calendar.html'}, name='calendar'),
+        {'template': 'news/events/calendar.html'}, name='calendar'),
     url(r'^events/$', views.EventListView.as_view(), name='events'),
     url(r'^events/(?P<pk>\d+)/$', views.EventView.as_view(), name='event'),
     url(r'^events/create/$', login_required(views.EventCreateView.as_view()),

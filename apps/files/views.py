@@ -84,7 +84,7 @@ def file_delete(request, pk, nickname=''):
 
 class GalleryListView(generic.ListView):
     model = GalleryImage
-    template_name = 'gallery/gallery_list.html'
+    template_name = 'files/gallery/gallery_list.html'
     paginate_by = settings.OBJECTS_ON_PAGE
     paginator_class = Paginator
 
@@ -105,7 +105,7 @@ class GalleryListView(generic.ListView):
 
 class GalleryImageDetailView(generic.DetailView):
     model = GalleryImage
-    template_name = 'gallery/gallery_image.html'
+    template_name = 'files/gallery/gallery_image.html'
 
     def get_context_data(self, **kwargs):
         context = super(GalleryImageDetailView, self).get_context_data(
@@ -119,7 +119,7 @@ class GalleryImageDetailView(generic.DetailView):
 
 class GalleryImageCreateView(generic.CreateView):
     model = GalleryImage
-    template_name = 'gallery/gallery_image_form.html'
+    template_name = 'files/gallery/gallery_image_form.html'
     form_class = GalleryImageForm
 
     def form_valid(self, form):
@@ -137,11 +137,11 @@ class GalleryImageOwnerMixin(object):
 
 class GalleryImageUpdateView(GalleryImageOwnerMixin, generic.UpdateView):
     model = GalleryImage
-    template_name = 'gallery/gallery_image_form.html'
+    template_name = 'files/gallery/gallery_image_form.html'
     form_class = GalleryImageUpdateForm
 
 
 class GalleryImageDeleteView(GalleryImageOwnerMixin, generic.DeleteView):
     model = GalleryImage
-    template_name = 'gallery/gallery_image_form.html'
+    template_name = 'files/gallery/gallery_image_form.html'
     success_url = reverse_lazy('files:galleries')

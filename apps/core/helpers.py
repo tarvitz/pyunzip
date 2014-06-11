@@ -354,15 +354,16 @@ def post_markup_filter(string):
         if tag not in ('spoiler', 'off', 'video'):
             continue
         if tag == 'spoiler':
-            html = render_to_string('s_comments.html', {'spoiler_text': text})
+            html = render_to_string('core/s_comments.html',
+                                    {'spoiler_text': text})
         elif tag == 'off':
-            html = render_to_string('off_comments.html', {
+            html = render_to_string('core/off_comments.html', {
                 'offtopic_text': text})
         elif tag == 'video':
             ident = text[text.rindex('/') + 1:text.rindex('.')]
             ident = re.sub(r'\s+', '_', ident)
             html = render_to_string(
-                'video_comments.html',
+                'core/video_comments.html',
                 {
                     'video_text': text,
                     'ident': ident
@@ -385,7 +386,8 @@ def post_markup_filter(string):
                 or AnonymousUser()
             )
             html = render_to_string(
-                'q_comments.html', {'quote_user': user, 'quote_text': text}
+                'core/q_comments.html', {
+                    'quote_user': user, 'quote_text': text}
             )
             html = re.sub(r'\n+', '', html)
             string = string.replace('(%s){%s}' % (username, text), html)
