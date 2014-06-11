@@ -27,6 +27,7 @@
                 <a href="{% url "accounts:profile-by-nick" comment.user.nickname %}">
                   {{ comment.user.get_nickname|safe }} </a>
             </div>
+            {% include "accounts/include/warnings.html" with usr=comment.user %}
             <div class="bottom"></div>
             <div class="post-controls"></div>
         </div>

@@ -1,0 +1,14 @@
+{% if user.is_authenticated and usr.warnings.count %}
+  {% with warn=usr.warnings.0 %}
+    <span class="policy-warnings level-{{ warn.level }}">{% spaceless %}
+      [
+      {% if warn.user == user or perms.accounts.change_policywarning %}
+        <a href="{{ warn.get_absolute_url }}">{{ warn.get_level }}</a>
+      {% else %}
+        {{ warn.get_level }}
+      {% endif %}
+      ]
+    {% endspaceless %}
+    </span>
+  {% endwith %}
+{% endif %}
