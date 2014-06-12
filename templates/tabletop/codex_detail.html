@@ -3,7 +3,7 @@
   <ul class="breadcrumb">
     <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
     <li><a href="{% url "tabletop:codex-list" %}">{% trans "codexes" %}</a></li>
-    <li class="active">{{ object.title }}</li>
+    <li class="active">{{ object.title|lower }}</li>
   </ul>
   <div class="pull-right">
     {% include "generic/actions.html" with object=object %}
