@@ -1,4 +1,4 @@
-{% extends base_template %} {% load newsfilters coretags static i18n %}
+{% extends base_template %} {% load coretags static i18n %}
 {% block js %}
   <script language='javascript' src='{% static "js/base.js" %}'></script>
 {% endblock %}
@@ -15,13 +15,13 @@
     {% for comment in comments.object_list %}
       {% include "generic/comment.html"%}
     {% endfor %}
-    {% with comments as page %}
-      {% include settings.document.links %}
-    {% endwith %}
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
   {% endif %}
 
   {% if user.is_authenticated %}
+    <h3>{% trans "Comment" context "verb" %}</h3>
+    <hr>
     {% get_content_type roster as object %}
-    {% include settings.document.comments_form with object=object %}
+    {% include "add_comment.html" with object=object %}
   {% endif %}
 {% endblock %}

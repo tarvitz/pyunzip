@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 19:55+0400\n"
-"PO-Revision-Date: 2014-06-12 19:57+0400\n"
+"POT-Creation-Date: 2014-06-12 20:12+0400\n"
+"PO-Revision-Date: 2014-06-12 20:12+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -1513,7 +1513,7 @@ msgstr "Количество pts должно быть больше 500"
 msgid "Revision"
 msgstr "Ревизия"
 
-#: apps/tabletop/forms.py:390 templates/tabletop/roster.html:28
+#: apps/tabletop/forms.py:390 templates/tabletop/include/roster.html:27
 msgid "Codex"
 msgstr "Кодекс"
 
@@ -2950,19 +2950,10 @@ msgstr "Поиск"
 msgid "Search some rosters"
 msgstr "Поиск ростеров"
 
-#: templates/tabletop/roster.html:26
-msgctxt "pts amount"
-msgid "Pts"
-msgstr "Количество очков"
-
-#: templates/tabletop/roster.html:30
-msgctxt "revision number"
-msgid "Revision"
-msgstr "Редакция"
-
-#: templates/tabletop/roster.html:32
-msgid "Roster"
-msgstr "Ростер"
+#: templates/tabletop/roster.html:24
+msgctxt "verb"
+msgid "Comment"
+msgstr "Комментировать"
 
 #: templates/tabletop/roster_form.html:12
 msgid "update roster"
@@ -2987,6 +2978,20 @@ msgstr "Добавить ростер"
 #: templates/tabletop/roster_list.html:23
 msgid "No rosters found"
 msgstr "Ростеров не найдено"
+
+#: templates/tabletop/include/roster.html:25
+msgctxt "pts amount"
+msgid "Pts"
+msgstr "Количество очков"
+
+#: templates/tabletop/include/roster.html:29
+msgctxt "revision number"
+msgid "Revision"
+msgstr "Редакция"
+
+#: templates/tabletop/include/roster.html:31
+msgid "Roster"
+msgstr "Ростер"
 
 #: templates/tabletop/reports/reports.html:16
 msgid "No reports found"
