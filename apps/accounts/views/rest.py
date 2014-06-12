@@ -16,4 +16,10 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    filter_class = UserSerializer
+    # filter_class = UserSerializer
+
+    def get_queryset(self):
+        qs = super(UserViewSet, self).get_queryset()
+        if self.request.user.is_authenticated():
+            return qs.filter(pk=self.request.user.pk)
+        return qs.none()
