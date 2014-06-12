@@ -1,0 +1,13 @@
+<div class="karma">
+  <a href="{{ usr.get_karma_up_url }}"
+     class="icon-calcplus karma-positive"></a>
+    <a href="{{ usr.get_karma_url }}">
+    {% if usr.karma >= 0 %}
+      <span class='karma-positive'>{{ usr.karma|default_if_none:0 }}</span>
+    {% else %}
+      <span class='karma-negative'>{{ usr.karma|default_if_none:0 }}</span>
+    {% endif %}
+    </a>
+  <a href="{{ usr.get_karma_down_url }}"
+     class="icon-calcminus karma-negative"></a>
+</div>

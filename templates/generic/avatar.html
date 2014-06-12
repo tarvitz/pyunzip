@@ -3,5 +3,7 @@
   <div>
     <a href="{% url "accounts:profile-by-nick" usr.nickname %}">{{ usr.get_nickname|safe }}</a>
   </div>
+  {% include "karma/include/karma.html" with usr=usr %}
   {% include "accounts/include/warnings.html" with usr=usr %}
+
 {% endspaceless %}

@@ -1,0 +1,39 @@
+{% extends base_template %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{{ usr.get_absolute_url }}'>{{ usr.get_nickname|safe }}</a></li>
+    <li class="active">{% trans "karma" %}</li>
+  </ul>
+
+  <h3>{% trans "Karma" %}</h3>
+
+  {% if object_list %}
+    <table class="table">
+      {% for object in object_list %}
+        <tr>
+          <td>
+            {% if object.value > 0 %}
+              <i class="icon-calcplus text-success"></i>
+            {% else %}
+              <i class="icon-calcminus text-danger"></i>
+            {% endif %}
+          </td>
+          <td>{{ object.voter.get_nickname|safe }}</td>
+          <td>{{ object.comment }}</td>
+          <td>
+            {% if object.url %}
+              <a href="{% url "core:safe-url" %}?url={{ object.url }}">{% trans "link" %}</a>
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </table>
+    {% if paginator %}
+      {% include "generic/paginator.html" %}
+    {% endif %}
+  {% else %}
+    <h3>{% trans "No karma registered" %}</h3>
+  {% endif %}
+{% endblock %}

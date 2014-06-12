@@ -14,9 +14,13 @@ ALTER_CHOICES = (
 )
 
 
-class AlterKarmaForm(forms.Form):
-    comment = forms.CharField(widget=forms.Textarea(), max_length=512)
-    url = forms.CharField(widget=forms.HiddenInput(),required=False)
+class KarmaForm(forms.Form):
+    comment = forms.CharField(
+        label=_("Comment"),
+        widget=forms.Textarea(
+            attrs={'class': 'form-control'}
+        ), max_length=512)
+    url = forms.URLField(widget=forms.HiddenInput(), required=False)
 
 
 class KarmaModelForm(forms.ModelForm):
@@ -64,9 +68,10 @@ class KarmaModelForm(forms.ModelForm):
         return instance
 
     class Meta:
+        attrs = {'class': 'form-control'}
         model = Karma
         fields = ('comment', 'user', )
         widgets = {
             'user': forms.HiddenInput,
-            'comment': forms.Textarea
+            'comment': forms.Textarea(attrs=attrs)
         }

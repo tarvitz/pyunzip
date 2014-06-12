@@ -15,7 +15,7 @@
   {% else %}
     <h3>{% trans "Down user's karma" %}</h3>
   {% endif %}
-  <form class='form-horizontal' action='.' method='POST'>
+  <form class='form-horizontal' action='{{ request.path }}' method='POST'>
     {% csrf_token %}
     {% trans "Submit" as submit_i18n %}
     {% include "forms/bootstrap_horizontal.html" with form=form %}

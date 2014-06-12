@@ -2,9 +2,10 @@ from django.conf.urls import *
 from django.utils.translation import ugettext_lazy as _
 from apps.core.shortcuts import direct_to_template
 
-urlpatterns = patterns('apps.core.views',
+urlpatterns = patterns(
+    'apps.core.views',
     url(r'^$', 'index', name='index'),
-
+    url(r'^url/$', 'safe_url', name='safe-url'),
     # directs
     url(r'^password/restored/$', direct_to_template,
         {'template': 'static/password_restored.html'},

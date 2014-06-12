@@ -99,6 +99,11 @@ class User(PermissionsMixin, AbstractBaseUser):
                              null=True)
     tz = models.FloatField(_('time zone'), choices=TZ_CHOICES, default=0)
     settings = PickledObjectField(_('Settings'), null=True, blank=True)
+    # extensions
+    karma = models.IntegerField(
+        _('karma'), default=0, help_text=_("user's karma"), null=True,
+        blank=True
+    )
     # managers
     objects = UserManager()
 
@@ -160,6 +165,15 @@ class User(PermissionsMixin, AbstractBaseUser):
     def get_policy_warning_create_url(self):
         return reverse('accounts:warning-create', args=(self.pk, ))
 
+    def get_karma_url(self):
+        return reverse('karma:karma-list', args=(self.pk, ))
+
+    def get_karma_up_url(self):
+        return reverse('karma:karma-alter', args=('up', self.nickname))
+
+    def get_karma_down_url(self):
+        return reverse('karma:karma-alter', args=('down', self.nickname))
+
     def get_policy_warnings(self):
         return self.warning_user_set.filter(
             is_expired=False)
@@ -212,7 +226,7 @@ class User(PermissionsMixin, AbstractBaseUser):
         return Comment.objects.filter(user=self).count()
 
     def get_karma_value(self):
-        amount = self.karma_owner_set.aggregate(Sum('value'))
+        amount = self.karma_user_set.aggregate(Sum('value'))
         amount = amount.items()[0][1] or 0
         return amount
 
@@ -228,35 +242,6 @@ class User(PermissionsMixin, AbstractBaseUser):
     def get_new_pm(self):
         return self.addressee.filter(is_read=False, dba=False)
 
-    @property
-    def karma(self):
-        return self.get_karma_value()
-
-    def get_karma_status(self):
-        from apps.core.helpers import safe_ret
-        # returns a karma status instance
-        from apps.karma.models import KarmaStatus
-        config = self.settings or {}
-        is_humor = config.get('karma_humor', False)
-        qset = Q(is_general=True)
-        order_by = ['-value', ] if self.karma > 0 else ['value', ]
-        kw = dict()
-
-        if self.karma > 0:
-            kw.update({'value__lte': int(self.karma)})
-        else:
-            kw.update({'value__gte': int(self.karma)})
-
-        if is_humor:
-            order_by += ['is_humor', ]
-        if safe_ret(self, 'army.side'):
-            qset = qset | Q(side=self.army.side)
-
-        status = KarmaStatus.objects.order_by(*order_by).filter(
-            Q(**kw) & qset
-        )
-        return status[0] if len(status) else None
-
     def get_forum_theme(self):
         if isinstance(self.settings, dict):
             return self.settings.get('forum_theme',
@@ -264,18 +249,6 @@ class User(PermissionsMixin, AbstractBaseUser):
         else:
             return settings.FORUM_THEME_DEFAULT
 
-    def get_magnitude(self):
-        if self.is_superuser:
-            return 0
-
-        if not self.ranks:
-            return 1000000  # extreamly high magnitude
-
-        mag = 100000000
-        for r in self.ranks.distinct():
-            if r.type.magnitude < mag:
-                mag = r.type.magnitude
-        return mag
 
     @property
     def files(self):

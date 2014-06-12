@@ -27,6 +27,10 @@ def index(request):
     return redirect(reverse('pybb:index'))
 
 
+def safe_url(request):
+    return redirect(request.GET.get('url', '/'))
+
+
 # CBV Mixins
 # noinspection PyUnresolvedReferences
 class RequestMixin(object):

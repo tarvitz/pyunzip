@@ -1,14 +1,7 @@
 # coding: utf-8
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-
-from apps.wh.models import Side
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 
 from datetime import datetime
@@ -20,56 +13,23 @@ class Karma(models.Model):
     value = models.IntegerField(_('Power'))
     date = models.DateTimeField(_('Date'), default=datetime.now,
                                 auto_now_add=True)
-    user = models.ForeignKey(User, related_name='karma_owner_set')
-    voter = models.ForeignKey(User, related_name='karma_voter_set')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             related_name='karma_user_set',
+                             verbose_name=_("user"))
+    voter = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              related_name='karma_voter_set',
+                              verbose_name=_("voter"))
     url = models.URLField(_('URL'), blank=True, null=True)
 
-    def get_karma(self):
-        karmas = self._base_manager.filter(user=self.user)
-        karma = 0
-        for k in karmas:
-            karma += k.value
-        return karma
-    karma = property(get_karma)
+    def get_user_karma_url(self):
+        return reverse('karma:karma-list', args=(self.user.pk, ))
 
-    def get_karma_value(self):
-        if self.value>0:
-            return '+%i' % self.value
-        else:
-            return '%i' % self.value
-    karma_value = property(get_karma_value)
-
-    def show_user(self):
-        return self.user.nickname
-    show_user.short_description = _('User')
-
-    #def get_status(self):
     def get_absolute_url(self):
-        return reverse('url_karma_user', args=(self.user.nickname,))
+        return reverse('karma:karma-detail', args=(self.pk, ))
 
     class Meta:
         ordering = ['-date']
 
 
-class KarmaStatus(models.Model):
-    codename = models.CharField(_('Codename'), max_length=100, unique=True)
-    status = models.CharField(_('Status'), max_length=100)
-    value = models.IntegerField(_('Value'))
-    is_humor = models.NullBooleanField(_('Humor'), null=True, blank=True)
-    description = models.CharField(_('Description'), max_length=1024)
-    side = models.ManyToManyField(Side, blank=True)
-    is_general = models.BooleanField(_('is General'), blank=True,
-                                     default=False)
-    syntax = models.CharField(_('Syntax'), max_length=20,
-                              blank=True, null=True, choices=settings.SYNTAX)
-
-    def __unicode__(self):
-        return "%s" % self.status
-
-    def get_absolute_url(self):
-        url = reverse('url_karma_status', args=(self.codename,))
-        return url
-
-    class Meta:
-        verbose_name = _('Karma Status')
-        verbose_name_plural = _('Karma Statuses')
+from .signals import setup_run
+setup_run()

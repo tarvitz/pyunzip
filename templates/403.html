@@ -1,0 +1,10 @@
+{% extends base_template %} {% load i18n %}
+{% block content %}
+  <h3>403</h3>
+  <div class="alert alert-info">
+    <button data-dismiss="alert" class="close">&times;</button>
+    <i class='icon-fourohfour'></i> {% trans "Forbidden" %}<br>
+    {% blocktrans %}You requested something which is not permit for you, or just forbidden for everyone.
+    {% endblocktrans %}
+  </div>
+{% endblock %}
