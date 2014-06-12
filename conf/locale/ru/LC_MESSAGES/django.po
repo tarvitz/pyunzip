@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 21:54+0400\n"
-"PO-Revision-Date: 2014-06-12 21:58+0400\n"
+"POT-Creation-Date: 2014-06-13 02:34+0400\n"
+"PO-Revision-Date: 2014-06-13 02:36+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -312,26 +312,35 @@ msgstr "временная зона"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:288 apps/karma/models.py:44 apps/pybb/models.py:104
-#: apps/pybb/models.py:183 apps/pybb/models.py:265
+#: apps/accounts/models.py:104 apps/karma/templates/karma_power.html:11
+#: apps/karma/templates/karma/karma_list.html:7
+msgid "karma"
+msgstr "карма"
+
+#: apps/accounts/models.py:104
+msgid "user's karma"
+msgstr "пользовательская карма"
+
+#: apps/accounts/models.py:261 apps/pybb/models.py:104 apps/pybb/models.py:183
+#: apps/pybb/models.py:265
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:289 templates/accounts/users.html:3
+#: apps/accounts/models.py:262 templates/accounts/users.html:3
 #: templates/pybb/head.html:40 templates/pybb/quick_access.html:41
 #: templates/pybb/users.html:6
 msgid "Users"
 msgstr "Пользователи"
 
-#: apps/accounts/models.py:295
+#: apps/accounts/models.py:268
 msgid "sender"
 msgstr "отправитель"
 
-#: apps/accounts/models.py:299
+#: apps/accounts/models.py:272
 msgid "addressee"
 msgstr "адресат"
 
-#: apps/accounts/models.py:302 apps/files/models.py:100 apps/menu/models.py:8
+#: apps/accounts/models.py:275 apps/files/models.py:100 apps/menu/models.py:8
 #: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
 #: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
 #: apps/tabletop/models.py:53 apps/tabletop/models.py:84
@@ -339,92 +348,92 @@ msgstr "адресат"
 msgid "title"
 msgstr "заголовок"
 
-#: apps/accounts/models.py:304
+#: apps/accounts/models.py:277
 msgid "text"
 msgstr "текст"
 
-#: apps/accounts/models.py:306 apps/news/models.py:76
+#: apps/accounts/models.py:279 apps/news/models.py:76
 msgid "cache content"
 msgstr "кеш контента"
 
-#: apps/accounts/models.py:308
+#: apps/accounts/models.py:281
 msgid "is read"
 msgstr "прочтено?"
 
-#: apps/accounts/models.py:310
+#: apps/accounts/models.py:283
 msgid "sent"
 msgstr "отосланно"
 
-#: apps/accounts/models.py:312
+#: apps/accounts/models.py:285
 msgid "deleted by sendr"
 msgstr "удалено отправителем"
 
-#: apps/accounts/models.py:313
+#: apps/accounts/models.py:286
 msgid "deleted by addr"
 msgstr "удалено адресатом"
 
-#: apps/accounts/models.py:315 apps/news/models.py:48
+#: apps/accounts/models.py:288 apps/news/models.py:48
 #: apps/tabletop/models.py:219 apps/wh/models.py:169
 msgid "syntax"
 msgstr "синтаксис"
 
-#: apps/accounts/models.py:322
+#: apps/accounts/models.py:295
 msgid "Private Message"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:323
+#: apps/accounts/models.py:296
 msgid "Private Messages"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:357
+#: apps/accounts/models.py:330
 msgid "read only"
 msgstr "только чтение"
 
-#: apps/accounts/models.py:366 apps/comments/models.py:76
-#: apps/karma/forms.py:27 apps/news/models.py:369
+#: apps/accounts/models.py:339 apps/comments/models.py:76
+#: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:369
 msgid "user"
 msgstr "пользователь"
 
-#: apps/accounts/models.py:368 apps/comments/models.py:72
+#: apps/accounts/models.py:341 apps/comments/models.py:72
 #: apps/tabletop/models.py:216
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/accounts/models.py:370
+#: apps/accounts/models.py:343
 msgid "level"
 msgstr "уровень"
 
-#: apps/accounts/models.py:372 apps/comments/models.py:77
+#: apps/accounts/models.py:345 apps/comments/models.py:77
 #: apps/core/models.py:23 apps/news/models.py:370
 msgid "created on"
 msgstr "создано"
 
-#: apps/accounts/models.py:374 apps/core/models.py:27
+#: apps/accounts/models.py:347 apps/core/models.py:27
 msgid "updated on"
 msgstr "обновлено"
 
-#: apps/accounts/models.py:376
+#: apps/accounts/models.py:349
 msgid "date expired"
 msgstr "дата окончания"
 
-#: apps/accounts/models.py:377
+#: apps/accounts/models.py:350
 msgid "date then warning is expired"
 msgstr "дата, после истечения которой предупреждение будет завершено"
 
-#: apps/accounts/models.py:380
+#: apps/accounts/models.py:353
 msgid "is expired"
 msgstr "истекло"
 
-#: apps/accounts/models.py:381
+#: apps/accounts/models.py:354
 msgid "marks if warning is expired for this user"
 msgstr "отмечает, если предупреждение уже истекло"
 
-#: apps/accounts/models.py:408
+#: apps/accounts/models.py:381
 #: templates/accounts/policy_warning_detail.html:15
 msgid "Policy warning"
 msgstr "Предупреждение"
 
-#: apps/accounts/models.py:409 templates/accounts/policy_warning_list.html:13
+#: apps/accounts/models.py:382 templates/accounts/policy_warning_list.html:13
 #: templates/accounts/profile.html:50
 msgid "Policy warnings"
 msgstr "Предупреждение"
@@ -446,7 +455,7 @@ msgstr "Другой пользователь с ником %s уже сущес
 msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
-#: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:87
+#: apps/comments/models.py:19 apps/news/models.py:87
 #: apps/tabletop/models.py:109
 msgid "Syntax"
 msgstr "Синтаксис"
@@ -545,7 +554,7 @@ msgid "Name"
 msgstr "Имя"
 
 #: apps/files/models.py:41 templates/files/gallery/gallery_list.html:22
-#: templates/pybb/head.html:56
+#: templates/pybb/head.html:59
 msgid "Gallery"
 msgstr "Галерея"
 
@@ -554,7 +563,7 @@ msgid "Galleries"
 msgstr "Галереи"
 
 #: apps/files/models.py:51 apps/menu/models.py:42 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:313 apps/tabletop/models.py:176
+#: apps/tabletop/forms.py:312 apps/tabletop/models.py:176
 #: apps/tabletop/models.py:187 templates/accounts/pm_list.html:27
 #: templates/comments/comment_watch_list.html:12
 #: templates/news/events/events.html:18 templates/tabletop/codex_list.html:19
@@ -621,18 +630,6 @@ msgstr "Файл пользователя"
 msgid "User files"
 msgstr "Файлы пользователя"
 
-#: apps/karma/admin.py:20 apps/news/admin.py:30 apps/wh/admin.py:18
-msgid "Base"
-msgstr "Базовый"
-
-#: apps/karma/admin.py:26 apps/tabletop/forms.py:477
-msgid "Side"
-msgstr "Сторона"
-
-#: apps/karma/admin.py:32
-msgid "Additional"
-msgstr "Дополнительный"
-
 #: apps/karma/forms.py:12
 msgid "up"
 msgstr "вверх"
@@ -641,72 +638,42 @@ msgstr "вверх"
 msgid "down"
 msgstr "вниз"
 
-#: apps/karma/forms.py:30 apps/menu/admin.py:18 apps/menu/admin.py:32
-msgid "url"
-msgstr "url"
-
-#: apps/karma/forms.py:40
-msgid "No such user exists"
-msgstr "Подобного пользователя не существует"
-
-#: apps/karma/forms.py:42 apps/karma/tests.py:106
-msgid "You can not alter karma for yourself"
-msgstr "Нельзя менять карму самим себе"
-
-#: apps/karma/models.py:19 templates/accounts/policy_warning_detail.html:19
+#: apps/karma/forms.py:19 apps/karma/models.py:12
+#: templates/accounts/policy_warning_detail.html:19
 #: templates/accounts/policy_warning_list.html:19
 msgid "Comment"
 msgstr "Комментарий"
 
-#: apps/karma/models.py:20
+#: apps/karma/forms.py:34 apps/menu/admin.py:18 apps/menu/admin.py:32
+msgid "url"
+msgstr "url"
+
+#: apps/karma/forms.py:44
+msgid "No such user exists"
+msgstr "Подобного пользователя не существует"
+
+#: apps/karma/forms.py:46
+msgid "You can not alter karma for yourself"
+msgstr "Нельзя менять карму самим себе"
+
+#: apps/karma/models.py:13
 msgid "Power"
 msgstr "Сила"
 
-#: apps/karma/models.py:21 templates/accounts/pm_list.html:28
+#: apps/karma/models.py:14 templates/accounts/pm_list.html:28
 msgid "Date"
 msgstr "Дата"
 
-#: apps/karma/models.py:25 apps/menu/models.py:17 apps/menu/models.py:56
+#: apps/karma/models.py:21
+msgid "voter"
+msgstr "от кого"
+
+#: apps/karma/models.py:22 apps/menu/models.py:17 apps/menu/models.py:56
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:177
-msgid "Codename"
-msgstr "Кодовое имя"
-
-#: apps/karma/models.py:56
-msgid "Status"
-msgstr "Статус"
-
-#: apps/karma/models.py:57
-msgid "Value"
-msgstr "Значение"
-
-#: apps/karma/models.py:58
-msgid "Humor"
-msgstr "Юмор"
-
-#: apps/karma/models.py:59 apps/pybb/models.py:57
-msgid "Description"
-msgstr "Описание"
-
-#: apps/karma/models.py:61 apps/wh/models.py:166
-msgid "is General"
-msgstr "генеральный?"
-
-#: apps/karma/models.py:74
-msgid "Karma Status"
-msgstr "Кармический статус"
-
-#: apps/karma/models.py:75
-msgid "Karma Statuses"
-msgstr "Кармические статусы"
-
-#: apps/karma/templates/karma_power.html:11
-msgid "karma"
-msgstr "карма"
-
 #: apps/karma/templates/karma/karma_change.html:5
+#: apps/karma/templates/karma/karma_list.html:5
 #: templates/accounts/password_change.html:4
 #: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
 #: templates/accounts/pm_list.html:5
@@ -754,6 +721,18 @@ msgstr "Понизить карму пользователя"
 #: templates/pybb/topic.html:75 templates/pybb/topic_form.html:19
 msgid "Submit"
 msgstr "Отправить"
+
+#: apps/karma/templates/karma/karma_list.html:10
+msgid "Karma"
+msgstr "Карма"
+
+#: apps/karma/templates/karma/karma_list.html:27
+msgid "link"
+msgstr "сслыка"
+
+#: apps/karma/templates/karma/karma_list.html:37
+msgid "No karma registered"
+msgstr "Кармически пуст"
 
 #: apps/menu/admin.py:28
 msgid "path"
@@ -811,6 +790,10 @@ msgstr "Подтвержденные новости"
 #: apps/news/admin.py:18
 msgid "Revert approved flag"
 msgstr "Поменять флаг подтвержденности"
+
+#: apps/news/admin.py:30 apps/wh/admin.py:18
+msgid "Base"
+msgstr "Базовый"
 
 #: apps/news/admin.py:43
 msgid "Stuff"
@@ -1155,6 +1138,10 @@ msgstr "Ваш выбор"
 msgid "Position"
 msgstr "Позиция"
 
+#: apps/pybb/models.py:57
+msgid "Description"
+msgstr "Описание"
+
 #: apps/pybb/models.py:59
 msgid "Moderators"
 msgstr "Модераторы"
@@ -1377,99 +1364,99 @@ msgstr "вчера, %s"
 msgid "This field is required."
 msgstr "Обязательное поле."
 
-#: apps/tabletop/forms.py:53
+#: apps/tabletop/forms.py:52
 msgctxt "Title"
 msgid "battle report title"
 msgstr "Заголовок"
 
-#: apps/tabletop/forms.py:54
+#: apps/tabletop/forms.py:53
 msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
-#: apps/tabletop/forms.py:58 apps/tabletop/forms.py:200
+#: apps/tabletop/forms.py:57 apps/tabletop/forms.py:199
 #: templates/tabletop/roster_list.html:13
 msgid "Rosters"
 msgstr "Ростеры"
 
-#: apps/tabletop/forms.py:61
+#: apps/tabletop/forms.py:60
 msgid "user rosters participating in the battle you want to describe"
 msgstr ""
 "пользовательские ростеры, которые принимают участие в битве, которую вы "
 "описываете"
 
-#: apps/tabletop/forms.py:67
+#: apps/tabletop/forms.py:66
 msgid "Winners"
 msgstr "Победители"
 
-#: apps/tabletop/forms.py:69
+#: apps/tabletop/forms.py:68
 msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
-#: apps/tabletop/forms.py:76
+#: apps/tabletop/forms.py:75
 msgid "Mission"
 msgstr "Миссия"
 
-#: apps/tabletop/forms.py:78
+#: apps/tabletop/forms.py:77
 msgid "mission you played"
 msgstr "миссия, в которую вы играли"
 
-#: apps/tabletop/forms.py:85
+#: apps/tabletop/forms.py:84
 msgid "Layout"
 msgstr "Формат"
 
-#: apps/tabletop/forms.py:87
+#: apps/tabletop/forms.py:86
 msgid "how much players participated in the game, 1vs1, 2vs2 and so on"
 msgstr "сколько игроков принимало участие в игре, 1vs1, 2vs2 и так далее"
 
-#: apps/tabletop/forms.py:94
+#: apps/tabletop/forms.py:93
 msgctxt "Content"
 msgid "battle report content"
 msgstr "Содержание"
 
-#: apps/tabletop/forms.py:127
+#: apps/tabletop/forms.py:126
 msgid ""
 "You can not write battle reports which has rosters that differ with pts field"
 msgstr ""
 "Вы не можете написать батлрепорт с ростерами, которые различны по количеству "
 "очков"
 
-#: apps/tabletop/forms.py:143
+#: apps/tabletop/forms.py:142
 msgid "You must choose winner's roster id within rosters' ids you passed"
 msgstr "Вы обязаны выбрать ростер победителя"
 
-#: apps/tabletop/forms.py:153
+#: apps/tabletop/forms.py:152
 msgid "Number of players and layout must exact by the amount of whole players"
 msgstr ""
 "Количество участников и формат должны совпадать с общим количеством "
 "участников"
 
-#: apps/tabletop/forms.py:163 apps/tabletop/tests.py:292
+#: apps/tabletop/forms.py:162 apps/tabletop/tests.py:292
 #, python-format
 msgid "You can not add more winners than %(amount)s"
 msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
 
-#: apps/tabletop/forms.py:188
+#: apps/tabletop/forms.py:187
 msgid "Search rosters"
 msgstr "Поиск ростеров"
 
-#: apps/tabletop/forms.py:190
+#: apps/tabletop/forms.py:189
 msgid "If you do not see rosters you need below you may search them"
 msgstr ""
 "Если вы не видете ростеры ниже, которые вам нужны, вы можете их поискать"
 
-#: apps/tabletop/forms.py:194
+#: apps/tabletop/forms.py:193
 msgid "You can add this rosters to battle report"
 msgstr "Вы можете добавить данный ростер в батл-репорт"
 
-#: apps/tabletop/forms.py:195
+#: apps/tabletop/forms.py:194
 msgid "Available rosters"
 msgstr "Доступные ростеры"
 
-#: apps/tabletop/forms.py:206
+#: apps/tabletop/forms.py:205
 msgid "Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc."
 msgstr "Игровая схема, например 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 и так далее."
 
-#: apps/tabletop/forms.py:249
+#: apps/tabletop/forms.py:248
 msgid ""
 "You should set right layout, for example 2vs2, 3vs1, number of players "
 "should be equal to number of rosters you've passed"
@@ -1477,37 +1464,37 @@ msgstr ""
 "В должны установить верную схему, например 2vs2, 3vs1, количество игроков "
 "должно быть равным количеству ростеров, которые вы предоставляете"
 
-#: apps/tabletop/forms.py:262
+#: apps/tabletop/forms.py:261
 msgid ""
 "10 players is absolute maximum, do not try to add layout with more players, "
 "it's strickly forbidden"
 msgstr "10 игроков - абсолютный максимум, не пытайтесь добавить в схему больше"
 
-#: apps/tabletop/forms.py:295
+#: apps/tabletop/forms.py:294
 msgid "Where is no such rosters which have more than 20k points"
 msgstr "Ростеров более 20к очков не существует"
 
-#: apps/tabletop/forms.py:304
+#: apps/tabletop/forms.py:303
 msgid "You should pass only int values through \"pts\" field"
 msgstr "Вы должны предоставить только целые числа в \"pts\" поле"
 
-#: apps/tabletop/forms.py:335
+#: apps/tabletop/forms.py:334
 msgid "Race field should contain exact value"
 msgstr "Поле расы должно содержать точное значение"
 
-#: apps/tabletop/forms.py:340
+#: apps/tabletop/forms.py:339
 msgid ""
 "You should to select one race from the race select field or type custom_race "
 "by your own"
 msgstr "Вы должны выбрать одну расу из списка или выбрать \"друая раса\""
 
-#: apps/tabletop/forms.py:359
+#: apps/tabletop/forms.py:358
 msgid "You can not pass player's name that containsmore than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
 
-#: apps/tabletop/forms.py:373 apps/tabletop/forms.py:434
+#: apps/tabletop/forms.py:372 apps/tabletop/forms.py:434
 msgid "The common pts should be greater than 500"
 msgstr "Количество pts должно быть больше 500"
 
@@ -1533,6 +1520,10 @@ msgid "You can not pass player's name that contains more than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
+
+#: apps/tabletop/forms.py:477
+msgid "Side"
+msgstr "Сторона"
 
 #: apps/tabletop/forms.py:483 apps/wh/models.py:58
 msgid "Army"
@@ -1659,6 +1650,10 @@ msgstr "поражений"
 msgid "Player"
 msgstr "Игрок"
 
+#: apps/tabletop/models.py:177
+msgid "Codename"
+msgstr "Кодовое имя"
+
 #: apps/tabletop/models.py:201
 msgid "published"
 msgstr "опубликовано"
@@ -1784,6 +1779,10 @@ msgstr "описание"
 msgid "Lower magnitude more powerfull"
 msgstr "Меньше величина более мощна"
 
+#: apps/wh/models.py:166
+msgid "is General"
+msgstr "генеральный?"
+
 #: apps/wh/models.py:191
 msgid "Rank"
 msgstr "Ранг"
@@ -1811,6 +1810,20 @@ msgstr "Мужской"
 #: apps/wh/templatetags/whfilters.py:27
 msgid "Female"
 msgstr "Женский"
+
+#: templates/403.html:6
+msgid "Forbidden"
+msgstr "Запрещено"
+
+#: templates/403.html:7
+msgid ""
+"You requested something which is not permit for you, or just forbidden for "
+"everyone.\n"
+"    "
+msgstr ""
+"Вы запросили что-то, что не разрешено для вашего типа пользователя или "
+"запрещено для всех.\n"
+"    "
 
 #: templates/404.html:6
 msgid "Page not found"
@@ -1909,7 +1922,7 @@ msgid "pm outox"
 msgstr "исходящие"
 
 #: templates/accounts/pm_detail.html:18 templates/accounts/pm_list.html:19
-#: templates/pybb/head.html:58
+#: templates/pybb/head.html:61
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
@@ -2062,7 +2075,7 @@ msgstr ""
 "      Это означает что вы не можете ничего редактировать, создавать, "
 "пожалуйста, дождитесь времени, когда время наказания истечет."
 
-#: templates/accounts/register.html:11 templates/pybb/head.html:82
+#: templates/accounts/register.html:11 templates/pybb/head.html:85
 msgid "Register"
 msgstr "Регистрация"
 
@@ -2165,7 +2178,7 @@ msgctxt "You used file space"
 msgid "You used"
 msgstr "Вы испольщовали"
 
-#: templates/files/user_files.html:31 templates/pybb/head.html:54
+#: templates/files/user_files.html:31 templates/pybb/head.html:57
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -2708,27 +2721,31 @@ msgstr "Календарь"
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: templates/pybb/head.html:51
+#: templates/pybb/head.html:52 templates/tabletop/codex_list.html:13
+msgid "Codexes"
+msgstr "Кодексы"
+
+#: templates/pybb/head.html:54
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: templates/pybb/head.html:53
+#: templates/pybb/head.html:56
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: templates/pybb/head.html:64
+#: templates/pybb/head.html:67
 msgid "Admincp"
 msgstr "Админка"
 
-#: templates/pybb/head.html:66
+#: templates/pybb/head.html:69
 msgid "Log out"
 msgstr "Выйти"
 
-#: templates/pybb/head.html:71
+#: templates/pybb/head.html:74
 msgid "Themes"
 msgstr "Темы"
 
-#: templates/pybb/head.html:83
+#: templates/pybb/head.html:86
 msgid "Log in"
 msgstr "Войти"
 
@@ -2908,6 +2925,7 @@ msgid "codexes"
 msgstr "кодексы"
 
 #: templates/tabletop/codex_detail.html:12
+#: templates/tabletop/codex_list.html:20
 msgid "Revisions"
 msgstr "Издания"
 
@@ -2949,15 +2967,11 @@ msgstr ""
 msgid "Add codex"
 msgstr "Добавить кодекс"
 
-#: templates/tabletop/codex_list.html:13
-msgid "Codexes"
-msgstr "Кодексы"
-
 #: templates/tabletop/codex_list.html:18
 msgid "Source"
 msgstr "Исходник"
 
-#: templates/tabletop/codex_list.html:33
+#: templates/tabletop/codex_list.html:34
 msgid "No codexes found"
 msgstr "Кодексов не обнаружено"
 
@@ -3102,6 +3116,24 @@ msgstr "Комментариев"
 #: templates/tabletop/reports/include/report_header.html:44
 msgid "read report"
 msgstr "прочесть репорт"
+
+#~ msgid "Additional"
+#~ msgstr "Дополнительный"
+
+#~ msgid "Status"
+#~ msgstr "Статус"
+
+#~ msgid "Value"
+#~ msgstr "Значение"
+
+#~ msgid "Humor"
+#~ msgstr "Юмор"
+
+#~ msgid "Karma Status"
+#~ msgstr "Кармический статус"
+
+#~ msgid "Karma Statuses"
+#~ msgstr "Кармические статусы"
 
 #~ msgid "submit"
 #~ msgstr "отправить"
@@ -3905,9 +3937,6 @@ msgstr "прочесть репорт"
 #~ msgctxt "new comments marker"
 #~ msgid "new"
 #~ msgstr "новый"
-
-#~ msgid "votes"
-#~ msgstr "оценки"
 
 #~ msgid "You can not pass value greater than '5' or lesser than '1'"
 #~ msgstr "Вы не можете ввести значения больше чем 5 или меньге чем 1"
