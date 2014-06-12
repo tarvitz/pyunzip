@@ -6,7 +6,7 @@ from apps.tabletop.forms import (
     AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,
     AddRosterModelForm, RosterForm)
 
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.helpers import (
     get_comments, get_content_type,
@@ -315,6 +315,12 @@ class RosterDetailView(generic.DetailView):
         return context
 
 
+class RosterAccessMixin(object):
+    def get_queryset(self):
+            qs = super(RosterAccessMixin, self).get_queryset()
+            return qs.filter(owner=self.request.user)
+
+
 class RosterCreateView(generic.CreateView):
     model = Roster
     template_name = 'tabletop/roster_form.html'
@@ -325,14 +331,23 @@ class RosterCreateView(generic.CreateView):
         return super(RosterCreateView, self).form_valid(form)
 
 
-class RosterUpdateView(generic.UpdateView):
+class RosterUpdateView(RosterAccessMixin, generic.UpdateView):
     model = Roster
     template_name = 'tabletop/roster_form.html'
     form_class = RosterForm
 
-    def get_queryset(self):
-        qs = super(RosterUpdateView, self).get_queryset()
-        return qs.filter(owner=self.request.user)
-
     def form_valid(self, form):
         return super(RosterUpdateView, self).form_valid(form)
+
+
+class RosterDeleteView(RosterAccessMixin, generic.DeleteView):
+    model = Roster
+    template_name = 'tabletop/roster_form.html'
+    success_url = reverse_lazy('tabletop:rosters')
+
+    def get_context_data(self, **kwargs):
+        context = super(RosterDeleteView, self).get_context_data(**kwargs)
+        context.update({
+            'delete': True
+        })
+        return context

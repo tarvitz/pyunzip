@@ -40,7 +40,8 @@ urlpatterns = patterns(
     url('^roster/edit/(?P<pk>\d+)/$',
         login_required(views.RosterUpdateView.as_view()),
         name='roster-edit'),
-
+    url('^roster/(?P<pk>\d+)/delete/$',
+        login_required(views.RosterDeleteView.as_view()), name='roster-delete'),
     url('^rosters/(?P<pk>\d+)/detail/$',
         views.RosterDetailView.as_view(),
         name='roster'),
