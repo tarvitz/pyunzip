@@ -5,7 +5,6 @@
     {% include "news/include/article.html" with news_general='True' %}
   {% endfor %}
   {% include "generic/paginator.html" %}
-  {{ paginator.num_pages|pprint }}
 
 {% else %}
   <h3>{% trans "No news found" %}</h3>
