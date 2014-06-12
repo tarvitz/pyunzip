@@ -51,7 +51,7 @@
 @tournament-text: darken(@alert-warning-bg, 45%);
 
 .fc-event{
-  &.game,&.tournament,&.order{
+  &.game,&.tournament,&.order,&.pre-release,&.release{
     .fc-event-time{
       .pull-right;
     }
@@ -70,5 +70,25 @@
   }
   &.release{
     .event-variant(@event-release-color, @event-release-bg, @event-release-border);
+  }
+}
+
+@media screen and (max-width: @screen-xs-max) {
+  .fc-header-right{
+    width: 10%;
+    > .fc-button{
+      display: block;
+      text-align: center;
+    }
+  }
+  .fc-header{
+    td{
+      white-space: pre-line;
+    }
+  }
+  .fc-header-title{
+    h2{
+      white-space: pre-line;
+    }
   }
 }

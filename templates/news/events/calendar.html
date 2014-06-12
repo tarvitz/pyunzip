@@ -1,7 +1,6 @@
 {% extends "base_template.html" %}
 {% load i18n static %}
-{% block css %}
-  {{ block.super }}
+{% block head_css %}
   <link rel="stylesheet" href="{% static "components/fullcalendar/dist/fullcalendar.css" %}"
         media="screen" type="text/css">
 {% endblock %}
