@@ -197,4 +197,119 @@
     text-align: center;
     width: 100%;
 }
-/*endof css*/
+
+// addons
+
+.message .msg_right_icon
+.quote_content{
+	padding: 0px;
+	margin: 0px;
+}
+.quote_txt{
+	border: 1px dotted white;
+	position: relative;
+	padding: 2px 4px;
+}
+.quote_content .quote_headline{
+	position: relative;
+	font-size: @font-size-small;
+    line-height: initial;
+	text-align: center;
+	border: 1px solid white;
+	border-bottom: 0px;
+	padding: 2 0px;
+	margin-top: 5px;
+}
+.quote_content .quote_txt{
+	min-height: 30px;
+}
+
+.quote_content img.quote_avatar{
+	float: right;
+	margin-top: -30px;
+	margin-right: -20px;
+	width: 50px;
+	border: 1px dotted white;
+}
+
+.quote-content{
+  padding: 0px;
+  margin: 0px;
+  > .quote-headline {
+    position: relative;
+    font-size: @font-size-small;
+    line-height: initial;
+    text-align: center;
+    border: 1px solid white;
+    border-bottom: 0px;
+    padding: 2 0px;
+    margin-top: 5px;
+  }
+  > .quote-body {
+      min-height: 30px;
+      border: 1px dotted white;
+      position: relative;
+      padding: 2px 4px;
+    > .quote-avatar{
+      float: right;
+      margin-top: -30px;
+      margin-right: -20px;
+      width: 50px;
+      //border: 1px dotted white;
+      border-radius: 30px;
+    }
+  }
+}
+
+  .spoiler_block{
+    max-width: 90%;
+    padding: 0px;
+    margin: 0px;
+  }
+  .spoiler_show{
+    border: 1px dotted white;
+  }
+  .spoiler_block .marker, .spoiler_block a, .spoiler_block .text{
+    font-family: Verdana;
+    font-size: 0.7em;
+  }
+
+  .tr_spoiler{
+    background-color: #CF0000 !important;
+    width: 100%;
+    height: 100%;
+  }
+
+  .spoiler{
+    position: relative;
+    border-top: 1px dotted white;
+    margin-top: 5px;
+  }
+  /*to prevent transparent coloring show wrong despite
+   * the elements margin*/
+  .spoiler *{
+    margin: 0px;
+  }
+
+  .offtopic{
+    background-color: #454545;
+    color: #555;
+    font-style: italic;
+    margin-top: 5px;
+    border: 1px dotted grey;
+  }
+  textarea.id_comment{
+    width: 85%;
+    height: 300px;
+    border: 1px solid black;
+  }
+  textarea.quick_edit{
+    width: 95%;
+    height: 300px;
+    border: 1px solid black;
+  }
+
+  input#submit{
+    border: 1px solid black;
+  }
+
