@@ -1,0 +1,35 @@
+{% extends base_template %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li class="active">{% trans "codexes" %}</li>
+  </ul>
+
+  <div class="control pull-right">
+    <a href="{% url "tabletop:codex-add" %}"
+       class="btn btn-sm btn-{{ user.get_color_theme|default:"default" }}">{% trans "Add codex" %}</a>
+  </div>
+  <h3>{% trans "Codexes" %}</h3>
+
+  {% if object_list %}
+    <table class="table">
+      <tr>
+        <th>{% trans "Source" %}</th>
+        <th>{% trans "Title" %}</th>
+        <th>&nbsp;</th>
+      </tr>
+      {% for object in object_list %}
+        <tr>
+          {% include "tabletop/include/codex.html" %}
+        </tr>
+      {% endfor %}
+    </table>
+
+    {% if paginator %}
+      {% include "generic/paginator.html" %}
+    {% endif %}
+  {% else %}
+    <h3>{% trans "No codexes found" %}</h3>
+  {% endif %}
+{% endblock %}

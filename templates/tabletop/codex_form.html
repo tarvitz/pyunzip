@@ -1,0 +1,44 @@
+{% extends base_template %} {% load i18n %}
+{% block css %}
+  {{ block.super }}
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "tabletop:codex-list" %}">{% trans "codexes" %}</a></li>
+    {% if not delete %}
+      {% if object %}
+        <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+        <li class="active">{% trans "update codex" %}</li>
+      {% else %}
+        <li class="active">{% trans "create codex" %}</li>
+      {% endif %}
+    {% else %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+      <li class="active">{% trans "delete codex" %}</li>
+    {% endif %}
+  </ul>
+  {% if delete %}
+    {% trans "Delete" as save_text %}
+    <h3>{% trans "Confirm codex deletion" %}</h3>
+  {% else %}
+    {% trans "Save" as save_text %}
+  {% endif %}
+
+  {% if not delete %}
+    <div class="alert alert-info">
+      <button class="close" data-dismiss="alert">&times;</button>
+      {% blocktrans %}You should select <strong>side</strong> or <strong>army</strong>
+        to pass link for codex creation. You could select any of these field, but consider
+        that <strong>army</strong> is prior. <br>
+        If you decide to bind codex to side, please leave army select blank.
+      {% endblocktrans %}
+    </div>
+  {% endif %}
+
+  <form class="form-horizontal" action='{{ request.path }}' method='POST'>
+    {% csrf_token %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with text=save_text klass=user.get_color_theme %}
+  </form>
+{% endblock %}

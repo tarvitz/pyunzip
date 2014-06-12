@@ -1,0 +1,14 @@
+{% extends base_template %} {% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href="{% url "tabletop:codex-list" %}">{% trans "codexes" %}</a></li>
+    <li class="active">{{ object.title }}</li>
+  </ul>
+  <div class="pull-right">
+    {% include "generic/actions.html" with object=object %}
+  </div>
+  <h3>{{ object.title }}</h3>
+  <strong>{% trans "Revisions" %}</strong>: {{ object.revisions }}
+
+{% endblock %}
