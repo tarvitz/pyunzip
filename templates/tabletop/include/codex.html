@@ -1,8 +1,8 @@
 <tr>
   <td>{{ object.source.title|default:object.source.name }}</td>
   <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
+  <td>{{ object.revisions }}</td>
   <td>
     {% include "generic/actions.html" with object=object %}
   </td>
-  <td>{{ object.revisions }}</td>
 </tr>
