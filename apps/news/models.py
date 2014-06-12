@@ -356,7 +356,7 @@ class Event(models.Model):
         return render_filter(out, settings.DEFAULT_SYNTAX)
 
     class Meta:
-        ordering = ['is_finished', '-date_start', ]
+        ordering = ['is_finished', 'date_start', ]
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
 
