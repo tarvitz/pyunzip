@@ -330,5 +330,9 @@ class RosterUpdateView(generic.UpdateView):
     template_name = 'tabletop/roster_form.html'
     form_class = RosterForm
 
+    def get_queryset(self):
+        qs = super(RosterUpdateView, self).get_queryset()
+        return qs.filter(owner=self.request.user)
+
     def form_valid(self, form):
         return super(RosterUpdateView, self).form_valid(form)

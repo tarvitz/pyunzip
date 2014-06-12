@@ -149,17 +149,22 @@ class Roster(models.Model):
         return self.title
 
     def __unicode__(self):
-        player_name = self.show_player()
-        codex = self.codex.bound()
-        return "%s [%s:%s:%i] [%i]" % (self.title, player_name, codex,
-                                       self.pts, self.revision)
+        return u'%(title)s:%(pts)s' % {
+            'title': self.title,
+            'pts': self.pts
+        }
 
     def save(self, *args, **kwargs):
         super(Roster, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('tabletop:roster', args=[self.id])
+        return reverse('tabletop:roster', args=(self.pk, ))
 
+    def get_edit_url(self):
+        return reverse('tabletop:roster-edit', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('tabletop:roster-delete', args=(self.pk, ))
     #todo: SPEEDUP
     def render_roster(self):
         roster = post_markup_filter(self.roster)
