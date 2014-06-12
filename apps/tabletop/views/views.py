@@ -4,7 +4,7 @@ from apps.tabletop.models import (
 )
 from apps.tabletop.forms import (
     AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,
-    AddRosterModelForm)
+    AddRosterModelForm, RosterForm)
 
 from django.core.urlresolvers import reverse
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -21,7 +21,6 @@ from apps.core.shortcuts import direct_to_template
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.auth import get_user_model
-User = get_user_model()
 
 from django.http import (
     HttpResponse, HttpResponseRedirect,
@@ -43,6 +42,8 @@ from django.core.cache import cache
 
 from datetime import datetime
 
+
+User = get_user_model()
 
 @login_required
 @render_to('tabletop/reports.html')
@@ -312,3 +313,22 @@ class RosterDetailView(generic.DetailView):
             'comments': comments
         })
         return context
+
+
+class RosterCreateView(generic.CreateView):
+    model = Roster
+    template_name = 'tabletop/roster_form.html'
+    form_class = RosterForm
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(RosterCreateView, self).form_valid(form)
+
+
+class RosterUpdateView(generic.UpdateView):
+    model = Roster
+    template_name = 'tabletop/roster_form.html'
+    form_class = RosterForm
+
+    def form_valid(self, form):
+        return super(RosterUpdateView, self).form_valid(form)

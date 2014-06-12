@@ -444,3 +444,27 @@ class AddRosterModelForm(RequestModelForm):
         if not player:
             player = self.request.user.nickname
         return player
+
+
+class RosterForm(forms.ModelForm):
+    required_css_class = 'required'
+
+    class Meta:
+        attrs = {'class': 'form-control'}
+        model = Roster
+        fields = ('title', 'pts', 'roster', 'codex', 'revision')
+        widgets = {
+            'title': forms.TextInput(attrs=attrs),
+            'pts': forms.NumberInput(attrs=attrs),
+            'roster': forms.Textarea(attrs={'class': 'form-control markitup'}),
+            'codex': forms.Select(
+                attrs={'class': 'form-control', 'data-toggle': 'select2'}),
+            'revision': forms.Select(
+                attrs={'class': 'form-control', })
+        }
+
+    class Media:
+        js = (
+            'components/select2/select2.js',
+            'js/select2_load.js',
+        )
