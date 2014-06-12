@@ -1,0 +1,57 @@
+{% extends base_template %} {% load i18n %}
+{% block css %}
+  {{ block.super }}
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "tabletop:rosters" %}">{% trans "rosters" %}</a></li>
+    {% if not delete %}
+      {% if object %}
+        <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+        <li class="active">{% trans "update roster" %}</li>
+      {% else %}
+        <li class="active">{% trans "create roster" %}</li>
+      {% endif %}
+    {% else %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+      <li class="active">{% trans "delete roster" %}</li>
+    {% endif %}
+  </ul>
+  {% if delete %}
+    {% trans "Delete" as save_text %}
+    <h3>{% trans "Confirm roster deletion" %}</h3>
+  {% else %}
+    {% trans "Save" as save_text %}
+  {% endif %}
+  <form class="form-horizontal" action='{{ request.path }}' method='POST'>
+    {% csrf_token %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with text=save_text klass=user.get_color_theme %}
+  </form>
+  <script type="text/javascript">
+    (function(){
+      var fetchRevisions = function(option){
+        if (option.val()){
+          var url = "{% url "api:codex-detail" 0 %}".replace(0, option.val());
+          var data = [];
+          $.getJSON(url, function(json) {
+            $("#id_revision option").detach().remove();
+            json.revisions.split (',').map (function (item) {
+              data.push({id: parseInt(item), text: item});
+              var option = $("<option>").text(item).val(item);
+              option.appendTo($("#id_revision"));
+            });
+
+          });
+        }
+      };
+
+      fetchRevisions($("#id_codex option:selected"));
+      $("#id_codex").change(function(e){
+        var option = $(this).find('option:selected');
+        fetchRevisions(option);
+      });
+    })();
+  </script>
+{% endblock %}
