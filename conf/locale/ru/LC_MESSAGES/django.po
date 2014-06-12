@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-11 23:03+0400\n"
-"PO-Revision-Date: 2014-06-11 23:03+0400\n"
+"POT-Creation-Date: 2014-06-12 19:55+0400\n"
+"PO-Revision-Date: 2014-06-12 19:57+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -20,39 +20,39 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: app/settings/dist.py:43
+#: app/settings/dist.py:47
 msgid "Russian"
 msgstr "Русский"
 
-#: app/settings/dist.py:44
+#: app/settings/dist.py:48
 msgid "English"
 msgstr "Английский"
 
-#: app/settings/dist.py:273
+#: app/settings/dist.py:277
 msgid "winter"
 msgstr "зимняя"
 
-#: app/settings/dist.py:274
+#: app/settings/dist.py:278
 msgid "summer"
 msgstr "летняя"
 
-#: app/settings/dist.py:275
+#: app/settings/dist.py:279
 msgid "autumn"
 msgstr "осенняя"
 
-#: app/settings/dist.py:276
+#: app/settings/dist.py:280
 msgid "spring"
 msgstr "весенняя"
 
-#: app/settings/dist.py:277
+#: app/settings/dist.py:281
 msgid "void"
 msgstr "пустотная"
 
-#: app/settings/dist.py:310
+#: app/settings/dist.py:312
 msgid "[ban]"
 msgstr "[бан]"
 
-#: app/settings/dist.py:311
+#: app/settings/dist.py:313
 msgid "[everban]"
 msgstr "[навекибан]"
 
@@ -84,8 +84,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:41
-#: apps/accounts/forms.py:103 templates/forms/login_modal.html:15
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:38
+#: apps/accounts/forms.py:100 templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -100,8 +100,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:44
-#: apps/accounts/forms.py:106 apps/accounts/forms.py:207
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:41
+#: apps/accounts/forms.py:103 apps/accounts/forms.py:204
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -128,78 +128,78 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:30
+#: apps/accounts/forms.py:27
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:55
+#: apps/accounts/forms.py:52
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:66 apps/comments/forms.py:14
+#: apps/accounts/forms.py:63 apps/comments/forms.py:14
 #: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:109
 #: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:78
+#: apps/accounts/forms.py:75
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:109 apps/accounts/forms.py:210
+#: apps/accounts/forms.py:106 apps/accounts/forms.py:207
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:112 apps/accounts/forms.py:190
+#: apps/accounts/forms.py:109 apps/accounts/forms.py:187
 #: templates/accounts/profile.html:47
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:115 templates/accounts/profile.html:39
+#: apps/accounts/forms.py:112 templates/accounts/profile.html:39
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:118
+#: apps/accounts/forms.py:115
 msgid "Captcha"
 msgstr "Капча"
 
-#: apps/accounts/forms.py:144
+#: apps/accounts/forms.py:141
 msgid "Password1 and Password2 does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:154
+#: apps/accounts/forms.py:151
 msgid "Your current password does not match with one you've input"
 msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
 
-#: apps/accounts/forms.py:183
+#: apps/accounts/forms.py:180
 msgid "No such user with such email"
 msgstr "Такого пользователя с данным email'ом нет"
 
-#: apps/accounts/forms.py:190
+#: apps/accounts/forms.py:187
 msgid "Your email"
 msgstr "Ваш email"
 
-#: apps/accounts/forms.py:199
+#: apps/accounts/forms.py:196
 msgid "Users with given email does not exists"
 msgstr "Пользователя с данным email не существует"
 
-#: apps/accounts/forms.py:219
+#: apps/accounts/forms.py:216
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:258
+#: apps/accounts/forms.py:255
 msgid "Addressee"
 msgstr "Адресат"
 
-#: apps/accounts/forms.py:268 apps/wh/admin.py:22
+#: apps/accounts/forms.py:265 apps/wh/admin.py:22
 msgid "Content"
 msgstr "Содержимое"
 
-#: apps/accounts/forms.py:282
+#: apps/accounts/forms.py:279
 msgid "You can not send private messages to yourself"
 msgstr "Вам нельзя слать самим себе сообщения"
 
-#: apps/accounts/forms.py:285
+#: apps/accounts/forms.py:282
 msgid "There's no user with such nickname, sorry"
 msgstr "Такого пользователя нет"
 
@@ -314,13 +314,12 @@ msgstr "Настройки"
 
 #: apps/accounts/models.py:288 apps/karma/models.py:44 apps/pybb/models.py:104
 #: apps/pybb/models.py:183 apps/pybb/models.py:265
-#: apps/wh/templates/accounts/password_restore.html:5
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:289 apps/pybb/templates/pybb/head.html:40
-#: apps/pybb/templates/pybb/quick_access.html:41
-#: apps/pybb/templates/pybb/users.html:6 templates/accounts/users.html:3
+#: apps/accounts/models.py:289 templates/accounts/users.html:3
+#: templates/pybb/head.html:40 templates/pybb/quick_access.html:41
+#: templates/pybb/users.html:6
 msgid "Users"
 msgstr "Пользователи"
 
@@ -336,7 +335,7 @@ msgstr "адресат"
 #: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
 #: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
 #: apps/tabletop/models.py:53 apps/tabletop/models.py:90
-#: apps/tabletop/models.py:199 apps/wh/models.py:16
+#: apps/tabletop/models.py:204 apps/wh/models.py:16
 msgid "title"
 msgstr "заголовок"
 
@@ -365,7 +364,7 @@ msgid "deleted by addr"
 msgstr "удалено адресатом"
 
 #: apps/accounts/models.py:315 apps/news/models.py:48
-#: apps/tabletop/models.py:220 apps/wh/models.py:169
+#: apps/tabletop/models.py:225 apps/wh/models.py:169
 msgid "syntax"
 msgstr "синтаксис"
 
@@ -387,7 +386,7 @@ msgid "user"
 msgstr "пользователь"
 
 #: apps/accounts/models.py:368 apps/comments/models.py:72
-#: apps/tabletop/models.py:217
+#: apps/tabletop/models.py:222
 msgid "comment"
 msgstr "комментарии"
 
@@ -449,8 +448,6 @@ msgstr "Поступил запрос на изменение вашего па�
 
 #: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:87
 #: apps/tabletop/models.py:115
-#: apps/tabletop/templates/add_old_battle_report.html:37
-#: apps/tabletop/templates/add_roster_old.html:44
 msgid "Syntax"
 msgstr "Синтаксис"
 
@@ -494,131 +491,6 @@ msgstr "Слежение за комментарием"
 msgid "Comment watches"
 msgstr "Слежение за комментариями"
 
-#: apps/comments/templates/comments/comment_form.html:5
-#: apps/comments/templates/comments/comment_watch_list.html:5
-#: apps/comments/templates/comments/subscribe_form.html:5
-#: apps/files/templates/files/user_files.html:8
-#: apps/files/templates/gallery/action_image.html:4
-#: apps/files/templates/gallery/gallery_image.html:6
-#: apps/files/templates/gallery/gallery_image_form.html:5
-#: apps/files/templates/gallery/gallery_list.html:6
-#: apps/files/templates/gallery/image.html:6
-#: apps/files/templates/gallery/upload.html:5
-#: apps/karma/templates/karma/karma_change.html:5
-#: apps/news/templates/events/calendar.html:15
-#: apps/news/templates/events/event.html:5
-#: apps/news/templates/events/event_form.html:5
-#: apps/news/templates/events/events.html:5
-#: apps/tabletop/templates/tabletop/roster.html:7
-#: apps/tabletop/templates/tabletop/roster_list.html:5
-#: apps/wh/templates/accounts/change_password.html:6
-#: apps/wh/templates/accounts/pm.html:11
-#: templates/accounts/password_change.html:4
-#: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
-#: templates/accounts/pm_list.html:5
-#: templates/accounts/policy_warning_detail.html:5
-#: templates/accounts/policy_warning_form.html:5
-#: templates/accounts/policy_warning_list.html:5
-#: templates/accounts/profile.html:5 templates/accounts/profile_update.html:4
-#: templates/static/timeout.html:4
-msgid "forum"
-msgstr "форум"
-
-#: apps/comments/templates/comments/comment_form.html:10
-msgid "update comment"
-msgstr "обновить комментарий"
-
-#: apps/comments/templates/comments/comment_form.html:12
-msgid "add comment"
-msgstr "добавить комментарий"
-
-#: apps/comments/templates/comments/comment_form.html:16
-msgid "Update comment"
-msgstr "Обновить комментарий"
-
-#: apps/comments/templates/comments/comment_form.html:18
-msgid "Add comment"
-msgstr "Добавить комментарий"
-
-#: apps/comments/templates/comments/comment_watch_list.html:6
-msgid "subscription list"
-msgstr "список подписки"
-
-#: apps/comments/templates/comments/comment_watch_list.html:8
-msgid "Subscription list"
-msgstr "Список подписки"
-
-#: apps/comments/templates/comments/comment_watch_list.html:12
-#: apps/files/models.py:51 apps/menu/models.py:42
-#: apps/news/templates/events/events.html:18 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:312 apps/tabletop/models.py:177
-#: apps/tabletop/models.py:188 apps/tabletop/templates/add_roster_old.html:23
-#: apps/tabletop/templates/reports.html:30 templates/accounts/pm_list.html:27
-msgid "Title"
-msgstr "Заголовок"
-
-#: apps/comments/templates/comments/comment_watch_list.html:13
-msgid "New comments"
-msgstr "Новые комментарии"
-
-#: apps/comments/templates/comments/comment_watch_list.html:26
-msgid "Mark as read"
-msgstr "Пометить как прочитанное"
-
-#: apps/comments/templates/comments/comment_watch_list.html:32
-#: apps/comments/templates/comments/subscribe_form.html:19
-#: apps/news/templates/events/event.html:28
-msgid "Remove subscription"
-msgstr "Удалить подписку"
-
-#: apps/comments/templates/comments/comment_watch_list.html:40
-msgid "No subscriptions found/no new content"
-msgstr "Подписок/нового контента не найдено"
-
-#: apps/comments/templates/comments/comment_watch_list.html:62
-msgid "Successfully updated, reload the page"
-msgstr "Успешно обновлено, обновите страницу"
-
-#: apps/comments/templates/comments/comment_watch_list.html:69
-msgid "Failed :("
-msgstr "Ошибка :("
-
-#: apps/comments/templates/comments/subscribe_form.html:13
-msgid "unsubscribe for new comments"
-msgstr "отписаться от новых комментариев"
-
-#: apps/comments/templates/comments/subscribe_form.html:15
-msgid "subscribe for new comments"
-msgstr "подписаться на новые комментарии"
-
-#: apps/comments/templates/comments/subscribe_form.html:22
-msgid "You want to remove this subscription for a new comments on"
-msgstr "Вы хотите удалить подписку на новые комментарии на"
-
-#: apps/comments/templates/comments/subscribe_form.html:25
-msgid "Approve subscription"
-msgstr "Добавить подписку"
-
-#: apps/comments/templates/comments/subscribe_form.html:28
-msgid "You want to approve subscription for a new comments on"
-msgstr "Вы хотите подписаться на новые комментарии к"
-
-#: apps/comments/templates/comments/subscribe_form.html:32
-#: apps/files/templates/gallery/action_image.html:13
-#: apps/files/templates/gallery/gallery_image_form.html:31
-#: apps/files/templates/gallery/upload.html:15
-#: apps/news/templates/events/event_form.html:17
-#: apps/pybb/templates/pybb/edit_post.html:20
-#: apps/pybb/templates/pybb/edit_profile.html:21
-#: apps/pybb/templates/pybb/poll_add.html:7
-#: apps/pybb/templates/pybb/poll_configure.html:11
-#: apps/pybb/templates/pybb/poll_wizard.html:19
-#: apps/tabletop/templates/add_roster.html:7
-#: apps/tabletop/templates/reports.html:20
-#: templates/accounts/policy_warning_form.html:29
-msgid "Save"
-msgstr "Сохранить"
-
 #: apps/core/__init__.py:5
 msgid "core"
 msgstr "ядро"
@@ -643,38 +515,6 @@ msgstr "UserSID"
 msgid "UserSIDs"
 msgstr "UserSID'ы"
 
-#: apps/core/templates/css_edit.html:15
-#: apps/core/templates/subscription.html:13
-#: apps/core/templates/core/approve_form.html:13
-#: apps/files/templates/files/upload_file.html:13
-#: apps/files/templates/replays/all.html:19
-#: apps/files/templates/replays/edit_replay.html:12
-#: apps/files/templates/replays/upload_replay.html:14
-#: apps/news/templates/sphinx_news.html:6
-#: apps/tabletop/templates/add_battle_report.html:11
-#: apps/tabletop/templates/add_codex.html:13
-#: apps/tabletop/templates/add_old_battle_report.html:43
-#: apps/tabletop/templates/add_roster_old.html:52
-#: apps/tabletop/templates/battle_report_index.html:15
-#: apps/tabletop/templates/index.html:15
-#: apps/tabletop/templates/search_rosters.html:35
-#: apps/tabletop/templates/user_rosters.html:25
-msgid "submit"
-msgstr "отправить"
-
-#: apps/core/templates/sphinx_search.html:16
-#: apps/core/templates/sphinx_search_model.html:16
-msgid "search"
-msgstr "поиск"
-
-#: apps/core/templates/core/widgets/days_select.html:4
-msgid "Selects all days"
-msgstr "Выбрать все дни"
-
-#: apps/core/templates/core/widgets/days_select.html:4
-msgid "Select all"
-msgstr "Выбрать все"
-
 #: apps/files/__init__.py:3
 msgid "files"
 msgstr "файлы"
@@ -695,8 +535,8 @@ msgstr ""
 msgid "Attachment"
 msgstr "Аттачмент"
 
-#: apps/files/models.py:25 apps/files/templates/files/user_files.html:45
-#: apps/news/templates/events/events.html:19
+#: apps/files/models.py:25 templates/files/user_files.html:45
+#: templates/news/events/events.html:19
 msgid "Type"
 msgstr "Тип"
 
@@ -704,14 +544,22 @@ msgstr "Тип"
 msgid "Name"
 msgstr "Имя"
 
-#: apps/files/models.py:41 apps/files/templates/gallery/gallery_list.html:22
-#: apps/pybb/templates/pybb/head.html:56
+#: apps/files/models.py:41 templates/files/gallery/gallery_list.html:22
+#: templates/pybb/head.html:56
 msgid "Gallery"
 msgstr "Галерея"
 
 #: apps/files/models.py:42
 msgid "Galleries"
 msgstr "Галереи"
+
+#: apps/files/models.py:51 apps/menu/models.py:42 apps/pybb/forms.py:86
+#: apps/tabletop/forms.py:312 apps/tabletop/models.py:182
+#: apps/tabletop/models.py:193 templates/accounts/pm_list.html:27
+#: templates/comments/comment_watch_list.html:12
+#: templates/news/events/events.html:18 templates/tabletop/reports.html:30
+msgid "Title"
+msgstr "Заголовок"
 
 #: apps/files/models.py:53
 msgid "Alias"
@@ -721,20 +569,18 @@ msgstr "Алиас"
 msgid "Fast name to access unit"
 msgstr "Имя для быстрого доступа к юниту"
 
-#: apps/files/models.py:58 apps/tabletop/templates/add_roster_old.html:47
+#: apps/files/models.py:58
 msgid "Comments"
 msgstr "Комментарии"
 
-#: apps/files/models.py:59 apps/files/templates/gallery/action_image.html:5
-#: apps/files/templates/gallery/gallery_list.html:11
-#: apps/files/templates/gallery/image.html:7
-#: apps/files/templates/gallery/upload.html:6
+#: apps/files/models.py:59 templates/files/gallery/action_image.html:5
+#: templates/files/gallery/gallery_list.html:11
+#: templates/files/gallery/upload.html:6
 msgid "gallery"
 msgstr "галерея"
 
 #: apps/files/models.py:61 apps/files/models.py:80
-#: apps/files/templates/files/user_files.html:72
-#: apps/files/templates/files/user_files.html:99
+#: templates/files/user_files.html:72 templates/files/user_files.html.py:99
 msgid "Image"
 msgstr "Изображение"
 
@@ -774,185 +620,6 @@ msgstr "Файл пользователя"
 msgid "User files"
 msgstr "Файлы пользователя"
 
-#: apps/files/templates/files/user_files.html:9
-msgid "my files"
-msgstr "мои файлы"
-
-#: apps/files/templates/files/user_files.html:17
-#: apps/files/templates/files/user_files.html:24
-msgid "Upload files"
-msgstr "Загрузить файлы"
-
-#: apps/files/templates/files/user_files.html:27
-msgid "Your limit"
-msgstr "Ваш лимит"
-
-#: apps/files/templates/files/user_files.html:28
-msgctxt "You used file space"
-msgid "You used"
-msgstr "Вы испольщовали"
-
-#: apps/files/templates/files/user_files.html:31
-#: apps/pybb/templates/pybb/head.html:54
-msgid "My files"
-msgstr "Мои файлы"
-
-#: apps/files/templates/files/user_files.html:36
-msgid "General"
-msgstr "Все файлы"
-
-#: apps/files/templates/files/user_files.html:37
-msgid "Pictures"
-msgstr "Картинки"
-
-#: apps/files/templates/files/user_files.html:46
-msgid "File"
-msgstr "Файл"
-
-#: apps/files/templates/files/user_files.html:47
-msgid "Link"
-msgstr "Ссылка"
-
-#: apps/files/templates/files/user_files.html:48
-#: apps/files/templates/files/user_files.html:74
-msgid "Size"
-msgstr "Размер"
-
-#: apps/files/templates/files/user_files.html:49
-#: apps/files/templates/files/user_files.html:75
-msgid "Actions"
-msgstr "Действия"
-
-#: apps/files/templates/files/user_files.html:59
-#: apps/files/templates/files/user_files.html:109
-msgid "Do you want to delete this file?"
-msgstr "Вы действительно хотите удалить этот файл?"
-
-#: apps/files/templates/files/user_files.html:61
-#: apps/files/templates/files/user_files.html:111
-#: apps/files/templates/gallery/gallery_image_form.html:11
-#: apps/pybb/templates/pybb/edit_profile.html:31
-#: apps/pybb/templates/pybb/poll.html:10
-msgid "delete"
-msgstr "удалить"
-
-#: apps/files/templates/files/user_files.html:73
-msgid "Links"
-msgstr "Ссылки"
-
-#: apps/files/templates/files/user_files.html:89
-msgid "Inserts thumbnail with link to image"
-msgstr "Добавляет эскиз с ссылкой на изображение"
-
-#: apps/files/templates/files/user_files.html:91
-msgid "Thumbnail and image"
-msgstr "Эскиз и изображение"
-
-#: apps/files/templates/files/user_files.html:95
-#: apps/files/templates/files/user_files.html:104
-msgid "Copies link to the clipboard"
-msgstr "Копирует ссылку в буфер обмена"
-
-#: apps/files/templates/files/user_files.html:95
-#: apps/files/templates/files/user_files.html:104
-msgid "copy"
-msgstr "буфер"
-
-#: apps/files/templates/files/user_files.html:97
-msgid "Inserts only image"
-msgstr "Добавляет только изображение"
-
-#: apps/files/templates/files/user_files.html:122
-msgid "No files uploaded"
-msgstr "Ни одного файла не загружено"
-
-#: apps/files/templates/files/user_files.html:133
-msgid "Copied to clipboard"
-msgstr "Скопировано в буфер обмена"
-
-#: apps/files/templates/files/user_files.html:141
-msgid ""
-"Sorry, your flash version is pretty old, please update to enable fast copying"
-msgstr ""
-"Ваша версия flash довольно старая, пожалуйста, обновите её, чтобы включить "
-"возможность быстрого копирования"
-
-#: apps/files/templates/files/user_files.html:190
-msgid "You are trying to upload the file. Do you want to proceed"
-msgstr "Вы хотите загрузить файл, продолжить?"
-
-#: apps/files/templates/files/user_files.html:197 templates/base.html:186
-msgid "Yes"
-msgstr "Да"
-
-#: apps/files/templates/files/user_files.html:206
-msgid "No"
-msgstr "Нет"
-
-#: apps/files/templates/files/user_files.html:214
-#: templates/js/locale.ru.html:10
-msgid "Do you want to proceed uploading the file?"
-msgstr "Вы действительно хотите загрузить этот файл?"
-
-#: apps/files/templates/files/user_files.html:233
-msgid "downloaded successfull, reload the page"
-msgstr "успешно загружено, обновите страницу"
-
-#: apps/files/templates/files/user_files.html:252
-#: templates/js/locale.ru.html:11
-msgid "error while uploading file"
-msgstr "произошла ошибка при загрузке файла"
-
-#: apps/files/templates/gallery/action_image.html:6
-#: apps/files/templates/gallery/upload.html:7
-msgid "upload image"
-msgstr "загрузить изображение"
-
-#: apps/files/templates/gallery/action_image.html:8
-msgid "Action image"
-msgstr "Действие с изображением"
-
-#: apps/files/templates/gallery/gallery_image.html:7
-#: apps/files/templates/gallery/gallery_image_form.html:6
-#: apps/files/templates/gallery/gallery_list.html:8
-msgid "galleries"
-msgstr "галереи"
-
-#: apps/files/templates/gallery/gallery_image_form.html:13
-msgid "update"
-msgstr "обновить"
-
-#: apps/files/templates/gallery/gallery_image_form.html:16
-#: apps/news/templates/events/event_form.html:13
-msgid "create new event"
-msgstr "создать новое событие"
-
-#: apps/files/templates/gallery/gallery_image_form.html:22
-msgid "You are going to delete this image, don't you?"
-msgstr "Вы хотите удалить данное изображение?"
-
-#: apps/files/templates/gallery/gallery_image_form.html:29
-#: apps/pybb/templates/pybb/post_template.html:75
-#: apps/wh/templates/accounts/pm.html:89
-msgid "Delete"
-msgstr "Удалить"
-
-#: apps/files/templates/gallery/gallery_list.html:18
-msgid "Add image"
-msgstr "Добавить изображение"
-
-#: apps/files/templates/gallery/upload.html:9
-msgid "Upload image"
-msgstr "Загрузить изображение"
-
-#: apps/files/templates/gallery/includes/image.html:8
-msgid "edit image"
-msgstr "правка изображения"
-
-#: apps/files/templates/gallery/includes/image.html:11
-msgid "delete image"
-msgstr "удалить изображение"
-
 #: apps/karma/admin.py:20 apps/news/admin.py:30 apps/wh/admin.py:18
 msgid "Base"
 msgstr "Базовый"
@@ -985,9 +652,7 @@ msgstr "Подобного пользователя не существует"
 msgid "You can not alter karma for yourself"
 msgstr "Нельзя менять карму самим себе"
 
-#: apps/karma/models.py:19
-#: apps/tabletop/templates/add_old_battle_report.html:40
-#: templates/accounts/policy_warning_detail.html:19
+#: apps/karma/models.py:19 templates/accounts/policy_warning_detail.html:19
 #: templates/accounts/policy_warning_list.html:19
 msgid "Comment"
 msgstr "Комментарий"
@@ -996,8 +661,7 @@ msgstr "Комментарий"
 msgid "Power"
 msgstr "Сила"
 
-#: apps/karma/models.py:21 apps/wh/templates/accounts/pm.html:43
-#: templates/accounts/pm_list.html:28
+#: apps/karma/models.py:21 templates/accounts/pm_list.html:28
 msgid "Date"
 msgstr "Дата"
 
@@ -1005,7 +669,7 @@ msgstr "Дата"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:178
+#: apps/karma/models.py:55 apps/tabletop/models.py:183
 msgid "Codename"
 msgstr "Кодовое имя"
 
@@ -1041,6 +705,30 @@ msgstr "Кармические статусы"
 msgid "karma"
 msgstr "карма"
 
+#: apps/karma/templates/karma/karma_change.html:5
+#: templates/accounts/password_change.html:4
+#: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
+#: templates/accounts/pm_list.html:5
+#: templates/accounts/policy_warning_detail.html:5
+#: templates/accounts/policy_warning_form.html:5
+#: templates/accounts/policy_warning_list.html:5
+#: templates/accounts/profile.html:5 templates/accounts/profile_update.html:4
+#: templates/comments/comment_form.html:5
+#: templates/comments/comment_watch_list.html:5
+#: templates/comments/subscribe_form.html:5 templates/files/user_files.html:8
+#: templates/files/gallery/action_image.html:4
+#: templates/files/gallery/gallery_image.html:6
+#: templates/files/gallery/gallery_image_form.html:5
+#: templates/files/gallery/gallery_list.html:6
+#: templates/files/gallery/upload.html:5 templates/news/article.html:4
+#: templates/news/article_form.html:4 templates/news/events/calendar.html:14
+#: templates/news/events/event.html:5 templates/news/events/event_form.html:5
+#: templates/news/events/events.html:5 templates/static/timeout.html:4
+#: templates/tabletop/roster.html:7 templates/tabletop/roster_form.html:7
+#: templates/tabletop/roster_list.html:5
+msgid "forum"
+msgstr "форум"
+
 #: apps/karma/templates/karma/karma_change.html:8
 msgid "karma up"
 msgstr "поднятие кармы"
@@ -1058,13 +746,10 @@ msgid "Down user's karma"
 msgstr "Понизить карму пользователя"
 
 #: apps/karma/templates/karma/karma_change.html:20
-#: apps/pybb/templates/pybb/add_post.html:36
-#: apps/pybb/templates/pybb/create_pm.html:15
-#: apps/pybb/templates/pybb/post_form.html:19
-#: apps/pybb/templates/pybb/post_list.html:76
-#: apps/pybb/templates/pybb/topic.html:75
-#: apps/pybb/templates/pybb/topic_form.html:19 templates/forms/submit.html:2
-#: templates/generic/form.html:3
+#: templates/forms/submit.html:2 templates/generic/form.html:3
+#: templates/pybb/add_post.html:36 templates/pybb/create_pm.html:15
+#: templates/pybb/post_form.html:19 templates/pybb/post_list.html:76
+#: templates/pybb/topic.html:75 templates/pybb/topic_form.html:19
 msgid "Submit"
 msgstr "Отправить"
 
@@ -1112,7 +797,8 @@ msgstr "Вертикальное меню"
 msgid "Vertical Menus"
 msgstr "Вертикальные меню"
 
-#: apps/news/__init__.py:3
+#: apps/news/__init__.py:3 templates/news/article.html:5
+#: templates/news/article_form.html:5
 msgid "news"
 msgstr "новости"
 
@@ -1136,8 +822,8 @@ msgstr "утверждено?"
 msgid "marks if the article would be approved"
 msgstr "помечает статью как утвержденную по умолчанию"
 
-#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:218
-#: apps/tabletop/templates/reports.html:48
+#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:223
+#: templates/tabletop/reports.html:48
 msgid "approved"
 msgstr "утверждено"
 
@@ -1172,7 +858,7 @@ msgstr "автор"
 msgid "content"
 msgstr "контент"
 
-#: apps/news/models.py:46 apps/tabletop/models.py:219
+#: apps/news/models.py:46 apps/tabletop/models.py:224
 msgid "ip address"
 msgstr "IP адрес"
 
@@ -1380,9 +1066,8 @@ msgstr ""
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:361 apps/news/templates/events/calendar.html:23
-#: apps/news/templates/events/events.html:13
-#: apps/pybb/templates/pybb/head.html:49
+#: apps/news/models.py:361 templates/news/events/calendar.html:22
+#: templates/news/events/events.html:13 templates/pybb/head.html:49
 msgid "Events"
 msgstr "События"
 
@@ -1401,271 +1086,6 @@ msgstr "Просмотр событий"
 #: apps/news/signals.py:24
 msgid "Your article changed status"
 msgstr "Статус вашей статьи был изменен"
-
-#: apps/news/templates/events/calendar.html:16
-#: apps/news/templates/events/event.html:7
-#: apps/news/templates/events/event_confirm_delete.html:5
-#: apps/news/templates/events/event_form.html:6
-#: apps/news/templates/events/events.html:6
-msgid "events"
-msgstr "события"
-
-#: apps/news/templates/events/calendar.html:19
-#: apps/news/templates/events/events.html:9
-msgid "Create event"
-msgstr "Создать событие"
-
-#: apps/news/templates/events/calendar.html:27
-msgid "Legend"
-msgstr "Легенда"
-
-#: apps/news/templates/events/calendar.html:28
-msgid "game"
-msgstr "игра"
-
-#: apps/news/templates/events/calendar.html:29
-msgid "tournament"
-msgstr "турнир"
-
-#: apps/news/templates/events/calendar.html:30
-msgctxt "mtg pre-release"
-msgid "pre release"
-msgstr "пре релиз"
-
-#: apps/news/templates/events/calendar.html:31
-msgctxt "mtg release"
-msgid "release"
-msgstr "релиз"
-
-#: apps/news/templates/events/calendar.html:32
-msgctxt "card order"
-msgid "order"
-msgstr "заказ"
-
-#: apps/news/templates/events/calendar.html:34
-msgid "marks new event"
-msgstr "отметка для нового события"
-
-#: apps/news/templates/events/calendar.html:38
-msgid "January"
-msgstr "Январь"
-
-#: apps/news/templates/events/calendar.html:38
-msgid "February"
-msgstr "Февраль"
-
-#: apps/news/templates/events/calendar.html:38
-msgid "March"
-msgstr "Март"
-
-#: apps/news/templates/events/calendar.html:39
-msgid "April"
-msgstr "Апрель"
-
-#: apps/news/templates/events/calendar.html:39
-msgid "May"
-msgstr "Май"
-
-#: apps/news/templates/events/calendar.html:39
-msgid "June"
-msgstr "Июнь"
-
-#: apps/news/templates/events/calendar.html:40
-msgid "July"
-msgstr "Июль"
-
-#: apps/news/templates/events/calendar.html:40
-msgid "August"
-msgstr "Август"
-
-#: apps/news/templates/events/calendar.html:40
-msgid "September"
-msgstr "Сентябрь"
-
-#: apps/news/templates/events/calendar.html:41
-msgid "October"
-msgstr "Октябрь"
-
-#: apps/news/templates/events/calendar.html:41
-msgid "November"
-msgstr "Ноябрь"
-
-#: apps/news/templates/events/calendar.html:42
-msgid "December"
-msgstr "Декабрь"
-
-#: apps/news/templates/events/calendar.html:44
-msgid "Mon"
-msgstr "Пн"
-
-#: apps/news/templates/events/calendar.html:44
-msgid "Tue"
-msgstr "Вт"
-
-#: apps/news/templates/events/calendar.html:44
-msgid "Wed"
-msgstr "Ср"
-
-#: apps/news/templates/events/calendar.html:45
-msgid "Thu"
-msgstr "Чт"
-
-#: apps/news/templates/events/calendar.html:45
-msgid "Fri"
-msgstr "Пт"
-
-#: apps/news/templates/events/calendar.html:45
-msgid "Sat"
-msgstr "Сб"
-
-#: apps/news/templates/events/calendar.html:46
-msgid "Sun"
-msgstr "Вс"
-
-#: apps/news/templates/events/calendar.html:48
-msgid "Monday"
-msgstr "Понедельник"
-
-#: apps/news/templates/events/calendar.html:48
-msgid "Tuesday"
-msgstr "Вторник"
-
-#: apps/news/templates/events/calendar.html:48
-msgid "Wednesday"
-msgstr "Среда"
-
-#: apps/news/templates/events/calendar.html:49
-msgid "Thursday"
-msgstr "Четверг"
-
-#: apps/news/templates/events/calendar.html:49
-msgid "Friday"
-msgstr "Пятница"
-
-#: apps/news/templates/events/calendar.html:49
-msgid "Saturday"
-msgstr "Суббота"
-
-#: apps/news/templates/events/calendar.html:50
-msgid "Sunday"
-msgstr "Воскресенье"
-
-#: apps/news/templates/events/calendar.html:84
-msgid "Today"
-msgstr "Сегодня"
-
-#: apps/news/templates/events/calendar.html:85
-msgid "month"
-msgstr "месяц"
-
-#: apps/news/templates/events/calendar.html:86
-msgid "week"
-msgstr "неделя"
-
-#: apps/news/templates/events/calendar.html:87
-msgid "day"
-msgstr "день"
-
-#: apps/news/templates/events/calendar.html:96
-msgid "Jan"
-msgstr "Янв"
-
-#: apps/news/templates/events/calendar.html:96
-msgid "Feb"
-msgstr "Фев"
-
-#: apps/news/templates/events/calendar.html:96
-msgid "Mar"
-msgstr "Мар"
-
-#: apps/news/templates/events/calendar.html:97
-msgid "Apr"
-msgstr "Апр"
-
-#: apps/news/templates/events/calendar.html:97
-msgid "Jun"
-msgstr "Июн"
-
-#: apps/news/templates/events/calendar.html:98
-msgid "Jul"
-msgstr "Июл"
-
-#: apps/news/templates/events/calendar.html:98
-msgid "Aug"
-msgstr "Авг"
-
-#: apps/news/templates/events/calendar.html:98
-msgid "Sep"
-msgstr "Сен"
-
-#: apps/news/templates/events/calendar.html:99
-msgid "Oct"
-msgstr "Окт"
-
-#: apps/news/templates/events/calendar.html:99
-msgid "Nov"
-msgstr "Ноя"
-
-#: apps/news/templates/events/calendar.html:99
-msgid "Dec"
-msgstr "Дек"
-
-#: apps/news/templates/events/calendar.html:109
-msgid "all day"
-msgstr "весь день"
-
-#: apps/news/templates/events/event.html:33
-msgid "Subscribe for a new comments"
-msgstr "Подписаться на новые комментарии"
-
-#: apps/news/templates/events/event.html:41
-msgid "Mark that I would come to this event"
-msgstr "Заявить об участвии в этом событии (я приду)"
-
-#: apps/news/templates/events/event.html:55
-msgid "Participants"
-msgstr "Участники"
-
-#: apps/news/templates/events/event_confirm_delete.html:4
-msgctxt "forum home"
-msgid "forum"
-msgstr "форум"
-
-#: apps/news/templates/events/event_confirm_delete.html:7
-msgid "confirm deletion"
-msgstr "подтвердить удаление"
-
-#: apps/news/templates/events/event_confirm_delete.html:12
-msgid "Do you realy want to delete this event?"
-msgstr "Вы действительно хотитеудалить это событие?"
-
-#: apps/news/templates/events/event_confirm_delete.html:13
-msgid "Yes, delete it"
-msgstr "Да, удалить это"
-
-#: apps/news/templates/events/event_form.html:11
-msgid "join event"
-msgstr "присоединиться к событию"
-
-#: apps/news/templates/events/events.html:20
-msgid "Date start"
-msgstr "Дата начала"
-
-#: apps/news/templates/events/events.html:21
-msgid "Date end"
-msgstr "Дата окончания"
-
-#: apps/news/templates/events/events.html:22
-msgid "Queued"
-msgstr "В очереди"
-
-#: apps/news/templates/events/events.html:42
-msgid "No events created"
-msgstr "События отсутствуют"
-
-#: apps/news/templates/includes/article.html:17
-msgid "Do you want to delete this article?"
-msgstr "Вы действительно хотите удалить эту статью?"
 
 #: apps/pybb/admin.py:39 apps/pybb/admin.py:61 apps/pybb/admin.py:92
 #: apps/pybb/admin.py:124
@@ -1689,7 +1109,6 @@ msgid "Latest topics on forum"
 msgstr "Последние топики на форуме"
 
 #: apps/pybb/forms.py:18 apps/pybb/models.py:101
-#: apps/wh/templates/accounts/pm.html:42
 msgid "Subject"
 msgstr "Тема"
 
@@ -1774,11 +1193,11 @@ msgstr "Создан"
 msgid "Views count"
 msgstr "Количество просмотров"
 
-#: apps/pybb/models.py:106 apps/pybb/templates/pybb/include/forum.html:22
+#: apps/pybb/models.py:106 templates/pybb/include/forum.html:22
 msgid "Sticky"
 msgstr "Прикрепленная"
 
-#: apps/pybb/models.py:107 apps/pybb/templates/pybb/include/forum.html:24
+#: apps/pybb/models.py:107 templates/pybb/include/forum.html:24
 msgid "Closed"
 msgstr "Закрытая"
 
@@ -1791,7 +1210,7 @@ msgstr "Подписчики"
 msgid "Topic"
 msgstr "Топик"
 
-#: apps/pybb/models.py:117 apps/pybb/templates/pybb/quick_access.html:35
+#: apps/pybb/models.py:117 templates/pybb/quick_access.html:35
 msgid "Topics"
 msgstr "Топики"
 
@@ -1827,7 +1246,7 @@ msgstr "IP пользователя"
 msgid "Post"
 msgstr "Пост"
 
-#: apps/pybb/models.py:199 apps/pybb/templates/pybb/quick_access.html:38
+#: apps/pybb/models.py:199 templates/pybb/quick_access.html:38
 msgid "Posts"
 msgstr "Посты"
 
@@ -1875,7 +1294,7 @@ msgstr "позволяет выбрать несколько вариантов 
 
 #: apps/pybb/models.py:303
 msgid "is prepared"
-msgstr ""
+msgstr "приготовлен"
 
 #: apps/pybb/models.py:304
 msgid "marks if poll is prepared to rock n roll"
@@ -1893,8 +1312,8 @@ msgstr "дата окончания"
 msgid "date then poll is expired"
 msgstr "дата, когда опрос будет завершен"
 
-#: apps/pybb/models.py:366 apps/pybb/templates/pybb/poll.html:13
-#: apps/pybb/templates/pybb/include/forum.html:26
+#: apps/pybb/models.py:366 templates/pybb/poll.html:13
+#: templates/pybb/include/forum.html:26
 msgid "Poll"
 msgstr "Опрос"
 
@@ -1925,275 +1344,6 @@ msgstr "Ответ на опрос"
 #: apps/pybb/models.py:419
 msgid "Poll answers"
 msgstr "Ответы на опрос"
-
-#: apps/pybb/templates/pybb/add_post.html:9
-#: apps/pybb/templates/pybb/add_post.html:17
-#: apps/pybb/templates/pybb/category.html:7
-#: apps/pybb/templates/pybb/create_pm.html:7
-#: apps/pybb/templates/pybb/edit_post.html:7
-#: apps/pybb/templates/pybb/forum.html:7
-#: apps/pybb/templates/pybb/post_list.html:7
-#: apps/pybb/templates/pybb/topic.html:7
-msgid "Root"
-msgstr "Корень"
-
-#: apps/pybb/templates/pybb/add_post.html:29
-#: apps/pybb/templates/pybb/post_form.html:14
-#: apps/pybb/templates/pybb/topic_form.html:14
-#: apps/pybb/templates/pybb/include/forum.html:5
-msgid "New topic"
-msgstr "Новый топик"
-
-#: apps/pybb/templates/pybb/add_post.html:29
-#: apps/pybb/templates/pybb/post_list.html:71
-#: apps/pybb/templates/pybb/topic.html:70
-msgid "New reply"
-msgstr "Новый ответ"
-
-#: apps/pybb/templates/pybb/base.html:55
-#: apps/pybb/templates/pybb/post_template.html:39
-#: templates/base_template.html:55 templates/error_template.html:26
-msgid "open text"
-msgstr "показать"
-
-#: apps/pybb/templates/pybb/base.html:55 templates/base_template.html:55
-#: templates/error_template.html:26
-msgid "close text"
-msgstr "скрыть"
-
-#: apps/pybb/templates/pybb/create_pm.html:7
-#: apps/pybb/templates/pybb/create_pm.html:13
-msgid "New private message"
-msgstr "Новое приватное сообщение"
-
-#: apps/pybb/templates/pybb/delete_post.html:5
-msgid "Are you sure you want to delete this message?"
-msgstr "Вы уверены, что хотите удалить это сообщение?"
-
-#: apps/pybb/templates/pybb/delete_post.html:12
-msgid "Yes, I am sure."
-msgstr "Да, я уверен."
-
-#: apps/pybb/templates/pybb/edit_post.html:13
-msgid "Editing the post"
-msgstr "Правка поста"
-
-#: apps/pybb/templates/pybb/edit_profile.html:6
-#: apps/pybb/templates/pybb/edit_profile.html:19
-msgid "Profile editing"
-msgstr "Редактирование профиля"
-
-#: apps/pybb/templates/pybb/edit_profile.html:12
-msgid "Change the password"
-msgstr "Сменить пароль"
-
-#: apps/pybb/templates/pybb/edit_profile.html:14
-#: apps/wh/templates/accounts/pm.html:119
-msgid "Inbox"
-msgstr "Входящие"
-
-#: apps/pybb/templates/pybb/edit_profile.html:15
-#: templates/accounts/pm_detail.html:9 templates/accounts/pm_detail.html:14
-#: templates/accounts/pm_list.html:8 templates/accounts/pm_list.html.py:12
-msgid "outbox"
-msgstr "исходящие"
-
-#: apps/pybb/templates/pybb/edit_profile.html:24
-msgid "Subscriptions on topics"
-msgstr "Подписки на топики"
-
-#: apps/pybb/templates/pybb/head.html:16
-msgid "VK social page"
-msgstr "Мы ВКонтакте"
-
-#: apps/pybb/templates/pybb/head.html:21
-msgid "Forthcoming events"
-msgstr "Предстоящие события"
-
-#: apps/pybb/templates/pybb/head.html:22
-msgid "Calendar"
-msgstr "Календарь"
-
-#: apps/pybb/templates/pybb/head.html:33
-msgid "Subscriptions"
-msgstr "Подписки"
-
-#: apps/pybb/templates/pybb/head.html:51
-msgid "My profile"
-msgstr "Мой профиль"
-
-#: apps/pybb/templates/pybb/head.html:53
-msgid "My rosters"
-msgstr "Мои ростеры"
-
-#: apps/pybb/templates/pybb/head.html:58 templates/accounts/pm_detail.html:18
-#: templates/accounts/pm_list.html:19
-msgid "Private messages"
-msgstr "Приватные сообщения"
-
-#: apps/pybb/templates/pybb/head.html:64
-msgid "Admincp"
-msgstr "Админка"
-
-#: apps/pybb/templates/pybb/head.html:66
-msgid "Log out"
-msgstr "Выйти"
-
-#: apps/pybb/templates/pybb/head.html:71
-msgid "Themes"
-msgstr "Темы"
-
-#: apps/pybb/templates/pybb/head.html:82 templates/accounts/register.html:11
-msgid "Register"
-msgstr "Регистрация"
-
-#: apps/pybb/templates/pybb/head.html:83
-msgid "Log in"
-msgstr "Войти"
-
-#: apps/pybb/templates/pybb/poll.html:7
-#: apps/tabletop/templates/reports/include/report_content.html:59
-#: apps/tabletop/templates/reports/include/report_header.html:10
-msgid "edit"
-msgstr "правка"
-
-#: apps/pybb/templates/pybb/poll.html:29
-msgid "Users voted"
-msgstr "Пользователей проголосовало"
-
-#: apps/pybb/templates/pybb/poll_configure.html:3
-msgid "Poll title"
-msgstr "Заголовок опроса"
-
-#: apps/pybb/templates/pybb/poll_wizard.html:21
-#: apps/pybb/templates/pybb/poll_wizard.html:29
-msgid "Next"
-msgstr "Следующий"
-
-#: apps/pybb/templates/pybb/poll_wizard.html:27
-msgid "Previous"
-msgstr "Предыдущий"
-
-#: apps/pybb/templates/pybb/post_form.html:7
-#: apps/pybb/templates/pybb/topic_form.html:7
-msgid "Home"
-msgstr "Домой"
-
-#: apps/pybb/templates/pybb/post_list.html:14
-msgid "Add poll to the topic"
-msgstr "Добавить опрос/голосование к топику"
-
-#: apps/pybb/templates/pybb/post_list.html:15
-#: apps/pybb/templates/pybb/topic.html:20
-msgid "Add poll"
-msgstr "Добавить опрос"
-
-#: apps/pybb/templates/pybb/post_list.html:41
-#: apps/pybb/templates/pybb/topic.html:40
-msgid "Unstick topic"
-msgstr "Неприкрепленные топики"
-
-#: apps/pybb/templates/pybb/post_list.html:45
-#: apps/pybb/templates/pybb/topic.html:44
-msgid "Stick topic"
-msgstr "Прикрепленные топики"
-
-#: apps/pybb/templates/pybb/post_list.html:50
-#: apps/pybb/templates/pybb/topic.html:49
-msgid "Open topic"
-msgstr "Открыть топик"
-
-#: apps/pybb/templates/pybb/post_list.html:54
-#: apps/pybb/templates/pybb/topic.html:53
-msgid "Close topic"
-msgstr "Закрыть топик"
-
-#: apps/pybb/templates/pybb/post_list.html:60
-#: apps/pybb/templates/pybb/topic.html:59
-msgid "Unsubscribe"
-msgstr "Отписаться"
-
-#: apps/pybb/templates/pybb/post_list.html:62
-#: apps/pybb/templates/pybb/topic.html:61
-msgid "Subscribe"
-msgstr "Подписаться"
-
-#: apps/pybb/templates/pybb/post_template.html:15
-#: templates/generic/comment_new.html:17
-msgid "Add user policy warning"
-msgstr "Добавить предупреждение пользователю"
-
-#: apps/pybb/templates/pybb/post_template.html:39
-msgid "Show/hide first topic post content"
-msgstr "Показывает/скрывает содержимое первого топика"
-
-#: apps/pybb/templates/pybb/post_template.html:56
-#: templates/generic/comment_new.html:37
-msgid "Edited"
-msgstr "Редактирован"
-
-#: apps/pybb/templates/pybb/post_template.html:69
-#: templates/generic/comment_new.html:49
-msgid "Quote"
-msgstr "Цитатировать"
-
-#: apps/pybb/templates/pybb/post_template.html:71
-#: templates/generic/comment_new.html:46
-msgid "Edit"
-msgstr "Правка"
-
-#: apps/pybb/templates/pybb/quick_access.html:4
-msgid "Last topics"
-msgstr "Топики"
-
-#: apps/pybb/templates/pybb/quick_access.html:5
-msgid "Last posts"
-msgstr "Посты"
-
-#: apps/pybb/templates/pybb/quick_access.html:6
-#: apps/pybb/templates/pybb/user.html:18
-msgid "Statistics"
-msgstr "Статистика"
-
-#: apps/pybb/templates/pybb/user.html:19
-msgid "Number of posts"
-msgstr "Количество постов"
-
-#: apps/pybb/templates/pybb/user.html:20
-msgid "Number of topics"
-msgstr "Количество топиков"
-
-#: apps/pybb/templates/pybb/user.html:21
-msgid "Date of registration"
-msgstr "Дата регистрации"
-
-#: apps/pybb/templates/pybb/user.html:22
-msgid "Contacts"
-msgstr "Контакты"
-
-#: apps/pybb/templates/pybb/user.html:24
-msgid "Location"
-msgstr "Место пребывания"
-
-#: apps/pybb/templates/pybb/user.html:27
-msgid "Site"
-msgstr "Сайт"
-
-#: apps/pybb/templates/pybb/user.html:48
-msgid "Send PM"
-msgstr "Отослать ЛС"
-
-#: apps/pybb/templates/pybb/users.html:10
-msgid "Search"
-msgstr "Поиск"
-
-#: apps/pybb/templates/pybb/include/forum.html:25
-msgid "Important"
-msgstr "Важное"
-
-#: apps/pybb/templates/pybb/include/forum.html:32
-msgid "Posts/Go to last page"
-msgstr "Постов/перейти на последнюю страницу"
 
 #: apps/pybb/templatetags/pybb_extras.py:51
 msgid "seconds ago,seconds ago,seconds ago"
@@ -2235,7 +1385,7 @@ msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
 #: apps/tabletop/forms.py:57 apps/tabletop/forms.py:199
-#: apps/tabletop/templates/tabletop/roster_list.html:13
+#: templates/tabletop/roster_list.html:13
 msgid "Rosters"
 msgstr "Ростеры"
 
@@ -2254,7 +1404,6 @@ msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
 #: apps/tabletop/forms.py:75
-#: apps/tabletop/templates/add_old_battle_report.html:29
 msgid "Mission"
 msgstr "Миссия"
 
@@ -2263,7 +1412,6 @@ msgid "mission you played"
 msgstr "миссия, в которую вы играли"
 
 #: apps/tabletop/forms.py:84
-#: apps/tabletop/templates/add_old_battle_report.html:32
 msgid "Layout"
 msgstr "Формат"
 
@@ -2365,7 +1513,7 @@ msgstr "Количество pts должно быть больше 500"
 msgid "Revision"
 msgstr "Ревизия"
 
-#: apps/tabletop/forms.py:390
+#: apps/tabletop/forms.py:390 templates/tabletop/roster.html:28
 msgid "Codex"
 msgstr "Кодекс"
 
@@ -2477,7 +1625,7 @@ msgstr "издание кодекса"
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:113 apps/tabletop/templates/add_roster_old.html:26
+#: apps/tabletop/models.py:113
 msgid "pts"
 msgstr "очки"
 
@@ -2497,169 +1645,38 @@ msgstr "побед"
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:129 apps/tabletop/templates/add_roster_old.html:30
+#: apps/tabletop/models.py:129
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:202
+#: apps/tabletop/models.py:207
 msgid "published"
 msgstr "опубликовано"
 
-#: apps/tabletop/models.py:205 apps/tabletop/templates/tabletop/roster.html:8
-#: apps/tabletop/templates/tabletop/roster_list.html:6
+#: apps/tabletop/models.py:210 templates/tabletop/roster.html:8
+#: templates/tabletop/roster_form.html:8 templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:208
+#: apps/tabletop/models.py:213
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:211
+#: apps/tabletop/models.py:216
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:212
+#: apps/tabletop/models.py:217
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:214
+#: apps/tabletop/models.py:219
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:262
+#: apps/tabletop/models.py:267
 msgid "[fuzzy] "
 msgstr "[плавающий]"
-
-#: apps/tabletop/templates/add_old_battle_report.html:11
-msgid "Tilte"
-msgstr "Заголовок"
-
-#: apps/tabletop/templates/add_old_battle_report.html:17
-msgid "Rosters' ids"
-msgstr ""
-
-#: apps/tabletop/templates/add_old_battle_report.html:22
-#: apps/tabletop/templates/reports/include/report_content.html:16
-msgid "Winner"
-msgstr "Победитель"
-
-#: apps/tabletop/templates/add_roster_old.html:34
-msgid "Roster"
-msgstr "Ростер"
-
-#: apps/tabletop/templates/add_roster_old.html:37
-msgid "Race"
-msgstr "Раса"
-
-#: apps/tabletop/templates/add_roster_old.html:40
-msgid "Custom Race"
-msgstr ""
-
-#: apps/tabletop/templates/reports.html:8
-#: apps/tabletop/templates/user_rosters.html:15
-msgid "Add"
-msgstr "Добавить"
-
-#: apps/tabletop/templates/reports.html:31
-msgid "Pts"
-msgstr "Очки"
-
-#: apps/tabletop/templates/reports.html:32
-msgctxt "published date"
-msgid "Published"
-msgstr "Опубликован"
-
-#: apps/tabletop/templates/reports.html:33
-msgctxt "battle report players"
-msgid "Players"
-msgstr "Участники"
-
-#: apps/tabletop/templates/reports.html:34
-msgctxt "approved report"
-msgid "Approved"
-msgstr "Утвержден"
-
-#: apps/tabletop/templates/reports.html:49
-msgid "not approved"
-msgstr "не утвержден"
-
-#: apps/tabletop/templates/reports.html:59
-msgid "No reports found ;)"
-msgstr "Ни одного репорта не найдено ;)"
-
-#: apps/tabletop/templates/reports.html:69
-msgid "Added successfull"
-msgstr "Успешно добавлен"
-
-#: apps/tabletop/templates/reports.html:81
-msgid "No results matched"
-msgstr "Совпадений не найдено"
-
-#: apps/tabletop/templates/reports.html:82
-msgid "Select some options"
-msgstr "Нажмите для выбора"
-
-#: apps/tabletop/templates/reports.html:109
-#: apps/wh/templates/accounts/pm.html:232
-msgid "Please, keep typing ..."
-msgstr "Продолжайте печатать ..."
-
-#: apps/tabletop/templates/reports.html:110
-#: apps/wh/templates/accounts/pm.html:233
-msgid "Searching for"
-msgstr "Поиск"
-
-#: apps/tabletop/templates/reports.html:119
-msgid "Search some rosters"
-msgstr "Поиск ростеров"
-
-#: apps/tabletop/templates/reports/reports.html:16
-msgid "No reports found"
-msgstr "Ни одного батлрепорта не найдено"
-
-#: apps/tabletop/templates/reports/include/report_content.html:5
-msgid "show info"
-msgstr "информация"
-
-#: apps/tabletop/templates/reports/include/report_content.html:9
-msgid "Show winners"
-msgstr "Показывать победителей"
-
-#: apps/tabletop/templates/reports/include/report_content.html:22
-#: apps/tabletop/templates/reports/include/report_content.html:44
-msgctxt "roster points"
-msgid "pts"
-msgstr "очки"
-
-#: apps/tabletop/templates/reports/include/report_content.html:66
-#: apps/tabletop/templates/reports/include/report_header.html:17
-msgid "approve"
-msgstr "утвердить"
-
-#: apps/tabletop/templates/reports/include/report_content.html:71
-#: apps/tabletop/templates/reports/include/report_header.html:22
-msgid "disapprove"
-msgstr "разутвердить"
-
-#: apps/tabletop/templates/reports/include/report_content.html:79
-msgid "Hides avatar block"
-msgstr "Спрятать блок с аватаркой"
-
-#: apps/tabletop/templates/reports/include/report_header.html:43
-msgid "Comments count"
-msgstr "Комментариев"
-
-#: apps/tabletop/templates/reports/include/report_header.html:44
-msgid "read report"
-msgstr "прочесть репорт"
-
-#: apps/tabletop/templates/tabletop/roster_list.html:11
-msgid "Add roster"
-msgstr "Добавить ростер"
-
-#: apps/tabletop/templates/tabletop/roster_list.html:23
-msgid "No rosters found"
-msgstr "Ростеров не найдено"
 
 #: apps/utils/translations.py:4
 msgid "Misc"
@@ -2667,7 +1684,7 @@ msgstr "Другое"
 
 #: apps/wh/__init__.py:3
 msgid "w40k"
-msgstr ""
+msgstr "w40k"
 
 #: apps/wh/admin.py:46 apps/wh/models.py:59
 msgid "Armies"
@@ -2777,92 +1794,6 @@ msgstr "дата-время активности"
 msgid "IP address"
 msgstr "IP адрес"
 
-#: apps/wh/templates/accounts/change_password.html:7
-#: templates/accounts/password_change.html:5
-#: templates/accounts/pm_detail.html:6 templates/accounts/pm_form.html:6
-#: templates/accounts/pm_list.html:6 templates/accounts/profile.html:6
-#: templates/accounts/users.html:43
-msgid "profile"
-msgstr "профиль"
-
-#: apps/wh/templates/accounts/change_password.html:8
-msgid "change password"
-msgstr "сменить пароль"
-
-#: apps/wh/templates/accounts/password_changed.html:3
-msgid "Successfully changed"
-msgstr "Успешно изменен"
-
-#: apps/wh/templates/accounts/password_restore.html:7
-msgid "Change password"
-msgstr "Сменить пароль"
-
-#: apps/wh/templates/accounts/pm.html:12 templates/accounts/pm_detail.html:2
-#: templates/accounts/pm_list.html:2
-msgid "private messages"
-msgstr "личные сообщения"
-
-#: apps/wh/templates/accounts/pm.html:16 templates/accounts/pm_list.html:17
-msgid "Send message"
-msgstr "Отправить сообщение"
-
-#: apps/wh/templates/accounts/pm.html:20
-#: apps/wh/templates/accounts/pm.html:107
-#: apps/wh/templates/accounts/pm_send.html:9
-#: templates/accounts/pm_form.html:16
-msgid "Send"
-msgstr "Отослать"
-
-#: apps/wh/templates/accounts/pm.html:39
-msgid "State"
-msgstr "Статус"
-
-#: apps/wh/templates/accounts/pm.html:40 templates/accounts/pm_list.html:25
-msgid "From"
-msgstr "Источник"
-
-#: apps/wh/templates/accounts/pm.html:41 templates/accounts/pm_list.html:26
-msgid "To"
-msgstr "Адресат"
-
-#: apps/wh/templates/accounts/pm.html:103 templates/accounts/pm_detail.html:43
-#: templates/accounts/pm_form.html:18
-msgid "Reply"
-msgstr "Ответить"
-
-#: apps/wh/templates/accounts/pm.html:119
-msgid "Outbox"
-msgstr "Исходящие"
-
-#: apps/wh/templates/accounts/pm.html:119
-msgid "Deleted"
-msgstr "Удаленные"
-
-#: apps/wh/templates/accounts/pm.html:149
-#: apps/wh/templates/accounts/pm_delete.html:4
-msgid "Successfully deleted"
-msgstr "Успешно удален"
-
-#: apps/wh/templates/accounts/pm.html:186
-msgid "Private message was sent"
-msgstr "Сообщение было отослано"
-
-#: apps/wh/templates/accounts/pm.html:240
-msgid "Search the user"
-msgstr "Поиск пользователя"
-
-#: apps/wh/templates/accounts/pm_delete.html:6
-msgid "Message wasn't deleted"
-msgstr "Сообщение не было удалено"
-
-#: apps/wh/templates/accounts/registered.html:3
-msgid "Successfully registered"
-msgstr "Успешно зарегистрирован"
-
-#: apps/wh/templates/warnings/alter.html:6 templates/jtmpl/karma.html:18
-msgid "Alter"
-msgstr "Изменить"
-
 #: apps/wh/templatetags/whfilters.py:25
 msgid "Not Identified"
 msgstr "Не опознан"
@@ -2887,27 +1818,15 @@ msgstr ""
 "Ошибка сервера, администрация будет уведомлена о произошедшем и исправит все "
 "в ближайшее время."
 
-#: templates/base.html:159
-msgid "Required field"
-msgstr "Обязательное поле"
+#: templates/base_template.html:49 templates/error_template.html:26
+#: templates/pybb/base.html:49 templates/pybb/post_template.html:35
+msgid "open text"
+msgstr "показать"
 
-#: templates/base.html:171
-msgid "You have unread messages"
-msgstr "У вас есть непрочтенные сообщения"
-
-#: templates/base.html:181
-msgid "Do you really want to approve this action?"
-msgstr "Вы действительно хотите выполнить это действие?"
-
-#: templates/base.html:187
-msgid "no"
-msgstr "нет"
-
-#: templates/edit_comment_ng.html:5
-#: templates/accounts/policy_warning_form.html:26
-#: templates/accounts/profile_update.html:11
-msgid "Update"
-msgstr "Обновить"
+#: templates/base_template.html:49 templates/error_template.html:26
+#: templates/pybb/base.html:49
+msgid "close text"
+msgstr "скрыть"
 
 #: templates/accounts/banned.html:3
 msgid "Your account have been banned, sorry :)"
@@ -2937,6 +1856,13 @@ msgstr "Восстановление пароля"
 msgid "Login"
 msgstr "Логин"
 
+#: templates/accounts/password_change.html:5
+#: templates/accounts/pm_detail.html:6 templates/accounts/pm_form.html:6
+#: templates/accounts/pm_list.html:6 templates/accounts/profile.html:6
+#: templates/accounts/users.html:43
+msgid "profile"
+msgstr "профиль"
+
 #: templates/accounts/password_change.html:8
 msgid "Password change"
 msgstr "Смена пароля"
@@ -2953,9 +1879,19 @@ msgstr "Ваш пароль был успешно изменен"
 msgid "Initiate"
 msgstr "Начать"
 
+#: templates/accounts/pm_detail.html:2 templates/accounts/pm_list.html:2
+msgid "private messages"
+msgstr "личные сообщения"
+
 #: templates/accounts/pm_detail.html:8 templates/accounts/pm_form.html:7
 msgid "pm inbox"
 msgstr "входящие"
+
+#: templates/accounts/pm_detail.html:9 templates/accounts/pm_detail.html:14
+#: templates/accounts/pm_list.html:8 templates/accounts/pm_list.html.py:12
+#: templates/pybb/edit_profile.html:15
+msgid "outbox"
+msgstr "исходящие"
 
 #: templates/accounts/pm_detail.html:10 templates/accounts/pm_detail.html:13
 #: templates/accounts/pm_list.html:9 templates/accounts/pm_list.html.py:11
@@ -2966,13 +1902,38 @@ msgstr "входящие"
 msgid "pm outox"
 msgstr "исходящие"
 
+#: templates/accounts/pm_detail.html:18 templates/accounts/pm_list.html:19
+#: templates/pybb/head.html:58
+msgid "Private messages"
+msgstr "Приватные сообщения"
+
 #: templates/accounts/pm_detail.html:37 templates/accounts/pm_form.html:12
 msgid "reply"
 msgstr "ответить"
 
+#: templates/accounts/pm_detail.html:43 templates/accounts/pm_form.html:18
+msgid "Reply"
+msgstr "Ответить"
+
 #: templates/accounts/pm_form.html:9
 msgid "send"
 msgstr "отослать"
+
+#: templates/accounts/pm_form.html:16
+msgid "Send"
+msgstr "Отослать"
+
+#: templates/accounts/pm_list.html:17
+msgid "Send message"
+msgstr "Отправить сообщение"
+
+#: templates/accounts/pm_list.html:25
+msgid "From"
+msgstr "Источник"
+
+#: templates/accounts/pm_list.html:26
+msgid "To"
+msgstr "Адресат"
 
 #: templates/accounts/pm_list.html:53
 msgid "No private messages was found"
@@ -3009,10 +1970,28 @@ msgstr "подтвердить удаление предупреждения"
 msgid "Update policy warning"
 msgstr "Обновить предупреждение"
 
+#: templates/accounts/policy_warning_form.html:26
+#: templates/accounts/profile_update.html:11
+msgid "Update"
+msgstr "Обновить"
+
 #: templates/accounts/policy_warning_form.html:28
 #: templates/accounts/profile.html:28
 msgid "Add policy warning"
 msgstr "Добавить предупреждение"
+
+#: templates/accounts/policy_warning_form.html:29
+#: templates/comments/subscribe_form.html:32
+#: templates/files/gallery/action_image.html:13
+#: templates/files/gallery/gallery_image_form.html:31
+#: templates/files/gallery/upload.html:15 templates/news/article_form.html:22
+#: templates/news/events/event_form.html:17 templates/pybb/edit_post.html:20
+#: templates/pybb/edit_profile.html:21 templates/pybb/poll_add.html:7
+#: templates/pybb/poll_configure.html:11 templates/pybb/poll_wizard.html:19
+#: templates/tabletop/add_roster.html:7 templates/tabletop/reports.html:20
+#: templates/tabletop/roster_form.html:25
+msgid "Save"
+msgstr "Сохранить"
 
 #: templates/accounts/policy_warning_form.html:32
 msgid "Confirm deletion policy warning"
@@ -3077,9 +2056,258 @@ msgstr ""
 "      Это означает что вы не можете ничего редактировать, создавать, "
 "пожалуйста, дождитесь времени, когда время наказания истечет."
 
-#: templates/admin/wh/profile/change_form.html:5
-msgid "It is better to manage profile in special form despite using amin one"
+#: templates/accounts/register.html:11 templates/pybb/head.html:82
+msgid "Register"
+msgstr "Регистрация"
+
+#: templates/accounts/registered.html:3
+msgid "Successfully registered"
+msgstr "Успешно зарегистрирован"
+
+#: templates/comments/comment_form.html:10
+msgid "update comment"
+msgstr "обновить комментарий"
+
+#: templates/comments/comment_form.html:12
+msgid "add comment"
+msgstr "добавить комментарий"
+
+#: templates/comments/comment_form.html:16
+msgid "Update comment"
+msgstr "Обновить комментарий"
+
+#: templates/comments/comment_form.html:18
+msgid "Add comment"
+msgstr "Добавить комментарий"
+
+#: templates/comments/comment_watch_list.html:6
+msgid "subscription list"
+msgstr "список подписки"
+
+#: templates/comments/comment_watch_list.html:8
+msgid "Subscription list"
+msgstr "Список подписки"
+
+#: templates/comments/comment_watch_list.html:13
+msgid "New comments"
+msgstr "Новые комментарии"
+
+#: templates/comments/comment_watch_list.html:26
+msgid "Mark as read"
+msgstr "Пометить как прочитанное"
+
+#: templates/comments/comment_watch_list.html:32
+#: templates/comments/subscribe_form.html:19
+#: templates/news/events/event.html:28
+msgid "Remove subscription"
+msgstr "Удалить подписку"
+
+#: templates/comments/comment_watch_list.html:40
+msgid "No subscriptions found/no new content"
+msgstr "Подписок/нового контента не найдено"
+
+#: templates/comments/comment_watch_list.html:62
+msgid "Successfully updated, reload the page"
+msgstr "Успешно обновлено, обновите страницу"
+
+#: templates/comments/comment_watch_list.html:69
+msgid "Failed :("
+msgstr "Ошибка :("
+
+#: templates/comments/subscribe_form.html:13
+msgid "unsubscribe for new comments"
+msgstr "отписаться от новых комментариев"
+
+#: templates/comments/subscribe_form.html:15
+msgid "subscribe for new comments"
+msgstr "подписаться на новые комментарии"
+
+#: templates/comments/subscribe_form.html:22
+msgid "You want to remove this subscription for a new comments on"
+msgstr "Вы хотите удалить подписку на новые комментарии на"
+
+#: templates/comments/subscribe_form.html:25
+msgid "Approve subscription"
+msgstr "Добавить подписку"
+
+#: templates/comments/subscribe_form.html:28
+msgid "You want to approve subscription for a new comments on"
+msgstr "Вы хотите подписаться на новые комментарии к"
+
+#: templates/core/widgets/days_select.html:4
+msgid "Selects all days"
+msgstr "Выбрать все дни"
+
+#: templates/core/widgets/days_select.html:4
+msgid "Select all"
+msgstr "Выбрать все"
+
+#: templates/files/user_files.html:9
+msgid "my files"
+msgstr "мои файлы"
+
+#: templates/files/user_files.html:17 templates/files/user_files.html.py:24
+msgid "Upload files"
+msgstr "Загрузить файлы"
+
+#: templates/files/user_files.html:27
+msgid "Your limit"
+msgstr "Ваш лимит"
+
+#: templates/files/user_files.html:28
+msgctxt "You used file space"
+msgid "You used"
+msgstr "Вы испольщовали"
+
+#: templates/files/user_files.html:31 templates/pybb/head.html:54
+msgid "My files"
+msgstr "Мои файлы"
+
+#: templates/files/user_files.html:36
+msgid "General"
+msgstr "Все файлы"
+
+#: templates/files/user_files.html:37
+msgid "Pictures"
+msgstr "Картинки"
+
+#: templates/files/user_files.html:46
+msgid "File"
+msgstr "Файл"
+
+#: templates/files/user_files.html:47
+msgid "Link"
+msgstr "Ссылка"
+
+#: templates/files/user_files.html:48 templates/files/user_files.html.py:74
+msgid "Size"
+msgstr "Размер"
+
+#: templates/files/user_files.html:49 templates/files/user_files.html.py:75
+msgid "Actions"
+msgstr "Действия"
+
+#: templates/files/user_files.html:59 templates/files/user_files.html:109
+msgid "Do you want to delete this file?"
+msgstr "Вы действительно хотите удалить этот файл?"
+
+#: templates/files/user_files.html:61 templates/files/user_files.html:111
+#: templates/files/gallery/gallery_image_form.html:11
+#: templates/pybb/edit_profile.html:31 templates/pybb/poll.html:10
+msgid "delete"
+msgstr "удалить"
+
+#: templates/files/user_files.html:73
+msgid "Links"
+msgstr "Ссылки"
+
+#: templates/files/user_files.html:89
+msgid "Inserts thumbnail with link to image"
+msgstr "Добавляет эскиз с ссылкой на изображение"
+
+#: templates/files/user_files.html:91
+msgid "Thumbnail and image"
+msgstr "Эскиз и изображение"
+
+#: templates/files/user_files.html:95 templates/files/user_files.html:104
+msgid "Copies link to the clipboard"
+msgstr "Копирует ссылку в буфер обмена"
+
+#: templates/files/user_files.html:95 templates/files/user_files.html:104
+msgid "copy"
+msgstr "буфер"
+
+#: templates/files/user_files.html:97
+msgid "Inserts only image"
+msgstr "Добавляет только изображение"
+
+#: templates/files/user_files.html:122
+msgid "No files uploaded"
+msgstr "Ни одного файла не загружено"
+
+#: templates/files/user_files.html:133
+msgid "Copied to clipboard"
+msgstr "Скопировано в буфер обмена"
+
+#: templates/files/user_files.html:141
+msgid ""
+"Sorry, your flash version is pretty old, please update to enable fast copying"
 msgstr ""
+"Ваша версия flash довольно старая, пожалуйста, обновите её, чтобы включить "
+"возможность быстрого копирования"
+
+#: templates/files/user_files.html:190
+msgid "You are trying to upload the file. Do you want to proceed"
+msgstr "Вы хотите загрузить файл, продолжить?"
+
+#: templates/files/user_files.html:197
+msgid "Yes"
+msgstr "Да"
+
+#: templates/files/user_files.html:206
+msgid "No"
+msgstr "Нет"
+
+#: templates/files/user_files.html:214 templates/js/locale.ru.html:10
+msgid "Do you want to proceed uploading the file?"
+msgstr "Вы действительно хотите загрузить этот файл?"
+
+#: templates/files/user_files.html:233
+msgid "downloaded successfull, reload the page"
+msgstr "успешно загружено, обновите страницу"
+
+#: templates/files/user_files.html:252 templates/js/locale.ru.html:11
+msgid "error while uploading file"
+msgstr "произошла ошибка при загрузке файла"
+
+#: templates/files/gallery/action_image.html:6
+#: templates/files/gallery/upload.html:7
+msgid "upload image"
+msgstr "загрузить изображение"
+
+#: templates/files/gallery/action_image.html:8
+msgid "Action image"
+msgstr "Действие с изображением"
+
+#: templates/files/gallery/gallery_image.html:7
+#: templates/files/gallery/gallery_image_form.html:6
+#: templates/files/gallery/gallery_list.html:8
+msgid "galleries"
+msgstr "галереи"
+
+#: templates/files/gallery/gallery_image_form.html:13
+msgid "update"
+msgstr "обновить"
+
+#: templates/files/gallery/gallery_image_form.html:16
+#: templates/news/events/event_form.html:13
+msgid "create new event"
+msgstr "создать новое событие"
+
+#: templates/files/gallery/gallery_image_form.html:22
+msgid "You are going to delete this image, don't you?"
+msgstr "Вы хотите удалить данное изображение?"
+
+#: templates/files/gallery/gallery_image_form.html:29
+#: templates/pybb/post_template.html:71 templates/tabletop/roster_form.html:22
+msgid "Delete"
+msgstr "Удалить"
+
+#: templates/files/gallery/gallery_list.html:18
+msgid "Add image"
+msgstr "Добавить изображение"
+
+#: templates/files/gallery/upload.html:9
+msgid "Upload image"
+msgstr "Загрузить изображение"
+
+#: templates/files/gallery/includes/image.html:8
+msgid "edit image"
+msgstr "правка изображения"
+
+#: templates/files/gallery/includes/image.html:11
+msgid "delete image"
+msgstr "удалить изображение"
 
 #: templates/forms/login_modal.html:37 templates/jtmpl/core.html:37
 #: templates/jtmpl/karma.html:19
@@ -3093,6 +2321,22 @@ msgstr "Редактировать объект"
 #: templates/generic/actions.html:5
 msgid "Delete object"
 msgstr "Удалить объект"
+
+#: templates/generic/comment.html:17 templates/pybb/post_template.html:15
+msgid "Add user policy warning"
+msgstr "Добавить предупреждение пользователю"
+
+#: templates/generic/comment.html:32 templates/pybb/post_template.html:52
+msgid "Edited"
+msgstr "Редактирован"
+
+#: templates/generic/comment.html:41 templates/pybb/post_template.html:67
+msgid "Edit"
+msgstr "Правка"
+
+#: templates/generic/comment.html:44 templates/pybb/post_template.html:65
+msgid "Quote"
+msgstr "Цитатировать"
 
 #: templates/js/locale.ru.html:12
 msgid "downloaded successfull"
@@ -3109,6 +2353,491 @@ msgstr "Помощь"
 #: templates/jtmpl/karma.html:10
 msgid "Alter karma for user"
 msgstr "Изменить карму пользователя"
+
+#: templates/jtmpl/karma.html:18
+msgid "Alter"
+msgstr "Изменить"
+
+#: templates/news/article_form.html:8
+msgid "edit article"
+msgstr "редактировать статью"
+
+#: templates/news/article_form.html:10
+msgid "create article"
+msgstr "создать статью"
+
+#: templates/news/article_form.html:15
+msgid "Edit article"
+msgstr "Редактировать статью"
+
+#: templates/news/article_form.html:17
+msgid "Add article"
+msgstr "Добавить статью"
+
+#: templates/news/events/calendar.html:15 templates/news/events/event.html:7
+#: templates/news/events/event_confirm_delete.html:5
+#: templates/news/events/event_form.html:6 templates/news/events/events.html:6
+msgid "events"
+msgstr "события"
+
+#: templates/news/events/calendar.html:18 templates/news/events/events.html:9
+msgid "Create event"
+msgstr "Создать событие"
+
+#: templates/news/events/calendar.html:26
+msgid "Legend"
+msgstr "Легенда"
+
+#: templates/news/events/calendar.html:27
+msgid "game"
+msgstr "игра"
+
+#: templates/news/events/calendar.html:28
+msgid "tournament"
+msgstr "турнир"
+
+#: templates/news/events/calendar.html:29
+msgctxt "mtg pre-release"
+msgid "pre release"
+msgstr "пре релиз"
+
+#: templates/news/events/calendar.html:30
+msgctxt "mtg release"
+msgid "release"
+msgstr "релиз"
+
+#: templates/news/events/calendar.html:31
+msgctxt "card order"
+msgid "order"
+msgstr "заказ"
+
+#: templates/news/events/calendar.html:33
+msgid "marks new event"
+msgstr "отметка для нового события"
+
+#: templates/news/events/calendar.html:37
+msgid "January"
+msgstr "Январь"
+
+#: templates/news/events/calendar.html:37
+msgid "February"
+msgstr "Февраль"
+
+#: templates/news/events/calendar.html:37
+msgid "March"
+msgstr "Март"
+
+#: templates/news/events/calendar.html:38
+msgid "April"
+msgstr "Апрель"
+
+#: templates/news/events/calendar.html:38
+msgid "May"
+msgstr "Май"
+
+#: templates/news/events/calendar.html:38
+msgid "June"
+msgstr "Июнь"
+
+#: templates/news/events/calendar.html:39
+msgid "July"
+msgstr "Июль"
+
+#: templates/news/events/calendar.html:39
+msgid "August"
+msgstr "Август"
+
+#: templates/news/events/calendar.html:39
+msgid "September"
+msgstr "Сентябрь"
+
+#: templates/news/events/calendar.html:40
+msgid "October"
+msgstr "Октябрь"
+
+#: templates/news/events/calendar.html:40
+msgid "November"
+msgstr "Ноябрь"
+
+#: templates/news/events/calendar.html:41
+msgid "December"
+msgstr "Декабрь"
+
+#: templates/news/events/calendar.html:43
+msgid "Mon"
+msgstr "Пн"
+
+#: templates/news/events/calendar.html:43
+msgid "Tue"
+msgstr "Вт"
+
+#: templates/news/events/calendar.html:43
+msgid "Wed"
+msgstr "Ср"
+
+#: templates/news/events/calendar.html:44
+msgid "Thu"
+msgstr "Чт"
+
+#: templates/news/events/calendar.html:44
+msgid "Fri"
+msgstr "Пт"
+
+#: templates/news/events/calendar.html:44
+msgid "Sat"
+msgstr "Сб"
+
+#: templates/news/events/calendar.html:45
+msgid "Sun"
+msgstr "Вс"
+
+#: templates/news/events/calendar.html:47
+msgid "Monday"
+msgstr "Понедельник"
+
+#: templates/news/events/calendar.html:47
+msgid "Tuesday"
+msgstr "Вторник"
+
+#: templates/news/events/calendar.html:47
+msgid "Wednesday"
+msgstr "Среда"
+
+#: templates/news/events/calendar.html:48
+msgid "Thursday"
+msgstr "Четверг"
+
+#: templates/news/events/calendar.html:48
+msgid "Friday"
+msgstr "Пятница"
+
+#: templates/news/events/calendar.html:48
+msgid "Saturday"
+msgstr "Суббота"
+
+#: templates/news/events/calendar.html:49
+msgid "Sunday"
+msgstr "Воскресенье"
+
+#: templates/news/events/calendar.html:83
+msgid "Today"
+msgstr "Сегодня"
+
+#: templates/news/events/calendar.html:84
+msgid "month"
+msgstr "месяц"
+
+#: templates/news/events/calendar.html:85
+msgid "week"
+msgstr "неделя"
+
+#: templates/news/events/calendar.html:86
+msgid "day"
+msgstr "день"
+
+#: templates/news/events/calendar.html:95
+msgid "Jan"
+msgstr "Янв"
+
+#: templates/news/events/calendar.html:95
+msgid "Feb"
+msgstr "Фев"
+
+#: templates/news/events/calendar.html:95
+msgid "Mar"
+msgstr "Мар"
+
+#: templates/news/events/calendar.html:96
+msgid "Apr"
+msgstr "Апр"
+
+#: templates/news/events/calendar.html:96
+msgid "Jun"
+msgstr "Июн"
+
+#: templates/news/events/calendar.html:97
+msgid "Jul"
+msgstr "Июл"
+
+#: templates/news/events/calendar.html:97
+msgid "Aug"
+msgstr "Авг"
+
+#: templates/news/events/calendar.html:97
+msgid "Sep"
+msgstr "Сен"
+
+#: templates/news/events/calendar.html:98
+msgid "Oct"
+msgstr "Окт"
+
+#: templates/news/events/calendar.html:98
+msgid "Nov"
+msgstr "Ноя"
+
+#: templates/news/events/calendar.html:98
+msgid "Dec"
+msgstr "Дек"
+
+#: templates/news/events/calendar.html:108
+msgid "all day"
+msgstr "весь день"
+
+#: templates/news/events/event.html:33
+msgid "Subscribe for a new comments"
+msgstr "Подписаться на новые комментарии"
+
+#: templates/news/events/event.html:41
+msgid "Mark that I would come to this event"
+msgstr "Заявить об участвии в этом событии (я приду)"
+
+#: templates/news/events/event.html:55
+msgid "Participants"
+msgstr "Участники"
+
+#: templates/news/events/event_confirm_delete.html:4
+msgctxt "forum home"
+msgid "forum"
+msgstr "форум"
+
+#: templates/news/events/event_confirm_delete.html:7
+msgid "confirm deletion"
+msgstr "подтвердить удаление"
+
+#: templates/news/events/event_confirm_delete.html:12
+msgid "Do you realy want to delete this event?"
+msgstr "Вы действительно хотитеудалить это событие?"
+
+#: templates/news/events/event_confirm_delete.html:13
+msgid "Yes, delete it"
+msgstr "Да, удалить это"
+
+#: templates/news/events/event_form.html:11
+msgid "join event"
+msgstr "присоединиться к событию"
+
+#: templates/news/events/events.html:20
+msgid "Date start"
+msgstr "Дата начала"
+
+#: templates/news/events/events.html:21
+msgid "Date end"
+msgstr "Дата окончания"
+
+#: templates/news/events/events.html:22
+msgid "Queued"
+msgstr "В очереди"
+
+#: templates/news/events/events.html:42
+msgid "No events created"
+msgstr "События отсутствуют"
+
+#: templates/news/include/news.html:10
+msgid "No news found"
+msgstr "Новостей не обнаружено"
+
+#: templates/pybb/add_post.html:9 templates/pybb/add_post.html.py:17
+#: templates/pybb/category.html:7 templates/pybb/create_pm.html:7
+#: templates/pybb/edit_post.html:7 templates/pybb/forum.html:7
+#: templates/pybb/post_list.html:7 templates/pybb/topic.html:7
+msgid "Root"
+msgstr "Корень"
+
+#: templates/pybb/add_post.html:29 templates/pybb/post_form.html:14
+#: templates/pybb/topic_form.html:14 templates/pybb/include/forum.html:5
+msgid "New topic"
+msgstr "Новый топик"
+
+#: templates/pybb/add_post.html:29 templates/pybb/post_list.html:71
+#: templates/pybb/topic.html:70
+msgid "New reply"
+msgstr "Новый ответ"
+
+#: templates/pybb/create_pm.html:7 templates/pybb/create_pm.html.py:13
+msgid "New private message"
+msgstr "Новое приватное сообщение"
+
+#: templates/pybb/delete_post.html:5
+msgid "Are you sure you want to delete this message?"
+msgstr "Вы уверены, что хотите удалить это сообщение?"
+
+#: templates/pybb/delete_post.html:12
+msgid "Yes, I am sure."
+msgstr "Да, я уверен."
+
+#: templates/pybb/edit_post.html:13
+msgid "Editing the post"
+msgstr "Правка поста"
+
+#: templates/pybb/edit_profile.html:6 templates/pybb/edit_profile.html:19
+msgid "Profile editing"
+msgstr "Редактирование профиля"
+
+#: templates/pybb/edit_profile.html:12
+msgid "Change the password"
+msgstr "Сменить пароль"
+
+#: templates/pybb/edit_profile.html:14
+msgid "Inbox"
+msgstr "Входящие"
+
+#: templates/pybb/edit_profile.html:24
+msgid "Subscriptions on topics"
+msgstr "Подписки на топики"
+
+#: templates/pybb/head.html:16
+msgid "VK social page"
+msgstr "Мы ВКонтакте"
+
+#: templates/pybb/head.html:21
+msgid "Forthcoming events"
+msgstr "Предстоящие события"
+
+#: templates/pybb/head.html:22
+msgid "Calendar"
+msgstr "Календарь"
+
+#: templates/pybb/head.html:33
+msgid "Subscriptions"
+msgstr "Подписки"
+
+#: templates/pybb/head.html:51
+msgid "My profile"
+msgstr "Мой профиль"
+
+#: templates/pybb/head.html:53
+msgid "My rosters"
+msgstr "Мои ростеры"
+
+#: templates/pybb/head.html:64
+msgid "Admincp"
+msgstr "Админка"
+
+#: templates/pybb/head.html:66
+msgid "Log out"
+msgstr "Выйти"
+
+#: templates/pybb/head.html:71
+msgid "Themes"
+msgstr "Темы"
+
+#: templates/pybb/head.html:83
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/pybb/poll.html:7
+#: templates/tabletop/reports/include/report_content.html:59
+#: templates/tabletop/reports/include/report_header.html:10
+msgid "edit"
+msgstr "правка"
+
+#: templates/pybb/poll.html:29
+msgid "Users voted"
+msgstr "Пользователей проголосовало"
+
+#: templates/pybb/poll_configure.html:3
+msgid "Poll title"
+msgstr "Заголовок опроса"
+
+#: templates/pybb/poll_wizard.html:21 templates/pybb/poll_wizard.html.py:29
+msgid "Next"
+msgstr "Следующий"
+
+#: templates/pybb/poll_wizard.html:27
+msgid "Previous"
+msgstr "Предыдущий"
+
+#: templates/pybb/post_form.html:7 templates/pybb/topic_form.html:7
+msgid "Home"
+msgstr "Домой"
+
+#: templates/pybb/post_list.html:14
+msgid "Add poll to the topic"
+msgstr "Добавить опрос/голосование к топику"
+
+#: templates/pybb/post_list.html:15 templates/pybb/topic.html:20
+msgid "Add poll"
+msgstr "Добавить опрос"
+
+#: templates/pybb/post_list.html:41 templates/pybb/topic.html:40
+msgid "Unstick topic"
+msgstr "Неприкрепленные топики"
+
+#: templates/pybb/post_list.html:45 templates/pybb/topic.html:44
+msgid "Stick topic"
+msgstr "Прикрепленные топики"
+
+#: templates/pybb/post_list.html:50 templates/pybb/topic.html:49
+msgid "Open topic"
+msgstr "Открыть топик"
+
+#: templates/pybb/post_list.html:54 templates/pybb/topic.html:53
+msgid "Close topic"
+msgstr "Закрыть топик"
+
+#: templates/pybb/post_list.html:60 templates/pybb/topic.html:59
+msgid "Unsubscribe"
+msgstr "Отписаться"
+
+#: templates/pybb/post_list.html:62 templates/pybb/topic.html:61
+msgid "Subscribe"
+msgstr "Подписаться"
+
+#: templates/pybb/post_template.html:35
+msgid "Show/hide first topic post content"
+msgstr "Показывает/скрывает содержимое первого топика"
+
+#: templates/pybb/quick_access.html:4
+msgid "Last topics"
+msgstr "Топики"
+
+#: templates/pybb/quick_access.html:5
+msgid "Last posts"
+msgstr "Посты"
+
+#: templates/pybb/quick_access.html:6 templates/pybb/user.html:18
+msgid "Statistics"
+msgstr "Статистика"
+
+#: templates/pybb/user.html:19
+msgid "Number of posts"
+msgstr "Количество постов"
+
+#: templates/pybb/user.html:20
+msgid "Number of topics"
+msgstr "Количество топиков"
+
+#: templates/pybb/user.html:21
+msgid "Date of registration"
+msgstr "Дата регистрации"
+
+#: templates/pybb/user.html:22
+msgid "Contacts"
+msgstr "Контакты"
+
+#: templates/pybb/user.html:24
+msgid "Location"
+msgstr "Место пребывания"
+
+#: templates/pybb/user.html:27
+msgid "Site"
+msgstr "Сайт"
+
+#: templates/pybb/user.html:48
+msgid "Send PM"
+msgstr "Отослать ЛС"
+
+#: templates/pybb/users.html:10
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/pybb/include/forum.html:25
+msgid "Important"
+msgstr "Важное"
+
+#: templates/pybb/include/forum.html:32
+msgid "Posts/Go to last page"
+msgstr "Постов/перейти на последнюю страницу"
 
 #: templates/static/addresse_limit.html:3
 #: templates/static/image_deleted.html:3
@@ -3142,7 +2871,7 @@ msgstr ""
 
 #: templates/static/faq.html:3
 msgid "Under heavy construction ;P"
-msgstr ""
+msgstr "В процессе тяжкой разработки ;P"
 
 #: templates/static/password_restore_initiated.html:3
 msgid "Email have been sent, please follow instructions"
@@ -3164,7 +2893,201 @@ msgstr ""
 
 #: templates/static/timeout.html:7
 msgid "Timeout, please wait for your turn ;)"
-msgstr ""
+msgstr "Таймаут, дождитесь вашей очереди ;)"
+
+#: templates/tabletop/reports.html:8
+msgid "Add"
+msgstr "Добавить"
+
+#: templates/tabletop/reports.html:31
+msgid "Pts"
+msgstr "Очки"
+
+#: templates/tabletop/reports.html:32
+msgctxt "published date"
+msgid "Published"
+msgstr "Опубликован"
+
+#: templates/tabletop/reports.html:33
+msgctxt "battle report players"
+msgid "Players"
+msgstr "Участники"
+
+#: templates/tabletop/reports.html:34
+msgctxt "approved report"
+msgid "Approved"
+msgstr "Утвержден"
+
+#: templates/tabletop/reports.html:49
+msgid "not approved"
+msgstr "не утвержден"
+
+#: templates/tabletop/reports.html:59
+msgid "No reports found ;)"
+msgstr "Ни одного репорта не найдено ;)"
+
+#: templates/tabletop/reports.html:69
+msgid "Added successfull"
+msgstr "Успешно добавлен"
+
+#: templates/tabletop/reports.html:81
+msgid "No results matched"
+msgstr "Совпадений не найдено"
+
+#: templates/tabletop/reports.html:82
+msgid "Select some options"
+msgstr "Нажмите для выбора"
+
+#: templates/tabletop/reports.html:109
+msgid "Please, keep typing ..."
+msgstr "Продолжайте печатать ..."
+
+#: templates/tabletop/reports.html:110
+msgid "Searching for"
+msgstr "Поиск"
+
+#: templates/tabletop/reports.html:119
+msgid "Search some rosters"
+msgstr "Поиск ростеров"
+
+#: templates/tabletop/roster.html:26
+msgctxt "pts amount"
+msgid "Pts"
+msgstr "Количество очков"
+
+#: templates/tabletop/roster.html:30
+msgctxt "revision number"
+msgid "Revision"
+msgstr "Редакция"
+
+#: templates/tabletop/roster.html:32
+msgid "Roster"
+msgstr "Ростер"
+
+#: templates/tabletop/roster_form.html:12
+msgid "update roster"
+msgstr "обновить ростер"
+
+#: templates/tabletop/roster_form.html:14
+msgid "create roster"
+msgstr "создать ростер"
+
+#: templates/tabletop/roster_form.html:18
+msgid "delete roster"
+msgstr "удалить ростер"
+
+#: templates/tabletop/roster_form.html:23
+msgid "Confirm roster deletion"
+msgstr "Подтвердить удаление ростера"
+
+#: templates/tabletop/roster_list.html:11
+msgid "Add roster"
+msgstr "Добавить ростер"
+
+#: templates/tabletop/roster_list.html:23
+msgid "No rosters found"
+msgstr "Ростеров не найдено"
+
+#: templates/tabletop/reports/reports.html:16
+msgid "No reports found"
+msgstr "Ни одного батлрепорта не найдено"
+
+#: templates/tabletop/reports/include/report_content.html:5
+msgid "show info"
+msgstr "информация"
+
+#: templates/tabletop/reports/include/report_content.html:9
+msgid "Show winners"
+msgstr "Показывать победителей"
+
+#: templates/tabletop/reports/include/report_content.html:16
+msgid "Winner"
+msgstr "Победитель"
+
+#: templates/tabletop/reports/include/report_content.html:22
+#: templates/tabletop/reports/include/report_content.html:44
+msgctxt "roster points"
+msgid "pts"
+msgstr "очки"
+
+#: templates/tabletop/reports/include/report_content.html:66
+#: templates/tabletop/reports/include/report_header.html:17
+msgid "approve"
+msgstr "утвердить"
+
+#: templates/tabletop/reports/include/report_content.html:71
+#: templates/tabletop/reports/include/report_header.html:22
+msgid "disapprove"
+msgstr "разутвердить"
+
+#: templates/tabletop/reports/include/report_content.html:79
+msgid "Hides avatar block"
+msgstr "Спрятать блок с аватаркой"
+
+#: templates/tabletop/reports/include/report_header.html:43
+msgid "Comments count"
+msgstr "Комментариев"
+
+#: templates/tabletop/reports/include/report_header.html:44
+msgid "read report"
+msgstr "прочесть репорт"
+
+#~ msgid "submit"
+#~ msgstr "отправить"
+
+#~ msgid "search"
+#~ msgstr "поиск"
+
+#~ msgid "Do you want to delete this article?"
+#~ msgstr "Вы действительно хотите удалить эту статью?"
+
+#~ msgid "Tilte"
+#~ msgstr "Заголовок"
+
+#~ msgid "Race"
+#~ msgstr "Раса"
+
+#~ msgid "change password"
+#~ msgstr "сменить пароль"
+
+#~ msgid "Successfully changed"
+#~ msgstr "Успешно изменен"
+
+#~ msgid "Change password"
+#~ msgstr "Сменить пароль"
+
+#~ msgid "State"
+#~ msgstr "Статус"
+
+#~ msgid "Outbox"
+#~ msgstr "Исходящие"
+
+#~ msgid "Deleted"
+#~ msgstr "Удаленные"
+
+#~ msgid "Successfully deleted"
+#~ msgstr "Успешно удален"
+
+#~ msgid "Private message was sent"
+#~ msgstr "Сообщение было отослано"
+
+#~ msgid "Search the user"
+#~ msgstr "Поиск пользователя"
+
+#~ msgid "Message wasn't deleted"
+#~ msgstr "Сообщение не было удалено"
+
+#~ msgid "Required field"
+#~ msgstr "Обязательное поле"
+
+#~ msgid "You have unread messages"
+#~ msgstr "У вас есть непрочтенные сообщения"
+
+#~ msgid "Do you really want to approve this action?"
+#~ msgstr "Вы действительно хотите выполнить это действие?"
+
+#~ msgid "no"
+#~ msgstr "нет"
 
 #~ msgid "Login required"
 #~ msgstr "Необходим вход"
@@ -3467,9 +3390,6 @@ msgstr ""
 
 #~ msgid "Show Online Users block"
 #~ msgstr "Показывать блок онлайн пользователей"
-
-#~ msgid "Show deleted rosters"
-#~ msgstr "Показывать удаленные ростеры"
 
 #~ msgid "Last Replays block objects amount"
 #~ msgstr "Количество последних реплеев в блоке"
@@ -3778,9 +3698,6 @@ msgstr ""
 
 #~ msgid "roster points cache"
 #~ msgstr "количество очков ростера"
-
-#~ msgid "Auto roster"
-#~ msgstr "Авто ростер"
 
 #~ msgid "Auto rosters"
 #~ msgstr "Авто ростеры"

@@ -14,15 +14,6 @@
       <div class='transparency grey'></div>
       {% if user == roster.owner or perms.tabletop.edit_roster %}
         <a href='{% url "tabletop:roster-edit" roster.id %}' class='msg_button'>[править]</a>
-      {% else %}
-        {% if user == roster.user %}
-          <a href='{% url "tabletop:roster-edit" roster.id %}' class='msg_button'>[править]</a>
-          <a href='{% url "tabletop:roster-spawn" roster.id %}' class='msg_button'
-             title='Переписать прямого владельца ростера на себя
-             (данный ростер больше не будет появляться в списке пользователя,
-             который его создал (по секрету - это были не вы, но записан он был на вас)'>[spawn]
-          </a>
-        {% endif %}
       {% endif %}
       {{ roster.title }}: {{ roster.pts }} pts
 
@@ -32,24 +23,16 @@
         {% include "generic/avatar.html" with usr=roster.owner %}
       </div>
       <div class='text'>
-        <div class='roster_info'>{# places with tabletop.css #}
-          Количество очков: <span class='pts'>{{ roster.pts }}</span><br>
-          Кодекс: <div class='race'>{{ roster.codex }}</div>
-          Издание: <div class='revision'> {{ roster.revision }}</div>
-          {% if not roster.user %}Имя игрока: <div class='player'>{{ roster.player }}</div> {% endif %}
-          Ростер:<div class='roster'>
-            {# {{ roster.roster|render_filter:roster.syntax|safe }}#}
-            {{ roster.render_roster|safe }}
-          </div>
-        </div>
-        {% if roster.comments %}
-          <div class='comment'>
-            {{ roster.comments|render_filter:roster.syntax|safe }}
-          </div>
-        {% endif %}
-        <br clear='all'>
-      </div> <!-- msg_text -->
-    </div> <!-- msg_content -->
+        <strong>{% trans "Pts" context "pts amount" %}</strong>:
+          <span class='pts'>{{ roster.pts }}</span><br>
+        <strong>{% trans "Codex" %}</strong>:
+          <span class='race'>{{ roster.codex }}</span> <br />
+        <strong>{% trans "Revision" context "revision number" %}</strong>:
+          <span class='revision'> {{ roster.revision }}</span><br />
+        <strong>{% trans "Roster" %}</strong>:
+          <span class='roster'>{{ roster.render_roster|safe }}</span><br />
+      </div>
+    </div>
     <br clear='all'>
     <div class='message-footer'>
       <div class='transparency grey'></div>
