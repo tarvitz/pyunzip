@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-13 02:34+0400\n"
-"PO-Revision-Date: 2014-06-13 02:36+0400\n"
+"POT-Creation-Date: 2014-06-13 03:25+0400\n"
+"PO-Revision-Date: 2014-06-13 03:25+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -151,11 +151,11 @@ msgid "Password repeat"
 msgstr "Повтор пароля"
 
 #: apps/accounts/forms.py:109 apps/accounts/forms.py:187
-#: templates/accounts/profile.html:47
+#: templates/accounts/profile.html:50
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:112 templates/accounts/profile.html:39
+#: apps/accounts/forms.py:112 templates/accounts/profile.html:42
 msgid "Nickname"
 msgstr "Никнейм"
 
@@ -312,8 +312,7 @@ msgstr "временная зона"
 msgid "Settings"
 msgstr "Настройки"
 
-#: apps/accounts/models.py:104 apps/karma/templates/karma_power.html:11
-#: apps/karma/templates/karma/karma_list.html:7
+#: apps/accounts/models.py:104 templates/karma/karma_list.html:7
 msgid "karma"
 msgstr "карма"
 
@@ -434,7 +433,7 @@ msgid "Policy warning"
 msgstr "Предупреждение"
 
 #: apps/accounts/models.py:382 templates/accounts/policy_warning_list.html:13
-#: templates/accounts/profile.html:50
+#: templates/accounts/profile.html:53
 msgid "Policy warnings"
 msgstr "Предупреждение"
 
@@ -671,68 +670,6 @@ msgstr "от кого"
 #: apps/karma/models.py:22 apps/menu/models.py:17 apps/menu/models.py:56
 msgid "URL"
 msgstr "УРЛ"
-
-#: apps/karma/templates/karma/karma_change.html:5
-#: apps/karma/templates/karma/karma_list.html:5
-#: templates/accounts/password_change.html:4
-#: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
-#: templates/accounts/pm_list.html:5
-#: templates/accounts/policy_warning_detail.html:5
-#: templates/accounts/policy_warning_form.html:5
-#: templates/accounts/policy_warning_list.html:5
-#: templates/accounts/profile.html:5 templates/accounts/profile_update.html:4
-#: templates/comments/comment_form.html:5
-#: templates/comments/comment_watch_list.html:5
-#: templates/comments/subscribe_form.html:5 templates/files/user_files.html:8
-#: templates/files/gallery/action_image.html:4
-#: templates/files/gallery/gallery_image.html:6
-#: templates/files/gallery/gallery_image_form.html:5
-#: templates/files/gallery/gallery_list.html:6
-#: templates/files/gallery/upload.html:5 templates/news/article.html:4
-#: templates/news/article_form.html:4 templates/news/events/calendar.html:14
-#: templates/news/events/event.html:5 templates/news/events/event_form.html:5
-#: templates/news/events/events.html:5 templates/static/timeout.html:4
-#: templates/tabletop/codex_detail.html:4 templates/tabletop/codex_form.html:7
-#: templates/tabletop/codex_list.html:5 templates/tabletop/roster.html:7
-#: templates/tabletop/roster_form.html:7 templates/tabletop/roster_list.html:5
-msgid "forum"
-msgstr "форум"
-
-#: apps/karma/templates/karma/karma_change.html:8
-msgid "karma up"
-msgstr "поднятие кармы"
-
-#: apps/karma/templates/karma/karma_change.html:10
-msgid "karma down"
-msgstr "снижение кармы"
-
-#: apps/karma/templates/karma/karma_change.html:14
-msgid "Up user's karma"
-msgstr "Поднять карму пользователя"
-
-#: apps/karma/templates/karma/karma_change.html:16
-msgid "Down user's karma"
-msgstr "Понизить карму пользователя"
-
-#: apps/karma/templates/karma/karma_change.html:20
-#: templates/forms/submit.html:2 templates/generic/form.html:3
-#: templates/pybb/add_post.html:36 templates/pybb/create_pm.html:15
-#: templates/pybb/post_form.html:19 templates/pybb/post_list.html:76
-#: templates/pybb/topic.html:75 templates/pybb/topic_form.html:19
-msgid "Submit"
-msgstr "Отправить"
-
-#: apps/karma/templates/karma/karma_list.html:10
-msgid "Karma"
-msgstr "Карма"
-
-#: apps/karma/templates/karma/karma_list.html:27
-msgid "link"
-msgstr "сслыка"
-
-#: apps/karma/templates/karma/karma_list.html:37
-msgid "No karma registered"
-msgstr "Кармически пуст"
 
 #: apps/menu/admin.py:28
 msgid "path"
@@ -1838,7 +1775,7 @@ msgstr ""
 "в ближайшее время."
 
 #: templates/base_template.html:49 templates/error_template.html:26
-#: templates/pybb/base.html:49 templates/pybb/post_template.html:35
+#: templates/pybb/base.html:49 templates/pybb/post_template.html:38
 msgid "open text"
 msgstr "показать"
 
@@ -1874,6 +1811,31 @@ msgstr "Восстановление пароля"
 #: templates/forms/login_modal.html:38
 msgid "Login"
 msgstr "Логин"
+
+#: templates/accounts/password_change.html:4
+#: templates/accounts/pm_detail.html:5 templates/accounts/pm_form.html:5
+#: templates/accounts/pm_list.html:5
+#: templates/accounts/policy_warning_detail.html:5
+#: templates/accounts/policy_warning_form.html:5
+#: templates/accounts/policy_warning_list.html:5
+#: templates/accounts/profile.html:5 templates/accounts/profile_update.html:4
+#: templates/comments/comment_form.html:5
+#: templates/comments/comment_watch_list.html:5
+#: templates/comments/subscribe_form.html:5 templates/files/user_files.html:8
+#: templates/files/gallery/action_image.html:4
+#: templates/files/gallery/gallery_image.html:6
+#: templates/files/gallery/gallery_image_form.html:5
+#: templates/files/gallery/gallery_list.html:6
+#: templates/files/gallery/upload.html:5 templates/karma/karma_change.html:5
+#: templates/karma/karma_list.html:5 templates/news/article.html:4
+#: templates/news/article_form.html:4 templates/news/events/calendar.html:14
+#: templates/news/events/event.html:5 templates/news/events/event_form.html:5
+#: templates/news/events/events.html:5 templates/static/timeout.html:4
+#: templates/tabletop/codex_detail.html:4 templates/tabletop/codex_form.html:7
+#: templates/tabletop/codex_list.html:5 templates/tabletop/roster.html:7
+#: templates/tabletop/roster_form.html:7 templates/tabletop/roster_list.html:5
+msgid "forum"
+msgstr "форум"
 
 #: templates/accounts/password_change.html:5
 #: templates/accounts/pm_detail.html:6 templates/accounts/pm_form.html:6
@@ -1995,7 +1957,7 @@ msgid "Update"
 msgstr "Обновить"
 
 #: templates/accounts/policy_warning_form.html:28
-#: templates/accounts/profile.html:28
+#: templates/accounts/profile.html:31
 msgid "Add policy warning"
 msgstr "Добавить предупреждение"
 
@@ -2032,27 +1994,27 @@ msgstr "Истекло"
 msgid "No warnings found"
 msgstr "Предупреждений не зафиксировано"
 
-#: templates/accounts/profile.html:8 templates/accounts/profile.html.py:22
+#: templates/accounts/profile.html:8 templates/accounts/profile.html.py:25
 msgid "update profile"
 msgstr "обновить профиль"
 
-#: templates/accounts/profile.html:41
+#: templates/accounts/profile.html:44
 msgid "Real name"
 msgstr "Реальное имя"
 
-#: templates/accounts/profile.html:43
+#: templates/accounts/profile.html:46
 msgid "Gender"
 msgstr "Пол"
 
-#: templates/accounts/profile.html:44
+#: templates/accounts/profile.html:47
 msgid "ICQ"
 msgstr "ICQ"
 
-#: templates/accounts/profile.html:45
+#: templates/accounts/profile.html:48
 msgid "Jabber/Google talk"
 msgstr "Jabber/Google talk"
 
-#: templates/accounts/profile.html:49
+#: templates/accounts/profile.html:52
 msgid "Signature"
 msgstr "Подпись"
 
@@ -2308,7 +2270,7 @@ msgid "You are going to delete this image, don't you?"
 msgstr "Вы хотите удалить данное изображение?"
 
 #: templates/files/gallery/gallery_image_form.html:29
-#: templates/pybb/post_template.html:71 templates/tabletop/codex_form.html:22
+#: templates/pybb/post_template.html:77 templates/tabletop/codex_form.html:22
 #: templates/tabletop/roster_form.html:22
 msgid "Delete"
 msgstr "Удалить"
@@ -2334,6 +2296,14 @@ msgstr "удалить изображение"
 msgid "Close"
 msgstr "Закрыть"
 
+#: templates/forms/submit.html:2 templates/generic/form.html:3
+#: templates/karma/karma_change.html:20 templates/pybb/add_post.html:36
+#: templates/pybb/create_pm.html:15 templates/pybb/post_form.html:19
+#: templates/pybb/post_list.html:76 templates/pybb/topic.html:75
+#: templates/pybb/topic_form.html:19
+msgid "Submit"
+msgstr "Отправить"
+
 #: templates/generic/actions.html:3
 msgid "Edit object"
 msgstr "Редактировать объект"
@@ -2342,19 +2312,19 @@ msgstr "Редактировать объект"
 msgid "Delete object"
 msgstr "Удалить объект"
 
-#: templates/generic/comment.html:17 templates/pybb/post_template.html:15
+#: templates/generic/comment.html:18 templates/pybb/post_template.html:18
 msgid "Add user policy warning"
 msgstr "Добавить предупреждение пользователю"
 
-#: templates/generic/comment.html:32 templates/pybb/post_template.html:52
+#: templates/generic/comment.html:33 templates/pybb/post_template.html:55
 msgid "Edited"
 msgstr "Редактирован"
 
-#: templates/generic/comment.html:41 templates/pybb/post_template.html:67
+#: templates/generic/comment.html:45 templates/pybb/post_template.html:73
 msgid "Edit"
 msgstr "Правка"
 
-#: templates/generic/comment.html:44 templates/pybb/post_template.html:65
+#: templates/generic/comment.html:48 templates/pybb/post_template.html:71
 msgid "Quote"
 msgstr "Цитатировать"
 
@@ -2377,6 +2347,46 @@ msgstr "Изменить карму пользователя"
 #: templates/jtmpl/karma.html:18
 msgid "Alter"
 msgstr "Изменить"
+
+#: templates/karma/karma_change.html:8
+msgid "karma up"
+msgstr "поднятие кармы"
+
+#: templates/karma/karma_change.html:10
+msgid "karma down"
+msgstr "снижение кармы"
+
+#: templates/karma/karma_change.html:14
+msgid "Up user's karma"
+msgstr "Поднять карму пользователя"
+
+#: templates/karma/karma_change.html:16
+msgid "Down user's karma"
+msgstr "Понизить карму пользователя"
+
+#: templates/karma/karma_list.html:10
+msgid "Karma"
+msgstr "Карма"
+
+#: templates/karma/karma_list.html:27
+msgid "link"
+msgstr "сслыка"
+
+#: templates/karma/karma_list.html:37
+msgid "No karma registered"
+msgstr "Кармически пуст"
+
+#: templates/karma/include/karma_buttons.html:4
+msgid "Up user karma"
+msgstr "Повысить карму пользователя"
+
+#: templates/karma/include/karma_buttons.html:6
+msgid "Down user karma"
+msgstr "Понизить карму пользователя"
+
+#: templates/karma/include/karma_power.html:4
+msgid "Watch user karma"
+msgstr "Посмотреть карму пользователя"
 
 #: templates/news/article_form.html:8
 msgid "edit article"
@@ -2807,7 +2817,7 @@ msgstr "Отписаться"
 msgid "Subscribe"
 msgstr "Подписаться"
 
-#: templates/pybb/post_template.html:35
+#: templates/pybb/post_template.html:38
 msgid "Show/hide first topic post content"
 msgstr "Показывает/скрывает содержимое первого топика"
 

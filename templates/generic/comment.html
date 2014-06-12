@@ -7,6 +7,7 @@
         <div class='transparency grey'></div>
         <span class='links'>
           <a class="permalink" href="{{ comment.get_absolute_url }}">#</a>
+          {% include "karma/include/karma_power.html" with usr=comment.user %}
           {% if user.is_authenticated and comment_watch %}
             {% if comment_watch.comment.submit_date < comment.submit_date or not comment_watch.comment %}
               <i class="glyphicon glyphicon-asterisk"></i>
@@ -36,6 +37,9 @@
     </div>
     <div class='message-footer'>
         <div class='transparency grey'></div>
+        <div class="pull-left">
+          {% include "karma/include/karma_buttons.html" with usr=comment.user %}
+        </div>
         <div class='links'>
             {% if perms.comments.change_comment or comment.user == user %}
                  <span><a href="{{ comment.get_edit_url }}">{% trans "Edit" %}</a></span>

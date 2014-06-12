@@ -15,6 +15,9 @@
     <div class='message round'>
       <div class='message-headline text-center'>
         <div class="transparency grey"></div>
+        <div class="pull-left">
+          {% include "karma/include/karma_power.html" with usr=object %}
+        </div>
         <b>Профиль</b>
         {% if object == user %}
           <span class="pull-right">
@@ -55,6 +58,7 @@
       <div class='message-footer'>
         <div class="transparency grey"></div>
         <div class="pull-left">
+          {% include "karma/include/karma_buttons.html" with usr=object %}
           {% if user == object %}
             [<a class='act_link' href='{{ user.get_password_change_url }}' title='сменить пароль'>***</a>]{% endif %}
             {% if user.is_staff %}[{{ object.username }}]{% endif %}

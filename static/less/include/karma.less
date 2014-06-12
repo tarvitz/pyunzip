@@ -2,12 +2,22 @@
   *[class^=icon-]{
     padding: 0px 5px;
   }
-  .karma-positive{
-    color: @state-success-text;
+  .karma-positive,.karma-negative{
     vertical-align: middle;
+    padding-top: 2px;
+  }
+  .karma-positive{
+    color: @text-color;
+    &:hover{
+      color: @state-success-text;
+      text-decoration: none;
+    }
   }
   .karma-negative{
-    color: @state-danger-text;
-    vertical-align: middle;
+    color: @text-color;
+    &:hover{
+      color: @state-danger-text;
+      text-decoration: none;
+    }
   }
 }

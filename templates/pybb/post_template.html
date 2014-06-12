@@ -7,8 +7,11 @@
           message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
         {% endif %}{% endspaceless %}">
         <div class='transparency grey'></div>
+
+
         <span class='links'>
             <a class="permalink" href="{{ post.get_absolute_url }}">#</a>
+            {% include "karma/include/karma_power.html" with usr=post.user %}
             {% if perms.accounts.change_policywarning %}
               <a class="glyphicon glyphicon-warning-sign text-danger pull-right"
                  rel="tooltip" href="{{ post.user.get_policy_warning_create_url }}"
@@ -60,6 +63,9 @@
           message-{{ user.get_forum_theme|default:gs.FORUM_THEME_DEFAULT }}
         {% endif %}{% endspaceless %}'>
         <div class='transparency grey'></div>
+        <div class="pull-left">
+          {% include "karma/include/karma_buttons.html" with usr=post.user %}
+        </div>
         <div class='links'>
             <span><a class='forum quote'
                 href="{% url "pybb:post-add" topic.id %}?quote_id={{ post.id }}">{% trans "Quote" %}</a></span>

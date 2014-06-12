@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}{% load i18n %}
+<span class="karma">
+  <a class="karma-positive icon-calcplus" href="{{ usr.get_karma_up_url }}"
+    rel="tooltip" data-title="{% trans "Up user karma" %}"></a>
+  <a class="karma-negative icon-calcminus" href="{{ usr.get_karma_down_url }}"
+    rel="tooltip" data-title="{% trans "Down user karma" %}"></a>
+</span>
+{% endif %}
