@@ -8,7 +8,6 @@
 <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/feeds/news">
 <link rel="alternate" type="application/rss+xml" title="ATOM" href="/feeds/news_atom">
 {% endblock %}
-{% block text_content %}
- {#% include settings.document.news_inc %#}
-  {% include "includes/include/news.html" %}
+{% block content %}
+  {% include "news/include/news.html" %}
 {% endblock %}

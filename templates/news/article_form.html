@@ -1,10 +1,27 @@
 {% extends base_template %} {% load i18n %}
-
 {% block content %}
-  <form id='id-form-add' method='POST' action='.' class='form-horizontal col-lg-10'>
-    {% csrf_token %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "news:news" %}">{% trans "news" %}</a></li>
+    {% if object %}
+      <li><a href='{{ object.get_absolute_url }}'>{{ object.title|lower }}</a></li>
+      <li class="active">{% trans "edit article" %}</li>
+    {% else %}
+      <li class="active">{% trans "create article" %}</li>
+    {% endif %}
+  </ul>
+
+  {% if object %}
+    <h3>{% trans "Edit article" %}</h3>
+  {% else %}
+    <h3>{% trans "Add article" %}</h3>
+  {% endif %}
+
+  <form id='id-form-add' method='POST' action='{{ request.path }}'
+        class='form-horizontal col-lg-10'>
+    {% csrf_token %} {% trans "Save" as save_i18n %}
     {% include "forms/bootstrap_horizontal.html" %}
-    {% include "forms/submit.html" %}
+    {% include "forms/submit.html" with save_text=save_i18n klass=user.get_color_theme %}
   </form>
 
   <script type='text/javascript'>

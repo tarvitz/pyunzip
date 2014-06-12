@@ -86,7 +86,7 @@ class NewsDetail(generic.DetailView):
 
 
 class NewsUpdateView(LoginRequiredMixin, generic.UpdateView):
-    template_name = 'news/action_article.html'
+    template_name = 'news/article_form.html'
     model = News
     form_class = ArticleModelForm
 

@@ -2,7 +2,7 @@
 {% block head_content %}
 <link rel='stylesheet' href='/styles/news.css' type='text/css' media='screen'>{% endblock %}
 {% block title %}Добавить статью {% endblock %}
-{% block text_content %}
+{% block content %}
 <center>
 	<form id='id-form-add' enctype="multipart/form-data" action='.' method='post'>
     {% csrf_token %}

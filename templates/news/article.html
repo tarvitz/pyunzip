@@ -1,21 +1,20 @@
-{% extends base_template %} {% load coretags %}
+{% extends base_template %} {% load coretags i18n %}
 {% block content %}
-{% if article %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "news:news" %}">{% trans "news" %}</a></li>
+    <li class="active">{{ article.title|lower }}</li>
+  </ul>
+
 {% with article as n %}
     {% include "news/include/article.html" %}
 {% endwith %}
 {% if comments.object_list %}
-    {% include "generic/pages.html" with page=paginator page_obj=comments %}
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
     {% for comment in comments %}
       {% include "generic/comment_new.html" with comment=comment %}
     {% endfor %}
-    {% include "generic/pages.html" with page=paginator %}
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
 {% endif %}
 
-{% else %}
-<div align='center' class='block_notice'>
-    <div class='transparent tr_black'></div>
-    Извините, но данной статьи не существует или она не была удалена
-</div>
-{% endif %}
 {% endblock %}

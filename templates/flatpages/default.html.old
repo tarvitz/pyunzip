@@ -130,7 +130,7 @@
 </div>
 <div id="text_content">
 	<div class="content">
-	{% block text_content %} {{ flatpage.content }} {% endblock %}
+	{% block content %} {{ flatpage.content }} {% endblock %}
 	<br clear="all">
 	</div>
 <br clear="all">
