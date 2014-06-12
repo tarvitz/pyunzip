@@ -74,6 +74,13 @@
 }
 
 @media screen and (max-width: @screen-xs-max) {
+  .fc-event{
+    &.game,&.tournament,&.order,&.pre-release,&.release{
+    .fc-event-time{
+      float: none !important;
+    }
+  }
+  }
   .fc-header-right{
     width: 10%;
     > .fc-button{
