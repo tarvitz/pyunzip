@@ -55,7 +55,7 @@ class NewsDetail(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(NewsDetail, self).get_context_data(**kwargs)
         page = get_int_or_zero(self.request.GET.get('page', 0))
-        form = CommentForm(None, request=self.request, initial={
+        form = CommentForm(None, initial={
             'app_n_model': 'news.news', 'obj_id': self.kwargs.get('number', 0),
             'url': self.request.META.get('PATH_INFO', ''),
             'page': page

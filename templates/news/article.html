@@ -1,8 +1,8 @@
 {% extends base_template %} {% load coretags %}
-{% block text_content %}
+{% block content %}
 {% if article %}
 {% with article as n %}
-    {% include "includes/include/article.html" %}
+    {% include "news/include/article.html" %}
 {% endwith %}
 {% if comments.object_list %}
     {% include "generic/pages.html" with page=paginator page_obj=comments %}
@@ -11,12 +11,7 @@
     {% endfor %}
     {% include "generic/pages.html" with page=paginator %}
 {% endif %}
-{% comment %}
-{% if user.is_authenticated and article.approved %}
-    {% get_content_type article as object %}
-    {% include settings.document.comments_form with object=object gs=gs %}
-{% endif %}
-{% endcomment %}
+
 {% else %}
 <div align='center' class='block_notice'>
     <div class='transparent tr_black'></div>

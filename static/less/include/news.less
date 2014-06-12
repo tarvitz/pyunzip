@@ -1,107 +1,105 @@
 @include "colors";
 
 div #news{
-	color: black;
-	margin: 0 30px;
-	color: white;
-	/*font-family: helvetica sans-serif Times\ New\ Roman Helvetica;*/
+  color: @text-color;
+  margin: 0 30px;
 }
 #news a{
-	text-decoration: none;
+  text-decoration: none;
 }
 #news img{
-	}
+}
 /* hdimg unused*/
 #news #hdimg{
-	float: left;
-	/*padding-right: 10px;*/
-	margin-left: -45px;
-	/*position: absolute;
-	z-index: 0;
-	left: 10px;
-	margin-left: 100px;*/
+  float: left;
+  /*padding-right: 10px;*/
+  margin-left: -45px;
+  /*position: absolute;
+  z-index: 0;
+  left: 10px;
+  margin-left: 100px;*/
 
 }
 #news #hdimg.right{
-	float: right;
-	width: 60px;
-	border: 1px dotted white;
-	margin-top: 3px;
+  float: right;
+  width: 60px;
+  border: 1px dotted @text-color;
+  margin-top: 3px;
 }
 #news #hdimg.first { width: 100px; }
 #news #spacer{
-	height: 16px;
+  height: 16px;
 }
 #news .headline{
-	font-weight: bold;
-	font-size: large;
-	color: white;
+  font-weight: bold;
+  font-size: large;
+  color: @text-color;
 }
 #news .headline .unapproved,#news .headline .unapproved a{ color: red; }
 .headline a{
-	text-decoration: none;
+  text-decoration: none;
 }
 .headline a img{
-	border: 0px;
+  border: 0px;
 }
 .headline a:visited{
-	color:#FAEBD7;
+  color:#FAEBD7;
 }
 .headline a:link{
-	color: #262626;
+  color: #262626;
 }
 .headline #edit_button{
-	float: right;
-	margin-top: 10px;
+  float: right;
+  margin-top: 10px;
 }
 .headline #edit_button.first{
-	margin-right: 50px;
+  margin-right: 50px;
 }
 .headline #edit_button a{
-	color: black;
+  color: black;
 }
 #news #read a{
-	text-decoration: none;
+  text-decoration: none;
 }
 #news #read{
-	font-size: 8pt;
-    line-height: initial;
-	text-align: right;
+  font-size: 8pt;
+  line-height: initial;
+  text-align: right;
 }
 #news #footer{
-	text-align: right;
-	font-size: 8pt;
-    line-height: initial;
-	color: white;
+  text-align: right;
+  font-size: 8pt;
+  line-height: initial;
+  color: @text-color;
 }
 .footer, .news .footer{
-	text-align: right;
-	font-size: 8pt;
-    line-height: initial;
-	color: white;
+  text-align: right;
+  font-size: 8pt;
+  line-height: initial;
+  color: @text-color;
 }
 #add_form textarea,#add_form input,#add_form select{
-	width: 80%;
-	border: 1px solid black;
+  width: 80%;
+  border: 1px solid black;
 }
 #add_form textarea{
-	height: 550px;
+  height: 550px;
 }
 #add_form textarea#id_head_content{
-	height: 200px;
+  height: 200px;
 }
 #add_form input#submit{
-	width: inherit;
-        color: white;
-        padding: 2px 10px;
-        background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
+  width: inherit;
+  color: @text-color;
+  padding: 2px 10px;
+  background: url("images/btn.jpg") repeat-x scroll center bottom #373838;
 }
 .news_image{ border: 1px solid black;}
 
 .headline-avatar{
-  	width: 60px;
-	border: 1px dotted white;
-	margin-left: 10px;
+  width: 60px;
+  border: 1px dotted @text-color;
+  margin-left: 10px;
 }
 .news-title{
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
