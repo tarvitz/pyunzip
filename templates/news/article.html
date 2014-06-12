@@ -12,7 +12,7 @@
 {% if comments.object_list %}
     {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
     {% for comment in comments %}
-      {% include "generic/comment_new.html" with comment=comment %}
+      {% include "generic/comment.html" with comment=comment %}
     {% endfor %}
     {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
 {% endif %}

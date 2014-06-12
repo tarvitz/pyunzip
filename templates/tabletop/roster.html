@@ -66,7 +66,7 @@
 
   {% if comments.object_list %}
     {% for comment in comments.object_list %}
-      {% include "generic/comment_new.html"%}
+      {% include "generic/comment.html"%}
     {% endfor %}
     {% with comments as page %}
       {% include settings.document.links %}

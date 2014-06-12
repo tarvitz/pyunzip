@@ -64,7 +64,7 @@
 
     <div class="comments">
       {% for comment in comments.object_list %}
-        {% include "generic/comment_new.html" with comment=comment comment_watch=comment_watch %}
+        {% include "generic/comment.html" with comment=comment comment_watch=comment_watch %}
       {% endfor %}
     </div>
     {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
