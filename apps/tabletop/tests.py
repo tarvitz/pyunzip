@@ -403,6 +403,20 @@ class RosterTest(TestHelperMixin, TestCase):
         post.pop('codex')
         self.check_state(roster, post, self.assertNotEqual)
 
+    def test_roster_delete(self):
+        roster = self.add_roster()
+        self.login(user=roster.owner.username)
+        response = self.client.post(roster.get_delete_url(), {}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Roster.objects.filter(pk=roster.pk).exists(), False)
+
+    def test_roster_delete_failure(self):
+        roster = self.add_roster()
+        self.login(user='admin')
+        response = self.client.post(roster.get_delete_url(), {}, follow=True)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Roster.objects.filter(pk=roster.pk).exists(), True)
+
 
 class CacheTest(TestCase):
     fixtures = [
