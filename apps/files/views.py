@@ -85,7 +85,7 @@ def file_delete(request, pk, nickname=''):
 class GalleryListView(generic.ListView):
     model = GalleryImage
     template_name = 'files/gallery/gallery_list.html'
-    paginate_by = settings.OBJECTS_ON_PAGE
+    paginate_by = settings.OBJECTS_ON_PAGE + 1
     paginator_class = Paginator
 
     def get_queryset(self):
