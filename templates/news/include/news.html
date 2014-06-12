@@ -1,28 +1,12 @@
-{% load comments %}{% load newsfilters %}
-{% with "True" as news_general %}
-  {% if news.object_list %}
-    {% for n in news.object_list %}
-      {% include "news/include/article.html" %}
-    {% endfor %}
+{% load i18n %}
 
-    <script language='javascript'>
-      $('.headline img.right').click(
-        function(){
-          if (this.width == 100){ var width = 60; }
-          else { var width = 100 };
-          $(this).animate({width: width,},1000);
-        });
+{% if object_list %}
+  {% for n in object_list %}
+    {% include "news/include/article.html" with news_general='True' %}
+  {% endfor %}
+  {% include "generic/paginator.html" %}
+  {{ paginator.num_pages|pprint }}
 
-    </script>
-
-    {% include "generic/paginator.html" with page_obj=news paginator=news.paginator %}
-
-  {% else %}
-    <center>
-      <div class='block_notice'>
-        <div class='transparency tr_black'></div>
-        o_O нет ничего
-      </div>
-    </center>
-  {% endif %} {# if news.object_list #}
-{% endwith %}
+{% else %}
+  <h3>{% trans "No news found" %}</h3>
+{% endif %} {# if news.object_list #}
