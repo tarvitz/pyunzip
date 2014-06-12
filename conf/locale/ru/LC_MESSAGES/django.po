@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-12 20:12+0400\n"
-"PO-Revision-Date: 2014-06-12 20:12+0400\n"
+"POT-Creation-Date: 2014-06-12 21:54+0400\n"
+"PO-Revision-Date: 2014-06-12 21:58+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -334,8 +334,8 @@ msgstr "адресат"
 #: apps/accounts/models.py:302 apps/files/models.py:100 apps/menu/models.py:8
 #: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
 #: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
-#: apps/tabletop/models.py:53 apps/tabletop/models.py:90
-#: apps/tabletop/models.py:204 apps/wh/models.py:16
+#: apps/tabletop/models.py:53 apps/tabletop/models.py:84
+#: apps/tabletop/models.py:198 apps/wh/models.py:16
 msgid "title"
 msgstr "заголовок"
 
@@ -364,7 +364,7 @@ msgid "deleted by addr"
 msgstr "удалено адресатом"
 
 #: apps/accounts/models.py:315 apps/news/models.py:48
-#: apps/tabletop/models.py:225 apps/wh/models.py:169
+#: apps/tabletop/models.py:219 apps/wh/models.py:169
 msgid "syntax"
 msgstr "синтаксис"
 
@@ -386,7 +386,7 @@ msgid "user"
 msgstr "пользователь"
 
 #: apps/accounts/models.py:368 apps/comments/models.py:72
-#: apps/tabletop/models.py:222
+#: apps/tabletop/models.py:216
 msgid "comment"
 msgstr "комментарии"
 
@@ -447,7 +447,7 @@ msgid "Your password requested to change"
 msgstr "Поступил запрос на изменение вашего пароля"
 
 #: apps/comments/models.py:19 apps/karma/models.py:63 apps/news/models.py:87
-#: apps/tabletop/models.py:115
+#: apps/tabletop/models.py:109
 msgid "Syntax"
 msgstr "Синтаксис"
 
@@ -554,10 +554,11 @@ msgid "Galleries"
 msgstr "Галереи"
 
 #: apps/files/models.py:51 apps/menu/models.py:42 apps/pybb/forms.py:86
-#: apps/tabletop/forms.py:312 apps/tabletop/models.py:182
-#: apps/tabletop/models.py:193 templates/accounts/pm_list.html:27
+#: apps/tabletop/forms.py:313 apps/tabletop/models.py:176
+#: apps/tabletop/models.py:187 templates/accounts/pm_list.html:27
 #: templates/comments/comment_watch_list.html:12
-#: templates/news/events/events.html:18 templates/tabletop/reports.html:30
+#: templates/news/events/events.html:18 templates/tabletop/codex_list.html:19
+#: templates/tabletop/reports.html:30
 msgid "Title"
 msgstr "Заголовок"
 
@@ -624,7 +625,7 @@ msgstr "Файлы пользователя"
 msgid "Base"
 msgstr "Базовый"
 
-#: apps/karma/admin.py:26
+#: apps/karma/admin.py:26 apps/tabletop/forms.py:477
 msgid "Side"
 msgstr "Сторона"
 
@@ -669,7 +670,7 @@ msgstr "Дата"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/karma/models.py:55 apps/tabletop/models.py:183
+#: apps/karma/models.py:55 apps/tabletop/models.py:177
 msgid "Codename"
 msgstr "Кодовое имя"
 
@@ -724,8 +725,9 @@ msgstr "карма"
 #: templates/news/article_form.html:4 templates/news/events/calendar.html:14
 #: templates/news/events/event.html:5 templates/news/events/event_form.html:5
 #: templates/news/events/events.html:5 templates/static/timeout.html:4
-#: templates/tabletop/roster.html:7 templates/tabletop/roster_form.html:7
-#: templates/tabletop/roster_list.html:5
+#: templates/tabletop/codex_detail.html:4 templates/tabletop/codex_form.html:7
+#: templates/tabletop/codex_list.html:5 templates/tabletop/roster.html:7
+#: templates/tabletop/roster_form.html:7 templates/tabletop/roster_list.html:5
 msgid "forum"
 msgstr "форум"
 
@@ -822,7 +824,7 @@ msgstr "утверждено?"
 msgid "marks if the article would be approved"
 msgstr "помечает статью как утвержденную по умолчанию"
 
-#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:223
+#: apps/news/models.py:21 apps/news/models.py:81 apps/tabletop/models.py:217
 #: templates/tabletop/reports.html:48
 msgid "approved"
 msgstr "утверждено"
@@ -858,7 +860,7 @@ msgstr "автор"
 msgid "content"
 msgstr "контент"
 
-#: apps/news/models.py:46 apps/tabletop/models.py:224
+#: apps/news/models.py:46 apps/tabletop/models.py:218
 msgid "ip address"
 msgstr "IP адрес"
 
@@ -1375,99 +1377,99 @@ msgstr "вчера, %s"
 msgid "This field is required."
 msgstr "Обязательное поле."
 
-#: apps/tabletop/forms.py:52
+#: apps/tabletop/forms.py:53
 msgctxt "Title"
 msgid "battle report title"
 msgstr "Заголовок"
 
-#: apps/tabletop/forms.py:53
+#: apps/tabletop/forms.py:54
 msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
-#: apps/tabletop/forms.py:57 apps/tabletop/forms.py:199
+#: apps/tabletop/forms.py:58 apps/tabletop/forms.py:200
 #: templates/tabletop/roster_list.html:13
 msgid "Rosters"
 msgstr "Ростеры"
 
-#: apps/tabletop/forms.py:60
+#: apps/tabletop/forms.py:61
 msgid "user rosters participating in the battle you want to describe"
 msgstr ""
 "пользовательские ростеры, которые принимают участие в битве, которую вы "
 "описываете"
 
-#: apps/tabletop/forms.py:66
+#: apps/tabletop/forms.py:67
 msgid "Winners"
 msgstr "Победители"
 
-#: apps/tabletop/forms.py:68
+#: apps/tabletop/forms.py:69
 msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
-#: apps/tabletop/forms.py:75
+#: apps/tabletop/forms.py:76
 msgid "Mission"
 msgstr "Миссия"
 
-#: apps/tabletop/forms.py:77
+#: apps/tabletop/forms.py:78
 msgid "mission you played"
 msgstr "миссия, в которую вы играли"
 
-#: apps/tabletop/forms.py:84
+#: apps/tabletop/forms.py:85
 msgid "Layout"
 msgstr "Формат"
 
-#: apps/tabletop/forms.py:86
+#: apps/tabletop/forms.py:87
 msgid "how much players participated in the game, 1vs1, 2vs2 and so on"
 msgstr "сколько игроков принимало участие в игре, 1vs1, 2vs2 и так далее"
 
-#: apps/tabletop/forms.py:93
+#: apps/tabletop/forms.py:94
 msgctxt "Content"
 msgid "battle report content"
 msgstr "Содержание"
 
-#: apps/tabletop/forms.py:126
+#: apps/tabletop/forms.py:127
 msgid ""
 "You can not write battle reports which has rosters that differ with pts field"
 msgstr ""
 "Вы не можете написать батлрепорт с ростерами, которые различны по количеству "
 "очков"
 
-#: apps/tabletop/forms.py:142
+#: apps/tabletop/forms.py:143
 msgid "You must choose winner's roster id within rosters' ids you passed"
 msgstr "Вы обязаны выбрать ростер победителя"
 
-#: apps/tabletop/forms.py:152
+#: apps/tabletop/forms.py:153
 msgid "Number of players and layout must exact by the amount of whole players"
 msgstr ""
 "Количество участников и формат должны совпадать с общим количеством "
 "участников"
 
-#: apps/tabletop/forms.py:162 apps/tabletop/tests.py:288
+#: apps/tabletop/forms.py:163 apps/tabletop/tests.py:292
 #, python-format
 msgid "You can not add more winners than %(amount)s"
 msgstr "Вы не можете добавить число победителей больше чем %(amount)s"
 
-#: apps/tabletop/forms.py:187
+#: apps/tabletop/forms.py:188
 msgid "Search rosters"
 msgstr "Поиск ростеров"
 
-#: apps/tabletop/forms.py:189
+#: apps/tabletop/forms.py:190
 msgid "If you do not see rosters you need below you may search them"
 msgstr ""
 "Если вы не видете ростеры ниже, которые вам нужны, вы можете их поискать"
 
-#: apps/tabletop/forms.py:193
+#: apps/tabletop/forms.py:194
 msgid "You can add this rosters to battle report"
 msgstr "Вы можете добавить данный ростер в батл-репорт"
 
-#: apps/tabletop/forms.py:194
+#: apps/tabletop/forms.py:195
 msgid "Available rosters"
 msgstr "Доступные ростеры"
 
-#: apps/tabletop/forms.py:205
+#: apps/tabletop/forms.py:206
 msgid "Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc."
 msgstr "Игровая схема, например 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 и так далее."
 
-#: apps/tabletop/forms.py:248
+#: apps/tabletop/forms.py:249
 msgid ""
 "You should set right layout, for example 2vs2, 3vs1, number of players "
 "should be equal to number of rosters you've passed"
@@ -1475,49 +1477,49 @@ msgstr ""
 "В должны установить верную схему, например 2vs2, 3vs1, количество игроков "
 "должно быть равным количеству ростеров, которые вы предоставляете"
 
-#: apps/tabletop/forms.py:261
+#: apps/tabletop/forms.py:262
 msgid ""
 "10 players is absolute maximum, do not try to add layout with more players, "
 "it's strickly forbidden"
 msgstr "10 игроков - абсолютный максимум, не пытайтесь добавить в схему больше"
 
-#: apps/tabletop/forms.py:294
+#: apps/tabletop/forms.py:295
 msgid "Where is no such rosters which have more than 20k points"
 msgstr "Ростеров более 20к очков не существует"
 
-#: apps/tabletop/forms.py:303
+#: apps/tabletop/forms.py:304
 msgid "You should pass only int values through \"pts\" field"
 msgstr "Вы должны предоставить только целые числа в \"pts\" поле"
 
-#: apps/tabletop/forms.py:334
+#: apps/tabletop/forms.py:335
 msgid "Race field should contain exact value"
 msgstr "Поле расы должно содержать точное значение"
 
-#: apps/tabletop/forms.py:339
+#: apps/tabletop/forms.py:340
 msgid ""
 "You should to select one race from the race select field or type custom_race "
 "by your own"
 msgstr "Вы должны выбрать одну расу из списка или выбрать \"друая раса\""
 
-#: apps/tabletop/forms.py:358
+#: apps/tabletop/forms.py:359
 msgid "You can not pass player's name that containsmore than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
 
-#: apps/tabletop/forms.py:372 apps/tabletop/forms.py:433
+#: apps/tabletop/forms.py:373 apps/tabletop/forms.py:434
 msgid "The common pts should be greater than 500"
 msgstr "Количество pts должно быть больше 500"
 
-#: apps/tabletop/forms.py:385
+#: apps/tabletop/forms.py:386
 msgid "Revision"
 msgstr "Ревизия"
 
-#: apps/tabletop/forms.py:390 templates/tabletop/include/roster.html:27
+#: apps/tabletop/forms.py:391 templates/tabletop/include/roster.html:27
 msgid "Codex"
 msgstr "Кодекс"
 
-#: apps/tabletop/forms.py:417
+#: apps/tabletop/forms.py:418
 #, python-format
 msgid ""
 "There is no such revision in \"%(unicode)s\", try to pass %(revisions)s as "
@@ -1526,11 +1528,19 @@ msgstr ""
 "Ревизии в \"%(unicode)s\" не существует, пожалуйста предоставьте "
 "%(revisions)s верным значением"
 
-#: apps/tabletop/forms.py:440
+#: apps/tabletop/forms.py:441
 msgid "You can not pass player's name that contains more than 64 symbols"
 msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
+
+#: apps/tabletop/forms.py:483 apps/wh/models.py:58
+msgid "Army"
+msgstr "Армия"
+
+#: apps/tabletop/forms.py:494
+msgid "Anything from side or army should be selected"
+msgstr "Вы должны выбрать что-нибудь из армии или стороны"
 
 #: apps/tabletop/models.py:24
 msgid "hq"
@@ -1596,85 +1606,85 @@ msgstr "простая сторона"
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:93
+#: apps/tabletop/models.py:87
 msgid "player"
 msgstr "автор"
 
-#: apps/tabletop/models.py:94
+#: apps/tabletop/models.py:88
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:96
+#: apps/tabletop/models.py:90
 msgid "comments"
 msgstr "комментарии"
 
-#: apps/tabletop/models.py:101
+#: apps/tabletop/models.py:95
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:104
+#: apps/tabletop/models.py:98
 msgid "custom Codex"
 msgstr "кастом кодекс"
 
-#: apps/tabletop/models.py:108
+#: apps/tabletop/models.py:102
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:110
+#: apps/tabletop/models.py:104
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:113
+#: apps/tabletop/models.py:107
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:113
+#: apps/tabletop/models.py:107
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:118
+#: apps/tabletop/models.py:112
 msgid "Orphan"
 msgstr "Орфан"
 
-#: apps/tabletop/models.py:119
+#: apps/tabletop/models.py:113
 msgid "wins"
 msgstr "побед"
 
-#: apps/tabletop/models.py:120
+#: apps/tabletop/models.py:114
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:129
+#: apps/tabletop/models.py:123
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:207
+#: apps/tabletop/models.py:201
 msgid "published"
 msgstr "опубликовано"
 
-#: apps/tabletop/models.py:210 templates/tabletop/roster.html:8
+#: apps/tabletop/models.py:204 templates/tabletop/roster.html:8
 #: templates/tabletop/roster_form.html:8 templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:213
+#: apps/tabletop/models.py:207
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:216
+#: apps/tabletop/models.py:210
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:217
+#: apps/tabletop/models.py:211
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:219
+#: apps/tabletop/models.py:213
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:267
+#: apps/tabletop/models.py:261
 msgid "[fuzzy] "
 msgstr "[плавающий]"
 
@@ -1701,10 +1711,6 @@ msgstr "фракция"
 #: apps/wh/models.py:35
 msgid "side"
 msgstr "сторона"
-
-#: apps/wh/models.py:58
-msgid "Army"
-msgstr "Армия"
 
 #: apps/wh/models.py:72
 msgid "Mini Quote"
@@ -1988,8 +1994,8 @@ msgstr "Добавить предупреждение"
 #: templates/news/events/event_form.html:17 templates/pybb/edit_post.html:20
 #: templates/pybb/edit_profile.html:21 templates/pybb/poll_add.html:7
 #: templates/pybb/poll_configure.html:11 templates/pybb/poll_wizard.html:19
-#: templates/tabletop/add_roster.html:7 templates/tabletop/reports.html:20
-#: templates/tabletop/roster_form.html:25
+#: templates/tabletop/add_roster.html:7 templates/tabletop/codex_form.html:25
+#: templates/tabletop/reports.html:20 templates/tabletop/roster_form.html:25
 msgid "Save"
 msgstr "Сохранить"
 
@@ -2289,7 +2295,8 @@ msgid "You are going to delete this image, don't you?"
 msgstr "Вы хотите удалить данное изображение?"
 
 #: templates/files/gallery/gallery_image_form.html:29
-#: templates/pybb/post_template.html:71 templates/tabletop/roster_form.html:22
+#: templates/pybb/post_template.html:71 templates/tabletop/codex_form.html:22
+#: templates/tabletop/roster_form.html:22
 msgid "Delete"
 msgstr "Удалить"
 
@@ -2895,6 +2902,65 @@ msgstr ""
 msgid "Timeout, please wait for your turn ;)"
 msgstr "Таймаут, дождитесь вашей очереди ;)"
 
+#: templates/tabletop/codex_detail.html:5 templates/tabletop/codex_form.html:8
+#: templates/tabletop/codex_list.html:6
+msgid "codexes"
+msgstr "кодексы"
+
+#: templates/tabletop/codex_detail.html:12
+msgid "Revisions"
+msgstr "Издания"
+
+#: templates/tabletop/codex_form.html:12
+msgid "update codex"
+msgstr "обновить кодекс"
+
+#: templates/tabletop/codex_form.html:14
+msgid "create codex"
+msgstr "создать кодекс"
+
+#: templates/tabletop/codex_form.html:18
+msgid "delete codex"
+msgstr "удалить кодекс"
+
+#: templates/tabletop/codex_form.html:23
+msgid "Confirm codex deletion"
+msgstr "Подтвердить удаление кодекса"
+
+#: templates/tabletop/codex_form.html:31
+msgid ""
+"You should select <strong>side</strong> or <strong>army</strong>\n"
+"        to pass link for codex creation. You could select any of these "
+"field, but consider\n"
+"        that <strong>army</strong> is prior. <br>\n"
+"        If you decide to bind codex to side, please leave army select "
+"blank.\n"
+"      "
+msgstr ""
+"Вы должны выбрать <strong>сторону</strong> или <strong>армию</strong>\n"
+"        для того, чтобы связать с выбором кодекс. Вы можете выбрать что "
+"угодно, но учтите, что\n"
+"        выбор <strong>армии</strong> приорететен. <br>\n"
+"        Если вы решите связать кодекс со стороной, то оставьте поле армии "
+"пустым.\n"
+"      "
+
+#: templates/tabletop/codex_list.html:11
+msgid "Add codex"
+msgstr "Добавить кодекс"
+
+#: templates/tabletop/codex_list.html:13
+msgid "Codexes"
+msgstr "Кодексы"
+
+#: templates/tabletop/codex_list.html:18
+msgid "Source"
+msgstr "Исходник"
+
+#: templates/tabletop/codex_list.html:33
+msgid "No codexes found"
+msgstr "Кодексов не обнаружено"
+
 #: templates/tabletop/reports.html:8
 msgid "Add"
 msgstr "Добавить"
@@ -2950,7 +3016,7 @@ msgstr "Поиск"
 msgid "Search some rosters"
 msgstr "Поиск ростеров"
 
-#: templates/tabletop/roster.html:24
+#: templates/tabletop/roster.html:22
 msgctxt "verb"
 msgid "Comment"
 msgstr "Комментировать"
@@ -3621,9 +3687,6 @@ msgstr "прочесть репорт"
 
 #~ msgid "Files"
 #~ msgstr "Файлы"
-
-#~ msgid "alter codex"
-#~ msgstr "изменить кодекс"
 
 #~ msgid "blocks"
 #~ msgstr "блокирует"

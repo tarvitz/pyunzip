@@ -380,6 +380,7 @@ REVISION_CHOICES = (
     (6, 6),
 )
 
+
 class AddRosterModelForm(RequestModelForm):
     required_css_class = 'required'
     revision = forms.ChoiceField(label=_("Revision"),
@@ -466,5 +467,45 @@ class RosterForm(forms.ModelForm):
     class Media:
         js = (
             'components/select2/select2.js',
+            'js/select2_load.js',
+        )
+
+
+class CodexForm(forms.ModelForm):
+    required_css_class = 'required'
+    side = forms.ModelChoiceField(
+        label=_("Side"), queryset=Side.objects,
+        widget=forms.Select(attrs={'class': 'form-control',
+                                   'data-toggle': 'select2'}),
+        required=False
+    )
+    army = forms.ModelChoiceField(
+        label=_("Army"), queryset=Army.objects,
+        widget=forms.Select(attrs={'class': 'form-control',
+                                   'data-toggle': 'select2'}),
+        required=False
+    )
+
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        side = cleaned_data.get('side', None)
+        army = cleaned_data.get('army')
+        if not any((side, army)):
+            msg = _("Anything from side or army should be selected")
+            self._errors['side'] = ErrorList([msg])
+        return cleaned_data
+
+    class Meta:
+        attrs = {'class': 'form-control'}
+        model = Codex
+        fields = ('side', 'army', 'title', 'revisions')
+        widgets = {
+            'title': forms.TextInput(attrs=attrs),
+            'revisions': forms.TextInput(attrs=attrs)
+        }
+
+    class Media:
+        js = (
+            'components/select2/select2.min.js',
             'js/select2_load.js',
         )

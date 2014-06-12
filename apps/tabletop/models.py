@@ -48,7 +48,7 @@ class Codex(models.Model):
                                      verbose_name=_('content type'),
                                      related_name="ct_set_for_%(class)s")
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey(ct_field="content type",
+    source = generic.GenericForeignKey(ct_field="content_type",
                                                fk_field="object_id")
     title = models.CharField(_('title'), max_length=128)
     #for sphinx search optimization
@@ -57,28 +57,22 @@ class Codex(models.Model):
                                                   max_length=64)
 
     def bound(self):
-        try:
-            return self.content_type.model_class().objects.get(
-                pk=self.object_id)
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            return u''
+        return self.source.__unicode__()
 
     def __unicode__(self):
-        bound = self.bound()
-        return bound.__unicode__() if bound else u''
+        return u'%(bound)s:%(title)s' % {
+            'bound': self.bound(),
+            'title': self.title
+        }
 
-    # noinspection PyUnresolvedReferences
-    def save(self, *args, **kwargs):
-        #write plain_side for better search withing sphinx
-        bound = self.bound()
-        if bound:
-            bound_name = bound.__class__.__name__.lower()
-            if 'army' in bound_name:
-                self.plain_side = bound.side.name
-            else:
-                self.plain_side = bound.name
-        super(Codex, self).save(*args, **kwargs)
+    def get_absolute_url(self):
+        return reverse('tabletop:codex-detail', args=(self.pk, ))
 
+    def get_edit_url(self):
+        return reverse('tabletop:codex-edit', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('tabletop:codex-delete', args=(self.pk, ))
 
 class Roster(models.Model):
     def valid_revision(value):

@@ -4,7 +4,7 @@ from apps.tabletop.models import (
 )
 from apps.tabletop.forms import (
     AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,
-    AddRosterModelForm, RosterForm)
+    RosterForm, CodexForm)
 
 from django.core.urlresolvers import reverse, reverse_lazy
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -23,12 +23,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth import get_user_model
 
 from django.http import (
-    HttpResponse, HttpResponseRedirect,
-    Http404
+    HttpResponseRedirect, Http404
 )
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 
-from django.db.models import Q
 from apps.core.decorators import (
     has_permission
 )
@@ -121,42 +120,6 @@ def report_approve(request, pk, approved=True):
     }
 
 
-@login_required
-def unorphan(request, pk):
-    roster = get_object_or_None(Roster, pk=pk)
-    if roster:
-        roster.is_orphan = False
-        roster.save()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-
-@login_required
-@render_to('tabletop/add_roster.html', allow_xhr=True)
-def action_roster(request, pk=None, action=None):
-    instance = None
-    if pk:
-        instance = get_object_or_404(Roster, pk=pk)
-
-    form = AddRosterModelForm(
-        request.POST or None, instance=instance,
-        request=request
-    )
-
-    if request.method == 'POST':
-        if form.is_valid():
-            #do not let overriding owner
-            if not hasattr(form.instance, 'owner'):
-                form.instance.owner = request.user
-            form.save()
-            return {
-                'redirect': 'tabletop:roster',
-                'redirect-args': (form.instance.pk,)
-            }
-    return {
-        'form': form
-    }
-
-
 #@todo: may be should be MORE CLEAN?
 @login_required
 def add_battle_report(request, action=None, pk=None):
@@ -206,30 +169,6 @@ def report_add(request, pk=None):
             #    roster.reload_wins_defeats(save=True)
             return {'redirect': 'tabletop:battle-reports'}
     return {'form': form}
-
-
-@login_required
-def xhr_rosters(request, search):
-    response = HttpResponse()
-    response['Content-Type'] = 'text/javascript'
-    queryset = (
-        Q(title__icontains=search)
-        | Q(owner__nickname__icontains=search)
-        | Q(pts__icontains=search)
-        | Q(codex__title__icontains=search)
-        | Q(codex__plain_side__icontains=search)
-        | Q(custom_codex__icontains=search)
-        | Q(player__icontains=search)
-    )
-    rosters = Roster.objects.filter(queryset)
-
-    raw = [(r.pk, r.__unicode__()) for r in rosters]
-    lw_rosters = [{'pk': r[0], 'title': r[1]} for r in raw]
-
-    if lw_rosters > 20:
-        lw_rosters = lw_rosters[:20]
-    response.write(json.dumps(lw_rosters))
-    return response
 
 
 @login_required
@@ -351,3 +290,77 @@ class RosterDeleteView(RosterAccessMixin, generic.DeleteView):
             'delete': True
         })
         return context
+
+
+class CodexAccessMixin(object):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('tabletop.change_codex'):
+            raise PermissionDenied("not allowed")
+        return super(CodexAccessMixin, self).dispatch(request, *args, **kwargs)
+
+
+class CodexAlterMixin(object):
+    def form_valid(self, form):
+        obj = form.cleaned_data['army'] or form.cleaned_data['side']
+        obj_ct = get_content_type(obj)
+        form.instance.content_type = obj_ct
+        form.instance.object_id = obj.pk
+        return super(CodexAlterMixin, self).form_valid(form)
+
+
+class CodexCreateView(CodexAccessMixin, CodexAlterMixin, generic.CreateView):
+    model = Codex
+    form_class = CodexForm
+    template_name = 'tabletop/codex_form.html'
+
+    def form_valid(self, form):
+        return super(CodexCreateView, self).form_valid(form)
+
+
+class CodexUpdateView(CodexAccessMixin, CodexAlterMixin, generic.UpdateView):
+    model = Codex
+    form_class = CodexForm
+    template_name = 'tabletop/codex_form.html'
+
+    def get_form_kwargs(self):
+        kwargs = super(CodexUpdateView, self).get_form_kwargs()
+        initial = {}
+        army_ct = get_content_type('wh.army')
+
+        field = 'army' if self.object.content_type == army_ct else 'side'
+        initial.update({
+            field: self.object.source.pk,
+        })
+        if field == 'army':
+            initial.update({
+                'side': self.object.source.side.pk
+            })
+        kwargs.update({
+            'initial': initial
+        })
+        return kwargs
+
+
+class CodexDeleteView(CodexAccessMixin, generic.DeleteView):
+    model = Codex
+    template_name = 'tabletop/codex_form.html'
+    success_url = reverse_lazy('tabletop:codex-list')
+
+    def get_context_data(self, **kwargs):
+        context = super(CodexDeleteView, self).get_context_data(**kwargs)
+        context.update({'delete': True})
+        return context
+
+
+class CodexDetailView(CodexAccessMixin, generic.DetailView):
+    model = Codex
+    form_class = CodexForm
+    template_name = 'tabletop/codex_detail.html'
+
+
+class CodexListView(CodexAccessMixin, generic.ListView):
+    model = Codex
+    form_class = CodexForm
+    paginate_by = settings.OBJECTS_ON_PAGE
+    paginator_class = Paginator
+    template_name = 'tabletop/codex_list.html'

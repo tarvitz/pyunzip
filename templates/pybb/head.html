@@ -48,6 +48,9 @@
                             {% if perms.news.change_event or perms.news.add_event%}
                               <li><a href="{% url "news:events" %}">{% trans "Events" %}</a></li>
                             {% endif %}
+                            {% if perms.tabletop.change_codex  %}
+                              <li><a href="{% url "tabletop:codex-list" %}">{% trans "Codexes" %}</a></li>
+                            {% endif %}
                             <li class=''><a href='{% url "accounts:profile" %}'>{% trans "My profile" %}</a></li>
                             <li class='divider'></li>
                             <li class=''><a href='{% url "tabletop:rosters" %}'>{% trans "My rosters" %}</a></li>
