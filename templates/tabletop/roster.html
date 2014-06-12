@@ -8,44 +8,8 @@
     <li><a href='{% url "tabletop:rosters" %}'>{% trans "rosters" %}</a></li>
     <li class="active">{{ roster.title }}</li>
   </ul>
-
-  <div class='round message message-center'>
-    <div class='message-headline'>
-      <div class='transparency grey'></div>
-      {% if user == roster.owner or perms.tabletop.edit_roster %}
-        <a href='{% url "tabletop:roster-edit" roster.id %}' class='msg_button'>[править]</a>
-      {% endif %}
-      {{ roster.title }}: {{ roster.pts }} pts
-
-    </div> <!-- msg_headline -->
-    <div class='message-content'>
-      <div class='avatar text-center'>
-        {% include "generic/avatar.html" with usr=roster.owner %}
-      </div>
-      <div class='text'>
-        <strong>{% trans "Pts" context "pts amount" %}</strong>:
-          <span class='pts'>{{ roster.pts }}</span><br>
-        <strong>{% trans "Codex" %}</strong>:
-          <span class='race'>{{ roster.codex }}</span> <br />
-        <strong>{% trans "Revision" context "revision number" %}</strong>:
-          <span class='revision'> {{ roster.revision }}</span><br />
-        <strong>{% trans "Roster" %}</strong>:
-          <span class='roster'>{{ roster.render_roster|safe }}</span><br />
-      </div>
-    </div>
-    <br clear='all'>
-    <div class='message-footer'>
-      <div class='transparency grey'></div>
-      {% spaceless %}
-        {% if roster.user != roster.owner %}
-          [добавлено: {{ roster.owner.get_nickname|safe }}]
-        {% endif %}
-        {% if perms.tabletop.edit_roster or roster.owner == user %}
-            [<a href='{{ r.get_delete_url }}'>удалить</a>]
-        {% endif %}
-      {% endspaceless %}
-    </div> <!-- msg_footer -->
-  </div> <!-- message -->
+  <h3>{{ roster.title }}</h3>
+  {% include "tabletop/include/roster.html" with r=roster %}
 
   {% if comments.object_list %}
     {% for comment in comments.object_list %}

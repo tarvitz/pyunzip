@@ -1,77 +1,39 @@
-{% load newsfilters %}
-<center>
-  <div class='round message' id='roster_{{ r.id }}'>
-    <div class='message-headline'>
-      <div class="transparency grey"></div>
-      <div class='links'>
-        {% if user == r.owner or perms.tabletop.edit_user_rosters %}
-            <span class='first'>
-               <a href='{{ r.get_delete_url }}'
-                  title='удалить' class='del_link' rel="tooltip">[x]</a>
-            </span>
-          <span>
-            <a href="{% url "tabletop:roster-edit" r.id %}"
-               title='редактировать ростер' rel="tooltip"
-               class='edit_link'>правка</a>
+{% load i18n %}
+<div class='round message' id='roster_{{ r.id }}'>
+  <div class='message-headline text-center'>
+    <div class="transparency grey"></div>
+    <div class='links'>
+      {% if user == r.owner or perms.tabletop.edit_user_rosters %}
+          <span class='first'>
+             <a href='{{ r.get_delete_url }}'
+                title='удалить' class='del_link' rel="tooltip">[x]</a>
           </span>
-        {% endif %}
-      </div>
-      <a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a>
-    </div><!-- msg_headline -->
-    <div class='message-content'>
-      <div class='avatar text-center'>
-       {% include "generic/avatar.html" with usr=r.owner %}
-      </div> <!-- msg_avatar -->
-      <div class='text'>
-        {% spaceless %}
-          {% if r.owner == r.user %}
-            <div class='txt'>
-              Владелец: {{ r.owner.get_nickname|safe }}
-            </div>
-          {% endif %}
-        {% endspaceless %}
-        <div class='txt'>
-          Автор: <i>{% if r.user %}{{ r.user.get_nickname|safe }}{% else %}{{ r.show_player }}{% endif %}</i>
-        </div>
-        <div class='txt'>Побед/поражений: </i>: {{ r.wins }}/{{ r.defeats }}</div>
-        <div class='txt'>Кодекс: <i>{{ r.codex }}</i></div>
-        <div class='txt'>Номер редакции кодекса: <i>{{ r.revision }}</i></div>
-        <div class='txt'>Очки: <i>{{ r.pts }} pts</i></div>
-        {% if roster_flag == "True" %}
-          <div class='txt'>Ростер:<br>
-            <span class='roster'>
-              {{ r.render_roster|safe }}
-            </span>
-          </div>
-        {% else %}
-          <div class='txt' id='id_roster_{{ r.id }}'>
-            Ростер:
-            <span class='roster'>
-              {{ r.render_roster|safe }}
-            </span>
-          </div>
-        {% endif %}
-        {% if r.comments %}
-          <div class='msg_txt'>Коментарий: <i>{{ r.comments|render_filter:r.syntax|safe }}</i></div>
-        {% endif %}
-        {% load comments %}
-        {% get_comment_count for r as comments_count %}
-        {% if comments_count %}
-          <div class='msg_txt'>Коментариев: {{ comments_count }}</div>
-        {% endif %}
-        <div style='clear: both;'></div>
-      </div> <!-- msg_text -->
-    </div><!-- msg_content -->
-    <br clear='all'>
-    <div class='message-footer'>
-      <div class="transparency grey"></div>
-      <div class='links'>
-        {% comment %}<span><a href='{% url "tabletop:rosters-codex" r.codex.id r.revision %}'{% spaceless %}
-                 title='{{ r.revision }}-я редакция кодекса'
-        {% endspaceless %}>{{ r.codex }} [{{ r.revision }}]</a></span>
-        <span><a href='{% url "tabletop:rosters-pts" r.pts %}'>{{ r.pts }} pts</a></span>{% endcomment %}
-      </div>
-      <br clear='all'>
-    </div> <!-- msg_footer -->
-  </div> <!-- message -->
-</center>
+        <span>
+          <a href="{% url "tabletop:roster-edit" r.id %}"
+             title='редактировать ростер' rel="tooltip"
+             class='edit_link'>правка</a>
+        </span>
+      {% endif %}
+    </div>
+    <a href='{{ r.get_absolute_url }}'>{{ r.title }} : {{ r.pts }} pts</a>
+  </div><!-- msg_headline -->
+  <div class='message-content'>
+    <div class='avatar text-center'>
+      {% include "generic/avatar.html" with usr=roster.owner %}
+    </div>
+    <div class='text'>
+      <strong>{% trans "Pts" context "pts amount" %}</strong>:
+        <span class='pts'>{{ roster.pts }}</span><br>
+      <strong>{% trans "Codex" %}</strong>:
+        <span class='race'>{{ roster.codex }}</span> <br />
+      <strong>{% trans "Revision" context "revision number" %}</strong>:
+        <span class='revision'> {{ roster.revision }}</span><br />
+      <strong>{% trans "Roster" %}</strong>:
+        <span class='roster'>{{ roster.render_roster|safe }}</span><br />
+    </div>
+  </div>
+  <div class='message-footer'>
+    <div class="transparency grey"></div>
+    <div class='links'>&nbsp;</div>
+  </div> <!-- msg_footer -->
+</div> <!-- message -->
