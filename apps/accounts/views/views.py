@@ -271,6 +271,11 @@ class PMDetailView(generic.DetailView):
     model = PM
     template_name = 'accounts/pm_detail.html'
 
+    def get_queryset(self):
+        qs = super(PMDetailView, self).get_queryset()
+        qset = Q(addressee=self.request.user) | Q(sender=self.request.user)
+        return qs.filter(qset)
+
     def get_context_data(self, **kwargs):
         context = super(PMDetailView, self).get_context_data(**kwargs)
         # update its read
