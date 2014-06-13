@@ -189,7 +189,7 @@ class User(PermissionsMixin, AbstractBaseUser):
         return self.get_forum_theme()
 
     def get_css_theme(self):
-        return self.settings.get('css_theme', 'light')
+        return ({'blank': True} or self.settings).get('css_theme', 'light')
 
     def get_username(self):
         return self.nickname or self.username

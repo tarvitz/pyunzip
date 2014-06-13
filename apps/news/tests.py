@@ -244,7 +244,6 @@ class EventWatchTest(TestHelperMixin, TestCase):
             event.date_end += timedelta(seconds=offset.seconds)
             event.save()
 
-    @skipIf(True, 'broken mark for deletion')
     def test_event_watched(self):
         """
         common test for watched event by user watch event action,
@@ -263,7 +262,6 @@ class EventWatchTest(TestHelperMixin, TestCase):
         self.assertEqual(event_watch.user, user)
         self.assertEqual(event_watch.event, event)
 
-    @skipIf(True, 'broken mark for deletion')
     def test_event_watched_is_finished(self):
         """
         common test for wached event by user event action if event is finished,
