@@ -24,6 +24,7 @@ django.mo
 *.gitignore
 /static/components
 /static/pybb
+/static/css/bootstrap-*.css
 /data/plop
 /db/uploads/*
 /db/*.sqlite
