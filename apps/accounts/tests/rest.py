@@ -43,6 +43,7 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
 
         self.patch = {
             'username': 'patched_user',
+            'nickname': 'butcher',
         }
 
         self.put = {

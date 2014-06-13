@@ -15,7 +15,7 @@ class UserFilterSet(django_filters.FilterSet):
 class UserCRUDAccessMixin(object):
     def create(self, request, *args, **kwargs):
         if (request.user.is_authenticated()
-                and request.user.has_perm('accounts.change_user')):
+                and request.user.has_perm('accounts.add_user')):
             return super(UserCRUDAccessMixin, self).create(request, *args,
                                                            **kwargs)
 
@@ -42,7 +42,7 @@ class UserCRUDAccessMixin(object):
 
     def destroy(self, request, *args, **kwargs):
         if (request.user.is_authenticated()
-                and request.user.has_perm('accounts.change_user')):
+                and request.user.has_perm('accounts.delete_user')):
             return super(UserCRUDAccessMixin, self).destroy(request, *args,
                                                             **kwargs)
         serializer = super(UserCRUDAccessMixin, self).get_serializer(
