@@ -1,4 +1,13 @@
 @karma-btn-text: lighten(@text-color, 40%);
+.badge-variant(@color) {
+  background-color: @color;
+  &[href] {
+    &:hover,
+    &:focus {
+      background-color: darken(@color, 10%);
+    }
+  }
+}
 
 .karma{
   *[class^=icon-]{
@@ -20,5 +29,25 @@
       color: @state-danger-text;
       text-decoration: none;
     }
+  }
+}
+.badge{
+  &.badge-success{
+    .badge-variant(@label-success-bg);
+  }
+  &.badge-primary{
+    .badge-variant(@label-primary-bg);
+  }
+  &.badge-info{
+    .badge-variant(@label-info-bg);
+  }
+  &.badge-default{
+    .badge-variant(@label-default-bg);
+  }
+  &.badge-warning{
+    .badge-variant(@label-warning-bg);
+  }
+  &.badge-danger{
+    .badge-variant(@label-danger-bg);
   }
 }
