@@ -1,9 +1,11 @@
 @import "../../bootstrap/variables";
+@default-panel-bg: #D3D3D3;
 
 @message-text-color: @text-color;
 @round-message-text-color: @text-color;
-@msg-headline-transparency: lightgrey;
-.message-headline,.message-footer{
+@msg-headline-transparency: @default-panel-bg;
+
+/*.message-headline,.message-footer{
   &.message-primary,&.message-info{
     background-color: @alert-info-bg;
   }
@@ -19,4 +21,4 @@
   &.message-warning{
     background-color: @alert-warning-bg;
   }
-}
+}*/

@@ -17,6 +17,8 @@ def base_template(request):
     template = settings.DEFAULT_TEMPLATE
     return ({
         'base_template': template,
+        'bootstrap_css_theme': 'css/bootstrap-{0}.css'.format(
+            request.user.get_css_theme() or 'light')
     })
 
 

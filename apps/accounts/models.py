@@ -188,6 +188,9 @@ class User(PermissionsMixin, AbstractBaseUser):
     def get_color_theme(self):
         return self.get_forum_theme()
 
+    def get_css_theme(self):
+        return self.settings.get('css_theme', 'light')
+
     def get_username(self):
         return self.nickname or self.username
 

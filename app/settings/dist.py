@@ -280,6 +280,10 @@ FORUM_THEMES = (
     (_("spring"), 'success'),
     (_("void"), 'default')
 )
+CSS_THEMES = (
+    (_('light theme'), 'light'),
+    (_('dark theme'), 'dark')
+)
 
 # TEMPLATES INCLUDES, todo: cleanup
 DOCUMENT = {

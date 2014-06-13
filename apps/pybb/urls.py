@@ -67,6 +67,8 @@ urlpatterns += patterns('',
     # Themes
     url('^themes/(?P<theme>[\w\d]+)/switch/$', views.switch_theme,
         name='theme-switch'),
+    url('^themes/(?P<theme>[\w\d]+)/css/switch/$', views.switch_css_theme,
+        name='css-theme-switch'),
     # Polls
     url('^topic/(?P<pk>\d+)/poll/add/$',
         login_required(views.ManagePollView.as_view()),

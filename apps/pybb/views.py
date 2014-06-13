@@ -381,6 +381,17 @@ def switch_theme(request, theme):
         request.user.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
+def switch_css_theme(request, theme):
+    themes = [i[1] for i in settings.CSS_THEMES]
+    if theme in themes:
+        if not request.user.settings:
+            request.user.settings = {}
+        request.user.settings['css_theme'] = settings.CSS_THEMES[
+            themes.index(theme)][1]
+        request.user.save()
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 class PollMixin(object):
     def get_poll_object(self):

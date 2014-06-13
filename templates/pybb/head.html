@@ -79,6 +79,10 @@
                                 <li><a href='{% url "pybb:theme-switch" theme.0 %}'>
                                   {% trans theme.0 %}</a></li>
                             {% endfor %}
+                            <li class="divider"></li>
+                            {% for theme in gs.CSS_THEMES %}
+                              <li><a href="{% url "pybb:css-theme-switch" theme.1 %}">{% trans theme.0 %}</a></li>
+                            {% endfor %}
                         </ul>
                     </li>
                     {% else %}
