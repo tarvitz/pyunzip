@@ -2,6 +2,7 @@
 from apps.menu.models import VMenuItem, HMenuItem
 from django.core.cache import cache
 
+
 def menu(request):
     hmenu = cache.get('hmenu:all')
     if not hmenu:

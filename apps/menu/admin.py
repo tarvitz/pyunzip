@@ -1,11 +1,8 @@
 #coding: utf-8
-from django import forms
-from django.db import models
-from django.db.models import Q, F
+
 from django.contrib import admin
 from apps.menu.models import VMenuItem, HMenuItem
 from django.utils.translation import ugettext_lazy as _
-#from hvad.admin import TranslatableAdmin
 
 
 class HMenuItemAdmin(admin.ModelAdmin):

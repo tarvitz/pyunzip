@@ -1,8 +1,8 @@
+# coding: utf-8
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from django.dispatch import receiver
-from django.core.cache import cache
-from django.db.models.signals import pre_save, post_save, pre_delete
+
 
 class HMenuItem(models.Model):
     title = models.CharField(_("title"), max_length=256)
@@ -77,7 +77,7 @@ class VMenuItem(models.Model):
         return self.url
 
     def get_absolute_url(self):
-        return self.get_url()
+        return self.url
 
     def get_children(self, is_hidden=False):
         return self.children.filter(is_hidden=is_hidden)
@@ -85,9 +85,6 @@ class VMenuItem(models.Model):
     @property
     def has_children(self, is_hidden=False):
         return bool(self.get_children(is_hidden))
-
-    def get_absolute_url(self):
-        return self.url
 
     class Meta:
         verbose_name = _("Vertical Menu")
