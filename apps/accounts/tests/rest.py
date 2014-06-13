@@ -65,17 +65,19 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
     # test anonymous user
     def test_anonymous_get_user_detail(self):
         response = self.client.get(self.url_detail, format='json')
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load['detail'], 'Not found')
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     def test_anonymous_get_user_list(self):
         response = self.client.get(self.url_list, format='json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(len(load['results']), 0)
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     def test_anonymous_put_user_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -84,7 +86,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
 
-        self.assertEqual(load['put'], 'permission denied')
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     def test_anonymous_post_user_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -92,7 +95,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load['post'], 'permission denied')
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     def test_anonymous_patch_user_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -100,7 +104,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load['patch'], 'permission denied')
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     def test_anonymous_delete_user_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -108,7 +113,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load['delete'], 'permission denied')
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
 
     # test admin user
     def test_admin_get_user_detail(self):
@@ -136,7 +142,6 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         put = deepcopy(self.put)
-
 
         for field, item in put.items():
             self.assertEqual(load[field], put[field])
@@ -178,3 +183,73 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(User.objects.count(), count - 1)
+    
+    # test non-privileged user
+    def test_user_get_user_detail(self):
+        self.login('user')
+        response = self.client.get(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(load, self.user_detail_response)
+
+    def test_user_get_user_list(self):
+        """
+        user could retrieve only self's data
+
+        :return:
+        """
+        self.login('user')
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            len(load['results']),
+            User.objects.filter(pk=self.user.pk).count()
+        )
+
+    def test_user_put_user_detail(self):
+        self.login('user')
+        count = User.objects.count()
+        response = self.client.put(self.url_put, data=self.put,
+                                   format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Not allowed.')
+
+    def test_user_post_user_list(self):
+        self.login('user')
+        count = User.objects.count()
+        response = self.client.post(self.url_post, data=self.post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Not allowed.')
+
+    def test_user_patch_user_detail(self):
+        self.login('user')
+        count = User.objects.count()
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Not allowed.')
+
+    def test_user_delete_user_detail(self):
+        self.login('user')
+        count = User.objects.count()
+        response = self.client.delete(self.url_delete, data={},
+                                      format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Not allowed.')
+        self.assertEqual(User.objects.count(), count)

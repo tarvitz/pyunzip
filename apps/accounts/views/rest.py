@@ -22,7 +22,7 @@ class UserCRUDAccessMixin(object):
         serializer = super(UserCRUDAccessMixin, self).get_serializer(
             data=request.DATA, files=request.FILES)
         errors = {
-            request.method.lower(): 'permission denied'
+            'detail': 'Not allowed.'
         }
         errors.update(serializer.errors)
         return Response(errors, status=status.HTTP_403_FORBIDDEN)
@@ -35,7 +35,7 @@ class UserCRUDAccessMixin(object):
         serializer = super(UserCRUDAccessMixin, self).get_serializer(
             data=request.DATA, files=request.FILES)
         errors = {
-            request.method.lower(): 'permission denied'
+            'detail': 'Not allowed.'
         }
         errors.update(serializer.errors)
         return Response(errors, status=status.HTTP_403_FORBIDDEN)
@@ -48,7 +48,7 @@ class UserCRUDAccessMixin(object):
         serializer = super(UserCRUDAccessMixin, self).get_serializer(
             data=request.DATA, files=request.FILES)
         errors = {
-            request.method.lower(): 'permission denied'
+            'detail': 'Not allowed.'
         }
         errors.update(serializer.errors)
         return Response(errors, status=status.HTTP_403_FORBIDDEN)
