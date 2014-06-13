@@ -2,6 +2,7 @@
 import django_filters
 from apps.news.models import Event
 from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
 from apps.news.serializers import EventSerializer
 
 
@@ -20,4 +21,5 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     filter_class = EventFilterSet
-    filter_fields = ('date_start', 'date_end', 'title'  )
+    filter_fields = ('date_start', 'date_end', 'title', )
+    permission_classes = (AllowAny, )
