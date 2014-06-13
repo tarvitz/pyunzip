@@ -38,7 +38,9 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.user_detail_response = {
             'username': 'user', 'gender': 'n', 'is_active': True,
             'avatar': '', 'nickname': 'user',
-            'date_joined': '2013-03-18T04:39:07.267'
+            'date_joined': '2013-03-18T04:39:07.267',
+            'email': 'user@blacklibrary.ru',
+            'id': 6
         }
 
         self.patch = {
@@ -134,9 +136,7 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         put = deepcopy(self.put)
-        # non serialized fields
-        put.pop('id')
-        put.pop('email')
+
 
         for field, item in put.items():
             self.assertEqual(load[field], put[field])
@@ -152,7 +152,7 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
 
         load = json.loads(response.content)
         post = deepcopy(self.post)
-        post.pop('email')
+
         self.assertEqual(User.objects.count(), count + 1)
         for field, value in post.items():
             self.assertEqual(load[field], post[field])

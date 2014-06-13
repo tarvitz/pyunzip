@@ -62,7 +62,6 @@ class UserViewSet(UserCRUDAccessMixin, viewsets.ModelViewSet):
     serializer_class = UserSerializer
     # filter_class = UserSerializer
 
-
     def get_queryset(self):
         qs = super(UserViewSet, self).get_queryset()
         if self.request.user.is_authenticated():
