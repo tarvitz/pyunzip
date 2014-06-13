@@ -2,9 +2,7 @@ from django.conf.urls import url, include, patterns
 from apps.core.shortcuts import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
-
 from django.conf import settings
-from apps.core.feeds import *
 
 urlpatterns = patterns(
     '',
@@ -16,8 +14,6 @@ urlpatterns = patterns(
     (r'^you/should/fulfil/your/destiny/$', direct_to_template,
         {'template': 'get_a_working_browser.html', }),
 
-    url(r'^feeds/news/$', NewsEntries(), name='feed-news'),
-    url(r'^feeds/news/atom/$', AtomNewsEntries(), name='feed-news-atom'),
     (r'^json/', include('apps.jsonapp.urls', namespace='json')),
     (r'^', include('apps.accounts.urls', namespace='accounts')),
     (r'^', include('apps.core.urls', namespace='core')),
