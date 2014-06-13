@@ -11,9 +11,6 @@ urlpatterns = patterns(
     (r'^comments/', include('django.contrib.comments.urls')),
     # Uncomment the next line to enable the admin:
     (r'^admin/', admin.site.urls),
-    (r'^you/should/fulfil/your/destiny/$', direct_to_template,
-        {'template': 'get_a_working_browser.html', }),
-
     (r'^json/', include('apps.jsonapp.urls', namespace='json')),
     (r'^', include('apps.accounts.urls', namespace='accounts')),
     (r'^', include('apps.core.urls', namespace='core')),
