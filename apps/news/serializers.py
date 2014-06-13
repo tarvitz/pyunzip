@@ -6,6 +6,7 @@ from rest_framework import serializers
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
     is_new = serializers.SerializerMethodField('get_is_new')
+    place = serializers.PrimaryKeyRelatedField()
 
     def get_url(self, instance):
         return instance.get_absolute_url()
@@ -22,5 +23,6 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         model = Event
         fields = (
             'title', 'date_start', 'date_end', 'type', 'is_finished', 'url',
-            'is_all_day', 'is_new', 'league'
+            'is_all_day', 'is_new', 'league', 'place', 'id',
+            #'content'  # currently disabled
         )

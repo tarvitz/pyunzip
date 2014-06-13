@@ -2,8 +2,22 @@
 import django_filters
 from apps.news.models import Event
 from rest_framework import viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import BasePermission, SAFE_METHODS
 from apps.news.serializers import EventSerializer
+
+
+class EventPermission(BasePermission):
+    """
+    Object-level permission to only allow owners of an object to edit it.
+    Assumes the model instance has an `owner` attribute.
+    """
+
+    def has_permission(self, request, view):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in SAFE_METHODS:
+            return True
+        return request.user.has_perm('news.event_change')
 
 
 class EventFilterSet(django_filters.FilterSet):
@@ -22,4 +36,4 @@ class EventViewSet(viewsets.ModelViewSet):
     serializer_class = EventSerializer
     filter_class = EventFilterSet
     filter_fields = ('date_start', 'date_end', 'title', )
-    permission_classes = (AllowAny, )
+    permission_classes = (EventPermission, )
