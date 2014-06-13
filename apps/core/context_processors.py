@@ -18,7 +18,8 @@ def base_template(request):
     return ({
         'base_template': template,
         'bootstrap_css_theme': 'css/bootstrap-{0}.css'.format(
-            request.user.get_css_theme() or 'light')
+            request.user.is_authenticated() and request.user.get_css_theme()
+            or 'light')
     })
 
 
