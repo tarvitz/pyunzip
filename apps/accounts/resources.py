@@ -1,3 +1,10 @@
+import warnings
+
+warnings.warn(
+    "django-tastypie dependency is deprecated as well as any code with its "
+    "usage. It would be deleted in near future.",
+    PendingDeprecationWarning)
+
 from apps.accounts.models import User
 from django.utils.translation import ugettext_lazy as _
 from tastypie.resources import ModelResource

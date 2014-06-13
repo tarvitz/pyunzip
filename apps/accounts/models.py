@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser, UserManager, PermissionsMixin)
 
 from picklefield import PickledObjectField
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -249,7 +249,6 @@ class User(PermissionsMixin, AbstractBaseUser):
         else:
             return settings.FORUM_THEME_DEFAULT
 
-
     @property
     def files(self):
         return self.user_file_set
@@ -366,6 +365,11 @@ class PolicyWarning(models.Model):
 
     # methods
     def get_level(self):
+        """gets human friendly policy level for current user instance
+
+        :return: human friendly policy warning level
+        :rtype: str
+        """
         idx = [
             self.level in i for i in POLICY_WARNING_LEVEL_CHOICES].index(True)
         return POLICY_WARNING_LEVEL_CHOICES[idx][1]

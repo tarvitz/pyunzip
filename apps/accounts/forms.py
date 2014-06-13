@@ -9,7 +9,6 @@ from django import forms
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
-from django.conf import settings
 from django.contrib import auth
 
 from captcha.fields import ReCaptchaField

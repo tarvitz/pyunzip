@@ -268,8 +268,8 @@ class Read(models.Model):
 
     class Meta:
         unique_together = ['user', 'topic']
-        verbose_name = _('Read')
-        verbose_name_plural = _('Reads')
+        verbose_name = _('Topic Read')
+        verbose_name_plural = _('Topic Reads')
 
     def save(self, *args, **kwargs):
         if self.time is None:

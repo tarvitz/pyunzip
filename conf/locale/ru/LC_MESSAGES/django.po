@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-13 03:25+0400\n"
-"PO-Revision-Date: 2014-06-13 03:25+0400\n"
+"POT-Creation-Date: 2014-06-13 18:26+0400\n"
+"PO-Revision-Date: 2014-06-13 18:27+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -84,8 +84,8 @@ msgstr "Пользователь с таким именем пользовате
 msgid "The two password fields didn't match."
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/admin.py:17 apps/accounts/forms.py:38
-#: apps/accounts/forms.py:100 templates/forms/login_modal.html:15
+#: apps/accounts/admin.py:17 apps/accounts/forms.py:37
+#: apps/accounts/forms.py:99 templates/forms/login_modal.html:15
 msgid "Username"
 msgstr "Имя пользователя"
 
@@ -100,8 +100,8 @@ msgid "This value may contain only letters, numbers and @/./+/-/_ characters."
 msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
-#: apps/accounts/admin.py:24 apps/accounts/forms.py:41
-#: apps/accounts/forms.py:103 apps/accounts/forms.py:204
+#: apps/accounts/admin.py:24 apps/accounts/forms.py:40
+#: apps/accounts/forms.py:102 apps/accounts/forms.py:203
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -128,78 +128,78 @@ msgctxt "is inactive on select"
 msgid "Inactive"
 msgstr "Неактивный"
 
-#: apps/accounts/forms.py:27
+#: apps/accounts/forms.py:26
 msgid "Passwords does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:52
+#: apps/accounts/forms.py:51
 msgid "Sorry your username or/and password are invalid"
 msgstr "Ваше имя пользователя и/или пароль не верны."
 
-#: apps/accounts/forms.py:63 apps/comments/forms.py:14
+#: apps/accounts/forms.py:62 apps/comments/forms.py:14
 #: apps/comments/forms.py:41 apps/files/forms.py:80 apps/news/forms.py:109
 #: apps/pybb/forms.py:170
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:75
+#: apps/accounts/forms.py:74
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:106 apps/accounts/forms.py:207
+#: apps/accounts/forms.py:105 apps/accounts/forms.py:206
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:109 apps/accounts/forms.py:187
+#: apps/accounts/forms.py:108 apps/accounts/forms.py:186
 #: templates/accounts/profile.html:50
 msgid "Email"
 msgstr "Email"
 
-#: apps/accounts/forms.py:112 templates/accounts/profile.html:42
+#: apps/accounts/forms.py:111 templates/accounts/profile.html:42
 msgid "Nickname"
 msgstr "Никнейм"
 
-#: apps/accounts/forms.py:115
+#: apps/accounts/forms.py:114
 msgid "Captcha"
 msgstr "Капча"
 
-#: apps/accounts/forms.py:141
+#: apps/accounts/forms.py:140
 msgid "Password1 and Password2 does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:151
+#: apps/accounts/forms.py:150
 msgid "Your current password does not match with one you've input"
 msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
 
-#: apps/accounts/forms.py:180
+#: apps/accounts/forms.py:179
 msgid "No such user with such email"
 msgstr "Такого пользователя с данным email'ом нет"
 
-#: apps/accounts/forms.py:187
+#: apps/accounts/forms.py:186
 msgid "Your email"
 msgstr "Ваш email"
 
-#: apps/accounts/forms.py:196
+#: apps/accounts/forms.py:195
 msgid "Users with given email does not exists"
 msgstr "Пользователя с данным email не существует"
 
-#: apps/accounts/forms.py:216
+#: apps/accounts/forms.py:215
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:255
+#: apps/accounts/forms.py:254
 msgid "Addressee"
 msgstr "Адресат"
 
-#: apps/accounts/forms.py:265 apps/wh/admin.py:22
+#: apps/accounts/forms.py:264 apps/wh/admin.py:22
 msgid "Content"
 msgstr "Содержимое"
 
-#: apps/accounts/forms.py:279
+#: apps/accounts/forms.py:278
 msgid "You can not send private messages to yourself"
 msgstr "Вам нельзя слать самим себе сообщения"
 
-#: apps/accounts/forms.py:282
+#: apps/accounts/forms.py:281
 msgid "There's no user with such nickname, sorry"
 msgstr "Такого пользователя нет"
 
@@ -320,26 +320,26 @@ msgstr "карма"
 msgid "user's karma"
 msgstr "пользовательская карма"
 
-#: apps/accounts/models.py:261 apps/pybb/models.py:104 apps/pybb/models.py:183
+#: apps/accounts/models.py:260 apps/pybb/models.py:104 apps/pybb/models.py:183
 #: apps/pybb/models.py:265
 msgid "User"
 msgstr "Пользователь"
 
-#: apps/accounts/models.py:262 templates/accounts/users.html:3
+#: apps/accounts/models.py:261 templates/accounts/users.html:3
 #: templates/pybb/head.html:40 templates/pybb/quick_access.html:41
 #: templates/pybb/users.html:6
 msgid "Users"
 msgstr "Пользователи"
 
-#: apps/accounts/models.py:268
+#: apps/accounts/models.py:267
 msgid "sender"
 msgstr "отправитель"
 
-#: apps/accounts/models.py:272
+#: apps/accounts/models.py:271
 msgid "addressee"
 msgstr "адресат"
 
-#: apps/accounts/models.py:275 apps/files/models.py:100 apps/menu/models.py:8
+#: apps/accounts/models.py:274 apps/files/models.py:100 apps/menu/models.py:8
 #: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
 #: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
 #: apps/tabletop/models.py:53 apps/tabletop/models.py:84
@@ -347,97 +347,97 @@ msgstr "адресат"
 msgid "title"
 msgstr "заголовок"
 
-#: apps/accounts/models.py:277
+#: apps/accounts/models.py:276
 msgid "text"
 msgstr "текст"
 
-#: apps/accounts/models.py:279 apps/news/models.py:76
+#: apps/accounts/models.py:278 apps/news/models.py:76
 msgid "cache content"
 msgstr "кеш контента"
 
-#: apps/accounts/models.py:281
+#: apps/accounts/models.py:280
 msgid "is read"
 msgstr "прочтено?"
 
-#: apps/accounts/models.py:283
+#: apps/accounts/models.py:282
 msgid "sent"
 msgstr "отосланно"
 
-#: apps/accounts/models.py:285
+#: apps/accounts/models.py:284
 msgid "deleted by sendr"
 msgstr "удалено отправителем"
 
-#: apps/accounts/models.py:286
+#: apps/accounts/models.py:285
 msgid "deleted by addr"
 msgstr "удалено адресатом"
 
-#: apps/accounts/models.py:288 apps/news/models.py:48
+#: apps/accounts/models.py:287 apps/news/models.py:48
 #: apps/tabletop/models.py:219 apps/wh/models.py:169
 msgid "syntax"
 msgstr "синтаксис"
 
-#: apps/accounts/models.py:295
+#: apps/accounts/models.py:294
 msgid "Private Message"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:296
+#: apps/accounts/models.py:295
 msgid "Private Messages"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:330
+#: apps/accounts/models.py:329
 msgid "read only"
 msgstr "только чтение"
 
-#: apps/accounts/models.py:339 apps/comments/models.py:76
+#: apps/accounts/models.py:338 apps/comments/models.py:76
 #: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:369
 msgid "user"
 msgstr "пользователь"
 
-#: apps/accounts/models.py:341 apps/comments/models.py:72
+#: apps/accounts/models.py:340 apps/comments/models.py:72
 #: apps/tabletop/models.py:216
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/accounts/models.py:343
+#: apps/accounts/models.py:342
 msgid "level"
 msgstr "уровень"
 
-#: apps/accounts/models.py:345 apps/comments/models.py:77
+#: apps/accounts/models.py:344 apps/comments/models.py:77
 #: apps/core/models.py:23 apps/news/models.py:370
 msgid "created on"
 msgstr "создано"
 
-#: apps/accounts/models.py:347 apps/core/models.py:27
+#: apps/accounts/models.py:346 apps/core/models.py:27
 msgid "updated on"
 msgstr "обновлено"
 
-#: apps/accounts/models.py:349
+#: apps/accounts/models.py:348
 msgid "date expired"
 msgstr "дата окончания"
 
-#: apps/accounts/models.py:350
+#: apps/accounts/models.py:349
 msgid "date then warning is expired"
 msgstr "дата, после истечения которой предупреждение будет завершено"
 
-#: apps/accounts/models.py:353
+#: apps/accounts/models.py:352
 msgid "is expired"
 msgstr "истекло"
 
-#: apps/accounts/models.py:354
+#: apps/accounts/models.py:353
 msgid "marks if warning is expired for this user"
 msgstr "отмечает, если предупреждение уже истекло"
 
-#: apps/accounts/models.py:381
+#: apps/accounts/models.py:385
 #: templates/accounts/policy_warning_detail.html:15
 msgid "Policy warning"
 msgstr "Предупреждение"
 
-#: apps/accounts/models.py:382 templates/accounts/policy_warning_list.html:13
+#: apps/accounts/models.py:386 templates/accounts/policy_warning_list.html:13
 #: templates/accounts/profile.html:53
 msgid "Policy warnings"
 msgstr "Предупреждение"
 
-#: apps/accounts/resources.py:21
+#: apps/accounts/resources.py:28
 msgid "User with such email exists"
 msgstr "Пользователь с таким email уже существует"
 
@@ -643,7 +643,7 @@ msgstr "вниз"
 msgid "Comment"
 msgstr "Комментарий"
 
-#: apps/karma/forms.py:34 apps/menu/admin.py:18 apps/menu/admin.py:32
+#: apps/karma/forms.py:34 apps/menu/admin.py:15 apps/menu/admin.py:29
 msgid "url"
 msgstr "url"
 
@@ -671,7 +671,7 @@ msgstr "от кого"
 msgid "URL"
 msgstr "УРЛ"
 
-#: apps/menu/admin.py:28
+#: apps/menu/admin.py:25
 msgid "path"
 msgstr "путь"
 
@@ -707,11 +707,11 @@ msgstr "Горизонтальные меню"
 msgid "is url?"
 msgstr "url?"
 
-#: apps/menu/models.py:93
+#: apps/menu/models.py:90
 msgid "Vertical Menu"
 msgstr "Вертикальное меню"
 
-#: apps/menu/models.py:94
+#: apps/menu/models.py:91
 msgid "Vertical Menus"
 msgstr "Вертикальные меню"
 
@@ -1181,12 +1181,12 @@ msgid "Time"
 msgstr "Время"
 
 #: apps/pybb/models.py:271
-msgid "Read"
-msgstr ""
+msgid "Topic Read"
+msgstr "Отметка прочтения топика"
 
 #: apps/pybb/models.py:272
-msgid "Reads"
-msgstr ""
+msgid "Topic Reads"
+msgstr "Отметки прочтения топика"
 
 #: apps/pybb/models.py:288
 msgid "poll title"
