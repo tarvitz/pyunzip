@@ -5,6 +5,8 @@ from rest_framework import serializers
 
 class CommentWatchSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
+    content_type = serializers.PrimaryKeyRelatedField()
+    user = serializers.PrimaryKeyRelatedField()
 
     def get_url(self, instance):
         return instance.object.get_absolute_url()
@@ -12,5 +14,6 @@ class CommentWatchSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = CommentWatch
         fields = (
-            'is_disabled', 'is_updated', 'url', 'id'
+            'is_disabled', 'is_updated', 'url', 'id', 'content_type',
+            'object_pk', 'user'
         )
