@@ -13,6 +13,8 @@ from apps.core.helpers import get_content_type
 import simplejson as json
 from copy import deepcopy
 
+__all__ = ['CommentWatchViewSetTest', ]
+
 
 class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
     fixtures = [
