@@ -50,6 +50,8 @@ class CommentViewSetTestMixin(object):
         self.url_list = reverse('api:comment-list')
         self.url_post = self.url_list
         self.url_put = self.url_detail
+        self.url_put_modify = reverse('api:comment-modify',
+                                      args=(self.comment.pk, ))
         self.url_patch = self.url_detail
         self.url_delete = self.url_detail
 
@@ -62,6 +64,12 @@ class CommentViewSetTestMixin(object):
             'syntax': 'textile',
             'user': reverse('api:user-detail', args=(self.other_user.pk, ))
         }
+        self.put_modify = {
+            'id': self.comment.pk,
+            'comment': u'New put comment',
+            'syntax': 'bb-code',
+        }
+
         self.patch = {
             'comment': u'New comment comment and so on',
         }
@@ -79,9 +87,7 @@ class CommentViewSetTestMixin(object):
                        u"\u043c \u0442\u0435\u0441\u0442!\n\u0425\u0443"
                        u"\u044f\u043a!\n(spoiler)[test]!\n\n\u0420\u0410"
                        u"\u0417\u0420 \u0417!",
-            "user_url": "",
             "url": "http://testserver/api/comments/1/",
-            "ip_address": "127.0.0.1",
             "object_pk": "4",
             "site": 1,
             "syntax": "textile",
@@ -90,8 +96,6 @@ class CommentViewSetTestMixin(object):
             "user": "http://testserver/api/users/6/",
             "content_type": 34,
             "is_public": True,
-            "user_name": "",
-            "user_email": "",
             "cache_comment": u"\t<p>\u0410 \u0432\u043e\u0442 "
                              u"\u0445\u0435\u0440!<br />\u0422\u0435\u0441"
                              u"\u0442\u0438\u0440\u0443\u0435\u043c "
@@ -262,6 +266,7 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(len(load['results']), Comment.objects.count())
 
     def test_put_detail(self):
+        # forbidden for non privileged user, use: comment-modify instead
         self.login('user')
         put = deepcopy(self.put)
         # no one except privileged users can modify user field freely
@@ -271,12 +276,24 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         count = Comment.objects.count()
         response = self.client.put(self.url_put, data=put,
                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'],
+            'You do not have permission to perform this action.')
+
+    def test_put_modify(self):
+        self.login('user')
+        put = self.put_modify
+        count = Comment.objects.count()
+        response = self.client.put(self.url_put_modify, data=put,
+                                   format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         put.pop('id')
         self.check_response(load, put)
-
         self.assertEqual(Comment.objects.count(), count)
 
     def test_post_list(self):
