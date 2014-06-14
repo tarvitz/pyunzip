@@ -3,10 +3,15 @@ import django_filters
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import permissions
 from django.http import Http404
 
-from apps.comments.serializers import CommentWatchSerializer
-from apps.comments.models import CommentWatch
+from apps.comments.serializers import (
+    CommentWatchSerializer, CommentSerializer)
+from apps.comments.models import CommentWatch, Comment
+
+
+__all__ = ['CommentWatchViewSet', 'CommentViewSet']
 
 
 class CommentWatchFilterSet(django_filters.FilterSet):
@@ -53,3 +58,27 @@ class CommentWatchViewSet(viewsets.ModelViewSet):
                 else qs.filter(user=self.request.user)
             )
         return CommentWatch.objects.none()
+
+
+class CommentPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # GET, HEAD, OPTION is allowed for all users
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_authenticated()
+
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+
+        privileged = request.user and request.user.has_perm(
+            'comments.change_comment')
+        if obj.user == request.user or privileged:
+            return True
+        return False
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = (CommentPermission, )

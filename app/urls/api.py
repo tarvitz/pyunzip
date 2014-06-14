@@ -6,7 +6,7 @@ from apps.accounts.views.api import (
     UserViewSet, PMViewSet, PolicyWarningViewSet
 )
 from apps.news.views.api import EventViewSet
-from apps.comments.views.api import CommentWatchViewSet
+from apps.comments.views.api import CommentWatchViewSet, CommentViewSet
 from apps.tabletop.views.api import RosterViewSet, CodexViewSet
 
 from rest_framework import routers
@@ -18,6 +18,7 @@ router.register(r'pms', PMViewSet)
 router.register(r'warnings', PolicyWarningViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'commentwatch', CommentWatchViewSet)
+router.register(r'comments', CommentViewSet)
 router.register(r'rosters', RosterViewSet)
 router.register(r'codexes', CodexViewSet)
 

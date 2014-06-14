@@ -1,6 +1,6 @@
 [
 {
-    "pk": 17,
+    "pk": 1,
     "model": "comments.comment",
     "fields": {
         "comment": "\u0410 \u0432\u043e\u0442 \u0445\u0435\u0440!\n\u0422\u0435\u0441\u0442\u0438\u0440\u0443\u0435\u043c \u0442\u0435\u0441\u0442!\n\u0425\u0443\u044f\u043a!\n(spoiler)[test]!\n\n\u0420\u0410\u0417\u0420 \u0417!",
@@ -11,7 +11,7 @@
         "site": 1,
         "syntax": "textile",
         "is_removed": false,
-        "user": 1,
+        "user": 6,
         "content_type": 34,
         "is_public": true,
         "user_name": "",
@@ -19,7 +19,7 @@
     }
 },
 {
-    "pk": 18,
+    "pk": 2,
     "model": "comments.comment",
     "fields": {
         "comment": "13dasd",
@@ -38,7 +38,7 @@
     }
 },
 {
-    "pk": 19,
+    "pk": 3,
     "model": "comments.comment",
     "fields": {
         "comment": "\u0421\u043e\u0443 \u043c\u0430\u0447!",
