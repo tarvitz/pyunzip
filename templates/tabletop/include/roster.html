@@ -29,7 +29,7 @@
       <strong>{% trans "Revision" context "revision number" %}</strong>:
         <span class='revision'> {{ roster.revision }}</span><br />
       <strong>{% trans "Roster" %}</strong>:
-        <span class='roster'>{{ roster.render_roster|safe }}</span><br />
+        <span class='roster'>{{ roster.roster_cache|safe }}</span><br />
     </div>
   </div>
   <div class='message-footer'>
