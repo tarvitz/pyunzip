@@ -1,2 +1,2 @@
 from .urls import *
-from .rest import *
+from .api import *

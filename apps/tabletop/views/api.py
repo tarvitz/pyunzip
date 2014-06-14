@@ -1,7 +1,7 @@
 # coding: utf-8
 
 import django_filters
-from apps.core.rest import IsOwnerOrReadOnly
+from apps.core.api import IsOwnerOrReadOnly
 from apps.tabletop.models import Codex, Roster
 
 from rest_framework import viewsets

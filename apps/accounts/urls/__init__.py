@@ -1,4 +1,4 @@
 from .urls import *
-import rest
+import api
 
-urlpatterns += rest.urlpatterns
+urlpatterns += api.urlpatterns

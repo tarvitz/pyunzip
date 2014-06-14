@@ -10,6 +10,8 @@ from django.core.urlresolvers import reverse
 import simplejson as json
 from copy import deepcopy
 
+__all__ = ['UserResourceTest', 'UserViewSetTest', ]
+
 
 class UserResourceTest(ResourceTestCase):
     # Use ``fixtures`` & ``urls`` as normal. See Django's ``TestCase``
