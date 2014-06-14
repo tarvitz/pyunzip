@@ -46,3 +46,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Comment
+        exclude = ('user_name', 'user_email', 'user_url', 'ip_address', )
