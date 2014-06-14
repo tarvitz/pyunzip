@@ -78,10 +78,24 @@ class PMViewSet(viewsets.ModelViewSet):
 
 class PolicyWarningPermission(permissions.BasePermission):
     def has_permission(self, request, view):
-        return (
+        if request.method == 'POST':
+            return (
+                request.user and
+                request.user.has_perm('accounts.change_policywarning')
+            )
+        return True
+
+    def has_object_permission(self, request, view, obj):
+        privileged = (
             request.user and
             request.user.has_perm('accounts.change_policywarning')
         )
+        if privileged:
+            return True
+        if (request.method in permissions.SAFE_METHODS
+                and request.user == obj.user):
+            return True
+        return False
 
 
 class PolicyWarningViewSet(viewsets.ModelViewSet):
@@ -89,3 +103,9 @@ class PolicyWarningViewSet(viewsets.ModelViewSet):
     serializer_class = PolicyWarningSerializer
     permission_classes = (permissions.IsAuthenticated,
                           PolicyWarningPermission, )
+
+    def get_queryset(self):
+        qs = super(PolicyWarningViewSet, self).get_queryset()
+        privileged = self.request.user.has_perm(
+            'accounts.change_policywarning')
+        return qs if privileged else qs.filter(user=self.request.user)

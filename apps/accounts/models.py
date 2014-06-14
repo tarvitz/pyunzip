@@ -344,7 +344,7 @@ class PolicyWarning(models.Model):
                                blank=True, null=True)
     level = models.PositiveIntegerField(_("level"), default=1,
                                         choices=POLICY_WARNING_LEVEL_CHOICES)
-    created_on = models.DateTimeField(_("created on"), auto_now=True,
+    created_on = models.DateTimeField(_("created on"), auto_now_add=True,
                                       default=datetime.now)
     updated_on = models.DateTimeField(_("updated on"), default=datetime.now)
     date_expired = models.DateField(

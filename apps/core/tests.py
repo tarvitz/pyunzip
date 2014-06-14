@@ -10,7 +10,7 @@ User = get_user_model()
 from django.db.models import Model
 from django.template import Context, Template
 from django.template.loader import get_template
-from datetime import datetime
+from datetime import datetime, date
 
 
 class JustTest(TestCase):
@@ -272,6 +272,8 @@ class TestHelperMixin(object):
             instance_value = getattr(instance, field)
             if isinstance(instance_value, (datetime, )):
                 assertion(instance_value.isoformat(), value)
+            elif isinstance(instance_value, date):
+                assertion(instance_value.isoformat(), value)
             elif isinstance(instance_value, Model):
                 assertion(instance_value.get_api_detail_url(), value)
             else:
@@ -292,6 +294,8 @@ class TestHelperMixin(object):
         for field, value in data.items():
             if isinstance(value, (datetime, )):
                 assertion(response[field], value.isoformat()[:-3])
+            elif isinstance(value, date):
+                assertion(response[field], value.isoformat())
             elif isinstance(value, basestring):
                 if '/api/' in value:
                     assertion(response[field], 'http://testserver' + value)

@@ -15,7 +15,7 @@ router = routers.DefaultRouter()
 
 router.register(r'users', UserViewSet)
 router.register(r'pms', PMViewSet)
-#router.register(r'warnings', PolicyWarningViewSet)
+router.register(r'warnings', PolicyWarningViewSet)
 router.register(r'events', EventViewSet)
 router.register(r'commentwatch', CommentWatchViewSet)
 router.register(r'rosters', RosterViewSet)
