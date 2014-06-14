@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
+from django.db.models import Model
 from django.template import Context, Template
 from django.template.loader import get_template
 from datetime import datetime
@@ -255,3 +256,46 @@ class TestHelperMixin(object):
                     }
         else:
             pass
+
+    def check_instance(self, instance, response, data, assertion=None):
+        """ Check instance fields with response keys and data for their
+        identification (if assertion is None)
+
+        :param instance: ModelObject ``instance``
+        :param dict response: json serialized api response (dict)
+        :param dict data: post/put/patch send data
+        :keyword assertion: callable assert function for check data
+        :return: None
+        """
+        assertion = assertion or super(TestHelperMixin, self).assertEqual
+        for field, value in data.items():
+            instance_value = getattr(instance, field)
+            if isinstance(instance_value, (datetime, )):
+                assertion(instance_value.isoformat(), value)
+            elif isinstance(instance_value, Model):
+                assertion(instance_value.get_api_detail_url(), value)
+            else:
+                assertion(instance_value, value)
+                assertion(response[field], value)
+
+    def check_response(self, response, data, assertion=None):
+        """Check api response with post data for its identifications
+        (if assertion is None)
+
+        :param instance: ModelObject ``instance``
+        :param dict response: json serialized api response (dict)
+        :param dict data: post/put/patch send data
+        :keyword assertion: callable assert function for check data
+        :return: None
+        """
+        assertion = assertion or super(TestHelperMixin, self).assertEqual
+        for field, value in data.items():
+            if isinstance(value, (datetime, )):
+                assertion(response[field], value.isoformat()[:-3])
+            elif isinstance(value, basestring):
+                if '/api/' in value:
+                    assertion(response[field], 'http://testserver' + value)
+                else:
+                    assertion(response[field], value)
+            else:
+                assertion(response[field], value)

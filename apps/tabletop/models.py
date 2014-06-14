@@ -74,6 +74,10 @@ class Codex(models.Model):
     def get_delete_url(self):
         return reverse('tabletop:codex-delete', args=(self.pk, ))
 
+    def get_api_detail_url(self):
+        return reverse('api:codex-detail', args=(self.pk, ))
+
+
 class Roster(models.Model):
     def valid_revision(value):
         if not 0 < value < 15:
@@ -82,10 +86,12 @@ class Roster(models.Model):
 
     owner = models.ForeignKey(User, related_name='roster_owner')
     title = models.CharField(_('title'), max_length=100)
-    user = models.ForeignKey(User, blank=True, null=True,
-                             related_name='roster_user_set')
-    player = models.CharField(_('player'), blank=True, max_length=32)
+
     roster = models.TextField(_('roster'), max_length=4096)
+    roster_cache = models.TextField(
+        _('roster cache'),
+        help_text=_("rendered roster cache"), blank=True, null=True
+    )
 
     comments = models.TextField(_('comments'), max_length=10240,
                                 blank=True, null=True)
@@ -94,9 +100,7 @@ class Roster(models.Model):
         Codex, blank=True, null=True, default=1,
         verbose_name=_("codex")
     )
-    custom_codex = models.CharField(
-        _('custom Codex'), max_length=50, blank=True, null=True
-    )
+
     revision = models.IntegerField(
         #fixme: pgettext_lazy falls to exception within model form render :(
         pgettext('revision', 'codex revision'),
@@ -108,8 +112,7 @@ class Roster(models.Model):
     )
     syntax = models.CharField(_('Syntax'), max_length=20, blank=True,
                               null=True, choices=settings.SYNTAX)
-    is_orphan = models.NullBooleanField(
-        _('Orphan'), default=False, blank=True, null=True)
+
     wins = models.PositiveIntegerField(_('wins'), default=0, blank=True)
     defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
 
@@ -159,6 +162,10 @@ class Roster(models.Model):
 
     def get_delete_url(self):
         return reverse('tabletop:roster-delete', args=(self.pk, ))
+
+    def get_api_detail_url(self):
+        return reverse('api:roster-detail', args=(self.pk, ))
+
     #todo: SPEEDUP
     def render_roster(self):
         roster = post_markup_filter(self.roster)

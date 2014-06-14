@@ -17,7 +17,7 @@ class EventPermission(BasePermission):
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in SAFE_METHODS:
             return True
-        return request.user.has_perm('news.event_change')
+        return request.user.has_perm('news.change_event')
 
 
 class EventFilterSet(django_filters.FilterSet):

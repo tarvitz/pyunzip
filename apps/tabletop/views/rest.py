@@ -1,7 +1,11 @@
 # coding: utf-8
+
 import django_filters
+from apps.core.rest import IsOwnerOrReadOnly
 from apps.tabletop.models import Codex, Roster
+
 from rest_framework import viewsets
+from rest_framework import permissions
 from apps.tabletop.serializers import CodexSerializer, RosterSerializer
 
 
@@ -22,12 +26,24 @@ class RosterViewSet(viewsets.ModelViewSet):
     queryset = Roster.objects.all()
     serializer_class = RosterSerializer
     filter_class = RosterFilterSet
+    permission_classes = (permissions.IsAuthenticated,
+                          IsOwnerOrReadOnly, )
 
-    def get_queryset(self):
-        qs = super(RosterViewSet, self).get_queryset()
-        if self.request.user.is_authenticated():
-            return qs.filter(owner=self.request.user)
-        return Roster.objects.none()
+    def check_object_permissions(self, request, obj):
+        # privileged users have whole access
+        if request.user.has_perm('tabletop.change_roster'):
+            return True
+        return super(RosterViewSet, self).check_object_permissions(
+            request, obj)
+
+
+class CodexPermission(permissions.BasePermission):
+    def has_permission(self, request, view):
+        # Read permissions are allowed to any request,
+        # so we'll always allow GET, HEAD or OPTIONS requests.
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user.has_perm('tabletop.change_codex')
 
 
 class CodexViewSet(viewsets.ModelViewSet):
@@ -37,3 +53,4 @@ class CodexViewSet(viewsets.ModelViewSet):
     queryset = Codex.objects.all()
     serializer_class = CodexSerializer
     filter_class = CodexFilterSet
+    permission_classes = (CodexPermission, )
