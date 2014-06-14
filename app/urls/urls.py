@@ -20,7 +20,7 @@ urlpatterns = patterns(
     (r'^', include('apps.tabletop.urls', namespace='tabletop')),
     (r'^', include('apps.karma.urls', namespace='karma')),
     (r'^', include('apps.comments.urls', namespace='comments')),
-    (r'^forum/', include('apps.pybb.urls', namespace='pybb')),
+    (r'^', include('apps.pybb.urls', namespace='pybb')),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 )
