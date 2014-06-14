@@ -239,6 +239,7 @@ CRON_CLASSES = (
     'apps.accounts.cron.PolicyWarningsMarkExpireCronJob',
 )
 
+API_OBJECTS_ON_PAGE = 50
 
 REST_FRAMEWORK = {
     #'DEFAULT_PERMISSION_CLASSES': (
@@ -248,7 +249,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',),
-    'PAGINATE_BY': 50,
+    'PAGINATE_BY': API_OBJECTS_ON_PAGE,
 }
 
 
