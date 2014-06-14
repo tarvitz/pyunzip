@@ -4,7 +4,15 @@ from apps.accounts.models import User
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework import permissions
 from apps.accounts.serializers import UserSerializer
+
+
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.is_superuser
 
 
 class UserFilterSet(django_filters.FilterSet):
@@ -12,54 +20,13 @@ class UserFilterSet(django_filters.FilterSet):
         model = User
 
 
-class UserCRUDAccessMixin(object):
-    def create(self, request, *args, **kwargs):
-        if (request.user.is_authenticated()
-                and request.user.has_perm('accounts.add_user')):
-            return super(UserCRUDAccessMixin, self).create(request, *args,
-                                                           **kwargs)
-
-        serializer = super(UserCRUDAccessMixin, self).get_serializer(
-            data=request.DATA, files=request.FILES)
-        errors = {
-            'detail': 'Not allowed.'
-        }
-        errors.update(serializer.errors)
-        return Response(errors, status=status.HTTP_403_FORBIDDEN)
-
-    def update(self, request, *args, **kwargs):
-        if (request.user.is_authenticated()
-                and request.user.has_perm('accounts.change_user')):
-            return super(UserCRUDAccessMixin, self).update(request, *args,
-                                                           **kwargs)
-        serializer = super(UserCRUDAccessMixin, self).get_serializer(
-            data=request.DATA, files=request.FILES)
-        errors = {
-            'detail': 'Not allowed.'
-        }
-        errors.update(serializer.errors)
-        return Response(errors, status=status.HTTP_403_FORBIDDEN)
-
-    def destroy(self, request, *args, **kwargs):
-        if (request.user.is_authenticated()
-                and request.user.has_perm('accounts.delete_user')):
-            return super(UserCRUDAccessMixin, self).destroy(request, *args,
-                                                            **kwargs)
-        serializer = super(UserCRUDAccessMixin, self).get_serializer(
-            data=request.DATA, files=request.FILES)
-        errors = {
-            'detail': 'Not allowed.'
-        }
-        errors.update(serializer.errors)
-        return Response(errors, status=status.HTTP_403_FORBIDDEN)
-
-
-class UserViewSet(UserCRUDAccessMixin, viewsets.ModelViewSet):
+class UserViewSet(viewsets.ModelViewSet):
     """
     API viewpoint for event
     """
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly, )
     # filter_class = UserSerializer
 
     def get_queryset(self):

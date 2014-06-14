@@ -27,7 +27,7 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
 
     def setUp(self):
         self.user = User.objects.get(username='user')
-        new_id = User.objects.count() + 1
+
         self.url_detail = reverse('api:user-detail', args=(self.user.pk, ))
         self.url_put = reverse('api:user-detail', args=(self.user.pk, ))
         self.url_patch = reverse('api:user-detail', args=(self.user.pk, ))
@@ -218,7 +218,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Not allowed.')
+            load['detail'],
+            'You do not have permission to perform this action.')
 
     def test_user_post_user_list(self):
         self.login('user')
@@ -230,7 +231,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Not allowed.')
+            load['detail'],
+            'You do not have permission to perform this action.')
 
     def test_user_patch_user_detail(self):
         self.login('user')
@@ -241,7 +243,8 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Not allowed.')
+            load['detail'],
+            'You do not have permission to perform this action.')
 
     def test_user_delete_user_detail(self):
         self.login('user')
@@ -251,5 +254,6 @@ class UserViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Not allowed.')
+            load['detail'],
+            'You do not have permission to perform this action.')
         self.assertEqual(User.objects.count(), count)
