@@ -50,8 +50,6 @@ class CommentViewSetTestMixin(object):
         self.url_list = reverse('api:comment-list')
         self.url_post = self.url_list
         self.url_put = self.url_detail
-        self.url_put_modify = reverse('api:comment-modify',
-                                      args=(self.comment.pk, ))
         self.url_patch = self.url_detail
         self.url_delete = self.url_detail
 
@@ -63,11 +61,6 @@ class CommentViewSetTestMixin(object):
             'site': 1,  # RO
             'syntax': 'textile',
             'user': reverse('api:user-detail', args=(self.other_user.pk, ))
-        }
-        self.put_modify = {
-            'id': self.comment.pk,
-            'comment': u'New put comment',
-            'syntax': 'bb-code',
         }
 
         self.patch = {
@@ -266,7 +259,7 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(len(load['results']), Comment.objects.count())
 
     def test_put_detail(self):
-        # forbidden for non privileged user, use: comment-modify instead
+        # forbidden for non privileged user, use: patch instead
         self.login('user')
         put = deepcopy(self.put)
         # no one except privileged users can modify user field freely
@@ -282,19 +275,6 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'],
             'You do not have permission to perform this action.')
-
-    def test_put_modify(self):
-        self.login('user')
-        put = self.put_modify
-        count = Comment.objects.count()
-        response = self.client.put(self.url_put_modify, data=put,
-                                   format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
-        put.pop('id')
-        self.check_response(load, put)
-        self.assertEqual(Comment.objects.count(), count)
 
     def test_post_list(self):
         self.login('user')
