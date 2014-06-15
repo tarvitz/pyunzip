@@ -16,7 +16,7 @@ urlpatterns = patterns(
     url(r'^profiles/(?P<slug>[\w\d\-_ ]+)/$',
         login_required(views.ProfileView.as_view()), name='profile-by-nick'),
 
-    url(r'^account/password/(?P<sid>[\w\d]+)/restore/$',
+    url(r'^accounts/password/(?P<sid>[\w\d]+)/restore/$',
         views.PasswordRestoreView.as_view(),
         name='password-restore'),
     url(r'^accounts/password/restore/initiate/$',
