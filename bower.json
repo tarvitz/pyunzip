@@ -1,6 +1,6 @@
 {
-  "name": "warmist",
-  "version": "0.0.1",
+  "name": "tessera",
+  "version": "0.1.0",
   "authors": [
     "Tarvitz <tarvitz@blacklibrary.ru>"
   ],
@@ -14,10 +14,10 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": ">=3.0.0",
-    "jquery": "=1.8.3",
+    "bootstrap": "~3.1.1",
+    "jquery": "=1.9.1",
     "jquery-colorbox": "~1.5.9",
-    "jquery-tmpl": "",
+    "jquery-tmpl": "*",
     "noty": "~2.2.5",
     "eonasdan-bootstrap-datetimepicker": "~3.0.0",
     "momentjs": ">=2.5.1",
@@ -25,6 +25,6 @@
     "select2": "~3.4.8"
   },
   "devDependencies": {
-    "select2": ">=3.4.3"
+    "select2": ">=3.4.8"
   }
 }
