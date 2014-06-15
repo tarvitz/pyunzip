@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from django.core.urlresolvers import reverse
-
+from django.conf import settings
 
 from apps.karma.models import Karma
 from apps.core.tests import TestHelperMixin
@@ -50,8 +50,11 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.assertEqual(karma.comment, self.post['comment'])
 
     def test_karma_alter_timeout(self):
-        Karma.objects.create(user=self.admin, voter=self.user, value=1,
-                             comment=u'New')
+        for item in range(settings.KARMA_PER_TIMEOUT_AMOUNT + 1):
+            Karma.objects.create(
+                user=self.admin, voter=self.user, value=1,
+                comment=u'New karma modification' + str(item)
+            )
         self.login('user')
         url = reverse('karma:karma-alter', args=('down', self.user.nickname, ))
         count = Karma.objects.count()

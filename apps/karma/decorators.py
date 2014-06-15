@@ -7,6 +7,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 
+# obsolete, todo: remove
 def day_expired(func,):
     def wrapper(*args, **kwargs):
         request = args[0]

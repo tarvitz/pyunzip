@@ -12,6 +12,7 @@ from rest_framework.test import APITestCase
 
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 import simplejson as json
 from copy import deepcopy
@@ -294,10 +295,11 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
 
         :return:
         """
-        Karma.objects.create(
-            user=self.other_user, voter=self.user, value=1,
-            comment=u'new karma'
-        )
+        for item in range(settings.KARMA_PER_TIMEOUT_AMOUNT + 1):
+            Karma.objects.create(
+                user=self.other_user, voter=self.user, value=1,
+                comment=u'new karma ' + str(item)
+            )
         self.login('user')
         count = Karma.objects.count()
         post = deepcopy(self.post)

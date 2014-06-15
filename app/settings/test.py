@@ -24,6 +24,8 @@ INSTALLED_APPS = list(INSTALLED_APPS)
 USER_FILES_LIMIT = 1.2 * 1024 * 1024
 SEND_MESSAGES = True
 
+KARMA_PER_TIMEOUT_AMOUNT = 100
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
