@@ -87,9 +87,9 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
 
-    @action(methods=['PATCH', 'PUT'])
+    @action(methods=['PATCH', 'PUT', ])
     def modify(self, request, pk=None):
-        obj = self.get_object()
+        obj = self.get_object_or_none()
         serializer = ModifyCommentSerializer(data=request.DATA, instance=obj)
         if serializer.is_valid():
             serializer.save()
