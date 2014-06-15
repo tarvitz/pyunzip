@@ -8,6 +8,7 @@ from apps.accounts.views.api import (
 from apps.news.views.api import EventViewSet
 from apps.comments.views.api import CommentWatchViewSet, CommentViewSet
 from apps.tabletop.views.api import RosterViewSet, CodexViewSet
+from apps.karma.views.api import KarmaViewSet
 
 from rest_framework import routers
 
@@ -21,6 +22,7 @@ router.register(r'commentwatch', CommentWatchViewSet)
 router.register(r'comments', CommentViewSet)
 router.register(r'rosters', RosterViewSet)
 router.register(r'codexes', CodexViewSet)
+router.register(r'karmas', KarmaViewSet)
 
 urlpatterns += patterns(
     '',
