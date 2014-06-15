@@ -176,7 +176,7 @@ class PasswordRestoreInitiateView(generic.FormView):
         else:
             for user in users:
                 sid = UserSID.objects.filter(
-                    user=self.request.user).order_by('-id')[0]
+                    user=user).order_by('-id')[0]
                 sids.append(sid)
                 (lambda x: x)(user)
 
