@@ -292,9 +292,11 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put.pop('id')
+        pk = put.pop('id')
         self.check_response(load, put)
         self.assertEqual(Comment.objects.count(), count)
+        comment = Comment.objects.get(pk=pk)
+        self.assertEqual(comment.comment, put['comment'])
 
     def test_post_list(self):
         self.login('user')

@@ -90,10 +90,14 @@ class CommentViewSet(viewsets.ModelViewSet):
     @action(methods=['PATCH', 'PUT'])
     def modify(self, request, pk=None):
         obj = self.get_object()
-        serializer = ModifyCommentSerializer(data=request.DATA)
+        serializer = ModifyCommentSerializer(data=request.DATA, instance=obj)
         if serializer.is_valid():
-            serializer.save_object(obj)
-            return Response(serializer.data)
+            serializer.save()
+            state = (
+                status.HTTP_200_OK if obj.pk == serializer.object.pk
+                else status.HTTP_201_CREATED
+            )
+            return Response(serializer.data, status=state)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
