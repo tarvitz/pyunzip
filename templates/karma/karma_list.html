@@ -20,7 +20,9 @@
               <i class="icon-calcminus text-danger"></i>
             {% endif %}
           </td>
-          <td>{{ object.voter.get_nickname|safe }}</td>
+          <td>
+            <img src="{{ object.voter.get_avatar_url }}" class="avatar" />
+            {{ object.voter.get_nickname|safe }}</td>
           <td>{{ object.comment }}</td>
           <td>
             {% if object.url %}
