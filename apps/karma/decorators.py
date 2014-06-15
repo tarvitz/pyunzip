@@ -1,13 +1,14 @@
 #decorators are here
 # coding: utf-8
 from apps.karma.models import Karma
-from datetime import datetime
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.shortcuts import redirect
 
-#implement more clear and wise functional of expired fncs
-def day_expired(func,*args,**kwargs):
-    def wrapper(*args,**kwargs):
+
+def day_expired(func,):
+    def wrapper(*args, **kwargs):
         request = args[0]
         user = request.user
         k = Karma.objects.filter(voter=user)
@@ -19,26 +20,17 @@ def day_expired(func,*args,**kwargs):
             else:
                 return HttpResponseRedirect('/timeout/')
         else:
-            return func(*args,**kwargs)
+            return func(*args, **kwargs)
     return wrapper
 
-def amount_comments_required(amount):
-    def decorator(func):
-        def wrapper(*args,**kwargs):
-            request = args[0]
-            count = request.user.get_comments_count()
-            if count >= amount:
-                return func(*args,**kwargs)
-            else:
-                return HttpResponseRedirect('/user/power/insufficient/')
-        return wrapper
-    return decorator
 
-def twenty_comments_required(func,*args,**kwargs):
-    def wrapper(*args,**kwargs):
-        request = args[0]
-        if request.user.get_comments_count() > 20:
-            return func(*args,**kwargs)
-        else:
-            return HttpResponseRedirect('/user/power/insufficient/')
+def amount_expired(func):
+    def wrapper(request, *args, **kwargs):
+        offset = datetime.now() - timedelta(
+            minutes=settings.KARMA_TIMEOUT_MINUTES)
+        karmas = request.user.karma_voter_set.filter(date__gte=offset)
+        if (karmas.count() >= settings.KARMA_PER_TIMEOUT_AMOUNT
+                and not request.user.has_perm('karma.change_karma')):
+            return redirect('core:timeout')
+        return func(request, *args, **kwargs)
     return wrapper

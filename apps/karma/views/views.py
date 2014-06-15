@@ -13,7 +13,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from apps.karma.decorators import (
-    day_expired,
+    day_expired, amount_expired
 
 )
 
@@ -26,7 +26,7 @@ class KarmaChangeView(generic.FormView):
     form_class = KarmaForm
     template_name = 'karma/karma_change.html'
 
-    @method_decorator(day_expired)
+    @method_decorator(amount_expired)
     def dispatch(self, request, *args, **kwargs):
         return super(KarmaChangeView, self).dispatch(request, *args, **kwargs)
 
