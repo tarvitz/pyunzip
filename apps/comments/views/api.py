@@ -5,11 +5,12 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import exceptions
-# from rest_framework.decorators import action
+from rest_framework.decorators import action
 from django.http import Http404
 
 from apps.comments.serializers import (
     CommentWatchSerializer, CommentSerializer,
+    ModifyCommentSerializer
 )
 from apps.comments.models import CommentWatch, Comment
 
@@ -85,6 +86,15 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
+
+    @action(methods=['PATCH', 'PUT'])
+    def modify(self, request, pk=None):
+        obj = self.get_object()
+        serializer = ModifyCommentSerializer(data=request.DATA)
+        if serializer.is_valid():
+            serializer.save_object(obj)
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def update(self, request, *args, **kwargs):
         obj = self.get_object()
