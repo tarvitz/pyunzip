@@ -69,4 +69,4 @@ UserAdmin.fieldsets[1][1]['fields'] = (
     'nickname', 'avatar', 'army', 'ranks', 'uin', 'jid'
 )
 
-admin.site.register(User, UserAdmin)
+# admin.site.register(User, UserAdmin)
