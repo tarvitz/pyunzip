@@ -1,3 +1,0 @@
-#!/bin/bash
-source ve/bin/activate
-./manage.py run_gunicorn
