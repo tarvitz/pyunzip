@@ -139,9 +139,8 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
-    @staticmethod
-    def get_profile_url():
-        return reverse('accounts:profile')
+    def get_profile_url(self):
+        return reverse('accounts:profile', args=(self.pk, ))
 
     @staticmethod
     def get_update_profile_url():
