@@ -33,14 +33,18 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
                 minutes=settings.KARMA_TIMEOUT_MINUTES)
 
             karmas = request.user.karma_voter_set.filter(date__gte=offset)
-            check_methods = ['POST', 'PUT', ]
-            if (request.method in check_methods
+            # apply check only for create methods, update ones should passes
+            # normally
+            create_methods = ['POST', 'PUT', ]
+            if (request.method in create_methods
                     and karmas.count() >= settings.KARMA_PER_TIMEOUT_AMOUNT):
                 raise serializers.ValidationError(FAILURE_MESSAGES['timeout'])
 
         return attrs
 
     def validate_voter(self, attrs, source):
+        """ non-privileged user can not cast karma
+        from different to his own user id """
         request = self.context['request']
         voter = attrs[source]
         if request.user != voter:
@@ -53,6 +57,7 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
         return attrs
 
     def validate_user(self, attrs, source):
+        """ non-privileged user can not set karma for himself """
         request = self.context['request']
         if request.user == attrs[source]:
             raise serializers.ValidationError(
@@ -60,6 +65,9 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
         return attrs
 
     def validate_value(self, attrs, source):
+        """ non-privileged user can not set karma value amount more than its
+        safe range with -1,1 """
+
         value = attrs[source]
         request = self.context['request']
         if value not in (-1, 1):
