@@ -200,6 +200,7 @@ class PasswordRestoreInitiateView(generic.FormView):
 class PasswordRestoreView(generic.FormView):
     form_class = PasswordRestoreForm
     success_url = reverse_lazy('core:password-restored')
+    template_name = 'accounts/password_restore.html'
 
     def get_form_kwargs(self):
         kwargs = super(PasswordRestoreView, self).get_form_kwargs()
