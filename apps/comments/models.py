@@ -46,7 +46,8 @@ class CommentExtension(object):
 
     def render_comment(self):
         """ renturns comment in render"""
-        return render_filter(post_markup_filter(self.comment), self.syntax or 'textile')
+        return render_filter(post_markup_filter(self.comment),
+                             self.syntax or 'textile')
 
     def get_content(self):
         return self.comment
@@ -86,7 +87,7 @@ class CommentWatch(models.Model):
 
     def __unicode__(self):
         title = (self.object.title if hasattr(self.object, 'title')
-                    else self.object.__unicode__())
+                 else self.object.__unicode__())
         return title + " " + self.user.get_username()
 
     # urls
@@ -124,3 +125,7 @@ class CommentWatch(models.Model):
         verbose_name = _("Comment watch")
         verbose_name_plural = _("Comment watches")
         unique_together = (('content_type', 'object_pk', 'user'), )
+
+
+from .signals import setup_signals
+setup_signals()

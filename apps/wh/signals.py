@@ -38,11 +38,5 @@ def on_rank_type_delete(instance, **kwargs):
     return on_rank_type_change(instance, **kwargs)
 
 
-@receiver(pre_save, sender=Comment)
-def on_comment_pre_save(instance, **kwargs):
-    instance.cache_comment = instance.render_comment()
-    return instance
-
-
 def setup_signals():
     pass
