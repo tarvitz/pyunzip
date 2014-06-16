@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-06-13 20:01+0400\n"
-"PO-Revision-Date: 2014-06-13 20:01+0400\n"
+"PO-Revision-Date: 2014-06-16 18:39+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -2334,7 +2334,7 @@ msgstr "Правка"
 
 #: templates/generic/comment.html:48 templates/pybb/post_template.html:71
 msgid "Quote"
-msgstr "Цитатировать"
+msgstr "Цитировать"
 
 #: templates/js/locale.ru.html:12
 msgid "downloaded successfull"
