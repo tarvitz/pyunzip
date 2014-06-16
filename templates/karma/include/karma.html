@@ -2,7 +2,7 @@
   <a href="{{ usr.get_karma_up_url }}"
      class="icon-calcplus karma-positive"></a>
     <a href="{{ usr.get_karma_url }}"
-       class="label label-{% if usr.karma >= 0 %}success{% else %}danger{% endif %}">
+       class="badge badge-{{ usr.get_color_theme }}">
     {% if usr.karma >= 0 %}
       {{ usr.karma|default_if_none:0 }}
     {% else %}
