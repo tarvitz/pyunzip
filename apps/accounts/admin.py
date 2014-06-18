@@ -57,16 +57,16 @@ class UserCreationForm(forms.ModelForm):
         fields = ('username', )
 
 
-class UserAdminForm(forms.ModelForm):
-    class Meta:
-        model = User
-
-
-UserAdmin.form = UserAdminForm
-UserAdmin.add_form = UserCreationForm
-
-UserAdmin.fieldsets[1][1]['fields'] = (
-    'nickname', 'avatar', 'army', 'ranks', 'uin', 'jid'
-)
+#class UserAdminForm(forms.ModelForm):
+#    class Meta:
+#        model = User
+#
+#
+#UserAdmin.form = UserAdminForm
+#UserAdmin.add_form = UserCreationForm
+#
+#UserAdmin.fieldsets[1][1]['fields'] = (
+#    'nickname', 'avatar', 'army', 'ranks', 'uin', 'jid'
+#)
 
 # admin.site.register(User, UserAdmin)
