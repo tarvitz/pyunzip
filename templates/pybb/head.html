@@ -29,13 +29,13 @@
                         </span>{% endif %}</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li>
+                    <li>{% spaceless %}
                       <a href="{% url "comments:subscriptions" %}">{% trans "Subscriptions" %}
                       {% if comment_watches.count %}
                         <span class="label label-{{ user.get_forum_theme|default:"warning" }}">
                           {{ comment_watches.count }}
                         </span>{% endif %}
-                      </a>
+                      </a>{% endspaceless %}
                     </li>
                     <li><a href="{% url "accounts:users" %}">{% trans "Users" %}</a></li>
                     <li class='dropdown'>
