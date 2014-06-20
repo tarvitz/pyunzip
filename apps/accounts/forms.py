@@ -88,9 +88,15 @@ class ProfileForm(RequestFormMixin, forms.ModelForm):
             'gender': forms.Select(attrs),
             'jid': forms.EmailInput(attrs),
             'about': forms.TextInput(attrs),
-            'army': Select2Widget(
-                attrs={'data-toggle': 'select2'})
+            'army': forms.Select(
+                attrs={'class': 'form-control', 'data-toggle': 'select2'})
         }
+
+    class Media:
+        js = (
+            'components/select2/select2.min.js',
+            'js/select2_load.js'
+        )
 
 
 class RegisterForm(forms.ModelForm):
