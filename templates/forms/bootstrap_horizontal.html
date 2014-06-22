@@ -1,9 +1,9 @@
 {% for field in form.visible_fields %}
 <div class="control-group form-group {{ field.css_classes }}">
-    {% if field.errors %}{{ field.errors }}{% endif %}
     <label class="control-label col-lg-2 control-label"
            for="id_{{ field.name }}">{{ field.label }}:</label>
-    <div class="controls col-lg-10">
+    <div class="controls col-lg-10 {{ field.errors|yesno:"error," }}">
+        {% if field.errors %}{{ field.errors }}{% endif %}
         {{ field }}
         {% if field.help_text %}
             <span class='help-text'>({{ field.help_text }})</span>
