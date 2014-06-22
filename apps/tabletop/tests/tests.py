@@ -13,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.core import exceptions
 from django.conf import settings
-from django.core.cache import cache
 
 from copy import deepcopy
 User = get_user_model()
