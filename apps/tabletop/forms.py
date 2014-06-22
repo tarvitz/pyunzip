@@ -198,6 +198,22 @@ class ReportForm(forms.ModelForm):
                                    'data-toggle': 'select2'
                                }))
 
+    def clean(self):
+        winners = self.cleaned_data.get('winners', [])
+        rosters = self.cleaned_data.get('rosters', [])
+        if not all((winners, rosters)):
+            return self.cleaned_data
+
+        msg_lst = []
+        for winner in winners:
+            if winner not in rosters:
+                msg = _("There's no such winner `%s` in rosters") % winner
+                msg_lst.append(msg)
+        if msg_lst:
+            self._errors['winners'] = ErrorList(msg_lst)
+
+        return self.cleaned_data
+
     class Meta:
         model = Report
         fields = ('title', 'layout', 'mission', 'rosters', 'winners',

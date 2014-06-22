@@ -593,6 +593,10 @@ class ReportTest(TestHelperMixin, TestCase):
             'is_draw': False,
             'layout': '1vs1'
         }
+        self.post_update_failure = {
+            'winners': [3, 4],
+            'rosters': [1, 2]
+        }
         self.user = User.objects.get(username='user')
         self.admin = User.objects.get(username='admin')
         self.create_url = reverse('tabletop:report-create')
@@ -717,6 +721,25 @@ class ReportTest(TestHelperMixin, TestCase):
         self.assertEqual(Report.objects.count(), count - 1)
         self.assertRaises(exceptions.ObjectDoesNotExist,
                           lambda: Report.objects.get(pk=report.pk))
+
+    def test_report_user_update_failure(self):
+        report = self.add_report(user=self.user)
+        self.login('user')
+        response = self.client.post(report.get_edit_url(),
+                                    self.post_update_failure, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('form', response.context)
+        form = response.context['form']
+        self.assertNotEqual(form.errors, {})
+        # winners should be represented withing selected rosters
+        winners = Roster.objects.filter(
+            pk__in=self.post_update_failure['winners'])
+        for winner in winners:
+            self.assertIn(
+                unicode(_("There's no such winner `%s` in rosters")
+                        % winner.__unicode__()),
+                form.errors['winners']
+            )
 
 
 class CacheTest(TestCase):
