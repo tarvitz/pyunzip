@@ -1,0 +1,39 @@
+{% load i18n %}
+<div class='round message' id='roster_{{ report.id }}'>
+  <div class='message-headline text-center'>
+    <div class="transparency grey"></div>
+    <div class='links'>
+      {% if user == report.owner or perms.tabletop.edit_user_rosters %}
+          <span class='first'>
+             <a href='{{ report.get_delete_url }}'
+                title='удалить' class='del_link' rel="tooltip">[x]</a>
+          </span>
+        <span>
+          <a href="{{ report.get_edit_url }}"
+             title='редактировать ростер' rel="tooltip"
+             class='edit_link'>правка</a>
+        </span>
+      {% endif %}
+    </div>
+    <a href='{{ report.get_absolute_url }}'>{{ report.title }} : {{ report.pts }} pts</a>
+  </div><!-- msg_headline -->
+  <div class='message-body'>
+    <div class='avatar text-center'>
+      {% include "generic/avatar.html" with usr=report.owner %}
+    </div>
+    <div class='text'>
+      <strong>{% trans "Pts" context "pts amount" %}</strong>:
+        <span class='pts'>{{ rostereport.pts }}</span><br>
+      <strong>{% trans "Codex" %}</strong>:
+        <span class='race'>{{ rostereport.codex }}</span> <br />
+      <strong>{% trans "Revision" context "revision number" %}</strong>:
+        <span class='revision'> {{ rostereport.revision }}</span><br />
+      <strong>{% trans "Roster" %}</strong>:
+        <span class='roster'>{{ rostereport.roster_cache|safe }}</span><br />
+    </div>
+  </div>
+  <div class='message-footer'>
+    <div class="transparency grey"></div>
+    <div class='links'>&nbsp;</div>
+  </div> <!-- msg_footer -->
+</div> <!-- message -->

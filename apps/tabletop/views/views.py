@@ -1,9 +1,9 @@
 # coding: utf-8
 from apps.tabletop.models import (
-    Roster, BattleReport, Codex
+    Roster, Report, Codex
 )
 from apps.tabletop.forms import (
-    AddBattleReportForm, AddBattleReportModelForm, AddCodexModelForm,
+    AddBattleReportForm, ReportForm, AddCodexModelForm,
     RosterForm, CodexForm)
 
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -31,6 +31,7 @@ from django.contrib.auth.decorators import login_required
 from apps.core.decorators import (
     has_permission
 )
+from apps.core.views import (OwnerModelOrAdminAccessMixin, )
 
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.comments.models import Comment
@@ -65,7 +66,7 @@ def battle_reports(request):
     if not can_edit:
         kw.update({'approved': True})
     battle_reps = paginate(
-        BattleReport.objects.filter(**kw), page,
+        Report.objects.filter(**kw), page,
         pages=settings.OBJECTS_ON_PAGE
     )
     return {
@@ -83,7 +84,7 @@ def report(request, pk):
         kw.update({'approved': True})
     battle_rep = cache.get('tabletop:report:%s' % pk)
     if not battle_rep:
-        battle_rep = get_object_or_404(BattleReport, **kw)
+        battle_rep = get_object_or_404(Report, **kw)
         cache.set('tabletop:report:%s' % battle_rep.pk, battle_rep)
     else:
         if not can_edit and not battle_rep.approved:
@@ -111,7 +112,7 @@ def report_approve(request, pk, approved=True):
     can_edit = request.user.has_perm('tabletop.edit_battle_report')
     if not can_edit:
         raise Http404("hands off")
-    battle_rep = get_object_or_404(BattleReport, pk=pk)
+    battle_rep = get_object_or_404(Report, pk=pk)
     battle_rep.approved = approved
     battle_rep.save()
     return {
@@ -126,9 +127,9 @@ def add_battle_report(request, action=None, pk=None):
     template = get_skin_template(request.user, 'add_battle_report.html')
     br = None
     if action == 'edit':
-        br = get_object_or_404(BattleReport, pk=pk)
+        br = get_object_or_404(Report, pk=pk)
     if request.method == 'POST':
-        form = AddBattleReportModelForm(request.POST, request=request,
+        form = ReportForm(request.POST, request=request,
                                         instance=br)
         if form.is_valid():
             instance = form.instance
@@ -140,7 +141,7 @@ def add_battle_report(request, action=None, pk=None):
             return HttpResponseRedirect(reverse('tabletop:battle-report'))
         else:
             return direct_to_template(request, template, {'form': form})
-    form = AddBattleReportModelForm(instance=br)
+    form = ReportForm(instance=br)
     return direct_to_template(request, template, {'form': form})
 
 
@@ -151,7 +152,7 @@ def report_add(request, pk=None):
     can_edit = request.user.has_perm('tabletop.edit_battle_report')
 
     if pk:
-        instance = get_object_or_404(BattleReport, pk=pk)
+        instance = get_object_or_404(Report, pk=pk)
         if not can_edit and request.user != instance.owner:
             raise Http404("hands off")
     form = AddBattleReportForm(
@@ -173,7 +174,7 @@ def report_add(request, pk=None):
 
 @login_required
 def delete_battle_report(request, pk, approve=''):
-    br = get_object_or_None(BattleReport, pk=pk)
+    br = get_object_or_None(Report, pk=pk)
     if (br.owner == request.user or request.user.is_superuser
             or request.user.has_perm('tabletop.delete_battlereports')):
         if br:
@@ -364,3 +365,35 @@ class CodexListView(CodexAccessMixin, generic.ListView):
     paginate_by = settings.OBJECTS_ON_PAGE
     paginator_class = Paginator
     template_name = 'tabletop/codex_list.html'
+
+
+class ReportCreateView(generic.CreateView):
+    model = Report
+    form_class = ReportForm
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(ReportCreateView, self).form_valid(form)
+
+
+class ReportUpdateView(OwnerModelOrAdminAccessMixin,
+                       generic.UpdateView):
+    model = Report
+    form_class = ReportForm
+
+
+class ReportDeleteView(OwnerModelOrAdminAccessMixin, generic.DeleteView):
+    model = Report
+    template_name = 'tabletop/report_form.html'
+
+    success_url = reverse_lazy('tabletop:report-list')
+
+
+class ReportDetailView(generic.DetailView):
+    model = Report
+
+
+class ReportListView(generic.ListView):
+    model = Report
+    paginate_by = settings.OBJECTS_ON_PAGE
+    paginator_class = Paginator

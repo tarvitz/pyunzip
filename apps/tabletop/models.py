@@ -13,11 +13,11 @@ User = get_user_model()
 from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.core.exceptions import ValidationError
 
 from apps.core.helpers import render_filter, post_markup_filter
 from django.contrib.contenttypes import generic
+from datetime import datetime
 
 
 MODEL_UNIT_TYPE_CHOICES = (
@@ -49,7 +49,7 @@ class Codex(models.Model):
                                      related_name="ct_set_for_%(class)s")
     object_id = models.PositiveIntegerField()
     source = generic.GenericForeignKey(ct_field="content_type",
-                                               fk_field="object_id")
+                                       fk_field="object_id")
     title = models.CharField(_('title'), max_length=128)
     #for sphinx search optimization
     plain_side = models.CharField(_('plain side'), max_length=128, blank=True)
@@ -201,28 +201,35 @@ class Mission(models.Model):
         pass
 
 
-class BattleReport(models.Model):
+class Report(models.Model):
     title = models.CharField(_('title'), max_length=100)
-    owner = models.ForeignKey(User, related_name='battle_report_set')
-    published = models.DateTimeField(
-        _('published'), auto_now=True
+    owner = models.ForeignKey(User, related_name='report_owner_set')
+    created_on = models.DateTimeField(
+        _('created on'), auto_now=True, default=datetime.now
     )
-    #boo :)
     rosters = models.ManyToManyField(Roster, verbose_name=_('rosters'))
     winners = models.ManyToManyField(
         Roster,
         blank=True, null=True, verbose_name=_('winners'),
         related_name='breport_winners_sets'
     )
-    mission = models.ForeignKey(Mission, verbose_name=_("mission"))
+    mission = models.ForeignKey(
+        Mission, verbose_name=_("mission"), blank=True, null=True
+    )
     layout = models.CharField(_('layout'), max_length=30)
     deployment = models.CharField(
         _('deployment'), choices=DEPLOYMENT_CHOICES, max_length=128,
         default='dow'
     )
     comment = models.TextField(_('comment'), max_length=10240)
-    approved = models.BooleanField(_('approved'), default=False, blank=True)
-    ip_address = models.IPAddressField(_('ip address'), blank=True, null=True)
+    comment_cache = models.TextField(
+        _('comment cache'), blank=True, null=True,
+        help_text=_("comment rendered cache"))
+    is_approved = models.BooleanField(_('is approved'), default=False,
+                                      blank=True)
+    is_draw = models.BooleanField(
+        _('is draw'), default=False,
+        help_text=_("marks if match was finished with draw result"))
     syntax = models.CharField(_('syntax'), max_length=20,
                               choices=settings.SYNTAX)
 
@@ -234,7 +241,13 @@ class BattleReport(models.Model):
         )
 
     def get_absolute_url(self):
-        return reverse('tabletop:report', args=(self.id,))
+        return reverse('tabletop:report-detail', args=(self.pk, ))
+
+    def get_edit_url(self):
+        return reverse('tabletop:report-update', args=(self.pk, ))
+
+    def get_delete_url(self):
+        return reverse('tabletop:report-delete', args=(self.pk, ))
 
     def get_title(self):
         return self.title
@@ -243,15 +256,6 @@ class BattleReport(models.Model):
         d = {}
         [d.update({i[0]: i[1]}) for i in DEPLOYMENT_CHOICES]
         return d[self.deployment]
-
-    def delete(self, *args, **kwargs):
-        # deletes battlereport instance with rosters which already
-        # had been deleted
-        # (orphans)
-        for r in self.rosters.distinct():
-            if r.is_orphan:
-                r.delete()
-        super(BattleReport, self).delete(*args, **kwargs)
 
     def get_approved_label(self):
         return 'success' if self.approved else 'inverse'

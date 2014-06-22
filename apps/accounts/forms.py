@@ -12,7 +12,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import auth
 
 from captcha.fields import ReCaptchaField
-from django_select2.widgets import Select2Widget
 
 
 #mixins

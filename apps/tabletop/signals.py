@@ -2,24 +2,21 @@
 from django.conf import settings
 from apps.core.helpers import render_filter
 from django.db.models.signals import (
-    post_save, pre_delete, pre_save
+    pre_delete, pre_save
 )
 from apps.tabletop.models import (
-    BattleReport, Roster
+    Report, Roster
 )
 from django.dispatch import receiver
 
-
-@receiver(post_save, sender=BattleReport)
-def on_battle_report_change(instance, **kwargs):
-    if instance.approved:
-        for roster in instance.rosters.all():
-            roster.reload_wins_defeats()
+@receiver(pre_save, sender=Report)
+def on_report_pre_save(instance, **kwargs):
+    instance.comment_cache = instance.render_comment()
     return instance
 
 
-@receiver(pre_delete, sender=BattleReport)
-def on_battle_report_delete(instance, **kwargs):
+@receiver(pre_delete, sender=Report)
+def on_report_delete(instance, **kwargs):
     return instance
 
 

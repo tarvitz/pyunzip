@@ -1,0 +1,32 @@
+{% extends base_template %} {% load i18n %}
+{% block css %}
+  {{ block.super }}
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li><a href="{% url "tabletop:report-list" %}">{% trans "reports" %}</a></li>
+    {% if not delete %}
+      {% if object %}
+        <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+        <li class="active">{% trans "update report" %}</li>
+      {% else %}
+        <li class="active">{% trans "create report" %}</li>
+      {% endif %}
+    {% else %}
+      <li><a href="{{ object.get_absolute_url }}">{{ object.title|lower }}</a></li>
+      <li class="active">{% trans "delete roster" %}</li>
+    {% endif %}
+  </ul>
+  {% if delete %}
+    {% trans "Delete" as save_text %}
+    <h3>{% trans "Confirm roster deletion" %}</h3>
+  {% else %}
+    {% trans "Save" as save_text %}
+  {% endif %}
+  <form class="form-horizontal" action='{{ request.path }}' method='POST'>
+    {% csrf_token %}
+    {% include "forms/bootstrap_horizontal.html" with form=form %}
+    {% include "forms/submit.html" with text=save_text klass=user.get_color_theme %}
+  </form>
+{% endblock %}

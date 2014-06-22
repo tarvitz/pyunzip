@@ -1,0 +1,21 @@
+[
+{
+    "pk": 1, 
+    "model": "tabletop.report", 
+    "fields": {
+        "comment": "\u0422\u0443\u0442 \u043e\u0447\u0435\u043d\u044c \u0431\u043e\u043b\u044c\u0448\u043e\u0439 \u0431\u0430\u0442\u043b \u0440\u0435\u043f\u043e\u0440\u0442.", 
+        "layout": "1vs1", 
+        "is_approved": false, 
+        "title": "\u0411\u0438\u0442\u0432\u0430 \u0437\u0430 \u0431`\u0430\u0442\u0432\u0443", 
+        "comment_cache": "\t<p>\u0422\u0443\u0442 \u043e\u0447\u0435\u043d\u044c \u0431\u043e\u043b\u044c\u0448\u043e\u0439 \u0431\u0430\u0442\u043b \u0440\u0435\u043f\u043e\u0440\u0442.</p>", 
+        "rosters": [], 
+        "mission": 6, 
+        "syntax": "", 
+        "created_on": "2014-06-17T04:59:03.339", 
+        "winners": [], 
+        "is_draw": false, 
+        "deployment": "dow", 
+        "owner": 1
+    }
+}
+]

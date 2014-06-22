@@ -11,11 +11,14 @@ from apps.core.widgets import TinyMkWidget
 
 
 from django.forms.util import ErrorList
-from apps.tabletop.models import Mission, Roster, BattleReport, Codex
+from apps.tabletop.models import Mission, Roster, Report, Codex
 
 import re
 
 from apps.wh.models import Side, Army
+
+DEFAULT_ATTRS = {'class': 'form-control'}
+SELECT2_ATTRS = {'class': 'form-control', 'data-toggle': 'select2'}
 
 
 class AddCodexModelForm(forms.ModelForm):
@@ -171,7 +174,7 @@ class AddBattleReportForm(RequestModelForm):
         return instance
 
     class Meta:
-        model = BattleReport
+        model = Report
         fields = (
             'title', 'mission', 'rosters', 'winners', 'layout',
             'deployment', 'comment')
@@ -180,88 +183,39 @@ class AddBattleReportForm(RequestModelForm):
                 'data-class': 'chosen', 'class': 'form-control'})
         }
 
+LAYOUT_CHOICES = (
+    ('1vs1', _("Player versus Player")),
+    ('2vs2', _("Two versus Two")),
+    ('ffa', _("Free for all")),
+)
 
-class AddBattleReportModelForm(RequestModelForm):
+
+class ReportForm(forms.ModelForm):
     required_css_class = 'required'
-    search_rosters = forms.CharField(
-        required=False, label=_('Search rosters'),
-        help_text=_(
-            'If you do not see rosters you need below you may search them'))
-    ids = Roster.objects.all()[0:10]
-    rosters_choice = forms.ModelMultipleChoiceField(
-        queryset=Roster.objects.filter(pk__in=ids),
-        help_text=_("You can add this rosters to battle report"),
-        label=_('Available rosters'),
-        required=False
-    )
-    del ids
-    users = forms.ModelMultipleChoiceField(queryset=Roster.objects.none(),
-                                           label=_('Rosters'))
-    winner = forms.ModelChoiceField(queryset=Roster.objects.none(),
-                                    required=False)
-    layout = forms.RegexField(
-        regex=re.compile(r'^[\d+vs]+', re.M), required=True,
-        help_text=_(
-            'Game layout, for example 2vs2, 1vs1, 1vs1vs1, 2vs1vs1 etc.'))
-    comment = forms.CharField(
-        widget=TinyMkWidget(
-            attrs={'disable_user_quote': True, 'disable_syntax': True}))
+    layout = forms.ChoiceField(label=_("Layout"), choices=LAYOUT_CHOICES,
+                               widget=forms.Select(attrs={
+                                   'class': 'form-control',
+                                   'data-toggle': 'select2'
+                               }))
 
     class Meta:
-        model = BattleReport
-        fields = ('title', 'layout', 'mission', 'syntax', 'search_rosters',
-                  'rosters_choice', 'users', 'winner', 'comment')
-        exclude = ['owner', 'published', 'approved', 'ip_address', ]
+        model = Report
+        fields = ('title', 'layout', 'mission', 'rosters', 'winners',
+                  'comment', 'is_draw')
+        widgets = {
+            'title': forms.TextInput(attrs=DEFAULT_ATTRS),
+            'mission': forms.Select(attrs=SELECT2_ATTRS),
+            'rosters': forms.SelectMultiple(attrs=SELECT2_ATTRS),
+            'winners': forms.SelectMultiple(attrs=SELECT2_ATTRS),
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control markitup'}),
+        }
 
-    def __init__(self, *args, **kwargs):
-        if 'instance' in kwargs:
-            instance = kwargs['instance']
-            #what do we have when we want to edit battle report ;)
-            if instance:
-                if instance.users.all():
-                    self.base_fields['users'].queryset = Roster.objects.filter(
-                        pk__in=(instance.users.all()))
-                    self.base_fields['winner'].queryset = \
-                        Roster.objects.filter(pk__in=(instance.users.all()))
-
-        #checking up for valid value existance
-        if args:
-            if 'users' in args[0]:
-                plain_users = args[0].getlist('users')
-                self.base_fields['users'].queryset = Roster.objects.filter(
-                    id__in=(plain_users, ))
-            if 'winner' in args[0]:
-                plain_winner = args[0]['winner']
-                if plain_winner:
-                    self.base_fields['winner'].queryset = \
-                        Roster.objects.filter(id=plain_winner)
-        super(AddBattleReportModelForm, self).__init__(*args, **kwargs)
-
-    def clean(self):
-        cleaned_data = self.cleaned_data
-        layout = cleaned_data.get('layout', None)
-        users = cleaned_data.get('users', None)
-        if layout and users:
-            l = sum([int(l) for l in layout.split('vs') if l])
-            if len(users) != l:
-                msg = _(
-                    'You should set right layout, for example 2vs2, '
-                    '3vs1, number of players should be equal to number '
-                    'of rosters you\'ve passed'
-                )
-                self._errors['users'] = ErrorList([msg])
-                del cleaned_data['users']
-        return cleaned_data
-
-    def clean_layout(self):
-        layout = self.cleaned_data['layout']
-        l = sum([int(l) for l in layout.split('vs') if l])
-        if l > 10:
-            raise forms.ValidationError(_(
-                '10 players is absolute maximum, do not try to'
-                ' add layout with more players, it\'s strickly forbidden'
-            ))
-        return layout
+    class Media:
+        js = (
+            'components/select2/select2.min.js',
+            'js/select2_load.js',
+        )
 
 
 class DeepSearchRosterForm(RequestForm):

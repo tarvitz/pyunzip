@@ -12,6 +12,7 @@ from django.template import Context, Template
 from django.template.loader import get_template
 from datetime import datetime, date
 
+from copy import deepcopy
 
 class JustTest(TestCase):
     fixtures = [
@@ -303,3 +304,25 @@ class TestHelperMixin(object):
                     assertion(response[field], value)
             else:
                 assertion(response[field], value)
+
+    def assertInstance(self, instance, raw):
+        """ assert instance fields with raw post data
+
+        :param instance:
+        :param (dict) raw: raw post data for instance creation or its update
+        :return:
+        """
+
+        verify = deepcopy(raw)
+        m2m_fields = instance._meta.get_m2m_with_model()
+
+        # process m2m relations
+        for fields in m2m_fields:
+            field = fields[0]
+            items = verify.pop(field.name)
+            for item in items:
+                obj_item = field.rel.to.objects.get(pk=item)
+                self.assertIn(obj_item, getattr(instance, field.name).all())
+
+        for key, value in verify.items():
+            self.assertEqual(getattr(instance, key), value)

@@ -1,0 +1,27 @@
+{% extends base_template %} {% load coretags static i18n %}
+{% block js %}
+  <script language='javascript' src='{% static "js/base.js" %}'></script>
+{% endblock %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{% url "tabletop:report-list" %}'>{% trans "reports" %}</a></li>
+    <li class="active">{{ object.title|lower }}</li>
+  </ul>
+  <h3>{{ object.title }}</h3>
+  {% include "tabletop/include/report.html" with report=object %}
+
+  {% if comments.object_list %}
+    {% for comment in comments.object_list %}
+      {% include "generic/comment.html"%}
+    {% endfor %}
+    {% include "generic/paginator.html" with page_obj=comments paginator=comments.paginator %}
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <h3>{% trans "Comment" context "verb" %}</h3>
+    <hr>
+    {% get_content_type object as object_ct %}
+    {% include "add_comment.html" with object=object_ct %}
+  {% endif %}
+{% endblock %}

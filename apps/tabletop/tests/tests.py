@@ -1,18 +1,19 @@
 # coding: utf-8
+
 from django.test import TestCase
-from apps.tabletop.models import Codex, Roster, Mission, BattleReport
+from apps.tabletop.models import Codex, Roster, Mission, Report
 from apps.core.tests import TestHelperMixin
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+from apps.core.helpers import get_object_or_404
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from apps.wh.models import Army, Side
 from apps.core.helpers import get_content_type
 from django.test.client import RequestFactory
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.contenttypes.models import ContentType
+from django.core import exceptions
 from django.conf import settings
 from django.core.cache import cache
 
@@ -136,10 +137,10 @@ class JustTest(TestHelperMixin, TestCase):
             'deployment': 'dow',
             'comment': u'Первый ростер победил :D'
         }
-        count = BattleReport.objects.count()
+        count = Report.objects.count()
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(count, BattleReport.objects.count())
+        self.assertEqual(count, Report.objects.count())
 
         # testing for user
         logged = self.client.login(username='user', password='123456')
@@ -148,8 +149,8 @@ class JustTest(TestHelperMixin, TestCase):
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         open('file.html', 'w').write(response.content)
-        self.assertEqual(count + 1, BattleReport.objects.count())
-        report = BattleReport.objects.all()[0]
+        self.assertEqual(count + 1, Report.objects.count())
+        report = Report.objects.all()[0]
         edit = deepcopy(post)
         edit.update({
             'mission': mission,
@@ -180,7 +181,7 @@ class JustTest(TestHelperMixin, TestCase):
     #@skipIf(True, "broken")
     def test_battle_report_edit(self):
         self.test_battle_report_add()
-        report = BattleReport.objects.all()[0]
+        report = Report.objects.all()[0]
         admin = User.objects.get(username='admin')
         report.owner = admin
         report.save()
@@ -212,7 +213,7 @@ class JustTest(TestHelperMixin, TestCase):
                 self.assertEqual(response.status_code, 404)
             else:  # anonymous got redirect for login
                 self.assertEqual(response.status_code, 404)
-            report = BattleReport.objects.get(id=report.id)
+            report = Report.objects.get(id=report.id)
             self.check_changes(report, edit, check=self.assertNotEqual)
 
         edit.update({
@@ -222,14 +223,14 @@ class JustTest(TestHelperMixin, TestCase):
         self.client.login(username='admin', password='123456')
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
-        report = BattleReport.objects.get(id=report.id)
+        report = Report.objects.get(id=report.id)
         self.check_changes(report, edit, check=self.assertEqual)
 
     #@skipIf(True, "broken")
     def test_battle_report_approve_disapprove(self):
         # only admin can approve/disapprove
         self.test_battle_report_add()
-        report = BattleReport.objects.all()[0]
+        report = Report.objects.all()[0]
         approve_url = reverse('tabletop:report-approve', args=(report.id,))
         disapprove_url = reverse('tabletop:report-disapprove', args=(report.id, ))
         for user in ('user', None):
@@ -244,14 +245,14 @@ class JustTest(TestHelperMixin, TestCase):
                 self.assertEqual(response.status_code, 404)
             else:
                 self.assertEqual(response.status_code, 404)
-            report = BattleReport.objects.get(id=report.id)
+            report = Report.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
             response = self.client.get(disapprove_url, follow=True)
             if user:
                 self.assertEqual(response.status_code, 404)
             else:
                 self.assertEqual(response.status_code, 404)
-            report = BattleReport.objects.get(id=report.id)
+            report = Report.objects.get(id=report.id)
             self.assertEqual(report.approved, False)
         # admin can approve
         self.client.login(username='admin', password='123456')
@@ -259,11 +260,11 @@ class JustTest(TestHelperMixin, TestCase):
         report.save()
         response = self.client.get(approve_url, follow=True)
         self.assertEqual(response.status_code, 200)
-        report = BattleReport.objects.get(id=report.id)
+        report = Report.objects.get(id=report.id)
         self.assertEqual(report.approved, True)
         response = self.client.get(disapprove_url, follow=True)
         self.assertEqual(response.status_code, 200)
-        report = BattleReport.objects.get(id=report.id)
+        report = Report.objects.get(id=report.id)
         self.assertEqual(report.approved, False)
 
     def test_battle_report_clean_winners(self):
@@ -282,7 +283,7 @@ class JustTest(TestHelperMixin, TestCase):
             'deployment': 'dow',
             'comment': u'Первый ростер победил :D'
         }
-        count = BattleReport.objects.count()
+        count = Report.objects.count()
         response = self.client.post(url, post, follow=True)
         self.assertEqual(response.status_code, 200)
         amount = 1
@@ -295,7 +296,7 @@ class JustTest(TestHelperMixin, TestCase):
         )
 
     def test_roster_win_defeats(self):
-        report = BattleReport.objects.filter(layout='1vs1')[0]
+        report = Report.objects.filter(layout='1vs1')[0]
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
 
@@ -314,12 +315,12 @@ class JustTest(TestHelperMixin, TestCase):
             'deployment': 'dow',
             'comment': u'Новый победный реп'
         }
-        count = BattleReport.objects.count()
+        count = Report.objects.count()
         url = reverse('tabletop:report-add')
         response = self.client.post(url, post, follow=True)
-        report = BattleReport.objects.all()[0]
+        report = Report.objects.all()[0]
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(count + 1, BattleReport.objects.count())
+        self.assertEqual(count + 1, Report.objects.count())
         wins = winner.wins
         winner = Roster.objects.get(pk=winner.pk)
         self.assertEqual(report.approved, False)
@@ -560,6 +561,164 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(Codex.objects.filter(pk=codex.pk).exists(), True)
 
 
+class ReportTest(TestHelperMixin, TestCase):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_games.json',
+        'tests/fixtures/load_missions.json',
+        'tests/fixtures/load_armies.json',
+        'tests/fixtures/load_sides.json',
+        'tests/fixtures/load_codexes.json',
+        'tests/fixtures/load_rosters.json',
+    ]
+
+    def setUp(self):
+        side_ct = get_content_type(Side)
+        Codex.objects.filter(content_type_id=17).update(content_type=side_ct)
+        self.winners = Roster.objects.filter(pk__in=[1, ])
+        self.rosters = Roster.objects.filter(pk__in=[1, 2])
+        self.post = {
+            'title': u'Report',
+            'comment': u'Comment',
+            'winners': [1, ],
+            'rosters': [1, 2],
+            'is_draw': False,
+            'layout': '1vs1'
+        }
+        self.post_update = {
+            'title': u'New report',
+            'comment': u'New comments',
+            'winners': [2, ],
+            'rosters': [1, 2],
+            'is_draw': False,
+            'layout': '1vs1'
+        }
+        self.user = User.objects.get(username='user')
+        self.admin = User.objects.get(username='admin')
+        self.create_url = reverse('tabletop:report-create')
+
+    def add_report(self, user=None):
+        user = user or self.user
+        report = Report.objects.create(
+            owner=user,
+            title=self.post['title'], comment=self.post['comment'],
+            is_draw=self.post['is_draw'], layout=self.post['layout']
+        )
+        for winner in self.winners:
+            report.winners.add(winner)
+        for roster in self.rosters:
+            report.rosters.add(roster)
+        report.save()
+        return report
+
+    def test_report_anonymous_create(self):
+        response = self.client.post(self.create_url, self.post, follow=True)
+        self.assertEqual(response.status_code, 404)
+
+    def test_report_anonymous_update(self):
+        report = self.add_report()
+        response = self.client.post(report.get_edit_url(), self.post,
+                                    follow=True)
+        self.assertEqual(response.status_code, 404)
+
+    def test_report_anonymous_delete(self):
+        report = self.add_report()
+        response = self.client.post(report.get_delete_url(), {},
+                                    follow=True)
+        self.assertEqual(response.status_code, 404)
+
+    def test_report_list(self):
+        self.add_report()
+        url = reverse('tabletop:report-list')
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+        context = response.context
+        self.assertIn('object_list', context)
+        self.assertEqual(context['object_list'].count(), 1)
+
+    def test_report_get(self):
+        report = self.add_report()
+        response = self.client.get(report.get_absolute_url(), follow=True)
+        self.assertEqual(response.status_code, 200)
+        context = response.context
+        self.assertIn('object', context)
+        self.assertIsInstance(context['object'], Report)
+
+    def test_report_user_create(self):
+        self.login('user')
+        count = Report.objects.count()
+        response = self.client.post(self.create_url, self.post, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.proceed_form_errors(response.context)
+        self.assertEqual(Report.objects.count(), count + 1)
+        report = Report.objects.latest('pk')
+        self.assertEqual(report.owner, self.user)
+
+    def test_report_user_update(self):
+        report = self.add_report(user=self.user)
+        self.login('user')
+        response = self.client.post(report.get_edit_url(), self.post_update,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.proceed_form_errors(response.context)
+        report = Report.objects.get(pk=report.pk)
+        self.assertInstance(report, self.post_update)
+
+    def test_report_user_delete(self):
+        report = self.add_report(user=self.user)
+        self.login('user')
+        count = Report.objects.count()
+        response = self.client.post(report.get_delete_url(), {}, follow=True)
+        # check we passes through deletion link
+        self.assertEqual(response.status_code, 200)
+        # check we delete something from reports
+        self.assertEqual(Report.objects.count(), count - 1)
+        # check we delete exactly that instance we wanted to
+        self.assertRaises(exceptions.ObjectDoesNotExist,
+                          lambda: Report.objects.get(pk=report.pk))
+
+    def test_report_user_update_non_owner(self):
+        """ non-owner's can not update/delete reports of non their own """
+        report = self.add_report(user=self.admin)
+        self.login('user')
+        response = self.client.post(report.get_edit_url(), self.post_update,
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_report_user_delete_non_owner(self):
+        """ non-owner's can not update/delete reports of non their own """
+        report = self.add_report(user=self.admin)
+        self.login('user')
+        response = self.client.post(report.get_delete_url(), {},
+                                    follow=True)
+        self.assertEqual(response.status_code, 403)
+
+    def test_report_admin_update_non_owner(self):
+        """ admin users can freely modify/delete reports that don't belng to
+        them
+        """
+        report = self.add_report(user=self.user)
+        self.login('admin')
+        response = self.client.post(report.get_edit_url(), self.post_update,
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        report = Report.objects.get(pk=report.pk)
+        self.assertInstance(report, self.post_update)
+
+    def test_report_admin_delete_non_owner(self):
+        """ admin users can delete reports that does not belong to them freely
+        """
+        report = self.add_report(user=self.user)
+        count = Report.objects.count()
+        self.login('admin')
+        response = self.client.post(report.get_delete_url(), {},
+                                    follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Report.objects.count(), count - 1)
+        self.assertRaises(exceptions.ObjectDoesNotExist,
+                          lambda: Report.objects.get(pk=report.pk))
+
+
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -586,7 +745,7 @@ class CacheTest(TestCase):
         self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
 
     def not_test_battle_report_cache(self):
-        report = BattleReport.objects.all()[0]
+        report = Report.objects.all()[0]
         # fixture should caches it
         self.assertEqual(self.get_battle_report_cache(report), report)
         self.del_battle_report_cache(report)

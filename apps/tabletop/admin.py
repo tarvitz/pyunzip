@@ -1,14 +1,14 @@
 # coding: utf-8
 from django.contrib import admin
 from apps.tabletop.models import (
-    Roster, Game, Mission, BattleReport,
+    Roster, Game, Mission, Report,
 )
 
 
 class BattleReportAdmin(admin.ModelAdmin):
-    list_display = ('title', 'layout', 'approved', 'ip_address')
-    search_fields = ['approved', 'title', 'winner']
-    list_filter = ['approved', 'layout', 'ip_address']
+    list_display = ('title', 'layout', 'is_approved', 'ip_address')
+    search_fields = ['title', 'winner']
+    list_filter = ['layout', 'is_approved']
 
 
 class GameAdmin(admin.ModelAdmin):
@@ -22,5 +22,4 @@ class RosterAdmin(admin.ModelAdmin):
 
 admin.site.register(Game, GameAdmin)
 admin.site.register(Mission)
-admin.site.register(BattleReport, BattleReportAdmin)
 admin.site.register(Roster, RosterAdmin)

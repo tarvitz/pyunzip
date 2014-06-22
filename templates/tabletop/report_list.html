@@ -1,0 +1,25 @@
+{% extends base_template %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href='{% url "pybb:index" %}'>{% trans "forum" %}</a></li>
+    <li><a href='{% url "tabletop:rosters" %}'>{% trans "rosters" %}</a></li>
+  </ul>
+
+  <div class="control pull-right">
+    <a href="{% url "tabletop:report-create" %}"
+       class="btn btn-sm btn-{{ user.get_color_theme|default:"default" }}">{% trans "Add report" %}</a>
+  </div>
+  <h3>{% trans "Reports" %}</h3>
+
+  {% if object_list %}
+    {% for report in object_list %}
+      {% include "tabletop/include/report.html" with report=report %}
+    {% endfor %}
+    {% if paginator %}
+      {% include "generic/paginator.html" %}
+    {% endif %}
+  {% else %}
+    <h3>{% trans "No rosters found" %}</h3>
+  {% endif %}
+{% endblock %}
