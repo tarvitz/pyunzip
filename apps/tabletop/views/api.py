@@ -1,12 +1,12 @@
 # coding: utf-8
 
 import django_filters
-from apps.core.api import IsOwnerOrReadOnly
-from apps.tabletop.models import Codex, Roster
+from apps.core.api import IsOwnerOrModelAdminOrReadOnly, IsOwnerOrReadOnly
+from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 
 from rest_framework import viewsets
 from rest_framework import permissions
-from apps.tabletop.serializers import CodexSerializer, RosterSerializer
+from apps.tabletop.serializers import *
 
 
 class CodexFilterSet(django_filters.FilterSet):
@@ -54,3 +54,21 @@ class CodexViewSet(viewsets.ModelViewSet):
     serializer_class = CodexSerializer
     filter_class = CodexFilterSet
     permission_classes = (CodexPermission, )
+
+
+class ReportViewSet(viewsets.ModelViewSet):
+    queryset = Report.objects.all()
+    serializer_class = ReportSerializer
+    permission_classes = (IsOwnerOrModelAdminOrReadOnly, )
+
+
+class MissionViewSet(viewsets.ModelViewSet):
+    queryset = Mission.objects.all()
+    serializer_class = MissionSerializer
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )
+
+
+class GameViewSet(viewsets.ModelViewSet):
+    queryset = Game.objects.all()
+    serializer_class = GameSerializer
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )

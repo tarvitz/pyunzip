@@ -302,6 +302,12 @@ class TestHelperMixin(object):
                     assertion(response[field], 'http://testserver' + value)
                 else:
                     assertion(response[field], value)
+            elif isinstance(value, (tuple, list)) and '/api/' in value[0]:
+                for item in value:
+                    assertion(
+                        'http://testserver' + item in response[field],
+                        True
+                    )
             else:
                 assertion(response[field], value)
 

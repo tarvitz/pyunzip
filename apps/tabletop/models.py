@@ -187,7 +187,8 @@ class Game(models.Model):
         return self.name
 
     class Meta:
-        pass
+        verbose_name = _("Game")
+        verbose_name_plural = _("Games")
 
 
 class Mission(models.Model):

@@ -1,8 +1,17 @@
 # coding: utf-8
-from apps.tabletop.models import Codex, Roster
-from django.utils.translation import ugettext_lazy as _
+from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 from rest_framework import serializers
+from django.utils.translation import ugettext_lazy as _
 
+
+__all__ = [
+    'CodexSerializer', 'RosterSerializer', 'ReportSerializer',
+    'MissionSerializer', 'GameSerializer'
+]
+
+FAILURE_MESSAGES = {
+    'wrong_owner': _("You should use your own user id for owner field set")
+}
 
 class CodexSerializer(serializers.HyperlinkedModelSerializer):
     content_type = serializers.SerializerMethodField('get_content_type')
@@ -43,3 +52,52 @@ class RosterSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Roster
         exclude = ('roster_cache', )
+
+
+class ReportSerializer(serializers.HyperlinkedModelSerializer):
+    owner = serializers.HyperlinkedRelatedField(required=False,
+                                                view_name='user-detail')
+
+    def validate_owner(self, attrs, source):
+        request = self.context['request']
+        prefix = 'change'
+        if request.method == 'POST':
+            prefix = 'add'
+        elif request.method in ('PUT', 'PATCH', ):
+            prefix = 'change'
+        elif request.method == 'DELETE':
+            prefix = 'delete'
+        app = self.Meta.model._meta.app_label
+        model_name = self.Meta.model._meta.model_name
+        perm = '%(app)s.%(prefix)s_%(model)s' % {
+            'app': app,
+            'model': model_name,
+            'prefix': prefix
+        }
+        owner = attrs[source]
+        if not(request.user and request.user.has_perm(perm)):
+            if owner is None:
+                attrs[source] = request.user
+            elif owner != request.user:
+                raise serializers.ValidationError(
+                    FAILURE_MESSAGES['wrong_owner']
+                )
+        return attrs
+
+    class Meta:
+        model = Report
+
+
+class GameSerializer(serializers.HyperlinkedModelSerializer):
+    name = serializers.CharField(required=True)
+
+    class Meta:
+        model = Game
+
+
+class MissionSerializer(serializers.HyperlinkedModelSerializer):
+    # todo: investigate why hyperlinked serializer fails on post/put game data
+    game = serializers.PrimaryKeyRelatedField()
+
+    class Meta:
+        model = Mission

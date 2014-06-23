@@ -4,11 +4,13 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from apps.wh.models import Army, Side
 from apps.tabletop.models import Report, Codex
+from apps.tabletop.serializers import FAILURE_MESSAGES
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from apps.core.helpers import get_content_type
 
@@ -52,13 +54,41 @@ class ReportViewSetTestMixin(object):
         self.url_delete = self.url_detail
 
         self.put = {
+            'id': 1,
+            'comment': u'new comment put',
+            'is_draw': False,
+            'mission': reverse('api:mission-detail', args=(3, )),
+            'layout': '1vs1',
+            'owner': reverse('api:user-detail', args=(self.user.pk, )),
+            'rosters': [
+                reverse('api:roster-detail', args=(1, )),
+                reverse('api:roster-detail', args=(3, ))
+            ],
+            'winners': [
+                reverse('api:roster-detail', args=(3, ))
+            ],
+            'title': u'New report',
+            'syntax': settings.DEFAULT_SYNTAX
         }
         self.patch = {
             'comment': u'New comment **here**',
             'is_draw': True,
         }
         self.post = {
-
+            'comment': u'new comment',
+            'is_draw': False,
+            'mission': reverse('api:mission-detail', args=(1, )),
+            'layout': '1vs1',
+            'owner': reverse('api:user-detail', args=(self.user.pk, )),
+            'rosters': [
+                reverse('api:roster-detail', args=(1, )),
+                reverse('api:roster-detail', args=(2, ))
+            ],
+            'winners': [
+                reverse('api:roster-detail', args=(1, ))
+            ],
+            'title': u'New report',
+            'syntax': settings.DEFAULT_SYNTAX
         }
         self.object_detail_response = {
             'comment': u'\u0422\u0443\u0442 \u043e\u0447\u0435\u043d\u044c '
@@ -75,7 +105,7 @@ class ReportViewSetTestMixin(object):
             'is_draw': False,
             'layout': '1vs1',
             'mission': 'http://testserver/api/missions/6/',
-            'owner': 'http://testserver/api/users/1/',
+            'owner': 'http://testserver/api/users/6/',
             'rosters': [],
             'syntax': '',
             'title': u'\u0411\u0438\u0442\u0432\u0430 \u0437\u0430 '
@@ -146,7 +176,7 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
 class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
                                  APITestCase):
     # test admin user
-    def test_admin_get_detail(self):
+    def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -154,7 +184,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
-    def test_admin_get_list(self):
+    def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -162,7 +192,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Report.objects.count())
 
-    def test_admin_put_detail(self):
+    def test_put_detail(self):
         self.login('admin')
         count = Report.objects.count()
         response = self.client.put(self.url_put, data=self.put,
@@ -176,7 +206,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(Report.objects.count(), count)
 
-    def test_admin_post_list(self):
+    def test_post_list(self):
         """
         tabletop.change_report permission holder users can freely assign
         owner to anyone, other users can only create reports for themselves
@@ -191,12 +221,13 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
+
         post = deepcopy(self.post)
 
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
-    def test_admin_patch_detail(self):
+    def test_patch_detail(self):
         self.login('admin')
         count = Report.objects.count()
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -209,7 +240,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Report.objects.count(), count)
 
-    def test_admin_delete_detail(self):
+    def test_delete_detail(self):
         self.login('admin')
         count = Report.objects.count()
         response = self.client.delete(self.url_delete, data={},
@@ -377,6 +408,24 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         self.check_response(load, post)
         report = Report.objects.latest('id')
         self.assertEqual(report.owner, self.other_user)
+
+    def test_post_list_false_owner_set(self):
+        """
+        post without owner, as it default would be assign to current user
+        :return:
+        """
+        self.login('user2')
+        count = Report.objects.count()
+        post = deepcopy(self.post)
+        response = self.client.post(self.url_post, data=post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+
+        self.assertEqual(Report.objects.count(), count)
+        self.assertEqual(load['owner'][0],
+                         unicode(FAILURE_MESSAGES['wrong_owner']))
 
     def test_patch_detail(self):
         self.login('user2')
