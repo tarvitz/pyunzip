@@ -3,7 +3,7 @@
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from apps.wh.models import Army, Side
-from apps.tabletop.models import Report, Codex
+from apps.tabletop.models import Report, Codex, Roster
 from apps.tabletop.serializers import FAILURE_MESSAGES
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
@@ -298,6 +298,28 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
+    def test_post_list_failure(self):
+        self.login('user')
+        post = deepcopy(self.post)
+        winners = Roster.objects.filter(pk__in=[3, 4])
+
+        post['winners'] = [
+            reverse('api:roster-detail', args=(3, )),
+            reverse('api:roster-detail', args=(4, )),
+        ]
+
+        response = self.client.post(self.url_post, data=post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(len(load['winners']), 2)
+        for idx, winner in enumerate(winners):
+            self.assertEqual(
+                load['winners'][idx],
+                unicode(FAILURE_MESSAGES['wrong_winner_rosters'] % winner)
+            )
+
     def test_post_list_no_owner(self):
         self.login('user')
         count = Report.objects.count()
@@ -392,6 +414,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
     def test_post_list_no_owner_set(self):
         """
         post without owner, as it default would be assign to current user
+
         :return:
         """
         self.login('user2')
@@ -412,6 +435,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
     def test_post_list_false_owner_set(self):
         """
         post without owner, as it default would be assign to current user
+
         :return:
         """
         self.login('user2')

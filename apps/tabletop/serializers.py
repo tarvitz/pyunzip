@@ -1,6 +1,7 @@
 # coding: utf-8
 from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 from rest_framework import serializers
+from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -10,8 +11,10 @@ __all__ = [
 ]
 
 FAILURE_MESSAGES = {
-    'wrong_owner': _("You should use your own user id for owner field set")
+    'wrong_owner': _("You should use your own user id for owner field set"),
+    'wrong_winner_rosters': _("There's no such winner `%s` in rosters")
 }
+
 
 class CodexSerializer(serializers.HyperlinkedModelSerializer):
     content_type = serializers.SerializerMethodField('get_content_type')
@@ -82,6 +85,18 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
                 raise serializers.ValidationError(
                     FAILURE_MESSAGES['wrong_owner']
                 )
+        return attrs
+
+    def validate(self, attrs):
+        winners = attrs.get('winners', [])
+        rosters = attrs.get('rosters', [])
+        msg_list = []
+        for winner in winners:
+            if winner not in rosters:
+                msg = FAILURE_MESSAGES['wrong_winner_rosters'] % winner
+                msg_list.append(msg)
+        if msg_list:
+            self._errors['winners'] = ErrorList(msg_list)
         return attrs
 
     class Meta:
