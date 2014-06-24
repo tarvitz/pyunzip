@@ -250,6 +250,7 @@ REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',),
     'PAGINATE_BY': API_OBJECTS_ON_PAGE,
+    'PAGINATE_BY_PARAM': 'page_size',
 }
 
 

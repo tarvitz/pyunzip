@@ -1,0 +1,498 @@
+[
+{
+    "pk": 1, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Blood Ravens", 
+        "side": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Death Watch", 
+        "side": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Relictors", 
+        "side": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Crimson Fists", 
+        "side": 1
+    }
+},
+{
+    "pk": 5, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Black Templars", 
+        "side": 1
+    }
+},
+{
+    "pk": 6, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Emperor's Children", 
+        "side": 2
+    }
+},
+{
+    "pk": 7, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Alpha Legion", 
+        "side": 2
+    }
+},
+{
+    "pk": 8, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Black Legion", 
+        "side": 2
+    }
+},
+{
+    "pk": 9, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "None", 
+        "side": 9
+    }
+},
+{
+    "pk": 10, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Necrons", 
+        "side": 7
+    }
+},
+{
+    "pk": 12, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Sacred Rose", 
+        "side": 10
+    }
+},
+{
+    "pk": 13, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Evil Sunz", 
+        "side": 12
+    }
+},
+{
+    "pk": 14, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Space Wolves", 
+        "side": 1
+    }
+},
+{
+    "pk": 15, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Ultramarines", 
+        "side": 1
+    }
+},
+{
+    "pk": 16, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "White Scars", 
+        "side": 1
+    }
+},
+{
+    "pk": 17, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Raven Guard", 
+        "side": 1
+    }
+},
+{
+    "pk": 18, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Salamanders", 
+        "side": 1
+    }
+},
+{
+    "pk": 19, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Our Martyred Lady", 
+        "side": 10
+    }
+},
+{
+    "pk": 20, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Valorous Heart", 
+        "side": 10
+    }
+},
+{
+    "pk": 21, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Bloody Rose", 
+        "side": 10
+    }
+},
+{
+    "pk": 22, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Ebon Chalice", 
+        "side": 10
+    }
+},
+{
+    "pk": 23, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Order of the Argent Shroud", 
+        "side": 10
+    }
+},
+{
+    "pk": 24, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Goffs", 
+        "side": 12
+    }
+},
+{
+    "pk": 25, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Bad Moons", 
+        "side": 12
+    }
+},
+{
+    "pk": 26, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Death Skullz", 
+        "side": 12
+    }
+},
+{
+    "pk": 27, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Snakebites", 
+        "side": 12
+    }
+},
+{
+    "pk": 28, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Blood Axez", 
+        "side": 12
+    }
+},
+{
+    "pk": 29, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Kults of Speed", 
+        "side": 12
+    }
+},
+{
+    "pk": 30, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "World Eaters", 
+        "side": 2
+    }
+},
+{
+    "pk": 31, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Thousand Sons", 
+        "side": 2
+    }
+},
+{
+    "pk": 32, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Word Bearers", 
+        "side": 2
+    }
+},
+{
+    "pk": 33, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Night Lords", 
+        "side": 2
+    }
+},
+{
+    "pk": 34, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Iron Warriors", 
+        "side": 2
+    }
+},
+{
+    "pk": 35, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "All-Seeing Eye Kabal", 
+        "side": 5
+    }
+},
+{
+    "pk": 36, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Black Heart Kabal", 
+        "side": 5
+    }
+},
+{
+    "pk": 37, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Bloodied Claw Kabal", 
+        "side": 5
+    }
+},
+{
+    "pk": 38, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Wych-cult of Murder", 
+        "side": 5
+    }
+},
+{
+    "pk": 39, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Emasculators", 
+        "side": 5
+    }
+},
+{
+    "pk": 40, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "The Kabal of the Forbidden Pleasures", 
+        "side": 5
+    }
+},
+{
+    "pk": 41, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "The Kabal of the Black Moon", 
+        "side": 5
+    }
+},
+{
+    "pk": 42, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Hive Fleet Behemoth", 
+        "side": 8
+    }
+},
+{
+    "pk": 43, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Hive Fleet Kraken", 
+        "side": 8
+    }
+},
+{
+    "pk": 44, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Hive Fleet Leviathan", 
+        "side": 8
+    }
+},
+{
+    "pk": 46, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Vior'La", 
+        "side": 6
+    }
+},
+{
+    "pk": 47, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Bork'An", 
+        "side": 6
+    }
+},
+{
+    "pk": 48, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Tau", 
+        "side": 6
+    }
+},
+{
+    "pk": 49, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "D'yanoi", 
+        "side": 6
+    }
+},
+{
+    "pk": 50, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Ke'Lshan", 
+        "side": 6
+    }
+},
+{
+    "pk": 51, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Cadian Shock Troops", 
+        "side": 3
+    }
+},
+{
+    "pk": 52, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Valhallan Ice Warriors", 
+        "side": 3
+    }
+},
+{
+    "pk": 53, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Armageddon Steel Legion", 
+        "side": 3
+    }
+},
+{
+    "pk": 54, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Catachan Jungle Fighters", 
+        "side": 3
+    }
+},
+{
+    "pk": 55, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Harakoni Warhawks", 
+        "side": 3
+    }
+},
+{
+    "pk": 56, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Mordian Iron Guard", 
+        "side": 3
+    }
+},
+{
+    "pk": 57, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Biel-tan", 
+        "side": 4
+    }
+},
+{
+    "pk": 58, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Saim-Hann", 
+        "side": 4
+    }
+},
+{
+    "pk": 59, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Iyanden", 
+        "side": 4
+    }
+},
+{
+    "pk": 60, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Alaitoc", 
+        "side": 4
+    }
+},
+{
+    "pk": 61, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Ulthwe", 
+        "side": 4
+    }
+},
+{
+    "pk": 62, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Harlequins", 
+        "side": 4
+    }
+},
+{
+    "pk": 65, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Ordo Hereticus", 
+        "side": 10
+    }
+},
+{
+    "pk": 66, 
+    "model": "wh.army", 
+    "fields": {
+        "name": "Ordo Xenos", 
+        "side": 13
+    }
+}
+]

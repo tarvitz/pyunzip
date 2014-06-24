@@ -1,0 +1,632 @@
+[
+{
+    "pk": 1, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Carry the Emperors will as your torch, with it destroy the shadows"
+    }
+},
+{
+    "pk": 2, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Victory needs no explanation, defeat allows none"
+    }
+},
+{
+    "pk": 3, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "There is only the Emperor, and He is our shield and protector"
+    }
+},
+{
+    "pk": 4, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Death is the servant of the righteous"
+    }
+},
+{
+    "pk": 5, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Thought: Hope is the beginning of unhappiness"
+    }
+},
+{
+    "pk": 6, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A suspicious mind is a healthy mind"
+    }
+},
+{
+    "pk": 7, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Hope is the beginning of unhappiness"
+    }
+},
+{
+    "pk": 8, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The Emperor knows, the Emperor is watching"
+    }
+},
+{
+    "pk": 9, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Death be thy compass"
+    }
+},
+{
+    "pk": 10, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Blessed is the mind too small for doubt"
+    }
+},
+{
+    "pk": 11, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "To admit defeat is to blaspheme against the Emperor"
+    }
+},
+{
+    "pk": 12, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The difference between heresy and treachery is ignorance"
+    }
+},
+{
+    "pk": 13, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Knowledge is power, guard it well"
+    }
+},
+{
+    "pk": 14, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A small mind is a tidy mind"
+    }
+},
+{
+    "pk": 15, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "An open mind is like a fortress with its gate unbarred and unguarded"
+    }
+},
+{
+    "pk": 16, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Better crippled in body than corrupt in mind"
+    }
+},
+{
+    "pk": 17, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Innocence proves nothing"
+    }
+},
+{
+    "pk": 18, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Only the awkward question; only the foolish ask twice"
+    }
+},
+{
+    "pk": 19, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Pain is an illusion of the senses, despair an illusion of the mind"
+    }
+},
+{
+    "pk": 20, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Success is commemorated; Failure merely remembered"
+    }
+},
+{
+    "pk": 21, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The wise man learns from the deaths of others"
+    }
+},
+{
+    "pk": 22, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Wisdom is the beginning of fear"
+    }
+},
+{
+    "pk": 23, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Zeal is its own excuse"
+    }
+},
+{
+    "pk": 24, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Zeal is no excuse"
+    }
+},
+{
+    "pk": 25, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Victory needs no explanation, defeat allows none"
+    }
+},
+{
+    "pk": 26, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Know the mutant; kill the mutant"
+    }
+},
+{
+    "pk": 27, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "My armour is contempt"
+    }
+},
+{
+    "pk": 28, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Ignorance is a virtue"
+    }
+},
+{
+    "pk": 29, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A wise man does not fear, a man afraid does not think"
+    }
+},
+{
+    "pk": 30, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Even a man who has nothing can still offer his life"
+    }
+},
+{
+    "pk": 31, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Only in death does duty end"
+    }
+},
+{
+    "pk": 32, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Excuses are the refuge of the weak"
+    }
+},
+{
+    "pk": 33, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Faith is your shield"
+    }
+},
+{
+    "pk": 34, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "All souls cry out for salvation"
+    }
+},
+{
+    "pk": 35, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Without Him there is nothing"
+    }
+},
+{
+    "pk": 36, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Damnation is eternal"
+    }
+},
+{
+    "pk": 37, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Cease and Repent"
+    }
+},
+{
+    "pk": 38, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Submit to His will"
+    }
+},
+{
+    "pk": 39, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Purity of purpose"
+    }
+},
+{
+    "pk": 40, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Curse now the death in vain"
+    }
+},
+{
+    "pk": 41, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "His will be done"
+    }
+},
+{
+    "pk": 42, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "No man died in His service that died in vain"
+    }
+},
+{
+    "pk": 43, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "To withdraw in disgust is not apathy"
+    }
+},
+{
+    "pk": 44, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "There is nothing to fear but failure"
+    }
+},
+{
+    "pk": 45, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Mercy is a sign of weakness"
+    }
+},
+{
+    "pk": 46, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A mind without purpose will wander in dark places"
+    }
+},
+{
+    "pk": 47, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Truth is subjective"
+    }
+},
+{
+    "pk": 48, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Faith without deeds is worthless"
+    }
+},
+{
+    "pk": 49, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Nobody is innocent, there are merely varying levels of guilt"
+    }
+},
+{
+    "pk": 50, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Beginning reform is beginning revolution"
+    }
+},
+{
+    "pk": 51, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Educate men without faith and you but make them clever devils"
+    }
+},
+{
+    "pk": 52, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Forgiveness is a sign of weakness"
+    }
+},
+{
+    "pk": 53, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Hard work conquers everything"
+    }
+},
+{
+    "pk": 54, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Perseverance and silence are the highest virtues"
+    }
+},
+{
+    "pk": 55, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Leniency is a sign of weakness"
+    }
+},
+{
+    "pk": 56, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Magnanimity is a sign of weakness"
+    }
+},
+{
+    "pk": 57, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Thou shalt not"
+    }
+},
+{
+    "pk": 58, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The man who has nothing can still have faith"
+    }
+},
+{
+    "pk": 59, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Be strong in your ignorance"
+    }
+},
+{
+    "pk": 60, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Doubt is a sign of weakness"
+    }
+},
+{
+    "pk": 61, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A broad mind lacks focus"
+    }
+},
+{
+    "pk": 62, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Tolerance is a sign of weakness"
+    }
+},
+{
+    "pk": 63, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A narrow view sees better"
+    }
+},
+{
+    "pk": 64, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The blood of martyrs is the seed of the Imperium"
+    }
+},
+{
+    "pk": 65, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Examine your thoughts"
+    }
+},
+{
+    "pk": 66, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Obey your orders"
+    }
+},
+{
+    "pk": 67, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "To question is to doubt"
+    }
+},
+{
+    "pk": 68, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The truly wise are always afraid"
+    }
+},
+{
+    "pk": 69, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Fear denies faith"
+    }
+},
+{
+    "pk": 70, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Never forget, never forgive"
+    }
+},
+{
+    "pk": 71, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Only the Emperor is all"
+    }
+},
+{
+    "pk": 72, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The Emperor knows, the Emperor is watching"
+    }
+},
+{
+    "pk": 73, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Life is a prison, death a release"
+    }
+},
+{
+    "pk": 74, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "A suspicious mind is a healthy mind"
+    }
+},
+{
+    "pk": 75, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "That was then, this is now"
+    }
+},
+{
+    "pk": 76, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Foolish are those who fear nothing, yet claim to know everything"
+    }
+},
+{
+    "pk": 77, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Brave are they who know everything yet fear nothing"
+    }
+},
+{
+    "pk": 78, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Ruthlessness is the kindness of the wise"
+    }
+},
+{
+    "pk": 79, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "It is better for a man to be afraid than happy"
+    }
+},
+{
+    "pk": 80, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Happiness is a delusion of the weak"
+    }
+},
+{
+    "pk": 81, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "True happiness stems only from duty"
+    }
+},
+{
+    "pk": 82, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "To serve Him is to worship Him"
+    }
+},
+{
+    "pk": 83, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "The loyal slave learns to love the lash"
+    }
+},
+{
+    "pk": 84, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Work earns Salvation"
+    }
+},
+{
+    "pk": 85, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Work is Prayer"
+    }
+},
+{
+    "pk": 86, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "He who keeps silent consents"
+    }
+},
+{
+    "pk": 87, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Truth begets hatred"
+    }
+},
+{
+    "pk": 88, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "For the Emperor my life, to Him my death"
+    }
+},
+{
+    "pk": 89, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Reward for treachery is retribution"
+    }
+},
+{
+    "pk": 90, 
+    "model": "wh.miniquote", 
+    "fields": {
+        "content": "Lies beget jesuitism"
+    }
+}
+]

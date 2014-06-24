@@ -1,0 +1,58 @@
+[
+{
+    "pk": 1, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": "wh40k", 
+        "title": "Imperium of men"
+    }
+},
+{
+    "pk": 2, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": null, 
+        "title": "Eldar"
+    }
+},
+{
+    "pk": 3, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": "wh40k", 
+        "title": "Tau"
+    }
+},
+{
+    "pk": 4, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": "wh40k", 
+        "title": "Dark Eldar"
+    }
+},
+{
+    "pk": 5, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": null, 
+        "title": "Chaos"
+    }
+},
+{
+    "pk": 6, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": "wh40k", 
+        "title": "Space Orks"
+    }
+},
+{
+    "pk": 7, 
+    "model": "wh.fraction", 
+    "fields": {
+        "universe": null, 
+        "title": "None"
+    }
+}
+]

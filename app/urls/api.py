@@ -10,6 +10,9 @@ from apps.comments.views.api import CommentWatchViewSet, CommentViewSet
 from apps.tabletop.views.api import (
     RosterViewSet, CodexViewSet, ReportViewSet, MissionViewSet, GameViewSet)
 from apps.karma.views.api import KarmaViewSet
+from apps.wh.views.api import (
+    UniverseViewSet, FractionViewSet, SideViewSet, ArmyViewSet,
+    RankTypeViewSet, RankViewSet, ExpressionViewSet, MiniQuoteViewSet)
 
 from rest_framework import routers
 
@@ -30,6 +33,14 @@ router.register(r'reports', ReportViewSet)
 router.register(r'games', GameViewSet)
 router.register(r'missions', MissionViewSet)
 
+router.register(r'universes', UniverseViewSet)
+router.register(r'fractions', FractionViewSet)
+router.register(r'sides', SideViewSet)
+router.register(r'armies', ArmyViewSet)
+router.register(r'ranks', RankViewSet)
+router.register(r'ranktypes', RankTypeViewSet)
+router.register(r'expressions', ExpressionViewSet)
+router.register(r'miniquotes', MiniQuoteViewSet)
 
 urlpatterns += patterns(
     '',

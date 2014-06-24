@@ -21,6 +21,8 @@ from django.core.cache import cache
 class ImplementMe(Exception):
     pass
 
+__all__ = ['JustTest', 'CacheTest']
+
 
 class JustTest(TestHelperMixin, TestCase):
     fixtures = [

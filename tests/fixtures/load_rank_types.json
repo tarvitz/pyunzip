@@ -1,49 +1,49 @@
 [
 {
-    "pk": 1,
-    "model": "wh.ranktype",
+    "pk": 1, 
+    "model": "wh.ranktype", 
     "fields": {
-        "style": "color: red;",
-        "group": null,
-        "css_class": "",
-        "css_id": "",
-        "magnitude": 1000,
+        "style": "", 
+        "group": null, 
+        "css_class": "", 
+        "css_id": "", 
+        "magnitude": 1000, 
         "type": "Common"
     }
 },
 {
-    "pk": 6,
-    "model": "wh.ranktype",
+    "pk": 6, 
+    "model": "wh.ranktype", 
     "fields": {
-        "style": "text-transform: uppercase;",
-        "group": null,
-        "css_class": "",
-        "css_id": "id_master",
-        "magnitude": 0,
+        "style": "", 
+        "group": null, 
+        "css_class": "", 
+        "css_id": "id_master", 
+        "magnitude": 0, 
         "type": "Master"
     }
 },
 {
-    "pk": 7,
-    "model": "wh.ranktype",
+    "pk": 7, 
+    "model": "wh.ranktype", 
     "fields": {
-        "style": "",
-        "group": null,
-        "css_class": "rank_administratum",
-        "css_id": "",
-        "magnitude": 100,
+        "style": "", 
+        "group": null, 
+        "css_class": "rank_administratum", 
+        "css_id": "", 
+        "magnitude": 100, 
         "type": "Administratum"
     }
 },
 {
-    "pk": 8,
-    "model": "wh.ranktype",
+    "pk": 8, 
+    "model": "wh.ranktype", 
     "fields": {
-        "style": "",
-        "group": null,
-        "css_class": "rank_developers",
-        "css_id": "",
-        "magnitude": 100,
+        "style": "", 
+        "group": null, 
+        "css_class": "rank_developers", 
+        "css_id": "", 
+        "magnitude": 100, 
         "type": "Developers"
     }
 }

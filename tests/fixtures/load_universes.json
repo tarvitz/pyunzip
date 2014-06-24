@@ -1,0 +1,16 @@
+[
+{
+    "pk": "wh40k", 
+    "model": "wh.universe", 
+    "fields": {
+        "title": "Warhammer 40000"
+    }
+},
+{
+    "pk": "whfb", 
+    "model": "wh.universe", 
+    "fields": {
+        "title": "Warhammer: Fantasy Battles"
+    }
+}
+]
