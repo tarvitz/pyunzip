@@ -73,7 +73,7 @@ class RankTypeViewSetTestMixin(object):
 
 
 class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
-                                   APITestCase):
+                                       APITestCase):
     def setUp(self):
         super(RankTypeViewSetAnonymousUserTest, self).setUp()
 

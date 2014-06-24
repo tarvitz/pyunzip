@@ -13,6 +13,8 @@ from apps.karma.views.api import KarmaViewSet
 from apps.wh.views.api import (
     UniverseViewSet, FractionViewSet, SideViewSet, ArmyViewSet,
     RankTypeViewSet, RankViewSet, ExpressionViewSet, MiniQuoteViewSet)
+from apps.files.views.api import (GalleryViewSet, ImageViewSet,
+                                  UserFileViewSet)
 
 from rest_framework import routers
 
@@ -41,6 +43,10 @@ router.register(r'ranks', RankViewSet)
 router.register(r'ranktypes', RankTypeViewSet)
 router.register(r'expressions', ExpressionViewSet)
 router.register(r'miniquotes', MiniQuoteViewSet)
+
+router.register(r'galleries', GalleryViewSet)
+router.register(r'images', ImageViewSet)
+router.register(r'userfiles', UserFileViewSet)
 
 urlpatterns += patterns(
     '',

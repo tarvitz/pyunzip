@@ -1,0 +1,10 @@
+[
+{
+    "pk": 1, 
+    "model": "files.gallery", 
+    "fields": {
+        "type": "global", 
+        "name": "test"
+    }
+}
+]
