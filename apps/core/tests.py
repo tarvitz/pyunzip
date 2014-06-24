@@ -5,22 +5,29 @@ from apps.core.helpers import (
 ) 
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
-User = get_user_model()
 
 from django.db.models import Model
 from django.template import Context, Template
 from django.template.loader import get_template
 from datetime import datetime, date
 
+from rest_framework import status
 from copy import deepcopy
+User = get_user_model()
+
+import simplejson as json
+
+import logging
+logger = logging.getLogger(__name__)
+
 
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
         'tests/fixtures/load_news_categories.json',
         'tests/fixtures/load_news.json',
-        #'tests/fixtures/load_comments.json',
     ]
+
     def setUp(self):
         pass
 
@@ -33,7 +40,8 @@ class JustTest(TestCase):
         for (key, value) in kw.items():
             try:
                 if key in fx:
-                    self.assertEqual(getattr(instance, key), fx[key].objects.get(pk=value))
+                    self.assertEqual(getattr(instance, key),
+                                     fx[key].objects.get(pk=value))
                 else:
                     self.assertEqual(getattr(instance, key), value)
             except AssertionError as err:
@@ -44,13 +52,9 @@ class JustTest(TestCase):
                 })
         return messages
 
-
-    """ testing helpers module """
     def test_urls(self):
         prefix = 'core'
         urls = [
-            'password-restored',
-            'password-restore-initiated',
             'permission-denied',
             'currently-unavailable',
             'wot_verification',
@@ -191,6 +195,7 @@ class BenchmarkTemplatesTest(TestCase):
             )
 
 
+# noinspection PyUnresolvedReferences
 class TestHelperMixin(object):
     def login(self, user):
         if user:
@@ -332,3 +337,194 @@ class TestHelperMixin(object):
 
         for key, value in verify.items():
             self.assertEqual(getattr(instance, key), value)
+
+
+# Api cases generic access tests
+class ApiTestCaseSet(object):
+    model_class = None
+    url_prefix = 'api'
+
+    def get_url_scheme(self, method='detail', url_prefix=None):
+        url_prefix = url_prefix or self.url_prefix
+        return '%(prefix)s:%(model)s-%(method)s' % {
+            'prefix': url_prefix or 'api',
+            'model': self.model_class._meta.model_name,
+            'method': method
+        }
+
+    def setUp(self):
+        self.maxDiff = None
+        # update content types
+
+        self.user = User.objects.get(username='user')
+        self.admin = User.objects.get(username='admin')
+        self.other_user = User.objects.get(username='user2')
+
+        self.object_instance = self.model_class.objects.get(pk=1)
+        self.url_detail = reverse(
+            self.get_url_scheme(), args=(self.object_instance.pk, ))
+
+        self.url_list = reverse(self.get_url_scheme(method='list'))
+        self.url_post = self.url_list
+        self.url_put = self.url_detail
+        self.url_patch = self.url_detail
+        self.url_delete = self.url_detail
+
+        self.put = {
+
+        }
+        self.patch = {
+        }
+        self.post = {
+        }
+        self.object_detail_response = {
+        }
+
+
+# noinspection PyUnresolvedReferences
+class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
+    """
+    anonymous user can perform GET access detail/list, otherwise read only
+    """
+    def test_get_detail(self):
+        response = self.client.get(self.url_detail, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(load, self.object_detail_response)
+
+    def test_get_list(self):
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(load['count'], self.model_class.objects.count())
+
+    def test_put_detail(self):
+        response = self.client.put(self.url_put, data=self.put, format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
+
+    def test_post_list(self):
+        response = self.client.post(self.url_post, data=self.post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
+
+    def test_patch_detail(self):
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
+
+    def test_delete_detail(self):
+        response = self.client.delete(self.url_delete, data={},
+                                      format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(
+            load['detail'], 'Authentication credentials were not provided.')
+
+
+# noinspection PyUnresolvedReferences
+class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
+    """
+    admin users can clain access for any instance of model
+    """
+    def test_get_detail(self):
+        self.login('admin')
+        response = self.client.get(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(load, self.object_detail_response)
+
+    def test_get_list(self):
+        self.login('admin')
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        self.assertEqual(load['count'], self.model_class.objects.count())
+
+    def test_put_detail(self):
+        self.login('admin')
+        count = self.model_class.objects.count()
+        response = self.client.put(self.url_put, data=self.put,
+                                   format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+
+        put = deepcopy(self.put)
+        self.check_response(load, put)
+
+        self.assertEqual(self.model_class.objects.count(), count)
+
+    def test_post_list(self):
+        self.login('admin')
+        count = self.model_class.objects.count()
+        response = self.client.post(self.url_post, data=self.post,
+                                    format='json')
+        if response.status_code == status.HTTP_400_BAD_REQUEST:
+            load = json.loads(response.content)
+            for key, item in load.items():
+                if isinstance(item, (tuple, list)):
+                    logger.info("%s: " % key + ", ".join(item))
+                else:
+                    logger.info(item)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        load = json.loads(response.content)
+        post = deepcopy(self.post)
+
+        self.assertEqual(self.model_class.objects.count(), count + 1)
+        self.check_response(load, post)
+
+    def test_patch_detail(self):
+        self.login('admin')
+        count = self.model_class.objects.count()
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        if response.status_code == status.HTTP_400_BAD_REQUEST:
+            load = json.loads(response.content)
+            for key, item in load.items():
+                if isinstance(item, (tuple, list)):
+                    logger.info("%s: " % key + ", ".join(item))
+                else:
+                    logger.info(item)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        load = json.loads(response.content)
+        obj = self.model_class.objects.get(pk=self.object_instance.pk)
+        self.check_instance(obj, load, self.patch)
+        self.assertEqual(self.model_class.objects.count(), count)
+
+    def test_delete_detail(self):
+        self.login('admin')
+        count = self.model_class.objects.count()
+        response = self.client.delete(self.url_delete, data={},
+                                      format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        if response.status_code == status.HTTP_400_BAD_REQUEST:
+            load = json.loads(response.content)
+            for key, item in load.items():
+                if isinstance(item, (tuple, list)):
+                    logger.info("%s: " % key + ", ".join(item))
+                else:
+                    logger.info(item)
+        self.assertEqual(self.model_class.objects.count(), count - 1)
