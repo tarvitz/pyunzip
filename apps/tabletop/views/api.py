@@ -37,15 +37,6 @@ class RosterViewSet(viewsets.ModelViewSet):
             request, obj)
 
 
-class CodexPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        # Read permissions are allowed to any request,
-        # so we'll always allow GET, HEAD or OPTIONS requests.
-        if request.method in permissions.SAFE_METHODS:
-            return True
-        return request.user.has_perm('tabletop.change_codex')
-
-
 class CodexViewSet(viewsets.ModelViewSet):
     """
     API viewpoint for codex
@@ -53,7 +44,7 @@ class CodexViewSet(viewsets.ModelViewSet):
     queryset = Codex.objects.all()
     serializer_class = CodexSerializer
     filter_class = CodexFilterSet
-    permission_classes = (CodexPermission, )
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )
 
 
 class ReportViewSet(viewsets.ModelViewSet):

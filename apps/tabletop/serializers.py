@@ -17,14 +17,10 @@ FAILURE_MESSAGES = {
 
 
 class CodexSerializer(serializers.HyperlinkedModelSerializer):
-    content_type = serializers.SerializerMethodField('get_content_type')
-
-    def get_content_type(self, instance):
-        return instance.content_type.pk
+    content_type = serializers.PrimaryKeyRelatedField()
 
     class Meta:
         model = Codex
-        #exclude = ('content_type', )
 
 
 class RosterSerializer(serializers.HyperlinkedModelSerializer):

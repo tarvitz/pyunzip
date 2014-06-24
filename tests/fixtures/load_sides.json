@@ -1,0 +1,98 @@
+[
+{
+    "pk": 1, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Space Marines", 
+        "fraction": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Chaos Space Marines", 
+        "fraction": 5
+    }
+},
+{
+    "pk": 3, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Imperial Guard", 
+        "fraction": 1
+    }
+},
+{
+    "pk": 4, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Eldar", 
+        "fraction": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Dark Eldar", 
+        "fraction": 4
+    }
+},
+{
+    "pk": 6, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Tau", 
+        "fraction": 3
+    }
+},
+{
+    "pk": 7, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Necrons", 
+        "fraction": 7
+    }
+},
+{
+    "pk": 8, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Tyranids", 
+        "fraction": 7
+    }
+},
+{
+    "pk": 9, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "None", 
+        "fraction": 7
+    }
+},
+{
+    "pk": 10, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Witch Hunters", 
+        "fraction": 1
+    }
+},
+{
+    "pk": 12, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Space Orks", 
+        "fraction": 6
+    }
+},
+{
+    "pk": 13, 
+    "model": "wh.side", 
+    "fields": {
+        "name": "Daemon Hunters", 
+        "fraction": 1
+    }
+}
+]
