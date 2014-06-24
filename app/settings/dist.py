@@ -164,6 +164,41 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
+        'apps.accounts': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.comments': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.karma': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.news': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.pybb': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.tabletop': {
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
+        'apps.wh':{
+            'level': "INFO",
+            'propagate': True,
+            'handlers': ['console', ],
+        },
         'apps.files': {
             'level': "INFO",
             'propagate': True,
