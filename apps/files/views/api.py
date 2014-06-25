@@ -3,7 +3,7 @@
 from apps.files.models import Gallery, Image, UserFile
 from rest_framework import viewsets
 from rest_framework import permissions
-
+from rest_framework import parsers
 from apps.files.serializers import (
     GallerySerializer, ImageSerializer, UserFileSerializer
 )
@@ -18,6 +18,8 @@ class GalleryViewSet(viewsets.ModelViewSet):
 class ImageViewSet(viewsets.ModelViewSet):
     queryset = Image.objects.all()
     serializer_class = ImageSerializer
+    parser_classes = (parsers.FormParser, parsers.MultiPartParser,
+                      parsers.JSONParser)
     permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )
 
 

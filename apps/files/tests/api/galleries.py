@@ -4,16 +4,11 @@ from apps.files.models import Gallery
 from apps.core.tests import (
     TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
 )
-from tastypie.test import ResourceTestCase
-from rest_framework import status
 from rest_framework.test import APITestCase
-
-from django.core.urlresolvers import reverse
-import simplejson as json
-from copy import deepcopy
+from unittest import TestCase
 
 
-class GalleryViewSetMixin(object):
+class GalleryViewSetMixin(TestCase):
     model_class = Gallery
     fixtures = [
         'tests/fixtures/load_users.json',

@@ -1,4 +1,6 @@
 # coding: utf-8
+import os
+
 from django.test import TestCase
 from apps.core.helpers import (
     post_markup_filter,
@@ -12,6 +14,7 @@ from django.template.loader import get_template
 from datetime import datetime, date
 
 from rest_framework import status
+from django.conf import settings
 from copy import deepcopy
 User = get_user_model()
 
@@ -313,6 +316,12 @@ class TestHelperMixin(object):
                         'http://testserver' + item in response[field],
                         True
                     )
+            elif isinstance(value, file):
+                # remove uploaded files
+                self.assertFileExists(response[field])
+                os.unlink(
+                    os.path.join(settings.MEDIA_ROOT, response[field])
+                )
             else:
                 assertion(response[field], value)
 
@@ -338,11 +347,19 @@ class TestHelperMixin(object):
         for key, value in verify.items():
             self.assertEqual(getattr(instance, key), value)
 
+    def assertFileExists(self, file_path):
+        """ assert file path with MEDIA_ROOT join file existance
+        """
+        path = os.path.join(settings.MEDIA_ROOT, file_path)
+        self.assertEqual(os.path.exists(path), True)
+
 
 # Api cases generic access tests
 class ApiTestCaseSet(object):
     model_class = None
     url_prefix = 'api'
+    post_format = 'json'
+    put_format = None
 
     def get_url_scheme(self, method='detail', url_prefix=None):
         url_prefix = url_prefix or self.url_prefix
@@ -401,7 +418,8 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
         self.assertEqual(load['count'], self.model_class.objects.count())
 
     def test_put_detail(self):
-        response = self.client.put(self.url_put, data=self.put, format='json')
+        response = self.client.put(self.url_put, data=self.put,
+                                   format=self.put_format or self.post_format)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
 
@@ -411,7 +429,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
-                                    format='json')
+                                    format=self.post_format)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
@@ -440,7 +458,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
 # noinspection PyUnresolvedReferences
 class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
     """
-    admin users can clain access for any instance of model
+    admin users can claim access for any instance of model
     """
     def test_get_detail(self):
         self.login('admin')
@@ -462,7 +480,15 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         self.login('admin')
         count = self.model_class.objects.count()
         response = self.client.put(self.url_put, data=self.put,
-                                   format='json')
+                                   format=self.put_format or self.post_format)
+        if response.status_code in (status.HTTP_400_BAD_REQUEST,
+                                    status.HTTP_415_UNSUPPORTED_MEDIA_TYPE):
+            load = json.loads(response.content)
+            for key, item in load.items():
+                if isinstance(item, (tuple, list)):
+                    logger.info("%s: " % key + ", ".join(item))
+                else:
+                    logger.info(item)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
@@ -476,8 +502,10 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         self.login('admin')
         count = self.model_class.objects.count()
         response = self.client.post(self.url_post, data=self.post,
-                                    format='json')
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
+                                    format=self.post_format)
+
+        if response.status_code in (status.HTTP_400_BAD_REQUEST,
+                                    status.HTTP_415_UNSUPPORTED_MEDIA_TYPE):
             load = json.loads(response.content)
             for key, item in load.items():
                 if isinstance(item, (tuple, list)):
@@ -489,25 +517,25 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
 
         self.assertEqual(self.model_class.objects.count(), count + 1)
-        self.check_response(load, post)
+        self.check_response(load, self.post)
 
     def test_patch_detail(self):
         self.login('admin')
         count = self.model_class.objects.count()
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
+        if response.status_code in (status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                                    status.HTTP_400_BAD_REQUEST):
             load = json.loads(response.content)
             for key, item in load.items():
                 if isinstance(item, (tuple, list)):
                     logger.info("%s: " % key + ", ".join(item))
                 else:
                     logger.info(item)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         obj = self.model_class.objects.get(pk=self.object_instance.pk)
@@ -520,7 +548,8 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        if response.status_code == status.HTTP_400_BAD_REQUEST:
+        if response.status_code in (status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+                                    status.HTTP_400_BAD_REQUEST):
             load = json.loads(response.content)
             for key, item in load.items():
                 if isinstance(item, (tuple, list)):

@@ -26,6 +26,8 @@ SEND_MESSAGES = True
 
 KARMA_PER_TIMEOUT_AMOUNT = 100
 
+MEDIA_ROOT = rel('db/tests/uploads')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

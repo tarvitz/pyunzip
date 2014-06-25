@@ -61,11 +61,6 @@ class Image(models.Model):
         _('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (
             str(s.owner.id), fn)
     )
-    thumbnail = models.ImageField(
-        _('Thumbnail'),
-        upload_to=os.path.join(settings.MEDIA_ROOT,
-                               "images/galleries/thumbnails/")
-    )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     comment_objects = generic.GenericRelation(
         'comments.Comment',

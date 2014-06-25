@@ -8,6 +8,7 @@ class GallerySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Gallery
 
+
 class ImageSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Image
