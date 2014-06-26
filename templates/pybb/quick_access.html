@@ -32,13 +32,20 @@
         </div>
         <div class="tab-pane" id='stats'>
             {% if quick.topics %}
-            <li class="tablist-inner-row">{% trans "Topics" %}: {{ quick.topics }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Topics" %}:</strong> {{ quick.topics.total }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Topics Today" %}:</strong> {{ quick.topics.today }}</li>
             {% endif %}
             {% if quick.posts %}
-            <li class="tablist-inner-row">{% trans "Posts" %}: {{ quick.posts }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Posts" %}:</strong> {{ quick.posts.total }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Posts Today" %}:</strong> {{ quick.posts.today }}</li>
             {% endif %}
             {% if quick.users %}
-            <li class="tablist-inner-row">{% trans "Users" %}: {{ quick.users }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Users" %}:</strong> {{ quick.users.total }}</li>
+            <li class="tablist-inner-row"><strong>{% trans "Users Today" %}:</strong> {{ quick.users.today }}</li>
+            {% endif %}
+            {% if quick.karma.total %}
+            <li class="tablist-inner-row"><strong>{% trans "Total Karma" %}:</strong> {{quick.karma.total}} </li>
+            <li class="tablist-inner-row"><strong>{% trans "Last Karma" %}:</strong> {% trans "from" %} <a href="{{ quick.karma.last.voter.get_profile_url }}">{{quick.karma.last.voter}}</a> +{{quick.karma.last.value}} {% trans "to" %} <a href="{{ quick.karma.last.user.get_profile_url }}">{{quick.karma.last.user}}</a> {% trans "for" %} "{{quick.karma.last.comment}}"</li>
             {% endif %}
         </div>
     </div>
