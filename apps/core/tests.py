@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+import six
 
 from django.test import TestCase
 from apps.core.helpers import (
@@ -9,14 +10,16 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
 from django.db.models import Model
-from django.template import Context, Template
+from django.template import Context
 from django.template.loader import get_template
 from datetime import datetime, date
 
 from rest_framework import status
+
 from django.conf import settings
 from copy import deepcopy
 User = get_user_model()
+
 
 import simplejson as json
 
@@ -38,7 +41,8 @@ class JustTest(TestCase):
         pass
 
     """ helpers """
-    def process_messages(self, instance, kw, fx={}):
+    def process_messages(self, instance, kw, fx=None):
+        fx = fx or {}
         messages = []
         for (key, value) in kw.items():
             try:
@@ -98,7 +102,9 @@ class JustTest(TestCase):
                     })
         if messages:
             for msg in messages:
-                print "Could not get url %(user)s in %(url)s, got %(err)s" % msg
+                logger.info(
+                    "Could not get url %(user)s in %(url)s, got %(err)s" % msg
+                )
             raise AssertionError
 
     def test_post_markup_unicode(self):
@@ -146,31 +152,37 @@ class BenchmarkTemplatesTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json'
     ]
+
     def setUp(self):
         pass
 
     def tearDown(self):
         pass
 
-    def benchmark(self, template, context={}):
+    def benchmark(self, template, context=None):
+        context = context or {}
         results = []
         for i in xrange(1000):
             n = datetime.now()
-            if isinstance(template, basestring):
-                tmpl = Template(template)
-            else:
-                tmpl = template
-            html = tmpl.render(Context(context))
+            # if isinstance(template, basestring):
+            #     tmpl = Template(template)
+            # else:
+            #     tmpl = template
+            # html = tmpl.render(Context(context))
             offset = datetime.now() - n
             results.append(offset.total_seconds())
         rmin = min(results)
         rmax = max(results)
         avg = sum(results) / len(results)
-        print "Got follow timings:\nmin: %(min)s,\nmax: %(max)s,\navg: %(avg)s" % {
-            'min': rmin,
-            'max': rmax,
-            'avg': avg
-        }
+        logger.info(
+            "Got follow timings:\nmin: %(min)s,"
+            "\nmax: %(max)s,\navg: %(avg)s" % {
+                'min': rmin,
+                'max': rmax,
+                'avg': avg
+            }
+        )
+
     def test_benchmark_get_form_tag(self):
         template = """{% load coretags %}
         {% get_form 'apps.comments.forms.CommentForm' as form %}
@@ -189,27 +201,27 @@ class BenchmarkTemplatesTest(TestCase):
             else:
                 self.client.logout()
             template = get_template('error_template.html')
-            out = template.render(Context(self.client.request().context))
+            template.render(Context(self.client.request().context))
 
-            print "Testing for '%s': " % user or "Anonymous"
+            logger.info("Testing for '%s': " % user or "Anonymous")
             self.benchmark(
                 template,
                 self.client.request().context
             )
 
 
-# noinspection PyUnresolvedReferences
 class TestHelperMixin(object):
-    def login(self, user):
+    def login(self, user, password='123456'):
         if user:
-            logged = self.client.login(username=user, password='123456')
-            self.assertEqual(logged, True)
+            logged = getattr(self, 'client').login(
+                username=user, password=password)
+            getattr(self, 'assertEqual')(logged, True)
         else:
-            self.client.logout()
+            getattr(self, 'client').logout()
 
     def check_state(self, instance, data, check=lambda x: x, check_in=None):
         messages = []
-        check_in = check_in or self.assertIn
+        check_in = check_in or getattr(self, 'assertIn')
         for (key, value) in data.items():
             try:
                 if hasattr(getattr(instance, key), 'all'):
@@ -227,7 +239,8 @@ class TestHelperMixin(object):
                 print u"Got %(err)s in %(key)s" % msg
             raise AssertionError
 
-    def proceed_form_errors(self, context):
+    @staticmethod
+    def proceed_form_errors(context):
         """
         :param context: requires response context instance
             to check form errors and print them to stdout
@@ -276,7 +289,7 @@ class TestHelperMixin(object):
         :keyword assertion: callable assert function for check data
         :return: None
         """
-        assertion = assertion or super(TestHelperMixin, self).assertEqual
+        assertion = assertion or getattr(self, 'assertEqual')
         for field, value in data.items():
             instance_value = getattr(instance, field)
             if isinstance(instance_value, (datetime, )):
@@ -293,19 +306,19 @@ class TestHelperMixin(object):
         """Check api response with post data for its identifications
         (if assertion is None)
 
-        :param instance: ModelObject ``instance``
+        :param response: ModelObject ``instance``
         :param dict response: json serialized api response (dict)
         :param dict data: post/put/patch send data
         :keyword assertion: callable assert function for check data
         :return: None
         """
-        assertion = assertion or super(TestHelperMixin, self).assertEqual
+        assertion = assertion or getattr(self, 'assertEqual')
         for field, value in data.items():
             if isinstance(value, (datetime, )):
                 assertion(response[field], value.isoformat()[:-3])
             elif isinstance(value, date):
                 assertion(response[field], value.isoformat())
-            elif isinstance(value, basestring):
+            elif isinstance(value, six.string_types):
                 if '/api/' in value:
                     assertion(response[field], 'http://testserver' + value)
                 else:
@@ -342,16 +355,17 @@ class TestHelperMixin(object):
             items = verify.pop(field.name)
             for item in items:
                 obj_item = field.rel.to.objects.get(pk=item)
-                self.assertIn(obj_item, getattr(instance, field.name).all())
+                getattr(self, 'assertIn')(
+                    obj_item, getattr(instance, field.name).all())
 
         for key, value in verify.items():
-            self.assertEqual(getattr(instance, key), value)
+            getattr(self, 'assertEqual')(getattr(instance, key), value)
 
     def assertFileExists(self, file_path):
         """ assert file path with MEDIA_ROOT join file existance
         """
         path = os.path.join(settings.MEDIA_ROOT, file_path)
-        self.assertEqual(os.path.exists(path), True)
+        getattr(self, 'assertEqual')(os.path.exists(path), True)
 
 
 # Api cases generic access tests
@@ -360,7 +374,11 @@ class ApiTestCaseSet(object):
     url_prefix = 'api'
     post_format = 'json'
     put_format = None
-
+    LOG_API_STATUSES = [
+        status.HTTP_400_BAD_REQUEST,
+        status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+        status.HTTP_403_FORBIDDEN
+    ]
     def get_url_scheme(self, method='detail', url_prefix=None):
         url_prefix = url_prefix or self.url_prefix
         return '%(prefix)s:%(model)s-%(method)s' % {
@@ -369,13 +387,27 @@ class ApiTestCaseSet(object):
             'method': method
         }
 
+    @staticmethod
+    def log_api_errors(response,
+                       statuses=LOG_API_STATUSES):
+        if response.status_code in statuses:
+            json_response = json.loads(response.content)
+            for key, item in json_response.items():
+                if isinstance(item, (tuple, list)):
+                    logger.info("%s: " % key + ", ".join(item))
+                else:
+                    logger.info(item)
+
     def setUp(self):
         self.maxDiff = None
         # update content types
 
         self.user = User.objects.get(username='user')
+        self.user_password = '123456'
         self.admin = User.objects.get(username='admin')
+        self.admin_password = '123456'
         self.other_user = User.objects.get(username='user2')
+        self.other_user_password = '123456'
 
         self.object_instance = self.model_class.objects.get(pk=1)
         self.url_detail = reverse(
@@ -386,6 +418,8 @@ class ApiTestCaseSet(object):
         self.url_put = self.url_detail
         self.url_patch = self.url_detail
         self.url_delete = self.url_detail
+
+        self.owner_restrict_delete = False
 
         self.put = {
 
@@ -399,7 +433,7 @@ class ApiTestCaseSet(object):
 
 
 # noinspection PyUnresolvedReferences
-class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
+class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     anonymous user can perform GET access detail/list, otherwise read only
     """
@@ -407,15 +441,16 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
         response = self.client.get(self.url_detail, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
-        self.assertEqual(load, self.object_detail_response)
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response, self.object_detail_response)
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
-        self.assertEqual(load['count'], self.model_class.objects.count())
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['count'],
+                         self.model_class.objects.count())
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -423,45 +458,49 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
 
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format=self.post_format)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
 
 # noinspection PyUnresolvedReferences
-class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
+class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     admin users can claim access for any instance of model
     """
     def test_get_detail(self):
-        self.login('admin')
+        self.login(self.admin.username, self.admin_password)
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
@@ -469,7 +508,7 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         self.assertEqual(load, self.object_detail_response)
 
     def test_get_list(self):
-        self.login('admin')
+        self.login(self.admin.username, self.admin_password)
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
@@ -477,69 +516,48 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         self.assertEqual(load['count'], self.model_class.objects.count())
 
     def test_put_detail(self):
-        self.login('admin')
+        self.login(self.admin.username, self.admin_password)
         count = self.model_class.objects.count()
         response = self.client.put(self.url_put, data=self.put,
                                    format=self.put_format or self.post_format)
-        if response.status_code in (status.HTTP_400_BAD_REQUEST,
-                                    status.HTTP_415_UNSUPPORTED_MEDIA_TYPE):
-            load = json.loads(response.content)
-            for key, item in load.items():
-                if isinstance(item, (tuple, list)):
-                    logger.info("%s: " % key + ", ".join(item))
-                else:
-                    logger.info(item)
+        self.log_api_errors(response)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
 
         put = deepcopy(self.put)
-        self.check_response(load, put)
+        self.check_response(json_response, put)
 
         self.assertEqual(self.model_class.objects.count(), count)
 
     def test_post_list(self):
-        self.login('admin')
+        self.login(self.admin.username, self.admin_password)
         count = self.model_class.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format=self.post_format)
-
-        if response.status_code in (status.HTTP_400_BAD_REQUEST,
-                                    status.HTTP_415_UNSUPPORTED_MEDIA_TYPE):
-            load = json.loads(response.content)
-            for key, item in load.items():
-                if isinstance(item, (tuple, list)):
-                    logger.info("%s: " % key + ", ".join(item))
-                else:
-                    logger.info(item)
+        self.log_api_errors(response)
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
 
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
 
         self.assertEqual(self.model_class.objects.count(), count + 1)
-        self.check_response(load, self.post)
+        self.check_response(json_response, self.post)
 
     def test_patch_detail(self):
-        self.login('admin')
+        self.login(self.admin.username, self.admin_password)
         count = self.model_class.objects.count()
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
-        if response.status_code in (status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                                    status.HTTP_400_BAD_REQUEST):
-            load = json.loads(response.content)
-            for key, item in load.items():
-                if isinstance(item, (tuple, list)):
-                    logger.info("%s: " % key + ", ".join(item))
-                else:
-                    logger.info(item)
+        self.log_api_errors(response)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
+        json_response = json.loads(response.content)
         obj = self.model_class.objects.get(pk=self.object_instance.pk)
-        self.check_instance(obj, load, self.patch)
+        self.check_instance(obj, json_response, self.patch)
         self.assertEqual(self.model_class.objects.count(), count)
 
     def test_delete_detail(self):
@@ -547,13 +565,89 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet):
         count = self.model_class.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
+        self.log_api_errors(response)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        if response.status_code in (status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-                                    status.HTTP_400_BAD_REQUEST):
-            load = json.loads(response.content)
-            for key, item in load.items():
-                if isinstance(item, (tuple, list)):
-                    logger.info("%s: " % key + ", ".join(item))
-                else:
-                    logger.info(item)
         self.assertEqual(self.model_class.objects.count(), count - 1)
+
+# noinspection PyUnresolvedReferences
+class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+    """
+    owners of their instances could process update (sometimes delete) actions
+    """
+    def test_get_detail(self):
+        self.login(self.user.username, self.user_password)
+        response = self.client.get(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json, self.object_detail_response)
+
+    def test_get_list(self):
+        self.login(self.user.username, self.user_password)
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json['count'],
+                         self.model_class.objects.count())
+
+    def test_put_detail(self):
+        self.login(self.user.username, self.user_password)
+        count = self.model_class.objects.count()
+        response = self.client.put(self.url_put, data=self.put,
+                                   format=self.post_format or self.put_format)
+        self.log_api_errors(response)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        self.check_response(response_json, self.put)
+        self.assertEqual(self.model_class.objects.count(), count)
+
+    def test_post_list(self):
+        self.login(self.user.username, self.user_password)
+        count = self.model_class.objects.count()
+        response = self.client.post(self.url_post, data=self.post,
+                                    format=self.post_format or self.put_format)
+        self.log_api_errors(response)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        response_json = json.loads(response.content)
+        post = deepcopy(self.post)
+
+        self.assertEqual(self.model_class.objects.count(), count + 1)
+        self.check_response(response_json, post)
+
+    def test_patch_detail(self):
+        self.login(self.user.username, self.user_password)
+        count = self.model_class.objects.count()
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+        self.log_api_errors(response)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        obj = self.model_class.objects.get(pk=self.object_instance.pk)
+        self.check_instance(obj, response_json, self.patch)
+        self.assertEqual(self.model_class.objects.count(), count)
+
+    def test_delete_detail(self):
+        self.login(self.user.username, self.user_password)
+        count = self.model_class.objects.count()
+        response = self.client.delete(self.url_delete, data={}, format='json')
+
+        # sometimes only admins can delete instances which user owns
+        if self.owner_restrict_delete:
+            self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+            self.assertEqual(self.model_class.objects.count(), count)
+            self.assertEqual(
+                self.model_class.objects.filter(
+                    pk=self.object_instance.pk).exists(),
+                True
+            )
+        else:
+            self.log_api_errors(response)
+            self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+            self.assertEqual(self.model_class.objects.count(), count - 1)

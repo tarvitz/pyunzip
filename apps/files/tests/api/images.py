@@ -1,13 +1,16 @@
 # coding: utf-8
-
+from django.contrib.auth import get_user_model
 from apps.files.models import Image
 from apps.core.tests import (
-    TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
+    TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
+    ApiUserOwnerTestCaseMixin
 )
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
 from unittest import TestCase
 from app.settings import rel
+
+User = get_user_model()
 
 
 class ImageViewSetMixin(TestCase):
@@ -21,6 +24,7 @@ class ImageViewSetMixin(TestCase):
     def setUp(self):
         super(ImageViewSetMixin, self).setUp()
         self.post_format = 'multipart'
+        self.user = User.objects.get(username='user')
 
         self.patch = {
             'title': 'new image',
@@ -48,25 +52,24 @@ class ImageViewSetMixin(TestCase):
             'comments': '1',
             'gallery': 'http://testserver/api/galleries/1/',
             'image': 'images/galleries/1/bl.png',
-            'owner': 'http://testserver/api/users/1/',
+            'owner': 'http://testserver/api/users/6/',
             'url': 'http://testserver/api/images/1/'
         }
 
 
-class ImageViewSetAnonymousUserTest(TestHelperMixin, ImageViewSetMixin,
+class ImageViewSetAnonymousUserTest(ImageViewSetMixin,
                                     ApiAnonymousUserTestCaseMixin,
                                     APITestCase):
     pass
 
 
-class ImageViewSetAdminUserTest(TestHelperMixin, ImageViewSetMixin,
+class ImageViewSetAdminUserTest(ImageViewSetMixin,
                                 ApiAdminUserTestCaseMixin,
                                 APITestCase):
     pass
 
 
-class ImageViewSetUserTest(TestHelperMixin,
-                           ImageViewSetMixin,
-                           ApiAdminUserTestCaseMixin,
+class ImageViewSetUserTest(ImageViewSetMixin,
+                           ApiUserOwnerTestCaseMixin,
                            APITestCase):
     pass

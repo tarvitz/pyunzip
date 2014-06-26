@@ -9,6 +9,10 @@ class IsOwnerOrModelAdminOrReadOnly(permissions.BasePermission):
     Allow access object owners to instances.
     """
     _permission_format = '%(app)s.%(prefix)s_%(model)s'
+    owner_fields = ['user', 'owner']
+
+    def get_owner_fields(self):
+        return self.owner_fields
 
     def has_permission(self, request, view):
         if request.method in permissions.SAFE_METHODS:
@@ -20,10 +24,10 @@ class IsOwnerOrModelAdminOrReadOnly(permissions.BasePermission):
             return True
 
         is_owner = False
-        if hasattr(obj, 'owner'):
-            is_owner = obj.owner == request.user
-        elif hasattr(obj, 'user'):
-            is_owner = obj.user == request.user
+        for owner_field in self.get_owner_fields():
+            if hasattr(obj, owner_field):
+                is_owner = getattr(obj, owner_field) == request.user
+
         if is_owner:
             return is_owner
 

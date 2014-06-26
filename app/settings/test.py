@@ -9,6 +9,7 @@ from app.settings.messages import *
 from app.settings.initials import *
 
 DEBUG = TEMPLATE_DEBUG = True
+
 DEV_SERVER = True
 CACHES = {
     'default': {

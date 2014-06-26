@@ -34,22 +34,19 @@ class GalleryViewSetMixin(TestCase):
         }
 
 
-class GalleryViewSetAnonymousUserTest(TestHelperMixin,
-                                      GalleryViewSetMixin,
+class GalleryViewSetAnonymousUserTest(GalleryViewSetMixin,
                                       ApiAnonymousUserTestCaseMixin,
                                       APITestCase):
     pass
 
 
-class GalleryViewSetAdminUserTest(TestHelperMixin,
-                                  GalleryViewSetMixin,
+class GalleryViewSetAdminUserTest(GalleryViewSetMixin,
                                   ApiAdminUserTestCaseMixin,
                                   APITestCase):
     pass
 
 
-class GalleryViewSetUserTest(TestHelperMixin,
-                             GalleryViewSetMixin,
+class GalleryViewSetUserTest(GalleryViewSetMixin,
                              ApiAdminUserTestCaseMixin,
                              APITestCase):
     pass
