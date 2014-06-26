@@ -60,10 +60,11 @@ class Codex(models.Model):
         return self.source.__unicode__()
 
     def __unicode__(self):
-        return u'%(bound)s:%(title)s' % {
-            'bound': self.bound(),
-            'title': self.title
-        }
+        return self.title
+        # return u'%(bound)s:%(title)s' % {
+        #     'bound': self.bound(),
+        #     'title': self.title
+        # }
 
     def get_absolute_url(self):
         return reverse('tabletop:codex-detail', args=(self.pk, ))
