@@ -1,7 +1,7 @@
 {% load pybb_extras i18n %}
 <div class='tabbable'>
     <ul class="nav nav-tabs">
-        <li class='active'><a href="#topics"data-toggle="tab">{% trans "Last topics" %}</a></li>
+        <li class='active'><a href="#topics" data-toggle="tab">{% trans "Last topics" %}</a></li>
         <li><a href='#posts' data-toggle="tab">{% trans "Last posts" %}</a></li>
         <li><a href='#stats' data-toggle="tab">{% trans "Statistics" %}</a></li>
     </ul>
@@ -9,44 +9,62 @@
         <div class="tab-pane active" id='topics'>
             {% for topic in quick.last_topics|pybb_unreads:user %}
             <li class="tablist-inner-row forum">
-            {% if topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
-            {% pybb_link topic %}
-            &rarr;
-            <span class="author"><a href="{{ topic.user.get_profile_url }}">{{ topic.user.get_nickname|safe }}</a></span>
-            &rarr;
-            <span class="updated">{% pybb_time topic.created %}</span>
+                {% if topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
+                {% pybb_link topic %}
+                &rarr;
+                <span class="author"><a href="{{ topic.user.get_profile_url }}">{{ topic.user.get_nickname|safe }}</a></span>
+                &rarr;
+                <span class="updated">{% pybb_time topic.created %}</span>
             </li>
             {% endfor %}
         </div>
         <div class="tab-pane" id='posts'>
             {% for post in quick.last_posts|pybb_unreads:user %}
             <li class="tablist-inner-row forum">
-            {% if post.topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
-            <a href="{{ post.get_absolute_url }}">{{ post.topic }}</a>
-            &rarr;
-            <span class="author"><a href="{{ post.user.get_profile_url }}">{{ post.user.get_nickname|safe }}</a></span>
-            &rarr;
-            <span class="updated">{% pybb_time post.created %}</span>
+                {% if post.topic|pybb_has_unreads:user %}<span class="icon-comment"></span>{% endif %}
+                <a href="{{ post.get_absolute_url }}">{{ post.topic }}</a>
+                &rarr;
+                <span class="author"><a href="{{ post.user.get_profile_url }}">{{ post.user.get_nickname|safe }}</a></span>
+                &rarr;
+                <span class="updated">{% pybb_time post.created %}</span>
             </li>
             {% endfor %}
         </div>
         <div class="tab-pane" id='stats'>
-            {% if quick.topics %}
-            <li class="tablist-inner-row"><strong>{% trans "Topics" %}:</strong> {{ quick.topics.total }}</li>
-            <li class="tablist-inner-row"><strong>{% trans "Topics Today" %}:</strong> {{ quick.topics.today }}</li>
-            {% endif %}
-            {% if quick.posts %}
-            <li class="tablist-inner-row"><strong>{% trans "Posts" %}:</strong> {{ quick.posts.total }}</li>
-            <li class="tablist-inner-row"><strong>{% trans "Posts Today" %}:</strong> {{ quick.posts.today }}</li>
-            {% endif %}
-            {% if quick.users %}
-            <li class="tablist-inner-row"><strong>{% trans "Users" %}:</strong> {{ quick.users.total }}</li>
-            <li class="tablist-inner-row"><strong>{% trans "Users Today" %}:</strong> {{ quick.users.today }}</li>
-            {% endif %}
-            {% if quick.karma.total %}
-            <li class="tablist-inner-row"><strong>{% trans "Total Karma" %}:</strong> {{quick.karma.total}} </li>
-            <li class="tablist-inner-row"><strong>{% trans "Last Karma" %}:</strong> {% trans "from" %} <a href="{{ quick.karma.last.voter.get_profile_url }}">{{quick.karma.last.voter}}</a> +{{quick.karma.last.value}} {% trans "to" %} <a href="{{ quick.karma.last.user.get_profile_url }}">{{quick.karma.last.user}}</a> {% trans "for" %} "{{quick.karma.last.comment}}"</li>
-            {% endif %}
+            
+            <table class="table">
+                {% if quick.topics %}
+                <tr>
+                    <td><strong>{% trans "Topics" %}:</strong> {{ quick.topics.total }}</td>
+                    <td><strong>{% trans "Today" %}:</strong> {% if quick.topics.today %}+{%endif%}{{ quick.topics.today }}</td>
+                </tr>
+                {% endif %}
+                {% if quick.posts %}
+                <tr>
+                    <td><strong>{% trans "Posts" %}:</strong> {{ quick.posts.total }}</td>
+                    <td><strong>{% trans "Today" %}:</strong> {% if quick.posts.today %}+{%endif%}{{ quick.posts.today }}</td>
+                </tr>
+                {% endif %}
+                {% if quick.users %}
+                <tr>
+                    <td><strong>{% trans "Users" %}:</strong> {{ quick.users.total }}</td>
+                    <td><strong>{% trans "Today" %}:</strong> {% if quick.users.today %}+{%endif%}{{ quick.users.today }}</td>
+                </tr>
+                {% endif %}
+                {% if quick.karma.total %}
+                <tr>
+                    <td><strong>{% trans "Total Karma" %}:</strong> {{quick.karma.total}}</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="2"><strong>{% trans "Last Karma" %}:</strong> {% trans "from" %} <a
+                            href="{{ quick.karma.last.voter.get_profile_url }}">{{quick.karma.last.voter}}</a>
+                        +{{quick.karma.last.value}} {% trans "to" %} <a
+                                href="{{ quick.karma.last.user.get_profile_url }}">{{quick.karma.last.user}}</a> {% trans "for" %} "{{quick.karma.last.comment}}"
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
         </div>
     </div>
 </div>
