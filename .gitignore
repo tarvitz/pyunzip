@@ -27,5 +27,6 @@ django.mo
 /static/css/bootstrap-*.css
 /data/plop
 /db/uploads/*
+/db/tests
 /db/*.sqlite
 /db/*.db
