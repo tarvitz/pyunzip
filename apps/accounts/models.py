@@ -139,6 +139,9 @@ class User(PermissionsMixin, AbstractBaseUser):
                 self.nickname or self.username, )
         )
 
+    def get_api_absolute_url(self):
+        return reverse('api:user-detail', args=(self.pk, ))
+
     def get_profile_url(self):
         return reverse('accounts:profile', args=(self.pk, ))
 

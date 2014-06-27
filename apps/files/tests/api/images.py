@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from apps.files.models import Image
 from apps.core.tests import (
     TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
-    ApiUserOwnerTestCaseMixin
+    ApiUserOwnerTestCaseMixin, ApiUserNotOwnerTestCaseMixin
 )
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
@@ -72,4 +72,10 @@ class ImageViewSetAdminUserTest(ImageViewSetMixin,
 class ImageViewSetUserTest(ImageViewSetMixin,
                            ApiUserOwnerTestCaseMixin,
                            APITestCase):
+    pass
+
+
+class ImageViewSetUserNotOwnerTest(ImageViewSetMixin,
+                                   ApiUserNotOwnerTestCaseMixin,
+                                   APITestCase):
     pass

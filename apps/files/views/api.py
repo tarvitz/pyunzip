@@ -27,4 +27,4 @@ class ImageViewSet(viewsets.ModelViewSet):
 class UserFileViewSet(viewsets.ModelViewSet):
     queryset = UserFile.objects.all()
     serializer_class = UserFileSerializer
-    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )
+    permission_classes = (IsOwnerOrModelAdminOrReadOnly, )

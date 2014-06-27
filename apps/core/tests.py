@@ -1,4 +1,5 @@
 # coding: utf-8
+
 import os
 import six
 
@@ -379,6 +380,7 @@ class ApiTestCaseSet(object):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         status.HTTP_403_FORBIDDEN
     ]
+
     def get_url_scheme(self, method='detail', url_prefix=None):
         url_prefix = url_prefix or self.url_prefix
         return '%(prefix)s:%(model)s-%(method)s' % {
@@ -402,6 +404,9 @@ class ApiTestCaseSet(object):
         self.maxDiff = None
         # update content types
 
+        self.pk_value = 1
+        self.owner_field = 'owner'
+
         self.user = User.objects.get(username='user')
         self.user_password = '123456'
         self.admin = User.objects.get(username='admin')
@@ -409,7 +414,7 @@ class ApiTestCaseSet(object):
         self.other_user = User.objects.get(username='user2')
         self.other_user_password = '123456'
 
-        self.object_instance = self.model_class.objects.get(pk=1)
+        self.object_instance = self.model_class.objects.get(pk=self.pk_value)
         self.url_detail = reverse(
             self.get_url_scheme(), args=(self.object_instance.pk, ))
 
@@ -430,6 +435,7 @@ class ApiTestCaseSet(object):
         }
         self.object_detail_response = {
         }
+        self.object_anonymous_detail_response = None
 
 
 # noinspection PyUnresolvedReferences
@@ -442,7 +448,10 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
-        self.assertEqual(json_response, self.object_detail_response)
+        detail_response = (
+            self.object_anonymous_detail_response or
+            self.object_detail_response)
+        self.assertEqual(json_response, detail_response)
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -569,6 +578,7 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(self.model_class.objects.count(), count - 1)
 
+
 # noinspection PyUnresolvedReferences
 class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
@@ -651,3 +661,83 @@ class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             self.log_api_errors(response)
             self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
             self.assertEqual(self.model_class.objects.count(), count - 1)
+
+
+# noinspection PyUnresolvedReferences
+class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+    """
+    instances with other user (not owner) should have only RO access
+    """
+    def test_get_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.get(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json, self.object_detail_response)
+
+    def test_get_list(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        self.assertEqual(response_json['count'],
+                         self.model_class.objects.count())
+
+    def test_put_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.put(self.url_put, data=self.put,
+                                   format=self.post_format or self.put_format)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'You do not have permission to perform this action.')
+
+    def test_post_list(self):
+        post = deepcopy(self.post)
+
+        # copy file objects
+        for item, value in self.post.items():
+            if isinstance(value, file):
+                post[item] = value
+        post.update({
+            self.owner_field: self.other_user.get_api_absolute_url(),
+        })
+
+        self.login(self.other_user.username, self.other_user_password)
+        count = self.model_class.objects.count()
+        response = self.client.post(self.url_post, data=post,
+                                    format=self.post_format or self.put_format)
+        self.log_api_errors(response)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        response_json = json.loads(response.content)
+
+        self.assertEqual(self.model_class.objects.count(), count + 1)
+        self.check_response(response_json, post)
+
+    def test_patch_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'You do not have permission to perform this action.')
+
+    def test_delete_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.delete(self.url_delete, data={}, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'You do not have permission to perform this action.')

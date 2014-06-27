@@ -1,0 +1,46 @@
+[
+{
+    "pk": 1,
+    "model": "files.userfile",
+    "fields": {
+        "owner": 6,
+        "plain_type": "image/png",
+        "size": 429202,
+        "file": "user/1/files/1.png",
+        "title": ""
+    }
+},
+{
+    "pk": 3,
+    "model": "files.userfile",
+    "fields": {
+        "owner": 1,
+        "plain_type": "image/png",
+        "size": 638279,
+        "file": "user/1/files/5.png",
+        "title": ""
+    }
+},
+{
+    "pk": 4,
+    "model": "files.userfile",
+    "fields": {
+        "owner": 1,
+        "plain_type": "image/jpeg",
+        "size": 219928,
+        "file": "user/1/files/01.jpg",
+        "title": ""
+    }
+},
+{
+    "pk": 5,
+    "model": "files.userfile",
+    "fields": {
+        "owner": 1,
+        "plain_type": "image/jpeg",
+        "size": 23644,
+        "file": "user/1/files/ss_06d79fbc925d6d8e6709b9878885dcce8e0b689a.600x338.jpg",
+        "title": ""
+    }
+}
+]
