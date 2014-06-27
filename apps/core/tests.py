@@ -375,6 +375,8 @@ class ApiTestCaseSet(object):
     url_prefix = 'api'
     post_format = 'json'
     put_format = None
+    pk_value = 1
+
     LOG_API_STATUSES = [
         status.HTTP_400_BAD_REQUEST,
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
@@ -404,7 +406,6 @@ class ApiTestCaseSet(object):
         self.maxDiff = None
         # update content types
 
-        self.pk_value = 1
         self.owner_field = 'owner'
 
         self.user = User.objects.get(username='user')
@@ -436,6 +437,7 @@ class ApiTestCaseSet(object):
         self.object_detail_response = {
         }
         self.object_anonymous_detail_response = None
+        self.object_admin_detail_response = None
 
 
 # noinspection PyUnresolvedReferences
@@ -514,7 +516,10 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load, self.object_detail_response)
+        self.assertEqual(
+            load,
+            self.object_admin_detail_response or self.object_detail_response
+        )
 
     def test_get_list(self):
         self.login(self.admin.username, self.admin_password)

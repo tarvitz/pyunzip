@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework import permissions
 from django.db.models import Q
 from apps.accounts.serializers import (
-    UserSerializer, PMSerializer, PolicyWarningSerializer
+    UserSerializer, PMSerializer, PolicyWarningSerializer, AccountSerializer
 )
 
 
@@ -26,19 +26,16 @@ class UserViewSet(viewsets.ModelViewSet):
     API viewpoint for event
     """
     queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated, IsAdminOrReadOnly, )
+    serializer_class = AccountSerializer
+    permission_classes = (permissions.DjangoModelPermissionsOrAnonReadOnly, )
     # filter_class = UserSerializer
 
-    def get_queryset(self):
-        qs = super(UserViewSet, self).get_queryset()
-        if self.request.user.is_authenticated():
-
-            return (
-                qs if self.request.user.has_perm('accounts.change_user')
-                else qs.filter(pk=self.request.user.pk)
-            )
-        return qs.none()
+    def get_serializer_class(self):
+        user = self.request.user
+        if not user.is_authenticated() or not user.has_perms(
+                ['accounts.add_user', 'accounts.change_user']):
+            return UserSerializer
+        return super(UserViewSet, self).get_serializer_class()
 
 
 class PMPermission(permissions.BasePermission):

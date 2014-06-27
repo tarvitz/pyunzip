@@ -4,6 +4,15 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 
+class AccountSerializer(serializers.HyperlinkedModelSerializer):
+    groups = serializers.PrimaryKeyRelatedField(many=True)
+    user_permissions = serializers.PrimaryKeyRelatedField(many=True)
+
+    class Meta:
+        model = User
+        exclude = ('password', )
+
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
