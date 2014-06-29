@@ -1,8 +1,11 @@
+from datetime import timedelta, datetime
 import math
 
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
 from django.http import (HttpResponseRedirect, Http404)
+from apps.karma.models import Karma
+
 try:
     from django.contrib.auth import get_user_model
     User = get_user_model()
@@ -30,18 +33,31 @@ from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
 from apps.utils.paginator import DiggPaginator as Paginator
+from django.db.models import Count, Min, Sum
 
 
 def index_ctx(request):
-    quick = {'posts': Post.objects.count(),
-             'topics': Topic.objects.count(),
-             'users': User.objects.count(),
+    quick = {'posts': {
+                  "total": Post.objects.count(),
+                  "today": Post.objects.filter(created__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count()
+             },
+             'topics': {
+                 "total": Topic.objects.count(),
+                 "today": Topic.objects.filter(created__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count(),
+             },
+             'users': {
+                 "total": User.objects.count(),
+                 "today": User.objects.filter(date_joined__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count(),
+             },
              'last_topics': Topic.objects.filter(
                  forum__is_private=False).select_related()[
                             :pybb_settings.QUICK_TOPICS_NUMBER],
              'last_posts': Post.objects.filter(
                  topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
-             }
+             'karma': {
+                 "total": Karma.objects.all().aggregate(Sum("value"))['value__sum'],
+                 "last": Karma.objects.latest("date")
+             }}
 
     cats = {}
     forums = {}
