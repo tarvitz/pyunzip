@@ -46,7 +46,7 @@ class UserViewSetMixin(object):
             'username': 'user', 'gender': 'n', 'is_active': True,
             'avatar': '', 'nickname': 'user',
             'date_joined': '2013-03-18T04:39:07.267',
-            'email': 'user@blacklibrary.ru',
+            #'email': 'user@blacklibrary.ru',
             'id': 6
         }
         self.object_admin_detail_response = {
