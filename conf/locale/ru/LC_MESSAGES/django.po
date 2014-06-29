@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-29 16:13+0400\n"
-"PO-Revision-Date: 2014-06-29 16:20+0400\n"
+"POT-Creation-Date: 2014-06-29 16:34+0400\n"
+"PO-Revision-Date: 2014-06-29 16:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
@@ -2889,21 +2889,24 @@ msgstr "Статистика"
 msgid "Total Karma"
 msgstr "Всего кармы"
 
-#: templates/pybb/quick_access.html:60
+#: templates/pybb/quick_access.html:61
 msgid "Last Karma"
 msgstr "Карма"
 
-#: templates/pybb/quick_access.html:60
+#: templates/pybb/quick_access.html:62
+msgctxt "from user"
 msgid "from"
 msgstr "от"
 
-#: templates/pybb/quick_access.html:62
+#: templates/pybb/quick_access.html:65
+msgctxt "to user"
 msgid "to"
 msgstr "к"
 
-#: templates/pybb/quick_access.html:63
+#: templates/pybb/quick_access.html:67
+msgctxt "comment text"
 msgid "for"
-msgstr "для"
+msgstr "с"
 
 #: templates/pybb/user.html:19
 msgid "Number of posts"
