@@ -262,7 +262,7 @@ class Read(models.Model):
     is logged to this model.
     """
 
-    user = models.ForeignKey(User, verbose_name=_('User'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'))
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'))
     time = models.DateTimeField(_('Time'), blank=True)
 
