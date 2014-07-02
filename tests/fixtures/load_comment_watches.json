@@ -1,0 +1,54 @@
+[
+{
+    "pk": 1, 
+    "model": "comments.commentwatch", 
+    "fields": {
+        "comment": 15, 
+        "object_pk": 1, 
+        "is_disabled": true, 
+        "created_on": "2014-06-03T19:05:45.351", 
+        "user": 2, 
+        "content_type": 13, 
+        "is_updated": true
+    }
+},
+{
+    "pk": 2, 
+    "model": "comments.commentwatch", 
+    "fields": {
+        "comment": 12, 
+        "object_pk": 3, 
+        "is_disabled": false, 
+        "created_on": "2014-06-03T06:12:38.991", 
+        "user": 2, 
+        "content_type": 13, 
+        "is_updated": false
+    }
+},
+{
+    "pk": 3, 
+    "model": "comments.commentwatch", 
+    "fields": {
+        "comment": null, 
+        "object_pk": 4, 
+        "is_disabled": false, 
+        "created_on": "2014-06-14T00:48:45.691", 
+        "user": 1, 
+        "content_type": 13, 
+        "is_updated": false
+    }
+},
+{
+    "pk": 4, 
+    "model": "comments.commentwatch", 
+    "fields": {
+        "comment": 18, 
+        "object_pk": 5, 
+        "is_disabled": false, 
+        "created_on": "2014-06-18T18:06:39.094", 
+        "user": 1, 
+        "content_type": 13, 
+        "is_updated": true
+    }
+}
+]

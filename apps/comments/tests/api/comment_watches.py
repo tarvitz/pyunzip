@@ -3,7 +3,9 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 from apps.comments.models import CommentWatch
 from apps.news.models import Event
-from apps.core.tests import TestHelperMixin
+from apps.core.tests import (
+    TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
+    ApiUserOwnerTestCaseMixin, ApiUserNotOwnerTestCaseMixin)
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -13,7 +15,80 @@ from apps.core.helpers import get_content_type
 import simplejson as json
 from copy import deepcopy
 
-__all__ = ['CommentWatchViewSetTest', ]
+__all__ = ['CommentWatchViewSetTest', 'CommentWatchViewAnonymousUserTest',]
+
+
+class CommentWatchViewMixin(object):
+    fixtures = [
+        'tests/fixtures/load_users.json',
+        'tests/fixtures/load_event_places.json',
+        'tests/fixtures/load_events.json',
+        'tests/fixtures/load_comments.json',
+        'tests/fixtures/load_comment_watches.json'
+    ]
+
+    model_class = CommentWatch
+    pk_value = 1
+
+    def setUp(self):
+        self.event_ct = get_content_type(Event)
+        # pk 13 in fixtures mean it should be Event content type
+        CommentWatch.objects.filter(pk=13).update(content_type=self.event_ct)
+
+        super(CommentWatchViewMixin, self).setUp()
+
+        self.user = User.objects.get(username='user')
+        self.admin = User.objects.get(username='admin')
+        self.other_user = User.objects.get(username='user2')
+
+
+        self.event = Event.objects.get(pk=1)
+
+
+
+        self.comment_watch = CommentWatch.objects.create(
+            content_type=self.event_ct, object_pk=self.event.pk,
+            comment=None, user=self.user,
+        )
+
+        self.url_detail = reverse(
+            'api:commentwatch-detail', args=(self.comment_watch.pk, ))
+
+        self.url_list = reverse('api:commentwatch-list')
+        self.url_post = self.url_list
+        self.url_put = self.url_detail
+        self.url_patch = self.url_detail
+        self.url_delete = self.url_detail
+
+        self.put = {
+            'id': self.comment_watch.pk,
+            'is_updated': True,
+            'is_disabled': False,
+            'content_type': self.event_ct.pk,
+            'user': self.user.pk,
+            'object_pk': self.comment_watch.pk,
+        }
+        self.patch = {
+            'is_updated': True,
+        }
+        self.post = {
+            'content_type': self.event_ct.pk,
+            'object_pk': self.comment_watch.pk,
+            'user': self.admin.pk,
+            'is_updated': False,
+            'is_disabled': False,
+        }
+        self.object_detail_response = {
+            'id': 1, 'is_disabled': False, 'is_updated': False,
+            'url': '/events/1/', 'content_type': 16, 'user': 6,
+            'object_pk': 1,
+        }
+
+
+class CommentWatchViewAnonymousUserTest(CommentWatchViewMixin,
+                                        ApiAnonymousUserTestCaseMixin,
+                                        APITestCase):
+    pass
 
 
 class CommentWatchViewSetTest(TestHelperMixin, APITestCase):

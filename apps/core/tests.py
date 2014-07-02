@@ -442,8 +442,15 @@ class ApiTestCaseSet(object):
 
 # noinspection PyUnresolvedReferences
 class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
-    """
-    anonymous user can perform GET access detail/list, otherwise read only
+    """ ApiAnonymousUserTestCaseMixin
+
+    Anonymous user can perform GET access detail/list, otherwise read only
+
+    .. note::
+
+        anonymous user can access freely for GET method, with restricted output
+        data in result which should be configurated by ModelViewSet
+        serializer_class property
     """
     def test_get_detail(self):
         response = self.client.get(self.url_detail, follow=True)
@@ -746,3 +753,75 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(
             json_response['detail'],
             'You do not have permission to perform this action.')
+
+
+class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+    """ ApiAnonymousUserTestCaseMixin
+
+    Anonymous user can not perform GET access detail/list
+    either other HTTP
+
+    .. note::
+
+        anonymous user have not access to resource completely, because the
+        resource could provide "hidden" or not public data only owner user
+        should retrieve
+    """
+    def test_get_detail(self):
+        response = self.client.get(self.url_detail, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        detail_response = (
+            self.object_anonymous_detail_response or
+            self.object_detail_response)
+        self.assertEqual(json_response, detail_response)
+
+    def test_get_list(self):
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['count'],
+                         self.model_class.objects.count())
+
+    def test_put_detail(self):
+        response = self.client.put(self.url_put, data=self.put,
+                                   format=self.put_format or self.post_format)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')
+
+    def test_post_list(self):
+        response = self.client.post(self.url_post, data=self.post,
+                                    format=self.post_format)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')
+
+    def test_patch_detail(self):
+        response = self.client.patch(self.url_patch, data=self.patch,
+                                     format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')
+
+    def test_delete_detail(self):
+        response = self.client.delete(self.url_delete, data={},
+                                      format='json')
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')

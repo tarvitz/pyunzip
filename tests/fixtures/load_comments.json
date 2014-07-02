@@ -245,5 +245,166 @@
         "user_name": "",
         "user_email": ""
     }
+},
+{
+    "pk": 12, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0411\u043b\u0430\u0431\u043b\u0430\n\u0431\u0430\u043b\u0430\u0431\u043b\u0430", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T02:19:56.244", 
+        "ip_address": null, 
+        "object_pk": "3", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 2, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u0411\u043b\u0430\u0431\u043b\u0430<br />\u0431\u0430\u043b\u0430\u0431\u043b\u0430</p>"
+    }
+},
+{
+    "pk": 13, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0414\u0430 \u0430 \u0432\u043e\u0442 \u0445\u0440\u0435\u043d \u0442\u0435\u0431\u0435", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T04:08:45.130", 
+        "ip_address": null, 
+        "object_pk": "1", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 2, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u0414\u0430 \u0430 \u0432\u043e\u0442 \u0445\u0440\u0435\u043d \u0442\u0435\u0431\u0435</p>"
+    }
+},
+{
+    "pk": 14, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u041d\u0435\u0442 \u0442\u0435\u0431\u0435\n\u041d\u043e\u0443", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T04:08:56.440", 
+        "ip_address": null, 
+        "object_pk": "1", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 1, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u041d\u0435\u0442 \u0442\u0435\u0431\u0435<br />\u041d\u043e\u0443</p>"
+    }
+},
+{
+    "pk": 15, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u041d\u043e\u0443!", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T04:09:57.872", 
+        "ip_address": null, 
+        "object_pk": "1", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 2, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u041d\u043e\u0443!</p>"
+    }
+},
+{
+    "pk": 16, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0424\u0430\u043a \u044e", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T04:10:12.708", 
+        "ip_address": null, 
+        "object_pk": "1", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 1, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u0424\u0430\u043a \u044e</p>"
+    }
+},
+{
+    "pk": 17, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0431\u043b\u0430 \u0431\u043b\u0430", 
+        "user_url": "", 
+        "submit_date": "2014-06-03T04:35:26.178", 
+        "ip_address": null, 
+        "object_pk": "3", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 1, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u0431\u043b\u0430 \u0431\u043b\u0430</p>"
+    }
+},
+{
+    "pk": 18, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u043e\u043b\u043e\u043b\u043e \u043f\u044b\u0448 \u043f\u044b\u0448", 
+        "user_url": "", 
+        "submit_date": "2014-06-18T18:06:20.777", 
+        "ip_address": null, 
+        "object_pk": "5", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 1, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u043e\u043b\u043e\u043b\u043e \u043f\u044b\u0448 \u043f\u044b\u0448</p>"
+    }
+},
+{
+    "pk": 19, 
+    "model": "comments.comment", 
+    "fields": {
+        "comment": "\u0430\u0437\u0430\u0437\u0430\u0437\u0430", 
+        "user_url": "", 
+        "submit_date": "2014-06-18T18:07:22.313", 
+        "ip_address": null, 
+        "object_pk": "5", 
+        "site": 1, 
+        "syntax": "textile", 
+        "is_removed": false, 
+        "user": 2, 
+        "content_type": 13, 
+        "is_public": true, 
+        "user_name": "", 
+        "user_email": "", 
+        "cache_comment": "\t<p>\u0430\u0437\u0430\u0437\u0430\u0437\u0430</p>"
+    }
 }
+
 ]
