@@ -244,7 +244,8 @@ EVENT_TYPE_CHOICES = (
     ('tournament', _("Tournament")),
     ('order', pgettext_lazy("cart order", "Order")),
     ('pre-release', pgettext_lazy('pre-release of smth', 'Pre-release')),
-    ('release', pgettext_lazy('release of smth', 'Release'))
+    ('release', pgettext_lazy('release of smth', 'Release')),
+    ('festivity', pgettext_lazy('festivity of smth', 'Festivity')),
 )
 
 EVENT_LEAGUE_CHOICES = (
