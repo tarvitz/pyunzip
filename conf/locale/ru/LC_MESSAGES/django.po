@@ -8,13 +8,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-29 16:34+0400\n"
+"POT-Creation-Date: 2014-07-26 13:15+0400\n"
 "PO-Revision-Date: 2014-06-29 16:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
@@ -334,7 +334,7 @@ msgid "User"
 msgstr "Пользователь"
 
 #: apps/accounts/models.py:266 templates/accounts/users.html:3
-#: templates/pybb/head.html:40 templates/pybb/quick_access.html:50
+#: templates/pybb/head.html:40 templates/pybb/quick_access.html:49
 #: templates/pybb/users.html:6
 msgid "Users"
 msgstr "Пользователи"
@@ -348,8 +348,8 @@ msgid "addressee"
 msgstr "адресат"
 
 #: apps/accounts/models.py:279 apps/files/models.py:95 apps/menu/models.py:8
-#: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:259
-#: apps/news/models.py:279 apps/pybb/models.py:287 apps/pybb/models.py:372
+#: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:260
+#: apps/news/models.py:280 apps/pybb/models.py:287 apps/pybb/models.py:372
 #: apps/tabletop/models.py:53 apps/tabletop/models.py:89
 #: apps/tabletop/models.py:207 apps/wh/models.py:16
 msgid "title"
@@ -397,7 +397,7 @@ msgid "read only"
 msgstr "только чтение"
 
 #: apps/accounts/models.py:343 apps/comments/models.py:77
-#: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:369
+#: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:370
 msgid "user"
 msgstr "пользователь"
 
@@ -411,7 +411,7 @@ msgid "level"
 msgstr "уровень"
 
 #: apps/accounts/models.py:349 apps/comments/models.py:78
-#: apps/core/models.py:24 apps/news/models.py:370 apps/tabletop/models.py:210
+#: apps/core/models.py:24 apps/news/models.py:371 apps/tabletop/models.py:210
 msgid "created on"
 msgstr "создано"
 
@@ -512,7 +512,7 @@ msgstr "Слежение за комментарием"
 msgid "Comment watches"
 msgstr "Слежение за комментариями"
 
-#: apps/comments/serializers.py:38 apps/comments/tests/api/comments.py:390
+#: apps/comments/serializers.py:41 apps/comments/tests/api/comments.py:390
 msgid "You can only post comment using your user id"
 msgstr ""
 "Вы можете отсылать комментарий, используя только свой идентификатор "
@@ -542,7 +542,7 @@ msgstr "UserSID"
 msgid "UserSIDs"
 msgstr "UserSID'ы"
 
-#: apps/core/serializers.py:8 apps/tabletop/serializers.py:14
+#: apps/core/serializers.py:9 apps/tabletop/serializers.py:14
 #: apps/wh/serializers.py:17
 msgid "You should use your own user id for owner field set"
 msgstr ""
@@ -813,7 +813,7 @@ msgstr "Категории"
 msgid "author"
 msgstr "автор"
 
-#: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:282
+#: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:283
 #: apps/wh/models.py:65 apps/wh/models.py:110
 msgid "content"
 msgstr "контент"
@@ -917,129 +917,134 @@ msgctxt "release of smth"
 msgid "Release"
 msgstr "Релиз"
 
-#: apps/news/models.py:251
+#: apps/news/models.py:248
+msgctxt "festivity of smth"
+msgid "Festivity"
+msgstr "Празднества"
+
+#: apps/news/models.py:252
 msgid "Warhammer 40000"
 msgstr "Warhammer 40000"
 
-#: apps/news/models.py:253
+#: apps/news/models.py:254
 msgid "Magic the gathering"
 msgstr "Magic the gathering"
 
-#: apps/news/models.py:254
+#: apps/news/models.py:255
 msgid "Board gaming"
 msgstr "Настольные игры"
 
-#: apps/news/models.py:260
+#: apps/news/models.py:261
 msgid "event place title"
 msgstr "название места ивента"
 
-#: apps/news/models.py:261
+#: apps/news/models.py:262
 msgid "address"
 msgstr "адрес"
 
-#: apps/news/models.py:262
+#: apps/news/models.py:263
 msgid "event place address"
 msgstr "адрес места события"
 
-#: apps/news/models.py:264
+#: apps/news/models.py:265
 msgid "contacts"
 msgstr "контакты"
 
-#: apps/news/models.py:265
+#: apps/news/models.py:266
 msgid "contacts/help who to find it"
 msgstr "контакты/помощь где, кого искать"
 
-#: apps/news/models.py:272
+#: apps/news/models.py:273
 msgid "Event Place"
 msgstr "Место события"
 
-#: apps/news/models.py:273
+#: apps/news/models.py:274
 msgid "Event Places"
 msgstr "Места событий"
 
-#: apps/news/models.py:279
+#: apps/news/models.py:280
 msgid "event title"
 msgstr "название события"
 
-#: apps/news/models.py:284
+#: apps/news/models.py:285
 msgid "content event text, description, further manual and so on"
 msgstr "текст события, описания, инструкции и так далее"
 
-#: apps/news/models.py:288
+#: apps/news/models.py:289
 msgid "content html"
 msgstr "html контент"
 
-#: apps/news/models.py:289
+#: apps/news/models.py:290
 msgid "rendered html content"
 msgstr "html рендер контента"
 
-#: apps/news/models.py:292
+#: apps/news/models.py:293
 msgid "date start"
 msgstr "дата начала"
 
-#: apps/news/models.py:292
+#: apps/news/models.py:293
 msgid "when event date starts"
 msgstr "когда событие начинается"
 
-#: apps/news/models.py:295
+#: apps/news/models.py:296
 msgid "date end"
 msgstr "дата окончания"
 
-#: apps/news/models.py:295
+#: apps/news/models.py:296
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:299 apps/wh/models.py:137
+#: apps/news/models.py:300 apps/wh/models.py:137
 msgid "type"
 msgstr "тип"
 
-#: apps/news/models.py:303
+#: apps/news/models.py:304
 msgid "league"
 msgstr "лига"
 
-#: apps/news/models.py:304
+#: apps/news/models.py:305
 msgid "game league"
 msgstr "игровая лига"
 
-#: apps/news/models.py:310
+#: apps/news/models.py:311
 msgid "event place"
 msgstr "место проведения"
 
-#: apps/news/models.py:314
+#: apps/news/models.py:315
 msgid "participants would take a part in the event"
 msgstr "участники, которые будут принимать участие в событии"
 
-#: apps/news/models.py:318 apps/pybb/models.py:308
+#: apps/news/models.py:319 apps/pybb/models.py:308
 msgid "is finished"
 msgstr "завершен"
 
-#: apps/news/models.py:321
+#: apps/news/models.py:322
 msgid "is all day"
 msgstr "весь день"
 
-#: apps/news/models.py:322
+#: apps/news/models.py:323
 msgid "marks if event could place whole day"
 msgstr ""
 "отмечает, если событие будет проходить весь день (убирает временные отметки)"
 
-#: apps/news/models.py:360
+#: apps/news/models.py:361
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:361 templates/news/events/calendar.html:22
+#: apps/news/models.py:362 templates/news/events/calendar.html:22
 #: templates/news/events/events.html:13 templates/pybb/head.html:49
 msgid "Events"
 msgstr "События"
 
-#: apps/news/models.py:366
+#: apps/news/models.py:367
 msgid "event"
 msgstr "событие"
 
-#: apps/news/models.py:377
+#: apps/news/models.py:378
 msgid "Event watch"
 msgstr "Просмотр события"
 
-#: apps/news/models.py:378
+#: apps/news/models.py:379
 msgid "Event watches"
 msgstr "Просмотр событий"
 
@@ -1174,7 +1179,7 @@ msgstr "Подписчики"
 msgid "Topic"
 msgstr "Топик"
 
-#: apps/pybb/models.py:117 templates/pybb/quick_access.html:38
+#: apps/pybb/models.py:117 templates/pybb/quick_access.html:37
 msgid "Topics"
 msgstr "Топики"
 
@@ -1210,7 +1215,7 @@ msgstr "IP пользователя"
 msgid "Post"
 msgstr "Пост"
 
-#: apps/pybb/models.py:199 templates/pybb/quick_access.html:44
+#: apps/pybb/models.py:199 templates/pybb/quick_access.html:43
 msgid "Posts"
 msgstr "Посты"
 
@@ -2600,8 +2605,8 @@ msgstr "Суббота"
 msgid "Sunday"
 msgstr "Воскресенье"
 
-#: templates/news/events/calendar.html:84 templates/pybb/quick_access.html:39
-#: templates/pybb/quick_access.html:45 templates/pybb/quick_access.html:51
+#: templates/news/events/calendar.html:84 templates/pybb/quick_access.html:38
+#: templates/pybb/quick_access.html:44 templates/pybb/quick_access.html:50
 msgid "Today"
 msgstr "Сегодня"
 
@@ -2885,25 +2890,25 @@ msgstr "Посты"
 msgid "Statistics"
 msgstr "Статистика"
 
-#: templates/pybb/quick_access.html:56
+#: templates/pybb/quick_access.html:55
 msgid "Total Karma"
 msgstr "Всего кармы"
 
-#: templates/pybb/quick_access.html:61
+#: templates/pybb/quick_access.html:60
 msgid "Last Karma"
 msgstr "Карма"
 
-#: templates/pybb/quick_access.html:62
+#: templates/pybb/quick_access.html:61
 msgctxt "from user"
 msgid "from"
 msgstr "от"
 
-#: templates/pybb/quick_access.html:65
+#: templates/pybb/quick_access.html:64
 msgctxt "to user"
 msgid "to"
 msgstr "к"
 
-#: templates/pybb/quick_access.html:67
+#: templates/pybb/quick_access.html:66
 msgctxt "comment text"
 msgid "for"
 msgstr "с"
@@ -3468,9 +3473,6 @@ msgstr "прочесть репорт"
 
 #~ msgid "prev datetime activity"
 #~ msgstr "предыдущая ДатаВремя активности"
-
-#~ msgid "Guest Activity"
-#~ msgstr "Гостевая активность"
 
 #~ msgid "Guest Activities"
 #~ msgstr "Гостевые активности"
