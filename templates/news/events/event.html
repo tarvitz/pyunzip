@@ -54,7 +54,9 @@
     {% if object.participants.count %}
       {% trans "Participants" %}:
       {% for person in object.participants.all %}
-        {{ person.get_nickname|safe }} {% if not forloop.last %},{% endif %}
+        <img src='{{ person.get_avatar_url }}' rel='tooltip'
+             class='avatar avatar-mini'
+             data-title='{{ person.nickname }}' /> {% if not forloop.last %}{% endif %}
       {% endfor %}
     {% endif %}
 

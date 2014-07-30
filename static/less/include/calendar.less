@@ -7,6 +7,10 @@
 @event-release-bg: @btn-primary-bg;
 @event-release-border: @btn-primary-border;
 
+@event-festivity-color: @text-color;
+@event-festivity-bg: #ffff99;
+@event-festivity-border: darken(@event-festivity-bg, 10%);
+
 .event-variant(@color; @background; @border) {
   color: @color;
   background-color: @background;
@@ -70,6 +74,9 @@
   }
   &.release{
     .event-variant(@event-release-color, @event-release-bg, @event-release-border);
+  }
+  &.festivity{
+    .event-variant(@event-festivity-color, @event-festivity-bg, @event-festivity-border);
   }
 }
 
