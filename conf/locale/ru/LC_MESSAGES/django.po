@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-26 13:15+0400\n"
+"POT-Creation-Date: 2014-08-14 23:43+0400\n"
 "PO-Revision-Date: 2014-06-29 16:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -2497,176 +2497,181 @@ msgctxt "card order"
 msgid "order"
 msgstr "заказ"
 
-#: templates/news/events/calendar.html:33
+#: templates/news/events/calendar.html:32
+msgctxt "festivity"
+msgid "festivity"
+msgstr "празднества"
+
+#: templates/news/events/calendar.html:34
 msgid "marks new event"
 msgstr "отметка для нового события"
 
-#: templates/news/events/calendar.html:37
+#: templates/news/events/calendar.html:38
 msgid "January"
 msgstr "Январь"
 
-#: templates/news/events/calendar.html:37
+#: templates/news/events/calendar.html:38
 msgid "February"
 msgstr "Февраль"
 
-#: templates/news/events/calendar.html:37
+#: templates/news/events/calendar.html:38
 msgid "March"
 msgstr "Март"
 
-#: templates/news/events/calendar.html:38
+#: templates/news/events/calendar.html:39
 msgid "April"
 msgstr "Апрель"
 
-#: templates/news/events/calendar.html:38
+#: templates/news/events/calendar.html:39
 msgid "May"
 msgstr "Май"
 
-#: templates/news/events/calendar.html:38
+#: templates/news/events/calendar.html:39
 msgid "June"
 msgstr "Июнь"
 
-#: templates/news/events/calendar.html:39
+#: templates/news/events/calendar.html:40
 msgid "July"
 msgstr "Июль"
 
-#: templates/news/events/calendar.html:39
+#: templates/news/events/calendar.html:40
 msgid "August"
 msgstr "Август"
 
-#: templates/news/events/calendar.html:39
+#: templates/news/events/calendar.html:40
 msgid "September"
 msgstr "Сентябрь"
 
-#: templates/news/events/calendar.html:40
+#: templates/news/events/calendar.html:41
 msgid "October"
 msgstr "Октябрь"
 
-#: templates/news/events/calendar.html:40
+#: templates/news/events/calendar.html:41
 msgid "November"
 msgstr "Ноябрь"
 
-#: templates/news/events/calendar.html:41
+#: templates/news/events/calendar.html:42
 msgid "December"
 msgstr "Декабрь"
 
-#: templates/news/events/calendar.html:43
+#: templates/news/events/calendar.html:44
 msgid "Mon"
 msgstr "Пн"
 
-#: templates/news/events/calendar.html:43
+#: templates/news/events/calendar.html:44
 msgid "Tue"
 msgstr "Вт"
 
-#: templates/news/events/calendar.html:43
+#: templates/news/events/calendar.html:44
 msgid "Wed"
 msgstr "Ср"
 
-#: templates/news/events/calendar.html:44
+#: templates/news/events/calendar.html:45
 msgid "Thu"
 msgstr "Чт"
 
-#: templates/news/events/calendar.html:44
+#: templates/news/events/calendar.html:45
 msgid "Fri"
 msgstr "Пт"
 
-#: templates/news/events/calendar.html:44
+#: templates/news/events/calendar.html:45
 msgid "Sat"
 msgstr "Сб"
 
-#: templates/news/events/calendar.html:45
+#: templates/news/events/calendar.html:46
 msgid "Sun"
 msgstr "Вс"
 
-#: templates/news/events/calendar.html:47
+#: templates/news/events/calendar.html:48
 msgid "Monday"
 msgstr "Понедельник"
 
-#: templates/news/events/calendar.html:47
+#: templates/news/events/calendar.html:48
 msgid "Tuesday"
 msgstr "Вторник"
 
-#: templates/news/events/calendar.html:47
+#: templates/news/events/calendar.html:48
 msgid "Wednesday"
 msgstr "Среда"
 
-#: templates/news/events/calendar.html:48
+#: templates/news/events/calendar.html:49
 msgid "Thursday"
 msgstr "Четверг"
 
-#: templates/news/events/calendar.html:48
+#: templates/news/events/calendar.html:49
 msgid "Friday"
 msgstr "Пятница"
 
-#: templates/news/events/calendar.html:48
+#: templates/news/events/calendar.html:49
 msgid "Saturday"
 msgstr "Суббота"
 
-#: templates/news/events/calendar.html:49
+#: templates/news/events/calendar.html:50
 msgid "Sunday"
 msgstr "Воскресенье"
 
-#: templates/news/events/calendar.html:84 templates/pybb/quick_access.html:38
+#: templates/news/events/calendar.html:85 templates/pybb/quick_access.html:38
 #: templates/pybb/quick_access.html:44 templates/pybb/quick_access.html:50
 msgid "Today"
 msgstr "Сегодня"
 
-#: templates/news/events/calendar.html:85
+#: templates/news/events/calendar.html:86
 msgid "month"
 msgstr "месяц"
 
-#: templates/news/events/calendar.html:86
+#: templates/news/events/calendar.html:87
 msgid "week"
 msgstr "неделя"
 
-#: templates/news/events/calendar.html:87
+#: templates/news/events/calendar.html:88
 msgid "day"
 msgstr "день"
 
-#: templates/news/events/calendar.html:96
+#: templates/news/events/calendar.html:97
 msgid "Jan"
 msgstr "Янв"
 
-#: templates/news/events/calendar.html:96
+#: templates/news/events/calendar.html:97
 msgid "Feb"
 msgstr "Фев"
 
-#: templates/news/events/calendar.html:96
+#: templates/news/events/calendar.html:97
 msgid "Mar"
 msgstr "Мар"
 
-#: templates/news/events/calendar.html:97
+#: templates/news/events/calendar.html:98
 msgid "Apr"
 msgstr "Апр"
 
-#: templates/news/events/calendar.html:97
+#: templates/news/events/calendar.html:98
 msgid "Jun"
 msgstr "Июн"
 
-#: templates/news/events/calendar.html:98
+#: templates/news/events/calendar.html:99
 msgid "Jul"
 msgstr "Июл"
 
-#: templates/news/events/calendar.html:98
+#: templates/news/events/calendar.html:99
 msgid "Aug"
 msgstr "Авг"
 
-#: templates/news/events/calendar.html:98
+#: templates/news/events/calendar.html:99
 msgid "Sep"
 msgstr "Сен"
 
-#: templates/news/events/calendar.html:99
+#: templates/news/events/calendar.html:100
 msgid "Oct"
 msgstr "Окт"
 
-#: templates/news/events/calendar.html:99
+#: templates/news/events/calendar.html:100
 msgid "Nov"
 msgstr "Ноя"
 
-#: templates/news/events/calendar.html:99
+#: templates/news/events/calendar.html:100
 msgid "Dec"
 msgstr "Дек"
 
-#: templates/news/events/calendar.html:109
+#: templates/news/events/calendar.html:110
 msgid "all day"
 msgstr "весь день"
 
