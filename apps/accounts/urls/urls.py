@@ -13,7 +13,7 @@ urlpatterns = patterns(
     url(r'^profiles/(?P<pk>\d+)/$',
         login_required(views.ProfileView.as_view()),
         name='profile'),
-    url(r'^profiles/(?P<slug>[\w\d\-_ ]+)/$',
+    url(r'^profiles/(?P<slug>[\w\d\-_ \.]+)/$',
         login_required(views.ProfileView.as_view()), name='profile-by-nick'),
 
     url(r'^accounts/password/(?P<sid>[\w\d]+)/restore/$',
