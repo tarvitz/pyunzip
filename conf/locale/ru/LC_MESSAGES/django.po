@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-14 23:43+0400\n"
+"POT-Creation-Date: 2014-08-23 15:42+0400\n"
 "PO-Revision-Date: 2014-06-29 16:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -578,7 +578,7 @@ msgid "Name"
 msgstr "Имя"
 
 #: apps/files/models.py:41 templates/files/gallery/gallery_list.html:22
-#: templates/pybb/head.html:65
+#: templates/pybb/head.html:68
 msgid "Gallery"
 msgstr "Галерея"
 
@@ -926,6 +926,10 @@ msgstr "Празднества"
 msgid "Warhammer 40000"
 msgstr "Warhammer 40000"
 
+#: apps/news/models.py:253
+msgid "Warhammer fantasy battle"
+msgstr "Warhammer Fantasy Battle"
+
 #: apps/news/models.py:254
 msgid "Magic the gathering"
 msgstr "Magic the gathering"
@@ -1032,7 +1036,7 @@ msgid "Event"
 msgstr "Событие"
 
 #: apps/news/models.py:362 templates/news/events/calendar.html:22
-#: templates/news/events/events.html:13 templates/pybb/head.html:49
+#: templates/news/events/events.html:13 templates/pybb/head.html:52
 msgid "Events"
 msgstr "События"
 
@@ -1938,7 +1942,7 @@ msgid "pm outox"
 msgstr "исходящие"
 
 #: templates/accounts/pm_detail.html:18 templates/accounts/pm_list.html:19
-#: templates/pybb/head.html:67
+#: templates/pybb/head.html:70
 msgid "Private messages"
 msgstr "Приватные сообщения"
 
@@ -2092,7 +2096,7 @@ msgstr ""
 "      Это означает что вы не можете ничего редактировать, создавать, "
 "пожалуйста, дождитесь времени, когда время наказания истечет."
 
-#: templates/accounts/register.html:11 templates/pybb/head.html:95
+#: templates/accounts/register.html:11 templates/pybb/head.html:98
 msgid "Register"
 msgstr "Регистрация"
 
@@ -2195,7 +2199,7 @@ msgctxt "You used file space"
 msgid "You used"
 msgstr "Вы испольщовали"
 
-#: templates/files/user_files.html:31 templates/pybb/head.html:63
+#: templates/files/user_files.html:31 templates/pybb/head.html:66
 msgid "My files"
 msgstr "Мои файлы"
 
@@ -2793,31 +2797,31 @@ msgstr "Календарь"
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: templates/pybb/head.html:52 templates/tabletop/codex_list.html:13
+#: templates/pybb/head.html:55 templates/tabletop/codex_list.html:13
 msgid "Codexes"
 msgstr "Кодексы"
 
-#: templates/pybb/head.html:58
+#: templates/pybb/head.html:61
 msgid "My profile"
 msgstr "Мой профиль"
 
-#: templates/pybb/head.html:62
+#: templates/pybb/head.html:65
 msgid "My rosters"
 msgstr "Мои ростеры"
 
-#: templates/pybb/head.html:73
+#: templates/pybb/head.html:76
 msgid "Admincp"
 msgstr "Админка"
 
-#: templates/pybb/head.html:75
+#: templates/pybb/head.html:78
 msgid "Log out"
 msgstr "Выйти"
 
-#: templates/pybb/head.html:80
+#: templates/pybb/head.html:83
 msgid "Themes"
 msgstr "Темы"
 
-#: templates/pybb/head.html:96
+#: templates/pybb/head.html:99
 msgid "Log in"
 msgstr "Войти"
 

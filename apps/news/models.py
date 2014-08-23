@@ -250,7 +250,7 @@ EVENT_TYPE_CHOICES = (
 
 EVENT_LEAGUE_CHOICES = (
     ('wh40k', _("Warhammer 40000")),
-    #('whfb', _("Warhammer fantasy battle"))
+    ('whfb', _("Warhammer fantasy battle"))
     ('mtg', _("Magic the gathering")),
     ('board', _("Board gaming"))
 )
