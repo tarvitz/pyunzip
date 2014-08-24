@@ -276,7 +276,7 @@ class PM(models.Model):
         verbose_name=_("addressee")
     )
     title = models.CharField(
-        _('title'), max_length=50
+        _('title'), max_length=256
     )
     content = models.TextField(_('text'))
     cache_content = models.TextField(
