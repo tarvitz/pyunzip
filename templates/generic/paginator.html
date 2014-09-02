@@ -6,11 +6,15 @@
       {% else %}
         <li class='disabled'><a href='#'>«</a></li>
       {% endif %}
-      {% for num in paginator.page_range %}
-        {% if page_obj.number == num %}
-          <li class='active'><a href='#'>{{ num }}</a></li>
+      {% for num in page_obj.page_range %}
+        {% if not num %}
+          <li><a href="#">...</a></li>
         {% else %}
-          <li><a data-toggle='paginator' href='?page={{ num }}{% if paginator.jump %}{{ paginator.jump }}{% endif %}'>{{ num }}</a></li>
+          {% if page_obj.number == num %}
+            <li class='active'><a href='#'>{{ num }}</a></li>
+          {% else %}
+            <li><a data-toggle='paginator' href='?page={{ num }}{% if paginator.jump %}{{ paginator.jump }}{% endif %}'>{{ num }}</a></li>
+          {% endif %}
         {% endif %}
       {% endfor %}
       {% if page_obj.has_next %}
