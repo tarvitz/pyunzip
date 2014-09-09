@@ -119,6 +119,14 @@ class RegisterForm(forms.ModelForm):
         label=_("Captcha")
     )
 
+    def clean_nickname(self):
+        nickname = self.cleaned_data['nickname']
+        exists = User.objects.filter(nickname__iexact=nickname)
+        if exists.count():
+            raise forms.ValidationError(
+                _("Another user with user nickname exists."))
+        return nickname
+
     class Meta:
         model = User
         fields = ('username', 'nickname', 'email', )
