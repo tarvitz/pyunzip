@@ -11,6 +11,6 @@ urlpatterns = patterns(
         login_required(views.KarmaListView.as_view()),
         name='karma-list'),
 
-    url(r'^karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s\d]+)/$',
+    url(r'^karma/alter/(?P<choice>(up|down))/(?P<nickname>[\w\s\d\.]+)/$',
         login_required(views.KarmaChangeView.as_view()), name='karma-alter'),
 )
