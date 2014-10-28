@@ -264,6 +264,7 @@ class User(PermissionsMixin, AbstractBaseUser):
     class Meta:
         verbose_name = _("User")
         verbose_name_plural = _("Users")
+        ordering = ['date_joined', ]
 
 
 class PM(models.Model):
