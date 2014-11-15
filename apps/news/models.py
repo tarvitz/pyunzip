@@ -279,11 +279,11 @@ class Event(models.Model):
     """
     title = models.CharField(_("title"), help_text=_("event title"),
                              max_length=256)
-    content = models.CharField(
+    content = models.TextField(
         _("content"),
         help_text=_(
             "content event text, description, further manual and so on"),
-        max_length=settings.MAX_DOCUMENT_SIZE
+        #max_length=settings.MAX_DOCUMENT_SIZE
     )
     content_html = models.TextField(
         _("content html"),
