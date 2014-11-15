@@ -36,11 +36,13 @@
       {% endif %}
     {% endif %}
 
+    {% comment %}
     {% if user.is_authenticated and user not in object.participants.all %}
       <a href="{{ object.get_join_url }}" rel="tooltip"
          data-title="{% trans "Mark that I would come to this event" %}">
           <i class="glyphicon glyphicon-ok icon-ok"></i></a>
     {% endif %}
+    {% endcomment %}
     {% if perms.news.change_event %}
       {% include "generic/actions.html" with object=object %}
     {% endif %}
@@ -51,8 +53,8 @@
   <div class='content'>
     {{ object.content_html|safe }}
     <hr />
+    {% trans "Participants" %}:
     {% if object.participants.count %}
-      {% trans "Participants" %}:
       {% for person in object.participants.all %}
         <img src='{{ person.get_avatar_url }}' rel='tooltip'
              class='avatar avatar-mini'
@@ -60,6 +62,11 @@
       {% endfor %}
     {% endif %}
 
+    {% if user.is_authenticated and user not in object.participants.all %}
+      <a href="{{ object.get_join_url }}" rel="tooltip" class='btn btn-xs btn-default'
+         data-title="{% trans "Mark that I would come to this event" %}">
+          <i class="glyphicon glyphicon-ok icon-ok"></i></a>
+    {% endif %}
   </div>
 
   {% if comments %}
