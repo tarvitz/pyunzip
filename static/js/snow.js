@@ -27,8 +27,7 @@ window.onload = function(){
   {
     ctx.clearRect(0, 0, W, H);
 
-    ctx.fillStyle = "rgba(107, 146, 185, 0.8)";
-    //ctx.fillStyle = "rgba(255, 255, 255, 0.75)";
+    ctx.fillStyle = $(canvas).css('color');
     ctx.beginPath();
     ctx.lineWidth = 1;
     for(var i = 0; i < mp; i++)
