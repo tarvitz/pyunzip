@@ -46,6 +46,8 @@
     {% block extra_meta %}{% endblock %}
 </head>
 <body id='document'>
+<canvas id='canvas' style='display: block; position: absolute; top: 0px; bottom: 0px; z-index: -1; '></canvas>
+
 {% trans "open text" as i18n_open %}{% trans "close text" as i18n_close %}
 <div id='wrap'>
     {% include 'pybb/head.html' %}
@@ -83,4 +85,5 @@
   });
 </script>
 <script type="text/javascript" src="{% static "js/load.js" %}"></script>
+<script type="text/javascript" src="{% static "js/snow.js" %}"></script>
 </html>
