@@ -10,15 +10,18 @@ window.onload = function(){
   canvas.height = H;
 
   //snowflake particles
-  var mp = 30; //max particles
+  var mp = 33; //max particles
   var particles = [];
+  var flakes = ['\u2744', '\u2745', '\u2746'];
+
   for(var i = 0; i < mp; i++)
   {
     particles.push({
       x: Math.random() * W,     //x-coordinate
       y: Math.random() * H,     //y-coordinate
       r: Math.random() * 4 + 1, //radius
-      d: Math.random() * mp     //density
+      d: Math.random() * mp,     //density
+      flake: flakes[Math.round(Math.random() * 10) % 3]
     })
   }
 
@@ -34,7 +37,10 @@ window.onload = function(){
     {
       var p = particles[i];
       ctx.moveTo(p.x, p.y);
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
+      ctx.font = (p.r * 4) + "px sans-serif";
+      ctx.fillText(p.flake, p.x, p.y);
+      // round flake
+      //ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
     }
     ctx.fill();
     update();
@@ -62,7 +68,10 @@ window.onload = function(){
       {
         if(i%3 > 0) //66.67% of the flakes
         {
-          particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
+          particles[i] = {
+            x: Math.random()*W, y: -10, r: p.r, d: p.d,
+            flake: particles[i].flake
+          };
         }
         else
         {
@@ -70,12 +79,18 @@ window.onload = function(){
           if(Math.sin(angle) > 0)
           {
             //Enter from the left
-            particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
+            particles[i] = {
+              x: -5, y: Math.random()*H, r: p.r, d: p.d,
+              flake: particles[i].flake
+            };
           }
           else
           {
             //Enter from the right
-            particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
+            particles[i] = {
+              x: W+5, y: Math.random()*H, r: p.r, d: p.d,
+              flake: particles[i].flake
+            };
           }
         }
       }
