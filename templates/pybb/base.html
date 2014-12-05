@@ -45,19 +45,20 @@
     {% block js %}{% endblock %}
     {% block extra_meta %}{% endblock %}
 </head>
-<body id='document'>
+<body id='document' class="ny">
 <canvas id='snow'></canvas>
 
 {% trans "open text" as i18n_open %}{% trans "close text" as i18n_close %}
 <div id='wrap'>
     {% include 'pybb/head.html' %}
-    <div class='container'>
+    <div class='container ny'>
         {% block content %}{% endblock %}
     </div>
     <div id='push'></div>
 </div>
 {% include 'pybb/footer.html' %}
 
+<div id='ny-image'></div>
 <!-- modals -->
 {% if not user.is_authenticated %}
   {% include "forms/login_modal.html" %}

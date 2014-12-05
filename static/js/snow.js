@@ -46,8 +46,9 @@ window.onload = function(){
     update();
   }
 
-  //Function to move the snowflakes
-  //angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+  // Function to move the snowflakes
+  // angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it
+  // to create vertical and horizontal movements of the flakes
   var angle = 0;
   function update()
   {
