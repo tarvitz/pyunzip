@@ -1,0 +1,6 @@
+<div class="alert alert-{{ note.type }}">
+  {{ note.content|safe }}
+  {% if note.sign %}
+    <div class="alert-purity-sign"></div>
+  {% endif %}
+</div>

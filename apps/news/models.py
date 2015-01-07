@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
@@ -379,6 +379,48 @@ class EventWatch(models.Model):
         verbose_name = _("Event watch")
         verbose_name_plural = _("Event watches")
         unique_together = (('event', 'user'), )
+
+
+class Note(models.Model):
+    """
+    Some note that should be shown as urgent information in the top of the
+    site view or something like that
+    """
+    TYPE_CHOICES = (
+        ('success', _("success")),
+        ('info', _("info")),
+        ('alert', _("alert")),
+        ('warning', _("warning")),
+        ('default', _("default"))
+    )
+    created_on = models.DateTimeField(
+        _("created on"), auto_now=True,
+        help_text=_("date time when instance was created"),
+        default=datetime.now
+    )
+    expired_on = models.DateTimeField(
+        _("expired on"),
+        help_text=_("date when note is expired"),
+        default=lambda: (datetime.now() + timedelta(days=14))
+    )
+    content = models.TextField(
+        _("content"), help_text=_("content")
+    )
+    for_authenticated_only = models.BooleanField(
+        _("for authenticated only"),
+        help_text=_("for authenticated users only"),
+        default=False
+    )
+    sign = models.BooleanField(
+        _("sign"), help_text=_("if the purity seal should be with its note")
+    )
+    type = models.CharField(
+        max_length=64, choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0]
+    )
+
+    def __unicode__(self):
+        return "[%s] %s" % (self.created_on.date().isoformat(),
+                            self.content[:100])
 
 
 from signals import setup_signals

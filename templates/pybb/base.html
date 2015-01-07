@@ -52,6 +52,7 @@
 <div id='wrap'>
     {% include 'pybb/head.html' %}
     <div class='container ny'>
+        {% include "news/note/note_list.html" %}
         {% block content %}{% endblock %}
     </div>
     <div id='push'></div>

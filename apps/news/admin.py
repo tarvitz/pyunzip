@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils.translation import ugettext_lazy as _
 from apps.news.models import (
-    EventPlace,
+    EventPlace, Note
 )
 from apps.news.adminforms import EventPlaceForm
 
@@ -59,6 +59,8 @@ class EventPlaceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EventPlace, EventPlaceAdmin)
+
+admin.site.register(Note)
 
 # disabled
 # admin.site.register(Category, CategoryAdmin)

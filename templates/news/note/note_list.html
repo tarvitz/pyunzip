@@ -1,0 +1,5 @@
+{% if notes %}
+  {% for note in notes %}
+      {% include "news/note/note_detail.html" %}
+  {% endfor %}
+{% endif %}
