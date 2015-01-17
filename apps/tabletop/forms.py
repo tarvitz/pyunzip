@@ -227,12 +227,6 @@ class ReportForm(forms.ModelForm):
                 'class': 'form-control markitup'}),
         }
 
-    class Media:
-        js = (
-            'components/select2/select2.min.js',
-            'js/select2_load.js',
-        )
-
 
 class DeepSearchRosterForm(RequestForm):
     player = forms.CharField(required=False)
@@ -434,12 +428,6 @@ class RosterForm(forms.ModelForm):
                 attrs={'class': 'form-control', })
         }
 
-    class Media:
-        js = (
-            'components/select2/select2.js',
-            'js/select2_load.js',
-        )
-
 
 class CodexForm(forms.ModelForm):
     required_css_class = 'required'
@@ -473,9 +461,3 @@ class CodexForm(forms.ModelForm):
             'title': forms.TextInput(attrs=attrs),
             'revisions': forms.TextInput(attrs=attrs)
         }
-
-    class Media:
-        js = (
-            'components/select2/select2.min.js',
-            'js/select2_load.js',
-        )

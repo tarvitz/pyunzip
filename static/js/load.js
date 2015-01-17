@@ -1,7 +1,6 @@
-
 var setTabs = function(src){
     document.cookie = 'mainTab=' + src;
-}
+};
 var updateTabs = function(){
     kookie = document.cookie.split('; ');
     match = document.cookie.match(/mainTab=(\w+)/);
@@ -13,7 +12,7 @@ var updateTabs = function(){
         blk = $('.nav-tabs').find('[href=#' + tabValue + ']');
         blk.parents('li').addClass('active');
     }
-}
+};
 
 
 $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
@@ -51,9 +50,17 @@ function getCookie(name){
 }
 
 (function(){
+  'use strict';
+
   $.each($('[data-toggle=date-time-picker]'), function(idx, item){
     $(item).datetimepicker({
       language: 'ru'
+    });
+  });
+  $.each($('[data-toggle=select2]'), function(idx, item){
+    $(item).select2({
+      placeholder: $(self).data('placeholder') || "",
+      formatNoMatches: "Не найдено"
     });
   });
   $("[data-toggle=quote]").click(function(e){

@@ -55,7 +55,8 @@ class ArticleModelForm(RequestModelForm):
             'content': forms.Textarea,
             'syntax': forms.HiddenInput,
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'category': forms.Select(attrs={'class': 'form-control chosen'}),
+            'category': forms.Select(attrs={'class': 'form-control',
+                                            'data-toggle': 'select2'}),
             'url': forms.TextInput(attrs={'class': 'form-control'})
         }
 
@@ -79,9 +80,12 @@ class EventForm(forms.ModelForm):
                 attrs={'class': 'form-control markitup'}
             ),
             'title': forms.TextInput(attrs),
-            'type': forms.Select(attrs={'class': 'form-control chosen'}),
-            'league': forms.Select(attrs={'class': 'form-control chosen'}),
-            'place': forms.Select(attrs={'class': 'form-control chosen'}),
+            'type': forms.Select(attrs={'class': 'form-control',
+                                        'data-toggle': 'select2'}),
+            'league': forms.Select(attrs={'class': 'form-control',
+                                          'data-toggle': 'select2'}),
+            'place': forms.Select(attrs={'class': 'form-control',
+                                         'data-toggle': 'select2'}),
         }
         fields = ('title', 'content', 'place', 'date_start', 'date_end',
                   'league', 'type', 'is_all_day')

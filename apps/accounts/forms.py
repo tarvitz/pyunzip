@@ -91,12 +91,6 @@ class ProfileForm(RequestFormMixin, forms.ModelForm):
                 attrs={'class': 'form-control', 'data-toggle': 'select2'})
         }
 
-    class Media:
-        js = (
-            'components/select2/select2.min.js',
-            'js/select2_load.js'
-        )
-
 
 class RegisterForm(forms.ModelForm):
     required_css_class = 'required'
@@ -306,12 +300,6 @@ class PMForm(RequestFormMixin, forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'})
         }
-
-    class Media:
-        js = (
-            'components/select2/select2.min.js',
-            'js/select2_load.js',
-        )
 
 
 class PolicyWarningForm(forms.ModelForm):
