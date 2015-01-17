@@ -11,6 +11,36 @@
 @event-festivity-bg: #f3d56e;
 @event-festivity-border: darken(@event-festivity-bg, 10%);
 
+.fc{
+  > .fc-header{
+    .fc-button{
+      .btn;
+      height: auto;
+      &.fc-state-default{
+        .btn-default;
+        box-shadow: none;
+      }
+      >.fc-icon{
+        .glyphicon;
+        font-size: 1em;
+        &.fc-icon-right-single-arrow{
+          .glyphicon-chevron-right;
+          &:after{
+            content: "";
+          }
+        }
+        &.fc-icon-left-single-arrow {
+          .glyphicon-chevron-left;
+          &:after{
+            content: "";
+          }
+        }
+      }
+    }
+  }
+}
+
+
 .event-variant(@color; @background; @border) {
   color: @color;
   background-color: @background;
