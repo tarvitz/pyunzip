@@ -11,6 +11,7 @@
 @event-festivity-bg: #f3d56e;
 @event-festivity-border: darken(@event-festivity-bg, 10%);
 
+/* this part is pretty obsolete on new full calendar */
 .fc{
   > .fc-header{
     .fc-button{
@@ -42,6 +43,12 @@
     >.fc-event-inner{
       padding: 4px 3px;
     }
+  }
+}
+/* new full calendar styles */
+.fc-content-skeleton{
+  .fc-day-grid-event{
+    padding: 4px 3px;
   }
 }
 
@@ -88,6 +95,12 @@
 }
 
 @tournament-text: darken(@alert-warning-bg, 45%);
+
+.legend{
+  .fc-event{
+    display: inline;
+  }
+}
 
 .fc-event{
   &.game,&.tournament,&.order,&.pre-release,&.release,&.festivity{
