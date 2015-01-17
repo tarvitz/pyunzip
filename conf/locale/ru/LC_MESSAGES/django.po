@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-23 15:42+0400\n"
+"POT-Creation-Date: 2015-01-17 07:42+0300\n"
 "PO-Revision-Date: 2014-06-29 16:34+0400\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -28,39 +28,39 @@ msgstr "Русский"
 msgid "English"
 msgstr "Английский"
 
-#: app/settings/dist.py:318
+#: app/settings/dist.py:319
 msgid "winter"
 msgstr "зимняя"
 
-#: app/settings/dist.py:319
+#: app/settings/dist.py:320
 msgid "summer"
 msgstr "летняя"
 
-#: app/settings/dist.py:320
+#: app/settings/dist.py:321
 msgid "autumn"
 msgstr "осенняя"
 
-#: app/settings/dist.py:321
+#: app/settings/dist.py:322
 msgid "spring"
 msgstr "весенняя"
 
-#: app/settings/dist.py:322
+#: app/settings/dist.py:323
 msgid "void"
 msgstr "пустотная"
 
-#: app/settings/dist.py:325
+#: app/settings/dist.py:326
 msgid "light theme"
 msgstr "светлая тема"
 
-#: app/settings/dist.py:326
+#: app/settings/dist.py:327
 msgid "dark theme"
 msgstr "темная тема"
 
-#: app/settings/dist.py:357
+#: app/settings/dist.py:358
 msgid "[ban]"
 msgstr "[бан]"
 
-#: app/settings/dist.py:358
+#: app/settings/dist.py:359
 msgid "[everban]"
 msgstr "[навекибан]"
 
@@ -109,7 +109,7 @@ msgstr ""
 "Данное значение может содержать только буквы, цифры и символы @/./+/-/_."
 
 #: apps/accounts/admin.py:24 apps/accounts/forms.py:39
-#: apps/accounts/forms.py:107 apps/accounts/forms.py:208
+#: apps/accounts/forms.py:107 apps/accounts/forms.py:216
 #: templates/forms/login_modal.html:16
 msgid "Password"
 msgstr "Пароль"
@@ -150,15 +150,15 @@ msgstr "Ваше имя пользователя и/или пароль не в�
 msgid "Yes, I agree"
 msgstr "Да, я согласен"
 
-#: apps/accounts/forms.py:73
+#: apps/accounts/forms.py:73 apps/accounts/forms.py:127
 msgid "Another user with user nickname exists."
 msgstr "Другой пользователь с таким ником уже существует."
 
-#: apps/accounts/forms.py:110 apps/accounts/forms.py:211
+#: apps/accounts/forms.py:110 apps/accounts/forms.py:219
 msgid "Password repeat"
 msgstr "Повтор пароля"
 
-#: apps/accounts/forms.py:113 apps/accounts/forms.py:191
+#: apps/accounts/forms.py:113 apps/accounts/forms.py:199
 #: templates/accounts/profile.html:50
 msgid "Email"
 msgstr "Email"
@@ -171,43 +171,43 @@ msgstr "Никнейм"
 msgid "Captcha"
 msgstr "Капча"
 
-#: apps/accounts/forms.py:145
+#: apps/accounts/forms.py:153
 msgid "Password1 and Password2 does not match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:155
+#: apps/accounts/forms.py:163
 msgid "Your current password does not match with one you've input"
 msgstr "Ваш текущий пароль не совпадает с тем, который вы ввели"
 
-#: apps/accounts/forms.py:184
+#: apps/accounts/forms.py:192
 msgid "No such user with such email"
 msgstr "Такого пользователя с данным email'ом нет"
 
-#: apps/accounts/forms.py:191
+#: apps/accounts/forms.py:199
 msgid "Your email"
 msgstr "Ваш email"
 
-#: apps/accounts/forms.py:200
+#: apps/accounts/forms.py:208
 msgid "Users with given email does not exists"
 msgstr "Пользователя с данным email не существует"
 
-#: apps/accounts/forms.py:220
+#: apps/accounts/forms.py:228
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
-#: apps/accounts/forms.py:259
+#: apps/accounts/forms.py:267
 msgid "Addressee"
 msgstr "Адресат"
 
-#: apps/accounts/forms.py:269 apps/wh/admin.py:22
+#: apps/accounts/forms.py:277 apps/wh/admin.py:22
 msgid "Content"
 msgstr "Содержимое"
 
-#: apps/accounts/forms.py:283
+#: apps/accounts/forms.py:291
 msgid "You can not send private messages to yourself"
 msgstr "Вам нельзя слать самим себе сообщения"
 
-#: apps/accounts/forms.py:286
+#: apps/accounts/forms.py:294
 msgid "There's no user with such nickname, sorry"
 msgstr "Такого пользователя нет"
 
@@ -339,108 +339,109 @@ msgstr "Пользователь"
 msgid "Users"
 msgstr "Пользователи"
 
-#: apps/accounts/models.py:272
+#: apps/accounts/models.py:273
 msgid "sender"
 msgstr "отправитель"
 
-#: apps/accounts/models.py:276
+#: apps/accounts/models.py:277
 msgid "addressee"
 msgstr "адресат"
 
-#: apps/accounts/models.py:279 apps/files/models.py:95 apps/menu/models.py:8
-#: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:260
-#: apps/news/models.py:280 apps/pybb/models.py:287 apps/pybb/models.py:372
+#: apps/accounts/models.py:280 apps/files/models.py:95 apps/menu/models.py:8
+#: apps/news/models.py:43 apps/news/models.py:60 apps/news/models.py:261
+#: apps/news/models.py:281 apps/pybb/models.py:287 apps/pybb/models.py:372
 #: apps/tabletop/models.py:53 apps/tabletop/models.py:89
 #: apps/tabletop/models.py:207 apps/wh/models.py:16
 msgid "title"
 msgstr "заголовок"
 
-#: apps/accounts/models.py:281
+#: apps/accounts/models.py:282
 msgid "text"
 msgstr "текст"
 
-#: apps/accounts/models.py:283 apps/news/models.py:76
+#: apps/accounts/models.py:284 apps/news/models.py:76
 msgid "cache content"
 msgstr "кеш контента"
 
-#: apps/accounts/models.py:285
+#: apps/accounts/models.py:286
 msgid "is read"
 msgstr "прочтено?"
 
-#: apps/accounts/models.py:287
+#: apps/accounts/models.py:288
 msgid "sent"
 msgstr "отосланно"
 
-#: apps/accounts/models.py:289
+#: apps/accounts/models.py:290
 msgid "deleted by sendr"
 msgstr "удалено отправителем"
 
-#: apps/accounts/models.py:290
+#: apps/accounts/models.py:291
 msgid "deleted by addr"
 msgstr "удалено адресатом"
 
-#: apps/accounts/models.py:292 apps/news/models.py:48
+#: apps/accounts/models.py:293 apps/news/models.py:48
 #: apps/tabletop/models.py:235 apps/wh/models.py:169
 msgid "syntax"
 msgstr "синтаксис"
 
-#: apps/accounts/models.py:299
+#: apps/accounts/models.py:300
 msgid "Private Message"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:300
+#: apps/accounts/models.py:301
 msgid "Private Messages"
 msgstr "Приватные сообщения"
 
-#: apps/accounts/models.py:334
+#: apps/accounts/models.py:335
 msgid "read only"
 msgstr "только чтение"
 
-#: apps/accounts/models.py:343 apps/comments/models.py:77
-#: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:370
+#: apps/accounts/models.py:344 apps/comments/models.py:77
+#: apps/karma/forms.py:31 apps/karma/models.py:18 apps/news/models.py:371
 msgid "user"
 msgstr "пользователь"
 
-#: apps/accounts/models.py:345 apps/comments/models.py:73
+#: apps/accounts/models.py:346 apps/comments/models.py:73
 #: apps/tabletop/models.py:226
 msgid "comment"
 msgstr "комментарии"
 
-#: apps/accounts/models.py:347
+#: apps/accounts/models.py:348
 msgid "level"
 msgstr "уровень"
 
-#: apps/accounts/models.py:349 apps/comments/models.py:78
-#: apps/core/models.py:24 apps/news/models.py:371 apps/tabletop/models.py:210
+#: apps/accounts/models.py:350 apps/comments/models.py:78
+#: apps/core/models.py:24 apps/news/models.py:372 apps/news/models.py:397
+#: apps/tabletop/models.py:210
 msgid "created on"
 msgstr "создано"
 
-#: apps/accounts/models.py:351 apps/core/models.py:28
+#: apps/accounts/models.py:352 apps/core/models.py:28
 msgid "updated on"
 msgstr "обновлено"
 
-#: apps/accounts/models.py:353
+#: apps/accounts/models.py:354
 msgid "date expired"
 msgstr "дата окончания"
 
-#: apps/accounts/models.py:354
+#: apps/accounts/models.py:355
 msgid "date then warning is expired"
 msgstr "дата, после истечения которой предупреждение будет завершено"
 
-#: apps/accounts/models.py:357
+#: apps/accounts/models.py:358
 msgid "is expired"
 msgstr "истекло"
 
-#: apps/accounts/models.py:358
+#: apps/accounts/models.py:359
 msgid "marks if warning is expired for this user"
 msgstr "отмечает, если предупреждение уже истекло"
 
-#: apps/accounts/models.py:390
+#: apps/accounts/models.py:391
 #: templates/accounts/policy_warning_detail.html:15
 msgid "Policy warning"
 msgstr "Предупреждение"
 
-#: apps/accounts/models.py:391 templates/accounts/policy_warning_list.html:13
+#: apps/accounts/models.py:392 templates/accounts/policy_warning_list.html:13
 #: templates/accounts/profile.html:53
 msgid "Policy warnings"
 msgstr "Предупреждение"
@@ -813,8 +814,8 @@ msgstr "Категории"
 msgid "author"
 msgstr "автор"
 
-#: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:283
-#: apps/wh/models.py:65 apps/wh/models.py:110
+#: apps/news/models.py:45 apps/news/models.py:74 apps/news/models.py:284
+#: apps/news/models.py:407 apps/wh/models.py:65 apps/wh/models.py:110
 msgid "content"
 msgstr "контент"
 
@@ -938,119 +939,175 @@ msgstr "Magic the gathering"
 msgid "Board gaming"
 msgstr "Настольные игры"
 
-#: apps/news/models.py:261
+#: apps/news/models.py:256
+msgid "Dungeons and Dragons"
+msgstr ""
+
+#: apps/news/models.py:262
 msgid "event place title"
 msgstr "название места ивента"
 
-#: apps/news/models.py:262
+#: apps/news/models.py:263
 msgid "address"
 msgstr "адрес"
 
-#: apps/news/models.py:263
+#: apps/news/models.py:264
 msgid "event place address"
 msgstr "адрес места события"
 
-#: apps/news/models.py:265
+#: apps/news/models.py:266
 msgid "contacts"
 msgstr "контакты"
 
-#: apps/news/models.py:266
+#: apps/news/models.py:267
 msgid "contacts/help who to find it"
 msgstr "контакты/помощь где, кого искать"
 
-#: apps/news/models.py:273
+#: apps/news/models.py:274
 msgid "Event Place"
 msgstr "Место события"
 
-#: apps/news/models.py:274
+#: apps/news/models.py:275
 msgid "Event Places"
 msgstr "Места событий"
 
-#: apps/news/models.py:280
+#: apps/news/models.py:281
 msgid "event title"
 msgstr "название события"
 
-#: apps/news/models.py:285
+#: apps/news/models.py:286
 msgid "content event text, description, further manual and so on"
 msgstr "текст события, описания, инструкции и так далее"
 
-#: apps/news/models.py:289
+#: apps/news/models.py:290
 msgid "content html"
 msgstr "html контент"
 
-#: apps/news/models.py:290
+#: apps/news/models.py:291
 msgid "rendered html content"
 msgstr "html рендер контента"
 
-#: apps/news/models.py:293
+#: apps/news/models.py:294
 msgid "date start"
 msgstr "дата начала"
 
-#: apps/news/models.py:293
+#: apps/news/models.py:294
 msgid "when event date starts"
 msgstr "когда событие начинается"
 
-#: apps/news/models.py:296
+#: apps/news/models.py:297
 msgid "date end"
 msgstr "дата окончания"
 
-#: apps/news/models.py:296
+#: apps/news/models.py:297
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:300 apps/wh/models.py:137
+#: apps/news/models.py:301 apps/wh/models.py:137
 msgid "type"
 msgstr "тип"
 
-#: apps/news/models.py:304
+#: apps/news/models.py:305
 msgid "league"
 msgstr "лига"
 
-#: apps/news/models.py:305
+#: apps/news/models.py:306
 msgid "game league"
 msgstr "игровая лига"
 
-#: apps/news/models.py:311
+#: apps/news/models.py:312
 msgid "event place"
 msgstr "место проведения"
 
-#: apps/news/models.py:315
+#: apps/news/models.py:316
 msgid "participants would take a part in the event"
 msgstr "участники, которые будут принимать участие в событии"
 
-#: apps/news/models.py:319 apps/pybb/models.py:308
+#: apps/news/models.py:320 apps/pybb/models.py:308
 msgid "is finished"
 msgstr "завершен"
 
-#: apps/news/models.py:322
+#: apps/news/models.py:323
 msgid "is all day"
 msgstr "весь день"
 
-#: apps/news/models.py:323
+#: apps/news/models.py:324
 msgid "marks if event could place whole day"
 msgstr ""
 "отмечает, если событие будет проходить весь день (убирает временные отметки)"
 
-#: apps/news/models.py:361
+#: apps/news/models.py:362
 msgid "Event"
 msgstr "Событие"
 
-#: apps/news/models.py:362 templates/news/events/calendar.html:22
+#: apps/news/models.py:363 templates/news/events/calendar.html:22
 #: templates/news/events/events.html:13 templates/pybb/head.html:52
 msgid "Events"
 msgstr "События"
 
-#: apps/news/models.py:367
+#: apps/news/models.py:368
 msgid "event"
 msgstr "событие"
 
-#: apps/news/models.py:378
+#: apps/news/models.py:379
 msgid "Event watch"
 msgstr "Просмотр события"
 
-#: apps/news/models.py:379
+#: apps/news/models.py:380
 msgid "Event watches"
 msgstr "Просмотр событий"
+
+#: apps/news/models.py:390
+msgid "success"
+msgstr ""
+
+#: apps/news/models.py:391
+#, fuzzy
+msgid "info"
+msgstr "информация"
+
+#: apps/news/models.py:392
+msgid "alert"
+msgstr ""
+
+#: apps/news/models.py:393
+#, fuzzy
+msgid "warning"
+msgstr "Предупреждение"
+
+#: apps/news/models.py:394
+msgid "default"
+msgstr ""
+
+#: apps/news/models.py:398
+msgid "date time when instance was created"
+msgstr ""
+
+#: apps/news/models.py:402
+#, fuzzy
+msgid "expired on"
+msgstr "истекает"
+
+#: apps/news/models.py:403
+#, fuzzy
+msgid "date when note is expired"
+msgstr "дата, когда опрос будет завершен"
+
+#: apps/news/models.py:410
+msgid "for authenticated only"
+msgstr ""
+
+#: apps/news/models.py:411
+msgid "for authenticated users only"
+msgstr ""
+
+#: apps/news/models.py:415
+msgid "sign"
+msgstr ""
+
+#: apps/news/models.py:415
+msgid "if the purity seal should be with its note"
+msgstr ""
 
 #: apps/news/signals.py:24
 msgid "Your article changed status"
@@ -1821,13 +1878,13 @@ msgstr ""
 "Ошибка сервера, администрация будет уведомлена о произошедшем и исправит все "
 "в ближайшее время."
 
-#: templates/base_template.html:49 templates/error_template.html:26
-#: templates/pybb/base.html:49 templates/pybb/post_template.html:38
+#: templates/base_template.html:51 templates/error_template.html:26
+#: templates/pybb/base.html:51 templates/pybb/post_template.html:38
 msgid "open text"
 msgstr "показать"
 
-#: templates/base_template.html:49 templates/error_template.html:26
-#: templates/pybb/base.html:49
+#: templates/base_template.html:51 templates/error_template.html:26
+#: templates/pybb/base.html:51
 msgid "close text"
 msgstr "скрыть"
 
@@ -2364,13 +2421,13 @@ msgstr "Закрыть"
 msgid "Submit"
 msgstr "Отправить"
 
-#: templates/generic/actions.html:3
-msgid "Edit object"
-msgstr "Редактировать объект"
+#: templates/generic/actions.html:13
+msgid "edit object"
+msgstr "редактировать объект"
 
-#: templates/generic/actions.html:5
-msgid "Delete object"
-msgstr "Удалить объект"
+#: templates/generic/actions.html:20
+msgid "delete object"
+msgstr "удалить объект"
 
 #: templates/generic/comment.html:18 templates/pybb/post_template.html:18
 msgid "Add user policy warning"
@@ -2679,17 +2736,17 @@ msgstr "Дек"
 msgid "all day"
 msgstr "весь день"
 
-#: templates/news/events/event.html:33
+#: templates/news/events/event.html:34
 msgid "Subscribe for a new comments"
 msgstr "Подписаться на новые комментарии"
 
-#: templates/news/events/event.html:41
-msgid "Mark that I would come to this event"
-msgstr "Заявить об участвии в этом событии (я приду)"
-
-#: templates/news/events/event.html:55
+#: templates/news/events/event.html:58
 msgid "Participants"
 msgstr "Участники"
+
+#: templates/news/events/event.html:69
+msgid "Mark that I would come to this event"
+msgstr "Заявить об участвии в этом событии (я приду)"
 
 #: templates/news/events/event_confirm_delete.html:4
 msgctxt "forum home"
@@ -3414,9 +3471,6 @@ msgstr "прочесть репорт"
 
 #~ msgid "style"
 #~ msgstr "стиль"
-
-#~ msgid "expired"
-#~ msgstr "истекает"
 
 #~ msgid "Can set warnings"
 #~ msgstr "Может устанавливать предупреждения"
