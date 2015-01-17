@@ -17,6 +17,10 @@ var updateTabs = function(){
 
 
 $("a[rel=twipsy], a[rel=tooltip]").tooltip({live: true, delay: 1200});
+$(".control-group").find('.control-label')
+ .attr('data-title', 'Обязательное поле')
+ .tooltip({live: true, delay: 1000});
+
 $('a[href=#]').click(function(e){ e.preventDefault();});
 
 $('#login-modal .postAjax').click(function(e){
