@@ -2197,7 +2197,7 @@ msgstr "Ваш лимит"
 #: templates/files/user_files.html:28
 msgctxt "You used file space"
 msgid "You used"
-msgstr "Вы испольщовали"
+msgstr "Вы использовали"
 
 #: templates/files/user_files.html:31 templates/pybb/head.html:66
 msgid "My files"

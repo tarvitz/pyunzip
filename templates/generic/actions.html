@@ -1,5 +1,25 @@
 {% load i18n %}
+{% comment %}
 <a href="{{ object.get_edit_url }}" rel="tooltip"
    data-title="{% trans "Edit object" %}"><i class='icon-edit'></i></a>
 <a href="{{ object.get_delete_url }}" rel="tooltip"
    data-title="{% trans "Delete object" %}"><i class='icon-remove icon-delete'></i></a>
+{% endcomment %}
+{% spaceless %}
+  <div class="btn-group-xs btn-group">
+    {% if object.get_edit_url|length > 0 %}
+      <a href="{{ object.get_edit_url }}" rel="tooltip"
+         class="btn btn-xs btn-default"
+         data-title="{% trans "edit object" %}">
+        <i class="glyphicon glyphicon-edit glyphicon-update"></i>
+      </a>
+    {% endif %}
+    {% if object.get_delete_url|length > 0 %}
+      <a href="{{ object.get_delete_url }}" rel="tooltip"
+         class="btn btn-xs btn-default"
+         data-title="{% trans "delete object" %}">
+        <i class="glyphicon glyphicon-remove glyphicon-delete"></i>
+      </a>
+    {% endif %}
+  </div>
+{% endspaceless %}

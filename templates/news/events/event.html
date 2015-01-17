@@ -30,8 +30,9 @@
       {% else %}
         {% get_content_type object as object_ct %}
         <a href="{% url "comments:subscription-add" object_ct.content_type.pk object.pk %}" rel="tooltip"
+           class="btn btn-xs btn-default"
            data-title="{% trans "Subscribe for a new comments" %}">
-          <i class="icon-addcomment"></i>
+          <i class="glyphicon glyphicon-plus-sign"></i>
         </a>
       {% endif %}
     {% endif %}
