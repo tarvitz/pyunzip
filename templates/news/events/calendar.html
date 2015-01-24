@@ -7,6 +7,7 @@
 
 {% block js %}
   {{ block.super }}
+  <script type="text/javascript" src="{% static "components/fullcalendar/dist/lang/ru.js" %}"></script>
   <script type="text/javascript" src="{% static "components/fullcalendar/dist/fullcalendar.min.js" %}"></script>
 {% endblock %}
 {% block content %}
@@ -66,7 +67,8 @@
           agenda: "H:mm"
         },
         displayEventEnd: true,
-        firstDay: 1,
+        //firstDay: 1,
+        lang: "ru",
         weekMode: "liquid",
         weekNumbers: "Wo",
         height: 540,
