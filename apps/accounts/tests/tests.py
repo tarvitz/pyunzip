@@ -17,11 +17,16 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
 from django.core.cache import cache
-
 from datetime import datetime, timedelta, date
+import allure
+from allure.constants import Severity
 
 
-class JustTest(TestHelperMixin, TestCase):
+@allure.feature('Accounts')
+class AccountTest(TestHelperMixin, TestCase):
+    """
+    account app general test cases
+    """
     fixtures = [
         'tests/fixtures/load_rank_types.json',
         'tests/fixtures/load_ranks.json',
@@ -39,7 +44,12 @@ class JustTest(TestHelperMixin, TestCase):
         ]
         self.get_object = get_object_or_None
 
+    @allure.story('urls')
+    @allure.severity(Severity.NORMAL)
     def test_registered_urls(self):
+        """
+        check urls related to accounts
+        """
         messages = []
 
         for user in ('admin', 'user', ):
@@ -68,6 +78,7 @@ class JustTest(TestHelperMixin, TestCase):
     def tearDown(self):
         pass
 
+    #: helpers
     def check_state(self, instance, data, check=lambda x: x):
         messages = []
         for (key, value) in data.items():
@@ -83,7 +94,12 @@ class JustTest(TestHelperMixin, TestCase):
                 print "Got %(err)s in %(key)s" % msg
             raise AssertionError
 
+    @allure.story('login')
+    @allure.severity(Severity.BLOCKER)
     def test_login(self):
+        """
+        common login
+        """
         login = {
             'username': 'user',
             'password': '123456'
@@ -93,7 +109,12 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '/logout/')
 
+    @allure.story('logout')
+    @allure.severity(Severity.NORMAL)
     def test_logout(self):
+        """
+        logout
+        """
         self.client.login(username='user', password='123456')
         url = reverse('accounts:logout')
         response = self.client.get(url, follow=True)
@@ -101,8 +122,13 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['user'].is_authenticated(), False)
         #self.assertNotContains(response, '/logout/')
 
+    @allure.story('login')
+    @allure.severity(Severity.MINOR)
     @skipIf(True, "disabled")
     def test_sulogin(self):
+        """
+        super user login under another user (test/debug purpose)
+        """
         # admin can login as other users (to watch bugs and something)
         # don't abuse this functional
         logged = self.client.login(username='admin', password='123456')
@@ -127,7 +153,12 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Permission denied')
 
+    @allure.story('password')
+    @allure.severity(Severity.BLOCKER)
     def test_password_change(self):
+        """
+        password change
+        """
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
 
@@ -145,7 +176,12 @@ class JustTest(TestHelperMixin, TestCase):
         logged = self.client.login(username='user', password=new_password)
         self.assertEqual(logged, True)
 
+    @allure.story("password")
+    @allure.severity(Severity.BLOCKER)
     def test_password_recover(self):
+        """
+        password recover
+        """
         # user@blacklibrary.ru == user
         self.client.logout()
         init_url = reverse('accounts:password-restore-initiate')
@@ -174,6 +210,8 @@ class JustTest(TestHelperMixin, TestCase):
                                    password='new_pass')
         self.assertEqual(logged, True)
 
+    @allure.story('register')
+    @allure.severity(Severity.BLOCKER)
     def test_duplicate_nick_update(self):
         # can update self nickname for current nickname
         url = reverse('accounts:profile-update')
@@ -185,6 +223,8 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].nickname, post['nickname'])
 
+    @allure.story('register')
+    @allure.severity(Severity.CRITICAL)
     def test_duplicate_nick_failure(self):
         # can not update to follow nickname because it's busy
         url = reverse('accounts:profile-update')
@@ -203,6 +243,8 @@ class JustTest(TestHelperMixin, TestCase):
                       post['nickname']))
         )
 
+    @allure.story('profile')
+    @allure.severity(Severity.CRITICAL)
     def test_profile_update(self):
         #avatar_name = 'avatar.jpg'
         avatar = open('tests/fixtures/avatar.jpg')
@@ -250,15 +292,11 @@ class JustTest(TestHelperMixin, TestCase):
                 print "Can not edit user got: %(err)s" % msg
             raise AssertionError
 
-        #self.assertEqual(user.skin.id, post['skin'])
-        #self.assertEqual(user.army.id, post['army'])
-        #self.assertEqual(
-        #    'avatars/%s/%s' % (user.pk, avatar_name),
-        #    user.avatar.name
-        #)
         self.assertEqual(os.path.exists(user.avatar.path), True)
         os.unlink(user.avatar.path)
 
+    @allure.story('register')
+    @allure.severity(Severity.BLOCKER)
     def test_register(self):
         os.environ['RECAPTCHA_TESTING'] = 'True'
         usernames = (
@@ -305,13 +343,16 @@ class JustTest(TestHelperMixin, TestCase):
             self.assertEqual(user.army, None)
             self.client.logout()
 
+    @allure.story('deprecated')
+    @allure.severity(Severity.NORMAL)
     def test_rank_view(self):
         rank = Rank.objects.all()[0]
         url = reverse('wh:ranks', args=(rank.id, ))
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-
+    @allure.story('access')
+    @allure.severity(Severity.NORMAL)
     def test_banned_user(self):
         u = User.objects.get(username='user')
         u.is_active = False
@@ -323,6 +364,8 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['request'].user.is_authenticated(),
                          False)
 
+    @allure.story('access')
+    @allure.severity(Severity.NORMAL)
     def test_banned_user_while_session(self):
         u = User.objects.get(username='user')
         u.is_active = True
@@ -344,7 +387,11 @@ class JustTest(TestHelperMixin, TestCase):
                          False)
 
 
+@allure.feature('Accounts: Cache')
 class CacheTest(TestCase):
+    """
+    Cache test cases purposes
+    """
     fixtures = [
         'tests/fixtures/load_rank_types.json',
         'tests/fixtures/load_ranks.json',
@@ -363,6 +410,8 @@ class CacheTest(TestCase):
     def cache_get_nickname(self, user):
         return cache.get('nick:%s' % user.username)
 
+    @allure.story('cache')
+    @allure.severity(Severity.NORMAL)
     @skipIf(True, "disabled")
     def test_user_change_get_nickname_test(self):
         user = User.objects.get(username='user')
@@ -388,6 +437,7 @@ class CacheTest(TestCase):
         self.assertEqual(self.cache_get_nickname(user), nickname)
 
 
+@allure.feature('Policy Warnings')
 class PolicyWarningTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -436,7 +486,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         )
 
     # CRUD tests
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_policy_warning_create(self, role='admin'):
+        """
+        create policy warning
+        :param str role: using role (admin, user)
+        """
         self.login(role)
         count = PolicyWarning.objects.count()
         response = self.client.post(self.create_url, self.post, follow=True)
@@ -454,7 +510,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         })
         self.check_state(policy_warning, post, self.assertEqual)
 
+    @allure.story('create')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_create_failure(self, role='user'):
+        """
+        create policy warning (permission denied)
+        :param str role: using role (admin, user)
+        """
         self.login(role)
         count = PolicyWarning.objects.count()
         response = self.client.get(self.create_url, follow=True)
@@ -463,7 +525,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(PolicyWarning.objects.count(), count)
 
+    @allure.story('update')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_update(self, role='admin'):
+        """
+        update policy warning
+        :param str role: using role (admin, user)
+        """
         self.add_policy_warning()
         self.assertNotEqual(PolicyWarning.objects.count(), 0)
         self.login(role)
@@ -483,7 +551,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         })
         self.check_state(policy_warning, post, self.assertEqual)
 
+    @allure.story('update')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_update_failure(self, role='user'):
+        """
+        update policy warning (permission denied)
+        :param str role: using role (admin, user)
+        """
         self.add_policy_warning()
         self.assertNotEqual(PolicyWarning.objects.count(), 0)
         self.login(role)
@@ -494,7 +568,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
                                     self.post_update, follow=True)
         self.assertEqual(response.status_code, 403)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_delete(self, role='admin'):
+        """
+        delete policy warning
+        :param str role: using role (admin, user)
+        """
         self.add_policy_warning()
         self.assertNotEqual(PolicyWarning.objects.count(), 0)
         self.login(role)
@@ -505,7 +585,13 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PolicyWarning.objects.count(), count - 1)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_delete_failure(self, role='user'):
+        """
+        create policy warning (permission denied)
+        :param str role: using role (admin, user)
+        """
         self.add_policy_warning()
         self.assertNotEqual(PolicyWarning.objects.count(), 0)
         self.login(role)
@@ -517,7 +603,12 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 403)
 
     # test read only, cron and other stuff
+    @allure.story('cron')
+    @allure.severity(Severity.NORMAL)
     def test_policy_warning_cron_task_expire(self):
+        """
+        policy warning cron expire test
+        """
         self.add_policy_warning()
         self.assertEqual(self.policy_warning.is_expired, False)
         self.policy_warning.date_expired = datetime.now() - timedelta(hours=24)
@@ -527,7 +618,12 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         policy_warning = PolicyWarning.objects.get(pk=self.policy_warning.pk)
         self.assertEqual(policy_warning.is_expired, True)
 
+    @allure.story('read')
+    @allure.severity(Severity.NORMAL)
     def test_post_with_read_only_policy_warning(self):
+        """
+        test post data with ``read only`` policy warning
+        """
         self.add_policy_warning()
         self.policy_warning.level = settings.READONLY_LEVEL
         self.policy_warning.save()
@@ -544,7 +640,12 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
                          reverse('accounts:read-only'))
         self.assertEqual(PM.objects.count(), count)
 
+    @allure.story('expire')
+    @allure.severity(Severity.NORMAL)
     def test_manual_check_policy_warning_expire(self):
+        """
+        manual check policy warning expire check
+        """
         self.add_policy_warning()
         self.policy_warning.level = settings.READONLY_LEVEL
         self.policy_warning.save()
@@ -569,6 +670,8 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PM.objects.count(), count + 1)
 
+    @allure.story("create")
+    @allure.severity(Severity.TRIVIAL)
     @skipIf(True, "Not implemented")
     def test_policy_warning_immunity(self):
         pass
