@@ -78,22 +78,6 @@ class AccountTest(TestHelperMixin, TestCase):
     def tearDown(self):
         pass
 
-    #: helpers
-    def check_state(self, instance, data, check=lambda x: x):
-        messages = []
-        for (key, value) in data.items():
-            try:
-                check(getattr(instance, key), value)
-            except AssertionError as err:
-                messages.append({
-                    'err': err,
-                    'key': key
-                })
-        if messages:
-            for msg in messages:
-                print "Got %(err)s in %(key)s" % msg
-            raise AssertionError
-
     @allure.story('login')
     @allure.severity(Severity.BLOCKER)
     def test_login(self):
