@@ -30,3 +30,6 @@ django.mo
 /db/tests
 /db/*.sqlite
 /db/*.db
+/db/allure
+/db/reports
+/db/sql
