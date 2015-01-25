@@ -1,4 +1,5 @@
 # coding: utf-8
+from django.contrib.contenttypes.models import ContentType
 
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
@@ -46,3 +47,8 @@ class ModelAccessSerializerMixin(object):
                 raise serializers.ValidationError(
                     FAILURE_MESSAGES['wrong_owner_field'])
         return super(ModelAccessSerializerMixin, self).validate(attrs)
+
+
+class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ContentType

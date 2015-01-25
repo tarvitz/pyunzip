@@ -15,6 +15,7 @@ from apps.wh.views.api import (
     RankTypeViewSet, RankViewSet, ExpressionViewSet, MiniQuoteViewSet)
 from apps.files.views.api import (GalleryViewSet, ImageViewSet,
                                   UserFileViewSet)
+from apps.core.api import ContentTypeViewSet
 
 from rest_framework import routers
 
@@ -47,6 +48,8 @@ router.register(r'miniquotes', MiniQuoteViewSet)
 router.register(r'galleries', GalleryViewSet)
 router.register(r'images', ImageViewSet)
 router.register(r'userfiles', UserFileViewSet)
+
+router.register(r'contenttypes', ContentTypeViewSet)
 
 urlpatterns += patterns(
     '',

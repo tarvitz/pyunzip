@@ -10,7 +10,7 @@ from apps.core.helpers import (
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
-from django.db.models import Model
+from django.db.models import Model, Q
 from django.template import Context
 from django.template.loader import get_template
 from datetime import datetime, date
@@ -704,6 +704,7 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
+
         self.assertEqual(
             json_response['detail'],
             'You do not have permission to perform this action.')
@@ -769,21 +770,21 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     def test_get_detail(self):
         response = self.client.get(self.url_detail, follow=True)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
-        detail_response = (
-            self.object_anonymous_detail_response or
-            self.object_detail_response)
-        self.assertEqual(json_response, detail_response)
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
-        self.assertEqual(json_response['count'],
-                         self.model_class.objects.count())
+        self.assertEqual(
+            json_response['detail'],
+            'Authentication credentials were not provided.')
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -825,3 +826,71 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(
             json_response['detail'],
             'Authentication credentials were not provided.')
+
+
+class ApiRestrictedOwnerUserTestCaseMixin(ApiUserOwnerTestCaseMixin,
+                                          ApiTestCaseSet,
+                                          TestHelperMixin):
+    """
+    Can only get access to his own instances, not for everyone else ones
+    """
+    def test_get_list(self):
+        self.login(self.user.username, self.user_password)
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        kw = {
+            self.owner_field: self.user
+        }
+        qset = Q(**kw)
+        self.assertEqual(response_json['count'],
+                         self.model_class.objects.filter(qset).count())
+
+
+class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
+                                             ApiTestCaseSet,
+                                             TestHelperMixin):
+    """ There's no access for other user resources, we would get 404
+    event if resources exists, than we check permission for possibility
+    have proceed actions
+    """
+    def test_get_list(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.get(self.url_list, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        response_json = json.loads(response.content)
+        kw = {
+            self.owner_field: self.other_user
+        }
+        qset = Q(**kw)
+        self.assertEqual(response_json['count'],
+                         self.model_class.objects.filter(qset).count())
+
+    def test_get_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.get(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['detail'],
+                         'Not found')
+
+    def test_delete_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.delete(self.url_detail, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['detail'],
+                         'Not found')
+
+    def test_patch_detail(self):
+        self.login(self.other_user.username, self.other_user_password)
+        response = self.client.patch(self.url_patch, format='json')
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response['Content-Type'], 'application/json')
+        json_response = json.loads(response.content)
+        self.assertEqual(json_response['detail'],
+                         'Not found')

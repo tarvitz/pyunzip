@@ -5,7 +5,11 @@ from apps.comments.models import CommentWatch
 from apps.news.models import Event
 from apps.core.tests import (
     TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
-    ApiUserOwnerTestCaseMixin, ApiUserNotOwnerTestCaseMixin)
+    ApiUserOwnerTestCaseMixin, ApiUserNotOwnerTestCaseMixin,
+    ApiRestrictedAnonymousUserTestCaseMixin,
+    ApiRestrictedOwnerUserTestCaseMixin,
+    ApiRestrictedUserNotOwnerTestCaseMixin,
+)
 from rest_framework import status
 from rest_framework.test import APITestCase
 
@@ -36,16 +40,13 @@ class CommentWatchViewMixin(object):
         CommentWatch.objects.filter(pk=13).update(content_type=self.event_ct)
 
         super(CommentWatchViewMixin, self).setUp()
+        self.owner_field = 'user'
 
         self.user = User.objects.get(username='user')
         self.admin = User.objects.get(username='admin')
         self.other_user = User.objects.get(username='user2')
 
-
         self.event = Event.objects.get(pk=1)
-
-
-
         self.comment_watch = CommentWatch.objects.create(
             content_type=self.event_ct, object_pk=self.event.pk,
             comment=None, user=self.user,
@@ -61,33 +62,56 @@ class CommentWatchViewMixin(object):
         self.url_delete = self.url_detail
 
         self.put = {
-            'id': self.comment_watch.pk,
             'is_updated': True,
             'is_disabled': False,
-            'content_type': self.event_ct.pk,
-            'user': self.user.pk,
-            'object_pk': self.comment_watch.pk,
+            'content_type': reverse('api:contenttype-detail',
+                                    args=(self.event_ct.pk, )),
+            'user': reverse('api:user-detail', args=(self.user.pk, )),
+            'object_pk': self.event.pk,
         }
         self.patch = {
             'is_updated': True,
         }
         self.post = {
-            'content_type': self.event_ct.pk,
-            'object_pk': self.comment_watch.pk,
+            'content_type': reverse('api:contenttype-detail',
+                        args=(self.event_ct.pk, )),
+            'object_pk': self.event.pk,
             'user': self.admin.pk,
             'is_updated': False,
             'is_disabled': False,
         }
         self.object_detail_response = {
-            'id': 1, 'is_disabled': False, 'is_updated': False,
-            'url': '/events/1/', 'content_type': 16, 'user': 6,
+            'content_type': self.event_ct.pk,
+            'id': 5,
+            'is_disabled': False,
+            'is_updated': False,
             'object_pk': 1,
+            'url': '/events/1/',
+            'user': 6
         }
 
 
 class CommentWatchViewAnonymousUserTest(CommentWatchViewMixin,
-                                        ApiAnonymousUserTestCaseMixin,
+                                        ApiRestrictedAnonymousUserTestCaseMixin,
                                         APITestCase):
+    pass
+
+
+class CommentWatchViewAdminUserTest(CommentWatchViewMixin,
+                                    ApiAdminUserTestCaseMixin,
+                                    APITestCase):
+    pass
+
+
+class CommentWatchViewUserTest(CommentWatchViewMixin,
+                               ApiRestrictedOwnerUserTestCaseMixin,
+                               APITestCase):
+    pass
+
+
+class CommentWatchViewUserNotOwnerTest(CommentWatchViewMixin,
+                                       ApiRestrictedUserNotOwnerTestCaseMixin,
+                                       APITestCase):
     pass
 
 

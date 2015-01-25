@@ -1,26 +1,29 @@
 # coding: utf-8
+from apps.core.serializers import ModelAccessSerializerMixin
 from apps.comments.models import CommentWatch, Comment
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 
 
-class CommentWatchSerializer(serializers.HyperlinkedModelSerializer):
+class CommentWatchSerializer(ModelAccessSerializerMixin,
+                             serializers.HyperlinkedModelSerializer):
+    user_owner_fields = ['user', ]
+
     url = serializers.SerializerMethodField('get_url')
-    content_type = serializers.PrimaryKeyRelatedField()
-    user = serializers.PrimaryKeyRelatedField()
 
     def get_url(self, instance):
-        return instance.object.get_absolute_url()
+        if hasattr(instance.object, 'get_absolute_url'):
+            return instance.object.get_absolute_url()
+        return ''
 
     class Meta:
         model = CommentWatch
-        fields = (
-            'is_disabled', 'is_updated', 'url', 'id', 'content_type',
-            'object_pk', 'user'
-        )
 
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(ModelAccessSerializerMixin,
+                        serializers.HyperlinkedModelSerializer):
+    user_owner_fields = ['user', ]
+
     content_type = serializers.PrimaryKeyRelatedField()
     site = serializers.PrimaryKeyRelatedField()
     submit_date = serializers.DateTimeField(required=False)

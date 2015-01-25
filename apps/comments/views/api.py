@@ -13,6 +13,7 @@ from apps.comments.serializers import (
     ModifyCommentSerializer
 )
 from apps.comments.models import CommentWatch, Comment
+from apps.core.api import IsOwnerOrModelAdminOrPermissionDenied
 
 
 __all__ = ['CommentWatchViewSet', 'CommentViewSet']
@@ -27,41 +28,40 @@ class CommentWatchFilterSet(django_filters.FilterSet):
         model = CommentWatch
 
 
-class CommentWatchViewSet(viewsets.ModelViewSet):
+class RestrictToNonOwnerViewSetMixin(object):
+    """ Restricts access to resource for non-owner users,
+     except admins and resource owners
+    """
+    restricted_serializer_class = None
+
+    def get_serializer_class(self):
+        return self.restricted_serializer_class
+
+
+class CommentWatchViewSet(RestrictToNonOwnerViewSetMixin,
+                          viewsets.ModelViewSet):
     """
     API viewpoint for CommentWatch instance
     """
     queryset = CommentWatch.objects.all()
     serializer_class = CommentWatchSerializer
+    restricted_serializer_class = CommentWatchSerializer
     filter_class = CommentWatchFilterSet
+    permission_classes = (IsOwnerOrModelAdminOrPermissionDenied, )
     filter_fields = (
-        'is_updated', 'is_disabled', 'id',
+        'is_updated', 'is_disabled',
     )
 
-    def update(self, request, *args, **kwargs):
-        if request.user.is_authenticated():
-            try:
-                self.get_object()
-                return super(CommentWatchViewSet, self).update(request, *args,
-                                                               **kwargs)
-            except Http404:
-                serializer = super(CommentWatchViewSet, self).get_serializer(
-                    data=request.DATA, files=request.FILES)
-                errors = {
-                    'detail': 'Not allowed.'
-                }
-                errors.update(serializer.errors)
-                return Response(errors, status=status.HTTP_403_FORBIDDEN)
 
-    def get_queryset(self):
-        qs = super(CommentWatchViewSet, self).get_queryset()
-        if self.request.user.is_authenticated():
-            return (
-                qs if self.request.user.has_perm(
-                    'comments.change_commentwatch')
-                else qs.filter(user=self.request.user)
-            )
-        return CommentWatch.objects.none()
+    # def get_queryset(self):
+    #     qs = super(CommentWatchViewSet, self).get_queryset()
+    #     if self.request.user.is_authenticated():
+    #         return (
+    #             qs if self.request.user.has_perm(
+    #                 'comments.change_commentwatch')
+    #             else qs.filter(user=self.request.user)
+    #         )
+    #     return CommentWatch.objects.none()
 
 
 class CommentPermission(permissions.BasePermission):
