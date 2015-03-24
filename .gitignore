@@ -16,12 +16,10 @@
 /*.log
 /fskill
 /fstart
-/.??*
 /run
 /run_tests
 /locale
 django.mo
-*.gitignore
 /static/components
 /static/pybb
 /static/css/bootstrap-*.css
@@ -33,3 +31,5 @@ django.mo
 /db/allure
 /db/reports
 /db/sql
+/.idea
+/.coverage
