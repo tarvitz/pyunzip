@@ -370,7 +370,6 @@ class AccountTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['request'].user.is_authenticated(),
                          False)
 
-
 @allure.feature('Accounts: Cache')
 class CacheTest(TestCase):
     """

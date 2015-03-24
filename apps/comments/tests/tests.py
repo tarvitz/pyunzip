@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from django.contrib.comments.models import Comment
 
 from rest_framework.test import APITestCase
+import allure
+from allure.constants import Severity
 # Create your tests here.
 
 
@@ -63,10 +65,13 @@ class CommentWatchBase(object):
         self.assertEqual(Comment.objects.count(), count + 1)
 
 
+@allure.feature('Comment Watch')
 class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
     """
     general CommentWatch test
     """
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_add_subscription(self):
         """
         test add new subscription for new users' comments
@@ -94,6 +99,8 @@ class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
         self.assertEqual(comment_watch.is_updated, False)
         self.assertEqual(comment_watch.get_new_comments().count(), 0)
 
+    @allure.story('use')
+    @allure.severity(Severity.CRITICAL)
     def test_new_comments(self):
         """
         test add new comments with user subscribed for its comments
@@ -119,6 +126,8 @@ class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
         # as he subscribed
         self.assertEqual(context['object_list'].count(), 1)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_remove_subscription(self):
         """
         test remove subscription test cases
@@ -149,10 +158,13 @@ class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
         self.assertEqual(response.context['object_list'].count(), 0)
 
 
+@allure.feature('API: Comment Watch')
 class CommentWatchApiTest(TestHelperMixin, CommentWatchBase, APITestCase):
     """
     CommentWatch test with django rest framework api integrations
     """
+    @allure.story('read')
+    @allure.severity(Severity.CRITICAL)
     def test_update_subscription_read(self):
         """
         test update subscription (mark all read) with drf api
