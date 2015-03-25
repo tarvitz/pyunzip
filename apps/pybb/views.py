@@ -56,7 +56,10 @@ def index_ctx(request):
                  topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
              'karma': {
                  "total": Karma.objects.all().aggregate(Sum("value"))['value__sum'],
-                 "last": Karma.objects.latest("date")
+                 "last": (
+                     Karma.objects.exists() and Karma.objects.latest("date")
+                     or 0
+                 )
              }}
 
     cats = {}
