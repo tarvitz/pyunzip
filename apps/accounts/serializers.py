@@ -1,13 +1,17 @@
 # coding: utf-8
 from apps.accounts.models import User, PM, PolicyWarning
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
 
 
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
-    groups = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
-    user_permissions = serializers.PrimaryKeyRelatedField(many=True,
-                                                          read_only=True)
+    groups = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Group, required=False
+    )
+    user_permissions = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=Permission, required=False
+    )
 
     class Meta:
         model = User

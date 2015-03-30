@@ -43,10 +43,11 @@ class UserViewSetMixin(object):
         self.url_list = reverse('api:user-list')
 
         self.object_detail_response = {
-            'username': 'user', 'gender': 'n', 'is_active': True,
-            'avatar': '', 'nickname': 'user',
-            'date_joined': '2013-03-18T04:39:07.267',
-            #'email': 'user@blacklibrary.ru',
+            'username': 'user',
+            'gender': 'n',
+            'is_active': True,
+            'avatar': None, 'nickname': 'user',
+            'date_joined': '2013-03-18T04:39:07.267000',
             'id': 6
         }
         self.object_admin_detail_response = {
@@ -70,7 +71,7 @@ class UserViewSetMixin(object):
             'plain_avatar': None,
             'ranks': [],
             'settings': None,
-            'tz': 0.0,
+            'tz': 0,
             'uin': None,
             'url': 'http://testserver/api/users/6/',
             'user_permissions': [],

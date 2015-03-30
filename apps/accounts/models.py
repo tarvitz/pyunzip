@@ -26,7 +26,8 @@ GENDER_CHOICES = (
     ('n', _('not identified'))
 )
 
-TZ_CHOICES = [(float(x[0]), x[1]) for x in (
+TZ_CHOICES = [
+    (float(x[0]), x[1]) for x in (
     (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
     (-8.5, '-08.5'), (-8, '-08 PST'), (-7, '-07 MST'), (-6, '-06 CST'),
     (-5, '-05 EST'), (-4, '-04 AST'), (-3.5, '-03.5'), (-3, '-03 ADT'),
@@ -97,7 +98,7 @@ class User(PermissionsMixin, AbstractBaseUser):
                               blank=True, null=True, default=0)
     about = models.CharField(_('about myself'), max_length=512, blank=True,
                              null=True)
-    tz = models.FloatField(_('time zone'), choices=TZ_CHOICES, default=0)
+    tz = models.FloatField(_('time zone'), choices=TZ_CHOICES, default=0.0)
     settings = PickledObjectField(_('Settings'), null=True, blank=True)
     # extensions
     karma = models.IntegerField(

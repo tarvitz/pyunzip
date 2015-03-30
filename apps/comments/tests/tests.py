@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.comments.models import Comment
 
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 import allure
 from allure.constants import Severity
 # Create your tests here.

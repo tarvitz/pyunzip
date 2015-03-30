@@ -6,7 +6,8 @@ import six
 from django.test import TestCase
 from apps.core.helpers import (
     post_markup_filter,
-) 
+)
+from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
@@ -483,7 +484,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -493,7 +494,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -503,7 +504,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -513,7 +514,7 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
 
 # noinspection PyUnresolvedReferences
@@ -779,7 +780,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -788,7 +789,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -799,7 +800,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -809,7 +810,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -819,7 +820,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -829,7 +830,7 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'Authentication credentials were not provided.')
+            _('Authentication credentials were not provided.'))
 
 
 class ApiRestrictedOwnerUserTestCaseMixin(ApiUserOwnerTestCaseMixin,
