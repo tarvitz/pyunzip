@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 from django.test import TestCase
 
 from apps.core.tests import TestHelperMixin
@@ -20,10 +21,15 @@ from django.template.loader import get_template
 from django.template import Context, Template
 from django.utils.unittest import skipIf
 
+import allure
+from allure.constants import Severity
 
 from datetime import datetime, timedelta
 
+logger = logging.getLogger(__file__)
 
+
+@allure.feature('Benchmark: News')
 class BenchmarkTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -35,11 +41,13 @@ class BenchmarkTest(TestCase):
         #self.client = Client()
         from apps.news import views
         self.views = views
-        print "Run benchmarking tests for news"
+        logger.info("Run benchmarking tests for news")
 
     def tearDown(self):
-        print "End of benchmarking tests for news"
+        logger.info("End of benchmarking tests for news")
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_news(self):
         for user in ['user', 'admin', None]:
             if user:
@@ -61,9 +69,13 @@ class BenchmarkTest(TestCase):
                 'url': url, 'user': user or 'Anonymous',
                 'min': minimum, 'max': maximum, 'avg': avg
             }
-            print "Benchmarking %(user)s %(url)s: min: %(min)s, max: %(max)s, avg: %(avg)s" % msg
+            logger.info(
+                "Benchmarking %(user)s %(url)s: min: %(min)s, "
+                "max: %(max)s, avg: %(avg)s" % msg
+            )
 
 
+@allure.feature('Benchmark: News')
 class BenchmarkTemplatesTest(TestCase):
     fixtures = [
         'tests/fixtures/load_news_categories.json',
@@ -105,14 +117,23 @@ class BenchmarkTemplatesTest(TestCase):
         rmin = min(results)
         rmax = max(results)
         avg = sum(results) / len(results)
-        print "Got follow timings:\nmin: %(min)s,\nmax: %(max)s,\navg: %(avg)s" % {
-            'min': rmin,
-            'max': rmax,
-            'avg': avg
-        }
+        logger.info(
+            "Got follow timings:\nmin: %(min)s,\n"
+            "max: %(max)s,\navg: %(avg)s" % {
+                'min': rmin,
+                'max': rmax,
+                'avg': avg
+            }
+        )
+
+    @allure.story('benchmark')
+    @allure.severity(Severity.NORMAL)
     @skipIf(True, 'broken mark for deletion')
     def test_news_page_plain(self):
-        print "Testing news page without render, only with context processors and stuff"
+        logger.info(
+            "Testing news page without render, only with "
+            "context processors and stuff"
+        )
         template = get_template('news/news.html')
         url = reverse('wh:login')  # without anything worthless
         response = self.client.get(url)
@@ -128,6 +149,7 @@ class BenchmarkTemplatesTest(TestCase):
             self.benchmark(template, context)
 
 
+@allure.feature('Cache: News')
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -145,6 +167,8 @@ class CacheTest(TestCase):
     def test_cache_key_prefix(self):
         self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')
 
+    @allure.story('cache')
+    @allure.severity(Severity.NORMAL)
     @skipIf(True, 'broken mark for deletion')
     def test_news_cache(self):
         keys = ['admin', 'everyone', 'everyone']
@@ -188,6 +212,7 @@ class CacheTest(TestCase):
             raise AssertionError
 
 
+@allure.feature('Events')
 class EventTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -205,6 +230,8 @@ class EventTest(TestHelperMixin, TestCase):
 
     # only change_event, add_event perms could allow to make crud
     # operations
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_event_create(self, role='admin'):
         self.login(role)
         url = reverse('news:event-create')
@@ -216,6 +243,8 @@ class EventTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Event.objects.count(), count + 1)
 
+    @allure.story('create')
+    @allure.severity(Severity.NORMAL)
     def test_event_create_failure(self):
         url = reverse('news:event-create')
         response = self.client.get(url, follow=True)
@@ -227,6 +256,7 @@ class EventTest(TestHelperMixin, TestCase):
         self.assertEqual(Event.objects.count(), count)
 
 
+@allure.feature('EventWatch')
 class EventWatchTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -244,6 +274,8 @@ class EventWatchTest(TestHelperMixin, TestCase):
             event.date_end += timedelta(seconds=offset.seconds)
             event.save()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_event_watched(self):
         """
         common test for watched event by user watch event action,
@@ -262,13 +294,15 @@ class EventWatchTest(TestHelperMixin, TestCase):
         self.assertEqual(event_watch.user, user)
         self.assertEqual(event_watch.event, event)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_event_watched_is_finished(self):
         """
         common test for wached event by user event action if event is finished,
         eventwatch instance shouldn't be registered
         """
         self.login('user')
-        user = User.objects.get(username='user')
+        _ = User.objects.get(username='user')
         event = Event.objects.filter(is_finished=True)[0]
         count = EventWatch.objects.count()
         self.assertEqual(count, 0)

@@ -7,7 +7,6 @@
 """
 
 # coding: utf-8
-#from django.utils import unittest
 from datetime import datetime, timedelta
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -24,8 +23,11 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
+import allure
+from allure.constants import Severity
 
 
+@allure.feature('Poll')
 class PollTest(TestHelperMixin, TestCase):
     """ TestCase for polls creation, update and deletion actions and logic """
     fixtures = [
@@ -96,10 +98,14 @@ class PollTest(TestHelperMixin, TestCase):
         self.assertEqual(poll.items.count(), poll_items_count)
         return poll
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_add_poll(self, role='admin'):
         """ create poll in 2 steps """
         pole = self.add_poll_items(role)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_update_poll(self, role='admin'):
         poll = self.add_poll_items(role)
         items_amount = poll.items.count()
@@ -134,6 +140,8 @@ class PollTest(TestHelperMixin, TestCase):
 
         self.assertEqual(poll.items.count(), items_amount + 1)
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_add_full_clean_poll_item(self, role='admin'):
         poll = self.add_poll(role)
         post = {
@@ -156,6 +164,8 @@ class PollTest(TestHelperMixin, TestCase):
                 item['title'][0], unicode(_("Title should be set"))
             )
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_add_poll_item_unclean(self, role='admin'):
         poll = self.add_poll(role)
         post = {
@@ -177,6 +187,7 @@ class PollTest(TestHelperMixin, TestCase):
                          unicode(_("Title should be set")))
 
 
+@allure.feature('Poll Answer')
 class PollAnswerTest(TestHelperMixin, TestCase):
     """ TestCase for voting polls actions and logic """
     fixtures = [
@@ -199,6 +210,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.single_poll.date_expire = datetime.now() + timedelta(weeks=1)
         self.single_poll.save()
 
+    @allure.story('vote')
+    @allure.severity(Severity.CRITICAL)
     def test_multiple_poll_vote(self):
         """ successful multiple poll vote action/logic """
         self.login('user')
@@ -221,6 +234,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         user = User.objects.get(username='user')
         self.assertEqual(self.multiple_poll.get_voted_users()[0], user)
 
+    @allure.story('vote')
+    @allure.severity(Severity.CRITICAL)
     def test_single_poll_vote(self):
         """ successful single poll vote action/logic """
         self.login('user')
@@ -241,6 +256,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         user = User.objects.get(username='user')
         self.assertEqual(self.single_poll.get_voted_users()[0], user)
 
+    @allure.story('vote')
+    @allure.severity(Severity.CRITICAL)
     def test_single_poll_vote_failure(self):
         """ in-successful single poll vote action/logic, user can not post
          more than one vote option"""
@@ -265,6 +282,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         user = User.objects.get(username='user')
         self.assertEqual(self.single_poll.get_voted_users()[0], user)
 
+    @allure.story('vote')
+    @allure.severity(Severity.CRITICAL)
     def test_poll_vote_when_finished(self):
         """ test if poll is not available to vote if it's finished """
         self.single_poll.is_finished = True
@@ -283,6 +302,7 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.single_poll.save()
 
 
+@allure.feature('Poll')
 class PollManageTest(TestHelperMixin, TestCase):
     """ TestCase for managing polls: delete, update"""
     fixtures = [
@@ -298,6 +318,8 @@ class PollManageTest(TestHelperMixin, TestCase):
     def setUp(self):
         self.poll = Poll.objects.get(pk=1)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_delete_poll(self):
         """ pybb.change_poll permission is required to delete any poll """
         self.login('admin')
@@ -313,6 +335,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         self.assertEqual(Poll.objects.count(), count - 1)
         self.assertEqual(PollItem.objects.count(), items_count - items_amount)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_delete_post_failure(self):
         """ only pybb.change_poll permission holders can delete polls """
         self.login(self.poll.topic.user.username)
@@ -329,6 +353,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         self.assertEqual(Poll.objects.count(), count)
         self.assertEqual(PollItem.objects.count(), items_count)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_manage_poll_failure(self):
         """ non poll-owner user can not manage/update poll"""
         qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
@@ -337,6 +363,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         response = self.client.get(self.poll.get_update_url(), follow=True)
         self.assertEqual(response.status_code, 403)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_manage_poll_success(self):
         """ non poll-owner with change_poll permission can
         manage/update poll"""
@@ -354,6 +382,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         user.user_permissions.remove(perm)
         user.save()
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_configure_poll_failure(self):
         """ non poll-owner user can not manage/update poll items"""
         qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
@@ -362,6 +392,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         response = self.client.get(self.poll.get_configure_url(), follow=True)
         self.assertEqual(response.status_code, 403)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_configure_poll_success(self):
         """ non poll-owner with change_poll permission can
         manage/update poll items"""
@@ -380,6 +412,7 @@ class PollManageTest(TestHelperMixin, TestCase):
         user.save()
 
 
+@allure.feature('Cron: Poll')
 class TestCronJobs(TestHelperMixin, TestCase):
     """ TestCase for testing cron jobs """
     fixtures = [
@@ -395,6 +428,8 @@ class TestCronJobs(TestHelperMixin, TestCase):
     def setUp(self):
         self.poll = Poll.objects.get(pk=1)
 
+    @allure.story('job')
+    @allure.severity(Severity.CRITICAL)
     def test_update_expire_job(self):
         self.poll.date_expire = datetime.now() - timedelta(seconds=1)
         self.poll.save()

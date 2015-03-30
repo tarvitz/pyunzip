@@ -9,8 +9,11 @@ from django.conf import settings
 
 from apps.karma.models import Karma
 from apps.core.tests import TestHelperMixin
+import allure
+from allure.constants import Severity
 
 
+@allure.feature('Karma')
 class KarmaTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -23,6 +26,8 @@ class KarmaTest(TestHelperMixin, TestCase):
             'comment': u'+1'
         }
 
+    @allure.story('alter')
+    @allure.severity(Severity.NORMAL)
     def test_karma_up(self):
         self.login('admin')
         url = reverse('karma:karma-alter', args=('up', self.user.nickname, ))
@@ -36,6 +41,8 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.assertEqual(karma.user.karma, karma_amount + karma.value)
         self.assertEqual(karma.comment, self.post['comment'])
 
+    @allure.story('alter')
+    @allure.severity(Severity.NORMAL)
     def test_karma_down(self):
         self.login('admin')
         url = reverse('karma:karma-alter', args=('down', self.user.nickname, ))
@@ -49,6 +56,8 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.assertEqual(karma.user.karma, karma_amount + karma.value)
         self.assertEqual(karma.comment, self.post['comment'])
 
+    @allure.story('access')
+    @allure.severity(Severity.NORMAL)
     def test_karma_alter_timeout(self):
         for item in range(settings.KARMA_PER_TIMEOUT_AMOUNT + 1):
             Karma.objects.create(
@@ -64,6 +73,8 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['request'].get_full_path(),
                          reverse('core:timeout'))
 
+    @allure.story('alter')
+    @allure.severity(Severity.NORMAL)
     def test_self_karma_alter(self):
         """
         self karma alterations are forbidden

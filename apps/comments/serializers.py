@@ -24,10 +24,11 @@ class CommentSerializer(ModelAccessSerializerMixin,
                         serializers.HyperlinkedModelSerializer):
     user_owner_fields = ['user', ]
 
-    content_type = serializers.PrimaryKeyRelatedField()
-    site = serializers.PrimaryKeyRelatedField()
+    content_type = serializers.PrimaryKeyRelatedField(read_only=True)
+    site = serializers.PrimaryKeyRelatedField(read_only=True)
     submit_date = serializers.DateTimeField(required=False)
     user = serializers.HyperlinkedRelatedField(required=False,
+                                               read_only=True,
                                                view_name='user-detail')
 
     def validate_user(self, attrs, source):

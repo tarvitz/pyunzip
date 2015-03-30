@@ -9,9 +9,11 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import simplejson as json
 
-from apps.core.helpers import get_object_or_None
+import allure
+from allure.constants import Severity
 
 
+@allure.feature("Files")
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -68,6 +70,8 @@ class JustTest(TestCase):
                 )
             raise AssertionError
 
+    @allure.story('upload')
+    @allure.severity(Severity.NORMAL)
     def test_jquery_file_upload(self):
         the_file = open('tests/fixtures/avatar.png')
         post = {
@@ -102,6 +106,8 @@ class JustTest(TestCase):
         self.assertEqual(user_file.size, user_file.file.size)
         self.unlink_files.append(user_file.file.path)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_file(self):
         self.test_jquery_file_upload()
         self.client.login(username='user', password='123456')
@@ -116,6 +122,8 @@ class JustTest(TestCase):
         )
         self.assertEqual(os.path.exists(user_file.file.path), False)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_serialize_userfile(self):
         self.client.login(username='user', password='123456')
         post = {
@@ -142,6 +150,8 @@ class JustTest(TestCase):
         self.assertIn('url', js['thumbnail'].keys())
         self.unlink_files.append(user_file.file.path)
 
+    @allure.story('upload')
+    @allure.severity(Severity.NORMAL)
     def test_big_file_uploading(self):
         self.client.login(username='user', password='123456')
         post = {

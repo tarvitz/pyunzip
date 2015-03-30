@@ -5,8 +5,9 @@ from rest_framework import serializers
 
 
 class AccountSerializer(serializers.HyperlinkedModelSerializer):
-    groups = serializers.PrimaryKeyRelatedField(many=True)
-    user_permissions = serializers.PrimaryKeyRelatedField(many=True)
+    groups = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    user_permissions = serializers.PrimaryKeyRelatedField(many=True,
+                                                          read_only=True)
 
     class Meta:
         model = User
@@ -25,6 +26,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class PMSerializer(serializers.HyperlinkedModelSerializer):
     sender = serializers.HyperlinkedRelatedField(required=False,
+                                                 read_only=True,
                                                  view_name='user-detail')
 
     def restore_object(self, attrs, instance=None):

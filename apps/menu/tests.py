@@ -1,12 +1,14 @@
 # coding: utf-8
-#from django.utils import unittest
 from django.test import TestCase
-from apps.menu.models import HMenuItem
 from django.test.client import RequestFactory
 from django.conf import settings
 from django.core.cache import cache
 
+import allure
+from allure.constants import Severity
 
+
+@allure.feature('Menu')
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_menus.json',
@@ -47,6 +49,7 @@ class JustTest(TestCase):
             raise AssertionError
 
 
+@allure.feature('Cache: Karma')
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_menus.json',
@@ -61,5 +64,7 @@ class CacheTest(TestCase):
     def get_hmenu_all(self, report):
         return cache.get('hmenu:all')
 
+    @allure.story('base')
+    @allure.severity(Severity.NORMAL)
     def test_cache_key_prefix(self):
         self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')

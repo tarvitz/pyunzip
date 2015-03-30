@@ -17,7 +17,7 @@ FAILURE_MESSAGES = {
 
 
 class CodexSerializer(serializers.HyperlinkedModelSerializer):
-    content_type = serializers.PrimaryKeyRelatedField()
+    content_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Codex
@@ -25,8 +25,9 @@ class CodexSerializer(serializers.HyperlinkedModelSerializer):
 
 class RosterSerializer(serializers.HyperlinkedModelSerializer):
     codex = serializers.HyperlinkedRelatedField(required=True,
+                                                queryset=Roster.objects,
                                                 view_name='codex-detail')
-    owner = serializers.HyperlinkedRelatedField(required=False,
+    owner = serializers.HyperlinkedRelatedField(required=False, read_only=True,
                                                 view_name='user-detail')
 
     def restore_object(self, attrs, instance=None):
@@ -54,7 +55,7 @@ class RosterSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReportSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(required=False,
+    owner = serializers.HyperlinkedRelatedField(required=False, read_only=True,
                                                 view_name='user-detail')
 
     def validate_owner(self, attrs, source):
@@ -108,7 +109,7 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 class MissionSerializer(serializers.HyperlinkedModelSerializer):
     # todo: investigate why hyperlinked serializer fails on post/put game data
-    game = serializers.PrimaryKeyRelatedField()
+    game = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Mission

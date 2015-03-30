@@ -6,7 +6,7 @@ from rest_framework import serializers
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_url')
     is_new = serializers.SerializerMethodField('get_is_new')
-    place = serializers.PrimaryKeyRelatedField()
+    place = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def get_url(self, instance):
         return instance.get_absolute_url()

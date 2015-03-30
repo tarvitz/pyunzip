@@ -16,6 +16,8 @@ from django.utils.unittest import skipIf
 
 from apps.core.helpers import get_object_or_None
 from django.core.cache import cache
+import allure
+from allure.constants import Severity
 
 
 class ImplementMe(Exception):
@@ -24,6 +26,7 @@ class ImplementMe(Exception):
 __all__ = ['JustTest', 'CacheTest']
 
 
+@allure.feature('WH')
 class JustTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_rank_types.json',
@@ -82,6 +85,8 @@ class JustTest(TestHelperMixin, TestCase):
                 print "Got %(err)s in %(key)s" % msg
             raise AssertionError
 
+    @allure.story('login')
+    @allure.severity(Severity.CRITICAL)
     @skipIf(True, "disabled")
     def test_sulogin(self):
         # admin can login as other users (to watch bugs and something)
@@ -108,6 +113,8 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Permission denied')
 
+    @allure.story('get')
+    @allure.severity(Severity.CRITICAL)
     def test_rank_view(self):
         rank = Rank.objects.all()[0]
         url = reverse('wh:ranks', args=(rank.id, ))
@@ -115,6 +122,7 @@ class JustTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
 
 
+@allure.feature('Cache')
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_rank_types.json',
@@ -134,6 +142,8 @@ class CacheTest(TestCase):
     def cache_get_nickname(self, user):
         return cache.get('nick:%s' % user.username)
 
+    @allure.story('get')
+    @allure.severity(Severity.CRITICAL)
     def test_user_change_get_nickname_test(self):
         user = User.objects.get(username='user')
         logged = self.client.login(username='user', password='123456')

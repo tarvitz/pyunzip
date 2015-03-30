@@ -5,7 +5,6 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import exceptions
-from rest_framework.decorators import action
 from django.http import Http404
 
 from apps.comments.serializers import (
@@ -87,7 +86,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
 
-    @action(methods=['PATCH', 'PUT', ])
+    #@action(methods=['PATCH', 'PUT', ])
     def modify(self, request, pk=None):
         obj = self.get_object_or_none()
         serializer = ModifyCommentSerializer(data=request.DATA, instance=obj)

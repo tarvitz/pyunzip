@@ -15,9 +15,13 @@ from django.core import exceptions
 from django.conf import settings
 
 from copy import deepcopy
+import allure
+from allure.constants import Severity
+
 User = get_user_model()
 
 
+@allure.feature('Roster')
 class RosterTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -55,6 +59,8 @@ class RosterTest(TestHelperMixin, TestCase):
         )
         return roster
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_roster_add(self):
         self.login('user')
         url = reverse('tabletop:roster-add')
@@ -69,6 +75,8 @@ class RosterTest(TestHelperMixin, TestCase):
         })
         self.check_state(roster, post, self.assertEqual)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_roster_update(self):
         roster = self.add_roster()
         self.login(user=roster.owner    .username)
@@ -82,6 +90,8 @@ class RosterTest(TestHelperMixin, TestCase):
         roster = Roster.objects.get(pk=roster.pk)
         self.check_state(roster, post, self.assertEqual)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_roster_update_failure(self):
         roster = self.add_roster(self.user)
         self.login('admin')
@@ -93,6 +103,8 @@ class RosterTest(TestHelperMixin, TestCase):
         post.pop('codex')
         self.check_state(roster, post, self.assertNotEqual)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_roster_delete(self):
         roster = self.add_roster()
         self.login(user=roster.owner.username)
@@ -100,6 +112,8 @@ class RosterTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Roster.objects.filter(pk=roster.pk).exists(), False)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_roster_delete_failure(self):
         roster = self.add_roster()
         self.login(user='admin')
@@ -108,6 +122,7 @@ class RosterTest(TestHelperMixin, TestCase):
         self.assertEqual(Roster.objects.filter(pk=roster.pk).exists(), True)
 
 
+@allure.feature('Codex')
 class CodexTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -146,6 +161,8 @@ class CodexTest(TestHelperMixin, TestCase):
         )
         return codex
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_side_create(self):
         self.login('admin')
         # side bind
@@ -160,6 +177,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(codex.title, self.post_side['title'])
         self.assertEqual(codex.revisions, self.post_side['revisions'])
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_army_create(self):
         self.login('admin')
         # army bind
@@ -174,6 +193,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(codex.title, self.post_army['title'])
         self.assertEqual(codex.revisions, self.post_army['revisions'])
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_army_is_prior_create(self):
         """
         army is prior for codex bindings, so if user would pass side and army
@@ -194,6 +215,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(codex.title, self.post['title'])
         self.assertEqual(codex.revisions, self.post['revisions'])
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_create_failure(self):
         self.login('user')
         count = Codex.objects.count()
@@ -202,6 +225,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Codex.objects.count(), count)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_update(self):
         codex = self.add_codex()
         self.login('admin')
@@ -214,6 +239,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(codex.title, self.post['title'])
         self.assertEqual(codex.revisions, self.post['revisions'])
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_update_failure(self):
         codex = self.add_codex()
         self.login('user')
@@ -225,6 +252,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertNotEqual(codex.title, self.post['title'])
         self.assertNotEqual(codex.revisions, self.post['revisions'])
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_delete(self):
         codex = self.add_codex()
         self.login('admin')
@@ -235,6 +264,8 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(Codex.objects.count(), count - 1)
         self.assertEqual(Codex.objects.filter(pk=codex.pk).exists(), False)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_codex_delete_failure(self):
         codex = self.add_codex()
         self.login('user')
@@ -246,6 +277,7 @@ class CodexTest(TestHelperMixin, TestCase):
         self.assertEqual(Codex.objects.filter(pk=codex.pk).exists(), True)
 
 
+@allure.feature('Report')
 class ReportTest(TestHelperMixin, TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -300,22 +332,30 @@ class ReportTest(TestHelperMixin, TestCase):
         report.save()
         return report
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_report_anonymous_create(self):
         response = self.client.post(self.create_url, self.post, follow=True)
         self.assertEqual(response.status_code, 404)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_report_anonymous_update(self):
         report = self.add_report()
         response = self.client.post(report.get_edit_url(), self.post,
                                     follow=True)
         self.assertEqual(response.status_code, 404)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_report_anonymous_delete(self):
         report = self.add_report()
         response = self.client.post(report.get_delete_url(), {},
                                     follow=True)
         self.assertEqual(response.status_code, 404)
 
+    @allure.story('get')
+    @allure.severity(Severity.CRITICAL)
     def test_report_list(self):
         self.add_report()
         url = reverse('tabletop:report-list')
@@ -325,6 +365,8 @@ class ReportTest(TestHelperMixin, TestCase):
         self.assertIn('object_list', context)
         self.assertEqual(context['object_list'].count(), 1)
 
+    @allure.story('get')
+    @allure.severity(Severity.CRITICAL)
     def test_report_get(self):
         report = self.add_report()
         response = self.client.get(report.get_absolute_url(), follow=True)
@@ -333,6 +375,8 @@ class ReportTest(TestHelperMixin, TestCase):
         self.assertIn('object', context)
         self.assertIsInstance(context['object'], Report)
 
+    @allure.story('create')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_create(self):
         self.login('user')
         count = Report.objects.count()
@@ -343,6 +387,8 @@ class ReportTest(TestHelperMixin, TestCase):
         report = Report.objects.latest('pk')
         self.assertEqual(report.owner, self.user)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_update(self):
         report = self.add_report(user=self.user)
         self.login('user')
@@ -353,6 +399,8 @@ class ReportTest(TestHelperMixin, TestCase):
         report = Report.objects.get(pk=report.pk)
         self.assertInstance(report, self.post_update)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_delete(self):
         report = self.add_report(user=self.user)
         self.login('user')
@@ -366,6 +414,8 @@ class ReportTest(TestHelperMixin, TestCase):
         self.assertRaises(exceptions.ObjectDoesNotExist,
                           lambda: Report.objects.get(pk=report.pk))
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_update_non_owner(self):
         """ non-owner's can not update/delete reports of non their own """
         report = self.add_report(user=self.admin)
@@ -374,6 +424,8 @@ class ReportTest(TestHelperMixin, TestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_delete_non_owner(self):
         """ non-owner's can not update/delete reports of non their own """
         report = self.add_report(user=self.admin)
@@ -382,6 +434,8 @@ class ReportTest(TestHelperMixin, TestCase):
                                     follow=True)
         self.assertEqual(response.status_code, 403)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_report_admin_update_non_owner(self):
         """ admin users can freely modify/delete reports that don't belng to
         them
@@ -394,6 +448,8 @@ class ReportTest(TestHelperMixin, TestCase):
         report = Report.objects.get(pk=report.pk)
         self.assertInstance(report, self.post_update)
 
+    @allure.story('delete')
+    @allure.severity(Severity.CRITICAL)
     def test_report_admin_delete_non_owner(self):
         """ admin users can delete reports that does not belong to them freely
         """
@@ -407,6 +463,8 @@ class ReportTest(TestHelperMixin, TestCase):
         self.assertRaises(exceptions.ObjectDoesNotExist,
                           lambda: Report.objects.get(pk=report.pk))
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_report_user_update_failure(self):
         report = self.add_report(user=self.user)
         self.login('user')
@@ -427,6 +485,7 @@ class ReportTest(TestHelperMixin, TestCase):
             )
 
 
+@allure.feature('Cache')
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -442,5 +501,7 @@ class CacheTest(TestCase):
     def tearDown(self):
         pass
 
+    @allure.story('cache')
+    @allure.severity(Severity.CRITICAL)
     def test_cache_key_prefix(self):
         self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')

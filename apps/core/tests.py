@@ -23,11 +23,14 @@ User = get_user_model()
 
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 import logging
 logger = logging.getLogger(__name__)
 
 
+@allure.feature('Core')
 class JustTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json',
@@ -60,6 +63,8 @@ class JustTest(TestCase):
                 })
         return messages
 
+    @allure.story('urls')
+    @allure.severity(Severity.NORMAL)
     def test_urls(self):
         prefix = 'core'
         urls = [
@@ -108,16 +113,22 @@ class JustTest(TestCase):
                 )
             raise AssertionError
 
+    @allure.story('markup')
+    @allure.severity(Severity.NORMAL)
     def test_post_markup_unicode(self):
         quote_source = u"(Пользователь){цитата}"
         quote = post_markup_filter(quote_source)
         self.assertNotIn(quote_source, quote)
 
+    @allure.story('markup')
+    @allure.severity(Severity.NORMAL)
     def test_post_markup(self):
         quote_source = u"(User){quote}"
         quote = post_markup_filter(quote_source)
         self.assertNotIn(quote_source, quote)
 
+    @allure.story('markup')
+    @allure.severity(Severity.NORMAL)
     def test_post_markup_variations(self):
         quotes = [
             u'(User){quote\n\n\n\nnquote}',
@@ -136,19 +147,8 @@ class JustTest(TestCase):
                 print msg
             raise AssertionError
 
-    def test_css_edit(self):
-        pass
 
-    def test_unsubscribe(self):
-        pass
-
-    def test_settings(self):
-        pass
-
-    def test_settings_store(self):
-        pass
-
-
+@allure.feature('Benchmark: Core')
 class BenchmarkTemplatesTest(TestCase):
     fixtures = [
         'tests/fixtures/load_users.json'
@@ -184,6 +184,8 @@ class BenchmarkTemplatesTest(TestCase):
             }
         )
 
+    @allure.story('benchmark')
+    @allure.severity(Severity.NORMAL)
     def test_benchmark_get_form_tag(self):
         template = """{% load coretags %}
         {% get_form 'apps.comments.forms.CommentForm' as form %}
@@ -194,6 +196,8 @@ class BenchmarkTemplatesTest(TestCase):
         """
         self.benchmark(template)
 
+    @allure.story('benchmark')
+    @allure.severity(Severity.NORMAL)
     def test_index_page(self):
         for user in ('admin', 'user', None):
             if user:
