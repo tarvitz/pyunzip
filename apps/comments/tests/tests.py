@@ -174,7 +174,7 @@ class CommentWatchApiTest(TestHelperMixin, CommentWatchBase, APITestCase):
         comment_watch = CommentWatch.objects.create(**self.create_dict)
         cw_count = comment_watch.get_new_comments().count()
         self.assertEqual(cw_count, 0)
-        self.make_comment('admin', status_code=302)
+        self.make_comment('admin', status_code=200)
 
         self.assertEqual(comment_watch.get_new_comments().count(),
                          cw_count + 1)
@@ -183,7 +183,6 @@ class CommentWatchApiTest(TestHelperMixin, CommentWatchBase, APITestCase):
         response = self.client.patch(url, self.post_update_subscription,
                                      format='json',
                                      follow=True)
-
         self.assertEqual(response.status_code, 200)
         comment_watch = CommentWatch.objects.get(pk=comment_watch.pk)
         self.check_state(comment_watch, self.post_update_subscription,

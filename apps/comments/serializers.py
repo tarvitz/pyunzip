@@ -9,9 +9,9 @@ class CommentWatchSerializer(ModelAccessSerializerMixin,
                              serializers.HyperlinkedModelSerializer):
     user_owner_fields = ['user', ]
 
-    url = serializers.SerializerMethodField('get_url')
+    url = serializers.SerializerMethodField('get_self_url')
 
-    def get_url(self, instance):
+    def get_self_url(self, instance):
         if hasattr(instance.object, 'get_absolute_url'):
             return instance.object.get_absolute_url()
         return ''
