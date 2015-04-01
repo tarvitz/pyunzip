@@ -91,7 +91,23 @@ class AccountTest(TestHelperMixin, TestCase):
         url = reverse('accounts:login')
         response = self.client.post(url, login, follow=True)
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated(), True)
         self.assertContains(response, '/logout/')
+
+    @allure.story('login')
+    @allure.severity(Severity.CRITICAL)
+    def test_login_email(self):
+        """
+        login with email
+        """
+        login = {
+            'username': 'user@blacklibrary.ru',
+            'password': '123456'
+        }
+        url = reverse('accounts:login')
+        response = self.client.post(url, login, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'].is_authenticated(), True)
 
     @allure.story('logout')
     @allure.severity(Severity.NORMAL)

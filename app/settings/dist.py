@@ -266,7 +266,7 @@ AUTH_USER_MODEL = (
 )
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    #'apps.accounts.backends.EmailAuthBackend',
+    'apps.accounts.backends.EmailAuthBackend',
 )
 
 CRON_CLASSES = (
