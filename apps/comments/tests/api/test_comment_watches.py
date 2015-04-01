@@ -74,20 +74,22 @@ class CommentWatchViewMixin(object):
         }
         self.post = {
             'content_type': reverse('api:contenttype-detail',
-                        args=(self.event_ct.pk, )),
+                                    args=(self.event_ct.pk, )),
             'object_pk': self.event.pk,
-            'user': self.admin.pk,
+            'user': reverse('api:user-detail', args=(self.admin.pk, )),
             'is_updated': False,
             'is_disabled': False,
         }
         self.object_detail_response = {
-            'content_type': self.event_ct.pk,
+            'content_type': reverse(
+                'api:contenttype-detail', args=(self.event_ct.pk, )),
             'id': 5,
             'is_disabled': False,
             'is_updated': False,
             'object_pk': 1,
             'url': '/events/1/',
-            'user': 6
+            'user': reverse('api:user-detail', args=(6, )),
+            'comment': None
         }
 
 

@@ -712,7 +712,7 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
 
         self.assertEqual(
             json_response['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         post = deepcopy(self.post)
@@ -747,7 +747,7 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login(self.other_user.username, self.other_user_password)
@@ -758,7 +758,7 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
         self.assertEqual(
             json_response['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
 
 class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
@@ -880,7 +880,7 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
         self.assertEqual(json_response['detail'],
-                         'Not found')
+                         _('Not found'))
 
     def test_delete_detail(self):
         self.login(self.other_user.username, self.other_user_password)
@@ -889,7 +889,7 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
         self.assertEqual(json_response['detail'],
-                         'Not found')
+                         _('Not found'))
 
     def test_patch_detail(self):
         self.login(self.other_user.username, self.other_user_password)
@@ -898,4 +898,4 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
         self.assertEqual(json_response['detail'],
-                         'Not found')
+                         _('Not found'))

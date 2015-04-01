@@ -1,6 +1,9 @@
 # coding: utf-8
+from apps.accounts.models import User
 from apps.core.serializers import ModelAccessSerializerMixin
 from apps.comments.models import CommentWatch, Comment
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.sites.models import Site
 from rest_framework import serializers
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,11 +27,13 @@ class CommentSerializer(ModelAccessSerializerMixin,
                         serializers.HyperlinkedModelSerializer):
     user_owner_fields = ['user', ]
 
-    content_type = serializers.PrimaryKeyRelatedField(read_only=True)
-    site = serializers.PrimaryKeyRelatedField(read_only=True)
+    content_type = serializers.PrimaryKeyRelatedField(
+        queryset=ContentType.objects
+    )
+    site = serializers.PrimaryKeyRelatedField(queryset=Site.objects)
     submit_date = serializers.DateTimeField(required=False)
     user = serializers.HyperlinkedRelatedField(required=False,
-                                               read_only=True,
+                                               queryset=User,
                                                view_name='user-detail')
 
     def validate_user(self, attrs, source):
