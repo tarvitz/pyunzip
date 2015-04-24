@@ -21,8 +21,12 @@
             {% endif %}
           </td>
           <td>
+            {% if object.value > 0 %}
             <img src="{{ object.voter.get_avatar_url }}" class="avatar" />
             {{ object.voter.get_nickname|safe }}</td>
+            {% else %}
+                {% trans "anonymous" %}
+            {% endif %}
           <td>{{ object.comment }}</td>
           <td>
             {% if object.url %}
