@@ -57,7 +57,8 @@ def index_ctx(request):
              'karma': {
                  "total": Karma.objects.all().aggregate(Sum("value"))['value__sum'],
                  "last": (
-                     Karma.objects.exists() and Karma.objects.latest("date")
+                     Karma.objects.exists() and
+                     Karma.objects.latest("date")
                      or 0
                  )
              }}

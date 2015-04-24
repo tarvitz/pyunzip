@@ -60,7 +60,11 @@
                       <strong>{% trans "Last Karma" %}:</strong>
                       {% trans "from" context "from user" %}
                       <a href="{{ quick.karma.last.voter.get_profile_url }}">
-                          {{ quick.karma.last.voter.get_nickname|safe }}</a>
+                          {% if quick.karma.last.value > 0 %}
+                            {{ quick.karma.last.voter.get_nickname|safe }}</a>
+                          {% else %}
+                            {% trans "Anonymous" %}
+                          {% endif %}
                           + {{quick.karma.last.value }} {% trans "to" context "to user"%} <a
                                 href="{{ quick.karma.last.user.get_profile_url }}">{{ quick.karma.last.user.get_nickname|safe }}</a>
                       {% trans "for" context "comment text" %} "{{ quick.karma.last.comment }}"
