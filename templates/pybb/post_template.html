@@ -64,7 +64,7 @@
         {% endif %}{% endspaceless %}'>
         <div class='transparency grey'></div>
         <div class="pull-left">
-          {% include "karma/include/karma_buttons.html" with usr=post.user %}
+          {% include "karma/include/karma_buttons.html" with usr=post.user obj=post obj_prefix="post" %}
         </div>
         <div class='links'>
             <span><a class='forum quote'

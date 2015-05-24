@@ -38,7 +38,7 @@
     <div class='message-footer'>
         <div class='transparency grey'></div>
         <div class="pull-left">
-          {% include "karma/include/karma_buttons.html" with usr=comment.user %}
+          {% include "karma/include/karma_buttons.html" with usr=comment.user obj=comment obj_prefix='post' %}
         </div>
         <div class='links'>
             {% if perms.comments.change_comment or comment.user == user %}

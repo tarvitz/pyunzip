@@ -32,9 +32,12 @@ class KarmaChangeView(generic.FormView):
 
     def get_form_kwargs(self):
         kwargs = super(KarmaChangeView, self).get_form_kwargs()
+        anchor = '#%s%s' % (self.request.GET.get('objprefix', ''),
+                            self.request.GET.get('objid', ''))
+        url = "%s%s" % (self.request.META.get('HTTP_REFERER', '/'), anchor)
         kwargs.update({
             'initial': {
-                'url': self.request.META.get('HTTP_REFERER', '/')
+                'url': url,
             }
         })
         return kwargs
