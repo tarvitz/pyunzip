@@ -369,3 +369,6 @@ KARMA_TIMEOUT_MINUTES = 60 * 24  # whole day
 MAXIMUM_WORDS_COUNT_BEFORE_HIDE = 500
 MAX_DOCUMENT_SIZE = 1024 * 4
 FROM_EMAIL = 'AstroPath (no replay) <astropath@blacklibrary.ru>'
+
+#: captcha settings
+NOCAPTCHA = True
