@@ -17,6 +17,7 @@
       <tr>
         <th>{% trans "Title" %}</th>
         <th>{% trans "Type" %}</th>
+        <th>{% trans "League" %}</th>
         <th>{% trans "Date start" %}</th>
         <th>{% trans "Date end" %}</th>
         <th>{% trans "Queued" %}</th>
@@ -26,6 +27,7 @@
         <tr>
           <td><a href='{{ object.get_absolute_url }}'>{{ object.title }}</a></td>
           <td>{{ object.get_type }}</td>
+          <td>{{ object.league|default_if_none:"&mdash;" }}</td>
           <td>{{ object.date_start|date:"Y, M d H:i" }}</td>
           <td>{{ object.date_end|date:"Y, M d H:i" }}</td>
           <td><i class="icon-{{ object.is_finished|yesno:"ban-circle,ok-circle" }}"></i></td>
