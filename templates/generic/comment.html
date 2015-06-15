@@ -22,7 +22,7 @@
         <span class="updated">{{ comment.submit_date|date:"Y/m/d H:i" }}</span>
     </div>
     <div class='message-body'>
-        <div class="avatar">
+        <div class="avatar {{ comment.user.get_avatar_birthday }}">
             {% include "generic/avatar.html" with usr=comment.user %}
             <div class="bottom"></div>
             <div class="post-controls"></div>

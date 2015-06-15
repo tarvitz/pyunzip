@@ -105,6 +105,9 @@ class User(PermissionsMixin, AbstractBaseUser):
         _('karma'), default=0, help_text=_("user's karma"), null=True,
         blank=True
     )
+    birthday = models.DateField(
+        _("birthday"), blank=True, null=True
+    )
     # managers
     objects = UserManager()
 
@@ -133,6 +136,14 @@ class User(PermissionsMixin, AbstractBaseUser):
         if self.avatar:
             return self.avatar.url
         return settings.NULL_AVATAR_URL
+
+    def get_avatar_birthday(self):
+        if not self.birthday:
+            return ''
+        d = timezone.now().timetuple()[1:3]
+        if d == (self.birthday.month, self.birthday.day):
+            return "avatar-birthday"
+        return ''
 
     def get_absolute_url(self):
         return reverse(

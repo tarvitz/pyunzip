@@ -21,7 +21,7 @@
         <span class="updated">{% pybb_time post.created %}</span>
     </div>
     <div class='message-body'>
-        <div class="avatar">
+        <div class="avatar {{ post.user.get_avatar_birthday }}">
             {% include "generic/avatar.html" with usr=post.user %}
             <div class="bottom">
             </div>
