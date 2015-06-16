@@ -25,14 +25,16 @@
     {% if user.is_authenticated %}
       {% if comment_watch %}
         <a href="{{ comment_watch.get_subscription_remove_url }}" rel="tooltip"
+           class="btn btn-xs btn-default"
            data-title="{% trans "Remove subscription" %}">
-            <i class="icon-remove icon-delete"></i></a>
+            <i class="glyphicon glyphicon-delete glyphicon-log-out"></i></a>
       {% else %}
         {% get_content_type object as object_ct %}
-        <a href="{% url "comments:subscription-add" object_ct.content_type.pk object.pk %}" rel="tooltip"
+        <a href="{% url "comments:subscription-add" object_ct.content_type.pk object.pk %}"
+           rel="tooltip"
            class="btn btn-xs btn-default"
            data-title="{% trans "Subscribe for a new comments" %}">
-          <i class="glyphicon glyphicon-plus-sign"></i>
+          <i class="glyphicon glyphicon-log-in"></i>
         </a>
       {% endif %}
     {% endif %}

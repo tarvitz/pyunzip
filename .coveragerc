@@ -1,5 +1,6 @@
 [run]
 branch = True
+omit = *migrations*
 
 [report]
 exclude_lines = 
