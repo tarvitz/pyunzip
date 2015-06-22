@@ -59,7 +59,7 @@
                     <td colspan="2">
                       <strong>{% trans "Last Karma" %}:</strong>
                       {% trans "from" context "from user" %}
-                      <a href="{{ quick.karma.last.voter.get_profile_url }}">
+                      <a href="{% if quick.karma.last.value > 0 %}{{ quick.karma.last.voter.get_profile_url }}{% else %}#{% endif %}">
                           {% if quick.karma.last.value > 0 %}
                             {{ quick.karma.last.voter.get_nickname|safe }}</a>
                           {% else %}
