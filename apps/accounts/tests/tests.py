@@ -109,6 +109,29 @@ class AccountTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated(), True)
 
+    @allure.story('login')
+    @allure.severity(Severity.CRITICAL)
+    def test_login_email_failure(self):
+        url = reverse('accounts:login')
+        with allure.step('check with wrong password'):
+            login = {
+                'username': 'user@blacklibrary.ru',
+                'password': 'wrongpassword'
+            }
+            response = self.client.post(url, login, follow=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.context['user'].is_authenticated(),
+                             False)
+        with allure.step('check with non-existent user'):
+            login = {
+                'username': 'non_existentuser@example.org',
+                'password': '123456'
+            }
+            response = self.client.post(url, login, follow=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.context['user'].is_authenticated(),
+                             False)
+
     @allure.story('logout')
     @allure.severity(Severity.NORMAL)
     def test_logout(self):
