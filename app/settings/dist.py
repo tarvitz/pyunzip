@@ -244,7 +244,6 @@ INSTALLED_APPS = (
     'apps.pybb',
     'apps.menu',
     'django_extensions',
-    'south',
     'rest_framework',
     'captcha',
     'sorl.thumbnail',
