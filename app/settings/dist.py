@@ -253,6 +253,10 @@ AUTHENTICATION_BACKENDS = (
     'apps.accounts.backends.EmailAuthBackend',
 )
 
+FIXTURE_DIRS = (
+    rel('tests/fixtures'),
+)
+
 CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
     'apps.news.cron.EventsMarkFinishedCronJob',
@@ -262,8 +266,6 @@ CRON_CLASSES = (
 API_OBJECTS_ON_PAGE = 50
 
 REST_FRAMEWORK = {
-    #'DEFAULT_PERMISSION_CLASSES': (
-    #    'rest_framework.permissions.IsAdminUser',),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),

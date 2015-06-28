@@ -3,6 +3,10 @@
 import os
 import six
 
+if six.PY3:
+    import _io
+    file = None
+
 from django.test import TestCase
 from apps.core.helpers import (
     post_markup_filter,
@@ -145,7 +149,7 @@ class JustTest(TestCase):
 
         if messages:
             for msg in messages:
-                print msg
+                logging.warn(msg)
             raise AssertionError
 
 
@@ -164,7 +168,7 @@ class BenchmarkTemplatesTest(TestCase):
     def benchmark(self, template, context=None):
         context = context or {}
         results = []
-        for i in xrange(1000):
+        for i in range(1000):
             n = datetime.now()
             # if isinstance(template, basestring):
             #     tmpl = Template(template)
@@ -242,7 +246,7 @@ class TestHelperMixin(object):
                 })
         if messages:
             for msg in messages:
-                print u"Got %(err)s in %(key)s" % msg
+                logging.warning(u"Got %(err)s in %(key)s" % msg)
             raise AssertionError
 
     @staticmethod
@@ -263,25 +267,28 @@ class TestHelperMixin(object):
         if not have_errors:
             return
 
-        print "Got errors in form:"
+        logging.warning("Got errors in form:")
         if isinstance(form.errors, dict):
             for key, error_list in form.errors.items():
-                print "in '%(key)s' got: '%(errors)s'" % {
+                logging.warning(
+                    "in '%(key)s' got: '%(errors)s'" % {
                     'key': key,
                     'errors': (
-                        "; ".join([unicode(i) for i in error_list])
+                        "; ".join([i for i in error_list])
                         if isinstance(error_list, (list, tuple))
-                        else unicode(error_list)
+                        else error_list
                     )
-                }
+                })
             return
         elif isinstance(form.errors, (list, tuple)):
             for f in form.errors:
                 for key, error_list in f.items():
-                    print u"in '%(key)s got: %(errors)s'" % {
-                        'key': key, 'errors': "; ".join([
-                            unicode(i) for i in error_list])
-                    }
+                    logging.warning(
+                        u"in '%(key)s got: %(errors)s'" % {
+                            'key': key, 'errors': "; ".join([
+                                i for i in error_list])
+                        }
+                    )
         else:
             pass
 
@@ -335,7 +342,7 @@ class TestHelperMixin(object):
                         'http://testserver' + item in response[field],
                         True
                     )
-            elif isinstance(value, file):
+            elif isinstance(value, (six.PY3 and _io.TextIOWrapper or file)):
                 # remove uploaded files
                 self.assertFileExists(response[field])
                 os.unlink(

@@ -19,9 +19,19 @@ Additions and fixes Copyright (c) 2006 Alex Shiels http://thresholdstate.com/
 """
 
 import re
+import six
 import uuid
 import string
-from urlparse import urlparse
+if six.PY2:
+    try:
+        from urlparse import urlparse
+    except ImportError:
+        pass
+elif six.PY3:
+    from urllib.parse import urlparse
+else:
+    raise EnvironmentError("Wrong python implementation")
+
 
 from apps.thirdpaty.textile.tools import sanitizer, imagesize
 

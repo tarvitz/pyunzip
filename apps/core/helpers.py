@@ -5,22 +5,25 @@ import six
 from functools import wraps
 from datetime import datetime, date, time
 from functools import partial
+
+from apps.comments.models import Comment
+from apps.core import get_skin_template
+from apps.thirdpaty.textile import render_textile
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
+
 from django.http import HttpResponse, Http404
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.shortcuts import get_object_or_404 as _get_object_or_404
-from apps.core import get_skin_template
 from django.shortcuts import (
     render_to_response, redirect
 )
 from django.template import RequestContext
 from django.template.loader import render_to_string
-from apps.comments.models import Comment
 
 from django.contrib.auth.models import AnonymousUser
 
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
@@ -402,16 +405,14 @@ def unescape(string):
 
 
 def render_filter(value, arg):
-    from apps.thirdpaty.postmarkup import render_bbcode
-    from apps.thirdpaty.creole.shortcuts import creole_filter as render_creole
-    from apps.thirdpaty.textile import render_textile
+    #: todo resolve bb code
+    def render_bbcode(source):
+        return source
 
     syntaxes = [i[0] for i in settings.SYNTAX]
     if arg in syntaxes:
         if arg in 'bb-code':
-            return unescape(render_bbcode(value))
-        elif arg in 'creole' or arg in 'wiki':
-            return render_creole(value)
+            return unescape(value)
         elif arg in 'textile':
             return render_textile(value)
     return render_textile(value)

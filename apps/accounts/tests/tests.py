@@ -1,6 +1,7 @@
 # coding: utf-8
-#from django.utils import unittest
 import os
+import six
+import logging
 
 from django.test import TestCase
 from django.utils.unittest import skipIf
@@ -72,7 +73,9 @@ class AccountTest(TestHelperMixin, TestCase):
                     })
         if messages:
             for msg in messages:
-                print "Got %(type)s on %(url)s with %(user)s: %(err)s" % msg
+                logging.warning(
+                    "Got %(type)s on %(url)s with %(user)s: %(err)s" % msg
+                )
             raise AssertionError
 
     def tearDown(self):
@@ -262,8 +265,8 @@ class AccountTest(TestHelperMixin, TestCase):
         form = response.context['form']
         self.assertEqual(
             form.errors['nickname'][0],
-            unicode(_('Another user with %s nickname exists.' %
-                      post['nickname']))
+            six.text_type(
+                _('Another user with %s nickname exists.' % post['nickname']))
         )
 
     @allure.story('profile')
@@ -297,9 +300,13 @@ class AccountTest(TestHelperMixin, TestCase):
         if 'form' in context:
             form = context['form']
             if form.errors:
-                print "Got form errors within posting form, proceeding:"
+                logging.warning(
+                    "Got form errors within posting form, proceeding:"
+                )
                 for (key, error_list) in form.errors.items():
-                    print "in '%s': '%s'" % (key, "; ".join(error_list))
+                    logging.warning(
+                        "in '%s': '%s'" % (key, "; ".join(error_list))
+                    )
 
         self.assertEqual(response.status_code, 200)
         messages = []
@@ -312,7 +319,7 @@ class AccountTest(TestHelperMixin, TestCase):
                 messages.append({'err': err})
         if messages:
             for msg in messages:
-                print "Can not edit user got: %(err)s" % msg
+                logging.warning("Can not edit user got: %(err)s" % msg)
             raise AssertionError
 
         self.assertEqual(os.path.exists(user.avatar.path), True)

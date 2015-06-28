@@ -1,32 +1,130 @@
 [
 {
-    "pk": 1, 
-    "model": "accounts.pm", 
+    "model": "accounts.pm",
+    "pk": 1,
     "fields": {
-        "is_read": false, 
-        "sender": 6, 
-        "title": "tes", 
-        "dba": false, 
-        "syntax": "textile", 
-        "content": "dasdad", 
-        "addressee": 7, 
-        "dbs": false, 
-        "sent": "2013-04-27T00:00:00"
+        "is_read": true,
+        "sent": "2014-05-27T03:41:09.889",
+        "addressee": 2,
+        "dba": false,
+        "cache_content": "\t<p>\u0412\u043e\u0442 \u0435\u0431\u0430!</p>",
+        "title": "\u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
+        "syntax": null,
+        "sender": 1,
+        "content": "\u0412\u043e\u0442 \u0435\u0431\u0430!",
+        "dbs": false
     }
 },
 {
-    "pk": 2, 
-    "model": "accounts.pm", 
+    "model": "accounts.pm",
+    "pk": 2,
     "fields": {
-        "is_read": false, 
-        "sender": 7, 
-        "title": "\u0421\u0430\u043c \u0442\u0430\u043a\u043e\u0439", 
-        "dba": false, 
-        "syntax": "textile", 
-        "content": "\u0441\u0430\u043c \u0442\u0430\u043a\u043e\u0439!", 
-        "addressee": 6, 
-        "dbs": false, 
-        "sent": "2013-04-27T06:16:00"
+        "is_read": true,
+        "sent": "2014-05-27T03:41:30.650",
+        "addressee": 1,
+        "dba": false,
+        "cache_content": "\t<p>\u0430 \u044f \u0445\u0437 \u0447\u0443\u0432\u0430\u043a \u0441\u043e\u0440\u0438</p>",
+        "title": "Re: \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
+        "syntax": null,
+        "sender": 2,
+        "content": "\u0430 \u044f \u0445\u0437 \u0447\u0443\u0432\u0430\u043a \u0441\u043e\u0440\u0438",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 3,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-04T03:47:14.559",
+        "addressee": 2,
+        "dba": false,
+        "cache_content": "\t<p>12312</p>",
+        "title": "Re: \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
+        "syntax": null,
+        "sender": 1,
+        "content": "12312",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 4,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-04T03:47:23.050",
+        "addressee": 1,
+        "dba": false,
+        "cache_content": "\t<p>\u041e\u043a</p>",
+        "title": "Re: \u0441\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435",
+        "syntax": null,
+        "sender": 2,
+        "content": "\u041e\u043a",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 5,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-08T02:06:37.114",
+        "addressee": 2,
+        "dba": false,
+        "cache_content": "\t<p>\u0424\u0438\u0433 \u0442\u0435\u0431\u0435!</p>",
+        "title": "\u0414\u0430\u0434\u0430",
+        "syntax": "textile",
+        "sender": 1,
+        "content": "\u0424\u0438\u0433 \u0442\u0435\u0431\u0435!",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 6,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-08T02:11:41.121",
+        "addressee": 1,
+        "dba": false,
+        "cache_content": "\t<p>\u0421\u0430\u043c \u0442\u0430\u043a\u043e\u0439, \u0431\u0435\u0431\u0435!</p>",
+        "title": "Re: \u0414\u0430\u0434\u0430",
+        "syntax": "textile",
+        "sender": 2,
+        "content": "\u0421\u0430\u043c \u0442\u0430\u043a\u043e\u0439, \u0431\u0435\u0431\u0435!",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 7,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-08T04:37:58.865",
+        "addressee": 2,
+        "dba": false,
+        "cache_content": "\t<p>\u0411\u043b\u0436\u0430\u0434!</p>",
+        "title": "Re: \u0414\u0430\u0434\u0430",
+        "syntax": "textile",
+        "sender": 1,
+        "content": "\u0411\u043b\u0436\u0430\u0434!",
+        "dbs": false
+    }
+},
+{
+    "model": "accounts.pm",
+    "pk": 8,
+    "fields": {
+        "is_read": true,
+        "sent": "2014-06-08T04:38:05.606",
+        "addressee": 2,
+        "dba": false,
+        "cache_content": "\t<p>2</p>",
+        "title": "1",
+        "syntax": "textile",
+        "sender": 1,
+        "content": "2",
+        "dbs": false
     }
 }
 ]
