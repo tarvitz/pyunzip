@@ -42,11 +42,22 @@ class Gallery(MetaGallery):
         verbose_name_plural = _('Galleries')
 
 
+def valid_alias(val):
+    if val.replace('_', '').isalnum():
+        return val
+    raise ValidationError("You should use only letters, digits and _")
+
+
 class Image(models.Model):
-    def valid_alias(val):
-        if val.replace('_', '').isalnum():
-            return val
-        raise ValidationError("You should use only letters, digits and _")
+    def upload_to(self, file_name):
+        """
+        image upload to hander
+
+        :param file_name: file's name
+        :rtype: str
+        :return: path upload to
+        """
+        return "images/galleries/%s/%s" % (str(self.owner.id), file_name)
 
     title = models.CharField(_('Title'), max_length=100)
     alias = models.CharField(
@@ -58,8 +69,7 @@ class Image(models.Model):
     comments = models.TextField(_('Comments'))
     gallery = models.ForeignKey(Gallery, verbose_name=_("gallery"))
     image = models.ImageField(
-        _('Image'), upload_to=lambda s, fn: "images/galleries/%s/%s" % (
-            str(s.owner.id), fn)
+        _('Image'), upload_to=upload_to,
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
     comment_objects = generic.GenericRelation(

@@ -12,6 +12,7 @@ from django.core import validators
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.utils import timezone
+from django.utils.encoding import force_text
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
@@ -116,13 +117,13 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     def get_full_name(self):
         if all([self.first_name, self.last_name]):
-            return unicode(
+            return force_text(
                 u'{first_name} {last_name}'.format(
                     first_name=self.first_name,
                     last_name=self.last_name
                 )
             )
-        return unicode(self.username)
+        return force_text(self.username)
 
     def get_short_name(self):
         if all([self.first_name, self.last_name]):
@@ -297,7 +298,7 @@ class PM(models.Model):
     )
     is_read = models.BooleanField(_('is read'), default=False)
     sent = models.DateTimeField(
-        _('sent'), auto_now=True, default=datetime.now
+        _('sent'), default=datetime.now
     )
     dbs = models.BooleanField(_('deleted by sendr'), default=False)
     dba = models.BooleanField(_('deleted by addr'), default=False)
@@ -359,7 +360,7 @@ class PolicyWarning(models.Model):
                                blank=True, null=True)
     level = models.PositiveIntegerField(_("level"), default=1,
                                         choices=POLICY_WARNING_LEVEL_CHOICES)
-    created_on = models.DateTimeField(_("created on"), auto_now_add=True,
+    created_on = models.DateTimeField(_("created on"),
                                       default=datetime.now)
     updated_on = models.DateTimeField(_("updated on"), default=datetime.now)
     date_expired = models.DateField(

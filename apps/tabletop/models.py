@@ -204,7 +204,7 @@ class Report(models.Model):
     title = models.CharField(_('title'), max_length=100)
     owner = models.ForeignKey(User, related_name='report_owner_set')
     created_on = models.DateTimeField(
-        _('created on'), auto_now=True, default=datetime.now
+        _('created on'), default=datetime.now
     )
     rosters = models.ManyToManyField(Roster, verbose_name=_('rosters'))
     winners = models.ManyToManyField(

@@ -227,7 +227,7 @@ class CommentWatch(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='comment_watch_user_set',
                              verbose_name=_("user"))
-    created_on = models.DateTimeField(_('created on'), auto_now=True,
+    created_on = models.DateTimeField(_('created on'),
                                       default=datetime.now)
     is_disabled = models.BooleanField(
         _("is disabled"), default=False,

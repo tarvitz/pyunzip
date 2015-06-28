@@ -368,7 +368,7 @@ class EventWatch(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='event_watch_user_set',
                              verbose_name=_("user"))
-    created_on = models.DateTimeField(_('created on'), auto_now=True,
+    created_on = models.DateTimeField(_('created on'),
                                       default=datetime.now)
 
     def __unicode__(self):
@@ -393,7 +393,7 @@ class Note(models.Model):
         ('default', _("default"))
     )
     created_on = models.DateTimeField(
-        _("created on"), auto_now=True,
+        _("created on"),
         help_text=_("date time when instance was created"),
         default=datetime.now
     )
@@ -422,5 +422,5 @@ class Note(models.Model):
                             self.content[:100])
 
 
-from signals import setup_signals
+from .signals import setup_signals
 setup_signals()

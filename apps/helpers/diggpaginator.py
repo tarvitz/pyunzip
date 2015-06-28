@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 import math
+from functools import reduce
 from django.core.paginator import \
     Paginator, QuerySetPaginator, Page, InvalidPage
 
@@ -8,6 +10,7 @@ __all__ = (
     'DiggPaginator',
     'QuerySetDiggPaginator',
 )
+
 
 class ExPaginator(Paginator):
     """Adds a ``softlimit`` option to ``page()``. If True, querying a
@@ -21,16 +24,16 @@ class ExPaginator(Paginator):
 
     >>> items = range(1, 1000)
     >>> paginator = ExPaginator(items, 10)
-    >>> paginator.page(1000)
+    >>> paginator.page(1000)  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
-    InvalidPage: That page contains no results
+    django.core.paginator.EmptyPage: That page contains no results
     >>> paginator.page(1000, softlimit=True)
     <Page 100 of 100>
 
     # [bug] graceful handling of non-int args
-    >>> paginator.page("str")
+    >>> paginator.page("str")  # doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
-    InvalidPage: That page number is not an integer
+    django.core.paginator.PageNotAnInteger: That page number is not an integer
     """
     def _ensure_int(self, num, e):
         # see Django #7307
@@ -42,12 +45,13 @@ class ExPaginator(Paginator):
     def page(self, number, softlimit=False):
         try:
             return super(ExPaginator, self).page(number)
-        except InvalidPage, e:
+        except InvalidPage as e:
             number = self._ensure_int(number, e)
             if number > self.num_pages and softlimit:
                 return self.page(self.num_pages, softlimit=False)
             else:
                 raise e
+
 
 class DiggPaginator(ExPaginator):
     """
@@ -98,67 +102,81 @@ class DiggPaginator(ExPaginator):
     exact number of items/pages is not actually known.
 
     # odd body length
-    >>> print DiggPaginator(range(1,1000), 10, body=5).page(1)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5).page(1))
     1 2 3 4 5 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5).page(100)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5).page(100))
     1 2 ... 96 97 98 99 100
 
     # even body length
-    >>> print DiggPaginator(range(1,1000), 10, body=6).page(1)
+    >>> print(DiggPaginator(range(1,1000), 10, body=6).page(1))
     1 2 3 4 5 6 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=6).page(100)
+    >>> print(DiggPaginator(range(1,1000), 10, body=6).page(100))
     1 2 ... 95 96 97 98 99 100
 
     # leading range and main range are combined when close; note how
     # we have varying body and padding values, and their effect.
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=2, margin=2).page(3)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=2,
+    ...                     margin=2).page(3))
     1 2 3 4 5 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=6, padding=2, margin=2).page(4)
+    >>> print(DiggPaginator(range(1,1000), 10, body=6, padding=2,
+    ...                     margin=2).page(4))
     1 2 3 4 5 6 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=1, margin=2).page(6)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=1,
+    ...                     margin=2).page(6))
     1 2 3 4 5 6 7 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=2, margin=2).page(7)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=2,
+    ...                     margin=2).page(7))
     1 2 ... 5 6 7 8 9 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=1, margin=2).page(7)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=1,
+    ...                     margin=2).page(7))
     1 2 ... 5 6 7 8 9 ... 99 100
 
     # the trailing range works the same
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=2, margin=2, ).page(98)
+    >>> print (DiggPaginator(range(1,1000), 10, body=5, padding=2,
+    ...                      margin=2,).page(98))
     1 2 ... 96 97 98 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=6, padding=2, margin=2, ).page(97)
+    >>> print(DiggPaginator(range(1,1000), 10, body=6, padding=2,
+    ...                     margin=2,).page(97))
     1 2 ... 95 96 97 98 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=1, margin=2, ).page(95)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=1,
+    ...                     margin=2,).page(95))
     1 2 ... 94 95 96 97 98 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=2, margin=2, ).page(94)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=2,
+    ...                     margin=2,).page(94))
     1 2 ... 92 93 94 95 96 ... 99 100
-    >>> print DiggPaginator(range(1,1000), 10, body=5, padding=1, margin=2, ).page(94)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5, padding=1,
+    ...                     margin=2,).page(94))
     1 2 ... 92 93 94 95 96 ... 99 100
 
     # all three ranges may be combined as well
-    >>> print DiggPaginator(range(1,151), 10, body=6, padding=2).page(7)
+    >>> print(DiggPaginator(range(1,151), 10, body=6, padding=2).page(7))
     1 2 3 4 5 6 7 8 9 ... 14 15
-    >>> print DiggPaginator(range(1,151), 10, body=6, padding=2).page(8)
+    >>> print(DiggPaginator(range(1,151), 10, body=6, padding=2).page(8))
     1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-    >>> print DiggPaginator(range(1,151), 10, body=6, padding=1).page(8)
+    >>> print(DiggPaginator(range(1,151), 10, body=6, padding=1).page(8))
     1 2 3 4 5 6 7 8 9 ... 14 15
 
     # no leading or trailing ranges might be required if there are only
     # a very small number of pages
-    >>> print DiggPaginator(range(1,80), 10, body=10).page(1)
+    >>> print(DiggPaginator(range(1,80), 10, body=10).page(1))
     1 2 3 4 5 6 7 8
-    >>> print DiggPaginator(range(1,80), 10, body=10).page(8)
+    >>> print(DiggPaginator(range(1,80), 10, body=10).page(8))
     1 2 3 4 5 6 7 8
-    >>> print DiggPaginator(range(1,12), 10, body=5).page(1)
+    >>> print(DiggPaginator(range(1,12), 10, body=5).page(1))
     1 2
 
     # test left align mode
-    >>> print DiggPaginator(range(1,1000), 10, body=5, align_left=True).page(1)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5,
+    ...                     align_left=True).page(1))
     1 2 3 4 5
-    >>> print DiggPaginator(range(1,1000), 10, body=5, align_left=True).page(50)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5,
+    ...       align_left=True).page(50))
     1 2 ... 48 49 50 51 52
-    >>> print DiggPaginator(range(1,1000), 10, body=5, align_left=True).page(97)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5,
+    ...                     align_left=True).page(97))
     1 2 ... 95 96 97 98 99
-    >>> print DiggPaginator(range(1,1000), 10, body=5, align_left=True).page(100)
+    >>> print(DiggPaginator(range(1,1000), 10, body=5,
+    ...                     align_left=True).page(100))
     1 2 ... 96 97 98 99 100
 
     # padding: default value
@@ -180,12 +198,15 @@ class DiggPaginator(ExPaginator):
         self.body = kwargs.pop('body', 10)
         self.tail = kwargs.pop('tail', 2)
         self.align_left = kwargs.pop('align_left', False)
-        self.margin = kwargs.pop('margin', 4)  # TODO: make the default relative to body?
+        # TODO: make the default relative to body?
+        self.margin = kwargs.pop('margin', 4)
         # validate padding value
-        max_padding = int(math.ceil(self.body/2.0)-1)
+        max_padding = int(math.ceil(self.body / 2.0) - 1)
         self.padding = kwargs.pop('padding', min(4, max_padding))
         if self.padding > max_padding:
-            raise ValueError('padding too large for body (max %d)'%max_padding)
+            raise ValueError(
+                'padding too large for body (max %d)' % max_padding
+            )
         super(DiggPaginator, self).__init__(*args, **kwargs)
 
     def page(self, number, *args, **kwargs):
@@ -194,21 +215,28 @@ class DiggPaginator(ExPaginator):
         """
 
         page = super(DiggPaginator, self).page(number, *args, **kwargs)
-        number = int(number) # we know this will work
+        number = int(number)  # we know this will work
 
         # easier access
         num_pages, body, tail, padding, margin = \
             self.num_pages, self.body, self.tail, self.padding, self.margin
 
         # put active page in middle of main range
-        main_range = map(int, [
-            math.floor(number-body/2.0)+1,  # +1 = shift odd body to right
-            math.floor(number+body/2.0)])
+        main_range = [
+            # +1 = shift odd body to right
+            int(math.floor(number - body / 2.0) + 1),
+            int(math.floor(number + body / 2.0))
+        ]
+
         # adjust bounds
         if main_range[0] < 1:
-            main_range = map(abs(main_range[0]-1).__add__, main_range)
+            main_range = [
+                x for x in map(abs(main_range[0] - 1).__add__, main_range)
+            ]
         if main_range[1] > num_pages:
-            main_range = map((num_pages-main_range[1]).__add__, main_range)
+            main_range = [
+                x for x in map((num_pages - main_range[1]).__add__, main_range)
+            ]
 
         # Determine leading and trailing ranges; if possible and appropriate,
         # combine them with the main range, in which case the resulting main
@@ -225,17 +253,17 @@ class DiggPaginator(ExPaginator):
         #     1 2 3 [4] 5 ... 99 100
         # If it were not for this adjustment, both cases would result in the
         # first output, regardless of the padding value.
-        if main_range[0] <= tail+margin:
+        if main_range[0] <= tail + margin:
             leading = []
-            main_range = [1, max(body, min(number+padding, main_range[1]))]
+            main_range = [1, max(body, min(number + padding, main_range[1]))]
             main_range[0] = 1
         else:
-            leading = range(1, tail+1)
+            leading = range(1, tail + 1)
         # basically same for trailing range, but not in ``left_align`` mode
         if self.align_left:
             trailing = []
         else:
-            if main_range[1] >= num_pages-(tail+margin)+1:
+            if main_range[1] >= num_pages - (tail + margin) + 1:
                 trailing = []
                 if not leading:
                     # ... but handle the special case of neither leading nor
@@ -244,9 +272,13 @@ class DiggPaginator(ExPaginator):
                     # section, again.
                     main_range = [1, num_pages]
                 else:
-                    main_range = [min(num_pages-body+1, max(number-padding, main_range[0])), num_pages]
+                    main_range = [
+                        min(num_pages - body + 1, max(number - padding,
+                                                      main_range[0])),
+                        num_pages
+                    ]
             else:
-                trailing = range(num_pages-tail+1, num_pages+1)
+                trailing = range(num_pages - tail + 1, num_pages + 1)
 
         # finally, normalize values that are out of bound; this basically
         # fixes all the things the above code screwed up in the simple case
@@ -255,14 +287,18 @@ class DiggPaginator(ExPaginator):
 
         # make the result of our calculations available as custom ranges
         # on the ``Page`` instance.
-        page.main_range = range(main_range[0], main_range[1]+1)
+        page.main_range = range(main_range[0], main_range[1] + 1)
         page.leading_range = leading
         page.trailing_range = trailing
-        page.page_range = reduce(lambda x, y: x+((x and y) and [False])+y,
-            [page.leading_range, page.main_range, page.trailing_range])
+        page.page_range = reduce(
+            lambda x, y: x + ((x and y) and [False]) + y,
+            [list(page.leading_range), list(page.main_range),
+             list(page.trailing_range)]
+        )
 
         page.__class__ = DiggPage
         return page
+
 
 class DiggPage(Page):
     def __str__(self):
@@ -270,6 +306,7 @@ class DiggPage(Page):
                             " ".join(map(str, self.leading_range)),
                             " ".join(map(str, self.main_range)),
                             " ".join(map(str, self.trailing_range))]))
+
 
 class QuerySetDiggPaginator(DiggPaginator, QuerySetPaginator):
     pass

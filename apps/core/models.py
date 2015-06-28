@@ -22,10 +22,9 @@ class UserSID(models.Model):
     )
     created_on = models.DateTimeField(
         _("created on"), default=datetime.now,
-        auto_now=True
     )
     updated_on = models.DateTimeField(
-        _('updated on'), default=datetime.now,
+        _('updated on'),
         auto_now_add=True
     )
     objects = UserSIDManager()

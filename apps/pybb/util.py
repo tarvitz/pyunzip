@@ -1,11 +1,12 @@
+import six
 import traceback
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponse
 from django.utils.functional import Promise
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from simplejson import JSONEncoder
 from django.template.defaultfilters import urlize as django_urlize
 
@@ -89,7 +90,7 @@ def ajax(func):
         if request.method == 'POST':
             try:
                 response = func(request, *args, **kwargs)
-            except Exception, ex:
+            except Exception as ex:
                 response = {'error': traceback.format_exc()}
         else:
             response = {'error': {'type': 403, 'message': 'Accepts only POST request'}}
@@ -107,7 +108,7 @@ class LazyJSONEncoder(JSONEncoder):
 
     def default(self, o):
         if isinstance(o, Promise):
-            return force_unicode(o)
+            return force_text(o)
         else:
             return super(LazyJSONEncoder, self).default(o)
 
@@ -155,9 +156,11 @@ def urlize(data):
                 ptr = ptr.parent
 
             if not islink:
-                chunk = chunk.replaceWith(django_urlize(unicode(chunk)))
+                chunk = chunk.replaceWith(django_urlize(
+                    six.string_types(chunk))
+                )
 
-        return unicode(soup)
+        return six.string_types(soup)
 
 
 def quote_text(text, markup):

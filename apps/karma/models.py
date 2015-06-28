@@ -11,8 +11,7 @@ from datetime import datetime
 class Karma(models.Model):
     comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
-    date = models.DateTimeField(_('Date'), default=datetime.now,
-                                auto_now_add=True)
+    date = models.DateTimeField(_('Date'), default=datetime.now)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='karma_user_set',
                              verbose_name=_("user"))

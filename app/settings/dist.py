@@ -1,16 +1,7 @@
 # coding: utf-8
 # Django settings for WarMist project.
 import os
-from settings_path import rel_path
-
-try:
-    import psycopg2
-except ImportError:
-    try:
-        from psycopg2ct import compat
-        compat.register()
-    except ImportError:
-        pass
+from .settings_path import rel_path
 
 DEBUG = False
 ADMINS = (

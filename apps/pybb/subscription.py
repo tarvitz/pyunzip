@@ -1,14 +1,10 @@
 from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext as _
-
-from apps.pybb import settings as pybb_settings
 from apps.pybb.util import absolute_url
 
-# i18n features disabled. See ticket #47
-
-TOPIC_SUBSCRIPTION_TEXT_TEMPLATE = (u"""New reply from %(username)s to topic that you have subscribed on.
+TOPIC_SUBSCRIPTION_TEXT_TEMPLATE = (
+    u"""New reply from %(username)s to topic that you have subscribed on.
 ---
 %(message)s
 ---
@@ -32,19 +28,11 @@ def send_mail(rec_list, subject, text, html=None):
     msg = EmailMultiAlternatives(subject, text, from_email, rec_list)
     if html:
         msg.attach_alternative(html, "text/html")
-    if pybb_settings.EMAIL_DEBUG:
-        print '---begin---'
-        print 'To:', rec_list
-        print 'Subject:', subject
-        print 'Body:', text
-        print '---end---'
     else:
         msg.send(fail_silently=True)
 
 
 def notify_topic_subscribers(post):
-    from apps.pybb.models import Post
-
     topic = post.topic
     if post != topic.head:
         for user in topic.subscribers.all():
@@ -57,14 +45,11 @@ def notify_topic_subscribers(post):
                     'post_url': absolute_url(post.get_absolute_url()),
                     'unsubscribe_url': absolute_url(reverse('pybb:subscription-delete', args=[post.topic.id])),
                 }
-                #html_content = html_version(post)
                 send_mail([to_email], subject, text_content)
 
 
 def notify_pm_recipients(pm):
     if not pm.read:
-        from apps.pybb.models import PrivateMessage
-
         subject = (u'New private message for you')
         to_email = pm.dst_user.email
         text_content = PM_RECIPIENT_TEXT_TEMPLATE % {
