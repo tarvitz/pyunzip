@@ -86,7 +86,8 @@ class Image(models.Model):
         verbose_name_plural = _('Images')
         ordering = ['-id', ]
         
-    get_title = lambda self: self.title
+    def get_title(self):
+        return self.title
 
     def get_absolute_url(self):
         return reverse('files:image', args=(self.pk, ))
@@ -102,11 +103,22 @@ class Image(models.Model):
 
 
 class UserFile(models.Model):
+    def file_upload_to(self, file_name):
+        """
+        file upload handler
+
+        :param str file_name: file name
+        :rtype: str
+        :return: path destination
+        """
+        return "user/%s/files/%s" % (
+            str(self.owner.id), file_name
+        )
+
     title = models.CharField(_('title'), max_length=256, blank=True,
                              null=True)
     file = models.FileField(
-        _('file'), upload_to=lambda s, fn: "user/%s/files/%s" % (
-            str(s.owner.id), fn)
+        _('file'), upload_to=file_upload_to
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name='user_file_set')

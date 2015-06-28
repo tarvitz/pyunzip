@@ -245,13 +245,9 @@ INSTALLED_APPS = (
     'django_cron',
 )
 
-SOUTH_MIGRATION_MODULES = {
-    'comments': 'apps.comments.migrations',
-}
 
-AUTH_USER_MODEL = (
-    'accounts.User' if 'apps.accounts' in INSTALLED_APPS else 'auth.User'
-)
+AUTH_USER_MODEL = 'accounts.User'
+
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'apps.accounts.backends.EmailAuthBackend',

@@ -3,8 +3,10 @@ import re
 import os
 
 from django.db import models
+from django.contrib import auth
 from django.contrib.auth.models import (
-    AbstractBaseUser, UserManager, PermissionsMixin)
+    AbstractBaseUser, UserManager, Permission, Group,
+    _user_has_module_perms, _user_get_all_permissions, _user_has_perm)
 
 from picklefield import PickledObjectField
 from django.db.models import Sum
@@ -40,7 +42,17 @@ TZ_CHOICES = [
 )]
 
 
-class User(PermissionsMixin, AbstractBaseUser):
+class User(AbstractBaseUser):
+    def avatar_upload_to(self, file_name):
+        """
+        upload to avatar
+
+        :param str file_name: file name
+        :rtype: str
+        :return: destination path
+        """
+        return 'avatars/%i_%s' % (self.pk, file_name)
+
     username = models.CharField(
         _('username'), max_length=40, unique=True,
         help_text=_('Required. 38 characters or fewer. Letters, numbers and '
@@ -62,6 +74,22 @@ class User(PermissionsMixin, AbstractBaseUser):
                     'active. Unselect this instead of deleting accounts.')
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
+    #: permission mixin
+    is_superuser = models.BooleanField(
+        _('superuser status'), default=False,
+        help_text=_('Designates that this user has all permissions without '
+                    'explicitly assigning them.'))
+    groups = models.ManyToManyField(
+        Group, verbose_name=_('groups'),
+        blank=True, help_text=_('The groups this user belongs to. A user will '
+                                'get all permissions granted to each of '
+                                'their groups.'),
+        related_name="user_group_set", related_query_name="user")
+    user_permissions = models.ManyToManyField(
+        Permission,
+        verbose_name=_('user permissions'), blank=True,
+        help_text=_('Specific permissions for this user.'),
+        related_name="user_permission_set", related_query_name="user")
 
     # additional fields
     nickname = models.CharField(
@@ -69,9 +97,7 @@ class User(PermissionsMixin, AbstractBaseUser):
         blank=True
     )
     avatar = models.ImageField(
-        _('Avatar'), upload_to=(
-            lambda x, fn: 'avatars/%i_%s' % (x.pk, fn)
-        ),
+        _('Avatar'), upload_to=avatar_upload_to,
         blank=True, null=True
     )
     plain_avatar = models.ImageField(
@@ -114,6 +140,59 @@ class User(PermissionsMixin, AbstractBaseUser):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email', ]
+
+    def get_group_permissions(self, obj=None):
+        """
+        Returns a list of permission strings that this user has through their
+        groups. This method queries all available auth backends. If an object
+        is passed in, only permissions matching this object are returned.
+        """
+        permissions = set()
+        for backend in auth.get_backends():
+            if hasattr(backend, "get_group_permissions"):
+                permissions.update(backend.get_group_permissions(self, obj))
+        return permissions
+
+    def get_all_permissions(self, obj=None):
+        return _user_get_all_permissions(self, obj)
+
+    def has_perm(self, perm, obj=None):
+        """
+        Returns True if the user has the specified permission. This method
+        queries all available auth backends, but returns immediately if any
+        backend returns True. Thus, a user who has permission from a single
+        auth backend is assumed to have permission in general. If an object is
+        provided, permissions for this specific object are checked.
+        """
+
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        return _user_has_perm(self, perm, obj)
+
+    def has_perms(self, perm_list, obj=None):
+        """
+        Returns True if the user has each of the specified permissions. If
+        object is passed, it checks if the user has all required perms for this
+        object.
+        """
+        for perm in perm_list:
+            if not self.has_perm(perm, obj):
+                return False
+        return True
+
+    def has_module_perms(self, app_label):
+        """
+        Returns True if the user has any permissions in the given app label.
+        Uses pretty much the same logic as has_perm, above.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        return _user_has_module_perms(self, app_label)
 
     def get_full_name(self):
         if all([self.first_name, self.last_name]):

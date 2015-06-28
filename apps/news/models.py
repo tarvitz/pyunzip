@@ -151,8 +151,11 @@ class AbstractNews(models.Model):
         out = post_markup_filter(getattr(self, field))
         return render_filter(out, self.syntax)
 
-    render_content = lambda self: self.render('content')
-    render_head_content = lambda self: self.render('head_content')
+    def render_content(self):
+        return self.render('content')
+
+    def render_head_content(self):
+        return self.render('head_content')
 
     class Meta:
         abstract = True
@@ -163,16 +166,12 @@ class ArchivedNews(AbstractNews):
         verbose_name = _('Archived Article')
         verbose_name_plural = _('Archived News')
         ordering = ['-id']
-
-    def get_absolute_url(self):
-        return reverse('news:article-archived', kwargs={'id': self.id})
-
-    class Meta:
         permissions = (
             ('edit_archived_news', _('Can edit archived news')),
         )
-        verbose_name = _('Archived news')
-        verbose_name_plural = _('Archived news')
+
+    def get_absolute_url(self):
+        return reverse('news:article-archived', kwargs={'id': self.id})
 
 
 class News(AbstractNews):
@@ -385,6 +384,16 @@ class Note(models.Model):
     Some note that should be shown as urgent information in the top of the
     site view or something like that
     """
+
+    def note_expired_on(self):
+        """
+        note expired on default datetime offset
+
+        :rtype: datetime
+        :return: offset
+        """
+        return datetime.now() + timedelta(days=14)
+
     TYPE_CHOICES = (
         ('success', _("success")),
         ('info', _("info")),
@@ -400,7 +409,7 @@ class Note(models.Model):
     expired_on = models.DateTimeField(
         _("expired on"),
         help_text=_("date when note is expired"),
-        default=lambda: (datetime.now() + timedelta(days=14))
+        default=note_expired_on
     )
     content = models.TextField(
         _("content"), help_text=_("content")
