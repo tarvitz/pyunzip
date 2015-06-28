@@ -1,14 +1,11 @@
 from datetime import datetime
 
 from django.db import models
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from apps.accounts.models import User
 from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned

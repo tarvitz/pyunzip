@@ -1,18 +1,8 @@
 from django.db.models.signals import post_save
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-
-from apps.pybb.gravatar import check_gravatar
 from apps.pybb.subscription import (
     notify_topic_subscribers, notify_pm_recipients)
 from apps.pybb.models import Post
 
-
-#def user_saved(instance, **kwargs):
-#    check_gravatar(instance)
 
 def post_saved(instance, **kwargs):
     notify_topic_subscribers(instance)
@@ -22,5 +12,4 @@ def pm_saved(instance, **kwargs):
 
 
 def setup_signals():
-    #post_save.connect(user_saved, sender=User)
     post_save.connect(post_saved, sender=Post)

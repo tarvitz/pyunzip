@@ -1,14 +1,9 @@
+from apps.accounts.models import User
 from django.db.models.signals import (
-    pre_save, post_save, pre_delete
+    post_save, pre_delete
 )
 
 from apps.wh.models import RankType
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
-from django.contrib.comments.models import Comment
 from django.core.cache import cache
 from django.dispatch import receiver
 

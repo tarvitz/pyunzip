@@ -6,16 +6,13 @@ from django.utils.translation import (
     pgettext
 )
 from django.core.urlresolvers import reverse
-
-from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 
 from apps.core.helpers import render_filter, post_markup_filter
+from apps.accounts.models import User
 from django.contrib.contenttypes import generic
 from datetime import datetime
 

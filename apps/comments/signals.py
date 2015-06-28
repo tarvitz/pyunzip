@@ -3,7 +3,7 @@
 from django.db.models.signals import (
     pre_save,
 )
-from django.contrib.comments.models import Comment
+from .models import Comment
 from django.dispatch import receiver
 
 

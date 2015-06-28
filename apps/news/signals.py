@@ -1,8 +1,6 @@
 from django.db.models.signals import (
     pre_save, post_save, pre_delete
 )
-from django.contrib.auth import get_user_model
-User = get_user_model()
 from django.utils.translation import ugettext_lazy as _
 from apps.news.models import News, Event
 from django.core.mail import send_mail

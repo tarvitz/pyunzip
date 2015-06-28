@@ -230,7 +230,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'django.contrib.comments',
     'apps.accounts',
     'apps.core',
     'apps.comments',
@@ -254,7 +253,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'gunicorn',
     'django_cron',
-    'django_select2',
 )
 
 SOUTH_MIGRATION_MODULES = {
