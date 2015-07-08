@@ -12,11 +12,12 @@ from apps.core.views import LoginRequiredMixin
 
 from apps.comments.forms import CommentForm
 from apps.core.helpers import get_content_type
+from apps.comments.models import Comment
+
 from django.core.paginator import InvalidPage, EmptyPage
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect
-from django.contrib.comments.models import Comment
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views import generic
 from django.core.exceptions import PermissionDenied

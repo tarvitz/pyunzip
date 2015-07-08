@@ -1,0 +1,12 @@
+{% extends base_template %}
+{% load i18n %}
+{% block content %}
+  <ul class="breadcrumb">
+    <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
+    <li class="active">{% trans "Comment" %}: {{ object }}</li>
+  </ul>
+  <h3>{% trans "Comment" %}</h3>
+
+  {% include "generic/comment.html" with comment=object %}
+
+{% endblock %}

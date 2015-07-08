@@ -1,14 +1,14 @@
+from ..models import Comment, CommentWatch
+from ..forms import (CommentForm, SubscriptionRemoveForm,
+                     CommentWatchSubscribeForm)
+
 from django.shortcuts import redirect
 from django.views import generic
 
-from apps.comments.forms import CommentForm, SubscriptionRemoveForm
-from apps.comments.models import CommentWatch
-from apps.comments.forms import CommentWatchSubscribeForm
 from apps.core.helpers import get_object_or_404, get_object_or_None
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.comments.models import Comment
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.conf import settings
 # Create your views here.
@@ -170,3 +170,8 @@ class CommentWatchListView(generic.ListView):
         qs = super(CommentWatchListView, self).get_queryset()
         return qs.filter(user=self.request.user,
                          is_disabled=False, is_updated=True)
+
+
+class CommentDetailView(generic.DetailView):
+    model = Comment
+    template_name = 'comments/comment_detail.html'

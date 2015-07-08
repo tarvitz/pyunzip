@@ -1,12 +1,11 @@
 # coding: utf-8
 from apps.comments.models import CommentWatch
+from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.sites.models import Site
 
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.contrib.comments.models import Comment
 
 
 class CommentWatchSubscribeForm(forms.ModelForm):

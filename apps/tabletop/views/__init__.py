@@ -1,2 +1,2 @@
-from views import *
-from json import *
+from .views import *
+from .json import *

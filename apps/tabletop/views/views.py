@@ -1,4 +1,5 @@
 # coding: utf-8
+from apps.comments.models import Comment
 from apps.tabletop.models import (
     Roster, Report, Codex
 )
@@ -34,7 +35,6 @@ from apps.core.decorators import (
 from apps.core.views import (OwnerModelOrAdminAccessMixin, )
 
 from django.views.decorators.csrf import csrf_protect
-from django.contrib.comments.models import Comment
 from django.views import generic
 
 import simplejson as json

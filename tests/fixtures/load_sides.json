@@ -1,98 +1,98 @@
 [
 {
-    "pk": 1, 
-    "model": "wh.side", 
+    "pk": 1,
+    "model": "wh.side",
     "fields": {
-        "name": "Space Marines", 
-        "fraction": 1
+        "fraction": 1,
+        "name": "Space Marines"
     }
 },
 {
-    "pk": 2, 
-    "model": "wh.side", 
+    "pk": 2,
+    "model": "wh.side",
     "fields": {
-        "name": "Chaos Space Marines", 
-        "fraction": 5
+        "fraction": 5,
+        "name": "Chaos Space Marines"
     }
 },
 {
-    "pk": 3, 
-    "model": "wh.side", 
+    "pk": 3,
+    "model": "wh.side",
     "fields": {
-        "name": "Imperial Guard", 
-        "fraction": 1
+        "fraction": 1,
+        "name": "Imperial Guard"
     }
 },
 {
-    "pk": 4, 
-    "model": "wh.side", 
+    "pk": 4,
+    "model": "wh.side",
     "fields": {
-        "name": "Eldar", 
-        "fraction": 2
+        "fraction": 2,
+        "name": "Eldar"
     }
 },
 {
-    "pk": 5, 
-    "model": "wh.side", 
+    "pk": 5,
+    "model": "wh.side",
     "fields": {
-        "name": "Dark Eldar", 
-        "fraction": 4
+        "fraction": 4,
+        "name": "Dark Eldar"
     }
 },
 {
-    "pk": 6, 
-    "model": "wh.side", 
+    "pk": 6,
+    "model": "wh.side",
     "fields": {
-        "name": "Tau", 
-        "fraction": 3
+        "fraction": 3,
+        "name": "Tau"
     }
 },
 {
-    "pk": 7, 
-    "model": "wh.side", 
+    "pk": 7,
+    "model": "wh.side",
     "fields": {
-        "name": "Necrons", 
-        "fraction": 7
+        "fraction": 7,
+        "name": "Necrons"
     }
 },
 {
-    "pk": 8, 
-    "model": "wh.side", 
+    "pk": 8,
+    "model": "wh.side",
     "fields": {
-        "name": "Tyranids", 
-        "fraction": 7
+        "fraction": 7,
+        "name": "Tyranids"
     }
 },
 {
-    "pk": 9, 
-    "model": "wh.side", 
+    "pk": 9,
+    "model": "wh.side",
     "fields": {
-        "name": "None", 
-        "fraction": 7
+        "fraction": 7,
+        "name": "None"
     }
 },
 {
-    "pk": 10, 
-    "model": "wh.side", 
+    "pk": 10,
+    "model": "wh.side",
     "fields": {
-        "name": "Witch Hunters", 
-        "fraction": 1
+        "fraction": 1,
+        "name": "Witch Hunters"
     }
 },
 {
-    "pk": 12, 
-    "model": "wh.side", 
+    "pk": 12,
+    "model": "wh.side",
     "fields": {
-        "name": "Space Orks", 
-        "fraction": 6
+        "fraction": 6,
+        "name": "Space Orks"
     }
 },
 {
-    "pk": 13, 
-    "model": "wh.side", 
+    "pk": 13,
+    "model": "wh.side",
     "fields": {
-        "name": "Daemon Hunters", 
-        "fraction": 1
+        "fraction": 1,
+        "name": "Daemon Hunters"
     }
 }
 ]

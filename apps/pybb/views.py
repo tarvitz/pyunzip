@@ -1,5 +1,5 @@
-from datetime import timedelta, datetime
 import math
+from datetime import timedelta, datetime
 
 from django.forms.models import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect
@@ -72,12 +72,13 @@ def index_ctx(request):
         cat['forums'].append(forum)
         forums[forum.id] = forum
 
-    cmpdef = lambda a, b: cmp(a['cat'].position, b['cat'].position)
-    cats = sorted(cats.values(), cmpdef)
+    # cmpdef = lambda a, b: cmp(a['cat'].position, b['cat'].position)
+    # cats = sorted(cats.values(), cmpdef)
 
-    return {'cats': cats,
-            'quick': quick,
-            }
+    return {
+        'cats': cats,
+        'quick': quick,
+    }
 index = render_to('pybb/index.html')(index_ctx)
 
 

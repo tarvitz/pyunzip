@@ -173,7 +173,9 @@ class Comment(BaseCommentAbstractModel):
                    doc="The URL given by the user who posted this comment")
 
     def get_absolute_url(self, anchor_pattern="#c%(id)s"):
-        return self.get_content_object_url() + (anchor_pattern % self.__dict__)
+        # return self.get_content_object_url() +
+        # (anchor_pattern % self.__dict__)
+        return reverse('comments:comment-detail', kwargs={'pk': self.pk})
 
     def get_as_text(self):
         """

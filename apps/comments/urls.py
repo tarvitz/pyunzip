@@ -4,6 +4,8 @@ from apps.comments import views
 
 urlpatterns = patterns(
     '',
+    url(r'^comments/(?P<pk>\d+)/$', views.CommentDetailView.as_view(),
+        name='comment-detail'),
     url(r'^comments/add/$', login_required(views.CommentCreateView.as_view()),
         name='comment-add'),
     url(r'^comments/(?P<pk>\d+)/update/$',

@@ -1,7 +1,6 @@
 from django.conf.urls import *
 from django.contrib.auth.decorators import login_required
 
-from apps.core.shortcuts import direct_to_template
 from apps.files import views
 
 urlpatterns = patterns(

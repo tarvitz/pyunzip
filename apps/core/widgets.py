@@ -12,7 +12,7 @@ from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 from django.utils import datetime_safe, formats
 from django.utils.html import escape, conditional_escape
-from django.utils.encoding import force_unicode
+from django.utils.encoding import force_text
 from itertools import chain
 
 
@@ -29,7 +29,7 @@ class TinyMkWidget(Widget):
         tinymk_template = get_template('core/widgets/tinymk_widget.html')
         out = tinymk_template.render(Context({'tinymk':final_attrs}))
         out = out+mark_safe(u'<textarea%s>%s</textarea>' % (flatatt(final_attrs),
-            conditional_escape(force_unicode(value))))
+            conditional_escape(force_text(value))))
         return out
 
 
@@ -183,7 +183,7 @@ class DaySelect(CheckboxSelectMultiple):
         final_attrs = self.build_attrs(attrs, name=name)
         output = [u'<ul>']
         # Normalize to strings
-        str_values = set([force_unicode(v) for v in value])
+        str_values = set([force_text(v) for v in value])
         out = []
         for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
             # If an ID attribute was given, add a numeric index as a suffix,
@@ -195,9 +195,9 @@ class DaySelect(CheckboxSelectMultiple):
                 label_for = ''
 
             cb = CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
-            option_value = force_unicode(option_value)
+            option_value = force_text(option_value)
             rendered_cb = cb.render(name, option_value)
-            option_label = conditional_escape(force_unicode(option_label))
+            option_label = conditional_escape(force_text(option_label))
             out.append({
                 'label': label_for, 'rendered': rendered_cb,
                 'option_label': option_label

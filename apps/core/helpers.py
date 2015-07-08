@@ -2,7 +2,7 @@
 
 import six
 
-from functools import wraps
+from functools import wraps, reduce
 from datetime import datetime, date, time
 from functools import partial
 
@@ -158,7 +158,7 @@ def get_content_type(object_source):
     """
     app_label, model = (None, None)
     if callable(object_source):  # class
-        model = object_source._meta.module_name
+        model = object_source._meta.model_name
         app_label = object_source._meta.app_label
 
     elif hasattr(object_source, 'pk'):  # class instance
@@ -168,7 +168,7 @@ def get_content_type(object_source):
             app_label = object_source._current_object._meta.app_label
         else:
             app_label = object_source._meta.app_label
-            model = object_source._meta.module_name
+            model = object_source._meta.model_name
     elif isinstance(object_source, basestring):
         app_label, model = object_source.split('.')
     ct = ContentType.objects.get(app_label=app_label, model=model)
@@ -267,7 +267,7 @@ def model_json_encoder(obj, **kwargs):
             _form.update({'errors': obj.errors})
         return _form
     elif isinstance(obj, Promise):
-        return unicode(obj)
+        return six.text_type(obj)
     return obj
 
 

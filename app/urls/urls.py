@@ -8,7 +8,6 @@ urlpatterns = patterns(
     '',
     url(r'^grappelli/', include('grappelli.urls')),
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    (r'^comments/', include('django.contrib.comments.urls')),
     # Uncomment the next line to enable the admin:
     (r'^admin/', admin.site.urls),
     (r'^json/', include('apps.jsonapp.urls', namespace='json')),

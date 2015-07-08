@@ -51,7 +51,7 @@ class GetObjectContentTypeNode(Node):
             'content_type': get_content_type_or_None(var),
             'id': var.pk,
             'app': meta.app_label,
-            'model': meta.module_name,
+            'model': meta.model_name,
         }
 
         if self.varname:

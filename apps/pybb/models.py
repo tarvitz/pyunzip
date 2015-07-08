@@ -1,3 +1,4 @@
+import six
 from datetime import datetime
 
 from django.db import models
@@ -26,6 +27,9 @@ class Category(models.Model):
         ordering = ['position']
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
+
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
@@ -112,6 +116,9 @@ class Topic(models.Model):
         ordering = ['-created']
         verbose_name = _('Topic')
         verbose_name_plural = _('Topics')
+
+    def __str__(self):
+        return self.name
 
     def __unicode__(self):
         return self.name
@@ -273,9 +280,13 @@ class Read(models.Model):
             self.time = datetime.now()
         super(Read, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return 'T[%d], U[%d]: %s' % (self.topic.id, self.user.id,
+                                     six.text_type(self.time))
+
     def __unicode__(self):
         return u'T[%d], U[%d]: %s' % (self.topic.id, self.user.id,
-                                      unicode(self.time))
+                                      six.text_type(self.time))
 
 
 class Poll(models.Model):
@@ -356,6 +367,9 @@ class Poll(models.Model):
             self.save()
         return self
 
+    def __str__(self):
+        return '%s [%i]' % (self.title, self.voted_amount)
+
     def __unicode__(self):
         return '%s [%i]' % (self.title, self.voted_amount)
 
@@ -392,6 +406,9 @@ class PollItem(models.Model):
         if commit:
             self.save()
         return self
+
+    def __str__(self):
+        return self.title
 
     def __unicode__(self):
         return self.title
