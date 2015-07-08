@@ -29,10 +29,14 @@ class AccountTest(TestHelperMixin, TestCase):
     account app general test cases
     """
     fixtures = [
-        'tests/fixtures/load_rank_types.json',
-        'tests/fixtures/load_ranks.json',
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pms.json'
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_pms.json'
     ]
 
     def setUp(self):
@@ -146,38 +150,6 @@ class AccountTest(TestHelperMixin, TestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['user'].is_authenticated(), False)
-        #self.assertNotContains(response, '/logout/')
-
-    @allure.story('login')
-    @allure.severity(Severity.MINOR)
-    @skipIf(True, "disabled")
-    def test_sulogin(self):
-        """
-        super user login under another user (test/debug purpose)
-        """
-        # admin can login as other users (to watch bugs and something)
-        # don't abuse this functional
-        logged = self.client.login(username='admin', password='123456')
-        u = User.objects.get(username='admin')
-        self.assertEqual(u.is_superuser, True)
-        self.assertEqual(logged, True)
-
-        url = reverse('wh:superlogin')
-        post = {
-            'username': 'user'
-        }
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, 'Permission denied')
-        #self.assertContains(response, "data-owner='user'")
-        # not admins can not use this
-        self.client.login(user='user', password='123456')
-        post.update({
-            'username': 'lilfox'
-        })
-        response = self.client.post(url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Permission denied')
 
     @allure.story('password')
     @allure.severity(Severity.BLOCKER)
@@ -272,7 +244,6 @@ class AccountTest(TestHelperMixin, TestCase):
     @allure.story('profile')
     @allure.severity(Severity.CRITICAL)
     def test_profile_update(self):
-        #avatar_name = 'avatar.jpg'
         avatar = open('tests/fixtures/avatar.jpg')
         edit_post = {
             'first_name': 'edited',
@@ -280,17 +251,12 @@ class AccountTest(TestHelperMixin, TestCase):
             'gender': 'm',  # (f)emale, (n)ot identified
             'nickname': 'real_tester',
             'jid': 'tester@jabber.org',
-            #'uin': 123412,
             'about': 'Duty is our salvation',
-            #'tz': 3.0
         }
         post = {
-            #'skin': 1,
-            #'side': 1,
-            #'army': 1,
             'avatar': avatar,
         }
-        post.update(edit_post)
+        post.update(**edit_post)
 
         logged = self.client.login(username='user', password='123456')
         self.assertEqual(logged, True)
@@ -340,7 +306,8 @@ class AccountTest(TestHelperMixin, TestCase):
                 'nickname': usern[2],   # 'test_nickname',
                 'password': '123456',
                 'password_repeat': '123456',
-                'recaptcha_response_field': 'PASSED'
+                'recaptcha_response_field': 'PASSED',
+                'captcha': 'PASSED'
             }
             url = reverse('accounts:register')
             initial = self.client.get(url, follow=True)
@@ -416,60 +383,15 @@ class AccountTest(TestHelperMixin, TestCase):
         self.assertEqual(response.context['request'].user.is_authenticated(),
                          False)
 
-@allure.feature('Accounts: Cache')
-class CacheTest(TestCase):
-    """
-    Cache test cases purposes
-    """
-    fixtures = [
-        'tests/fixtures/load_rank_types.json',
-        'tests/fixtures/load_ranks.json',
-        'tests/fixtures/load_users.json',
-    ]
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    def cache_delete_nickname(self, user):
-        cache.delete('nick:%s' % user.username)
-
-    def cache_get_nickname(self, user):
-        return cache.get('nick:%s' % user.username)
-
-    @allure.story('cache')
-    @allure.severity(Severity.NORMAL)
-    @skipIf(True, "disabled")
-    def test_user_change_get_nickname_test(self):
-        user = User.objects.get(username='user')
-        logged = self.client.login(username='user', password='123456')
-        nickname = user.get_nickname(no_cache=True)
-        self.assertNotEqual(nickname, '')
-        self.cache_delete_nickname(user)
-        self.assertEqual(logged, True)
-
-        rank_type = RankType.objects.get(id=1)
-        ranks = user.ranks.filter(pk__in=rank_type.rank_set.all())
-        self.assertNotEqual(ranks.count(), 0)
-        self.cache_delete_nickname(user)
-        self.assertEqual(self.cache_get_nickname(user), None)
-        # trying to fetch it via changing type
-        rank_type = RankType.objects.get(pk=rank_type.pk)
-        rank_type.save()
-        self.assertEqual(self.cache_get_nickname(user), nickname)
-        # trying to fetch it via user change
-        self.cache_delete_nickname(user)
-        user = User.objects.get(pk=user.pk)
-        user.save()
-        self.assertEqual(self.cache_get_nickname(user), nickname)
-
 
 @allure.feature('Policy Warnings')
 class PolicyWarningTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
     ]
 
     def setUp(self):
@@ -698,9 +620,3 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
                                     self.post_pm, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PM.objects.count(), count + 1)
-
-    @allure.story("create")
-    @allure.severity(Severity.TRIVIAL)
-    @skipIf(True, "Not implemented")
-    def test_policy_warning_immunity(self):
-        pass
