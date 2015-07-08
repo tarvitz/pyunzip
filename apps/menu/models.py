@@ -2,8 +2,10 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class HMenuItem(models.Model):
     title = models.CharField(_("title"), max_length=256)
     order = models.PositiveSmallIntegerField(
@@ -29,7 +31,7 @@ class HMenuItem(models.Model):
     def get_absolute_url(self):
         return self.get_url()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
@@ -38,6 +40,7 @@ class HMenuItem(models.Model):
         ordering = ['order', 'id', ]
 
 
+@python_2_unicode_compatible
 class VMenuItem(models.Model):
     title = models.CharField(_("Title"), max_length=256)
     order = models.PositiveSmallIntegerField(
@@ -63,7 +66,7 @@ class VMenuItem(models.Model):
         help_text=_("marks menu item as hidden"),
         default=False)
 
-    def __unicode__(self):
+    def __str__(self):
         out = self.title
         target = self
         while 1:

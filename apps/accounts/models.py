@@ -7,6 +7,7 @@ from django.contrib import auth
 from django.contrib.auth.models import (
     AbstractBaseUser, UserManager, Permission, Group,
     _user_has_module_perms, _user_get_all_permissions, _user_has_perm)
+from django.utils.encoding import python_2_unicode_compatible
 
 from picklefield import PickledObjectField
 from django.db.models import Sum
@@ -42,6 +43,7 @@ TZ_CHOICES = [
 )]
 
 
+@python_2_unicode_compatible
 class User(AbstractBaseUser):
     def avatar_upload_to(self, file_name):
         """
@@ -350,7 +352,7 @@ class User(AbstractBaseUser):
     def files(self):
         return self.user_file_set
 
-    def __unicode__(self):
+    def __str__(self):
         return self.nickname or self.username
 
     class Meta:
@@ -359,6 +361,7 @@ class User(AbstractBaseUser):
         ordering = ['date_joined', ]
 
 
+@python_2_unicode_compatible
 class PM(models.Model):
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='sender',
@@ -397,7 +400,7 @@ class PM(models.Model):
             self.remove()
         return
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     def render(self, field):
@@ -430,6 +433,7 @@ POLICY_WARNING_LEVEL_CHOICES = (
 )
 
 
+@python_2_unicode_compatible
 class PolicyWarning(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='warning_user_set',
@@ -472,7 +476,7 @@ class PolicyWarning(models.Model):
             self.level in i for i in POLICY_WARNING_LEVEL_CHOICES].index(True)
         return POLICY_WARNING_LEVEL_CHOICES[idx][1]
 
-    def __unicode__(self):
+    def __str__(self):
         return '[%(level)s] %(date)s' % {
             'level': self.get_level(),
             'date': self.date_expired.strftime('%d-%m-%Y')

@@ -7,17 +7,20 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class Attachment(models.Model):
     attachment = models.FileField(
         _('Attachment'), upload_to=os.path.join(settings.MEDIA_ROOT,
                                                 'attachments/'))
 
-    def __unicode__(self):
+    def __str__(self):
         return self.attachment.name
 
 
+@python_2_unicode_compatible
 class MetaGallery(models.Model):
     gallery_types = [
         ('tech', 'technical'), ('global', 'global'), ('user', 'user')
@@ -30,8 +33,9 @@ class MetaGallery(models.Model):
         abstract = True
 
 
+@python_2_unicode_compatible
 class Gallery(MetaGallery):
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -48,6 +52,7 @@ def valid_alias(val):
     raise ValidationError("You should use only letters, digits and _")
 
 
+@python_2_unicode_compatible
 class Image(models.Model):
     def upload_to(self, file_name):
         """
@@ -98,10 +103,11 @@ class Image(models.Model):
     def get_delete_url(self):
         return reverse('files:image-delete', args=(self.pk, ))
 
-    def __unicode__(self):
+    def __str__(self):
         return "Images"
 
 
+@python_2_unicode_compatible
 class UserFile(models.Model):
     def file_upload_to(self, file_name):
         """
@@ -162,7 +168,7 @@ class UserFile(models.Model):
             pass
         super(UserFile, self).delete(*args, **kwargs)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title or "User %s file" % (self.owner.id, )
 
     class Meta:

@@ -11,6 +11,7 @@ from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.utils.encoding import python_2_unicode_compatible
 
 MARKUP_CHOICES = (
     ('textile', 'textile'),
@@ -19,6 +20,7 @@ MARKUP_CHOICES = (
 )
 
 
+@python_2_unicode_compatible
 class Category(models.Model):
     name = models.CharField(_('Name'), max_length=80)
     position = models.IntegerField(_('Position'), blank=True, default=0)
@@ -29,9 +31,6 @@ class Category(models.Model):
         verbose_name_plural = _('Categories')
 
     def __str__(self):
-        return self.name
-
-    def __unicode__(self):
         return self.name
 
     def forum_count(self):
@@ -50,6 +49,7 @@ class Category(models.Model):
             topic__forum__category=self).select_related()
 
 
+@python_2_unicode_compatible
 class Forum(models.Model):
     category = models.ForeignKey(Category, related_name='forums',
                                  verbose_name=_('Category'))
@@ -74,7 +74,7 @@ class Forum(models.Model):
         verbose_name = _('Forum')
         verbose_name_plural = _('Forums')
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def topic_count(self):
@@ -96,6 +96,7 @@ class Forum(models.Model):
             return None
 
 
+@python_2_unicode_compatible
 class Topic(models.Model):
     forum = models.ForeignKey(Forum, related_name='topics',
                               verbose_name=_('Forum'))
@@ -118,9 +119,6 @@ class Topic(models.Model):
         verbose_name_plural = _('Topics')
 
     def __str__(self):
-        return self.name
-
-    def __unicode__(self):
         return self.name
 
     @property
@@ -166,6 +164,7 @@ class Topic(models.Model):
         return reverse_lazy('pybb:posts', args=(self.pk, ))
 
 
+@python_2_unicode_compatible
 class AnonymousPost(models.Model):
     session_key = models.CharField(_('Session key'), max_length=40)
     topic = models.ForeignKey(Topic, verbose_name=_('Topic'), blank=True)
@@ -180,6 +179,7 @@ class AnonymousPost(models.Model):
         verbose_name_plural = _('Anonymous posts')
 
 
+@python_2_unicode_compatible
 class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts',
                               verbose_name=_('Topic'))
@@ -260,6 +260,7 @@ class Post(models.Model):
         return len(self.body.split(' '))
 
 
+@python_2_unicode_compatible
 class Read(models.Model):
     """
     For each topic that user has entered the time
@@ -281,14 +282,11 @@ class Read(models.Model):
         super(Read, self).save(*args, **kwargs)
 
     def __str__(self):
-        return 'T[%d], U[%d]: %s' % (self.topic.id, self.user.id,
-                                     six.text_type(self.time))
-
-    def __unicode__(self):
         return u'T[%d], U[%d]: %s' % (self.topic.id, self.user.id,
                                       six.text_type(self.time))
 
 
+@python_2_unicode_compatible
 class Poll(models.Model):
     topic = models.ForeignKey(Topic, related_name='poll_topic_set',
                               unique=True)
@@ -370,14 +368,12 @@ class Poll(models.Model):
     def __str__(self):
         return '%s [%i]' % (self.title, self.voted_amount)
 
-    def __unicode__(self):
-        return '%s [%i]' % (self.title, self.voted_amount)
-
     class Meta:
         verbose_name = _("Poll")
         verbose_name_plural = _("Polls")
 
 
+@python_2_unicode_compatible
 class PollItem(models.Model):
     poll = models.ForeignKey(Poll, related_name='poll_item_poll_set')
     title = models.CharField(_('title'), max_length=2048)
@@ -410,14 +406,12 @@ class PollItem(models.Model):
     def __str__(self):
         return self.title
 
-    def __unicode__(self):
-        return self.title
-
     class Meta:
         verbose_name = _("Poll item")
         verbose_name_plural = _("Poll items")
 
 
+@python_2_unicode_compatible
 class PollAnswer(models.Model):
     poll = models.ForeignKey(Poll, related_name='answer_poll_set')
     poll_item = models.ForeignKey(PollItem,
@@ -425,7 +419,7 @@ class PollAnswer(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='answer_user_set')
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s: %s' % (self.user.get_username(), self.poll_item.title)
 
     class Meta:

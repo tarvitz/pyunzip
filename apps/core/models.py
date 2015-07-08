@@ -2,13 +2,15 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 
-from datetime import datetime, timedelta
+from datetime import datetime
 
 from apps.core.managers import UserSIDManager
 
 
+@python_2_unicode_compatible
 class UserSID(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              related_name='user_sid_set')
@@ -28,7 +30,7 @@ class UserSID(models.Model):
     )
     objects = UserSIDManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s [%s]" % (self.user.username, self.sid)
 
     class Meta:

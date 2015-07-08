@@ -13,6 +13,7 @@ from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
 from django.contrib.contenttypes import generic
+from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import post_markup_filter, render_filter
 
@@ -25,11 +26,12 @@ NEWS_STATUSES = (
 
 
 # Create your models here.
+@python_2_unicode_compatible
 class Category(models.Model):
     name = models.CharField(_('Category'), max_length=100, blank=False,
                             null=False)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -37,6 +39,7 @@ class Category(models.Model):
         verbose_name_plural = _('Categories')
 
 
+@python_2_unicode_compatible
 class AbstractSubstance(models.Model):
     title = models.CharField(
         _('title'), max_length=255, null=False)
@@ -54,6 +57,7 @@ class AbstractSubstance(models.Model):
 
 
 # noinspection PyUnresolvedReferences,PyUnresolvedReferences
+@python_2_unicode_compatible
 class AbstractNews(models.Model):
     title = models.CharField(
         _('title'), max_length=255,
@@ -110,7 +114,7 @@ class AbstractNews(models.Model):
     def get_content(self):
         return self.content
 
-    def __unicode__(self):
+    def __str__(self):
         return "News"
 
     def _get_description(self):
@@ -161,6 +165,7 @@ class AbstractNews(models.Model):
         abstract = True
 
 
+@python_2_unicode_compatible
 class ArchivedNews(AbstractNews):
     class Meta:
         verbose_name = _('Archived Article')
@@ -174,6 +179,7 @@ class ArchivedNews(AbstractNews):
         return reverse('news:article-archived', kwargs={'id': self.id})
 
 
+@python_2_unicode_compatible
 class News(AbstractNews):
     comments = generic.GenericRelation(
         Comment,
@@ -255,6 +261,7 @@ EVENT_LEAGUE_CHOICES = (
 )
 
 
+@python_2_unicode_compatible
 class EventPlace(models.Model):
     title = models.CharField(_("title"), max_length=512,
                              help_text=_("event place title"))
@@ -265,7 +272,7 @@ class EventPlace(models.Model):
                                 help_text=_("contacts/help who to find it"),
                                 blank=True, null=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
@@ -273,6 +280,7 @@ class EventPlace(models.Model):
         verbose_name_plural = _("Event Places")
 
 
+@python_2_unicode_compatible
 class Event(models.Model):
     """ different events model container for all-people notification usage
     """
@@ -327,7 +335,7 @@ class Event(models.Model):
         object_id_field='object_pk'
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%s [%s]' % (self.title, self.type)
 
     # urls
@@ -361,6 +369,7 @@ class Event(models.Model):
         verbose_name_plural = _("Events")
 
 
+@python_2_unicode_compatible
 class EventWatch(models.Model):
     event = models.ForeignKey('news.Event', related_name='event_watch_set',
                               verbose_name=_("event"))
@@ -370,7 +379,7 @@ class EventWatch(models.Model):
     created_on = models.DateTimeField(_('created on'),
                                       default=datetime.now)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.event.title + " " + self.user.get_username()
 
     class Meta:
@@ -379,6 +388,7 @@ class EventWatch(models.Model):
         unique_together = (('event', 'user'), )
 
 
+@python_2_unicode_compatible
 class Note(models.Model):
     """
     Some note that should be shown as urgent information in the top of the
@@ -426,7 +436,7 @@ class Note(models.Model):
         max_length=64, choices=TYPE_CHOICES, default=TYPE_CHOICES[0][0]
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return "[%s] %s" % (self.created_on.date().isoformat(),
                             self.content[:100])
 

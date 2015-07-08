@@ -10,6 +10,7 @@ from django.conf import settings
 
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
+from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import render_filter, post_markup_filter
 from apps.accounts.models import User
@@ -40,6 +41,7 @@ DEPLOYMENT_CHOICES = (
 )
 
 
+@python_2_unicode_compatible
 class Codex(models.Model):
     content_type = models.ForeignKey(ContentType,
                                      verbose_name=_('content type'),
@@ -54,14 +56,10 @@ class Codex(models.Model):
                                                   max_length=64)
 
     def bound(self):
-        return self.source.__unicode__()
+        return self.source
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
-        # return u'%(bound)s:%(title)s' % {
-        #     'bound': self.bound(),
-        #     'title': self.title
-        # }
 
     def get_absolute_url(self):
         return reverse('tabletop:codex-detail', args=(self.pk, ))
@@ -76,6 +74,7 @@ class Codex(models.Model):
         return reverse('api:codex-detail', args=(self.pk, ))
 
 
+@python_2_unicode_compatible
 class Roster(models.Model):
     def valid_revision(value):
         if not 0 < value < 15:
@@ -143,7 +142,7 @@ class Roster(models.Model):
     def get_title(self):
         return self.title
 
-    def __unicode__(self):
+    def __str__(self):
         return u'%(title)s:%(pts)s' % {
             'title': self.title,
             'pts': self.pts
@@ -177,11 +176,12 @@ class Roster(models.Model):
         ordering = ['-id']
 
 
+@python_2_unicode_compatible
 class Game(models.Model):
     name = models.CharField(_('Title'), primary_key=True, max_length=50)
     codename = models.CharField(_('Codename'), max_length=15, unique=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -189,17 +189,19 @@ class Game(models.Model):
         verbose_name_plural = _("Games")
 
 
+@python_2_unicode_compatible
 class Mission(models.Model):
     title = models.CharField(_('Title'), max_length=50)
     game = models.ForeignKey(Game)
 
-    def __unicode__(self):
+    def __str__(self):
             return self.title
 
     class Meta:
         pass
 
 
+@python_2_unicode_compatible
 class Report(models.Model):
     title = models.CharField(_('title'), max_length=100)
     owner = models.ForeignKey(User, related_name='report_owner_set')
@@ -232,7 +234,7 @@ class Report(models.Model):
     syntax = models.CharField(_('syntax'), max_length=20,
                               choices=settings.SYNTAX)
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s [%s:%s]" % (
             self.title,
             self.mission.game.codename,
@@ -292,13 +294,11 @@ class Report(models.Model):
         lst = list()
         pieces = self.layout.split('vs')
         for j in pieces:
-            for k in xrange(0, int(j)):
-                #print k,j
+            for k in range(0, int(j)):
                 if k == int(j)-1:
                     lst.append(True)
                 else:
                     lst.append(False)
-        #remove last item and replace it within False
         lst.pop(len(lst)-1)
         lst.append(False)
         return lst

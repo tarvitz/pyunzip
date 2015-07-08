@@ -5,8 +5,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
 
 
+@python_2_unicode_compatible
 class Universe(models.Model):
     codename = models.CharField(
         _('сodename'), max_length=100, unique=True,
@@ -15,10 +17,11 @@ class Universe(models.Model):
     title = models.CharField(
         _('title'), max_length=100)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.codename
 
 
+@python_2_unicode_compatible
 class Fraction(models.Model):
     title = models.CharField(
         _('fraction'), max_length=30, null=False)
@@ -26,20 +29,22 @@ class Fraction(models.Model):
         Universe, blank=True, null=True
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
 
+@python_2_unicode_compatible
 class Side(models.Model):
     name = models.CharField(
         _('side'), max_length=40, null=False
     )
     fraction = models.ForeignKey(Fraction)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class Army(models.Model):
     name = models.CharField(
         _('army'), max_length=100,
@@ -47,7 +52,7 @@ class Army(models.Model):
     )
     side = models.ForeignKey(Side)
 
-    def __unicode__(self):
+    def __str__(self):
         return "[%s]:%s" % (self.side.name, self.name)
 
     @property
@@ -60,12 +65,13 @@ class Army(models.Model):
         ordering = ['side', ]
 
 
+@python_2_unicode_compatible
 class MiniQuote(models.Model):
     content = models.CharField(
         _('content'), max_length=255
     )
 
-    def __unicode__(self):
+    def __str__(self):
         return self.content
 
     class Meta:
@@ -73,6 +79,7 @@ class MiniQuote(models.Model):
         verbose_name_plural = _('Mini Quotes')
 
 
+@python_2_unicode_compatible
 class Expression(models.Model):
     author = models.CharField(
         _('author'), max_length=100, blank=True
@@ -119,7 +126,7 @@ class Expression(models.Model):
         return ''
     show_author.short_description = _('author')
 
-    def __unicode__(self):
+    def __str__(self):
         if self.original_content:
             return self.original_content
         elif self.content:
@@ -133,6 +140,7 @@ class Expression(models.Model):
 
 
 # noinspection PyShadowingBuiltins
+@python_2_unicode_compatible
 class RankType(models.Model):
     type = models.CharField(_('type'), max_length=100)
     magnitude = models.IntegerField(
@@ -146,11 +154,12 @@ class RankType(models.Model):
                               blank=True)
     group = models.ForeignKey(Group, null=True, blank=True)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.type
 
 
 # noinspection PyShadowingBuiltins
+@python_2_unicode_compatible
 class Rank(models.Model):
     short_name = models.CharField(_('short name'), max_length=50)
     codename = models.CharField(
@@ -170,7 +179,7 @@ class Rank(models.Model):
         blank=True, null=True
     )
 
-    def __unicode__(self):
+    def __str__(self):
         if self.type is not None:
             return "%s:%s" % (self.type.type, self.short_name)
         return self.short_name
@@ -192,6 +201,7 @@ class Rank(models.Model):
         verbose_name_plural = _("Ranks")
 
 
+@python_2_unicode_compatible
 class AbstractActivity(models.Model):
     activity_date = models.DateTimeField(
         _('dateTime activity'), blank=False, null=True

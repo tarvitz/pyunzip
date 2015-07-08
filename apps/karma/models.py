@@ -3,11 +3,13 @@ from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.utils.encoding import python_2_unicode_compatible
 
 from datetime import datetime
 
 
 # Create your models here.
+@python_2_unicode_compatible
 class Karma(models.Model):
     comment = models.CharField(_('Comment'), max_length=512, blank=True)
     value = models.IntegerField(_('Power'))
