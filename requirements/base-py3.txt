@@ -15,3 +15,4 @@ six==1.9.0
 sorl-thumbnail==12.2
 python3-memcached==1.51
 django-filter==0.10.0
+pytils==0.3
