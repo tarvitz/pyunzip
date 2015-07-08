@@ -76,9 +76,10 @@ def index_ctx(request):
     # cats = sorted(cats.values(), cmpdef)
 
     return {
-        'cats': cats,
+        'cats': cats.values(),
         'quick': quick,
     }
+
 index = render_to('pybb/index.html')(index_ctx)
 
 
