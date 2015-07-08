@@ -23,6 +23,5 @@ class EventSerializer(serializers.HyperlinkedModelSerializer):
         model = Event
         fields = (
             'title', 'date_start', 'date_end', 'type', 'is_finished', 'url',
-            'is_all_day', 'is_new', 'league', 'place', 'id',
-            #'content'  # currently disabled
+            'is_all_day', 'is_new', 'league', 'place', 'id'
         )

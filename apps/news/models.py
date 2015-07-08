@@ -7,8 +7,6 @@ from django.core.urlresolvers import reverse
 from apps.files.models import Attachment
 from apps.utils.models import copy_fields
 
-from apps.accounts.models import User
-
 from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
@@ -187,13 +185,10 @@ class News(AbstractNews):
         object_id_field='object_pk'
     )
 
-    #def get_absolute_url(self):
-    #    return reverse('news:article', kwargs={'number': self.id})
-
     def archive(self):
         a = ArchivedNews()
         copy_fields(self, a)
-        #actions with comments
+        # actions with comments
         a.save()
         old_ct = ContentType.objects.get(app_label='news', model='news')
         new_ct = ContentType.objects.get(app_label='news',
@@ -288,9 +283,8 @@ class Event(models.Model):
                              max_length=256)
     content = models.TextField(
         _("content"),
-        help_text=_(
-            "content event text, description, further manual and so on"),
-        #max_length=settings.MAX_DOCUMENT_SIZE
+        help_text=_("content event text, description, further "
+                    "manual and so on")
     )
     content_html = models.TextField(
         _("content html"),

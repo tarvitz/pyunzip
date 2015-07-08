@@ -1,10 +1,9 @@
 # coding: utf-8
 import os
 from apps.core.helpers import render_to
-from apps.news.templatetags.newsfilters import render_filter
 from apps.core.helpers import post_markup_filter, render_filter
-from django.utils.safestring import mark_safe
 from django.views.decorators.csrf import csrf_exempt
+
 
 @csrf_exempt
 @render_to('helpers/preview/general.html')
@@ -18,7 +17,6 @@ def markup_preview(request):
     data = {'preview': preview}
     if template:
         data.update({
-            '_template': os.path.join('helpers/preview', template  + '.html')
+            '_template': os.path.join('helpers/preview', template + '.html')
         })
-
     return data

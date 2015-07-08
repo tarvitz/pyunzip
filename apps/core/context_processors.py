@@ -7,9 +7,6 @@ def core(request):
     base = base_template(request)
     base.update(global_referer(request))
     base.update(global_settings(request))
-    base.update({
-        'miniquote': MiniQuote.objects.order_by('?')[0]
-    })
     return base
 
 

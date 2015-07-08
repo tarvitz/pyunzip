@@ -38,8 +38,6 @@ class ArticleModelForm(RequestModelForm):
         )
         if not self.instance.pk:
             self.instance.author_ip = ip
-            #if can_edit:
-            #    self.instance.approved = True
         else:
             self.instance.editor = (
                 self.request.user.nickname or self.request.user.username)

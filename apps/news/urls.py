@@ -1,7 +1,7 @@
-from django.conf.urls import *
+from django.conf.urls import patterns, url
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
-from apps.news import views
+from apps.news.views import views
 
 
 urlpatterns = patterns(
@@ -10,10 +10,11 @@ urlpatterns = patterns(
     url(r'^news/(?P<pk>\d+)/$', views.NewsDetail.as_view(), name='article'),
     url(r'^news/(?P<pk>\d+)/edit/$', views.NewsUpdateView.as_view(),
         name='news-update'),
-    url(r'^news/user/$', 'news_user', name='news-user'),
-    url(r'^article/edit/(?P<id>\d+)/$','add_article', {'edit_flag':'True'},
+    url(r'^news/user/$', 'views.news_user', name='news-user'),
+    url(r'^article/edit/(?P<id>\d+)/$', 'views.add_article',
+        {'edit_flag': 'True'},
         name='article-edit'),
-    url('^markup/preview/$', 'markup_preview', name='markup-preview'),
+    url('^markup/preview/$', 'helpers.markup_preview', name='markup-preview'),
     url(r'article/created/$', direct_to_template,
         {'template': 'news/article_created.html'},
         name='article-created'),

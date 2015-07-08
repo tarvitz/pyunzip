@@ -18,7 +18,6 @@ def revert_approved(modeladmin, request, queryset):
 revert_approved.short_description = _('Revert approved flag')
 
 
-#AdminModels
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('date', 'category', 'title', 'author', 'approved',
                     'author_ip', 'attachment')
@@ -59,10 +58,4 @@ class EventPlaceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(EventPlace, EventPlaceAdmin)
-
 admin.site.register(Note)
-
-# disabled
-# admin.site.register(Category, CategoryAdmin)
-# admin.site.register(News, NewsAdmin)
-# admin.site.register(ArchivedNews)

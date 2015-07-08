@@ -50,8 +50,7 @@ class EventViewSetTestMixin(object):
             'place': 2,
             'date_start': datetime.now() + timedelta(minutes=10),
             'date_end': datetime.now() + timedelta(minutes=360),
-            'title': u'Private',
-            #'content': u'No newcomers are welcome',
+            'title': u'Private'
         }
         self.patch = {
             'is_all_day': True,
@@ -66,7 +65,6 @@ class EventViewSetTestMixin(object):
             'date_start': datetime.now() + timedelta(minutes=10),
             'date_end': datetime.now() + timedelta(minutes=720),
             'title': u'New Event',
-            #'content': u'New event and so on',
         }
         self.object_detail_response = {
             'id': 1,
@@ -76,7 +74,6 @@ class EventViewSetTestMixin(object):
             'is_finished': False,
             'is_new': True,
             'place': None,
-            #'content': u'p. бухаем, не бухаем все дела dadasd',
             'league': 'wh40k',
             'title': u'Клевое событие',
             'type': 'order',

@@ -104,7 +104,7 @@ class NewsUpdateView(LoginRequiredMixin, generic.UpdateView):
         return super(NewsUpdateView, self).dispatch(request, *args, **kwargs)
 
 
-#@obsolete
+# @obsolete
 @login_required
 @render_to('news/add.html')
 def add_article(request, pk=None, edit_flag=False):
