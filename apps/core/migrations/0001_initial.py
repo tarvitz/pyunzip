@@ -16,17 +16,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='UserSID',
             fields=[
-                ('id', models.AutoField(primary_key=True, verbose_name='ID', auto_created=True, serialize=False)),
-                ('sid', models.CharField(unique=True, verbose_name='SID', max_length=512)),
-                ('expired_date', models.DateTimeField(default=datetime.datetime(2015, 7, 5, 14, 36, 1, 161042), verbose_name='Expires')),
-                ('expired', models.BooleanField(default=False, verbose_name='expired?')),
-                ('created_on', models.DateTimeField(default=datetime.datetime.now, verbose_name='created on')),
-                ('updated_on', models.DateTimeField(verbose_name='updated on', auto_now_add=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL, related_name='user_sid_set')),
+                ('id', models.AutoField(serialize=False, verbose_name='ID', primary_key=True, auto_created=True)),
+                ('sid', models.CharField(max_length=512, verbose_name='SID', unique=True)),
+                ('expired_date', models.DateTimeField(verbose_name='Expires')),
+                ('expired', models.BooleanField(verbose_name='expired?', default=False)),
+                ('created_on', models.DateTimeField(verbose_name='created on', auto_now_add=True)),
+                ('updated_on', models.DateTimeField(verbose_name='updated on', default=datetime.datetime.now)),
+                ('user', models.ForeignKey(related_name='user_sid_set', to=settings.AUTH_USER_MODEL)),
             ],
             options={
-                'verbose_name_plural': 'UserSIDs',
                 'verbose_name': 'UserSID',
+                'verbose_name_plural': 'UserSIDs',
             },
         ),
     ]

@@ -15,17 +15,16 @@ class UserSID(models.Model):
     sid = models.CharField(_("SID"), unique=True, max_length=512)
     # additional fields ?
     expired_date = models.DateTimeField(
-        _("Expires"), default=datetime.now() + timedelta(weeks=1)
+        _("Expires"),
     )
     expired = models.BooleanField(
         _("expired?"), default=False
     )
     created_on = models.DateTimeField(
-        _("created on"), default=datetime.now,
+        _("created on"), auto_now_add=True,
     )
     updated_on = models.DateTimeField(
-        _('updated on'),
-        auto_now_add=True
+        _('updated on'), default=datetime.now
     )
     objects = UserSIDManager()
 
