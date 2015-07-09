@@ -241,7 +241,8 @@ class AccountTest(TestHelperMixin, TestCase):
     @allure.story('profile')
     @allure.severity(Severity.CRITICAL)
     def test_profile_update(self):
-        avatar = open('tests/fixtures/avatar.jpg')
+        avatar_path = 'tests/fixtures/avatar.jpg'
+        avatar = open(avatar_path, 'rb')
         edit_post = {
             'first_name': 'edited',
             'last_name': 'editor',
