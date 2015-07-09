@@ -60,7 +60,7 @@ class AccountTest(TestHelperMixin, TestCase):
             self.assertEqual(logged, True)
             for url in self.urls_registered:
                 try:
-                    response = self.client.get(url, follow=True)
+                    response = self.client.get(str(url), follow=True)
                     try:
                         self.assertEqual(response.status_code, 200)
                     except AssertionError as err:
