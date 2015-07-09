@@ -4,20 +4,18 @@ import six
 import logging
 
 from django.test import TestCase
-from django.utils.unittest import skipIf
 from django.conf import settings
 
 from apps.accounts.models import User, PolicyWarning, PM
 from apps.accounts.cron import PolicyWarningsMarkExpireCronJob
-from apps.wh.models import (
-    Rank, RankType)
+from apps.wh.models import Rank
 from apps.core.models import UserSID
 from apps.core.tests import TestHelperMixin
 from django.core.urlresolvers import reverse, reverse_lazy, NoReverseMatch
 from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_object_or_None
 from copy import deepcopy
-from django.core.cache import cache
+
 from datetime import datetime, timedelta, date
 import allure
 from allure.constants import Severity
@@ -307,7 +305,7 @@ class AccountTest(TestHelperMixin, TestCase):
                 'password': '123456',
                 'password_repeat': '123456',
                 'recaptcha_response_field': 'PASSED',
-                'captcha': 'PASSED'
+                'g-recaptcha-response': 'PASSED'
             }
             url = reverse('accounts:register')
             initial = self.client.get(url, follow=True)
@@ -331,9 +329,9 @@ class AccountTest(TestHelperMixin, TestCase):
             self.assertContains(response, '/logout/')
 
             user = User.objects.get(username=usern[0])
-            edit = deepcopy(post)
+            edit = dict(**post)
             fields = ['recaptcha_response_field', 'password',
-                      'password_repeat']
+                      'password_repeat', 'g-recaptcha-response']
             for f in fields:
                 del edit[f]
             self.check_state(user, edit, check=self.assertEqual)
