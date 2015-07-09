@@ -20,14 +20,20 @@ from copy import deepcopy
 
 class ReportViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_sides.json',
-        'tests/fixtures/load_armies.json',
-        'tests/fixtures/load_codexes.json',
-        'tests/fixtures/load_rosters.json',
-        'tests/fixtures/load_games.json',
-        'tests/fixtures/load_missions.json',
-        'tests/fixtures/load_reports.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_codexes.json',
+        'load_rosters.json',
+        'load_games.json',
+        'load_missions.json',
+        'load_reports.json',
     ]
 
     def setUp(self):

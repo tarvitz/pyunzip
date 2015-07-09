@@ -18,9 +18,15 @@ from copy import deepcopy
 
 class MissionViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_games.json',
-        'tests/fixtures/load_missions.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_games.json',
+        'load_missions.json',
     ]
 
     def setUp(self):

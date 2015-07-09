@@ -10,6 +10,7 @@ from apps.core.helpers import get_content_type
 
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import force_text
 
 from django.core import exceptions
 from django.conf import settings
@@ -24,10 +25,16 @@ User = get_user_model()
 @allure.feature('Roster')
 class RosterTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_games.json',
-        'tests/fixtures/load_missions.json',
-        'tests/fixtures/load_codexes.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_games.json',
+        'load_missions.json',
+        'load_codexes.json',
     ]
 
     post = {
@@ -125,10 +132,16 @@ class RosterTest(TestHelperMixin, TestCase):
 @allure.feature('Codex')
 class CodexTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_universes.json',
-        'tests/fixtures/load_sides.json',
-        'tests/fixtures/load_armies.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_universes.json',
+        'load_sides.json',
+        'load_armies.json',
     ]
 
     def setUp(self):
@@ -280,13 +293,19 @@ class CodexTest(TestHelperMixin, TestCase):
 @allure.feature('Report')
 class ReportTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_games.json',
-        'tests/fixtures/load_missions.json',
-        'tests/fixtures/load_armies.json',
-        'tests/fixtures/load_sides.json',
-        'tests/fixtures/load_codexes.json',
-        'tests/fixtures/load_rosters.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_games.json',
+        'load_missions.json',
+        'load_armies.json',
+        'load_sides.json',
+        'load_codexes.json',
+        'load_rosters.json',
     ]
 
     def setUp(self):
@@ -479,29 +498,9 @@ class ReportTest(TestHelperMixin, TestCase):
             pk__in=self.post_update_failure['winners'])
         for winner in winners:
             self.assertIn(
-                unicode(_("There's no such winner `%s` in rosters")
-                        % winner.__unicode__()),
+                force_text(
+                    _("There's no such winner `%s` in rosters") % (
+                        winner.__str__(), )
+                ),
                 form.errors['winners']
             )
-
-
-@allure.feature('Cache')
-class CacheTest(TestCase):
-    fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_games.json',
-        'tests/fixtures/load_missions.json',
-        'tests/fixtures/load_codexes.json',
-        'tests/fixtures/load_rosters.json',
-    ]
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    @allure.story('cache')
-    @allure.severity(Severity.CRITICAL)
-    def test_cache_key_prefix(self):
-        self.assertEqual(settings.CACHES['default']['KEY_PREFIX'], 'tests')

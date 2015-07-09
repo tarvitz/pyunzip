@@ -169,7 +169,7 @@ def get_content_type(object_source):
         else:
             app_label = object_source._meta.app_label
             model = object_source._meta.model_name
-    elif isinstance(object_source, basestring):
+    elif isinstance(object_source, six.string_types):
         app_label, model = object_source.split('.')
     ct = ContentType.objects.get(app_label=app_label, model=model)
     return ct

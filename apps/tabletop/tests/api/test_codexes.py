@@ -18,9 +18,15 @@ from copy import deepcopy
 
 class CodexViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_sides.json',
-        'tests/fixtures/load_codexes.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_sides.json',
+        'load_codexes.json',
     ]
 
     def setUp(self):

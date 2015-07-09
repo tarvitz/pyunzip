@@ -8,7 +8,7 @@
         "title": "\u0422\u0435\u0441\u0442\u043e\u0432\u044b\u0439",
         "comments": "",
         "syntax": "textile",
-        "owner": 6,
+        "owner": 2,
         "pts": 1000,
         "revision": 5
     }
@@ -22,7 +22,7 @@
         "title": "\u0411\u043e\u0435\u0432\u043e\u0439",
         "comments": "",
         "syntax": "textile",
-        "owner": 6,
+        "owner": 2,
         "pts": 1000,
         "revision": 5
     }
@@ -36,7 +36,7 @@
         "title": "\u041d\u043e\u0432\u044b\u0439 \u0442\u0435\u0441\u0442\u043e\u0432\u044b\u0439 \u0440\u043e\u0441\u0442\u0435\u0440",
         "comments": null,
         "syntax": null,
-        "owner": 6,
+        "owner": 2,
         "pts": 555,
         "revision": 5
     }
@@ -50,7 +50,7 @@
         "title": "\u041d\u043e\u0432\u044b\u0439 \u0442\u0435\u0441\u0442\u043e\u0432\u044b\u0439 \u0440\u043e\u0441\u0442\u0435\u0440",
         "comments": null,
         "syntax": null,
-        "owner": 6,
+        "owner": 2,
         "pts": 555,
         "revision": 5
     }
