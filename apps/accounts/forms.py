@@ -240,7 +240,7 @@ class PasswordRestoreForm(RequestFormMixin, forms.ModelForm):
 
     class Meta:
         model = UserSID
-        exclude = ('expired_date', 'expired', 'sid', 'user')
+        exclude = ('expired_date', 'expired', 'sid', 'user', 'updated_on')
 
 
 class PMReplyForm(RequestFormMixin, forms.ModelForm):

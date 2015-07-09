@@ -179,7 +179,6 @@ class AccountTest(TestHelperMixin, TestCase):
         password recover
         """
         # user@blacklibrary.ru == user
-        self.client.logout()
         init_url = reverse('accounts:password-restore-initiate')
 
         count = UserSID.objects.count()

@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from django.http import Http404
 from django.core.exceptions import PermissionDenied
+from django.utils.text import force_text
 from django.conf import settings
 
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -183,14 +184,15 @@ class PasswordRestoreInitiateView(generic.FormView):
         for sid in sids:
             msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
                 'link': settings.DOMAIN + "%s" % reverse_lazy(
-                'accounts:password-restore', args=(sid.sid, ))
+                    'accounts:password-restore', args=(sid.sid, )
+                )
             }
             if settings.SEND_MESSAGES:
                 send_mail(
-                    subject=unicode(
+                    subject=force_text(
                         _('Your password requested to change')
                     ),
-                    message=unicode(msg),
+                    message=force_text(msg),
                     from_email=settings.FROM_EMAIL,
                     recipient_list=[sid.user.email]
                 )
