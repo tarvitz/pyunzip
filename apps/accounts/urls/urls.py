@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
-from apps.accounts import views
+from apps.accounts.views import views
 
 
 urlpatterns = patterns(
-    'apps.accounts.views',
+    'apps.accounts.views.views',
     url(r'^login/$', views.LoginView.as_view(), name='login'),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^profile/$',

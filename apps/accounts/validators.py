@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 _ = lambda s: s
 
 __all__ = [
-    'validate_user_context', 
+    'validate_user_context',
 ]
 
 

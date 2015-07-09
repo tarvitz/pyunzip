@@ -31,7 +31,6 @@ from apps.accounts.models import (
 )
 
 
-#mixins
 class AdminMixin(object):
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_admin:
@@ -69,16 +68,6 @@ class NonUserMixin(object):
             return redirect('accounts:login')
         return super(NonUserMixin, self).dispatch(
             request, *args, **kwargs
-        )
-
-
-class ProfileView(LoginRequiredMixin, generic.TemplateView):
-    model = User
-    template_name = 'accounts/profile.html'
-
-    def get_queryset(self):
-        return super(ProfileView, self).get_queryset().filter(
-            pk=self.request.user.pk
         )
 
 

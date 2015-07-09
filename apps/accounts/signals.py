@@ -3,7 +3,7 @@ from apps.accounts.models import PM
 
 from django.dispatch import receiver
 from django.db.models.signals import (
-    pre_save, post_save, pre_delete
+    pre_save,
 )
 
 __all__ = ['on_pm_pre_save', ]

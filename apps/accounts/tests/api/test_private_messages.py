@@ -336,7 +336,7 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
 
 
 class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
-                                    APITestCase):
+                                APITestCase):
     # test non-privileged user,
     # this user is owner of event so he/she can modify it and delete
     # also create new ones

@@ -1,5 +1,5 @@
 try:
-    from django.contrib.auth import get_user_model, check_password
+    from django.contrib.auth import get_user_model
     User = get_user_model()
 except ImportError:
     from apps.accounts.models import User

@@ -11,7 +11,6 @@ from rest_framework.test import APITestCase
 
 from django.conf import settings
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from datetime import datetime, date, timedelta
 
@@ -176,8 +175,9 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
 
     def test_post_list(self):
         """
-        accounts.change_policy_warning permission holder users can freely assign
-        sender to anyone, other users can only create policy_warnings for themselves
+        accounts.change_policy_warning permission holder users can freely
+        assign sender to anyone, other users can only create policy_warnings
+        for themselves
 
         :return:
         """

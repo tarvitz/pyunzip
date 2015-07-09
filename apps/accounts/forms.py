@@ -14,7 +14,7 @@ from django.contrib import auth
 from captcha.fields import ReCaptchaField
 
 
-#mixins
+# mixins
 class CleanPasswordMixin(object):
     def clean(self):
         cd = super(CleanPasswordMixin, self).clean()
@@ -51,7 +51,7 @@ class LoginForm(forms.Form):
             self._errors['password'] = ErrorList([msg])
             if 'password' in cd:
                 del cd['password']
-        
+
         cd['user'] = user
         return cd
 
@@ -323,6 +323,6 @@ class PolicyWarningForm(forms.ModelForm):
         }
         js = (
             'components/eonasdan-bootstrap-datetimepicker/build/js'
-                '/bootstrap-datetimepicker.min.js',
+            '/bootstrap-datetimepicker.min.js',
             'js/datetimepickers.js'
         )
