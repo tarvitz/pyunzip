@@ -2,7 +2,7 @@
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
-from apps.wh.models import Army, Side, Universe
+from apps.wh.models import Army, Side
 from apps.tabletop.models import Roster, Codex
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
@@ -61,7 +61,7 @@ class RosterViewSetTestMixin(object):
             'revision': 4,
             'title': u'New mega Roster',
             'codex': reverse('api:codex-detail', args=(self.codex.pk, ))
-            #'content': u'No newcomers are welcome',
+            # 'content': u'No newcomers are welcome',
         }
         self.patch = {
             'pts': 1250,

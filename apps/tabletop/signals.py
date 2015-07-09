@@ -9,6 +9,7 @@ from apps.tabletop.models import (
 )
 from django.dispatch import receiver
 
+
 @receiver(pre_save, sender=Report)
 def on_report_pre_save(instance, **kwargs):
     instance.comment_cache = instance.render_comment()

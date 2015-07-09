@@ -50,7 +50,7 @@ class Codex(models.Model):
     source = generic.GenericForeignKey(ct_field="content_type",
                                        fk_field="object_id")
     title = models.CharField(_('title'), max_length=128)
-    #for sphinx search optimization
+    # for sphinx search optimization
     plain_side = models.CharField(_('plain side'), max_length=128, blank=True)
     revisions = models.CommaSeparatedIntegerField(_('revisions'),
                                                   max_length=64)
@@ -99,7 +99,7 @@ class Roster(models.Model):
     )
 
     revision = models.IntegerField(
-        #fixme: pgettext_lazy falls to exception within model form render :(
+        # fixme: pgettext_lazy falls to exception within model form render :(
         pgettext('revision', 'codex revision'),
         validators=[valid_revision, ],
         help_text=_("revision means how new your codex is (bigger is newer)")
@@ -163,7 +163,7 @@ class Roster(models.Model):
     def get_api_detail_url(self):
         return reverse('api:roster-detail', args=(self.pk, ))
 
-    #todo: SPEEDUP
+    # todo: SPEEDUP
     def render_roster(self):
         roster = post_markup_filter(self.roster)
         return render_filter(roster, self.syntax or 'textile')

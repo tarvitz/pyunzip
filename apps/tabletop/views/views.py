@@ -37,13 +37,13 @@ from apps.core.views import (OwnerModelOrAdminAccessMixin, )
 from django.views.decorators.csrf import csrf_protect
 from django.views import generic
 
-import simplejson as json
 from django.core.cache import cache
 
 from datetime import datetime
 
 
 User = get_user_model()
+
 
 @login_required
 @render_to('tabletop/reports.html')
@@ -121,7 +121,7 @@ def report_approve(request, pk, approved=True):
     }
 
 
-#@todo: may be should be MORE CLEAN?
+# todo: may be should be MORE CLEAN?
 @login_required
 def add_battle_report(request, action=None, pk=None):
     template = get_skin_template(request.user, 'add_battle_report.html')
@@ -130,7 +130,7 @@ def add_battle_report(request, action=None, pk=None):
         br = get_object_or_404(Report, pk=pk)
     if request.method == 'POST':
         form = ReportForm(request.POST, request=request,
-                                        instance=br)
+                          instance=br)
         if form.is_valid():
             instance = form.instance
             instance.owner = request.user
@@ -166,7 +166,7 @@ def report_add(request, pk=None):
             # reloading wins/defeats
             if instance.approved:
                 instance.save()
-            #for roster in instance.rosters.all():
+            # for roster in instance.rosters.all():
             #    roster.reload_wins_defeats(save=True)
             return {'redirect': 'tabletop:battle-reports'}
     return {'form': form}

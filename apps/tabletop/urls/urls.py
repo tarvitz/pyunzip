@@ -1,10 +1,10 @@
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 from django.contrib.auth.decorators import login_required
-from apps.tabletop import views
+from apps.tabletop.viewss import views
 
 
 urlpatterns = patterns(
-    'apps.tabletop.views',
+    'apps.tabletop.views.views',
 
     url('^rosters/all/$', views.RostersListView.as_view(),
         name='rosters-index'),
@@ -16,7 +16,8 @@ urlpatterns = patterns(
         login_required(views.RosterUpdateView.as_view()),
         name='roster-edit'),
     url('^roster/(?P<pk>\d+)/delete/$',
-        login_required(views.RosterDeleteView.as_view()), name='roster-delete'),
+        login_required(views.RosterDeleteView.as_view()),
+        name='roster-delete'),
     url('^rosters/(?P<pk>\d+)/detail/$',
         views.RosterDetailView.as_view(),
         name='roster'),

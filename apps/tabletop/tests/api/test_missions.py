@@ -2,15 +2,12 @@
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
-from apps.wh.models import Army, Side
 from apps.tabletop.models import Mission
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
-
-from apps.core.helpers import get_content_type
 
 import simplejson as json
 from copy import deepcopy
@@ -123,7 +120,7 @@ class MissionViewSetAnonymousUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
 
 class MissionViewSetAdminUserTest(MissionViewSetTestMixin, TestHelperMixin,
-                               APITestCase):
+                                  APITestCase):
     # test admin user
     def test_get_detail(self):
         self.login('admin')
@@ -198,7 +195,7 @@ class MissionViewSetAdminUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
 
 class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
-                            APITestCase):
+                             APITestCase):
     # test non-privileged user,
     # this user is owner of event so he/she can modify it and delete
     # also create new ones
@@ -235,7 +232,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
     def test_post_list(self):
         self.login('user')
-        count = Mission.objects.count()
+        Mission.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -248,7 +245,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
     def test_post_list_no_owner(self):
         self.login('user')
-        count = Mission.objects.count()
+        Mission.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -273,7 +270,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
     def test_delete_detail(self):
         self.login('user')
-        count = Mission.objects.count()
+        Mission.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

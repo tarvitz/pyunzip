@@ -209,7 +209,7 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
 
 
 class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
-                            APITestCase):
+                           APITestCase):
     # test non-privileged user,
     # this user is owner of event so he/she can modify it and delete
     # also create new ones
@@ -246,7 +246,7 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
 
     def test_post_list(self):
         self.login('user')
-        count = Codex.objects.count()
+        Codex.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -259,7 +259,7 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
 
     def test_post_list_no_owner(self):
         self.login('user')
-        count = Codex.objects.count()
+        Codex.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -284,7 +284,7 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
 
     def test_delete_detail(self):
         self.login('user')
-        count = Codex.objects.count()
+        Codex.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

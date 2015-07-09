@@ -13,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.text import force_text
 
 from django.core import exceptions
-from django.conf import settings
 
 from copy import deepcopy
 import allure

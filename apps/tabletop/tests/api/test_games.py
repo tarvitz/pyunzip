@@ -9,8 +9,6 @@ from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
 
-from apps.core.helpers import get_content_type
-
 import simplejson as json
 from copy import deepcopy
 
@@ -197,7 +195,7 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
 
 
 class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
-                            APITestCase):
+                          APITestCase):
     # test non-privileged user,
     # this user is owner of event so he/she can modify it and delete
     # also create new ones
@@ -234,7 +232,7 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
 
     def test_post_list(self):
         self.login('user')
-        count = Game.objects.count()
+        Game.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -247,7 +245,7 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
 
     def test_post_list_no_owner(self):
         self.login('user')
-        count = Game.objects.count()
+        Game.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -272,7 +270,7 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
 
     def test_delete_detail(self):
         self.login('user')
-        count = Game.objects.count()
+        Game.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

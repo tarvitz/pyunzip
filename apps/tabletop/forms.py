@@ -51,7 +51,6 @@ class AddCodexModelForm(forms.ModelForm):
 
 class AddBattleReportForm(RequestModelForm):
     title = forms.CharField(
-        #regex=re.compile('^[\w\d\ \-\_\.]+$'),
         label=pgettext_lazy("Title", "battle report title"),
         help_text=_("battle report title, please be more creative"),
         widget=forms.TextInput(attrs={'class': 'span8 form-control'})
@@ -130,7 +129,6 @@ class AddBattleReportForm(RequestModelForm):
                         'rosters that differ with pts field'
                     )
                 )
-        #returns int list
         return rosters
 
     def clean(self):
@@ -140,7 +138,7 @@ class AddBattleReportForm(RequestModelForm):
         layout = self.cleaned_data.get('layout', None)
         if rosters and winners:
             for winner in winners:
-                if not winner in rosters:
+                if winner not in rosters:
                     msg = _(
                         'You must choose winner\'s roster id within '
                         'rosters\' ids you passed'
@@ -241,7 +239,6 @@ class DeepSearchRosterForm(RequestForm):
             return
         r = re.compile('[\w\s-]+')
         player = r.match(player).group()
-        #print player
         return player
 
     def clean_pts(self):
@@ -313,7 +310,7 @@ class AddRosterForm(RequestForm):
             referer = '/'
         return referer
 
-    #kinda cheat ;)
+    # kinda cheat ;)
     def clean_player(self):
         player = self.cleaned_data.get('player', None)
         if len(player) > 64:

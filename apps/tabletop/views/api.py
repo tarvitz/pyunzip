@@ -6,7 +6,10 @@ from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 
 from rest_framework import viewsets
 from rest_framework import permissions
-from apps.tabletop.serializers import *
+from apps.tabletop.serializers import (
+    CodexSerializer, MissionSerializer, GameSerializer, ReportSerializer,
+    RosterSerializer
+)
 
 
 class CodexFilterSet(django_filters.FilterSet):

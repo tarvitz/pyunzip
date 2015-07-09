@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.contrib import admin
 from apps.tabletop.models import (
-    Roster, Game, Mission, Report,
+    Roster, Game, Mission
 )
 
 
