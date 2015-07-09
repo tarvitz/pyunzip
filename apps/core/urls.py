@@ -1,10 +1,8 @@
-from django.conf.urls import *
-from django.utils.translation import ugettext_lazy as _
+from django.conf.urls import url, patterns
 from apps.core.shortcuts import direct_to_template
 
 urlpatterns = patterns(
     'apps.core.views',
-    #url(r'^$', 'index', name='index'),
     url(r'^url/$', 'safe_url', name='safe-url'),
     # directs
     url(r'^password/restored/$', direct_to_template,
@@ -27,8 +25,7 @@ urlpatterns = patterns(
     url('^e1cfb81ac9ad.html$', direct_to_template,
         {'template': 'static/e1cfb81ac9ad.html'},
         name='yande-mail-verification'),
-    url('^robots.txt$', 'robots',
-       name='url_robots'),
+    url('^robots.txt$', 'robots', name='url_robots'),
     # static
     url(r'accounts/password/changed/successful/$',
         direct_to_template, {'template': 'static/password_changed.html'},

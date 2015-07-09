@@ -16,8 +16,6 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 
 from django.db.models import Model, Q
-from django.template import Context
-from django.template.loader import get_template
 from datetime import datetime, date
 
 from rest_framework import status
@@ -195,7 +193,7 @@ class TestHelperMixin(object):
             to check form errors and print them to stdout
         :return: None
         """
-        if not 'form' in context:
+        if 'form' not in context:
             return
 
         form = context['form']
@@ -211,13 +209,14 @@ class TestHelperMixin(object):
             for key, error_list in form.errors.items():
                 logging.warning(
                     "in '%(key)s' got: '%(errors)s'" % {
-                    'key': key,
-                    'errors': (
-                        "; ".join([i for i in error_list])
-                        if isinstance(error_list, (list, tuple))
-                        else error_list
-                    )
-                })
+                        'key': key,
+                        'errors': (
+                            "; ".join([i for i in error_list])
+                            if isinstance(error_list, (list, tuple))
+                            else error_list
+                        )
+                    }
+                )
             return
         elif isinstance(form.errors, (list, tuple)):
             for f in form.errors:

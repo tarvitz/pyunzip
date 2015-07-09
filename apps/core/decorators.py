@@ -1,19 +1,13 @@
 # coding: utf-8
-
-from django.http import HttpResponse
 from django.shortcuts import redirect
 
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
-
-
-import simplejson as json
 
 
 def has_permission(perms):
     """checks if request.user has permission"""
     permissions = perms
-    
+
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             user = request.user

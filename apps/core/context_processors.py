@@ -1,5 +1,4 @@
 # coding: utf-8
-from apps.wh.models import MiniQuote
 from django.conf import settings
 
 
@@ -31,6 +30,6 @@ def global_settings(request):
 
 def global_referer(request):
     return {
-        'global_referer': request.META.get('HTTP_REFERER','/'),
+        'global_referer': request.META.get('HTTP_REFERER', '/'),
         'current_referer': request.META.get('PATH_INFO', '/')
     }

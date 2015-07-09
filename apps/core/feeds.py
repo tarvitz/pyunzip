@@ -10,7 +10,7 @@ class NewsEntries(Feed):
     description = "The lastes news"
     title_template = 'feeds/news/newsentries_title.html'
     description_template = 'feeds/news/newsentries_description.html'
-    
+
     def item_link(self, obj):
         link = obj.get_absolute_url()
         return link

@@ -88,7 +88,7 @@ class GetFormNode(Node):
         )
         app = self.init[:self.init.rindex('.')]
         _form = self.init[self.init.rindex('.')+1:]
-        #module = __import__(app, 0, 0, -1)
+        # module = __import__(app, 0, 0, -1)
         module = importlib.import_module(app)
         form_class = getattr(module, _form)
         context[self.varname] = (

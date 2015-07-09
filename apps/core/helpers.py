@@ -116,7 +116,7 @@ def paginate(objects, page, **kwargs):
     _pages = kwargs.get('pages', settings.OBJECTS_ON_PAGE)
 
     paginator = Paginator(objects, _pages)
-    #?page=last goes for the last page
+    # ?page=last goes for the last page
     if isinstance(page, six.string_types):
         if page in ('last', 'end'):
             page = paginator.num_pages
@@ -206,12 +206,12 @@ def model_json_encoder(obj, **kwargs):
     elif isinstance(obj, Model):
         obj.__dict__.update({'unicode': obj.__unicode__()})
         dt = obj.__dict__
-        #obsolete better use partial
+        # obsolete better use partial
         fields = ['_content_type_cache', '_author_cache', '_state']
         for key in fields:
             if key in dt:
                 del dt[key]
-        #normailize caches
+        # normailize caches
         disable_cache = kwargs['disable_cache'] \
             if 'disable_cache' in kwargs else False
 
@@ -220,12 +220,12 @@ def model_json_encoder(obj, **kwargs):
             if '_cache' in key and key.startswith('_'):
                 if not disable_cache:
                     dt[key[1:]] = dt[key]
-                    #delete cache
+                    # delete cache
                     del dt[key]
             if disable_cache and '_cache' in key:
                 del dt[key]
 
-        #delete restriction fields
+        # delete restriction fields
         if kwargs.get('fields_restrict'):
             for f in kwargs.get('fields_restrict'):
                 if f in dt:

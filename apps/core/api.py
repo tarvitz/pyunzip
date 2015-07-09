@@ -6,6 +6,7 @@ from rest_framework import viewsets
 
 from apps.core.serializers import ContentTypeSerializer
 
+
 class OwnerModelPermissionMixin(object):
     """ object owner detect mixin """
     owner_fields = ['user', 'owner']

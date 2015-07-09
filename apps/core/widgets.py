@@ -17,19 +17,22 @@ from itertools import chain
 
 
 class TinyMkWidget(Widget):
-    def __init__(self,attrs=None):
+    def __init__(self, attrs=None):
         default_attrs = {'cols': '40', 'rows': '25'}
         if attrs:
             default_attrs.update(attrs)
-        super(TinyMkWidget,self).__init__(default_attrs)
+        super(TinyMkWidget, self).__init__(default_attrs)
 
-    def render(self,name,value,attrs=None):
-        if value is None: value = ''
+    def render(self, name, value, attrs=None):
+        if value is None:
+            value = ''
         final_attrs = self.build_attrs(attrs, name=name)
         tinymk_template = get_template('core/widgets/tinymk_widget.html')
-        out = tinymk_template.render(Context({'tinymk':final_attrs}))
-        out = out+mark_safe(u'<textarea%s>%s</textarea>' % (flatatt(final_attrs),
-            conditional_escape(force_text(value))))
+        out = tinymk_template.render(Context({'tinymk': final_attrs}))
+        out = out+mark_safe(
+            u'<textarea%s>%s</textarea>' % (
+                flatatt(final_attrs), conditional_escape(force_text(value)))
+            )
         return out
 
 
@@ -164,28 +167,29 @@ class DaySelect(CheckboxSelectMultiple):
     def __init__(self, attrs={}):
         self.attrs = attrs
 
-    def render(self, name, value, attrs=None):
-        final_attrs = self.build_attrs(attrs)
-        final_attrs.update({
-            'choices': self.choices,
-            'name': name
-        })
-
-        node = render_to_string(
-            'core/widgets/days_select.html',
-            final_attrs,
-        )
-        return mark_safe(node)
+    # def render(self, name, value, attrs=None):
+    #     final_attrs = self.build_attrs(attrs)
+    #     final_attrs.update({
+    #         'choices': self.choices,
+    #         'name': name
+    #     })
+    #
+    #     node = render_to_string(
+    #         'core/widgets/days_select.html',
+    #         final_attrs,
+    #     )
+    #     return mark_safe(node)
 
     def render(self, name, value, attrs=None, choices=()):
-        if value is None: value = []
+        if value is None:
+            value = []
         has_id = attrs and 'id' in attrs
         final_attrs = self.build_attrs(attrs, name=name)
-        output = [u'<ul>']
         # Normalize to strings
         str_values = set([force_text(v) for v in value])
         out = []
-        for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
+        for i, (option_value, option_label) in enumerate(chain(self.choices,
+                                                               choices)):
             # If an ID attribute was given, add a numeric index as a suffix,
             # so that the checkboxes don't all have the same ID attribute.
             if has_id:
@@ -194,7 +198,9 @@ class DaySelect(CheckboxSelectMultiple):
             else:
                 label_for = ''
 
-            cb = CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
+            cb = CheckboxInput(
+                final_attrs, check_test=lambda value: value in str_values
+            )
             option_value = force_text(option_value)
             rendered_cb = cb.render(name, option_value)
             option_label = conditional_escape(force_text(option_label))
