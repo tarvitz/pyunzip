@@ -38,9 +38,15 @@ logger = logging.getLogger(__name__)
 @allure.feature('Core')
 class JustTest(TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_news_categories.json',
-        'tests/fixtures/load_news.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_news_categories.json',
+        'load_news.json',
     ]
 
     def setUp(self):
