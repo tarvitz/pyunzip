@@ -5,5 +5,12 @@
     "fields": {
         "codename": "wh40k"
     }
+},
+{
+    "pk": "Warhammer Fantasy Battle",
+    "model": "tabletop.game",
+    "fields": {
+        "codename": "whfb"
+    }
 }
 ]
