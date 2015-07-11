@@ -49,3 +49,22 @@ if 'django_plop.middleware.PlopMiddleware' in MIDDLEWARE_CLASSES:
     MIDDLEWARE_CLASSES = list(MIDDLEWARE_CLASSES)
     MIDDLEWARE_CLASSES.pop(MIDDLEWARE_CLASSES.index(
         'django_plop.middleware.PlopMiddleware'))
+
+# internal apps
+MIGRATION_MODULES = {
+    app: "apps.%s.migrations_not_used_in_tests" % app
+    for app in ["accounts", "tabletop", "wh", "core",
+                "files", "karma", "menu", "news", "pybb",
+                "comments",]
+}
+# django apps
+MIGRATION_MODULES.update({
+    app: "django.contrib.%s.migrations_not_used_in_tests" % app
+    for app in ["sites", "admin", "auth", "contenttypes", "sessions"]
+})
+
+# third-party apps
+MIGRATION_MODULES.update({
+    app: "%s.migrations_not_used_in_tests" % app
+    for app in ['django_cron', ]
+})
