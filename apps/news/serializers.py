@@ -1,12 +1,14 @@
 # coding: utf-8
-from apps.news.models import Event, EventWatch
+from apps.news.models import Event, EventWatch, EventPlace
 from rest_framework import serializers
 
 
 class EventSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.SerializerMethodField('get_self_url')
     is_new = serializers.SerializerMethodField('get_self_is_new')
-    place = serializers.PrimaryKeyRelatedField(read_only=True)
+    place = serializers.PrimaryKeyRelatedField(
+        read_only=False, queryset=EventPlace.objects
+    )
 
     def get_self_url(self, instance):
         return instance.get_absolute_url()

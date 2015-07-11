@@ -157,6 +157,38 @@ class JustTest(TestCase):
             raise AssertionError
 
 
+class ApiTestSourceAssertionMixin(object):
+    """
+    API test source assertion mixin
+    """
+    def assertUpdate(self, data, payload):
+        """
+        asserts post/put/patch data given in dict with response one
+
+        :param dict data: user given data to post/put/patch/etc
+        :param dict payload: response.data or response payload in json (dict)
+        :rtype: None
+        :return: None
+        :raises AssertionError:
+            - if one or more fields has not equal data
+        """
+        errors = []
+        for field, item in data.items():
+            value = data[field]
+            if isinstance(item, (datetime, )):
+                value = data[field].isoformat()[:-3] + '000'
+            elif isinstance(item, six.string_types):
+                if value.startswith('http://testserver'):
+                    value = value.replace('http://testserver', '')
+
+            if value != payload[field]:
+                errors.append(
+                    '%r: %r != %r' % (field, value, payload[field])
+                )
+        if errors:
+            raise AssertionError(errors)
+
+
 class TestHelperMixin(object):
     def login(self, user, password='123456'):
         if user:

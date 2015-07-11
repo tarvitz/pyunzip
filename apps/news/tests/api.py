@@ -3,24 +3,30 @@
 from django.contrib.auth import get_user_model
 User = get_user_model()
 from apps.news.models import Event, EventPlace
-from apps.core.tests import TestHelperMixin
+from apps.core.tests import TestHelperMixin, ApiTestSourceAssertionMixin
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from apps.core.helpers import get_content_type
 
 import simplejson as json
-from copy import deepcopy
 from datetime import datetime, timedelta
 
 
 class EventViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_event_places.json',
-        'tests/fixtures/load_events.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_event_places.json',
+        'load_events.json',
     ]
 
     def setUp(self):
@@ -94,7 +100,7 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
 
         # Always False for anonymous user
-        object_detail_response = deepcopy(self.object_detail_response)
+        object_detail_response = dict(**self.object_detail_response)
         object_detail_response.update({
             'is_new': False
         })
@@ -116,7 +122,7 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -125,7 +131,7 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -134,7 +140,7 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -143,10 +149,11 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
-class EventViewSetAdminUserTest(EventViewSetTestMixin, TestHelperMixin,
+class EventViewSetAdminUserTest(EventViewSetTestMixin,
+                                ApiTestSourceAssertionMixin, TestHelperMixin,
                                 APITestCase):
     # test admin user
     def test_admin_get_detail(self):
@@ -173,13 +180,8 @@ class EventViewSetAdminUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
-
-        for field, item in put.items():
-            if isinstance(item, (datetime, )):
-                self.assertEqual(load[field], put[field].isoformat()[:-3])
-            else:
-                self.assertEqual(load[field], put[field])
+        put = dict(**self.put)
+        self.assertUpdate(put, load)
         self.assertEqual(Event.objects.count(), count)
 
     def test_admin_post_list(self):
@@ -191,14 +193,10 @@ class EventViewSetAdminUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Event.objects.count(), count + 1)
-        for field, value in post.items():
-            if isinstance(value, (datetime, )):
-                self.assertEqual(load[field], value.isoformat()[:-3])
-            else:
-                self.assertEqual(load[field], value)
+        self.assertUpdate(post, load)
 
     def test_admin_patch_detail(self):
         self.login('admin')
@@ -209,13 +207,7 @@ class EventViewSetAdminUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        obj = Event.objects.get(pk=self.event.pk)
-        for field, value in self.patch.items():
-            if isinstance(getattr(obj, field), (datetime, )):
-                self.assertEqual(getattr(obj, field).isoformat(), value)
-            else:
-                self.assertEqual(getattr(obj, field), value)
-                self.assertEqual(load[field], value)
+        self.assertUpdate(self.patch, load)
         self.assertEqual(Event.objects.count(), count)
 
     def test_admin_delete_detail(self):
@@ -261,7 +253,7 @@ class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         self.login('user')
@@ -272,7 +264,7 @@ class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_patch_detail(self):
         self.login('user')
@@ -283,7 +275,7 @@ class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user')
@@ -294,4 +286,4 @@ class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
