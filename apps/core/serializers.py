@@ -49,6 +49,42 @@ class ModelAccessSerializerMixin(object):
         return super(ModelAccessSerializerMixin, self).validate(attrs)
 
 
+class CurrentUserSerializerMixin(object):
+    """
+    check permission and set user field to current user
+    """
+    check_permission = 'auth.change_user'
+    check_fields = []
+
+    def _get_user_field(self, user):
+        """
+        get roster owner, if None or permission set can not change owner
+        there should return current user
+
+        :param user: owner
+        :rtype: apps.accounts.models.User
+        :return: owner user
+        """
+        request = self._context['request']
+        if request.user.has_perm(self.check_permission):
+            return user and user or request.user
+        return request.user
+
+    def _process_validated_data(self, validated_data):
+        """
+        update validated data with proper owner object and other things
+
+        :param dict validated_data: validated data for update/create actions
+        :rtype: dict
+        :return: validated data
+        """
+        validated_data.update({
+            field: self._get_user_field(validated_data.get(field))
+            for field in self.check_fields
+        })
+        return validated_data
+
+
 class ContentTypeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = ContentType

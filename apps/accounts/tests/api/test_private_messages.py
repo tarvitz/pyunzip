@@ -13,9 +13,10 @@ from django.conf import settings
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.utils.encoding import force_text
 
 import simplejson as json
-from copy import deepcopy
+
 
 __all__ = [
     'PMViewSetAdminUserTest', 'PMViewSetAnonymousUserTest',
@@ -25,11 +26,18 @@ __all__ = [
 
 class PMViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pms.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_pms.json',
     ]
 
     def setUp(self):
+        self.maxDiff = None
         self.user = User.objects.get(username='user')
         self.admin = User.objects.get(username='admin')
         self.other_user = User.objects.get(username='user2')
@@ -56,7 +64,7 @@ class PMViewSetTestMixin(object):
             'is_read': False,
             'sender': reverse('api:user-detail', args=(self.user.pk, )),
             'syntax': 'textile',
-            'title': u'title and so on',
+            'title': u'title and so on'
         }
         self.patch = {
             'title': u'New pm comment and so on',
@@ -74,16 +82,16 @@ class PMViewSetTestMixin(object):
             'title': u'New message',
         }
         self.object_detail_response = {
-            'addressee': 'http://testserver/api/users/7/',
-            'cache_content': '\t<p>dasdad</p>',
-            'content': 'dasdad',
+            'addressee': 'http://testserver/api/users/2/',
+            'cache_content': '\t<p>Вот еба!</p>',
+            'content': 'Вот еба!',
             'dba': False,
             'dbs': False,
-            'is_read': False,
-            'sender': 'http://testserver/api/users/6/',
-            'sent': '2013-04-27T00:00:00',
-            'syntax': 'textile',
-            'title': 'tes',
+            'is_read': True,
+            'sender': 'http://testserver/api/users/1/',
+            'sent': '2014-05-27T03:41:09.889000',
+            'syntax': None,
+            'title': 'сообщение',
             'url': 'http://testserver/api/pms/1/'
         }
 
@@ -101,7 +109,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
 
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            load,
+            {'detail': _('Authentication credentials were not provided.')})
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -109,7 +118,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            load,
+            {'detail': _('Authentication credentials were not provided.')})
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -119,7 +129,7 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -128,7 +138,7 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -137,7 +147,7 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -146,7 +156,7 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
@@ -176,11 +186,13 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
-        put.pop('id')
-        self.check_response(load, put)
-
         self.assertEqual(PM.objects.count(), count)
+
+        put = dict(**self.put)
+        #: todo make checks automatically
+        load.pop('url')
+        load.pop('sent')
+        self.check_response(put, load)
 
     def test_admin_post_list(self):
         """
@@ -197,7 +209,7 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
@@ -238,7 +250,7 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load, self.object_detail_response)
+        self.assertEqual(self.object_detail_response, load)
 
     def test_get_list(self):
         self.login('user')
@@ -259,7 +271,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load,
-            {'detail': 'You do not have permission to perform this action.'})
+            {'detail': _('You do not have permission to perform this action.')}
+        )
 
     def test_post_list(self):
         self.login('user')
@@ -269,14 +282,14 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
 
     def test_post_list_optional(self):
         self.login('user')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.pop('sender')
         count = PM.objects.count()
         response = self.client.post(self.url_post, data=post,
@@ -292,7 +305,7 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
 
     def test_post_list_no_owner(self):
         self.login('user')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.update({
             'sender': reverse('api:user-detail', args=(self.admin.pk, ))
         })
@@ -302,7 +315,7 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
@@ -319,7 +332,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load,
-            {'detail': 'You do not have permission to perform this action.'})
+            {'detail': _('You do not have permission to perform this action.')}
+        )
 
     def test_delete_detail(self):
         self.login('user')
@@ -332,7 +346,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(PM.objects.count(), count)
         self.assertEqual(
             load,
-            {'detail': 'You do not have permission to perform this action.'})
+            {'detail': _('You do not have permission to perform this action.')}
+        )
 
 
 class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
@@ -354,9 +369,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(
-            load['detail'],
-            'Not found')
+        self.assertEqual(force_text(_('Not found.')), load['detail'])
 
     def test_get_list(self):
         self.login('user2')
@@ -377,7 +390,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         """
@@ -387,7 +400,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         :return:
         """
         self.login('user2')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         addressee, sender = post['sender'], post['addressee']
         post.update({
             'addressee': addressee,
@@ -410,7 +423,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         :return:
         """
         self.login('user2')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         count = PM.objects.count()
         response = self.client.post(self.url_post, data=post,
@@ -420,7 +433,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(PM.objects.count(), count)
         self.assertEqual(load['addressee'][0],
-                         unicode(_("You can not send pm for yourself")))
+                         force_text(_("You can not send pm for yourself")))
 
     def test_post_list_no_owner_set(self):
         """
@@ -429,7 +442,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         """
         self.login('user2')
         count = PM.objects.count()
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.pop('sender')
         post.update({
             'addressee': reverse('api:user-detail', args=(self.user.pk, ))
@@ -454,7 +467,7 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user2')
@@ -465,4 +478,4 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))

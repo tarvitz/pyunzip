@@ -13,9 +13,10 @@ from django.conf import settings
 from django.db.models import Q
 from django.core.urlresolvers import reverse
 from datetime import datetime, date, timedelta
+from django.utils.translation import ugettext_lazy as _
 
 import simplejson as json
-from copy import deepcopy
+
 
 __all__ = [
     'PolicyWarningViewSetAdminUserTest',
@@ -27,11 +28,18 @@ __all__ = [
 
 class PolicyWarningViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_policy_warnings.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_policy_warnings.json',
     ]
 
     def setUp(self):
+        self.maxDiff = None
         self.user = User.objects.get(username='user')
         self.admin = User.objects.get(username='admin')
         self.other_user = User.objects.get(username='user2')
@@ -69,13 +77,13 @@ class PolicyWarningViewSetTestMixin(object):
         }
         self.object_detail_response = {
             'comment': u'\u044b!',
-            'created_on': '2014-06-10T14:36:21.760',
+            'created_on': '2014-06-10T14:36:21.760000',
             'date_expired': '2014-06-10',
             'is_expired': False,
             'level': 4,
-            'updated_on': '2014-06-10T14:34:15.770',
+            'updated_on': '2014-06-10T14:34:15.770000',
             'url': 'http://testserver/api/warnings/1/',
-            'user': 'http://testserver/api/users/6/'
+            'user': 'http://testserver/api/users/2/'
         }
 
 
@@ -92,7 +100,9 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
 
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            {'detail': _('Authentication credentials were not provided.')},
+            load
+        )
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -100,7 +110,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            load,
+            {'detail': _('Authentication credentials were not provided.')})
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -110,7 +121,7 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -119,7 +130,7 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -128,7 +139,7 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -137,7 +148,7 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
@@ -167,7 +178,7 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         put.pop('id')
         self.check_response(load, put)
 
@@ -189,7 +200,7 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(PolicyWarning.objects.count(), count + 1)
         self.check_response(load, post)
@@ -245,7 +256,7 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(load, {'detail': 'Not found'})
+        self.assertEqual(load, {'detail': _('Not found.')})
 
     def test_get_list(self):
         self.login('user')
@@ -267,7 +278,7 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         """
@@ -284,7 +295,7 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_patch_detail(self):
         self.login('user')
@@ -295,7 +306,7 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user')
@@ -306,4 +317,4 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))

@@ -270,7 +270,10 @@ class TestHelperMixin(object):
             elif isinstance(value, date):
                 assertion(response[field], value.isoformat())
             elif isinstance(value, six.string_types):
-                if '/api/' in value:
+                if value.startswith('http://testserver'):
+                    assertion(response[field],
+                              value.replace('http://testserver', ''))
+                elif '/api/' in value:
                     assertion(response[field], 'http://testserver' + value)
                 else:
                     assertion(response[field], value)

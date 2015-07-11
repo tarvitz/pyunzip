@@ -1,5 +1,6 @@
 # coding: utf-8
 from apps.accounts.models import User, PM, PolicyWarning
+from apps.core.serializers import CurrentUserSerializerMixin
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group, Permission
 from rest_framework import serializers
@@ -27,28 +28,33 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         )
 
 
-class PMSerializer(serializers.HyperlinkedModelSerializer):
-    sender = serializers.HyperlinkedRelatedField(required=False,
-                                                 read_only=True,
-                                                 view_name='user-detail')
+class PMSerializer(CurrentUserSerializerMixin,
+                   serializers.HyperlinkedModelSerializer):
+    sender = serializers.HyperlinkedRelatedField(
+        required=False, read_only=False,
+        view_name='user-detail', queryset=User.objects
+    )
 
-    def restore_object(self, attrs, instance=None):
-        if not attrs.get('sender'):
-            attrs['sender'] = self.context['request'].user
-        return super(PMSerializer, self).restore_object(attrs, instance)
+    check_fields = ['sender', ]
+    check_permission = 'accounts.change_pm'
 
-    def save_object(self, obj, **kwargs):
-        request = self.context['request']
-        if not request.user.has_perm('accounts.change_pm'):
-            obj.sender = request.user
-        return super(PMSerializer, self).save_object(obj, **kwargs)
+    def update(self, instance, validated_data):
+        self._process_validated_data(validated_data)
+        for k, v in validated_data.items():
+            setattr(instance, k, v)
+        instance.save()
+        return instance
 
-    def validate_addressee(self, attrs, source):
-        if attrs[source] == self.context['request'].user:
+    def create(self, validated_data):
+        self._process_validated_data(validated_data)
+        return PM.objects.create(**validated_data)
+
+    def validate_addressee(self, value):
+        if value == self.context['request'].user:
             raise serializers.ValidationError(
                 _("You can not send pm for yourself")
             )
-        return attrs
+        return value
 
     class Meta:
         model = PM

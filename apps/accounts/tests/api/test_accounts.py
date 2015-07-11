@@ -9,8 +9,8 @@ from django.core.urlresolvers import reverse
 
 
 __all__ = [
-    'UserResourceTest', 'UserViewSetAnonymousUserTest',
-    'UserViewSetAdminUserTest', 'UserViewSetUserTest']
+    'UserViewSetAnonymousUserTest', 'UserViewSetAdminUserTest',
+    'UserViewSetUserTest']
 
 
 class UserViewSetMixin(object):

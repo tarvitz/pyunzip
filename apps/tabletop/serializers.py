@@ -1,6 +1,8 @@
 # coding: utf-8
 from apps.accounts.models import User
 from apps.tabletop.models import Codex, Roster, Report, Mission, Game
+from apps.core.serializers import CurrentUserSerializerMixin
+
 from rest_framework import serializers
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
@@ -27,7 +29,8 @@ class CodexSerializer(serializers.HyperlinkedModelSerializer):
         model = Codex
 
 
-class RosterSerializer(serializers.HyperlinkedModelSerializer):
+class RosterSerializer(CurrentUserSerializerMixin,
+                       serializers.HyperlinkedModelSerializer):
     codex = serializers.HyperlinkedRelatedField(required=True,
                                                 queryset=Codex.objects,
                                                 view_name='codex-detail')
@@ -35,33 +38,8 @@ class RosterSerializer(serializers.HyperlinkedModelSerializer):
         required=False, read_only=False, view_name='user-detail',
         queryset=User.objects
     )
-
-    def _get_owner(self, owner):
-        """
-        get roster owner, if None or permission set can not change owner
-        there should return current user
-
-        :param owner: owner
-        :rtype: apps.accounts.models.User
-        :return: owner user
-        """
-        request = self._context['request']
-        if request.user.has_perm('tabletop.change_roster'):
-            return owner and owner or request.user
-        return request.user
-
-    def _process_validated_data(self, validated_data):
-        """
-        update validated data with proper owner object and other things
-
-        :param dict validated_data: validated data for update/create actions
-        :rtype: dict
-        :return: validated data
-        """
-        validated_data.update({
-            'owner': self._get_owner(validated_data.get('owner'))
-        })
-        return validated_data
+    check_fields = ['owner']
+    check_permission = 'tabletop.change_roster'
 
     def update(self, instance, validated_data):
         self._process_validated_data(validated_data)
