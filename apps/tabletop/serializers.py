@@ -1,4 +1,5 @@
 # coding: utf-8
+from apps.accounts.models import User
 from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 from rest_framework import serializers
 from django.forms.util import ErrorList
@@ -58,10 +59,13 @@ class RosterSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class ReportSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.HyperlinkedRelatedField(required=False, read_only=True,
-                                                view_name='user-detail')
+    owner = serializers.HyperlinkedRelatedField(
+        read_only=False, queryset=User.objects,
+        view_name='user-detail',
+        default=None
+    )
 
-    def validate_owner(self, attrs, source):
+    def validate_owner(self, value):
         request = self.context['request']
         prefix = 'change'
         if request.method == 'POST':
@@ -77,15 +81,15 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
             'model': model_name,
             'prefix': prefix
         }
-        owner = attrs[source]
+        owner = value
         if not(request.user and request.user.has_perm(perm)):
             if owner is None:
-                attrs[source] = request.user
+                value = request.user
             elif owner != request.user:
                 raise serializers.ValidationError(
                     FAILURE_MESSAGES['wrong_owner']
                 )
-        return attrs
+        return value
 
     def validate(self, attrs):
         winners = attrs.get('winners', [])
@@ -96,7 +100,7 @@ class ReportSerializer(serializers.HyperlinkedModelSerializer):
                 msg = FAILURE_MESSAGES['wrong_winner_rosters'] % winner
                 msg_list.append(msg)
         if msg_list:
-            self._errors['winners'] = ErrorList(msg_list)
+            raise serializers.ValidationError(ErrorList(msg_list))
         return attrs
 
     class Meta:
@@ -112,7 +116,10 @@ class GameSerializer(serializers.HyperlinkedModelSerializer):
 
 class MissionSerializer(serializers.HyperlinkedModelSerializer):
     # todo: investigate why hyperlinked serializer fails on post/put game data
-    game = serializers.PrimaryKeyRelatedField(read_only=True)
+    game = serializers.PrimaryKeyRelatedField(
+        read_only=False,
+        queryset=Game.objects
+    )
 
     class Meta:
         model = Mission

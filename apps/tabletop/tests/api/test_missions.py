@@ -8,9 +8,10 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 import simplejson as json
-from copy import deepcopy
+
 
 
 class MissionViewSetTestMixin(object):
@@ -89,7 +90,7 @@ class MissionViewSetAnonymousUserTest(MissionViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -98,7 +99,7 @@ class MissionViewSetAnonymousUserTest(MissionViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -107,7 +108,7 @@ class MissionViewSetAnonymousUserTest(MissionViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -116,7 +117,7 @@ class MissionViewSetAnonymousUserTest(MissionViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class MissionViewSetAdminUserTest(MissionViewSetTestMixin, TestHelperMixin,
@@ -147,7 +148,7 @@ class MissionViewSetAdminUserTest(MissionViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
 
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         self.check_response(load, put)
 
         self.assertEqual(Mission.objects.count(), count)
@@ -167,7 +168,7 @@ class MissionViewSetAdminUserTest(MissionViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Mission.objects.count(), count + 1)
         self.check_response(load, post)
@@ -228,7 +229,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         self.login('user')
@@ -241,7 +242,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list_no_owner(self):
         self.login('user')
@@ -254,7 +255,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_patch_detail(self):
         self.login('user')
@@ -266,7 +267,7 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user')
@@ -279,4 +280,4 @@ class MissionViewSetUserTest(MissionViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))

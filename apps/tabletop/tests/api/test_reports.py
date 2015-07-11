@@ -10,12 +10,13 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_text
 from django.conf import settings
 
 from apps.core.helpers import get_content_type
 
 import simplejson as json
-from copy import deepcopy
 
 
 class ReportViewSetTestMixin(object):
@@ -105,13 +106,13 @@ class ReportViewSetTestMixin(object):
                              u'\u043d\u044c \u0431\u043e\u043b\u044c'
                              u'\u0448\u043e\u0439 \u0431\u0430\u0442\u043b '
                              u'\u0440\u0435\u043f\u043e\u0440\u0442.</p>',
-            'created_on': '2014-06-17T04:59:03.339',
+            'created_on': '2014-06-17T04:59:03.339000',
             'deployment': 'dow',
             'is_approved': False,
             'is_draw': False,
             'layout': '1vs1',
             'mission': 'http://testserver/api/missions/6/',
-            'owner': 'http://testserver/api/users/6/',
+            'owner': 'http://testserver/api/users/2/',
             'rosters': [],
             'syntax': '',
             'title': u'\u0411\u0438\u0442\u0432\u0430 \u0437\u0430 '
@@ -149,7 +150,7 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -158,7 +159,7 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -167,7 +168,7 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -176,7 +177,7 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
@@ -206,7 +207,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         put.pop('id')
         self.check_response(load, put)
 
@@ -228,7 +229,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
 
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
@@ -287,7 +288,7 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         put.pop('id')
         self.check_response(load, put)
 
@@ -299,14 +300,14 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
     def test_post_list_failure(self):
         self.login('user')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         winners = Roster.objects.filter(pk__in=[3, 4])
 
         post['winners'] = [
@@ -319,11 +320,11 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(len(load['winners']), 2)
+        self.assertEqual(len(load['non_field_errors']), 2)
         for idx, winner in enumerate(winners):
             self.assertEqual(
-                load['winners'][idx],
-                unicode(FAILURE_MESSAGES['wrong_winner_rosters'] % winner)
+                load['non_field_errors'][idx],
+                force_text(FAILURE_MESSAGES['wrong_winner_rosters'] % winner)
             )
 
     def test_post_list_no_owner(self):
@@ -334,7 +335,7 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
@@ -393,7 +394,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         """
@@ -403,7 +404,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         :return:
         """
         self.login('user2')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.update({
             'owner': reverse('api:user-detail', args=(self.other_user.pk, ))
         })
@@ -425,7 +426,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         """
         self.login('user2')
         count = Report.objects.count()
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.pop('owner')
         response = self.client.post(self.url_post, data=post,
                                     format='json')
@@ -446,7 +447,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         """
         self.login('user2')
         count = Report.objects.count()
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         response = self.client.post(self.url_post, data=post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
@@ -455,7 +456,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(Report.objects.count(), count)
         self.assertEqual(load['owner'][0],
-                         unicode(FAILURE_MESSAGES['wrong_owner']))
+                         force_text(FAILURE_MESSAGES['wrong_owner']))
 
     def test_patch_detail(self):
         self.login('user2')
@@ -466,7 +467,7 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user2')
@@ -477,4 +478,4 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
