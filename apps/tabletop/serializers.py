@@ -3,7 +3,7 @@ from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 from rest_framework import serializers
 from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
-
+from django.contrib.contenttypes.models import ContentType
 
 __all__ = [
     'CodexSerializer', 'RosterSerializer', 'ReportSerializer',
@@ -17,7 +17,10 @@ FAILURE_MESSAGES = {
 
 
 class CodexSerializer(serializers.HyperlinkedModelSerializer):
-    content_type = serializers.PrimaryKeyRelatedField(read_only=True)
+    content_type = serializers.PrimaryKeyRelatedField(
+        read_only=False,
+        queryset=ContentType.objects.filter(app_label='wh',
+                                            model='side'))
 
     class Meta:
         model = Codex

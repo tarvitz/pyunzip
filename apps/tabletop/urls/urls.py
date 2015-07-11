@@ -1,6 +1,6 @@
 from django.conf.urls import url, patterns
 from django.contrib.auth.decorators import login_required
-from apps.tabletop.viewss import views
+from apps.tabletop.views import views
 
 
 urlpatterns = patterns(

@@ -61,5 +61,36 @@
     },
     "model": "accounts.user",
     "pk": 2
+}, {
+    "fields": {
+        "username": "user2",
+        "email": "user2@blacklibrary.ru",
+        "groups": [],
+        "settings": null,
+        "is_superuser": false,
+        "ranks": [],
+        "last_name": "User",
+        "date_joined": "2015-07-08T22:42:15.379",
+        "password": "pbkdf2_sha256$20000$8paR7fDjWq29$LrOsiLEdNbBmBRs26x/UY5g65QHExvu0KI/xpxPemns=",
+        "plain_avatar": "",
+        "avatar": "avatars/2_user_WviM94D.png",
+        "gender": "m",
+        "is_active": true,
+        "about": "blah",
+        "jid": "user2@blacklibrary.ru",
+        "nickname": "user2",
+        "user_permissions": [],
+        "army": 2,
+        "uin": 0,
+        "last_login": "2015-07-08T22:42:23.051",
+        "karma": 0,
+        "birthday": null,
+        "tz": 0.0,
+        "is_staff": true,
+        "first_name": "User",
+        "photo": ""
+    },
+    "model": "accounts.user",
+    "pk": 3
 }
 ]
