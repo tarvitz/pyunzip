@@ -9,11 +9,11 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext_lazy as _
 
 from apps.core.helpers import get_content_type
 
 import simplejson as json
-from copy import deepcopy
 
 
 class RosterViewSetTestMixin(object):
@@ -81,7 +81,7 @@ class RosterViewSetTestMixin(object):
             'codex': 'http://testserver/api/codexes/1/',
             'comments': '',
             'defeats': 0,
-            'owner': 'http://testserver/api/users/6/',
+            'owner': 'http://testserver/api/users/2/',
             'pts': 1000,
             'revision': 5,
             'roster': u'\u0424\u041a, 2\u0422\u0430\u043a\u0442\u0438'
@@ -108,7 +108,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
 
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            load,
+            {'detail': _('Authentication credentials were not provided.')})
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -116,7 +117,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load, {'detail': 'Authentication credentials were not provided.'})
+            load,
+            {'detail': _('Authentication credentials were not provided.')})
 
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
@@ -126,7 +128,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'],
+            _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -135,7 +138,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'],
+            _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -144,7 +148,7 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -153,7 +157,7 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
@@ -183,7 +187,7 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         put.pop('id')
         self.check_response(load, put)
 
@@ -204,7 +208,7 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
@@ -263,7 +267,7 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         put.pop('id')
         self.check_response(load, put)
 
@@ -275,7 +279,7 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
@@ -288,7 +292,7 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
@@ -347,7 +351,7 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         """
@@ -357,7 +361,7 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         :return:
         """
         self.login('user2')
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.update({
             'owner': reverse('api:user-detail', args=(self.other_user.pk, ))
         })
@@ -378,7 +382,7 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         """
         self.login('user2')
         count = Roster.objects.count()
-        post = deepcopy(self.post)
+        post = dict(**self.post)
         post.pop('owner')
         response = self.client.post(self.url_post, data=post,
                                     format='json')
@@ -400,7 +404,7 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user2')
@@ -411,4 +415,4 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))

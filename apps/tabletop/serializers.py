@@ -29,29 +29,57 @@ class CodexSerializer(serializers.HyperlinkedModelSerializer):
 
 class RosterSerializer(serializers.HyperlinkedModelSerializer):
     codex = serializers.HyperlinkedRelatedField(required=True,
-                                                queryset=Roster.objects,
+                                                queryset=Codex.objects,
                                                 view_name='codex-detail')
-    owner = serializers.HyperlinkedRelatedField(required=False, read_only=True,
-                                                view_name='user-detail')
+    owner = serializers.HyperlinkedRelatedField(
+        required=False, read_only=False, view_name='user-detail',
+        queryset=User.objects
+    )
 
-    def restore_object(self, attrs, instance=None):
-        if not attrs.get('owner'):
-            attrs.update({'owner': self.context['request'].user})
-        return super(RosterSerializer, self).restore_object(attrs, instance)
-
-    def save_object(self, obj, **kwargs):
+    def _get_owner(self, owner):
         """
-        It does not matter if user would pass wrong owner id,
-        anyway roster should be saved with his/hers one.
+        get roster owner, if None or permission set can not change owner
+        there should return current user
 
-        :param obj:
-        :param kwargs:
+        :param owner: owner
+        :rtype: apps.accounts.models.User
+        :return: owner user
+        """
+        request = self._context['request']
+        if request.user.has_perm('tabletop.change_roster'):
+            return owner and owner or request.user
+        return request.user
+
+    def _process_validated_data(self, validated_data):
+        """
+        update validated data with proper owner object and other things
+
+        :param dict validated_data: validated data for update/create actions
+        :rtype: dict
+        :return: validated data
+        """
+        validated_data.update({
+            'owner': self._get_owner(validated_data.get('owner'))
+        })
+        return validated_data
+
+    def update(self, instance, validated_data):
+        self._process_validated_data(validated_data)
+        for k, v in validated_data.items():
+            setattr(instance, k, v)
+        instance.save()
+        return instance
+
+    def create(self, validated_data):
+        """
+        It does not matter if user would pass wrong owner,
+        anyway roster should be save with his own id.
+
+        :param validated_data:
         :return:
         """
-        request = self.context['request']
-        if not request.user.has_perm('tabletop.change_roster'):
-            obj.owner = self.context['request'].user
-        return super(RosterSerializer, self).save_object(obj, **kwargs)
+        self._process_validated_data(validated_data)
+        return Roster.objects.create(**validated_data)
 
     class Meta:
         model = Roster
