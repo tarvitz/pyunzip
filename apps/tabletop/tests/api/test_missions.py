@@ -13,7 +13,6 @@ from django.utils.translation import ugettext_lazy as _
 import simplejson as json
 
 
-
 class MissionViewSetTestMixin(object):
     fixtures = [
         'load_universes.json',
