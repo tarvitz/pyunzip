@@ -335,8 +335,7 @@ class User(AbstractBaseUser):
 
     def get_karma_value(self):
         amount = self.karma_user_set.aggregate(Sum('value'))
-        amount = amount.items()[0][1] or 0
-        return amount
+        return amount.get('value__sum', 0)
 
     def get_unwatched_events(self):
         from apps.news.models import Event, EventWatch

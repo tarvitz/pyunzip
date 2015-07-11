@@ -16,7 +16,13 @@ from allure.constants import Severity
 @allure.feature('Karma')
 class KarmaTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
     ]
 
     def setUp(self):
