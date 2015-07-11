@@ -406,11 +406,12 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         response = self.client.get(self.url_detail, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
-        json_response = json.loads(response.content)
+
+        load = json.loads(response.content)
         detail_response = (
             self.object_anonymous_detail_response or
             self.object_detail_response)
-        self.assertEqual(json_response, detail_response)
+        self.assertEqual(detail_response, load)
 
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
@@ -474,8 +475,8 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load,
-            self.object_admin_detail_response or self.object_detail_response
+            self.object_admin_detail_response or self.object_detail_response,
+            load
         )
 
     def test_get_list(self):
