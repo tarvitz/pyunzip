@@ -4,8 +4,7 @@ User = get_user_model()
 from apps.comments.models import CommentWatch
 from apps.news.models import Event
 from apps.core.tests import (
-    TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
-    ApiUserOwnerTestCaseMixin, ApiUserNotOwnerTestCaseMixin,
+    TestHelperMixin, ApiAdminUserTestCaseMixin,
     ApiRestrictedAnonymousUserTestCaseMixin,
     ApiRestrictedOwnerUserTestCaseMixin,
     ApiRestrictedUserNotOwnerTestCaseMixin,
@@ -17,18 +16,24 @@ from django.core.urlresolvers import reverse
 
 from apps.core.helpers import get_content_type
 import simplejson as json
-from copy import deepcopy
 
 __all__ = ['CommentWatchViewSetTest', 'CommentWatchViewAnonymousUserTest',]
 
 
 class CommentWatchViewMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_event_places.json',
-        'tests/fixtures/load_events.json',
-        'tests/fixtures/load_comments.json',
-        'tests/fixtures/load_comment_watches.json'
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_users.json',
+        'load_event_places.json',
+        'load_events.json',
+        'load_comments.json',
+        'load_comment_watches.json'
     ]
 
     model_class = CommentWatch
@@ -249,7 +254,7 @@ class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
 
         for field, item in put.items():
             self.assertEqual(load[field], put[field])
@@ -264,7 +269,7 @@ class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(CommentWatch.objects.count(), count + 1)
         for field, value in post.items():
@@ -322,7 +327,7 @@ class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        put = deepcopy(self.put)
+        put = dict(**self.put)
 
         for field, item in put.items():
             self.assertEqual(load[field], put[field])
@@ -337,7 +342,7 @@ class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(CommentWatch.objects.count(), count + 1)
         for field, value in post.items():
@@ -406,7 +411,7 @@ class CommentWatchViewSetTest(TestHelperMixin, APITestCase):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(CommentWatch.objects.count(), count + 1)
         for field, value in post.items():

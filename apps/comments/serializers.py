@@ -1,6 +1,7 @@
 # coding: utf-8
 from apps.accounts.models import User
-from apps.core.serializers import ModelAccessSerializerMixin
+from apps.core.serializers import (
+    ModelAccessSerializerMixin, CurrentUserSerializerMixin)
 from apps.comments.models import CommentWatch, Comment
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.sites.models import Site
@@ -24,34 +25,45 @@ class CommentWatchSerializer(ModelAccessSerializerMixin,
 
 
 class CommentSerializer(ModelAccessSerializerMixin,
+                        CurrentUserSerializerMixin,
                         serializers.HyperlinkedModelSerializer):
     user_owner_fields = ['user', ]
 
+    url = serializers.HyperlinkedIdentityField(
+        view_name='comment-detail',
+        lookup_field='pk'
+    )
     content_type = serializers.PrimaryKeyRelatedField(
         queryset=ContentType.objects
     )
     site = serializers.PrimaryKeyRelatedField(queryset=Site.objects)
     submit_date = serializers.DateTimeField(required=False)
-    user = serializers.HyperlinkedRelatedField(required=False,
-                                               queryset=User,
-                                               view_name='user-detail')
+    user = serializers.HyperlinkedRelatedField(
+        required=False, default=None, queryset=User.objects,
+        view_name='user-detail'
+    )
 
-    def validate_user(self, attrs, source):
+    check_fields = ['user']
+    check_permission = 'comments.change_comment'
+
+    def validate_user(self, value):
         request = self.context['request']
         privileged = request.user.has_perm('comments.change_comment')
-        if not attrs[source]:
-            return attrs
+        if not value:
+            return request.user if value is None else value
 
-        if not privileged and attrs[source] != request.user:
+        if not privileged and value != request.user:
             raise serializers.ValidationError(
                 _("You can only post comment using your user id")
             )
-        return attrs
+        return value
 
-    def restore_object(self, attrs, instance=None):
-        if attrs.get('user') is None:
-            attrs['user'] = self.context['request'].user
-        return super(CommentSerializer, self).restore_object(attrs, instance)
+    def update(self, instance, validated_data):
+        self._process_validated_data(validated_data)
+        for k, v in validated_data.items():
+            setattr(instance, k, v)
+        instance.save()
+        return instance
 
     class Meta:
         model = Comment

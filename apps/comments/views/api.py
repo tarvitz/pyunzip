@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework import exceptions
-from django.http import Http404
+from rest_framework.decorators import detail_route
 
 from apps.comments.serializers import (
     CommentWatchSerializer, CommentSerializer,
@@ -51,7 +51,6 @@ class CommentWatchViewSet(RestrictToNonOwnerViewSetMixin,
         'is_updated', 'is_disabled',
     )
 
-
     # def get_queryset(self):
     #     qs = super(CommentWatchViewSet, self).get_queryset()
     #     if self.request.user.is_authenticated():
@@ -86,7 +85,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
 
-    #@action(methods=['PATCH', 'PUT', ])
+    @detail_route(methods=['post'])
     def modify(self, request, pk=None):
         obj = self.get_object_or_none()
         serializer = ModifyCommentSerializer(data=request.DATA, instance=obj)

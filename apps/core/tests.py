@@ -161,12 +161,13 @@ class ApiTestSourceAssertionMixin(object):
     """
     API test source assertion mixin
     """
-    def assertUpdate(self, data, payload):
+    def assertUpdate(self, data, payload, skip_diff=True):
         """
         asserts post/put/patch data given in dict with response one
 
         :param dict data: user given data to post/put/patch/etc
         :param dict payload: response.data or response payload in json (dict)
+        :param bool skip_diff: skip fields that does not include into payload
         :rtype: None
         :return: None
         :raises AssertionError:
@@ -174,6 +175,9 @@ class ApiTestSourceAssertionMixin(object):
         """
         errors = []
         for field, item in data.items():
+            if field not in payload and skip_diff:
+                continue
+
             value = data[field]
             if isinstance(item, (datetime, )):
                 value = data[field].isoformat()[:-3] + '000'
@@ -181,7 +185,7 @@ class ApiTestSourceAssertionMixin(object):
                 if value.startswith('http://testserver'):
                     value = value.replace('http://testserver', '')
 
-            if value != payload[field]:
+            if value != payload.get(field):
                 errors.append(
                     '%r: %r != %r' % (field, value, payload[field])
                 )

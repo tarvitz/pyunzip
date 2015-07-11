@@ -169,6 +169,7 @@ class Comment(BaseCommentAbstractModel):
 
     def _set_url(self, val):
         self.user_url = val
+
     url = property(_get_url, _set_url,
                    doc="The URL given by the user who posted this comment")
 

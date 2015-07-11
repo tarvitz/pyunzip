@@ -1,12 +1,11 @@
 # coding: utf-8
 from apps.news.models import Event
 from apps.accounts.models import User
-from apps.comments.models import CommentWatch
+from apps.comments.models import CommentWatch, Comment
 from apps.core.helpers import get_content_type
 from apps.core.tests import TestHelperMixin
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from django.contrib.comments.models import Comment
 
 from rest_framework.test import APITestCase, APIClient
 import allure
@@ -17,13 +16,18 @@ from allure.constants import Severity
 # noinspection PyUnresolvedReferences
 class CommentWatchBase(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_event_places.json',
-        'tests/fixtures/load_events.json',
-        'tests/fixtures/load_comments.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_event_places.json',
+        'load_events.json',
+        'load_comments.json',
     ]
 
-    # noinspection PyAttributeOutsideInit,PyPep8Naming
     def setUp(self):
         self.event = Event.objects.latest('pk')
         self.event_ct = get_content_type(self.event)
