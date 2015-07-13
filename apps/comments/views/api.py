@@ -51,6 +51,12 @@ class CommentWatchViewSet(RestrictToNonOwnerViewSetMixin,
         'is_updated', 'is_disabled',
     )
 
+    def get_queryset(self):
+        qs = super(CommentWatchViewSet, self).get_queryset()
+        if self.request.user.has_perm('comments.change_commentwatch'):
+            return qs
+        return qs.filter(user=self.request.user)
+
     # def get_queryset(self):
     #     qs = super(CommentWatchViewSet, self).get_queryset()
     #     if self.request.user.is_authenticated():
@@ -81,6 +87,7 @@ class CommentPermission(permissions.BasePermission):
 
 
 class CommentViewSet(viewsets.ModelViewSet):
+
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     permission_classes = (CommentPermission, )
