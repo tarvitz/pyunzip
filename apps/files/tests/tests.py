@@ -16,7 +16,13 @@ from allure.constants import Severity
 @allure.feature("Files")
 class JustTest(TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
     ]
 
     def setUp(self):
@@ -45,10 +51,12 @@ class JustTest(TestCase):
     def print_form_errors(self, form):
         if 'errors' in form:
             for (key, items) in form['errors'].items():
-                print "%(key)s: %(items)s" % {
-                    'key': key,
-                    'items': ", ".join(items)
-                }
+                print(
+                    "%(key)s: %(items)s" % {
+                        'key': key,
+                        'items': ", ".join(items)
+                    }
+                )
 
     def no_test_urls_params(self):
         messages = []
@@ -65,15 +73,17 @@ class JustTest(TestCase):
                     messages.append({'url': url, 'user': user, 'err': err})
         if messages:
             for msg in messages:
-                print "Got error in (%s): %s, with %s" % (
-                    msg['user'], msg['url'], msg['err']
+                print(
+                    "Got error in (%s): %s, with %s" % (
+                        msg['user'], msg['url'], msg['err']
+                    )
                 )
             raise AssertionError
 
     @allure.story('upload')
     @allure.severity(Severity.NORMAL)
     def test_jquery_file_upload(self):
-        the_file = open('tests/fixtures/avatar.png')
+        the_file = open('tests/fixtures/avatar.png', 'rb')
         post = {
             'title': 'avatar',
             'file': the_file
@@ -128,7 +138,7 @@ class JustTest(TestCase):
         self.client.login(username='user', password='123456')
         post = {
             'title': 'avatar',
-            'file': open('tests/fixtures/avatar.png')
+            'file': open('tests/fixtures/avatar.png', 'rb')
         }
         url = reverse('files:file-upload')
         count = UserFile.objects.filter(owner__username='user').count()
@@ -140,8 +150,8 @@ class JustTest(TestCase):
             self.print_form_errors(js['form'])
         new_count = UserFile.objects.filter(owner__username='user').count()
 
-        print "\nGot file instance: %s\n" % js['file']
-        self.assertIn('avatar.png', js['file']['url'])
+        print("\nGot file instance: %s\n" % js['file'])
+        self.assertIn('avatar', js['file']['url'])
         self.assertEqual(count + 1, new_count)
         user_file = UserFile.objects.filter(owner__username='user')[0]
         js_file = json.dumps(user_file, default=model_json_encoder)
@@ -156,7 +166,7 @@ class JustTest(TestCase):
         self.client.login(username='user', password='123456')
         post = {
             'title': 'big file',
-            'file': open('tests/fixtures/big_file.zip')
+            'file': open('tests/fixtures/big_file.zip', 'rb')
         }
         url = reverse('files:file-upload')
         response = self.client.post(url, post, follow=True)

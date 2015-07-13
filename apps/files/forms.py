@@ -22,7 +22,9 @@ class UploadFileForm(RequestModelForm):
             self._errors['file'] = ErrorList([msg])
             return self.cleaned_data
         size = self.request.user.files.all().aggregate(Sum('size'))
-        size = size.items()[0][1] or 0
+        # size = size.items()[0][1] or 0
+        size = size.get('size__sum') or 0
+
         size += self.files['file'].size
         if size > settings.USER_FILES_LIMIT:
             msg = _(

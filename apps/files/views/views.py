@@ -63,7 +63,7 @@ def files(request, nickname=''):
     user_files = paginate(user_files, page, pages=settings.OBJECTS_ON_PAGE)
 
     space_used = request.user.files.aggregate(Sum('size'))
-    space_used = space_used.items()[0][1] or 0
+    space_used = space_used.get('size__sum') or 0
 
     return {
         'files': user_files,
