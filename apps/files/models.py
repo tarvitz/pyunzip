@@ -90,7 +90,7 @@ class Image(models.Model):
         verbose_name = _('Image')
         verbose_name_plural = _('Images')
         ordering = ['-id', ]
-        
+
     def get_title(self):
         return self.title
 

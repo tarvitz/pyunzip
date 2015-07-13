@@ -1,7 +1,6 @@
 # coding: utf-8
 from apps.core.serializers import ModelAccessSerializerMixin
 from apps.files.models import Gallery, Image, UserFile
-from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 

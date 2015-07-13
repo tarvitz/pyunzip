@@ -1,5 +1,4 @@
 # coding: utf-8
-#from django.utils import unittest
 import os
 from django.test import TestCase
 from apps.files.models import UserFile

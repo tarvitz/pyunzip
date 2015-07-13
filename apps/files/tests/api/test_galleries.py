@@ -2,7 +2,7 @@
 
 from apps.files.models import Gallery
 from apps.core.tests import (
-    TestHelperMixin, ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
+    ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
 )
 from rest_framework.test import APITestCase
 from unittest import TestCase
