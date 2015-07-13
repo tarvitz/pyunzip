@@ -31,6 +31,7 @@ class CommentWatchNode(Node):
         context[self.varname] = comment_watch
         return ''
 
+
 @register.tag
 def get_comment_watch(parser, tokens):
     """ {% get_comment_watch object as comment_watch_instance %}

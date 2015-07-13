@@ -1,6 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.contrib.auth.decorators import login_required
-from apps.comments import views
+from apps.comments.views import views
 
 urlpatterns = patterns(
     '',

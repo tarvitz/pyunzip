@@ -281,7 +281,7 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         put.update({
             'user': reverse('api:user-detail', args=(self.user.pk, ))
         })
-        count = Comment.objects.count()
+        Comment.objects.count()
         response = self.client.put(self.url_put, data=put,
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)

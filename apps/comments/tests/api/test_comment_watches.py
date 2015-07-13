@@ -205,7 +205,7 @@ class CommentWatchViewSetTest(TestHelperMixin,
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(CommentWatch.objects.count(), count - 1)
-    
+
     # test non-privileged user,
     # this user is owner of comment_watch so he/she can modify it and delete
     # also create new ones
@@ -249,7 +249,6 @@ class CommentWatchViewSetTest(TestHelperMixin,
             'user': reverse('api:user-detail', args=(self.user.pk, )),
             'object_pk': self.user_comment.pk,
         })
-        count = CommentWatch.objects.count()
         response = self.client.post(self.url_post, data=post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)

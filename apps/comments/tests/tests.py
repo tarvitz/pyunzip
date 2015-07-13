@@ -7,7 +7,7 @@ from apps.core.tests import TestHelperMixin
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 
-from rest_framework.test import APITestCase, APIClient
+from rest_framework.test import APITestCase
 import allure
 from allure.constants import Severity
 # Create your tests here.

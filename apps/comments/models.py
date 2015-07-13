@@ -60,7 +60,8 @@ class Comment(BaseCommentAbstractModel):
     # user; otherwise at least user_name should have been set and the comment
     # was posted by a non-authenticated user.
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('user'),
-                    blank=True, null=True, related_name="%(class)s_comments")
+                             blank=True, null=True,
+                             related_name="%(class)s_comments")
     user_name = models.CharField(_("user's name"), max_length=50, blank=True)
     user_email = models.EmailField(_("user's email address"), blank=True)
     user_url = models.URLField(_("user's URL"), blank=True)

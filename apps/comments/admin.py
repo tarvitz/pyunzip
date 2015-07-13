@@ -32,7 +32,7 @@ class CommentsAdmin(admin.ModelAdmin):
             {'fields': ('submit_date', 'ip_address', 'is_public',
                         'is_removed')}
         ),
-     )
+    )
 
     list_display = ('name', 'content_type', 'object_pk', 'ip_address',
                     'submit_date', 'is_public', 'is_removed')
