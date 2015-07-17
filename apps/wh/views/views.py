@@ -69,7 +69,8 @@ def show_rank(request, pk=None, codename=None):
         )
         try:
             stat(img)
-            img = "images/ranks/%s/%s.jpg" % (rank.type.type.lower(), rank.codename)
+            img = "images/ranks/%s/%s.jpg" % (rank.type.type.lower(),
+                                              rank.codename)
         except OSError:
             img = "images/ranks/_none_.jpg"
     except Rank.DoesNotExist:

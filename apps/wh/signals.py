@@ -16,6 +16,7 @@ def on_user_change(instance, **kwargs):
     )
     return instance
 
+
 @receiver(post_save, sender=RankType)
 def on_rank_type_change(instance, **kwargs):
     users = User.objects.filter(
@@ -27,6 +28,7 @@ def on_rank_type_change(instance, **kwargs):
             user.get_nickname(no_cache=True)
         )
     return instance
+
 
 @receiver(pre_delete, sender=RankType)
 def on_rank_type_delete(instance, **kwargs):

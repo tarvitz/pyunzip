@@ -3,7 +3,6 @@
 from apps.wh.models import (
     Universe, Fraction, Side, Army, Rank, RankType, MiniQuote, Expression)
 from rest_framework import serializers
-from django.forms.util import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
 

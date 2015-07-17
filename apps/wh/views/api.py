@@ -1,11 +1,14 @@
 # coding: utf-8
-import django_filters
 from apps.wh.models import (
     Universe, Fraction, Side, Army, Rank, RankType, MiniQuote, Expression)
 
 from rest_framework import viewsets
 from rest_framework import permissions
-from apps.wh.serializers import *
+from apps.wh.serializers import (
+    UniverseSerializer, FractionSerializer, SideSerializer, ArmySerializer,
+    ExpressionSerializer, MiniQuoteSerializer, RankSerializer,
+    RankTypeSerializer
+)
 
 __all__ = ['UniverseViewSet', 'FractionViewSet', 'SideViewSet',
            'ArmyViewSet', 'RankViewSet', 'RankTypeViewSet', 'MiniQuoteViewSet',

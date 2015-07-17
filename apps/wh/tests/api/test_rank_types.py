@@ -1,27 +1,25 @@
 # coding: utf-8
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 from apps.wh.models import RankType
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.core.urlresolvers import reverse
-
-from apps.core.helpers import get_content_type
-from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 import simplejson as json
-from copy import deepcopy
 
 
 class RankTypeViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_universes.json',
-        'tests/fixtures/load_sides.json',
-        'tests/fixtures/load_rank_types.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_users.json'
     ]
 
     def setUp(self):
@@ -72,7 +70,8 @@ class RankTypeViewSetTestMixin(object):
         }
 
 
-class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
+class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin,
+                                       TestHelperMixin,
                                        APITestCase):
     def setUp(self):
         super(RankTypeViewSetAnonymousUserTest, self).setUp()
@@ -99,7 +98,7 @@ class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -108,7 +107,7 @@ class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -117,7 +116,7 @@ class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -126,11 +125,11 @@ class RankTypeViewSetAnonymousUserTest(RankTypeViewSetTestMixin, TestHelperMixin
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class RankTypeViewSetAdminUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
-                               APITestCase):
+                                   APITestCase):
     # test admin user
     def test_get_detail(self):
         self.login('admin')
@@ -157,7 +156,7 @@ class RankTypeViewSetAdminUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
 
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         self.check_response(load, put)
 
         self.assertEqual(RankType.objects.count(), count)
@@ -171,7 +170,7 @@ class RankTypeViewSetAdminUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(RankType.objects.count(), count + 1)
         self.check_response(load, post)
@@ -199,7 +198,7 @@ class RankTypeViewSetAdminUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
 
 
 class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
-                            APITestCase):
+                              APITestCase):
     # test non-privileged user,
     # this user is owner of event so he/she can modify it and delete
     # also create new ones
@@ -232,11 +231,10 @@ class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         self.login('user')
-        count = RankType.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -245,11 +243,10 @@ class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list_no_owner(self):
         self.login('user')
-        count = RankType.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -258,7 +255,7 @@ class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_patch_detail(self):
         self.login('user')
@@ -270,11 +267,10 @@ class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_delete_detail(self):
         self.login('user')
-        count = RankType.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -283,4 +279,4 @@ class RankTypeViewSetUserTest(RankTypeViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
