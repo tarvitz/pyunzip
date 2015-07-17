@@ -1,4 +1,3 @@
-#decorators are here
 # coding: utf-8
 from apps.karma.models import Karma
 from datetime import datetime, timedelta

@@ -43,7 +43,9 @@ class KarmaModelForm(forms.ModelForm):
         if not user:
             raise forms.ValidationError(_("No such user exists"))
         if user == self.request.user:
-            raise forms.ValidationError(_("You can not alter karma for yourself"))
+            raise forms.ValidationError(
+                _("You can not alter karma for yourself")
+            )
         return user
 
     def clean(self):

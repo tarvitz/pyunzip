@@ -12,10 +12,7 @@ from apps.karma.forms import KarmaForm
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from apps.karma.decorators import (
-    day_expired, amount_expired
-
-)
+from apps.karma.decorators import amount_expired
 
 from django.views import generic
 from django.utils.decorators import method_decorator

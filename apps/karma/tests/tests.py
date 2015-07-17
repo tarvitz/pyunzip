@@ -90,7 +90,7 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.login(self.user.username)
         url = reverse('karma:karma-alter', args=('up', self.user.nickname, ))
         count = Karma.objects.count()
-        karma_amount = self.user.karma
+        self.user.karma
         response = self.client.post(url, self.post, follow=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Karma.objects.count(), count)

@@ -243,7 +243,7 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         # forbidden for non privileged user, use: patch method instead
         self.login('user')
         put = deepcopy(self.put)
-        count = Karma.objects.count()
+        Karma.objects.count()
         response = self.client.put(self.url_put, data=put,
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -258,7 +258,6 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         count = Karma.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
-        #self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)

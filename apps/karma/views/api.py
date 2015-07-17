@@ -2,7 +2,6 @@
 import django_filters
 from rest_framework import viewsets
 from rest_framework import permissions
-from rest_framework import exceptions
 from apps.karma.serializers import (
     KarmaSerializer,
 )

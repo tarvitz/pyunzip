@@ -2,9 +2,7 @@
 from apps.karma.models import Karma
 
 from django.dispatch import receiver
-from django.db.models.signals import (
-    pre_save, post_save, pre_delete
-)
+from django.db.models.signals import post_save
 
 __all__ = ['on_karma_post_save', ]
 

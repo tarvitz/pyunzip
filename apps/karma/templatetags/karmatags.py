@@ -12,7 +12,7 @@ class GetKarmaPowerForUser(Node):
     def __init__(self, user, varname):
         self.varname = varname
         self.user = user
-        
+
     def render(self, context):
         user = self.user.resolve(context, ignore_failures=True)
         karma = Karma.objects.filter(user=user)

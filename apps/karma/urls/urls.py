@@ -1,10 +1,10 @@
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 from django.contrib.auth.decorators import login_required
 
-from apps.karma import views
+from apps.karma.views import views
 
 urlpatterns = patterns(
-    'apps.karma.views',
+    'apps.karma.views.views',
     url(r'^karma/$', login_required(views.KarmaListView.as_view()),
         name='karma-list'),
     url(r'^karma/(?P<pk>\d+)/$',
