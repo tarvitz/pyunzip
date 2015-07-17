@@ -1,5 +1,4 @@
 from django.conf.urls import url, include, patterns
-from apps.core.shortcuts import direct_to_template
 from django.contrib import admin
 admin.autodiscover()
 from django.conf import settings
@@ -10,7 +9,6 @@ urlpatterns = patterns(
     (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     (r'^admin/', admin.site.urls),
-    (r'^json/', include('apps.jsonapp.urls', namespace='json')),
     (r'^', include('apps.accounts.urls', namespace='accounts')),
     (r'^', include('apps.core.urls', namespace='core')),
     (r'^', include('apps.wh.urls', namespace='wh')),

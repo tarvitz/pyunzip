@@ -224,7 +224,6 @@ INSTALLED_APPS = (
     'apps.accounts',
     'apps.core',
     'apps.comments',
-    'apps.jsonapp',
     #
     'apps.wh',
     'apps.news',
