@@ -332,7 +332,7 @@ class TestHelperMixin(object):
                 elif six.PY2:
                     self.assertFileExists(response[field])
                     os.unlink(
-                       os.path.join(settings.MEDIA_ROOT, response[field])
+                        os.path.join(settings.MEDIA_ROOT, response[field])
                     )
                 else:
                     raise EnvironmentError("Wrong python version")
