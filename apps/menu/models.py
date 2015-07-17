@@ -26,7 +26,6 @@ class HMenuItem(models.Model):
 
     def get_url(self):
         return self.url
-        #pass
 
     def get_absolute_url(self):
         return self.get_url()

@@ -45,7 +45,7 @@ class JustTest(TestCase):
         if messages:
             for msg in messages:
                 msg = "Got %(err)s in %(key)s" % msg
-                print msg
+                print(msg)
             raise AssertionError
 
 
