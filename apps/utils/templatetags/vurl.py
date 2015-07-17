@@ -1,20 +1,13 @@
-#import sys
-#import re
-#from itertools import cycle as itertools_cycle
-#try:
-#    reversed
-#except NameError:
-#    from django.utils.itercompat import reversed     # Python 2.3 fallback
+# -*- coding: utf-8 -*-
 
-from django.template import Node, NodeList, Template, Context, Variable
-#from django.template import TemplateSyntaxError, VariableDoesNotExist, BLOCK_TAG_START, BLOCK_TAG_END, VARIABLE_TAG_START, VARIABLE_TAG_END, SINGLE_BRACE_START, SINGLE_BRACE_END, COMMENT_TAG_START, COMMENT_TAG_END
-from django.template import Library #, get_library, InvalidTemplateLibrary
+from django.template import Node
+from django.template import Library
 from django.conf import settings
-from django.utils.encoding import smart_str, smart_unicode
-#from django.utils.itercompat import groupby
-#from django.utils.safestring import mark_safe
+from django.utils.encoding import smart_str
+from django.template.engine import ImproperlyConfigured
 
 register = Library()
+
 
 class URLNode(Node):
     def __init__(self, view_name, args, kwargs, asvar):
@@ -27,14 +20,14 @@ class URLNode(Node):
         from django.core.urlresolvers import reverse, NoReverseMatch
         view_name = self.view_name.resolve(context)
         args = [arg.resolve(context) for arg in self.args]
-        kwargs = dict([(smart_str(k,'ascii'), v.resolve(context))
+        kwargs = dict([(smart_str(k, 'ascii'), v.resolve(context))
                        for k, v in self.kwargs.items()])
 
-        
         # Try to look up the URL twice: once given the view name, and again
         # relative to what we guess is the "main" app. If they both fail,
         # re-raise the NoReverseMatch unless we're using the
         # {% url ... as var %} construct in which cause return nothing.
+
         url = ''
         try:
             url = reverse(view_name, args=args, kwargs=kwargs)
@@ -53,7 +46,8 @@ class URLNode(Node):
         else:
             return url
 
-#reimplementation
+
+# reimplementation
 def vurl(parser, token):
     """
     Returns an absolute URL matching given view with its parameters.
@@ -87,8 +81,8 @@ def vurl(parser, token):
     """
     bits = token.contents.split(' ')
     if len(bits) < 2:
-        raise TemplateSyntaxError("'%s' takes at least one argument"
-                                  " (path to a view)" % bits[0])
+        raise ImproperlyConfigured("'%s' takes at least one argument"
+                                   " (path to a view)" % bits[0])
     viewname = parser.compile_filter(bits[1])
     args = []
     kwargs = {}

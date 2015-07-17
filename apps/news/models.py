@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
+from copy import deepcopy
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, pgettext_lazy
 from django.core.urlresolvers import reverse
 
 from apps.files.models import Attachment
-from apps.utils.models import copy_fields
 
 from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
@@ -14,6 +14,16 @@ from django.contrib.contenttypes import generic
 from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import post_markup_filter, render_filter
+
+
+def copy_fields(src, dest):
+    for dest_field in src._meta.fields:
+        if dest_field.name not in ('pk', 'id'):
+            clone = None
+            attr_value = getattr(src, dest_field.name)
+            clone = deepcopy(attr_value)
+            setattr(dest, dest_field.name, clone)
+
 
 NEWS_STATUSES = (
     ('approved', _("approved")),
