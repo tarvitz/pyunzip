@@ -57,8 +57,8 @@ class ImageViewSetMixin(TestCase):
             'alias': '',
             'comments': '1',
             'gallery': 'http://testserver/api/galleries/1/',
-            'image': 'images/galleries/1/bl.png',
-            'owner': 'http://testserver/api/users/6/',
+            'image': 'http://testserver/uploads/images/galleries/1/bl.png',
+            'owner': 'http://testserver/api/users/2/',
             'url': 'http://testserver/api/images/1/'
         }
 
