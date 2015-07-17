@@ -45,8 +45,8 @@ class UserFileViewSetMixin(TestCase):
             'owner': reverse('api:user-detail', args=(self.user.pk, )),
         }
         self.object_detail_response = {
-            'file': 'user/1/files/1.png',
-            'owner': 'http://testserver/api/users/6/',
+            'file': 'http://testserver/uploads/user/1/files/1.png',
+            'owner': 'http://testserver/api/users/2/',
             'plain_type': 'image/png',
             'size': 429202,
             'title': '',
@@ -66,13 +66,13 @@ class UserFileViewSetAdminUserTest(UserFileViewSetMixin,
     pass
 
 
-class UserFileViewSetUserTest(UserFileViewSetMixin,
-                              ApiUserOwnerTestCaseMixin,
-                              APITestCase):
-    pass
-
-
 class UserFileViewSetUserNotOwnerTest(UserFileViewSetMixin,
                                       ApiUserNotOwnerTestCaseMixin,
                                       APITestCase):
+    pass
+
+
+class UserFileViewSetUserTest(UserFileViewSetMixin,
+                              ApiUserOwnerTestCaseMixin,
+                              APITestCase):
     pass
