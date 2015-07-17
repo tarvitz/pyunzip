@@ -21,7 +21,6 @@ from datetime import datetime, date
 from rest_framework import status
 
 from django.conf import settings
-from copy import deepcopy
 User = get_user_model()
 
 
@@ -319,12 +318,24 @@ class TestHelperMixin(object):
                         'http://testserver' + item in response[field],
                         True
                     )
-            elif isinstance(value, (six.PY3 and _io.TextIOWrapper or file)):
+            elif isinstance(value, (six.PY3 and (_io.TextIOWrapper,
+                                                 _io.BufferedReader) or file)):
                 # remove uploaded files
-                self.assertFileExists(response[field])
-                os.unlink(
-                    os.path.join(settings.MEDIA_ROOT, response[field])
-                )
+                if six.PY3:
+                    file_path = os.path.join(
+                        settings.MEDIA_ROOT,
+                        response[field].replace('http://testserver/uploads/',
+                                                '')
+                    )
+                    self.assertFileExists(file_path)
+                    os.unlink(file_path)
+                elif six.PY2:
+                    self.assertFileExists(response[field])
+                    os.unlink(
+                       os.path.join(settings.MEDIA_ROOT, response[field])
+                    )
+                else:
+                    raise EnvironmentError("Wrong python version")
             else:
                 assertion(response[field], value)
 
@@ -336,7 +347,7 @@ class TestHelperMixin(object):
         :return:
         """
 
-        verify = deepcopy(raw)
+        verify = dict(**raw)
         m2m_fields = instance._meta.get_m2m_with_model()
 
         # process m2m relations
@@ -537,7 +548,7 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response['Content-Type'], 'application/json')
         json_response = json.loads(response.content)
 
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         self.check_response(json_response, put)
 
         self.assertEqual(self.model_class.objects.count(), count)
@@ -626,7 +637,7 @@ class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(response['Content-Type'], 'application/json')
 
         response_json = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(self.model_class.objects.count(), count + 1)
         self.check_response(response_json, post)
@@ -700,11 +711,12 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         # copy file objects
         for item, value in self.post.items():
-            if isinstance(value, file):
+            if isinstance(value, six.PY3 and (_io.TextIOWrapper,
+                                              _io.BufferedReader) or file):
                 post[item] = value
         post.update({
             self.owner_field: self.other_user.get_api_absolute_url(),
