@@ -28,6 +28,9 @@ class Karma(models.Model):
     def get_absolute_url(self):
         return reverse('karma:karma-detail', args=(self.pk, ))
 
+    def get_api_absolute_url(self):
+        return reverse('api:karma-detail', args=(self.pk, ))
+
     class Meta:
         ordering = ['-date']
 

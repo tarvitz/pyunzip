@@ -24,6 +24,10 @@ __all__ = [
 
 
 class KarmaSerializer(serializers.HyperlinkedModelSerializer):
+    site_url = serializers.CharField(source='url', read_only=True)
+    url = serializers.CharField(source='get_api_absolute_url',
+                                read_only=True)
+
     def validate(self, attrs):
         request = self.context['request']
         privileged = request.user and request.user.has_perm(
@@ -42,11 +46,11 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
 
         return attrs
 
-    def validate_voter(self, attrs, source):
+    def validate_voter(self, value):
         """ non-privileged user can not cast karma
         from different to his own user id """
         request = self.context['request']
-        voter = attrs[source]
+        voter = value
         if request.user != voter:
             privileged = request.user and request.user.has_perm(
                 'karma.change_karma')
@@ -54,21 +58,20 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
                 raise serializers.ValidationError(
                     FAILURE_MESSAGES['karma_voter_violation']
                 )
-        return attrs
+        return value
 
-    def validate_user(self, attrs, source):
+    def validate_user(self, value):
         """ non-privileged user can not set karma for himself """
         request = self.context['request']
-        if request.user == attrs[source]:
+        if request.user == value:
             raise serializers.ValidationError(
                 FAILURE_MESSAGES['self_karma_set'])
-        return attrs
+        return value
 
-    def validate_value(self, attrs, source):
+    def validate_value(self, value):
         """ non-privileged user can not set karma value amount more than its
         safe range with -1,1 """
 
-        value = attrs[source]
         request = self.context['request']
         if value not in (-1, 1):
             privileged = request.user and request.user.has_perm(
@@ -77,8 +80,7 @@ class KarmaSerializer(serializers.HyperlinkedModelSerializer):
                 raise serializers.ValidationError(
                     FAILURE_MESSAGES['karma_amount_exceed']
                 )
-        return attrs
+        return value
 
     class Meta:
         model = Karma
-        url_field_name = 'url_detail'

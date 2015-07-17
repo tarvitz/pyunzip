@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_text
 from django.core.urlresolvers import reverse
 from django.conf import settings
 
@@ -26,8 +27,14 @@ __all__ = [
 
 class KarmaViewSetTestMixin(object):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_karma.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_rank_types.json',
+        'load_ranks.json',
+        'load_users.json',
+        'load_karma.json',
     ]
 
     def setUp(self):
@@ -50,7 +57,7 @@ class KarmaViewSetTestMixin(object):
         self.put = {
             'id': self.karma.pk,
             'comment': u'new comment',
-            'url': 'http://w40k.net/news/4/',
+            'url': 'http://testserver/api/karmas/1/',
             'value': 1,
             'voter': reverse('api:user-detail', args=(self.user.pk, )),
             'user': reverse('api:user-detail', args=(self.other_user.pk, )),
@@ -61,19 +68,19 @@ class KarmaViewSetTestMixin(object):
         }
         self.post = {
             'comment': u'\u0442\u0443\u0442 =)',
-            'url': 'http://w40k.net/news/4/',
+            'url': 'http://testserver/api/karmas/2/',
             'user': reverse('api:user-detail', args=(self.other_user.pk, )),
             'voter': reverse('api:user-detail', args=(self.user.pk, )),
             'value': 1,
         }
         self.object_detail_response = {
             'comment': u'\u0442\u0443\u0442 =)',
-            'date': '2013-04-08T01:48:58.795',
-            'url': '/news/4/',
-            'url_detail': 'http://testserver/api/karmas/1/',
+            'date': '2013-04-08T01:48:58.795000',
+            'site_url': '/news/4/',
+            'url': '/api/karmas/1/',
             'user': 'http://testserver/api/users/1/',
             'value': -5,
-            'voter': 'http://testserver/api/users/6/'
+            'voter': 'http://testserver/api/users/2/'
         }
 
 
@@ -105,7 +112,7 @@ class KarmaViewSetAnonymousUserTest(KarmaViewSetTestMixin, TestHelperMixin,
 
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
@@ -114,7 +121,7 @@ class KarmaViewSetAnonymousUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -123,7 +130,7 @@ class KarmaViewSetAnonymousUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
@@ -132,7 +139,7 @@ class KarmaViewSetAnonymousUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         self.assertEqual(
-            load['detail'], 'Authentication credentials were not provided.')
+            load['detail'], _('Authentication credentials were not provided.'))
 
 
 class KarmaViewSetAdminUserTest(KarmaViewSetTestMixin, TestHelperMixin,
@@ -244,7 +251,7 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
 
     def test_post_list(self):
         self.login('user')
@@ -277,16 +284,17 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Karma.objects.count(), count)
         # user can not set karma for himself
         self.assertEqual(
-            load['user'][0], unicode(FAILURE_MESSAGES['self_karma_set'])
+            load['user'][0], force_text(FAILURE_MESSAGES['self_karma_set'])
         )
         # user can not set karma amount more than range: -1, 1
         self.assertEqual(
-            load['value'][0], unicode(FAILURE_MESSAGES['karma_amount_exceed'])
+            load['value'][0],
+            force_text(FAILURE_MESSAGES['karma_amount_exceed'])
         )
         # user can not post karma alteration from other account
         self.assertEqual(
             load['voter'][0],
-            unicode(FAILURE_MESSAGES['karma_voter_violation'])
+            force_text(FAILURE_MESSAGES['karma_voter_violation'])
         )
 
     def test_post_list_karma_timeout_exceed(self):
@@ -313,7 +321,8 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Karma.objects.count(), count)
 
         self.assertEqual(
-            load['non_field_errors'][0], unicode(FAILURE_MESSAGES['timeout'])
+            load['non_field_errors'][0],
+            force_text(FAILURE_MESSAGES['timeout'])
         )
 
     def test_patch_detail(self):
@@ -339,4 +348,4 @@ class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
-            'You do not have permission to perform this action.')
+            _('You do not have permission to perform this action.'))
