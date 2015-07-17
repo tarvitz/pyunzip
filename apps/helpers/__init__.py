@@ -10,4 +10,3 @@ def rel_path(subdir):
 
 if __name__ in '__main__':
     pass
-
