@@ -7,6 +7,7 @@ from apps.pybb.models import Post
 def post_saved(instance, **kwargs):
     notify_topic_subscribers(instance)
 
+
 def pm_saved(instance, **kwargs):
     notify_pm_recipients(instance)
 

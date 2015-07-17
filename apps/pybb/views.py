@@ -6,11 +6,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.http import (HttpResponseRedirect, Http404)
 from apps.karma.models import Karma
 
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
+from apps.accounts.models import User
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -26,49 +22,62 @@ from apps.pybb.forms import (
     TopicPostForm
 )
 from apps.pybb import settings as pybb_settings
-from apps.pybb.anonymous_post import (
-    handle_anonymous_post, load_anonymous_post, delete_anonymous_post)
 from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
 from apps.utils.paginator import DiggPaginator as Paginator
-from django.db.models import Count, Min, Sum
+from django.db.models import Sum
 
 
 def index_ctx(request):
-    quick = {'posts': {
-                  "total": Post.objects.count(),
-                  "today": Post.objects.filter(created__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count()
-             },
-             'topics': {
-                 "total": Topic.objects.count(),
-                 "today": Topic.objects.filter(created__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count(),
-             },
-             'users': {
-                 "total": User.objects.count(),
-                 "today": User.objects.filter(date_joined__range=(datetime.now().date(), datetime.now().date() + timedelta(1))).count(),
-             },
-             'last_topics': Topic.objects.filter(
-                 forum__is_private=False).select_related()[
-                            :pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': Post.objects.filter(
-                 topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
-             'karma': {
-                 "total": Karma.objects.all().aggregate(Sum("value"))['value__sum'],
-                 "last": (
-                     Karma.objects.exists() and
-                     Karma.objects.latest("date")
-                     or 0
-                 )
-             }}
+    quick = {
+        'posts': {
+            "total": Post.objects.count(),
+            "today": Post.objects.filter(
+                created__range=(datetime.now().date(),
+                                datetime.now().date() + timedelta(1))
+            ).count()
+        },
+        'topics': {
+            "total": Topic.objects.count(),
+            "today": Topic.objects.filter(
+                created__range=(datetime.now().date(),
+                                datetime.now().date() + timedelta(1))
+            ).count(),
+        },
+        'users': {
+            "total": User.objects.count(),
+            "today": User.objects.filter(
+                date_joined__range=(datetime.now().date(),
+                                    datetime.now().date() + timedelta(1))
+            ).count(),
+        },
+        'last_topics': Topic.objects.filter(
+            forum__is_private=False
+        ).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+        'last_posts': Post.objects.filter(
+            topic__forum__is_private=False
+        ).order_by(
+            '-created'
+        ).select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+        'karma': {
+            "total": Karma.objects.all().aggregate(Sum("value"))['value__sum'],
+            "last": (
+                Karma.objects.exists() and
+                Karma.objects.latest("date")
+                or 0
+            )
+        }
+    }
 
     cats = {}
     forums = {}
 
     for forum in Forum.objects.filter(is_hidden=False).select_related():
-        cat = cats.setdefault(forum.category.id,
-            {'cat': forum.category, 'forums': []})
+        cat = cats.setdefault(
+            forum.category.id, {'cat': forum.category, 'forums': []}
+        )
         cat['forums'].append(forum)
         forums[forum.id] = forum
 
@@ -85,13 +94,18 @@ index = render_to('pybb/index.html')(index_ctx)
 
 def show_category_ctx(request, category_id):
     category = get_object_or_404(Category, pk=category_id)
-    quick = {'posts': category.posts.count(),
-             'topics': category.topics.count(),
-             'last_topics': category.topics.filter(
-                 forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
-             'last_posts': category.posts.filter(
-                 topic__forum__is_private=True).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
-             }
+    quick = {
+        'posts': category.posts.count(),
+        'topics': category.topics.count(),
+        'last_topics': category.topics.filter(
+            forum__is_private=False
+        ).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+        'last_posts': category.posts.filter(
+            topic__forum__is_private=True
+        ).order_by(
+            '-created'
+        ).select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+    }
     return {'category': category,
             'quick': quick,
             }
@@ -102,7 +116,7 @@ show_category = render_to('pybb/category.html')(show_category_ctx)
 def show_forum_ctx(request, forum_id):
     forum = get_object_or_404(Forum, pk=forum_id)
     is_private = bool(forum) and forum.is_private
-    if is_private and (not request.user in forum.participants.all()):
+    if is_private and (request.user not in forum.participants.all()):
         raise Http404("not found")
 
     topics = forum.topics.order_by('-sticky', '-updated').select_related()
@@ -110,9 +124,13 @@ def show_forum_ctx(request, forum_id):
         'posts': forum.post_count,
         'topics': forum.topics.count(),
         'last_topics': forum.topics.filter(
-            forum__is_private=False).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
+            forum__is_private=False
+        ).select_related()[:pybb_settings.QUICK_TOPICS_NUMBER],
         'last_posts': forum.posts.filter(
-            topic__forum__is_private=False).order_by('-created').select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
+            topic__forum__is_private=False
+        ).order_by(
+            '-created'
+        ).select_related()[:pybb_settings.QUICK_POSTS_NUMBER],
     }
 
     return {'forum': forum,
@@ -148,10 +166,6 @@ def show_topic_ctx(request, topic_id):
     last_post = topic.posts.order_by('-created')[0]
 
     initial = {}
-    apost = load_anonymous_post(request, topic)
-    if apost:
-        initial = {'markup': apost.markup, 'body': apost.body}
-
     if request.user.is_authenticated():
         initial = {'markup': settings.DEFAULT_SYNTAX}
 
@@ -159,7 +173,8 @@ def show_topic_ctx(request, topic_id):
 
     moderator = request.user.is_superuser or\
         request.user in topic.forum.moderators.all()
-    if request.user.is_authenticated() and request.user in topic.subscribers.all():
+    if (request.user.is_authenticated()
+            and request.user in topic.subscribers.all()):
         subscribed = True
     else:
         subscribed = False
@@ -168,15 +183,16 @@ def show_topic_ctx(request, topic_id):
     if topic.poll and topic.poll.is_multiple:
         poll_form_class = MultipleVotePollForm
     poll_form = poll_form_class(None, poll=topic.poll) if topic.poll else None
-    return {'topic': topic,
-            'last_post': last_post,
-            'first_post': first_post,
-            'form': form,
-            'moderator': moderator,
-            'subscribed': subscribed,
-            'paged_qs': posts,
-            'poll_form': poll_form
-            }
+    return {
+        'topic': topic,
+        'last_post': last_post,
+        'first_post': first_post,
+        'form': form,
+        'moderator': moderator,
+        'subscribed': subscribed,
+        'paged_qs': posts,
+        'poll_form': poll_form
+    }
 show_topic = render_to('pybb/topic.html')(show_topic_ctx)
 
 
@@ -193,11 +209,8 @@ def add_post_ctx(request, forum_id, topic_id):
     if topic and topic.closed:
         return HttpResponseRedirect(topic.get_absolute_url())
 
-    #if forum.is_private and (request.user not in forum.participants.all()):
-    #    raise Http404("not found")
-
     if not request.user.is_authenticated():
-        return handle_anonymous_post(request, topic_id)
+        raise PermissionDenied("not allowed")
 
     # GET request
     if 'GET' == request.method:
@@ -212,21 +225,15 @@ def add_post_ctx(request, forum_id, topic_id):
                 settings.DEFAULT_SYNTAX
             )
 
-        apost = load_anonymous_post(request, topic)
-        if apost:
-            markup = apost.markup
-            body = apost.body
-        else:
-            markup = settings.DEFAULT_SYNTAX
-            body = quote
+        markup = settings.DEFAULT_SYNTAX
+        body = quote
 
         form = build_form(AddPostForm, request, topic=topic, forum=forum,
-                          user=request.user, initial={'markup': markup, 'body': body})
+                          user=request.user,
+                          initial={'markup': markup, 'body': body})
 
     # POST request
     elif request.method == 'POST':
-        delete_anonymous_post(request, topic)
-
         ip = request.META.get('REMOTE_ADDR', '')
         form = build_form(AddPostForm, request, topic=topic, forum=forum,
                           user=request.user, ip=ip)
@@ -257,7 +264,10 @@ def show_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     count = post.topic.posts.filter(created__lt=post.created).count() + 1
     page = math.ceil(count / float(pybb_settings.TOPIC_PAGE_SIZE))
-    url = '%s?page=%d#post-%d' % (reverse('pybb:topic', args=[post.topic.id]), page, post.id)
+    url = (
+        '%s?page=%d#post-%d' % (reverse('pybb:topic',
+                                        args=[post.topic.id]), page, post.id)
+    )
     return HttpResponseRedirect(url)
 
 
@@ -313,9 +323,9 @@ def delete_post_ctx(request, post_id):
     topic = post.topic
 
     allowed = False
-    if request.user.is_superuser or\
-        request.user in post.topic.forum.moderators.all() or \
-        (post.user == request.user and post == last_post):
+    if (request.user.is_superuser or
+            request.user in post.topic.forum.moderators.all() or
+            (post.user == request.user and post == last_post)):
         allowed = True
 
     if not allowed:
@@ -391,7 +401,6 @@ def add_subscription(request, topic_id):
     return HttpResponseRedirect(reverse('pybb:topic', args=[topic.id]))
 
 
-
 @login_required
 def switch_theme(request, theme):
     themes = [i[0] for i in settings.FORUM_THEMES]
@@ -402,6 +411,7 @@ def switch_theme(request, theme):
             themes.index(theme)][1]
         request.user.save()
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
 
 @login_required
 def switch_css_theme(request, theme):
@@ -482,7 +492,6 @@ class ManagePollView(generic.FormView):
         if is_delete:
             if not request.user.has_perm('pybb.change_poll'):
                 raise PermissionDenied("not allowed")
-
 
         if any([is_delete, is_update]):
             poll = get_object_or_404(Poll, pk=self.kwargs.get('pk', 0))
@@ -665,7 +674,8 @@ class PostAddView(generic.CreateView):
         return redirect(
             topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
                 'page': page,
-                'post': instance.pk,}
+                'post': instance.pk
+            }
         )
 
 

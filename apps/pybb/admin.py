@@ -5,7 +5,7 @@ from apps.pybb.models import Category, Forum, Topic, AnonymousPost, Post, Read
 from django.conf import settings
 
 
-#actions
+#: actions
 def revert_hidden(modeladmin, request, queryset):
     for q in queryset:
         q.is_hidden = not q.is_hidden
@@ -74,7 +74,7 @@ class AnonymousPostAdmin(admin.ModelAdmin):
     list_per_page = settings.OBJECTS_ON_PAGE
     ordering = ['-created']
     search_fields = ['title']
-    
+
 
 class PostAdmin(admin.ModelAdmin):
     list_display = ['topic', 'user', 'created', 'updated', 'summary']

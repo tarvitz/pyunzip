@@ -84,7 +84,9 @@ class PollTest(TestHelperMixin, TestCase):
         post = {
             'poll_item_poll_set-TOTAL_FORMS': 4,
             'poll_item_poll_set-INITIAL_FORMS': 0,
-            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-MAX_NUM_FORMS': (
+                settings.MAXIMUM_POLL_ITEMS_AMOUNT
+            ),
             'poll_item_poll_set-0-title': 'Variant 1',
             'poll_item_poll_set-1-title': 'Variant 2',
             'poll_item_poll_set-2-title': 'Variant 3',
@@ -102,7 +104,7 @@ class PollTest(TestHelperMixin, TestCase):
     @allure.severity(Severity.CRITICAL)
     def test_add_poll(self, role='admin'):
         """ create poll in 2 steps """
-        pole = self.add_poll_items(role)
+        self.add_poll_items(role)
 
     @allure.story('update')
     @allure.severity(Severity.CRITICAL)
@@ -122,7 +124,9 @@ class PollTest(TestHelperMixin, TestCase):
         items_post = {
             'poll_item_poll_set-TOTAL_FORMS': 5,
             'poll_item_poll_set-INITIAL_FORMS': 4,
-            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-MAX_NUM_FORMS': (
+                settings.MAXIMUM_POLL_ITEMS_AMOUNT
+            ),
             'poll_item_poll_set-0-title': 'Variant 1',
             'poll_item_poll_set-0-id': 1,
             'poll_item_poll_set-1-title': 'Variant 2',
@@ -147,7 +151,9 @@ class PollTest(TestHelperMixin, TestCase):
         post = {
             'poll_item_poll_set-TOTAL_FORMS': 4,
             'poll_item_poll_set-INITIAL_FORMS': 0,
-            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-MAX_NUM_FORMS': (
+                settings.MAXIMUM_POLL_ITEMS_AMOUNT
+            ),
             'poll_item_poll_set-0-title': '',
             'poll_item_poll_set-1-title': '',
             'poll_item_poll_set-2-title': '',
@@ -171,7 +177,9 @@ class PollTest(TestHelperMixin, TestCase):
         post = {
             'poll_item_poll_set-TOTAL_FORMS': 4,
             'poll_item_poll_set-INITIAL_FORMS': 0,
-            'poll_item_poll_set-MAX_NUM_FORMS': settings.MAXIMUM_POLL_ITEMS_AMOUNT,
+            'poll_item_poll_set-MAX_NUM_FORMS': (
+                settings.MAXIMUM_POLL_ITEMS_AMOUNT
+            ),
             'poll_item_poll_set-0-title': 'Variant 1',
             'poll_item_poll_set-1-title': 'Variant 2',
             'poll_item_poll_set-2-title': '',
@@ -273,7 +281,6 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.assertEqual(response.status_code, 200)
         self.proceed_form_errors(response.context)
 
-
         self.assertNotEqual(PollAnswer.objects.count(), count + amount)
         # only one option is valid
         self.assertEqual(PollAnswer.objects.count(), count + 1)
@@ -345,7 +352,6 @@ class PollManageTest(TestHelperMixin, TestCase):
         }
         count = Poll.objects.count()
         items_count = PollItem.objects.count()
-        items_amount = self.poll.items.count()
         response = self.client.post(self.poll.get_delete_url(), post,
                                     follow=True)
         # permission denied
@@ -416,13 +422,13 @@ class PollManageTest(TestHelperMixin, TestCase):
 class TestCronJobs(TestHelperMixin, TestCase):
     """ TestCase for testing cron jobs """
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
-        'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_polls.json',
-        'tests/fixtures/load_poll_items.json'
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
+        'load_posts.json',
+        'load_polls.json',
+        'load_poll_items.json'
     ]
 
     def setUp(self):

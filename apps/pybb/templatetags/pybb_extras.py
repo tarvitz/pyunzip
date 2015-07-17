@@ -12,9 +12,9 @@ from django.utils import dateformat
 from apps.pybb.models import Forum, Topic, Read
 from apps.pybb.unread import cache_unreads
 from apps.pybb import settings as pybb_settings
-from django.conf import settings as gs
 
 register = template.Library()
+
 
 @register.filter
 def pybb_profile_link(user):
@@ -29,7 +29,9 @@ def pybb_time(parser, token):
     try:
         tag, time = token.split_contents()
     except ValueError:
-        raise template.TemplateSyntaxError('pybb_time requires single argument')
+        raise template.TemplateSyntaxError(
+            'pybb_time requires single argument'
+        )
     else:
         return PybbTimeNode(time)
 
@@ -74,6 +76,7 @@ class PybbTimeNode(template.Node):
 
 pagination = 'pybb/pagination.html'
 
+
 @register.inclusion_tag(pagination, takes_context=True)
 def pybb_pagination(context, adjacent_pages=5):
     """
@@ -81,18 +84,19 @@ def pybb_pagination(context, adjacent_pages=5):
     """
 
     page_list = range(
-        max(1,context['page'] - adjacent_pages),
-        min(context['pages'],context['page'] + adjacent_pages) + 1)
+        max(1, context['page'] - adjacent_pages),
+        min(context['pages'], context['page'] + adjacent_pages) + 1)
     lower_page = None
     higher_page = None
 
+    #: wtf, srsly?
     if not 1 == context['page']:
         lower_page = context['page'] - 1
 
-    if not 1 in page_list:
-        page_list.insert(0,1)
-        if not 2 in page_list:
-            page_list.insert(1,'.')
+    if 1 not in page_list:
+        page_list.insert(0, 1)
+        if 2 not in page_list:
+            page_list.insert(1, '.')
 
     if not context['pages'] == context['page']:
         higher_page = context['page'] + 1
@@ -101,6 +105,7 @@ def pybb_pagination(context, adjacent_pages=5):
         if not context['pages'] - 1 in page_list:
             page_list.append('.')
         page_list.append(context['pages'])
+
     get_params = '&'.join(
         [
             '%s=%s' % (x[0], ','.join(x[1]))
@@ -121,7 +126,7 @@ def pybb_pagination(context, adjacent_pages=5):
         'pages': context['pages'],
         'page_list': page_list,
         'per_page': context['per_page'],
-        }
+    }
 
 
 @register.simple_tag
@@ -130,7 +135,10 @@ def pybb_link(object, anchor=u''):
     Return A tag with link to object.
     """
 
-    url = hasattr(object,'get_absolute_url') and object.get_absolute_url() or None   
+    url = (
+        hasattr(object, 'get_absolute_url')
+        and object.get_absolute_url() or None
+    )
     anchor = anchor or smart_text(object)
     return mark_safe('<a href="%s">%s</a>' % (url, escape(anchor)))
 
@@ -165,6 +173,7 @@ def pybb_has_unreads(topic, user):
                     return topic.updated > read.time
         else:
             raise Exception('Object should be a topic')
+
 
 @register.filter
 def pybb_forum_has_unreads(forum, user):

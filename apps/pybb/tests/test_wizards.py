@@ -1,7 +1,7 @@
 # coding: utf-8
 from django.test import TestCase
 from apps.core.tests import TestHelperMixin
-from apps.pybb.models import Poll, PollItem, PollAnswer
+from apps.pybb.models import Poll, PollItem
 from django.core.urlresolvers import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 
@@ -13,13 +13,14 @@ class SimpleTest(TestCase):
     def test_simple(self):
         self.assertEqual(2, 1 + 1)
 
+
 # TODO: remote, not usable
 class PollWizardTest(TestHelperMixin, TestCase):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
     ]
     items_count = 5
     wizard_step_1_data = {

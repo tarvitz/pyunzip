@@ -34,14 +34,11 @@ class JustTest(TestCase):
                 })
         if messages:
             for msg in messages:
-                print "Got %(err)s in %(key)s" % msg
+                print("Got %(err)s in %(key)s" % msg)
             raise AssertionError
 
 
 class CacheTest(TestCase):
-    #fixtures = [
-    #]
-
     def setUp(self):
         pass
 
@@ -75,11 +72,11 @@ class TopicTest(TestHelperMixin, JustTest):
 
 class PostTest(TestHelperMixin, JustTest):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
-        'tests/fixtures/load_posts.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
+        'load_posts.json',
     ]
     add_post = {
         'body': u'Контент поста',

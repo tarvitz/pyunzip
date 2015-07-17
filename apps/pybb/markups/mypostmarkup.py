@@ -4,8 +4,9 @@ import re
 RE_FIRST_LF = re.compile('^\s*\r?\n')
 markup = postmarkup.create(exclude=['link', 'url', 'code'], use_pygments=False)
 
+
 class LinkTagNoAnnotate(postmarkup.LinkTag):
-    def annotate_link(self, domain):        
+    def annotate_link(self, domain):
         return ''
 
 
@@ -19,7 +20,7 @@ class CodeTagNoBreak(postmarkup.CodeTag):
 
     def _escape(self, s):
         return postmarkup.PostMarkup.standard_replace_no_break(s.rstrip('\n'))
-                
+
 
 markup.tag_factory.add_tag(LinkTagNoAnnotate, 'url')
 markup.tag_factory.add_tag(CodeTagNoBreak, 'code')

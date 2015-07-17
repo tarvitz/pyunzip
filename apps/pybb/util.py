@@ -21,8 +21,6 @@ def render_to(template_path):
 
     def decorator(func):
         def wrapper(request, *args, **kwargs):
-            import pdb
-            #output = pdb.runcall(func, request, *args, **kwargs)
             output = func(request, *args, **kwargs)
             if not isinstance(output, dict):
                 return output
@@ -39,12 +37,11 @@ def render_to(template_path):
     return decorator
 
 
-def paged(paged_list_name, per_page):#, per_page_var='per_page'):
+def paged(paged_list_name, per_page):
     """
     Parse page from GET data and pass it to view. Split the
     query set returned from view.
     """
-    
     def decorator(func):
         def wrapper(request, *args, **kwargs):
             result = func(request, *args, **kwargs)
@@ -56,15 +53,6 @@ def paged(paged_list_name, per_page):#, per_page_var='per_page'):
                 page = 1
 
             real_per_page = per_page
-
-            #if per_page_var:
-                #try:
-                    #value = int(request.GET[per_page_var])
-                #except (ValueError, KeyError):
-                    #pass
-                #else:
-                    #if value > 0:
-                        #real_per_page = value
 
             from django.core.paginator import Paginator
             paginator = Paginator(result['paged_qs'], real_per_page)
@@ -90,10 +78,12 @@ def ajax(func):
         if request.method == 'POST':
             try:
                 response = func(request, *args, **kwargs)
-            except Exception as ex:
+            except Exception:
                 response = {'error': traceback.format_exc()}
         else:
-            response = {'error': {'type': 403, 'message': 'Accepts only POST request'}}
+            response = {
+                'error': {'type': 403, 'message': 'Accepts only POST request'}
+            }
         if isinstance(response, dict):
             return JsonResponse(response)
         else:
@@ -123,7 +113,7 @@ class JsonResponse(HttpResponse):
         super(JsonResponse, self).__init__(
             content=json_data, mimetype=mimetype)
 
-        
+
 def build_form(Form, _request, GET=False, *args, **kwargs):
     """
     Shorcut for building the form instance of given form class.
@@ -136,31 +126,30 @@ def build_form(Form, _request, GET=False, *args, **kwargs):
     else:
         form = Form(*args, **kwargs)
     return form
-    
+
 
 def urlize(data):
-        """
-        Urlize plain text links in the HTML contents.
-       
-        Do not urlize content of A and CODE tags.
-        """
+    """
+    Urlize plain text links in the HTML contents.
+    Do not urlize content of A and CODE tags.
+    """
 
-        soup = BeautifulSoup(data)
-        for chunk in soup.findAll(text=True):
-            islink = False
-            ptr = chunk.parent
-            while ptr.parent:
-                if ptr.name == 'a' or ptr.name == 'code':
-                    islink = True
-                    break
-                ptr = ptr.parent
+    soup = BeautifulSoup(data)
+    for chunk in soup.findAll(text=True):
+        islink = False
+        ptr = chunk.parent
+        while ptr.parent:
+            if ptr.name == 'a' or ptr.name == 'code':
+                islink = True
+                break
+            ptr = ptr.parent
 
-            if not islink:
-                chunk = chunk.replaceWith(django_urlize(
-                    six.string_types(chunk))
-                )
+        if not islink:
+            chunk = chunk.replaceWith(django_urlize(
+                six.string_types(chunk))
+            )
 
-        return six.string_types(soup)
+    return six.string_types(soup)
 
 
 def quote_text(text, markup):
@@ -169,7 +158,7 @@ def quote_text(text, markup):
     """
 
     if markup == 'markdown':
-        return '>'+text.replace('\n','\n>').replace('\r','\n>') + '\n'
+        return '>'+text.replace('\n', '\n>').replace('\r', '\n>') + '\n'
     elif markup == 'bbcode':
         return '[quote]%s[/quote]\n' % text
     elif markup == 'textile':

@@ -53,7 +53,6 @@ class AddPostForm(forms.ModelForm):
 
         post = Post(
             topic=topic, user=self.user, user_ip=self.ip,
-            #markup=self.cleaned_data['markup'],
             body=self.cleaned_data['body']
         )
         post.save()
@@ -128,9 +127,9 @@ class AddPollForm(forms.ModelForm):
         js = (
             '/media/components/moment/min/moment.min.js',
             '/media/components/eonasdan-bootstrap-datetimepicker/build/js/'
-                'bootstrap-datetimepicker.min.js',
+            'bootstrap-datetimepicker.min.js',
             '/media/components/eonasdan-bootstrap-datetimepicker/src/js/'
-                'locales/bootstrap-datetimepicker.ru.js',
+            'locales/bootstrap-datetimepicker.ru.js',
             '/media/js/datetimepickers.js'
         )
 
@@ -199,7 +198,7 @@ class PollItemBaseinlineFormset(BaseInlineFormSet):
 class PollVoteFormMixin(object):
     """Poll form mixin for voting purpose"""
     def __init__(self, *args, **kwargs):
-        if not 'poll' in kwargs:
+        if 'poll' not in kwargs:
             raise ImproperlyConfigured(
                 "PollForm should always initialized with Poll instance"
             )

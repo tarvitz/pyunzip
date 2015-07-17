@@ -1,4 +1,4 @@
-from django.conf.urls import *
+from django.conf.urls import url, patterns
 
 from apps.pybb import views
 from apps.pybb.feeds import LastPosts, LastTopics
@@ -13,7 +13,8 @@ urlpatterns = patterns(
         {'feed_dict': feeds}, name='feed'),
 
 )
-urlpatterns += patterns('',
+urlpatterns += patterns(
+    '',
     # Misc
     url('^$', views.index, name='index'),
     url('^category/(?P<category_id>\d+)/$', views.show_category,
@@ -22,16 +23,12 @@ urlpatterns += patterns('',
         name='forum'),
     # User
     url('^user/(?P<username>.*)/$', views.user, name='profile'),
-    #url('^profile/edit/$', views.edit_profile, name='profile-edit'),
-    #url('^users/$', views.users, name='users'),
 
     # Topic
     url('^topic/(?P<topic_id>\d+)/$', views.show_topic,
         name='topic'),
     url('^topics/(?P<pk>\d+)/posts/$', views.PostListView.as_view(),
         name='posts'),
-    #url('^forum/(?P<forum_id>\d+)/topic/add/$', views.add_post,
-    #    {'topic_id': None}, name='topic-add'),
     url('^forums/(?P<pk>\d+)/topics/add/$',
         login_required(views.PostAddView.as_view()),
         {'topic': True},
@@ -46,12 +43,10 @@ urlpatterns += patterns('',
         name='topic-open'),
 
     # Post
-    #url('^topic/(?P<topic_id>\d+)/post/add/$', views.add_post,
-    #    {'forum_id': None}, name='post-add'),
     url('^topics/(?P<pk>\d+)/posts/add/$',
         login_required(views.PostAddView.as_view()), name='post-add'),
     url('^post/(?P<post_id>\d+)/$', views.show_post, name='post'),
-    #url('^post/(?P<post_id>\d+)/edit/$', views.edit_post, name='post-edit'),
+
     url('^posts/(?P<pk>\d+)/edit/$',
         login_required(views.PostUpdateView.as_view()),
         name='post-edit'),
@@ -87,6 +82,4 @@ urlpatterns += patterns('',
     url('^poll/(?P<pk>\d+)/vote/$',
         login_required(views.PollVoteView.as_view()),
         name='poll-vote'),
-    #url('^topic/(?P<pk>\d+)/poll/add/step/(?P<step>.+)/$',
-    #    views.add_poll_wizard, name='add-poll'),
 )

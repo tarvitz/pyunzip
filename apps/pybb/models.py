@@ -56,7 +56,8 @@ class Forum(models.Model):
     name = models.CharField(_('Name'), max_length=80)
     position = models.IntegerField(_('Position'), blank=True, default=0)
     description = models.TextField(_('Description'), blank=True, default='')
-    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, null=True,
+    moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
+                                        null=True,
                                         verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
@@ -108,7 +109,8 @@ class Topic(models.Model):
     sticky = models.BooleanField(_('Sticky'), blank=True, default=False)
     closed = models.BooleanField(_('Closed'), blank=True, default=False)
     subscribers = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name='subscriptions', verbose_name=_('Subscribers'),
+        settings.AUTH_USER_MODEL, related_name='subscriptions',
+        verbose_name=_('Subscribers'),
         blank=True
     )
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)

@@ -1,6 +1,7 @@
-#coding: utf-8
+# -*- coding: utf-8 -*-
 from django.conf import settings
 _ = lambda s: s
+
 
 def get(key, default):
     return getattr(settings, key, default)
@@ -26,4 +27,6 @@ HOST = get('PYBB_HOST', 'localhost:8000')
 FREEZE_FIRST_POST = get('PYBB_FREEZE_FIRST_POST', True)
 ADMIN_URL = get('PYBB_ADMIN_URL', '/admin/')
 EMAIL_DEBUG = get('PYBB_EMAIL_DEBUG', False)
-ANONYMOUS_POST_COOKIE_NAME = get('PYBB_ANONYMOUS_POST_COOKIE_NAME', 'pybb_anonymous_post_id') 
+ANONYMOUS_POST_COOKIE_NAME = get(
+    'PYBB_ANONYMOUS_POST_COOKIE_NAME', 'pybb_anonymous_post_id'
+)
