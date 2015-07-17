@@ -34,8 +34,9 @@ def getimagesize(url):
 
 
 def setup_module(module):
-    from nose.plugins.skip import SkipTest
+    from unittest import SkipTest
     try:
-        import ImageFile
+        from PIL import ImageFile
+        del ImageFile
     except ImportError:
         raise SkipTest()

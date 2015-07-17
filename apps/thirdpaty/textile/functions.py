@@ -21,7 +21,6 @@ Additions and fixes Copyright (c) 2006 Alex Shiels http://thresholdstate.com/
 import re
 import six
 import uuid
-import string
 if six.PY2:
     try:
         from urlparse import urlparse
@@ -36,8 +35,8 @@ else:
 from apps.thirdpaty.textile.tools import sanitizer, imagesize
 
 
-def _normalize_newlines(string):
-    out = string.strip()
+def _normalize_newlines(input):
+    out = input.strip()
     out = re.sub(r'\r\n', '\n', out)
     out = re.sub(r'\n{3,}', '\n\n', out)
     out = re.sub(r'\n\s*\n', '\n\n', out)
@@ -271,8 +270,10 @@ class Textile(object):
         True
 
         """
-        r = re.compile(r'<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>',
-                       re.S).sub('', text.strip()).strip()
+        r = re.compile(
+            r'<(p|blockquote|div|form|table|ul|ol|pre|h\d)[^>]*?>.*</\1>',
+            re.S
+        ).sub('', text.strip()).strip()
         r = re.compile(r'<(hr|br)[^>]*?/>').sub('', r)
         return '' != r
 
@@ -280,14 +281,20 @@ class Textile(object):
         r"""
         >>> t = Textile()
         >>> t.table('(rowclass). |one|two|three|\n|a|b|c|')
-        '\t<table>\n\t\t<tr class="rowclass">\n\t\t\t<td>one</td>\n\t\t\t<td>two</td>\n\t\t\t<td>three</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>a</td>\n\t\t\t<td>b</td>\n\t\t\t<td>c</td>\n\t\t</tr>\n\t</table>\n\n'
+        '\t<table>\n\t\t<tr class="rowclass">\n\t\t\t<td>one</td>\n\t\t\t
+<td>two</td>\n\t\t\t<td>three</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td>a</td>
+\n\t\t\t<td>b</td>\n\t\t\t<td>c</td>\n\t\t</tr>\n\t</table>\n\n'
         """
+
         text = text + "\n\n"
-        pattern = re.compile(r'^(?:table(_?%(s)s%(a)s%(c)s)\. ?\n)?^(%(a)s%(c)s\.? ?\|.*\|)\n\n'
-                             % {'s': self.table_span_re,
-                                'a': self.align_re,
-                                'c': self.c},
-                             re.S | re.M | re.U)
+        pattern = re.compile(
+            r'^(?:table(_?%(s)s%(a)s%(c)s)\. ?\n)'
+            r'?^(%(a)s%(c)s\.? ?\|.*\|)\n\n' % {
+                's': self.table_span_re,
+                'a': self.align_re,
+                'c': self.c
+            }, re.S | re.M | re.U
+        )
         return pattern.sub(self.fTable, text)
 
     def fTable(self, match):
@@ -334,7 +341,7 @@ class Textile(object):
         '\\t<ul>\\n\\t\\t<li>one</li>\\n\\t\\t<li>two</li>\\n\\t\\t<li>three</li>\\n\\t</ul>'
         """
 
-        #Replace line-initial bullets with asterisks
+        # Replace line-initial bullets with asterisks
         bullet_pattern = re.compile(u'^•', re.U | re.M)
 
         pattern = re.compile(r'^([#*]+%s .*)$(?![^#*])'
@@ -391,10 +398,12 @@ class Textile(object):
 
     def doBr(self, match):
         if self.html_type == 'html':
-            content = re.sub(r'(.+)(?:(?<!<br>)|(?<!<br />))\n(?![#*\s|])', '\\1<br>',
+            content = re.sub(r'(.+)(?:(?<!<br>)|(?<!<br />))\n(?![#*\s|])',
+                             '\\1<br>',
                              match.group(3))
         else:
-            content = re.sub(r'(.+)(?:(?<!<br>)|(?<!<br />))\n(?![#*\s|])', '\\1<br />',
+            content = re.sub(r'(.+)(?:(?<!<br>)|(?<!<br />))\n(?![#*\s|])',
+                             '\\1<br />',
                              match.group(3))
         return '<%s%s>%s%s' % (match.group(1), match.group(2),
                                content, match.group(4))
@@ -481,12 +490,15 @@ class Textile(object):
         """
         >>> t = Textile()
         >>> t.fBlock("bq", "", None, "", "Hello BlockQuote")
-        ('\\t<blockquote>\\n', '\\t\\t<p>', 'Hello BlockQuote', '</p>', '\\n\\t</blockquote>')
+        ('\\t<blockquote>\\n', '\\t\\t<p>', 'Hello BlockQuote', '</p>',
+'\\n\\t</blockquote>')
 
         >>> t.fBlock("bq", "", None, "http://google.com", "Hello BlockQuote")
-        ('\\t<blockquote cite="http://google.com">\\n', '\\t\\t<p>', 'Hello BlockQuote', '</p>', '\\n\\t</blockquote>')
+        ('\\t<blockquote cite="http://google.com">\\n', '\\t\\t<p>',
+'Hello BlockQuote', '</p>', '\\n\\t</blockquote>')
 
-        >>> t.fBlock("bc", "", None, "", 'printf "Hello, World";') # doctest: +ELLIPSIS
+        >>> t.fBlock("bc", "", None, "",
+        ...     'printf "Hello, World";')  # doctest: +ELLIPSIS
         ('<pre>', '<code>', ..., '</code>', '</pre>')
 
         >>> t.fBlock("h1", "", None, "", "foobar")
@@ -587,7 +599,7 @@ class Textile(object):
         '<p><cite>Cat&#8217;s Cradle</cite> by Vonnegut</p>'
 
         """
-         # fix: hackish
+        # fix: hackish
         text = re.sub(r'"\Z', '\" ', text)
 
         glyph_search = (
@@ -621,7 +633,7 @@ class Textile(object):
             re.compile(r'\b ?[([]R[])]', re.I),
             # copyright
             re.compile(r'\b ?[([]C[])]', re.I),
-         )
+        )
 
         glyph_replace = [x % dict(self.glyph_defaults) for x in (
             r'\1%(txt_apostrophe)s\2',            # apostrophe's
@@ -660,7 +672,10 @@ class Textile(object):
         {'Google': 'http://www.google.com'}
 
         """
-        pattern = re.compile(r'(?:(?<=^)|(?<=\s))\[(.+)\]((?:http(?:s?):\/\/|\/)\S+)(?=\s|$)', re.U)
+        pattern = re.compile(
+            r'(?:(?<=^)|(?<=\s))\[(.+)\]((?:http(?:s?):\/\/|\/)\S+)(?=\s|$)',
+            re.U
+        )
         text = pattern.sub(self.refs, text)
         return text
 
@@ -765,13 +780,21 @@ class Textile(object):
         '"http://www.ya.ru":http://www.ya.ru'
         """
 
-        pattern = re.compile(r"""\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))""", re.U | re.I)
+        pattern = re.compile(
+            r"\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)"
+            r"(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+"
+            r"(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)"
+            r"|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))", re.U | re.I
+        )
         return pattern.sub(r'"\1":\1', text)
 
     def links(self, text):
         """
         >>> t = Textile()
-        >>> t.links('fooobar "Google":http://google.com/foobar/ and hello world "flickr":http://flickr.com/photos/jsamsa/ ') # doctest: +ELLIPSIS
+        >>> t.links(
+        ...    'fooobar "Google":http://google.com/foobar/ '
+        ...    'and hello world "flickr":http://flickr.com/photos/jsamsa/'
+        ... ) # doctest: +ELLIPSIS
         'fooobar ... and hello world ...'
         """
 
@@ -801,7 +824,7 @@ class Textile(object):
     def fLink(self, match):
         pre, atts, text, title, url, post = match.groups()
 
-        if pre == None:
+        if pre is None:
             pre = ''
 
         # assume ) at the end of the url is not actually part of the url
@@ -832,7 +855,8 @@ class Textile(object):
         """
         >>> t = Textile()
         >>> t.span(r"hello %(bob)span *strong* and **bold**% goodbye")
-        'hello <span class="bob">span <strong>strong</strong> and <b>bold</b></span> goodbye'
+        'hello <span class="bob">span <strong>strong</strong> and <b>
+bold</b></span> goodbye'
         """
         qtags = (r'\*\*', r'\*', r'\?\?', r'\-', r'__',
                  r'_', r'%', r'\+', r'~', r'\^')
@@ -856,16 +880,18 @@ class Textile(object):
     def fSpan(self, match):
         _, tag, atts, cite, content, end, _ = match.groups()
 
-        qtags = {'*': 'strong',
-                '**': 'b',
-                '??': 'cite',
-                 '_': 'em',
-                '__': 'i',
-                 '-': 'del',
-                 '%': 'span',
-                 '+': 'ins',
-                 '~': 'sub',
-                 '^': 'sup'}
+        qtags = {
+            '*': 'strong',
+            '**': 'b',
+            '??': 'cite',
+            '_': 'em',
+            '__': 'i',
+            '-': 'del',
+            '%': 'span',
+            '+': 'ins',
+            '~': 'sub',
+            '^': 'sup'
+        }
 
         tag = qtags[tag]
         atts = self.pba(atts)
@@ -881,7 +907,8 @@ class Textile(object):
         """
         >>> t = Textile()
         >>> t.image('!/imgs/myphoto.jpg!:http://jsamsa.com')
-        '<a href="http://jsamsa.com" class="img"><img src="/imgs/myphoto.jpg" alt="" /></a>'
+        '<a href="http://jsamsa.com" class="img"><img src="/imgs/myphoto.jpg"
+alt="" /></a>'
         >>> t.image('!</imgs/myphoto.jpg!')
         '<img src="/imgs/myphoto.jpg" style="float: left;" alt="" />'
         """
@@ -898,9 +925,9 @@ class Textile(object):
             (?::(\S+))?        # optional href
             (?:[\]}]|(?=\s|$)) # lookahead: space or end of string
         """ % self.c, re.U | re.X)
-        return pattern.sub(self.fImage, text)
+        return pattern.sub(self.f_image, text)
 
-    def fImage(self, match):
+    def f_image(self, match):
         # (None, '', '/imgs/myphoto.jpg', None, None)
         align, atts, url, title, href = match.groups()
         atts = self.pba(atts)
@@ -944,7 +971,7 @@ class Textile(object):
 
     def fCode(self, match):
         before, text, after = match.groups()
-        if after == None:
+        if after is None:
             after = ''
         # text needs to be escaped
         if not self.restricted:
@@ -953,7 +980,7 @@ class Textile(object):
 
     def fPre(self, match):
         before, text, after = match.groups()
-        if after == None:
+        if after is None:
             after = ''
         # text needs to be escaped
         if not self.restricted:
@@ -972,7 +999,7 @@ class Textile(object):
 
     def fTextile(self, match):
         before, notextile, after = match.groups()
-        if after == None:
+        if after is None:
             after = ''
         return ''.join([before, self.shelve(notextile), after])
 
@@ -990,7 +1017,7 @@ def textile(text, head_offset=0, html_type='xhtml', auto_link=False,
 
     """
     return Textile(auto_link=auto_link).textile(text, head_offset=head_offset,
-                                                  html_type=html_type)
+                                                html_type=html_type)
 
 
 def textile_restricted(text, lite=True, noimage=True, html_type='xhtml',

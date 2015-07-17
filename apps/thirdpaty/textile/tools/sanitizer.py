@@ -9,7 +9,7 @@ def sanitize(string, html_type):
     """
     try:
         import html5lib
-        from html5lib import sanitizer, serializer, treewalkers, treebuilders
+        from html5lib import sanitizer, serializer, treewalkers
     except ImportError:
         raise Exception("html5lib not available")
 
@@ -28,8 +28,9 @@ def sanitize(string, html_type):
 
 
 def setup_module(module):
-    from nose.plugins.skip import SkipTest
+    from unittest import SkipTest
     try:
         import html5lib
+        del html5lib
     except ImportError:
         raise SkipTest()
