@@ -7,6 +7,7 @@
 """
 
 # coding: utf-8
+from apps.accounts.models import User
 from datetime import datetime, timedelta
 from django.test import TestCase
 from django.core.urlresolvers import reverse
@@ -17,12 +18,10 @@ from apps.core.helpers import get_object_or_None
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Poll, PollItem, PollAnswer, Topic
 from apps.pybb.cron import UpdatePollJob
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
+from django.utils.encoding import force_text
+from django.core.exceptions import ValidationError
+
 import allure
 from allure.constants import Severity
 
@@ -31,11 +30,15 @@ from allure.constants import Severity
 class PollTest(TestHelperMixin, TestCase):
     """ TestCase for polls creation, update and deletion actions and logic """
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
-        'tests/fixtures/load_posts.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
+        'load_posts.json',
     ]
     poll_post = {
         'title': 'Poll',
@@ -55,7 +58,7 @@ class PollTest(TestHelperMixin, TestCase):
         :return:
         """
         self.login(role)
-        url = self.topic.get_poll_add_url()
+        url = force_text(self.topic.get_poll_add_url())
         count = Poll.objects.count()
 
         response = self.client.post(url, self.poll_post, follow=True)
@@ -92,8 +95,8 @@ class PollTest(TestHelperMixin, TestCase):
             'poll_item_poll_set-2-title': 'Variant 3',
             'poll_item_poll_set-3-title': 'Variant 4',
         }
-        response = self.client.post(poll.get_configure_url(), post,
-                                    follow=True)
+        response = self.client.post(force_text(poll.get_configure_url()),
+                                    post, follow=True)
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(PollItem.objects.count(), count + poll_items_count)
@@ -111,7 +114,7 @@ class PollTest(TestHelperMixin, TestCase):
     def test_update_poll(self, role='admin'):
         poll = self.add_poll_items(role)
         items_amount = poll.items.count()
-        url = poll.get_update_url()
+        url = force_text(poll.get_update_url())
         post = {
             'title': u'new poll title',
             'items_amount': items_amount + 1
@@ -137,7 +140,7 @@ class PollTest(TestHelperMixin, TestCase):
             'poll_item_poll_set-3-id': 4,
             'poll_item_poll_set-4-title': 'Variant 5',
         }
-        response = self.client.post(poll.get_configure_url(),
+        response = self.client.post(force_text(poll.get_configure_url()),
                                     items_post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.proceed_form_errors(response.context)
@@ -159,15 +162,9 @@ class PollTest(TestHelperMixin, TestCase):
             'poll_item_poll_set-2-title': '',
             'poll_item_poll_set-3-title': '',
         }
-        response = self.client.post(poll.get_configure_url(), post,
-                                    follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('form', response.context)
-        form = response.context['form']
-        self.assertNotEqual(form.errors, {})
-        for item in form.errors:
-            self.assertEqual(
-                item['title'][0], unicode(_("Title should be set"))
+        with self.assertRaises(ValidationError):
+            response = self.client.post(
+                force_text(poll.get_configure_url(), post), follow=True
             )
 
     @allure.story('create')
@@ -185,27 +182,31 @@ class PollTest(TestHelperMixin, TestCase):
             'poll_item_poll_set-2-title': '',
             'poll_item_poll_set-3-title': 'Variant 4',
         }
-        response = self.client.post(poll.get_configure_url(), post,
-                                    follow=True)
+        response = self.client.post(force_text(poll.get_configure_url()),
+                                    post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertIn('form', response.context)
         form = response.context['form']
         self.assertNotEqual(form.errors, {})
         self.assertEqual(form.errors[2]['title'][0],
-                         unicode(_("Title should be set")))
+                         force_text(_("Title should be set")))
 
 
 @allure.feature('Poll Answer')
 class PollAnswerTest(TestHelperMixin, TestCase):
     """ TestCase for voting polls actions and logic """
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
-        'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_polls.json',
-        'tests/fixtures/load_poll_items.json'
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
+        'load_posts.json',
+        'load_polls.json',
+        'load_poll_items.json'
     ]
 
     def setUp(self):
@@ -223,8 +224,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
     def test_multiple_poll_vote(self):
         """ successful multiple poll vote action/logic """
         self.login('user')
-        url = self.multiple_poll.get_vote_url()
-        pks = map(lambda x: x['pk'], self.multiple_poll.items.values('pk'))
+        url = force_text(self.multiple_poll.get_vote_url())
+        pks = self.multiple_poll.items.values_list('pk', flat=True)
 
         post = {
             'vote': pks[0:2],
@@ -247,8 +248,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
     def test_single_poll_vote(self):
         """ successful single poll vote action/logic """
         self.login('user')
-        url = self.single_poll.get_vote_url()
-        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        url = force_text(self.single_poll.get_vote_url())
+        pks = self.single_poll.items.values_list('pk', flat=True)
         post = {
             'vote': pks[0]
         }
@@ -270,8 +271,8 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         """ in-successful single poll vote action/logic, user can not post
          more than one vote option"""
         self.login('user')
-        url = self.single_poll.get_vote_url()
-        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        url = force_text(self.single_poll.get_vote_url())
+        pks = self.single_poll.items.values_list('pk', flat=True)
         post = {
             'vote': pks[0:2]
         }
@@ -297,12 +298,12 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.single_poll.save()
         self.login('user')
         count = PollAnswer.objects.count()
-        pks = map(lambda x: x['pk'], self.single_poll.items.values('pk'))
+        pks = self.single_poll.items.values_list('pk', flat=True)
         post = {
             'vote': pks[0]
         }
-        response = self.client.post(self.single_poll.get_vote_url(), post,
-                                    follow=True)
+        response = self.client.post(
+            force_text(self.single_poll.get_vote_url()), post, follow=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(PollAnswer.objects.count(), count)
         self.single_poll.is_finished = False
@@ -313,13 +314,17 @@ class PollAnswerTest(TestHelperMixin, TestCase):
 class PollManageTest(TestHelperMixin, TestCase):
     """ TestCase for managing polls: delete, update"""
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
-        'tests/fixtures/load_topics.json',
-        'tests/fixtures/load_posts.json',
-        'tests/fixtures/load_polls.json',
-        'tests/fixtures/load_poll_items.json'
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
+        'load_topics.json',
+        'load_posts.json',
+        'load_polls.json',
+        'load_poll_items.json'
     ]
 
     def setUp(self):
@@ -336,8 +341,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         count = Poll.objects.count()
         items_count = PollItem.objects.count()
         items_amount = self.poll.items.count()
-        response = self.client.post(self.poll.get_delete_url(), post,
-                                    follow=True)
+        response = self.client.post(force_text(self.poll.get_delete_url()),
+                                    post, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Poll.objects.count(), count - 1)
         self.assertEqual(PollItem.objects.count(), items_count - items_amount)
@@ -352,8 +357,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         }
         count = Poll.objects.count()
         items_count = PollItem.objects.count()
-        response = self.client.post(self.poll.get_delete_url(), post,
-                                    follow=True)
+        response = self.client.post(force_text(self.poll.get_delete_url()),
+                                    post, follow=True)
         # permission denied
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Poll.objects.count(), count)
@@ -366,7 +371,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
         user = User.objects.filter(qset)[0]
         self.login(user.username)
-        response = self.client.get(self.poll.get_update_url(), follow=True)
+        response = self.client.get(
+            force_text(self.poll.get_update_url()), follow=True)
         self.assertEqual(response.status_code, 403)
 
     @allure.story('update')
@@ -381,7 +387,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         user.save()
 
         self.login(user=user.username)
-        response = self.client.get(self.poll.get_update_url(), follow=True)
+        response = self.client.get(
+            force_text(self.poll.get_update_url()), follow=True)
         self.assertEqual(response.status_code, 200)
 
         # post actions
@@ -395,7 +402,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         qset = ~Q(pk=self.poll.topic.user.pk) & ~Q(is_superuser=True)
         user = User.objects.filter(qset)[0]
         self.login(user.username)
-        response = self.client.get(self.poll.get_configure_url(), follow=True)
+        response = self.client.get(force_text(self.poll.get_configure_url()),
+                                   follow=True)
         self.assertEqual(response.status_code, 403)
 
     @allure.story('update')
@@ -410,7 +418,8 @@ class PollManageTest(TestHelperMixin, TestCase):
         user.save()
 
         self.login(user=user.username)
-        response = self.client.get(self.poll.get_configure_url(), follow=True)
+        response = self.client.get(force_text(self.poll.get_configure_url()),
+                                   follow=True)
         self.assertEqual(response.status_code, 200)
 
         # post actions
@@ -422,6 +431,10 @@ class PollManageTest(TestHelperMixin, TestCase):
 class TestCronJobs(TestHelperMixin, TestCase):
     """ TestCase for testing cron jobs """
     fixtures = [
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
         'load_users.json',
         'load_pybb_categories.json',
         'load_forums.json',
