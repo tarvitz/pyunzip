@@ -670,7 +670,7 @@ class PostAddView(generic.CreateView):
         instance.save()
         if is_new_topic:
             return redirect(topic.get_absolute_url())
-        page = (topic.posts.count() / settings.OBJECTS_ON_PAGE) + 1
+        page = int((topic.posts.count() // settings.OBJECTS_ON_PAGE) + 1)
         return redirect(
             topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
                 'page': page,
@@ -688,7 +688,7 @@ class PostUpdateView(generic.UpdateView):
         post = self.get_object()
         topic = post.topic
         page = list(topic.posts.values_list('pk', flat=True)).index(post.pk)
-        page = page / settings.OBJECTS_ON_PAGE + 1
+        page = page // settings.OBJECTS_ON_PAGE + 1
         return topic.get_absolute_url() + '?page=%(page)s#post-%(post)s' % {
             'page': page, 'post': post.pk
         }

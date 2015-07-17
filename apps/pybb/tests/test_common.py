@@ -1,12 +1,13 @@
 # coding: utf-8
+from apps.accounts.models import User
 from django.test import TestCase
 from apps.core.tests import TestHelperMixin
 from apps.pybb.models import Forum, Topic, Post
 from apps.core.helpers import get_object_or_None
 from django.core.urlresolvers import reverse
+from django.utils.encoding import force_text
+
 from copy import deepcopy
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 
 class JustTest(TestCase):
@@ -38,19 +39,15 @@ class JustTest(TestCase):
             raise AssertionError
 
 
-class CacheTest(TestCase):
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-
 class TopicTest(TestHelperMixin, JustTest):
     fixtures = [
-        'tests/fixtures/load_users.json',
-        'tests/fixtures/load_pybb_categories.json',
-        'tests/fixtures/load_forums.json',
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+        'load_pybb_categories.json',
+        'load_forums.json',
     ]
     add_topic_post = {
         'name': u'Заголовок поста',
@@ -72,6 +69,10 @@ class TopicTest(TestHelperMixin, JustTest):
 
 class PostTest(TestHelperMixin, JustTest):
     fixtures = [
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
         'load_users.json',
         'load_pybb_categories.json',
         'load_forums.json',
@@ -108,7 +109,7 @@ class PostTest(TestHelperMixin, JustTest):
 
     def test_topic_add(self, role='user'):
         self.login(role)
-        url = reverse('pybb:post-add', args=(self.topic.pk, ))
+        url = force_text(reverse('pybb:post-add', args=(self.topic.pk, )))
         count = self.topic.posts.count()
         response = self.client.post(url, self.add_post, follow=True)
         self.assertEqual(response.status_code, 200)
