@@ -26,7 +26,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.core.exceptions import PermissionDenied
-from apps.utils.paginator import DiggPaginator as Paginator
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from django.db.models import Sum
 
 
