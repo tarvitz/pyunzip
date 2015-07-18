@@ -14,6 +14,8 @@ from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
+import allure
+from allure.constants import Severity
 
 import simplejson as json
 
@@ -96,12 +98,15 @@ class PMViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Private Messages')
 class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
                                  APITestCase):
     def setUp(self):
         super(PMViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -112,6 +117,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
             load,
             {'detail': _('Authentication credentials were not provided.')})
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -121,6 +128,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
             load,
             {'detail': _('Authentication credentials were not provided.')})
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -131,6 +140,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -140,6 +151,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -149,6 +162,8 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -159,9 +174,12 @@ class PMViewSetAnonymousUserTest(PMViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Private Messages')
 class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
                              APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -170,6 +188,8 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -178,6 +198,8 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), PM.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_admin_put_detail(self):
         self.login('admin')
         count = PM.objects.count()
@@ -194,6 +216,8 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         load.pop('sent')
         self.check_response(put, load)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_admin_post_list(self):
         """
         accounts.change_pm permission holder users can freely assign
@@ -214,6 +238,8 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_admin_patch_detail(self):
         self.login('admin')
         count = PM.objects.count()
@@ -227,6 +253,8 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(PM.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_admin_delete_detail(self):
         self.login('admin')
         count = PM.objects.count()
@@ -236,6 +264,7 @@ class PMViewSetAdminUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(PM.objects.count(), count - 1)
 
 
+@allure.feature('API: Private Messages')
 class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
                         APITestCase):
     # test non-privileged user,
@@ -244,6 +273,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(PMViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -252,6 +283,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(self.object_detail_response, load)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -261,6 +294,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         qset = Q(sender=self.user) | Q(addressee=self.user)
         self.assertEqual(len(load['results']), PM.objects.filter(qset).count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -274,6 +309,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
             {'detail': _('You do not have permission to perform this action.')}
         )
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         count = PM.objects.count()
@@ -287,6 +324,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_optional(self):
         self.login('user')
         post = dict(**self.post)
@@ -303,6 +342,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         pm = PM.objects.latest('pk')
         self.assertEqual(pm.sender, self.user)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         post = dict(**self.post)
@@ -323,6 +364,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         # user can not send messages from the 'other' users
         self.assertEqual(pm.sender, self.user)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -335,6 +378,8 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
             {'detail': _('You do not have permission to perform this action.')}
         )
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         count = PM.objects.count()
@@ -350,6 +395,7 @@ class PMViewSetUserTest(PMViewSetTestMixin, TestHelperMixin,
         )
 
 
+@allure.feature('API: Private Messages')
 class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
                                 APITestCase):
     # test non-privileged user,
@@ -358,6 +404,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(PMViewSetUserNotOwnerTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         """Anyone except sender, addressee would retrieve 404"""
 
@@ -371,6 +419,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(force_text(_('Not found.')), load['detail'])
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user2')
         response = self.client.get(self.url_list, format='json')
@@ -380,6 +430,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         qset = Q(addressee=self.other_user) | Q(sender=self.other_user)
         self.assertEqual(len(load['results']), PM.objects.filter(qset).count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user2')
         response = self.client.put(self.url_put, data=self.put,
@@ -392,6 +444,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         any user can create his own pm, whatever user would post
@@ -416,6 +470,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(PM.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_to_self(self):
         """
         check for non-possibility to send pm for self
@@ -435,6 +491,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         self.assertEqual(load['addressee'][0],
                          force_text(_("You can not send pm for yourself")))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner_set(self):
         """
         post without owner, as it default would be assign to current user
@@ -458,6 +516,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
         pm = PM.objects.latest('id')
         self.assertEqual(pm.sender, self.other_user)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user2')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -469,6 +529,8 @@ class PMViewSetUserNotOwnerTest(PMViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user2')
         response = self.client.delete(self.url_delete, data={},

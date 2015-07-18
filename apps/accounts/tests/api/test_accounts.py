@@ -6,6 +6,7 @@ from apps.core.tests import (
 )
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
+import allure
 
 
 __all__ = [
@@ -94,18 +95,21 @@ class UserViewSetMixin(object):
         }
 
 
+@allure.feature('API: Accounts')
 class UserViewSetAnonymousUserTest(UserViewSetMixin,
                                    ApiAnonymousUserTestCaseMixin,
                                    APITestCase):
     pass
 
 
+@allure.feature('API: Accounts')
 class UserViewSetAdminUserTest(UserViewSetMixin,
                                ApiAdminUserTestCaseMixin,
                                APITestCase):
     pass
 
 
+@allure.feature('API: Accounts')
 class UserViewSetUserTest(UserViewSetMixin,
                           ApiAnonymousUserTestCaseMixin,
                           APITestCase):

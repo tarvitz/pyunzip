@@ -10,6 +10,8 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 
 class MiniQuoteViewSetTestMixin(object):
@@ -57,6 +59,7 @@ class MiniQuoteViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: MiniQuotes')
 class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
                                         TestHelperMixin,
                                         APITestCase):
@@ -64,6 +67,8 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
         super(MiniQuoteViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -71,6 +76,8 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -78,6 +85,8 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load['count'], MiniQuote.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -87,6 +96,8 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -105,6 +116,8 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -115,9 +128,12 @@ class MiniQuoteViewSetAnonymousUserTest(MiniQuoteViewSetTestMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: MiniQuotes')
 class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
                                     APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -126,6 +142,8 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -134,6 +152,8 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load['count'], MiniQuote.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = MiniQuote.objects.count()
@@ -148,6 +168,8 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(MiniQuote.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         tabletop.change_miniquote permission holder users can freely assign
@@ -168,6 +190,8 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         self.assertEqual(MiniQuote.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = MiniQuote.objects.count()
@@ -181,6 +205,8 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(MiniQuote.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = MiniQuote.objects.count()
@@ -190,6 +216,7 @@ class MiniQuoteViewSetAdminUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         self.assertEqual(MiniQuote.objects.count(), count - 1)
 
 
+@allure.feature('API: MiniQuotes')
 class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
                                APITestCase):
     # test non-privileged user,
@@ -198,6 +225,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(MiniQuoteViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -206,6 +235,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -214,6 +245,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load['count'], MiniQuote.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -226,6 +259,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         response = self.client.post(self.url_post, data=self.post,
@@ -238,6 +273,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         response = self.client.post(self.url_post, data=self.post,
@@ -250,6 +287,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -262,6 +301,8 @@ class MiniQuoteViewSetUserTest(MiniQuoteViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         response = self.client.delete(self.url_delete, data={},

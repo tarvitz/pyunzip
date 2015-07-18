@@ -1,6 +1,5 @@
 # coding: utf-8
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 from apps.comments.models import CommentWatch, Comment
 from apps.news.models import Event
 from apps.core.tests import (
@@ -14,10 +13,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.core.helpers import get_content_type
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 __all__ = ['CommentWatchViewSetTest', ]
 
 
+@allure.feature('API: Comment Watches')
 class CommentWatchViewSetTest(TestHelperMixin,
                               ApiTestSourceAssertionMixin, APITestCase):
     fixtures = [
@@ -88,6 +90,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         }
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -96,6 +100,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -104,6 +110,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -114,6 +122,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -123,6 +133,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -132,6 +144,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_anonymous_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -142,6 +156,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -151,6 +167,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         load.pop('created_on')
         self.assertEqual(self.object_detail_response, load)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -159,6 +177,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), CommentWatch.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_admin_put_detail(self):
         self.login('admin')
         count = CommentWatch.objects.count()
@@ -170,6 +190,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertUpdate(load, self.put)
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_admin_post_list(self):
         self.login('admin')
         count = CommentWatch.objects.count()
@@ -184,6 +206,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(CommentWatch.objects.count(), count + 1)
         self.assertUpdate(load, self.post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_admin_patch_detail(self):
         self.login('admin')
         count = CommentWatch.objects.count()
@@ -198,6 +222,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
             self.assertEqual(load[field], self.patch[field])
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_admin_delete_detail(self):
         self.login('admin')
         count = CommentWatch.objects.count()
@@ -209,6 +235,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
     # test non-privileged user,
     # this user is owner of comment_watch so he/she can modify it and delete
     # also create new ones
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_user_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -218,6 +246,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         load.pop('created_on')
         self.assertEqual(self.object_detail_response, load)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_user_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -229,6 +259,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
             CommentWatch.objects.filter(user=self.user).count()
         )
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_user_put_detail(self):
         self.login('user')
         count = CommentWatch.objects.count()
@@ -242,6 +274,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertUpdate(load, put)
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_user_post_list(self):
         self.login('user')
         post = dict(**self.post)
@@ -257,6 +291,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         load = json.loads(response.content)
         self.assertUpdate(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_user_patch_detail(self):
         self.login('user')
         count = CommentWatch.objects.count()
@@ -271,6 +307,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
             self.assertEqual(load[field], self.patch[field])
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_user_delete_detail(self):
         self.login('user')
         count = CommentWatch.objects.count()
@@ -283,6 +321,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
     # this user is not owner of represented comment watch
     # so he/she can not modify it and delete
     # but can create new  ones
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_get_detail(self):
         self.login('user2')
         response = self.client.get(self.url_detail, format='json')
@@ -291,6 +331,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, {'detail': _('Not found.')})
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_get_list(self):
         self.login('user2')
         response = self.client.get(self.url_list, format='json')
@@ -302,6 +344,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
             CommentWatch.objects.filter(user=self.other_user).count()
         )
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_put_detail(self):
         self.login('user2')
         count = CommentWatch.objects.count()
@@ -311,6 +355,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_post_list(self):
         self.login('user2')
         count = CommentWatch.objects.count()
@@ -327,6 +373,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(CommentWatch.objects.count(), count + 1)
         self.assertUpdate(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_patch_detail(self):
         self.login('user2')
         count = CommentWatch.objects.count()
@@ -336,6 +384,8 @@ class CommentWatchViewSetTest(TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         self.assertEqual(CommentWatch.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_not_owner_delete_detail(self):
         self.login('user2')
         count = CommentWatch.objects.count()

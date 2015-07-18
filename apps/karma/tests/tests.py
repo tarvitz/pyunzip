@@ -1,8 +1,7 @@
 # coding: utf-8
 
 from django.test import TestCase
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -90,7 +89,6 @@ class KarmaTest(TestHelperMixin, TestCase):
         self.login(self.user.username)
         url = reverse('karma:karma-alter', args=('up', self.user.nickname, ))
         count = Karma.objects.count()
-        self.user.karma
         response = self.client.post(url, self.post, follow=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(Karma.objects.count(), count)

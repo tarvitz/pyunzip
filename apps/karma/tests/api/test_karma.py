@@ -1,22 +1,30 @@
 # coding: utf-8
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
-from apps.news.models import Event, EventPlace
-from apps.core.tests import TestHelperMixin, ApiTestSourceAssertionMixin
+from apps.accounts.models import User
+from apps.karma.models import Karma
+from apps.karma.serializers import FAILURE_MESSAGES
+from apps.core.tests import TestHelperMixin
+
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-
-from apps.core.helpers import get_content_type
+from django.utils.encoding import force_text
+from django.core.urlresolvers import reverse
+from django.conf import settings
 
 import simplejson as json
-from datetime import datetime, timedelta
+import allure
+from allure.constants import Severity
+
+__all__ = [
+    'KarmaViewSetAdminUserTest', 'KarmaViewSetAnonymousUserTest',
+    'KarmaViewSetTestMixin',
+    'KarmaViewSetUserTest'
+]
 
 
-class EventViewSetTestMixin(object):
+class KarmaViewSetTestMixin(object):
     fixtures = [
         'load_universes.json',
         'load_fractions.json',
@@ -25,95 +33,83 @@ class EventViewSetTestMixin(object):
         'load_rank_types.json',
         'load_ranks.json',
         'load_users.json',
-        'load_event_places.json',
-        'load_events.json',
+        'load_karma.json',
     ]
 
     def setUp(self):
+        self.maxDiff = None
         self.user = User.objects.get(username='user')
         self.admin = User.objects.get(username='admin')
         self.other_user = User.objects.get(username='user2')
 
-        self.event_ct = get_content_type(Event)
-        self.event_place = EventPlace.objects.get(pk=1)
+        self.karma = Karma.objects.get(pk=1)
 
-        self.event = Event.objects.get(pk=1)
         self.url_detail = reverse(
-            'api:event-detail', args=(self.event.pk, ))
+            'api:karma-detail', args=(self.karma.pk, ))
 
-        self.url_list = reverse('api:event-list')
+        self.url_list = reverse('api:karma-list')
         self.url_post = self.url_list
         self.url_put = self.url_detail
         self.url_patch = self.url_detail
         self.url_delete = self.url_detail
 
         self.put = {
-            'id': self.event.pk,
-            'is_all_day': True,
-            'is_finished': True,
-            'type': 'game',
-            'league': 'mtg',
-            'place': 2,
-            'date_start': datetime.now() + timedelta(minutes=10),
-            'date_end': datetime.now() + timedelta(minutes=360),
-            'title': u'Private'
+            'id': self.karma.pk,
+            'comment': u'new comment',
+            'url': 'http://testserver/api/karmas/1/',
+            'value': 1,
+            'voter': reverse('api:user-detail', args=(self.user.pk, )),
+            'user': reverse('api:user-detail', args=(self.other_user.pk, )),
         }
+
         self.patch = {
-            'is_all_day': True,
-            'type': 'tournament'
+            'comment': u'Altered comment',
         }
         self.post = {
-            'is_all_day': True,
-            'is_finished': True,
-            'type': 'order',
-            'league': 'wh40k',
-            'place': 2,
-            'date_start': datetime.now() + timedelta(minutes=10),
-            'date_end': datetime.now() + timedelta(minutes=720),
-            'title': u'New Event',
+            'comment': u'\u0442\u0443\u0442 =)',
+            'url': 'http://testserver/api/karmas/2/',
+            'user': reverse('api:user-detail', args=(self.other_user.pk, )),
+            'voter': reverse('api:user-detail', args=(self.user.pk, )),
+            'value': 1,
         }
         self.object_detail_response = {
-            'id': 1,
-            'date_end': '2014-05-31T10:00:00',
-            'date_start': '2014-05-31T12:00:00',
-            'is_all_day': False,
-            'is_finished': False,
-            'is_new': True,
-            'place': None,
-            'league': 'wh40k',
-            'title': u'Клевое событие',
-            'type': 'order',
-            'url': '/events/1/'
+            'comment': u'\u0442\u0443\u0442 =)',
+            'date': '2013-04-08T01:48:58.795000',
+            'site_url': '/news/4/',
+            'url': '/api/karmas/1/',
+            'user': 'http://testserver/api/users/1/',
+            'value': -5,
+            'voter': 'http://testserver/api/users/2/'
         }
 
 
-class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
+@allure.feature('API: Karma')
+class KarmaViewSetAnonymousUserTest(KarmaViewSetTestMixin, TestHelperMixin,
                                     APITestCase):
     def setUp(self):
-        super(EventViewSetAnonymousUserTest, self).setUp()
+        super(KarmaViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
+        self.assertEqual(load, self.object_detail_response)
 
-        # Always False for anonymous user
-        object_detail_response = dict(**self.object_detail_response)
-        object_detail_response.update({
-            'is_new': False
-        })
-
-        self.assertEqual(load, object_detail_response)
-
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(len(load['results']), Event.objects.count())
+        self.assertEqual(len(load['results']), Karma.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -124,6 +120,8 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -133,6 +131,8 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -142,6 +142,8 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -152,11 +154,13 @@ class EventViewSetAnonymousUserTest(EventViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
-class EventViewSetAdminUserTest(EventViewSetTestMixin,
-                                ApiTestSourceAssertionMixin, TestHelperMixin,
+@allure.feature('API: Karma')
+class KarmaViewSetAdminUserTest(KarmaViewSetTestMixin, TestHelperMixin,
                                 APITestCase):
     # test admin user
-    def test_admin_get_detail(self):
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
+    def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -164,29 +168,43 @@ class EventViewSetAdminUserTest(EventViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
-    def test_admin_get_list(self):
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
+    def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(len(load['results']), Event.objects.count())
+        self.assertEqual(len(load['results']), Karma.objects.count())
 
-    def test_admin_put_detail(self):
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
+    def test_put_detail(self):
         self.login('admin')
-        count = Event.objects.count()
+        count = Karma.objects.count()
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
         put = dict(**self.put)
-        self.assertUpdate(put, load)
-        self.assertEqual(Event.objects.count(), count)
+        put.pop('id')
+        self.check_response(load, put)
 
-    def test_admin_post_list(self):
+        self.assertEqual(Karma.objects.count(), count)
+
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
+    def test_post_list(self):
+        """
+        accounts.change_karma permission holder users can freely assign
+        sender to anyone, other users can only create karmas for themselves
+
+        :return:
+        """
         self.login('admin')
-        count = Event.objects.count()
+        count = Karma.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -195,38 +213,44 @@ class EventViewSetAdminUserTest(EventViewSetTestMixin,
         load = json.loads(response.content)
         post = dict(**self.post)
 
-        self.assertEqual(Event.objects.count(), count + 1)
-        self.assertUpdate(post, load)
+        self.assertEqual(Karma.objects.count(), count + 1)
+        self.check_response(load, post)
 
-    def test_admin_patch_detail(self):
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
+    def test_patch_detail(self):
         self.login('admin')
-        count = Event.objects.count()
+        count = Karma.objects.count()
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertUpdate(self.patch, load)
-        self.assertEqual(Event.objects.count(), count)
+        obj = Karma.objects.get(pk=self.karma.pk)
+        self.check_instance(obj, load, self.patch)
+        self.assertEqual(Karma.objects.count(), count)
 
-    def test_admin_delete_detail(self):
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
+    def test_delete_detail(self):
         self.login('admin')
-        count = Event.objects.count()
+        count = Karma.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-        self.assertEqual(Event.objects.count(), count - 1)
+        self.assertEqual(Karma.objects.count(), count - 1)
 
 
-class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
+@allure.feature('API: Karma')
+class KarmaViewSetUserTest(KarmaViewSetTestMixin, TestHelperMixin,
                            APITestCase):
     # test non-privileged user,
-    # this user is owner of event so he/she can modify it and delete
-    # also create new ones
     def setUp(self):
-        super(EventViewSetUserTest, self).setUp()
+        super(KarmaViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -235,54 +259,133 @@ class EventViewSetUserTest(EventViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
-        self.login('user')
+        self.login('admin')
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(len(load['results']), Event.objects.count())
+        self.assertEqual(len(load['results']), Karma.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
+        # forbidden for non privileged user, use: patch method instead
         self.login('user')
-        response = self.client.put(self.url_put, data=self.put,
+        put = dict(**self.put)
+        Karma.objects.count()
+        response = self.client.put(self.url_put, data=put,
                                    format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
-
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
+        count = Karma.objects.count()
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(response['Content-Type'], 'application/json')
-        load = json.loads(response.content)
-        self.assertEqual(
-            load['detail'],
-            _('You do not have permission to perform this action.'))
 
+        load = json.loads(response.content)
+        post = dict(**self.post)
+
+        self.assertEqual(Karma.objects.count(), count + 1)
+        self.check_response(load, post)
+
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
+    def test_post_list_failure(self):
+        self.login('user')
+        count = Karma.objects.count()
+        post = dict(**self.post)
+        post['voter'], post['user'] = post['user'], post['voter']
+        post.update({
+            'value': -2
+        })
+        response = self.client.post(self.url_post, data=post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        load = json.loads(response.content)
+        self.assertEqual(Karma.objects.count(), count)
+        # user can not set karma for himself
+        self.assertEqual(
+            load['user'][0], force_text(FAILURE_MESSAGES['self_karma_set'])
+        )
+        # user can not set karma amount more than range: -1, 1
+        self.assertEqual(
+            load['value'][0],
+            force_text(FAILURE_MESSAGES['karma_amount_exceed'])
+        )
+        # user can not post karma alteration from other account
+        self.assertEqual(
+            load['voter'][0],
+            force_text(FAILURE_MESSAGES['karma_voter_violation'])
+        )
+
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
+    def test_post_list_karma_timeout_exceed(self):
+        """ non privileged users has limited karma create amount tries.
+        it could be set with settings KARMA_PER_TIMEOUT_AMOUNT
+
+        :return:
+        """
+        for item in range(settings.KARMA_PER_TIMEOUT_AMOUNT + 1):
+            Karma.objects.create(
+                user=self.other_user, voter=self.user, value=1,
+                comment=u'new karma ' + str(item)
+            )
+        self.login('user')
+        count = Karma.objects.count()
+        post = dict(**self.post)
+
+        response = self.client.post(self.url_post, data=post,
+                                    format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+        load = json.loads(response.content)
+        self.assertEqual(Karma.objects.count(), count)
+
+        self.assertEqual(
+            load['non_field_errors'][0],
+            force_text(FAILURE_MESSAGES['timeout'])
+        )
+
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
+        count = Karma.objects.count()
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
-        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
-        self.assertEqual(
-            load['detail'],
-            _('You do not have permission to perform this action.'))
+        obj = Karma.objects.get(pk=self.karma.pk)
+        self.check_instance(obj, load, self.patch)
+        self.assertEqual(Karma.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
+        count = Karma.objects.count()
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response['Content-Type'], 'application/json')
+        self.assertEqual(Karma.objects.count(), count)
         load = json.loads(response.content)
         self.assertEqual(
             load['detail'],

@@ -1,7 +1,6 @@
 # coding: utf-8
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 from apps.wh.models import Army, Side
 from apps.tabletop.models import Roster, Codex
 from apps.core.tests import TestHelperMixin
@@ -14,6 +13,8 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_content_type
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 
 class RosterViewSetTestMixin(object):
@@ -95,12 +96,15 @@ class RosterViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Rosters')
 class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
                                      APITestCase):
     def setUp(self):
         super(RosterViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -111,6 +115,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
             load,
             {'detail': _('Authentication credentials were not provided.')})
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -120,6 +126,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
             load,
             {'detail': _('Authentication credentials were not provided.')})
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -131,6 +139,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -141,6 +151,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -150,6 +162,8 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -160,9 +174,12 @@ class RosterViewSetAnonymousUserTest(RosterViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Rosters')
 class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
                                  APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -171,6 +188,8 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_admin_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -179,6 +198,8 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Roster.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_admin_put_detail(self):
         self.login('admin')
         count = Roster.objects.count()
@@ -193,6 +214,8 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(Roster.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_admin_post_list(self):
         """
         tabletop.change_roster permission holder users can freely assign
@@ -213,6 +236,8 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_admin_patch_detail(self):
         self.login('admin')
         count = Roster.objects.count()
@@ -226,6 +251,8 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Roster.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_admin_delete_detail(self):
         self.login('admin')
         count = Roster.objects.count()
@@ -235,6 +262,7 @@ class RosterViewSetAdminUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count - 1)
 
 
+@allure.feature('API: Rosters')
 class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
                             APITestCase):
     # test non-privileged user,
@@ -243,6 +271,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(RosterViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -251,6 +281,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -259,6 +291,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Roster.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -271,6 +305,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         put.pop('id')
         self.check_response(load, put)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         count = Roster.objects.count()
@@ -284,6 +320,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         count = Roster.objects.count()
@@ -297,6 +335,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -307,6 +347,8 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         obj = Roster.objects.get(pk=self.roster.pk)
         self.check_instance(obj, load, self.patch)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         count = Roster.objects.count()
@@ -317,6 +359,7 @@ class RosterViewSetUserTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count - 1)
 
 
+@allure.feature('API: Rosters')
 class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
                                     APITestCase):
     # test non-privileged user,
@@ -325,6 +368,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(RosterViewSetUserNotOwnerTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user2')
         response = self.client.get(self.url_detail, format='json')
@@ -333,6 +378,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user2')
         response = self.client.get(self.url_list, format='json')
@@ -341,6 +388,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Roster.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user2')
         response = self.client.put(self.url_put, data=self.put,
@@ -353,6 +402,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         any user can create his own roster, whatever user would post
@@ -375,6 +426,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Roster.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner_set(self):
         """
         post without owner, as it default would be assign to current user
@@ -395,6 +448,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
         roster = Roster.objects.latest('id')
         self.assertEqual(roster.owner, self.other_user)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user2')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -406,6 +461,8 @@ class RosterViewSetUserNotOwnerTest(RosterViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user2')
         response = self.client.delete(self.url_delete, data={},

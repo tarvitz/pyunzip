@@ -1,7 +1,6 @@
 # coding: utf-8
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 from apps.wh.models import Army, Side
 from apps.tabletop.models import Report, Codex, Roster
 from apps.tabletop.serializers import FAILURE_MESSAGES
@@ -17,6 +16,8 @@ from django.conf import settings
 from apps.core.helpers import get_content_type
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 
 class ReportViewSetTestMixin(object):
@@ -122,12 +123,15 @@ class ReportViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Reports')
 class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
                                      APITestCase):
     def setUp(self):
         super(ReportViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -135,6 +139,8 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -142,6 +148,8 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Report.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -152,6 +160,8 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -161,6 +171,8 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -170,6 +182,8 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -180,9 +194,12 @@ class ReportViewSetAnonymousUserTest(ReportViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Reports')
 class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
                                  APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -191,6 +208,8 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -199,6 +218,8 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Report.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = Report.objects.count()
@@ -213,6 +234,8 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(Report.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         tabletop.change_report permission holder users can freely assign
@@ -234,6 +257,8 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = Report.objects.count()
@@ -247,6 +272,8 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Report.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = Report.objects.count()
@@ -256,6 +283,7 @@ class ReportViewSetAdminUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count - 1)
 
 
+@allure.feature('API: Reports')
 class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
                             APITestCase):
     # test non-privileged user,
@@ -264,6 +292,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(ReportViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -272,6 +302,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -280,6 +312,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Report.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -292,6 +326,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         put.pop('id')
         self.check_response(load, put)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         count = Report.objects.count()
@@ -305,6 +341,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_failure(self):
         self.login('user')
         post = dict(**self.post)
@@ -327,6 +365,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
                 force_text(FAILURE_MESSAGES['wrong_winner_rosters'] % winner)
             )
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         count = Report.objects.count()
@@ -340,6 +380,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -350,6 +392,8 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         obj = Report.objects.get(pk=self.report.pk)
         self.check_instance(obj, load, self.patch)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         count = Report.objects.count()
@@ -360,6 +404,7 @@ class ReportViewSetUserTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count - 1)
 
 
+@allure.feature('API: Reports')
 class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
                                     APITestCase):
     # test non-privileged user,
@@ -368,6 +413,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(ReportViewSetUserNotOwnerTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user2')
         response = self.client.get(self.url_detail, format='json')
@@ -376,6 +423,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user2')
         response = self.client.get(self.url_list, format='json')
@@ -384,6 +433,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Report.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user2')
         response = self.client.put(self.url_put, data=self.put,
@@ -396,6 +447,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         any user can create his own report, whatever user would post
@@ -418,6 +471,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Report.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner_set(self):
         """
         post without owner, as it default would be assign to current user
@@ -439,6 +494,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         report = Report.objects.latest('id')
         self.assertEqual(report.owner, self.other_user)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_false_owner_set(self):
         """
         post without owner, as it default would be assign to current user
@@ -458,6 +515,8 @@ class ReportViewSetUserNotOwnerTest(ReportViewSetTestMixin, TestHelperMixin,
         self.assertEqual(load['owner'][0],
                          force_text(FAILURE_MESSAGES['wrong_owner']))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user2')
         response = self.client.patch(self.url_patch, data=self.patch,

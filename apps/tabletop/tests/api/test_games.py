@@ -1,7 +1,6 @@
 # coding: utf-8
 
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from apps.accounts.models import User
 from apps.tabletop.models import Game
 from apps.core.tests import TestHelperMixin
 from rest_framework import status
@@ -11,6 +10,8 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 
 class GameViewSetTestMixin(object):
@@ -61,12 +62,15 @@ class GameViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Games')
 class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
                                    APITestCase):
     def setUp(self):
         super(GameViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -74,6 +78,8 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -81,6 +87,8 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Game.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -90,6 +98,8 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -99,6 +109,8 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -108,6 +120,8 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -118,9 +132,12 @@ class GameViewSetAnonymousUserTest(GameViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Games')
 class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
                                APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -129,6 +146,8 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -137,6 +156,8 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Game.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = Game.objects.count()
@@ -152,6 +173,8 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
 
         self.assertEqual(Game.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         tabletop.change_game permission holder users can freely assign
@@ -172,6 +195,8 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Game.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = Game.objects.count()
@@ -185,6 +210,8 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Game.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = Game.objects.count()
@@ -194,6 +221,7 @@ class GameViewSetAdminUserTest(GameViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Game.objects.count(), count - 1)
 
 
+@allure.feature('API: Games')
 class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
                           APITestCase):
     # test non-privileged user,
@@ -202,6 +230,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(GameViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -210,6 +240,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -218,6 +250,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Game.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -230,6 +264,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         Game.objects.count()
@@ -243,6 +279,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         Game.objects.count()
@@ -256,6 +294,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -268,6 +308,8 @@ class GameViewSetUserTest(GameViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         Game.objects.count()

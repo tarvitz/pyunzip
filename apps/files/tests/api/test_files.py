@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.contrib.auth import get_user_model
+from apps.accounts.models import User
 from apps.files.models import UserFile
 from apps.core.tests import (
     ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
@@ -9,8 +9,7 @@ from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
 from unittest import TestCase
 from app.settings import rel
-
-User = get_user_model()
+import allure
 
 
 class UserFileViewSetMixin(TestCase):
@@ -54,24 +53,28 @@ class UserFileViewSetMixin(TestCase):
         }
 
 
+@allure.feature('API: Files')
 class UserFileViewSetAnonymousUserTest(UserFileViewSetMixin,
                                        ApiAnonymousUserTestCaseMixin,
                                        APITestCase):
     pass
 
 
+@allure.feature('API: Files')
 class UserFileViewSetAdminUserTest(UserFileViewSetMixin,
                                    ApiAdminUserTestCaseMixin,
                                    APITestCase):
     pass
 
 
+@allure.feature('API: Files')
 class UserFileViewSetUserNotOwnerTest(UserFileViewSetMixin,
                                       ApiUserNotOwnerTestCaseMixin,
                                       APITestCase):
     pass
 
 
+@allure.feature('API: Files')
 class UserFileViewSetUserTest(UserFileViewSetMixin,
                               ApiUserOwnerTestCaseMixin,
                               APITestCase):

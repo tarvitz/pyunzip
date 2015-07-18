@@ -770,6 +770,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         resource could provide "hidden" or not public data only owner user
         should retrieve
     """
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, follow=True)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -779,6 +781,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             json_response['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -788,6 +792,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             json_response['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format=self.put_format or self.post_format)
@@ -799,6 +805,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             json_response['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format=self.post_format)
@@ -809,6 +817,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             json_response['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -819,6 +829,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             json_response['detail'],
             _('Authentication credentials were not provided.'))
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -836,6 +848,8 @@ class ApiRestrictedOwnerUserTestCaseMixin(ApiUserOwnerTestCaseMixin,
     """
     Can only get access to his own instances, not for everyone else ones
     """
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login(self.user.username, self.user_password)
         response = self.client.get(self.url_list, format='json')
@@ -857,6 +871,8 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
     event if resources exists, than we check permission for possibility
     have proceed actions
     """
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login(self.other_user.username, self.other_user_password)
         response = self.client.get(self.url_list, format='json')
@@ -870,6 +886,8 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(response_json['count'],
                          self.model_class.objects.filter(qset).count())
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login(self.other_user.username, self.other_user_password)
         response = self.client.get(self.url_detail, format='json')
@@ -879,6 +897,8 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(json_response['detail'],
                          _('Not found'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login(self.other_user.username, self.other_user_password)
         response = self.client.delete(self.url_detail, format='json')
@@ -888,6 +908,8 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         self.assertEqual(json_response['detail'],
                          _('Not found'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login(self.other_user.username, self.other_user_password)
         response = self.client.patch(self.url_patch, format='json')

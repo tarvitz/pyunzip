@@ -1,9 +1,8 @@
 # coding: utf-8
 
 from unittest import skipIf
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
+from apps.accounts.models import User
 from apps.comments.models import Comment
 from apps.news.models import Event
 
@@ -17,6 +16,8 @@ from django.utils.encoding import force_text
 from django.core.urlresolvers import reverse
 
 import simplejson as json
+import allure
+from allure.constants import Severity
 
 __all__ = [
     'CommentViewSetAdminUserTest', 'CommentViewSetAnonymousUserTest',
@@ -118,12 +119,15 @@ class CommentViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Comments')
 class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
                                       APITestCase):
     def setUp(self):
         super(CommentViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -131,6 +135,8 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -138,6 +144,8 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Comment.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -148,6 +156,8 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -157,6 +167,8 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -166,6 +178,8 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -176,10 +190,13 @@ class CommentViewSetAnonymousUserTest(CommentViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Comments')
 class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
                                   ApiTestSourceAssertionMixin,
                                   APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -188,6 +205,8 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(self.object_detail_response, load)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -196,6 +215,8 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Comment.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = Comment.objects.count()
@@ -209,6 +230,8 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertUpdate(load, put)
         self.assertEqual(Comment.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         accounts.change_comment permission holder users can freely assign
@@ -229,6 +252,8 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Comment.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = Comment.objects.count()
@@ -242,6 +267,8 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Comment.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = Comment.objects.count()
@@ -251,12 +278,15 @@ class CommentViewSetAdminUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Comment.objects.count(), count - 1)
 
 
+@allure.feature('API: Comments')
 class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
                              APITestCase):
     # test non-privileged user,
     def setUp(self):
         super(CommentViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -265,6 +295,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -273,6 +305,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Comment.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         # forbidden for non privileged user, use: comment-modify instead
         self.login('user')
@@ -293,6 +327,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
 
     @skipIf(True, "disabled as this put detail won't get object, "
                   "just try to apply data creation")
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_modify(self):
         self.login('user')
         put = self.put_modify
@@ -308,6 +344,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         comment = Comment.objects.get(pk=pk)
         self.assertEqual(comment.comment, put['comment'])
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         count = Comment.objects.count()
@@ -322,6 +360,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Comment.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         count = Comment.objects.count()
@@ -335,6 +375,8 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Comment.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         count = Comment.objects.count()
@@ -344,6 +386,7 @@ class CommentViewSetUserTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Comment.objects.count(), count - 1)
 
 
+@allure.feature('API: Comments')
 class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
                                      APITestCase):
     # test non-privileged user
@@ -351,6 +394,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(CommentViewSetUserNotOwnerTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         """Anyone except sender, addressee would retrieve 404"""
         self.login('user2')
@@ -360,6 +405,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user2')
         response = self.client.get(self.url_list, format='json')
@@ -368,6 +415,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Comment.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user2')
         response = self.client.put(self.url_put, data=self.put,
@@ -380,6 +429,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_failure(self):
         """
         any user can create his own comment, whatever user would post
@@ -400,6 +451,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
             force_text(_("You can only post comment using your user id"))
         )
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         any user can create his own comment, whatever user would post
@@ -421,6 +474,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Comment.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_user_set(self):
         """
         check comment creation without user field passage
@@ -443,6 +498,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
         comment = Comment.objects.latest('pk')
         self.assertEqual(comment.user, self.other_user)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user2')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -454,6 +511,8 @@ class CommentViewSetUserNotOwnerTest(CommentViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user2')
         response = self.client.delete(self.url_delete, data={},

@@ -12,7 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.helpers import get_content_type
 
 import simplejson as json
-from copy import deepcopy
+import allure
+from allure.constants import Severity
 
 
 class CodexViewSetTestMixin(object):
@@ -75,12 +76,15 @@ class CodexViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Codexes')
 class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
                                     APITestCase):
     def setUp(self):
         super(CodexViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -88,6 +92,8 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -95,6 +101,8 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Codex.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -104,6 +112,8 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -113,6 +123,8 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -122,6 +134,8 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -132,9 +146,12 @@ class CodexViewSetAnonymousUserTest(CodexViewSetTestMixin, TestHelperMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Codexes')
 class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
                                 APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -143,6 +160,8 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -151,6 +170,8 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Codex.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = Codex.objects.count()
@@ -160,11 +181,13 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
         load = json.loads(response.content)
 
-        put = deepcopy(self.put)
+        put = dict(**self.put)
         self.check_response(load, put)
 
         self.assertEqual(Codex.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         tabletop.change_codex permission holder users can freely assign
@@ -180,11 +203,13 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(response['Content-Type'], 'application/json')
 
         load = json.loads(response.content)
-        post = deepcopy(self.post)
+        post = dict(**self.post)
 
         self.assertEqual(Codex.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = Codex.objects.count()
@@ -198,6 +223,8 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(Codex.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = Codex.objects.count()
@@ -207,6 +234,7 @@ class CodexViewSetAdminUserTest(CodexViewSetTestMixin, TestHelperMixin,
         self.assertEqual(Codex.objects.count(), count - 1)
 
 
+@allure.feature('API: Codexes')
 class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
                            APITestCase):
     # test non-privileged user,
@@ -215,6 +243,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
     def setUp(self):
         super(CodexViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('user')
         response = self.client.get(self.url_detail, format='json')
@@ -223,6 +253,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -231,6 +263,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), Codex.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -243,6 +277,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         self.login('user')
         Codex.objects.count()
@@ -256,6 +292,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list_no_owner(self):
         self.login('user')
         Codex.objects.count()
@@ -269,6 +307,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -281,6 +321,8 @@ class CodexViewSetUserTest(CodexViewSetTestMixin, TestHelperMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         Codex.objects.count()

@@ -5,6 +5,7 @@ from apps.core.tests import (
     ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
 )
 from rest_framework.test import APITestCase
+import allure
 from unittest import TestCase
 
 
@@ -40,19 +41,28 @@ class GalleryViewSetMixin(TestCase):
         }
 
 
+@allure.feature('API: Galleries')
 class GalleryViewSetAnonymousUserTest(GalleryViewSetMixin,
                                       ApiAnonymousUserTestCaseMixin,
                                       APITestCase):
-    pass
+    """
+    Gallery api test cases for anonymous user (not authenticated)
+    """
 
 
+@allure.feature('API: Galleries')
 class GalleryViewSetAdminUserTest(GalleryViewSetMixin,
                                   ApiAdminUserTestCaseMixin,
                                   APITestCase):
-    pass
+    """
+    Gallery api test cases for admin user
+    """
 
 
+@allure.feature('API: Galleries')
 class GalleryViewSetUserTest(GalleryViewSetMixin,
                              ApiAdminUserTestCaseMixin,
                              APITestCase):
-    pass
+    """
+    Gallery api test cases for common user (authenticated)
+    """

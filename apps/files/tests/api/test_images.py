@@ -1,5 +1,5 @@
 # coding: utf-8
-from django.contrib.auth import get_user_model
+from apps.accounts.models import User
 from apps.files.models import Image
 from apps.core.tests import (
     ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin,
@@ -9,8 +9,7 @@ from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
 from unittest import TestCase
 from app.settings import rel
-
-User = get_user_model()
+import allure
 
 
 class ImageViewSetMixin(TestCase):
@@ -63,25 +62,37 @@ class ImageViewSetMixin(TestCase):
         }
 
 
+@allure.feature('API: Images')
 class ImageViewSetAnonymousUserTest(ImageViewSetMixin,
                                     ApiAnonymousUserTestCaseMixin,
                                     APITestCase):
-    pass
+    """
+    Image api test cases for non authenticated user
+    """
 
 
+@allure.feature('API: Images')
 class ImageViewSetAdminUserTest(ImageViewSetMixin,
                                 ApiAdminUserTestCaseMixin,
                                 APITestCase):
-    pass
+    """
+    Image api test cases for admin user (superuser or just privileged one)
+    """
 
 
+@allure.feature('API: Images')
 class ImageViewSetUserTest(ImageViewSetMixin,
                            ApiUserOwnerTestCaseMixin,
                            APITestCase):
-    pass
+    """
+    Image api test cases for common authenticated user
+    """
 
 
+@allure.feature('API: Images')
 class ImageViewSetUserNotOwnerTest(ImageViewSetMixin,
                                    ApiUserNotOwnerTestCaseMixin,
                                    APITestCase):
-    pass
+    """
+    Image api test cases for common user who is not an owner of given image
+    """

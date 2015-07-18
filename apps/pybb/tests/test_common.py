@@ -6,7 +6,8 @@ from apps.pybb.models import Forum, Topic, Post
 from apps.core.helpers import get_object_or_None
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
-
+import allure
+from allure.constants import Severity
 from copy import deepcopy
 
 
@@ -57,6 +58,8 @@ class TopicTest(TestHelperMixin, JustTest):
     def setUp(self):
         self.forum = Forum.objects.get(pk=1)
 
+    @allure.story('add')
+    @allure.severity(Severity.CRITICAL)
     def test_topic_add(self, role='user'):
         self.login(role)
         url = reverse('pybb:topic-add', args=(self.forum.pk, ))
@@ -67,6 +70,7 @@ class TopicTest(TestHelperMixin, JustTest):
         self.assertEqual(Topic.objects.count(), count + 1)
 
 
+@allure.feature('Post')
 class PostTest(TestHelperMixin, JustTest):
     fixtures = [
         'load_universes.json',
@@ -97,6 +101,8 @@ class PostTest(TestHelperMixin, JustTest):
         self.post_old_content.pk = None
         self.post_old_content.save()
 
+    @allure.story('add')
+    @allure.severity(Severity.CRITICAL)
     def test_topic_add_failure(self):
         """ anonymous users can not post """
         url = reverse('pybb:post-add', args=(self.topic.pk, ))
@@ -107,6 +113,8 @@ class PostTest(TestHelperMixin, JustTest):
         self.proceed_form_errors(response.context)
         self.assertEqual(self.topic.posts.count(), count)
 
+    @allure.story('add')
+    @allure.severity(Severity.CRITICAL)
     def test_topic_add(self, role='user'):
         self.login(role)
         url = force_text(reverse('pybb:post-add', args=(self.topic.pk, )))
@@ -116,9 +124,13 @@ class PostTest(TestHelperMixin, JustTest):
         self.proceed_form_errors(response.context)
         self.assertEqual(self.topic.posts.count(), count + 1)
 
+    @allure.story('add')
+    @allure.severity(Severity.CRITICAL)
     def test_topic_add_admin(self, role='admin'):
         self.test_topic_add(role=role)
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_post_update(self, role=None):
         if not role:
             self.login(self.post.user.username)
@@ -134,9 +146,13 @@ class PostTest(TestHelperMixin, JustTest):
         self.assertNotEqual(self.post_old_content.body, post.body)
         self.assertEqual(post.body, self.edit_post['body'])
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_post_update_superuser(self):
         self.test_post_update(role='admin')
 
+    @allure.story('update')
+    @allure.severity(Severity.CRITICAL)
     def test_post_update_failure(self):
         self.login(self.non_post_owner.username)
         url = self.post.get_edit_url()

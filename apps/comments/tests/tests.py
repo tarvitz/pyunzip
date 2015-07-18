@@ -10,7 +10,6 @@ from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 import allure
 from allure.constants import Severity
-# Create your tests here.
 
 
 # noinspection PyUnresolvedReferences

@@ -14,6 +14,8 @@ from django.db.models import Q
 from django.core.urlresolvers import reverse
 from datetime import datetime, date, timedelta
 from django.utils.translation import ugettext_lazy as _
+import allure
+from allure.constants import Severity
 
 import simplejson as json
 
@@ -87,12 +89,15 @@ class PolicyWarningViewSetTestMixin(object):
         }
 
 
+@allure.feature('API: Policy Warning')
 class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
                                             TestHelperMixin, APITestCase):
     def setUp(self):
         super(PolicyWarningViewSetAnonymousUserTest, self).setUp()
 
     # test anonymous user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         response = self.client.get(self.url_detail, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -104,6 +109,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
             load
         )
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         response = self.client.get(self.url_list, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -113,6 +120,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
             load,
             {'detail': _('Authentication credentials were not provided.')})
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         response = self.client.put(self.url_put, data=self.put,
                                    format='json')
@@ -123,6 +132,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         response = self.client.post(self.url_post, data=self.post,
                                     format='json')
@@ -132,6 +143,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         response = self.client.patch(self.url_patch, data=self.patch,
                                      format='json')
@@ -141,6 +154,8 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(
             load['detail'], _('Authentication credentials were not provided.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         response = self.client.delete(self.url_delete, data={},
                                       format='json')
@@ -151,9 +166,12 @@ class PolicyWarningViewSetAnonymousUserTest(PolicyWarningViewSetTestMixin,
             load['detail'], _('Authentication credentials were not provided.'))
 
 
+@allure.feature('API: Policy Warning')
 class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
                                         TestHelperMixin, APITestCase):
     # test admin user
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         self.login('admin')
         response = self.client.get(self.url_detail, format='json')
@@ -162,6 +180,8 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('admin')
         response = self.client.get(self.url_list, format='json')
@@ -170,6 +190,8 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(len(load['results']), PolicyWarning.objects.count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('admin')
         count = PolicyWarning.objects.count()
@@ -184,6 +206,8 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
 
         self.assertEqual(PolicyWarning.objects.count(), count)
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         accounts.change_policy_warning permission holder users can freely
@@ -205,6 +229,8 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(PolicyWarning.objects.count(), count + 1)
         self.check_response(load, post)
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('admin')
         count = PolicyWarning.objects.count()
@@ -218,6 +244,8 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         self.check_instance(obj, load, self.patch)
         self.assertEqual(PolicyWarning.objects.count(), count)
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('admin')
         count = PolicyWarning.objects.count()
@@ -227,6 +255,7 @@ class PolicyWarningViewSetAdminUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(PolicyWarning.objects.count(), count - 1)
 
 
+@allure.feature('API: Policy Warning')
 class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
                                    TestHelperMixin, APITestCase):
     # test non-privileged user,
@@ -235,6 +264,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
     def setUp(self):
         super(PolicyWarningViewSetUserTest, self).setUp()
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail(self):
         """Anyone except sender, addressee would retrieve 404"""
         self.login('user')
@@ -244,6 +275,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load, self.object_detail_response)
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_detail_not_self(self):
         """
         tests for retrieve warning which is not belong to this user
@@ -258,6 +291,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         load = json.loads(response.content)
         self.assertEqual(load, {'detail': _('Not found.')})
 
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
     def test_get_list(self):
         self.login('user')
         response = self.client.get(self.url_list, format='json')
@@ -268,6 +303,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
         self.assertEqual(len(load['results']),
                          PolicyWarning.objects.filter(qset).count())
 
+    @allure.story('put')
+    @allure.severity(Severity.NORMAL)
     def test_put_detail(self):
         self.login('user')
         response = self.client.put(self.url_put, data=self.put,
@@ -280,6 +317,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('post')
+    @allure.severity(Severity.NORMAL)
     def test_post_list(self):
         """
         any user can create his own policy_warning, whatever user would post
@@ -297,6 +336,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('patch')
+    @allure.severity(Severity.NORMAL)
     def test_patch_detail(self):
         self.login('user')
         response = self.client.patch(self.url_patch, data=self.patch,
@@ -308,6 +349,8 @@ class PolicyWarningViewSetUserTest(PolicyWarningViewSetTestMixin,
             load['detail'],
             _('You do not have permission to perform this action.'))
 
+    @allure.story('delete')
+    @allure.severity(Severity.NORMAL)
     def test_delete_detail(self):
         self.login('user')
         response = self.client.delete(self.url_delete, data={},
