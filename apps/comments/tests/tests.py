@@ -68,7 +68,7 @@ class CommentWatchBase(object):
         self.assertEqual(Comment.objects.count(), count + 1)
 
 
-@allure.feature('Comment Watch')
+@allure.feature('General: Comment Watches')
 class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
     """
     general CommentWatch test

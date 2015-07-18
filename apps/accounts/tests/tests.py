@@ -21,7 +21,7 @@ import allure
 from allure.constants import Severity
 
 
-@allure.feature('Accounts')
+@allure.feature('General: Accounts')
 class AccountTest(TestHelperMixin, TestCase):
     """
     account app general test cases
@@ -382,7 +382,7 @@ class AccountTest(TestHelperMixin, TestCase):
                          False)
 
 
-@allure.feature('Policy Warnings')
+@allure.feature('General: Policy Warnings')
 class PolicyWarningTest(TestHelperMixin, TestCase):
     fixtures = [
         'load_universes.json',

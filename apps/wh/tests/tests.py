@@ -17,11 +17,11 @@ class ImplementMe(Exception):
     pass
 
 
-__all__ = ['JustTest', ]
+__all__ = ['WHTest', ]
 
 
-@allure.feature('WH')
-class JustTest(TestHelperMixin, TestCase):
+@allure.feature('General: WH')
+class WHTest(TestHelperMixin, TestCase):
     fixtures = [
         'load_universes.json',
         'load_fractions.json',

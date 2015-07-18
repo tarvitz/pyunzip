@@ -12,7 +12,7 @@ import allure
 from allure.constants import Severity
 
 
-@allure.feature('Karma')
+@allure.feature('General: Karma')
 class KarmaTest(TestHelperMixin, TestCase):
     fixtures = [
         'load_universes.json',

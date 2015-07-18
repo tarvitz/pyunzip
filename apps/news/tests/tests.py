@@ -65,7 +65,7 @@ class BenchmarkTest(TestCase):
             )
 
 
-@allure.feature('Events')
+@allure.feature('General: Events')
 class EventTest(TestHelperMixin, TestCase):
     fixtures = [
         'load_universes.json',
@@ -113,7 +113,7 @@ class EventTest(TestHelperMixin, TestCase):
         self.assertEqual(Event.objects.count(), count)
 
 
-@allure.feature('EventWatch')
+@allure.feature('General: Event Watches')
 class EventWatchTest(TestHelperMixin, TestCase):
     fixtures = [
         'load_universes.json',

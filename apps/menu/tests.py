@@ -8,8 +8,8 @@ import allure
 from allure.constants import Severity
 
 
-@allure.feature('Menu')
-class JustTest(TestCase):
+@allure.feature('General: Menus')
+class MenuTest(TestCase):
     fixtures = [
         'tests/fixtures/load_menus.json',
     ]
@@ -49,7 +49,7 @@ class JustTest(TestCase):
             raise AssertionError
 
 
-@allure.feature('Cache: Karma')
+@allure.feature('Cache: Menus')
 class CacheTest(TestCase):
     fixtures = [
         'tests/fixtures/load_menus.json',

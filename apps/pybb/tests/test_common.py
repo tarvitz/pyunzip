@@ -40,6 +40,7 @@ class JustTest(TestCase):
             raise AssertionError
 
 
+@allure.feature('General: Topics')
 class TopicTest(TestHelperMixin, JustTest):
     fixtures = [
         'load_universes.json',
@@ -70,7 +71,7 @@ class TopicTest(TestHelperMixin, JustTest):
         self.assertEqual(Topic.objects.count(), count + 1)
 
 
-@allure.feature('Post')
+@allure.feature('General: Posts')
 class PostTest(TestHelperMixin, JustTest):
     fixtures = [
         'load_universes.json',

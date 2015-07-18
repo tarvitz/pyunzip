@@ -12,8 +12,8 @@ import allure
 from allure.constants import Severity
 
 
-@allure.feature("Files")
-class JustTest(TestCase):
+@allure.feature("General: Files")
+class FilesTest(TestCase):
     fixtures = [
         'load_universes.json',
         'load_fractions.json',
