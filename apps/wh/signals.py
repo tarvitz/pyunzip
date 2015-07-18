@@ -22,7 +22,7 @@ def on_rank_type_change(instance, **kwargs):
     users = User.objects.filter(
         ranks__in=instance.rank_set.all()
     )
-    for user in list(users):
+    for user in users:
         cache.set(
             'nick:%s' % user.username,
             user.get_nickname(no_cache=True)
