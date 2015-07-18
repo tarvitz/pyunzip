@@ -1,6 +1,11 @@
 [run]
 branch = True
 omit = *migrations*
+    *tests.py
+    *test_*.py
+    tests/api*.py
+    *tests/*.py
+    */thirdpaty/*
 
 [report]
 exclude_lines = 
