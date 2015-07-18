@@ -1,11 +1,7 @@
 # -*- coding: utf-8  -*-
-import re
-import six
 from apps.thirdpaty.textile import render_textile
-
 from django.template import Library
-from django.conf import settings
-from django.template.defaultfilters import striptags
+
 
 register = Library()
 

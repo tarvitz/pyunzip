@@ -163,7 +163,7 @@ class PollTest(TestHelperMixin, TestCase):
             'poll_item_poll_set-3-title': '',
         }
         with self.assertRaises(ValidationError):
-            response = self.client.post(
+            self.client.post(
                 force_text(poll.get_configure_url(), post), follow=True
             )
 
