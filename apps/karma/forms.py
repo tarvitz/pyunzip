@@ -1,11 +1,7 @@
 from apps.karma.models import Karma
+from apps.accounts.models import User
 from django import forms
 from django.utils.translation import ugettext_lazy as _
-try:
-    from django.contrib.auth import get_user_model
-    User = get_user_model()
-except ImportError:
-    from django.contrib.auth.models import User
 from apps.core.helpers import get_object_or_None
 
 ALTER_CHOICES = (
