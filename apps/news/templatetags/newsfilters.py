@@ -17,11 +17,12 @@ def textile_filter(value):
 
 @register.filter(name='render_filter')
 def render_filter(value, arg):
-    syntaxes = [i[0] for i in settings.SYNTAX]
-    if arg in syntaxes:
-        if arg in 'bb-code':
-            return striptags(value)
-        elif arg in 'textile':
-            return render_textile(value)
-        return render_textile(value)
+    """
+    renders only to textile
+
+    :param str value: string for render
+    :param str arg: syntax types (not important this time)
+    :rtype: str
+    :return: rendered string
+    """
     return render_textile(value)
