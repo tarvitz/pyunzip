@@ -32,8 +32,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@allure.feature('Core')
-class JustTest(TestCase):
+@allure.feature('General: Core')
+class CoreTest(TestCase):
     fixtures = [
         'load_universes.json',
         'load_fractions.json',

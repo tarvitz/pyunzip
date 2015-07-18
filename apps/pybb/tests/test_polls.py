@@ -1,9 +1,9 @@
 """Poll tests, everything related to polls
 
-.. module:: pybb.tests.polls
+.. module:: apps.pybb.tests.test_polls
     :platform: Linux, Unix, Windows
     :synopsis: Tests for forum polls
-.. moduleauthor: Saul Tarvitz <tarvitz@blacklibrary.ru>
+.. moduleauthor: Nickolas Fox <tarvitz@blacklibrary.ru>
 """
 
 # coding: utf-8
@@ -26,7 +26,7 @@ import allure
 from allure.constants import Severity
 
 
-@allure.feature('Poll')
+@allure.feature('General: Polls')
 class PollTest(TestHelperMixin, TestCase):
     """ TestCase for polls creation, update and deletion actions and logic """
     fixtures = [
@@ -192,7 +192,7 @@ class PollTest(TestHelperMixin, TestCase):
                          force_text(_("Title should be set")))
 
 
-@allure.feature('Poll Answer')
+@allure.feature('General: Poll Answers')
 class PollAnswerTest(TestHelperMixin, TestCase):
     """ TestCase for voting polls actions and logic """
     fixtures = [
@@ -310,7 +310,7 @@ class PollAnswerTest(TestHelperMixin, TestCase):
         self.single_poll.save()
 
 
-@allure.feature('Poll')
+@allure.feature('General: Polls')
 class PollManageTest(TestHelperMixin, TestCase):
     """ TestCase for managing polls: delete, update"""
     fixtures = [
@@ -427,7 +427,7 @@ class PollManageTest(TestHelperMixin, TestCase):
         user.save()
 
 
-@allure.feature('Cron: Poll')
+@allure.feature('Cron: Polls')
 class TestCronJobs(TestHelperMixin, TestCase):
     """ TestCase for testing cron jobs """
     fixtures = [
