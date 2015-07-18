@@ -229,6 +229,7 @@ INSTALLED_APPS = (
     'apps.news',
     'apps.files',
     'apps.tabletop',
+    'apps.utils',
     'apps.karma',
     'apps.pybb',
     'apps.menu',
@@ -264,9 +265,6 @@ CRON_CLASSES = (
 API_OBJECTS_ON_PAGE = 50
 
 REST_FRAMEWORK = {
-    'DEFAULT_PARSER_CLASSES': (
-        'drf_ujson.parsers.UJSONParser',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
