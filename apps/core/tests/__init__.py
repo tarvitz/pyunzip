@@ -1,195 +1,29 @@
-# coding: utf-8
-
+# -*- coding: utf-8 -*-
+"""
+.. module:: apps.core.tests
+    :synopsis: Test cases helpers for unit testing
+    :platform: Linux, Unix, Windows
+.. moduleauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
+.. sectionauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
+"""
 import os
+import logging
 import six
-
-if six.PY3:
-    import _io
-    file = None
-
-from django.test import TestCase
-from apps.core.helpers import (
-    post_markup_filter,
-)
-from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
-from django.contrib.auth import get_user_model
-
-from django.db.models import Model, Q
-from datetime import datetime, date
-
-from rest_framework import status
-
-from django.conf import settings
-User = get_user_model()
-
-
 import simplejson as json
 import allure
 from allure.constants import Severity
+from datetime import datetime, date
 
-import logging
-logger = logging.getLogger(__name__)
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.db.models import Q, Model
+from django.utils.translation import ugettext_lazy as _
+from rest_framework import status
 
-
-@allure.feature('General: Core')
-class CoreTest(TestCase):
-    fixtures = [
-        'load_universes.json',
-        'load_fractions.json',
-        'load_sides.json',
-        'load_armies.json',
-        'load_rank_types.json',
-        'load_ranks.json',
-        'load_users.json',
-        'load_news_categories.json',
-        'load_news.json',
-    ]
-
-    def setUp(self):
-        pass
-
-    def tearDown(self):
-        pass
-
-    """ helpers """
-    def process_messages(self, instance, kw, fx=None):
-        fx = fx or {}
-        messages = []
-        for (key, value) in kw.items():
-            try:
-                if key in fx:
-                    self.assertEqual(getattr(instance, key),
-                                     fx[key].objects.get(pk=value))
-                else:
-                    self.assertEqual(getattr(instance, key), value)
-            except AssertionError as err:
-                messages.append({
-                    'err': err,
-                    'key': key,
-                    'value': value
-                })
-        return messages
-
-    @allure.story('urls')
-    @allure.severity(Severity.NORMAL)
-    def test_urls(self):
-        prefix = 'core'
-        urls = [
-            'permission-denied',
-            'currently-unavailable',
-            'wot_verification',
-            # static
-            'vote-invalid-object',
-            'karma-self-alter',
-            'karma-power-insufficient',
-            'user-not-exists',
-            'timeout',
-            'rules',
-            'faq',
-            'pm-success',
-            'sender-limit-error',
-            'addressee-limit-error',
-            'pm-permission-denied',
-            'pm-deleted',
-            'permission-denied',
-            'image-undeletable',
-            'image-deleted',
-            'password-changed'
-
-        ]
-        messages = []
-        for user in ['user', 'admin', None]:
-            if user:
-                logged = self.client.login(username=user, password='123456')
-                self.assertEqual(logged, True)
-            for url in urls:
-                _url = reverse('%s:%s' % (prefix, url))
-                try:
-                    response = self.client.get(_url, follow=True)
-                    self.assertEqual(response.status_code, 200)
-                except AssertionError as err:
-                    messages.append({
-                        'err': err,
-                        'url': _url,
-                        'user': user
-                    })
-        if messages:
-            for msg in messages:
-                logger.info(
-                    "Could not get url %(user)s in %(url)s, got %(err)s" % msg
-                )
-            raise AssertionError
-
-    @allure.story('markup')
-    @allure.severity(Severity.NORMAL)
-    def test_post_markup_unicode(self):
-        quote_source = u"(Пользователь){цитата}"
-        quote = post_markup_filter(quote_source)
-        self.assertNotIn(quote_source, quote)
-
-    @allure.story('markup')
-    @allure.severity(Severity.NORMAL)
-    def test_post_markup(self):
-        quote_source = u"(User){quote}"
-        quote = post_markup_filter(quote_source)
-        self.assertNotIn(quote_source, quote)
-
-    @allure.story('markup')
-    @allure.severity(Severity.NORMAL)
-    def test_post_markup_variations(self):
-        quotes = [
-            u'(User){quote\n\n\n\nnquote}',
-            u'(User){\n\nq\n\n\ote}',
-            u'(User){\na\n}'
-        ]
-        messages = []
-        for (index, quote) in enumerate(quotes):
-            try:
-                self.assertNotIn(post_markup_filter(quote), quotes[index])
-            except AssertionError as err:
-                messages.append(err)
-
-        if messages:
-            for msg in messages:
-                logging.warn(msg)
-            raise AssertionError
-
-
-class ApiTestSourceAssertionMixin(object):
-    """
-    API test source assertion mixin
-    """
-    def assertUpdate(self, data, payload, skip_diff=True):
-        """
-        asserts post/put/patch data given in dict with response one
-
-        :param dict data: user given data to post/put/patch/etc
-        :param dict payload: response.data or response payload in json (dict)
-        :param bool skip_diff: skip fields that does not include into payload
-        :rtype: None
-        :return: None
-        :raises AssertionError:
-            - if one or more fields has not equal data
-        """
-        errors = []
-        for field, item in data.items():
-            if field not in payload and skip_diff:
-                continue
-
-            value = data[field]
-            if isinstance(item, (datetime, )):
-                value = data[field].isoformat()[:-3] + '000'
-            elif isinstance(item, six.string_types):
-                if value.startswith('http://testserver'):
-                    value = value.replace('http://testserver', '')
-
-            if value != payload.get(field):
-                errors.append(
-                    '%r: %r != %r' % (field, value, payload[field])
-                )
-        if errors:
-            raise AssertionError(errors)
+from apps.accounts.models import User
+from apps.core.tests.test_core import file
+if six.PY3:
+    import _io
 
 
 class TestHelperMixin(object):
@@ -369,7 +203,6 @@ class TestHelperMixin(object):
         getattr(self, 'assertEqual')(os.path.exists(path), True)
 
 
-# Api cases generic access tests
 class ApiTestCaseSet(object):
     model_class = None
     url_prefix = 'api'
@@ -398,9 +231,9 @@ class ApiTestCaseSet(object):
             json_response = json.loads(response.content)
             for key, item in json_response.items():
                 if isinstance(item, (tuple, list)):
-                    logger.info("%s: " % key + ", ".join(item))
+                    logging.info("%s: " % key + ", ".join(item))
                 else:
-                    logger.info(item)
+                    logging.info(item)
 
     def setUp(self):
         self.maxDiff = None
@@ -440,7 +273,6 @@ class ApiTestCaseSet(object):
         self.object_admin_detail_response = None
 
 
-# noinspection PyUnresolvedReferences
 class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """ ApiAnonymousUserTestCaseMixin
 
@@ -513,7 +345,6 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             _('Authentication credentials were not provided.'))
 
 
-# noinspection PyUnresolvedReferences
 class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     admin users can claim access for any instance of model
@@ -592,7 +423,6 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(self.model_class.objects.count(), count - 1)
 
 
-# noinspection PyUnresolvedReferences
 class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     owners of their instances could process update (sometimes delete) actions
@@ -676,7 +506,6 @@ class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             self.assertEqual(self.model_class.objects.count(), count - 1)
 
 
-# noinspection PyUnresolvedReferences
 class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
     """
     instances with other user (not owner) should have only RO access
@@ -918,3 +747,39 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         json_response = json.loads(response.content)
         self.assertEqual(json_response['detail'],
                          _('Not found'))
+
+
+class ApiTestSourceAssertionMixin(object):
+    """
+    API test source assertion mixin
+    """
+    def assertUpdate(self, data, payload, skip_diff=True):
+        """
+        asserts post/put/patch data given in dict with response one
+
+        :param dict data: user given data to post/put/patch/etc
+        :param dict payload: response.data or response payload in json (dict)
+        :param bool skip_diff: skip fields that does not include into payload
+        :rtype: None
+        :return: None
+        :raises AssertionError:
+            - if one or more fields has not equal data
+        """
+        errors = []
+        for field, item in data.items():
+            if field not in payload and skip_diff:
+                continue
+
+            value = data[field]
+            if isinstance(item, (datetime, )):
+                value = data[field].isoformat()[:-3] + '000'
+            elif isinstance(item, six.string_types):
+                if value.startswith('http://testserver'):
+                    value = value.replace('http://testserver', '')
+
+            if value != payload.get(field):
+                errors.append(
+                    '%r: %r != %r' % (field, value, payload[field])
+                )
+        if errors:
+            raise AssertionError(errors)

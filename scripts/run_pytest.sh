@@ -1,7 +1,7 @@
 #!/bin/bash
 ALLURE=`which allure`
 COV=`which coverage`
-PYTHONPATH=$PWD $COV run --source=apps -m py.test --alluredir=db/reports/allure
+PYTHONPATH=$PWD $COV run --source=apps -m py.test --alluredir=db/reports/allure $@
 if [ ! -z $ALLURE ]; then
     if [ ! $? -eq 0 ]; then
         echo "building allure reports"

@@ -2,7 +2,8 @@
 
 from apps.accounts.models import User
 from apps.core.tests import (
-    ApiAnonymousUserTestCaseMixin, ApiAdminUserTestCaseMixin
+    ApiAnonymousUserTestCaseMixin,
+    ApiAdminUserTestCaseMixin
 )
 from rest_framework.test import APITestCase
 from django.core.urlresolvers import reverse
@@ -99,18 +100,24 @@ class UserViewSetMixin(object):
 class UserViewSetAnonymousUserTest(UserViewSetMixin,
                                    ApiAnonymousUserTestCaseMixin,
                                    APITestCase):
-    pass
+    """
+    User api test cases for non authenticated user
+    """
 
 
 @allure.feature('API: Accounts')
 class UserViewSetAdminUserTest(UserViewSetMixin,
                                ApiAdminUserTestCaseMixin,
                                APITestCase):
-    pass
+    """
+    User api test cases for admin (or privileged) user
+    """
 
 
 @allure.feature('API: Accounts')
 class UserViewSetUserTest(UserViewSetMixin,
                           ApiAnonymousUserTestCaseMixin,
                           APITestCase):
-    pass
+    """
+    User api test cases for common authenticated user
+    """
