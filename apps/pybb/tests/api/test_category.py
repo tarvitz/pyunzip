@@ -11,7 +11,6 @@ from apps.core.tests import (
     ApiAdminUserTestCaseMixin, ApiAnonymousUserTestCaseMixin,
 )
 from apps.pybb.models import Category
-from django.core.urlresolvers import reverse
 from rest_framework.test import APITestCase
 import allure
 
@@ -60,4 +59,18 @@ class CategoryViewSetMixin(object):
 class CategoryViewSetAnonymousUserTest(CategoryViewSetMixin,
                                        ApiAnonymousUserTestCaseMixin,
                                        APITestCase):
+    pass
+
+
+@allure.feature('API: Category')
+class CategoryViewSetAdminUserTest(CategoryViewSetMixin,
+                                   ApiAdminUserTestCaseMixin,
+                                   APITestCase):
+    pass
+
+
+@allure.feature('API: Category')
+class CategoryViewSetUserTest(CategoryViewSetMixin,
+                              ApiAnonymousUserTestCaseMixin,
+                              APITestCase):
     pass

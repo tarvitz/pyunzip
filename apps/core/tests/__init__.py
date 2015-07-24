@@ -203,6 +203,48 @@ class TestHelperMixin(object):
         getattr(self, 'assertEqual')(os.path.exists(path), True)
 
 
+class ApiTestSourceAssertionMixin(object):
+    """
+    API test source assertion mixin
+    """
+    def assertUpdate(self, data, payload, skip_diff=True):
+        """
+        asserts post/put/patch data given in dict with response one
+
+        :param dict data: user given data to post/put/patch/etc
+        :param dict payload: response.data or response payload in json (dict)
+        :param bool skip_diff: skip fields that does not include into payload
+        :rtype: None
+        :return: None
+        :raises AssertionError:
+            - if one or more fields has not equal data
+        """
+        errors = []
+        for field, item in data.items():
+            if field not in payload and skip_diff:
+                continue
+
+            value = data[field]
+            if isinstance(item, (datetime, )):
+                value = data[field].isoformat()[:-3] + '000'
+            elif isinstance(item, six.string_types):
+                if value.startswith('http://testserver'):
+                    value = value.replace('http://testserver', '')
+            elif isinstance(item, (list, tuple)):
+                _value = []
+                for entry in value:
+                    if entry.startswith('http://testserver'):
+                        entry = entry.replace('http://testserver', '')
+                    _value.append(entry)
+                value = _value
+            if value != payload.get(field):
+                errors.append(
+                    '%r: %r != %r' % (field, value, payload[field])
+                )
+        if errors:
+            raise AssertionError(errors)
+
+
 class ApiTestCaseSet(object):
     model_class = None
     url_prefix = 'api'
@@ -273,7 +315,8 @@ class ApiTestCaseSet(object):
         self.object_admin_detail_response = None
 
 
-class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin,
+                                    ApiTestSourceAssertionMixin):
     """ ApiAnonymousUserTestCaseMixin
 
     Anonymous user can perform GET access detail/list, otherwise read only
@@ -345,7 +388,8 @@ class ApiAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             _('Authentication credentials were not provided.'))
 
 
-class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin,
+                                ApiTestSourceAssertionMixin):
     """
     admin users can claim access for any instance of model
     """
@@ -380,7 +424,8 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         json_response = json.loads(response.content)
 
         put = dict(**self.put)
-        self.check_response(json_response, put)
+        # self.check_response(json_response, put)
+        self.assertUpdate(json_response, put)
 
         self.assertEqual(self.model_class.objects.count(), count)
 
@@ -423,7 +468,8 @@ class ApiAdminUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
         self.assertEqual(self.model_class.objects.count(), count - 1)
 
 
-class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin,
+                                ApiTestSourceAssertionMixin):
     """
     owners of their instances could process update (sometimes delete) actions
     """
@@ -506,7 +552,8 @@ class ApiUserOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             self.assertEqual(self.model_class.objects.count(), count - 1)
 
 
-class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin,
+                                   ApiTestSourceAssertionMixin):
     """
     instances with other user (not owner) should have only RO access
     """
@@ -587,7 +634,8 @@ class ApiUserNotOwnerTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
             _('You do not have permission to perform this action.'))
 
 
-class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
+class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin,
+                                              ApiTestSourceAssertionMixin):
     """ ApiAnonymousUserTestCaseMixin
 
     Anonymous user can not perform GET access detail/list
@@ -673,7 +721,8 @@ class ApiRestrictedAnonymousUserTestCaseMixin(ApiTestCaseSet, TestHelperMixin):
 
 class ApiRestrictedOwnerUserTestCaseMixin(ApiUserOwnerTestCaseMixin,
                                           ApiTestCaseSet,
-                                          TestHelperMixin):
+                                          TestHelperMixin,
+                                          ApiTestSourceAssertionMixin):
     """
     Can only get access to his own instances, not for everyone else ones
     """
@@ -695,7 +744,8 @@ class ApiRestrictedOwnerUserTestCaseMixin(ApiUserOwnerTestCaseMixin,
 
 class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
                                              ApiTestCaseSet,
-                                             TestHelperMixin):
+                                             TestHelperMixin,
+                                             ApiTestSourceAssertionMixin):
     """ There's no access for other user resources, we would get 404
     event if resources exists, than we check permission for possibility
     have proceed actions
@@ -747,39 +797,3 @@ class ApiRestrictedUserNotOwnerTestCaseMixin(ApiUserNotOwnerTestCaseMixin,
         json_response = json.loads(response.content)
         self.assertEqual(json_response['detail'],
                          _('Not found'))
-
-
-class ApiTestSourceAssertionMixin(object):
-    """
-    API test source assertion mixin
-    """
-    def assertUpdate(self, data, payload, skip_diff=True):
-        """
-        asserts post/put/patch data given in dict with response one
-
-        :param dict data: user given data to post/put/patch/etc
-        :param dict payload: response.data or response payload in json (dict)
-        :param bool skip_diff: skip fields that does not include into payload
-        :rtype: None
-        :return: None
-        :raises AssertionError:
-            - if one or more fields has not equal data
-        """
-        errors = []
-        for field, item in data.items():
-            if field not in payload and skip_diff:
-                continue
-
-            value = data[field]
-            if isinstance(item, (datetime, )):
-                value = data[field].isoformat()[:-3] + '000'
-            elif isinstance(item, six.string_types):
-                if value.startswith('http://testserver'):
-                    value = value.replace('http://testserver', '')
-
-            if value != payload.get(field):
-                errors.append(
-                    '%r: %r != %r' % (field, value, payload[field])
-                )
-        if errors:
-            raise AssertionError(errors)
