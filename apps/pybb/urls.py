@@ -1,6 +1,6 @@
 from django.conf.urls import url, patterns
 
-from apps.pybb import views
+from apps.pybb.views import views
 from apps.pybb.feeds import LastPosts, LastTopics
 from django.contrib.auth.decorators import login_required
 
@@ -8,12 +8,8 @@ feeds = {
     'posts': LastPosts,
     'topics': LastTopics,
 }
-urlpatterns = patterns(
-    url('^feeds/(?P<url>.*)/$', 'django.contrib.syndication.views.feed',
-        {'feed_dict': feeds}, name='feed'),
 
-)
-urlpatterns += patterns(
+urlpatterns = patterns(
     '',
     # Misc
     url('^$', views.index, name='index'),

@@ -15,6 +15,9 @@ from apps.wh.views.api import (
     RankTypeViewSet, RankViewSet, ExpressionViewSet, MiniQuoteViewSet)
 from apps.files.views.api import (GalleryViewSet, ImageViewSet,
                                   UserFileViewSet)
+from apps.pybb.views.api import (
+    CategoryViewSet, ForumViewSet, PostViewSet, TopicViewSet, PollViewSet,
+    PollItemViewSet, PollAnswerViewSet, ReadViewSet)
 from apps.core.api import ContentTypeViewSet
 
 from rest_framework import routers
@@ -48,6 +51,15 @@ router.register(r'miniquotes', MiniQuoteViewSet)
 router.register(r'galleries', GalleryViewSet)
 router.register(r'images', ImageViewSet)
 router.register(r'userfiles', UserFileViewSet)
+
+router.register(r'categories', CategoryViewSet)
+router.register(r'forums', ForumViewSet)
+router.register(r'topics', TopicViewSet)
+router.register(r'posts', PostViewSet)
+router.register(r'postreads', ReadViewSet)
+router.register(r'polls', PollViewSet)
+router.register(r'pollitems', PollItemViewSet)
+router.register(r'pollanswers', PollAnswerViewSet)
 
 router.register(r'contenttypes', ContentTypeViewSet)
 
