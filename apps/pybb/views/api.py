@@ -13,7 +13,7 @@ __all__ = ['CategoryViewSet', ]
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Category instance
     """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -22,7 +22,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
 class ForumViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Forum instance
     """
     queryset = Forum.objects.all()
     serializer_class = ForumSerializer
@@ -31,7 +31,7 @@ class ForumViewSet(viewsets.ModelViewSet):
 
 class TopicViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Topic instance
     """
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
@@ -40,7 +40,7 @@ class TopicViewSet(viewsets.ModelViewSet):
 
 class PostViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Post instance
     """
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -49,7 +49,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class ReadViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Read instance
     """
     queryset = Read.objects.all()
     serializer_class = ReadSerializer
@@ -58,7 +58,7 @@ class ReadViewSet(viewsets.ModelViewSet):
 
 class PollViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Poll instance
     """
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
@@ -67,7 +67,7 @@ class PollViewSet(viewsets.ModelViewSet):
 
 class PollItemViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Poll Item instance
     """
     queryset = PollItem.objects.all()
     serializer_class = PollItemSerializer
@@ -76,7 +76,7 @@ class PollItemViewSet(viewsets.ModelViewSet):
 
 class PollAnswerViewSet(viewsets.ModelViewSet):
     """
-    API viewpoint for Karma instance
+    API viewpoint for Poll Answer instance
     """
     queryset = PollAnswer.objects.all()
     serializer_class = PollAnswerSerializer
