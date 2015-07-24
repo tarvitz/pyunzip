@@ -237,6 +237,27 @@ class ApiTestSourceAssertionMixin(object):
                         entry = entry.replace('http://testserver', '')
                     _value.append(entry)
                 value = _value
+
+            if isinstance(payload[field],
+                          (six.PY3 and (_io.TextIOWrapper,
+                                        _io.BufferedReader) or file)):
+                # remove uploaded files
+                if six.PY3:
+                    file_path = os.path.join(
+                        settings.MEDIA_ROOT,
+                        value.replace('/uploads/', '')
+                    )
+                    self.assertFileExists(file_path)
+                    os.unlink(file_path)
+                elif six.PY2:
+                    self.assertFileExists(value)
+                    os.unlink(
+                        os.path.join(settings.MEDIA_ROOT, value)
+                    )
+                else:
+                    raise EnvironmentError("Wrong python version")
+                #: ignore file/image upload case
+                continue
             if value != payload.get(field):
                 errors.append(
                     '%r: %r != %r' % (field, value, payload[field])
