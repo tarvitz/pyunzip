@@ -241,12 +241,11 @@ INSTALLED_APPS = (
     'apps.karma',
     'apps.pybb',
     'apps.menu',
-    # 'django_extensions',
     'rest_framework',
     'captcha',
     'sorl.thumbnail',
     'gunicorn',
-    'django_cron',
+    # 'django_cron',
 )
 
 
