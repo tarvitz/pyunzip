@@ -1,5 +1,6 @@
 from django.conf.urls import url, include, patterns
 from django.contrib import admin
+from django.views.static import serve
 admin.autodiscover()
 from django.conf import settings
 
@@ -25,7 +26,7 @@ urlpatterns = patterns(
 if settings.DEV_SERVER:
     urlpatterns += patterns(
         '',
-        url(r'^uploads/(?P<path>.*)$', 'django.views.static.serve',
+        url(r'^uploads/(?P<path>.*)$', serve,
             {
                 'document_root': settings.MEDIA_ROOT,
                 'show_indexes': True

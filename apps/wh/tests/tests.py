@@ -1,12 +1,12 @@
 # coding: utf-8
-
+from unittest import skipIf
 from django.test import TestCase
 from apps.accounts.models import User
 from apps.wh.models import Rank
 
 from apps.core.tests import TestHelperMixin
 from django.core.urlresolvers import reverse, NoReverseMatch
-from django.utils.unittest import skipIf
+
 
 from apps.core.helpers import get_object_or_None
 import allure

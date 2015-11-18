@@ -1,2 +1,2 @@
 #!/bin/bash
-python manage.py test --settings=app.settings.test $@
+python manage.py test --parallel --settings=app.settings.test $@
