@@ -263,7 +263,7 @@ user = render_to('pybb/user.html')(user_ctx)
 def show_post(request, post_id):
     post = get_object_or_404(Post, pk=post_id)
     count = post.topic.posts.filter(created__lt=post.created).count() + 1
-    page = math.ceil(count / float(pybb_settings.TOPIC_PAGE_SIZE))
+    page = math.ceil(count // float(pybb_settings.TOPIC_PAGE_SIZE))
     url = (
         '%s?page=%d#post-%d' % (reverse('pybb:topic',
                                         args=[post.topic.id]), page, post.id)
