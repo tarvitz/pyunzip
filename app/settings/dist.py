@@ -216,11 +216,13 @@ LOGGING = {
 }
 
 INSTALLED_APPS = (
+    'django.contrib.admin',
     'django.contrib.sitemaps',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.staticfiles',
     'apps.accounts',
     'apps.core',
     'apps.comments',
@@ -232,13 +234,10 @@ INSTALLED_APPS = (
     'apps.karma',
     'apps.pybb',
     'apps.menu',
-    'django_extensions',
+    # 'django_extensions',
     'rest_framework',
     'captcha',
     'sorl.thumbnail',
-    'grappelli',
-    'django.contrib.admin',
-    'django.contrib.staticfiles',
     'gunicorn',
     'django_cron',
 )

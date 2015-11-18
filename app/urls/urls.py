@@ -5,8 +5,7 @@ from django.conf import settings
 
 urlpatterns = patterns(
     '',
-    url(r'^grappelli/', include('grappelli.urls')),
-    (r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the next line to enable the admin:
     (r'^admin/', admin.site.urls),
     (r'^', include('apps.accounts.urls', namespace='accounts')),
