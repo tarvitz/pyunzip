@@ -137,7 +137,7 @@ class Topic(models.Model):
 
     def get_last_page(self):
         mod = self.posts.count() % settings.OBJECTS_ON_PAGE
-        return (self.posts.count() / settings.OBJECTS_ON_PAGE) + (mod and 1)
+        return (self.posts.count() // settings.OBJECTS_ON_PAGE) + (mod and 1)
 
     @property
     def poll(self):
