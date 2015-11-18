@@ -1,9 +1,10 @@
 from django.conf.urls import url, patterns
 from apps.core.shortcuts import direct_to_template
 
-urlpatterns = patterns(
-    'apps.core.views',
-    url(r'^url/$', 'safe_url', name='safe-url'),
+from . import views
+
+urlpatterns = [
+    url(r'^url/$', views.safe_url, name='safe-url'),
     # directs
     url(r'^password/restored/$', direct_to_template,
         {'template': 'static/password_restored.html'},
@@ -25,7 +26,7 @@ urlpatterns = patterns(
     url('^e1cfb81ac9ad.html$', direct_to_template,
         {'template': 'static/e1cfb81ac9ad.html'},
         name='yande-mail-verification'),
-    url('^robots.txt$', 'robots', name='url_robots'),
+    url('^robots.txt$', views.robots, name='url_robots'),
     # static
     url(r'accounts/password/changed/successful/$',
         direct_to_template, {'template': 'static/password_changed.html'},
@@ -90,4 +91,4 @@ urlpatterns = patterns(
         direct_to_template,
         {'template': 'static/vote_invalid_object.html'},
         name='vote-invalid-object'),
-)
+]

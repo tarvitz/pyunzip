@@ -1,10 +1,9 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 
 from apps.files.views import views
 
-urlpatterns = patterns(
-    'apps.files.views.views',
+urlpatterns = [
     url(r'^galleries/$', views.GalleryListView.as_view(), name='galleries'),
     url(r'^galleries/(?P<pk>\d+)/$', views.GalleryListView.as_view(),
         name='galleries'),
@@ -20,10 +19,10 @@ urlpatterns = patterns(
     url(r'^images/(?P<pk>\d+)/edit/$',
         login_required(views.GalleryImageUpdateView.as_view()),
         name='image-edit'),
-    url(r'^files/upload/new/$', 'file_upload', name='file-upload'),
+    url(r'^files/upload/new/$', views.file_upload, name='file-upload'),
 
     # todo: refactor
-    url(r'^users/files/$', 'files', name='files'),
-    url(r'^users/files/(?P<pk>\d+)/delete/$', 'file_delete',
+    url(r'^users/files/$', views.files, name='files'),
+    url(r'^users/files/(?P<pk>\d+)/delete/$', views.file_delete,
         name='file-delete')
-)
+]

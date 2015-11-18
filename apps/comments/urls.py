@@ -1,9 +1,8 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from apps.comments.views import views
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     url(r'^comments/(?P<pk>\d+)/$', views.CommentDetailView.as_view(),
         name='comment-detail'),
     url(r'^comments/add/$', login_required(views.CommentCreateView.as_view()),
@@ -20,4 +19,4 @@ urlpatterns = patterns(
     url(r'^subscriptions/(?P<pk>\d+)/remove/$',
         login_required(views.RemoveSubscriptionView.as_view()),
         name='subscription-remove')
-)
+]

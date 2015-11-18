@@ -1,20 +1,19 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
-from apps.news.views import views
+from .views import views, helpers
 
 
-urlpatterns = patterns(
-    'apps.news.views',
+urlpatterns = [
     url('^news/$', views.NewsListView.as_view(), name='news'),
     url(r'^news/(?P<pk>\d+)/$', views.NewsDetail.as_view(), name='article'),
     url(r'^news/(?P<pk>\d+)/edit/$', views.NewsUpdateView.as_view(),
         name='news-update'),
-    url(r'^news/user/$', 'views.news_user', name='news-user'),
-    url(r'^article/edit/(?P<id>\d+)/$', 'views.add_article',
+    url(r'^news/user/$', views.news_user, name='news-user'),
+    url(r'^article/edit/(?P<id>\d+)/$', views.add_article,
         {'edit_flag': 'True'},
         name='article-edit'),
-    url('^markup/preview/$', 'helpers.markup_preview', name='markup-preview'),
+    url('^markup/preview/$', helpers.markup_preview, name='markup-preview'),
     url(r'article/created/$', direct_to_template,
         {'template': 'news/article_created.html'},
         name='article-created'),
@@ -34,4 +33,4 @@ urlpatterns = patterns(
     url(r'^events/(?P<pk>\d+)/join/$',
         login_required(views.EventParticipateView.as_view()),
         name='event-join')
-)
+]

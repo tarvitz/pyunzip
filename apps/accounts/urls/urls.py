@@ -1,11 +1,10 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from apps.core.shortcuts import direct_to_template
 from django.contrib.auth.decorators import login_required
 from apps.accounts.views import views
 
 
-urlpatterns = patterns(
-    'apps.accounts.views.views',
+urlpatterns = [
     url(r'^login/$', views.LoginView.as_view(), name='login'),
     url(r'^logout/$', views.LogoutView.as_view(), name='logout'),
     url(r'^profile/$',
@@ -73,4 +72,4 @@ urlpatterns = patterns(
         name='password-changed'),
     url(r'^accounts/read/only/$', direct_to_template,
         {'template': 'accounts/read_only.html'}, name='read-only'),
-)
+]

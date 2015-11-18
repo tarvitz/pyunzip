@@ -1,6 +1,6 @@
 from .urls import urlpatterns
 
-from django.conf.urls import url, include, patterns
+from django.conf.urls import url, include
 
 from apps.accounts.views.api import (
     UserViewSet, PMViewSet, PolicyWarningViewSet
@@ -63,8 +63,7 @@ router.register(r'pollanswers', PollAnswerViewSet)
 
 router.register(r'contenttypes', ContentTypeViewSet)
 
-urlpatterns += patterns(
-    '',
+urlpatterns += [
     url(r'^api/', include(router.urls)),
     url(r'^api/', include(router.urls, namespace='api')),
-)
+]

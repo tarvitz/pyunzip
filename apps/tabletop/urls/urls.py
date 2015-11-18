@@ -1,11 +1,9 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from apps.tabletop.views import views
 
 
-urlpatterns = patterns(
-    'apps.tabletop.views.views',
-
+urlpatterns = [
     url('^rosters/all/$', views.RostersListView.as_view(),
         name='rosters-index'),
     url('^rosters/$', login_required(views.UserRosterListView.as_view()),
@@ -52,4 +50,4 @@ urlpatterns = patterns(
     url('^reports/$',
         views.ReportListView.as_view(),
         name='report-list'),
-)
+]

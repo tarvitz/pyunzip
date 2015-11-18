@@ -1,4 +1,4 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 
 from apps.pybb.views import views
 from apps.pybb.feeds import LastPosts, LastTopics
@@ -9,8 +9,7 @@ feeds = {
     'topics': LastTopics,
 }
 
-urlpatterns = patterns(
-    '',
+urlpatterns = [
     # Misc
     url('^$', views.index, name='index'),
     url('^category/(?P<category_id>\d+)/$', views.show_category,
@@ -78,4 +77,4 @@ urlpatterns = patterns(
     url('^poll/(?P<pk>\d+)/vote/$',
         login_required(views.PollVoteView.as_view()),
         name='poll-vote'),
-)
+]
