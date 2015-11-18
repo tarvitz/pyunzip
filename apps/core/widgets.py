@@ -7,7 +7,7 @@ from django.template import Context
 
 from django import forms
 from django.forms import Widget, CheckboxSelectMultiple, CheckboxInput
-from django.forms.util import flatatt
+from django.forms.utils import flatatt
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
 from django.utils import datetime_safe, formats

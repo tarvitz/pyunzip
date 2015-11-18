@@ -16,5 +16,5 @@ def on_karma_post_save(instance, **kwargs):
     return instance
 
 
-def setup_run():
+def setup_signals():
     pass

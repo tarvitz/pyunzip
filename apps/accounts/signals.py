@@ -15,5 +15,5 @@ def on_pm_pre_save(instance, **kwargs):
     return instance
 
 
-def setup_run():
+def setup_signals():
     pass

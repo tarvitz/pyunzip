@@ -14,7 +14,10 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import render_filter, post_markup_filter
 from apps.accounts.models import User
-from django.contrib.contenttypes import generic
+try:
+    from django.contrib.contenttypes.generic import GenericForeignKey
+except ImportError:
+    from django.contrib.contenttypes.fields import GenericForeignKey
 from datetime import datetime
 
 
@@ -47,8 +50,7 @@ class Codex(models.Model):
                                      verbose_name=_('content type'),
                                      related_name="ct_set_for_%(class)s")
     object_id = models.PositiveIntegerField()
-    source = generic.GenericForeignKey(ct_field="content_type",
-                                       fk_field="object_id")
+    source = GenericForeignKey(ct_field="content_type", fk_field="object_id")
     title = models.CharField(_('title'), max_length=128)
     # for sphinx search optimization
     plain_side = models.CharField(_('plain side'), max_length=128, blank=True)

@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django import forms
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.forms.models import BaseInlineFormSet
 from django.conf import settings
 from django.utils.translation import ugettext as _

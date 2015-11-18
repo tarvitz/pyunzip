@@ -4,7 +4,7 @@ from apps.tabletop.models import Codex, Roster, Report, Mission, Game
 from apps.core.serializers import CurrentUserSerializerMixin
 
 from rest_framework import serializers
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
 

@@ -10,7 +10,7 @@ from django.conf import settings
 from apps.core.widgets import TinyMkWidget
 
 
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from apps.tabletop.models import Mission, Roster, Report, Codex
 
 import re

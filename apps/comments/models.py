@@ -5,7 +5,10 @@ from django.db import models
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.contrib.contenttypes import generic
+try:
+    from django.contrib.contenttypes.generic import GenericForeignKey
+except ImportError:
+    from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.core import urlresolvers
 from django.utils import timezone
@@ -31,8 +34,8 @@ class BaseCommentAbstractModel(models.Model):
         related_name="content_type_set_for_%(class)s"
     )
     object_pk = models.TextField(_('object ID'))
-    content_object = generic.GenericForeignKey(ct_field="content_type",
-                                               fk_field="object_pk")
+    content_object = GenericForeignKey(ct_field="content_type",
+                                       fk_field="object_pk")
 
     # Metadata about the comment
     site = models.ForeignKey(Site)
@@ -222,8 +225,7 @@ class CommentWatch(models.Model):
         ContentType, verbose_name=_('content type'),
         related_name='content_type_set_for_%(class)s')
     object_pk = models.PositiveIntegerField(_('object pk'))
-    object = generic.GenericForeignKey(ct_field='content_type',
-                                       fk_field='object_pk')
+    object = GenericForeignKey(ct_field='content_type', fk_field='object_pk')
     comment = models.ForeignKey('comments.Comment',
                                 related_name='comment_watch_set',
                                 verbose_name=_("comment"), blank=True,

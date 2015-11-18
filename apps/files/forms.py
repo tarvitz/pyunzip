@@ -1,5 +1,5 @@
 from django import forms
-from django.forms.util import ErrorList
+from django.forms.utils import ErrorList
 from django.utils.translation import ugettext_lazy as _
 
 from django.contrib.auth import get_user_model

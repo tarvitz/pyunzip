@@ -1,6 +1,9 @@
 import os
 
-from django.contrib.contenttypes import generic
+try:
+    from django.contrib.contenttypes.generic import GenericRelation
+except ImportError:
+    from django.contrib.contenttypes.fields import GenericRelation
 from django.conf import settings
 from django.db import models
 
@@ -77,10 +80,8 @@ class Image(models.Model):
         _('Image'), upload_to=upload_to,
     )
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    comment_objects = generic.GenericRelation(
-        'comments.Comment',
-        object_id_field='object_pk'
-    )
+    comment_objects = GenericRelation('comments.Comment',
+                                      object_id_field='object_pk')
 
     class Meta:
         permissions = (

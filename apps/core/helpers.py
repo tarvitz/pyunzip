@@ -27,7 +27,11 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.template.loader import get_template
-from django.db.models import get_model
+try:
+    from django.db.models import get_model
+except ImportError:
+    from django.apps import apps
+    get_model = apps.get_model
 
 from django.core.exceptions import ImproperlyConfigured
 from django.template import Context

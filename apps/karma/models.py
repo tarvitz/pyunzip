@@ -33,7 +33,3 @@ class Karma(models.Model):
 
     class Meta:
         ordering = ['-date']
-
-
-from .signals import setup_run
-setup_run()

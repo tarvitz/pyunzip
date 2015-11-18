@@ -10,7 +10,10 @@ from apps.files.models import Attachment
 from apps.comments.models import Comment
 from django.contrib.contenttypes.models import ContentType
 from django.conf import settings
-from django.contrib.contenttypes import generic
+try:
+    from django.contrib.contenttypes.generic import GenericRelation
+except ImportError:
+    from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import post_markup_filter, render_filter
@@ -189,7 +192,7 @@ class ArchivedNews(AbstractNews):
 
 @python_2_unicode_compatible
 class News(AbstractNews):
-    comments = generic.GenericRelation(
+    comments = GenericRelation(
         Comment,
         content_type_field='content_type',
         object_id_field='object_pk'
@@ -334,7 +337,7 @@ class Event(models.Model):
         help_text=_("marks if event could place whole day"),
     )
 
-    comments = generic.GenericRelation(
+    comments = GenericRelation(
         'comments.Comment',
         object_id_field='object_pk'
     )

@@ -492,7 +492,3 @@ class PolicyWarning(models.Model):
         ordering = ['-date_expired', ]
         verbose_name = _("Policy warning")
         verbose_name_plural = _("Policy warnings")
-
-
-from apps.accounts import signals
-signals.setup_run()
