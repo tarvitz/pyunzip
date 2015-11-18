@@ -33,3 +33,4 @@ django.mo
 /db/sql
 /.idea
 /.coverage
+/static_root
