@@ -56,13 +56,13 @@ ADMIN_MEDIA = rel_path('admin_media')
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/uploads/'
 STATIC_URL = '/static/'
+STATIC_ROOT = rel_path('static_root')
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
-STATIC_ROOT = ''
 MEDIA_ROOT = rel_path('db/uploads')
 
 STATICFILES_DIRS = (
