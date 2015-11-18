@@ -94,8 +94,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'apps.shop.context_processors.catalog',
-                'apps.shop.context_processors.cart',
+                'apps.core.context_processors.global_settings',
+                'apps.core.context_processors.core',
+                'apps.menu.context_processors.menu',
+                'apps.news.context_processors.weekly_events',
+                'apps.news.context_processors.notes',
+                'apps.comments.context_processors.comment_watches',
             ],
         },
     },
@@ -122,23 +126,6 @@ CACHES = {
 
 ROOT_URLCONF = 'app.urls'
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.request',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.static',
-    'apps.core.context_processors.global_settings',
-    'apps.core.context_processors.core',
-    'apps.menu.context_processors.menu',
-    'apps.news.context_processors.weekly_events',
-    'apps.news.context_processors.notes',
-    'apps.comments.context_processors.comment_watches',
-)
-
-TEMPLATE_DIRS = (
-    rel_path('templates'),
-)
 
 LOGGING = {
     'version': 1,
@@ -288,8 +275,10 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',),
-    'PAGINATE_BY': API_OBJECTS_ON_PAGE,
-    'PAGINATE_BY_PARAM': 'page_size',
+    'DEFAULT_PAGINATION_CLASS': (
+        'rest_framework.pagination.LimitOffsetPagination'
+    ),
+    'PAGE_SIZE': API_OBJECTS_ON_PAGE
 }
 
 
