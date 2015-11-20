@@ -202,17 +202,7 @@ LOGGING = {
             'level': 'INFO',
             'propagate': True,
             'handlers': ['console', ],
-        },
-        'apps.thirdpaty.sleekxmpp.basexmpp': {
-            'level': 'INFO',
-            'propagate': True,
-            'handlers': ['console', ],
-        },
-        'apps.thirdpaty.sleekxmpp.xmlstream.xmlstream': {
-            'level': 'INFO',
-            'propagate': True,
-            'handlers': ['console', ],
-        },
+        }
     },
 
 }
@@ -281,12 +271,7 @@ DOMAIN = 'w40k.net'
 ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
 
 PRODUCTION = True
-DEVELOPMENT = False
-YANDEX_METRICA_ENABLED = False
-
-SERVER_EMAIL = 'noreply@w40k.net'
 DEV_SERVER = True
-GRAPPELLI_ADMIN_TITLE = 'w40k.net'
 
 DEFAULT_TEMPLATE = 'base_template.html'
 DEFAULT_SYNTAX = 'textile'
@@ -294,7 +279,6 @@ IMAGE_THUMBNAIL_SIZE = '200x200'
 BRUTEFORCE_ITER = 10
 SEND_MESSAGES = True
 OBJECTS_ON_PAGE = 20
-EXPEREMENTAL = False
 USER_FILES_LIMIT = 100 * 1024 * 1024
 MAXIMUM_POLL_ITEMS_AMOUNT = 10
 NULL_AVATAR_URL = os.path.join(MEDIA_URL, 'avatars/none.png')

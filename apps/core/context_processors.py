@@ -24,7 +24,7 @@ def global_settings(request):
     return {
         'gs': settings,
         'global_settings': settings,
-        'settings': {'document': settings.DOCUMENT}
+        # 'settings': {'document': settings.DOCUMENT}
     }
 
 
