@@ -1,4 +1,4 @@
-from django.conf.urls import url, patterns
+from django.conf.urls import url
 from apps.core.shortcuts import direct_to_template
 
 from . import views

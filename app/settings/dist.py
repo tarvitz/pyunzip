@@ -15,6 +15,7 @@ DATABASES = {
     }
 }
 
+
 def rel(path):
     return os.path.join(
         os.path.join(os.path.dirname(__file__), '../..'), path)
@@ -75,12 +76,6 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -88,6 +83,7 @@ TEMPLATES = [
             rel('templates')
         ],
         'APP_DIRS': True,
+        'DEBUG': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -233,7 +229,7 @@ INSTALLED_APPS = (
     'apps.accounts',
     'apps.core',
     'apps.comments',
-    #
+
     'apps.wh',
     'apps.news',
     'apps.files',

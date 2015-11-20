@@ -57,7 +57,6 @@ class Forum(models.Model):
     position = models.IntegerField(_('Position'), blank=True, default=0)
     description = models.TextField(_('Description'), blank=True, default='')
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
-                                        null=True,
                                         verbose_name=_('Moderators'))
     updated = models.DateTimeField(_('Updated'), null=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
@@ -68,7 +67,7 @@ class Forum(models.Model):
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='forum_user_sets',
         help_text=_("private participants list"),
-        blank=True, null=True)
+        blank=True)
 
     class Meta:
         ordering = ['position']
@@ -196,8 +195,7 @@ class Post(models.Model):
     body = models.TextField(_('Message'))
     body_html = models.TextField(_('HTML version'))
     body_text = models.TextField(_('Text version'))
-    user_ip = models.IPAddressField(_('User IP'), blank=True,
-                                    default='127.0.0.1')
+    user_ip = models.GenericIPAddressField(_('User IP'), default='127.0.0.1')
 
     class Meta:
         ordering = ['created']
@@ -290,8 +288,7 @@ class Read(models.Model):
 
 @python_2_unicode_compatible
 class Poll(models.Model):
-    topic = models.ForeignKey(Topic, related_name='poll_topic_set',
-                              unique=True)
+    topic = models.OneToOneField(Topic, related_name='poll_topic_set')
     title = models.CharField(_('title'), max_length=2048,
                              help_text=_("poll title"))
     voted_amount = models.PositiveIntegerField(

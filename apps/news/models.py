@@ -327,7 +327,7 @@ class Event(models.Model):
     participants = models.ManyToManyField(
         settings.AUTH_USER_MODEL, related_name='event_users_sets',
         help_text=_("participants would take a part in the event"),
-        blank=True, null=True
+        blank=True
     )
     is_finished = models.BooleanField(
         _('is finished'), default=False

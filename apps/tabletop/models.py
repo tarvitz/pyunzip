@@ -213,7 +213,7 @@ class Report(models.Model):
     rosters = models.ManyToManyField(Roster, verbose_name=_('rosters'))
     winners = models.ManyToManyField(
         Roster,
-        blank=True, null=True, verbose_name=_('winners'),
+        blank=True, verbose_name=_('winners'),
         related_name='breport_winners_sets'
     )
     mission = models.ForeignKey(

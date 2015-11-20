@@ -121,7 +121,7 @@ class User(AbstractBaseUser):
         blank=True
     )
     # TODO: refactor, redo, recode
-    ranks = models.ManyToManyField('wh.Rank', null=True, blank=True)
+    ranks = models.ManyToManyField('wh.Rank', blank=True)
     army = models.ForeignKey('wh.Army', null=True, blank=True,
                              verbose_name=_("army"))
 
@@ -132,7 +132,7 @@ class User(AbstractBaseUser):
     jid = models.EmailField(_('jabber id'), max_length=255,
                             blank=True, null=True)
 
-    uin = models.IntegerField(_('uin (icq number)'), max_length=12,
+    uin = models.IntegerField(_('uin (icq number)'),
                               blank=True, null=True, default=0)
     about = models.CharField(_('about myself'), max_length=512, blank=True,
                              null=True)

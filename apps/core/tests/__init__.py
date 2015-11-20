@@ -202,6 +202,17 @@ class TestHelperMixin(object):
         path = os.path.join(settings.MEDIA_ROOT, file_path)
         getattr(self, 'assertEqual')(os.path.exists(path), True)
 
+    def assertResponseStatus(self, response, status):
+        try:
+            self.assertEqual(status, response.status_code)
+            context = response.context
+            if context and 'form' in context:
+                form = context['form']
+                if form.errors:
+                    logging.warning(form.errors)
+        except AssertionError:
+            raise
+
 
 class ApiTestSourceAssertionMixin(object):
     """

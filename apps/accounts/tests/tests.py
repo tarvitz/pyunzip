@@ -618,3 +618,42 @@ class PolicyWarningTest(TestHelperMixin, TestCase):
                                     self.post_pm, follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(PM.objects.count(), count + 1)
+
+
+@allure.feature('General: Private Messages')
+class PMTest(TestHelperMixin, TestCase):
+    fixtures = [
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+    ]
+
+    post = {
+        'addressee': 1,
+        'title': 'new message',
+        'content': 'new message content'
+    }
+
+    def setUp(self):
+        self.addressee = User.objects.get(pk=1)
+
+    @allure.story('create')
+    @allure.severity(Severity.BLOCKER)
+    def test_send_private_message(self):
+        """
+        send private messages
+        """
+        with allure.step('setup environment'):
+            self.assertTrue(self.client.login(username='user',
+                                              password='123456'))
+            url = reverse_lazy('accounts:pm-create')
+            count = PM.objects.count()
+        with allure.step('get form'):
+            response = self.client.get(url)
+            self.assertResponseStatus(response, 200)
+        with allure.step('send message'):
+            response = self.client.post(url, self.post)
+            self.assertResponseStatus(response, 302)
+            self.assertEqual(count + 1, PM.objects.count())

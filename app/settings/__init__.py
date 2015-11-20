@@ -5,4 +5,3 @@ try:
 except ImportError:
     pass
 from .messages import *
-from .initials import *
