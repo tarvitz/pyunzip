@@ -83,7 +83,6 @@ TEMPLATES = [
             rel('templates')
         ],
         'APP_DIRS': True,
-        'DEBUG': False,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
