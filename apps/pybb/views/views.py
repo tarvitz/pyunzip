@@ -84,7 +84,7 @@ def index_ctx(request):
     def cmp(x):
         return x['cat'].position
 
-    cats = sorted(cats.values(), cmp)
+    cats = sorted(cats.values(), key=cmp)
 
     return {
         'cats': cats,  # cats.values(),
