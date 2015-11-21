@@ -81,17 +81,9 @@ def index_ctx(request):
         cat['forums'].append(forum)
         forums[forum.id] = forum
 
-    def cmp(x, y):
-        a = x['cat'].position
-        b = y['cat'].position
-        if a > b:
-            return 1
-        elif a < b:
-            return -1
-        else:
-            return 0
+    def cmp(x):
+        return x['cat'].position
 
-    # cmpdef = lambda a, b: cmp(a['cat'].position, b['cat'].position)
     cats = sorted(cats.values(), cmp)
 
     return {
