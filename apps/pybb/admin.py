@@ -24,9 +24,9 @@ class ForumAdmin(admin.ModelAdmin):
     list_display = ['name', 'category', 'position', 'topic_count', 'css_icon',
                     'is_hidden', 'is_private']
     list_per_page = settings.OBJECTS_ON_PAGE
-    ordering = ['-category']
+    ordering = ['position', '-category']
     search_fields = ['name', 'category__name']
-    list_editable = ['css_icon', ]
+    list_editable = ['category', 'position', 'css_icon', ]
     actions = [revert_hidden, ]
     fieldsets = (
         (
