@@ -140,12 +140,7 @@ class Topic(models.Model):
 
     @property
     def poll(self):
-        instance = None
-        try:
-            instance = self.poll_topic_set.get()
-        except (ObjectDoesNotExist, MultipleObjectsReturned):
-            pass
-        return instance
+        return self.poll
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -288,7 +283,7 @@ class Read(models.Model):
 
 @python_2_unicode_compatible
 class Poll(models.Model):
-    topic = models.OneToOneField(Topic, related_name='poll_topic_set')
+    topic = models.OneToOneField(Topic, related_name='poll')
     title = models.CharField(_('title'), max_length=2048,
                              help_text=_("poll title"))
     voted_amount = models.PositiveIntegerField(
