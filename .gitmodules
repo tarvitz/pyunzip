@@ -7,3 +7,6 @@
 [submodule "submodules/django-cron"]
 	path = submodules/django-cron
 	url = git@github.com:tarvitz/django-cron.git
+[submodule "submodules/django-haystack"]
+	path = submodules/django-haystack
+	url = https://github.com/django-haystack/django-haystack.git

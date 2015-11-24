@@ -18,6 +18,7 @@ urlpatterns = [
     url(r'^', include('apps.karma.urls', namespace='karma')),
     url(r'^', include('apps.comments.urls', namespace='comments')),
     url(r'^', include('apps.pybb.urls', namespace='pybb')),
+    url('^search/', include('haystack.urls')),
     url(r'^api-auth/', include('rest_framework.urls',
                                namespace='rest_framework')),
 ]
