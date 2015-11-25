@@ -261,7 +261,7 @@ class Post(models.Model):
         return len(self.body.split(' '))
 
     def __str__(self):
-        return self.body_text[:100]
+        return "%s: %s ..." % (_("Post"), self.body_text[:100])
 
 
 @python_2_unicode_compatible
