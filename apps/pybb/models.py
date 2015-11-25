@@ -143,7 +143,9 @@ class Topic(models.Model):
 
     @property
     def poll(self):
-        return self.poll
+        if hasattr(self, 'poll_set'):
+            return self.poll_set
+        return None
 
     def save(self, *args, **kwargs):
         if self.id is None:
@@ -290,7 +292,7 @@ class Read(models.Model):
 
 @python_2_unicode_compatible
 class Poll(models.Model):
-    topic = models.OneToOneField(Topic, related_name='poll')
+    topic = models.OneToOneField(Topic, related_name='poll_set')
     title = models.CharField(_('title'), max_length=2048,
                              help_text=_("poll title"))
     voted_amount = models.PositiveIntegerField(
