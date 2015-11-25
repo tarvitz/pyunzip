@@ -10,6 +10,7 @@ from apps.accounts.models import User
 from apps.pybb import settings as pybb_settings
 from apps.core.helpers import post_markup_filter, render_filter
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -58,7 +59,8 @@ class Forum(models.Model):
     description = models.TextField(_('Description'), blank=True, default='')
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
                                         verbose_name=_('Moderators'))
-    updated = models.DateTimeField(_('Updated'), null=True)
+    updated = models.DateTimeField(_('Updated'), null=True,
+                                   auto_now_add=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
     css_icon = models.CharField(_("Css icon"), blank=True, default='',
                                 max_length=64)
@@ -102,7 +104,8 @@ class Topic(models.Model):
                               verbose_name=_('Forum'))
     name = models.CharField(_('Subject'), max_length=255)
     created = models.DateTimeField(_('Created'), null=True)
-    updated = models.DateTimeField(_('Updated'), null=True)
+    updated = models.DateTimeField(_('Updated'), null=True,
+                                   auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_('User'))
     views = models.IntegerField(_('Views count'), blank=True, default=0)
     sticky = models.BooleanField(_('Sticky'), blank=True, default=False)
@@ -185,7 +188,8 @@ class Post(models.Model):
                              verbose_name=_('User'))
     created = models.DateTimeField(_('Created'), blank=True,
                                    default=datetime.now)
-    updated = models.DateTimeField(_('Updated'), blank=True, null=True)
+    updated = models.DateTimeField(_('Updated'), blank=True, null=True,
+                                   auto_now_add=True)
     markup = models.CharField(
         _('Markup'), max_length=15, default=pybb_settings.DEFAULT_MARKUP,
         choices=MARKUP_CHOICES)
@@ -214,7 +218,7 @@ class Post(models.Model):
         new = self.id is None
 
         if new:
-            self.topic.updated = datetime.now()
+            self.topic.updated = timezone.now()
             self.topic.post_count += 1
             self.topic.save()
             self.topic.forum.updated = self.topic.updated
