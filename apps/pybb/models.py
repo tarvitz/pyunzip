@@ -258,6 +258,9 @@ class Post(models.Model):
     def get_body_messges_count(self):
         return len(self.body.split(' '))
 
+    def __str__(self):
+        return self.body_text[:100]
+
 
 @python_2_unicode_compatible
 class Read(models.Model):
