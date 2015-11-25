@@ -12,7 +12,7 @@ class PostIndex(indexes.SearchIndex, indexes.Indexable):
         return models.Post
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.filter(updated__lte=timezone.now())
+        return self.get_model().objects.filter(created__lte=timezone.now())
 
 
 class TopicIndex(indexes.SearchIndex, indexes.Indexable):
@@ -22,4 +22,4 @@ class TopicIndex(indexes.SearchIndex, indexes.Indexable):
         return models.Topic
 
     def index_queryset(self, using=None):
-        return self.get_model().objects.filter(updated__lte=timezone.now())
+        return self.get_model().objects.filter(created__lte=timezone.now())
