@@ -657,3 +657,36 @@ class PMTest(TestHelperMixin, TestCase):
             response = self.client.post(url, self.post)
             self.assertResponseStatus(response, 302)
             self.assertEqual(count + 1, PM.objects.count())
+
+
+@allure.feature('General: Accounts')
+class AccountUserTest(TestHelperMixin, TestCase):
+    fixtures = [
+        'load_universes.json',
+        'load_fractions.json',
+        'load_sides.json',
+        'load_armies.json',
+        'load_users.json',
+    ]
+
+    def setUp(self):
+        self.user = User.objects.get(username='user')
+        self.admin_user = User.objects.get(username='admin')
+
+    @allure.story('get')
+    @allure.severity(Severity.NORMAL)
+    def test_get_other_user_profile(self):
+        """
+        send private messages
+        """
+        with allure.step('setup environment'):
+            self.assertTrue(self.client.login(username='user',
+                                              password='123456'))
+            url = reverse_lazy('accounts:profile-by-nick',
+                               kwargs={'slug': 'admin'})
+        with allure.step('get other user account profile'):
+            response = self.client.get(url)
+            self.assertResponseStatus(response, 200)
+            context = response.context
+            self.assertEqual(context['user'], self.user)
+            self.assertEqual(context['object'], self.admin_user)

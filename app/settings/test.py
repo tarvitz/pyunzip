@@ -1,12 +1,12 @@
 # coding: utf-8
-#from .dist import *
-#from .local import *
-#from .messages import *
-#from .initials import *
-from app.settings.dist import *
-from app.settings.local import *
-from app.settings.messages import *
-from app.settings.initials import *
+
+from .dist import *
+from .messages import *
+try:
+    from .local import *
+except ImportError:
+    pass
+
 
 DEBUG = TEMPLATE_DEBUG = True
 
