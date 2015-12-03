@@ -51,8 +51,8 @@
             </div>
             {% endif %}
             {% endif %}
-            {% if post.updated %}
-            <div class="updated-message">{% trans "Edited" %} {% pybb_time post.updated %}</div>
+            {% if post.is_updated %}
+                <div class="updated-message">{% trans "Edited" %} {% pybb_time post.updated %}</div>
             {% endif %}
             <div class="post-related">
             </div>

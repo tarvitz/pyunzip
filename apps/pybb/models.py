@@ -263,6 +263,9 @@ class Post(models.Model):
     def __str__(self):
         return "%s: %s ..." % (_("Post"), self.body_text[:100])
 
+    def is_updated(self):
+        return self.created.timetuple()[:7] != self.updated.timetuple()[:7]
+
 
 @python_2_unicode_compatible
 class Read(models.Model):
