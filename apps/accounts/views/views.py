@@ -141,13 +141,7 @@ class ProfileView(generic.DetailView):
     template_name = 'accounts/profile.html'
     model = User
     slug_field = 'nickname'
-
-    def get_queryset(self):
-        if 'nickname' in self.kwargs:
-            return super(ProfileView, self).get_queryset().filter(
-                nickname__iexact=self.kwargs.get('nickname', '!void')
-            )
-        return super(ProfileView, self).get_queryset()
+    context_object_name = 'object'
 
 
 class PasswordRestoreInitiateView(generic.FormView):
