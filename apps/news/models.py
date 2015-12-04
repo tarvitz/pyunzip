@@ -401,16 +401,6 @@ class Note(models.Model):
     Some note that should be shown as urgent information in the top of the
     site view or something like that
     """
-
-    def note_expired_on():
-        """
-        note expired on default datetime offset
-
-        :rtype: datetime
-        :return: offset
-        """
-        return datetime.now() + timedelta(days=14)
-
     TYPE_CHOICES = (
         ('success', _("success")),
         ('info', _("info")),
@@ -425,8 +415,7 @@ class Note(models.Model):
     )
     expired_on = models.DateTimeField(
         _("expired on"),
-        help_text=_("date when note is expired"),
-        default=note_expired_on
+        help_text=_("date when note is expired")
     )
     content = models.TextField(
         _("content"), help_text=_("content")
