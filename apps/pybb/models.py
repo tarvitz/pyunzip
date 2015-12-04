@@ -264,7 +264,11 @@ class Post(models.Model):
         return "%s: %s ..." % (_("Post"), self.body_text[:100])
 
     def is_updated(self):
-        return self.created.timetuple()[:7] != self.updated.timetuple()[:7]
+        if all((self.created, self.updated)):
+            return (
+                self.created.timetuple()[:7] != self.updated.timetuple()[:7]
+            )
+        return False
 
 
 @python_2_unicode_compatible
