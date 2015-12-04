@@ -402,7 +402,7 @@ class Note(models.Model):
     site view or something like that
     """
 
-    def note_expired_on(self):
+    def note_expired_on():
         """
         note expired on default datetime offset
 
