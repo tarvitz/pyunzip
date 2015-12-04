@@ -54,7 +54,7 @@ class TopicAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None, {
-                'fields': ('forum', 'name', 'user', ('created', 'updated'))
+                'fields': ('forum', 'name', 'user', 'created')
             }
         ),
         (
