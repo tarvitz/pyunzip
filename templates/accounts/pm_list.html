@@ -18,6 +18,14 @@
   </div>
   <h3>{% trans "Private messages" %}</h3>
 
+  <div class="btn btn-group">
+    <a href="{% url "accounts:pm-inbox" %}"
+       class="btn btn-default glyphicon glyphicon-envelope"
+       data-title="{% trans "Inbox" %}" rel="tooltip"></a>
+    <a href="{% url "accounts:pm-outbox" %}"
+       class="btn btn-default glyphicon glyphicon-pencil"
+       data-title="{% trans "Outbox" %}" rel="tooltip"></a>
+  </div>
   {% if object_list %}
     <table class="table">
       <tr>
