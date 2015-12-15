@@ -8,6 +8,8 @@ ADMINS = (
     ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
 )
 
+SECRET_KEY = 'some secret key is here'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -229,7 +231,6 @@ INSTALLED_APPS = (
     'rest_framework',
     'captcha',
     'sorl.thumbnail',
-    'gunicorn',
     'haystack',
     'django_comments',
     # 'django_cron',
