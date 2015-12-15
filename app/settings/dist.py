@@ -217,6 +217,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+
     'apps.accounts',
     'apps.core',
     'apps.comments',
@@ -232,7 +233,6 @@ INSTALLED_APPS = (
     'captcha',
     'sorl.thumbnail',
     'haystack',
-    'django_comments',
     # 'django_cron',
 )
 
