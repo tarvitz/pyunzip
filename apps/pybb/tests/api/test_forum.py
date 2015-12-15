@@ -48,7 +48,7 @@ class ForumViewSetMixin(object):
             "name": "Space Marines",
             "position": 0,
             "description": "",
-            "updated": "2015-07-08T23:01:53.302133",
+            # "updated": "2015-07-08T23:01:53.302133",
             "post_count": 1,
             "css_icon": "icon-github",
             "is_hidden": False,

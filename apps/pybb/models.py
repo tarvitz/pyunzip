@@ -59,8 +59,7 @@ class Forum(models.Model):
     description = models.TextField(_('Description'), blank=True, default='')
     moderators = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True,
                                         verbose_name=_('Moderators'))
-    updated = models.DateTimeField(_('Updated'), null=True,
-                                   auto_now_add=True)
+    updated = models.DateTimeField(_('Updated'), null=True, auto_now=True)
     post_count = models.IntegerField(_('Post count'), blank=True, default=0)
     css_icon = models.CharField(_("Css icon"), blank=True, default='',
                                 max_length=64)
