@@ -266,8 +266,9 @@ class DeepSearchRosterForm(RequestForm):
 
 class AddRosterForm(RequestForm):
     RACE_CHOICES = [
-        (i.id, i.name) for i in Side.objects.all().exclude(
-            name__iexact='none').order_by('id')
+        # (i.id, i.name)
+        # for i in Side.objects.all().exclude(
+        #     name__iexact='none').order_by('id')
     ]
     RACE_CHOICES.insert(0, (0, u'------'))
     title = forms.CharField(label=_("Title"))

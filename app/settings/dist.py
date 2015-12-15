@@ -8,6 +8,8 @@ ADMINS = (
     ('Saul Tarvitz', 'tarvitz@blacklibrary.ru'),
 )
 
+SECRET_KEY = 'some secret key is here'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -215,6 +217,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+
     'apps.accounts',
     'apps.core',
     'apps.comments',
@@ -229,9 +232,7 @@ INSTALLED_APPS = (
     'rest_framework',
     'captcha',
     'sorl.thumbnail',
-    'gunicorn',
     'haystack',
-    'django_comments',
     # 'django_cron',
 )
 
@@ -275,7 +276,7 @@ ALLOWED_HOSTS = ('w40k.net', 'www.w40k.net', 'me.w40k.net', 'localhost')
 PRODUCTION = True
 DEV_SERVER = True
 
-DEFAULT_TEMPLATE = 'base_template.html'
+DEFAULT_TEMPLATE = 'pybb/base.html'
 DEFAULT_SYNTAX = 'textile'
 IMAGE_THUMBNAIL_SIZE = '200x200'
 BRUTEFORCE_ITER = 10
