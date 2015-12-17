@@ -233,7 +233,7 @@ INSTALLED_APPS = (
     'captcha',
     'sorl.thumbnail',
     'haystack',
-    # 'django_cron',
+    'django_cron',
 )
 
 
