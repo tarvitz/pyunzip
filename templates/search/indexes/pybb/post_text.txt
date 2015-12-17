@@ -1,1 +1,1 @@
-{{ object.body_text }}
+{{ object.body_html|safe }}
