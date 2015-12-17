@@ -6,13 +6,15 @@ from django.db import models
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from apps.accounts.models import User
-from apps.pybb import settings as pybb_settings
-from apps.core.helpers import post_markup_filter, render_filter
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.html import strip_tags
+
+from apps.accounts.models import User
+from apps.pybb import settings as pybb_settings
+from apps.core.helpers import post_markup_filter, render_filter
+
 
 MARKUP_CHOICES = (
     ('textile', 'textile'),
@@ -212,6 +214,7 @@ class Post(models.Model):
         if self.created is None:
             self.created = datetime.now()
         self.body_html = self.render("body")
+        self.body_text = strip_tags(self.body_html)
 
         new = self.id is None
 
@@ -259,7 +262,8 @@ class Post(models.Model):
         return len(self.body.split(' '))
 
     def __str__(self):
-        return "%s: %s ..." % (_("Post"), self.body_text[:100])
+        text = self.body_text or strip_tags(self.body_html)
+        return "%s: %s ..." % (_("Post"), text[:100])
 
     def is_updated(self):
         if all((self.created, self.updated)):
