@@ -1,9 +1,6 @@
 import os
 
-try:
-    from django.contrib.contenttypes.generic import GenericRelation
-except ImportError:
-    from django.contrib.contenttypes.fields import GenericRelation
+from django.contrib.contenttypes.fields import GenericRelation
 from django.conf import settings
 from django.db import models
 
