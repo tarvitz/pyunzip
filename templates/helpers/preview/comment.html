@@ -1,9 +1,10 @@
 {% load static %}
-<link rel='stylesheet' href='{% static "css/bootstrap-forum.css" %}' media='screen' type='text/css'>
+<link rel='stylesheet' href='{% static "css/bootstrap-light.css" %}'
+      media='screen' type='text/css'>
 <style type='text/css'>
   .message{ width: 99%; !important}
 </style>
-<script type='text/javascript' src='/media/js/jquery-1.7.1.min.js'></script>
+<script type='text/javascript' src='{% static "components/jquery/jquery.min.js" %}"'></script>
 
 <div class="round message" style="width: 97%">
   <div class="message-headline">
@@ -32,7 +33,9 @@
   </div> <!-- content -->
   <div class="message-footer"><center>;)</center></div> <!-- footer -->
 </div> <!-- message -->
+{% endblock %}
 
+{% block endjs %}
 <script language='javascript'>
   $(document).ready(function(){
     $('.spoiler_block a').click(function(){
@@ -49,3 +52,4 @@
     });
   });
 </script>
+{% endblock %}

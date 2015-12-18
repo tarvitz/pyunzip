@@ -23,7 +23,9 @@
     {% include "forms/bootstrap_horizontal.html" %}
     {% include "forms/submit.html" with save_text=save_i18n klass=user.get_color_theme %}
   </form>
+{% endblock %}
 
+{% block endjs %}
   <script type='text/javascript'>
     /* settings */
     var markItUpParsers = {
