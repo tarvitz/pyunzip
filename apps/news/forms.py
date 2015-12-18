@@ -88,24 +88,6 @@ class EventForm(forms.ModelForm):
         fields = ('title', 'content', 'place', 'date_start', 'date_end',
                   'league', 'type', 'is_all_day')
 
-    class Media:
-        js = (
-            settings.STATIC_URL + "components/moment/min/moment.min.js",
-            settings.STATIC_URL + "components/"
-            "eonasdan-bootstrap-datetimepicker/"
-            "src/js/locales/bootstrap-datetimepicker.ru.js",
-            settings.STATIC_URL + "components/"
-            "eonasdan-bootstrap-datetimepicker/"
-            "build/js/bootstrap-datetimepicker.min.js",
-        )
-        css = {
-            'all': (
-                settings.STATIC_URL + 'components/'
-                "eonasdan-bootstrap-datetimepicker/build/css/"
-                "bootstrap-datetimepicker.min.css",
-            )
-        }
-
 
 class EventParticipateForm(forms.ModelForm):
     agree = forms.BooleanField(label=_("Yes, I agree"), required=True)

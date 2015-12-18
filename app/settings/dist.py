@@ -70,7 +70,8 @@ MEDIA_ROOT = rel_path('db/uploads')
 
 STATICFILES_DIRS = (
     'static',
-    rel('static')
+    rel('static'),
+    rel('static/components/bootstrap/dist')
 )
 
 STATICFILES_FINDERS = (

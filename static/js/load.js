@@ -57,6 +57,7 @@ function getCookie(name){
       language: 'ru'
     });
   });
+
   $.each($('[data-toggle=select2]'), function(idx, item){
     $(item).select2({
       placeholder: $(self).data('placeholder') || "",
