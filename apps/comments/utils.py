@@ -76,7 +76,8 @@ def get_page(rank, objects_on_page=None):
     """
     objects_on_page = (objects_on_page or settings.OBJECTS_ON_PAGE) or 1
     rank = rank or 1
-    return (rank // objects_on_page) or 1
+    page = (rank % objects_on_page) or 1
+    return (rank / 2 > 0) and page + 1 or page
 
 
 def store_comment_positions(content_object):
