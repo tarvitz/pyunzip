@@ -18,15 +18,20 @@ class BaseCommentNode(template.Node):
 
     @classmethod
     def handle_token(cls, parser, token):
-        """Class method to parse get_comment_list/count/form and return a Node."""
+        """Class method to parse get_comment_list/count/form and
+        return a Node."""
         tokens = token.split_contents()
         if tokens[1] != 'for':
-            raise template.TemplateSyntaxError("Second argument in %r tag must be 'for'" % tokens[0])
+            raise template.TemplateSyntaxError(
+                "Second argument in %r tag must be 'for'" % tokens[0]
+            )
 
         # {% get_whatever for obj as varname %}
         if len(tokens) == 5:
             if tokens[3] != 'as':
-                raise template.TemplateSyntaxError("Third argument in %r must be 'as'" % tokens[0])
+                raise template.TemplateSyntaxError(
+                    "Third argument in %r must be 'as'" % tokens[0]
+                )
             return cls(
                 object_expr=parser.compile_filter(tokens[2]),
                 as_varname=tokens[4],
@@ -35,15 +40,20 @@ class BaseCommentNode(template.Node):
         # {% get_whatever for app.model pk as varname %}
         elif len(tokens) == 6:
             if tokens[4] != 'as':
-                raise template.TemplateSyntaxError("Fourth argument in %r must be 'as'" % tokens[0])
+                raise template.TemplateSyntaxError(
+                    "Fourth argument in %r must be 'as'" % tokens[0]
+                )
             return cls(
-                ctype=BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
+                ctype=BaseCommentNode.lookup_content_type(tokens[2],
+                                                          tokens[0]),
                 object_pk_expr=parser.compile_filter(tokens[3]),
                 as_varname=tokens[5]
             )
 
         else:
-            raise template.TemplateSyntaxError("%r tag requires 4 or 5 arguments" % tokens[0])
+            raise template.TemplateSyntaxError(
+                "%r tag requires 4 or 5 arguments" % tokens[0]
+            )
 
     @staticmethod
     def lookup_content_type(token, tagname):
@@ -51,14 +61,23 @@ class BaseCommentNode(template.Node):
             app, model = token.split('.')
             return ContentType.objects.get_by_natural_key(app, model)
         except ValueError:
-            raise template.TemplateSyntaxError("Third argument in %r must be in the format 'app.model'" % tagname)
+            raise template.TemplateSyntaxError(
+                "Third argument in %r must be in the "
+                "format 'app.model'" % tagname
+            )
         except ContentType.DoesNotExist:
-            raise template.TemplateSyntaxError("%r tag has non-existant content-type: '%s.%s'" % (tagname, app, model))
+            raise template.TemplateSyntaxError(
+                "%r tag has non-existant content-type: "
+                "'%s.%s'" % (tagname, app, model)
+            )
 
-    def __init__(self, ctype=None, object_pk_expr=None, object_expr=None, as_varname=None, comment=None):
+    def __init__(self, ctype=None, object_pk_expr=None, object_expr=None,
+                 as_varname=None, comment=None):
         if ctype is None and object_expr is None:
             raise template.TemplateSyntaxError(
-                "Comment nodes must be given either a literal object or a ctype and object pk.")
+                "Comment nodes must be given either a literal "
+                "object or a ctype and object pk."
+            )
         self.comment_model = comments.get_model()
         self.as_varname = as_varname
         self.ctype = ctype
@@ -68,7 +87,9 @@ class BaseCommentNode(template.Node):
 
     def render(self, context):
         qs = self.get_queryset(context)
-        context[self.as_varname] = self.get_context_value_from_queryset(context, qs)
+        context[self.as_varname] = self.get_context_value_from_queryset(
+            context, qs
+        )
         return ''
 
     def get_queryset(self, context):
@@ -89,7 +110,8 @@ class BaseCommentNode(template.Node):
         field_names = [f.name for f in self.comment_model._meta.fields]
         if 'is_public' in field_names:
             qs = qs.filter(is_public=True)
-        if getattr(settings, 'COMMENTS_HIDE_REMOVED', True) and 'is_removed' in field_names:
+        if (getattr(settings, 'COMMENTS_HIDE_REMOVED', True)
+                and 'is_removed' in field_names):
             qs = qs.filter(is_removed=False)
 
         return qs
@@ -102,7 +124,9 @@ class BaseCommentNode(template.Node):
                 return None, None
             return ContentType.objects.get_for_model(obj), obj.pk
         else:
-            return self.ctype, self.object_pk_expr.resolve(context, ignore_failures=True)
+            return self.ctype, self.object_pk_expr.resolve(
+                context, ignore_failures=True
+            )
 
     def get_context_value_from_queryset(self, context, qs):
         """Subclasses should override this."""
@@ -157,7 +181,9 @@ class RenderCommentFormNode(CommentFormNode):
         """Class method to parse render_comment_form and return a Node."""
         tokens = token.split_contents()
         if tokens[1] != 'for':
-            raise template.TemplateSyntaxError("Second argument in %r tag must be 'for'" % tokens[0])
+            raise template.TemplateSyntaxError(
+                "Second argument in %r tag must be 'for'" % tokens[0]
+            )
 
         # {% render_comment_form for obj %}
         if len(tokens) == 3:
@@ -166,7 +192,8 @@ class RenderCommentFormNode(CommentFormNode):
         # {% render_comment_form for app.models pk %}
         elif len(tokens) == 4:
             return cls(
-                ctype=BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
+                ctype=BaseCommentNode.lookup_content_type(tokens[2],
+                                                          tokens[0]),
                 object_pk_expr=parser.compile_filter(tokens[3])
             )
 
@@ -179,7 +206,11 @@ class RenderCommentFormNode(CommentFormNode):
                 "comments/form.html"
             ]
             context.push()
-            formstr = render_to_string(template_search_list, {"form": self.get_form(context)}, context)
+            formstr = render_to_string(
+                template_search_list, {
+                    "form": self.get_form(context)
+                }, context
+            )
             context.pop()
             return formstr
         else:
@@ -194,7 +225,9 @@ class RenderCommentListNode(CommentListNode):
         """Class method to parse render_comment_list and return a Node."""
         tokens = token.split_contents()
         if tokens[1] != 'for':
-            raise template.TemplateSyntaxError("Second argument in %r tag must be 'for'" % tokens[0])
+            raise template.TemplateSyntaxError(
+                "Second argument in %r tag must be 'for'" % tokens[0]
+            )
 
         # {% render_comment_list for obj %}
         if len(tokens) == 3:
@@ -203,7 +236,8 @@ class RenderCommentListNode(CommentListNode):
         # {% render_comment_list for app.models pk %}
         elif len(tokens) == 4:
             return cls(
-                ctype=BaseCommentNode.lookup_content_type(tokens[2], tokens[0]),
+                ctype=BaseCommentNode.lookup_content_type(tokens[2],
+                                                          tokens[0]),
                 object_pk_expr=parser.compile_filter(tokens[3])
             )
 
@@ -218,7 +252,9 @@ class RenderCommentListNode(CommentListNode):
             qs = self.get_queryset(context)
             context.push()
             liststr = render_to_string(template_search_list, {
-                "comment_list": self.get_context_value_from_queryset(context, qs)
+                "comment_list": self.get_context_value_from_queryset(
+                    context, qs
+                )
             }, context)
             context.pop()
             return liststr
@@ -310,8 +346,8 @@ def get_comment_form(parser, token):
 @register.tag
 def render_comment_form(parser, token):
     """
-    Render the comment form (as returned by ``{% render_comment_form %}``) through
-    the ``comments/form.html`` template.
+    Render the comment form (as returned by ``{% render_comment_form %}``)
+    through the ``comments/form.html`` template.
 
     Syntax::
 
