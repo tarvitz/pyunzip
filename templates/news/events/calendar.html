@@ -7,8 +7,6 @@
 
 {% block js %}
   {{ block.super }}
-  <script type="text/javascript" src="{% static "components/fullcalendar/dist/lang/ru.js" %}"></script>
-  <script type="text/javascript" src="{% static "components/fullcalendar/dist/fullcalendar.min.js" %}"></script>
 {% endblock %}
 {% block content %}
   <ul class="breadcrumb">
@@ -51,6 +49,11 @@
     {% trans "Sunday" as sunday %}
   {% endspaceless %}
   {# end i18n #}
+{% endblock %}
+
+{% block endjs %}
+  <script type="text/javascript" src="{% static "components/fullcalendar/dist/lang/ru.js" %}"></script>
+  <script type="text/javascript" src="{% static "components/fullcalendar/dist/fullcalendar.min.js" %}"></script>
   <script type="text/javascript">
     var processDate = function(d){
       var date = d._d;
