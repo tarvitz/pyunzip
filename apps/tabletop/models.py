@@ -116,10 +116,6 @@ class Roster(models.Model):
     defeats = models.PositiveIntegerField(_('defeats'), default=0, blank=True)
 
     def show_player(self):
-        # if hasattr(self.user, 'nickname'):
-        #     return self.user.get_username()
-        # if self.player:
-        #     return self.player
         if self.owner:
             return self.owner.get_username()
     show_player.short_description = _('Player')
