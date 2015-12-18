@@ -1,5 +1,6 @@
 # coding: utf-8
 from .managers import CommentManager
+from . import utils
 
 from django.db import models
 from django.db.models import Q
@@ -177,9 +178,24 @@ class Comment(BaseCommentAbstractModel):
     url = property(_get_url, _set_url,
                    doc="The URL given by the user who posted this comment")
 
-    def get_absolute_url(self, anchor_pattern="#c%(id)s"):
+    def get_absolute_url(self, anchor_pattern="#post-%(id)s"):
         # return self.get_content_object_url() +
         # (anchor_pattern % self.__dict__)
+        if hasattr(self.content_object, 'get_absolute_url'):
+            if not hasattr(self, '_rank'):
+                count = utils.get_count(content_object=self.content_object)
+                if not count:
+                    utils.store_comment_positions(self.content_object)
+                self._rank = utils.get_comment_position(self.content_object,
+                                                        self.pk)
+            url = self.content_object.get_absolute_url()
+            page = utils.get_page(self._rank)
+
+            return '%(url)s?page=%(page)s%(anchor)s' % {
+                'url': url,
+                'page': page,
+                'anchor': anchor_pattern % {'id': self.pk}
+            }
         return reverse('comments:comment-detail', kwargs={'pk': self.pk})
 
     def get_as_text(self):
