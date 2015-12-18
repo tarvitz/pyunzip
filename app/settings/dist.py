@@ -362,3 +362,10 @@ HAYSTACK_CONNECTIONS = {
         'INDEX_NAME': 'warmist',
     },
 }
+
+#: redis setup
+REDIS = {
+    'host': 'localhost',
+    'db': 1,
+    'port': 6379
+}

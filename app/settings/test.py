@@ -68,3 +68,7 @@ MIGRATION_MODULES.update({
     app: "%s.migrations_not_used_in_tests" % app
     for app in ['django_cron', ]
 })
+
+REDIS.update({
+    'db': 13
+})
