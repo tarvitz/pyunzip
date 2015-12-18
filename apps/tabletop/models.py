@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import Min
 from django.utils.translation import (
     ugettext_lazy as _, ugettext as tr,
-    pgettext
+    pgettext_lazy
 )
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -14,10 +14,8 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from apps.core.helpers import render_filter, post_markup_filter
 from apps.accounts.models import User
-try:
-    from django.contrib.contenttypes.generic import GenericForeignKey
-except ImportError:
-    from django.contrib.contenttypes.fields import GenericForeignKey
+
+from django.contrib.contenttypes.fields import GenericForeignKey
 from datetime import datetime
 
 
@@ -102,7 +100,7 @@ class Roster(models.Model):
 
     revision = models.IntegerField(
         # fixme: pgettext_lazy falls to exception within model form render :(
-        pgettext('revision', 'codex revision'),
+        pgettext_lazy('revision', 'codex revision'),
         validators=[valid_revision, ],
         help_text=_("revision means how new your codex is (bigger is newer)")
     )
