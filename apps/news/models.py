@@ -186,8 +186,8 @@ class ArchivedNews(AbstractNews):
             ('edit_archived_news', _('Can edit archived news')),
         )
 
-    def get_absolute_url(self):
-        return reverse('news:article-archived', kwargs={'id': self.id})
+    # def get_absolute_url(self):
+    #     return reverse('news:article-archived', kwargs={'id': self.id})
 
 
 @python_2_unicode_compatible
