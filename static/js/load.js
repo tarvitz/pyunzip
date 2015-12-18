@@ -43,10 +43,33 @@ markupSettings = myMarkupSettings['textile'];
 markupSettings['previewParserPath'] = markupPreviewURL + '?markup=textile&template=comment';
 $('textarea.markitup').markItUp(markupSettings);
 
-function getCookie(name){
-  var reg = RegExp('(' + name + ')=([\\w\\d\\_\\- ]+)');
-  var out = document.cookie.match(reg);
-  return (out) ? out[2] : '';
+//function getCookie(name){
+//  var reg = RegExp('(' + name + ')=([\\w\\d\\_\\- ]+)');
+//  var out = document.cookie.match(reg);
+//  return (out) ? out[2] : '';
+//}
+
+// using jQuery
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 (function(){

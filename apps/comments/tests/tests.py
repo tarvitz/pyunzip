@@ -174,26 +174,28 @@ class CommentWatchApiTest(TestHelperMixin, CommentWatchBase, APITestCase):
 
         :return: None
         """
-        comment_watch = CommentWatch.objects.create(**self.create_dict)
-        cw_count = comment_watch.get_new_comments().count()
-        self.assertEqual(cw_count, 0)
-        self.make_comment('admin', status_code=200)
+        with allure.step('setup environment'):
+            comment_watch = CommentWatch.objects.create(**self.create_dict)
+            cw_count = comment_watch.get_new_comments().count()
+            self.assertEqual(cw_count, 0)
+            self.make_comment('admin', status_code=200)
 
-        self.assertEqual(comment_watch.get_new_comments().count(),
-                         cw_count + 1)
-        self.login('user')
-        url = reverse('api:commentwatch-detail', args=(comment_watch.pk, ))
-        response = self.client.patch(url, self.post_update_subscription,
-                                     format='json',
-                                     follow=True)
-        self.assertEqual(response.status_code, 200)
-        comment_watch = CommentWatch.objects.get(pk=comment_watch.pk)
-        self.check_state(comment_watch, self.post_update_subscription,
-                         self.assertEqual)
-        # new comments are persist anyway but user should not get access
-        # to them
-        self.assertEqual(comment_watch.get_new_comments().count(),
-                         cw_count + 1)
-        response = self.client.get(self.subscriptions_url, follow=True)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.context['object_list'].count(), 0)
+            self.assertEqual(comment_watch.get_new_comments().count(),
+                             cw_count + 1)
+            self.login('user')
+        with allure.step('update comment watch'):
+            url = reverse('api:commentwatch-detail', args=(comment_watch.pk, ))
+            response = self.client.patch(url, self.post_update_subscription,
+                                         format='json',
+                                         follow=True)
+            self.assertEqual(response.status_code, 200)
+            comment_watch = CommentWatch.objects.get(pk=comment_watch.pk)
+            self.check_state(comment_watch, self.post_update_subscription,
+                             self.assertEqual)
+            # new comments are persist anyway but user should not get access
+            # to them
+            self.assertEqual(comment_watch.get_new_comments().count(),
+                             cw_count + 1)
+            response = self.client.get(self.subscriptions_url, follow=True)
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.context['object_list'].count(), 0)

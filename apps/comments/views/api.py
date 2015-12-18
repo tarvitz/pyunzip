@@ -57,16 +57,6 @@ class CommentWatchViewSet(RestrictToNonOwnerViewSetMixin,
             return qs
         return qs.filter(user=self.request.user)
 
-    # def get_queryset(self):
-    #     qs = super(CommentWatchViewSet, self).get_queryset()
-    #     if self.request.user.is_authenticated():
-    #         return (
-    #             qs if self.request.user.has_perm(
-    #                 'comments.change_commentwatch')
-    #             else qs.filter(user=self.request.user)
-    #         )
-    #     return CommentWatch.objects.none()
-
 
 class CommentPermission(permissions.BasePermission):
     def has_permission(self, request, view):

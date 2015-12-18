@@ -44,17 +44,22 @@
     (function(){
       $('[data-toggle=subscription-read]').click(function(e){
         var self = $(this);
-        var data = {
-          is_updated: false,
-          csrfmiddlewaretoken: getCookie('csrftoken')
+        var csrftoken = csrftoken || getCookie('csrftoken');
+        var patch = {
+          is_updated: false
         };
         $.ajax({
-          headers: {
-            'X-HTTP-Method-Override': 'PATCH',
+          beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+              xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
           },
-          type: "POST",
+          headers: {
+            'X-HTTP-Method-Override': 'PATCH'
+          },
+          type: "PATCH",
           url: self.data('url'),
-          data: data,
+          data: patch,
           //dataType: 'json',
           success: function(data, textStatus, jqXHR){
             if (!data.is_updated){
@@ -71,6 +76,16 @@
                 dismissQueue: true
               });
             }
+          },
+          error: function(jqXHR, textStatus, errorThrown){
+            var response = JSON.parse(jqXHR.responseText);
+            noty({
+              text: "{% trans 'Error happend, please stand by' %}: <br />"
+                + 'status ' + jqXHR.status + '<br />' + jqXHR.responseText,
+              type: "error",
+              dismissQueue: true,
+            });
+            console.log(response);
           }
         });
       });
