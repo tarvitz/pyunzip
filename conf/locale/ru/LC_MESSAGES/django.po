@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 22:20+0300\n"
+"POT-Creation-Date: 2015-12-19 23:24+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -603,6 +603,14 @@ msgstr ""
 #: apps/core/__init__.py:5
 msgid "core"
 msgstr "ядро"
+
+#: apps/core/admin.py:8
+msgid "Tessera admin"
+msgstr "Тессера администрирование"
+
+#: apps/core/admin.py:9
+msgid "Tessera"
+msgstr "Тессера"
 
 #: apps/core/apps.py:18
 msgid "Core Application Module"
