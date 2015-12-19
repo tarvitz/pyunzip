@@ -189,7 +189,7 @@ class Comment(BaseCommentAbstractModel):
                 self._rank = utils.get_comment_position(self.content_object,
                                                         self.pk)
             url = self.content_object.get_absolute_url()
-            page = utils.get_page(self._rank)
+            page = utils.get_page(self._rank + 1)
 
             return '%(url)s?page=%(page)s%(anchor)s' % {
                 'url': url,
