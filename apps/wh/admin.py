@@ -33,10 +33,14 @@ admin.site.register(Expression, ExpressionAdmin)
 
 
 class FractionAdmin(admin.ModelAdmin):
-    list_display = ('title', )
+    list_display = ('title', 'universe')
     ordering = ('id', )
 admin.site.register(Fraction, FractionAdmin)
-admin.site.register(Side)
+
+
+class SideAdmin(admin.ModelAdmin):
+    list_display = ('title', 'fraction')
+admin.site.register(Side, SideAdmin)
 
 
 class ArmyAdmin(admin.ModelAdmin):

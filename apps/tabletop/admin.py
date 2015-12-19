@@ -2,6 +2,7 @@
 from django.contrib import admin
 from . import models
 
+
 class BattleReportAdmin(admin.ModelAdmin):
     list_display = ('title', 'layout', 'is_approved', 'ip_address')
     search_fields = ['title', 'winner']
