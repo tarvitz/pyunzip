@@ -70,7 +70,9 @@ admin.site.register(RankType, RankTypeAdmin)
 
 
 class MiniQuoteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'content')
+    list_display = ('id', 'content', )
+    list_editable = ('content', )
+    search_fields = ('content', )
 admin.site.register(MiniQuote, MiniQuoteAdmin)
 
 
