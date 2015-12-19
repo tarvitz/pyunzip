@@ -44,7 +44,7 @@ admin.site.register(Side, SideAdmin)
 
 
 class ArmyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'side')
+    list_display = ('name', 'side')
     fieldsets = (
         (
             _('Armies'),
