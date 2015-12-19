@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 22:10+0300\n"
+"POT-Creation-Date: 2015-12-19 22:14+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -1500,7 +1500,6 @@ msgid "Games"
 msgstr "Игры"
 
 #: apps/tabletop/models.py:204
-#| msgid "Mission"
 msgid "Missions"
 msgstr "Миссии"
 

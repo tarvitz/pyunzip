@@ -175,7 +175,7 @@ class Roster(models.Model):
         )
         ordering = ['-id']
         verbose_name = _("Roster")
-        verbose_name = _("Rosters")
+        verbose_name_plural = _("Rosters")
 
 
 @python_2_unicode_compatible
