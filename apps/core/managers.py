@@ -14,6 +14,7 @@ class UserSIDManager(models.Manager):
             return None
 
         expired_date = timezone.now() + timedelta(days=1)
-        instance = self.model(user=user, sid=sid, expired_date=expired_date)
+        instance = self.model(user=user, sid=sid, expired_date=expired_date,
+                              expired=False)
         instance.save()
         return instance
