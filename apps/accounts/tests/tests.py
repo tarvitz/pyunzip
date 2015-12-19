@@ -213,6 +213,9 @@ class AccountTest(TestHelperMixin, TestCase):
             logged = self.client.login(username=sid.user.username,
                                        password='new_pass')
             self.assertEqual(logged, True)
+        with allure.step('check sid'):
+            sid = UserSID.objects.get(pk=sid.pk)
+            self.assertEqual(sid.expired, True)
 
     @allure.story('register')
     @allure.severity(Severity.BLOCKER)
