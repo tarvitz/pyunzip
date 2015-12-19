@@ -151,18 +151,10 @@ class PasswordRestoreInitiateView(generic.FormView):
 
     def form_valid(self, form):
         users = form.cleaned_data['users']
-        sids = UserSID.objects.filter(user__in=users, expired=True)
-        sids = list(sids)
-        if not sids:
-            for user in users:
-                sid = UserSID.objects.create(user)
-                sids.append(sid)
-        else:
-            for user in users:
-                sid = UserSID.objects.filter(
-                    user=user).order_by('-id')[0]
-                sids.append(sid)
-                (lambda x: x)(user)
+        sids = []
+        for user in users:
+            sid = UserSID.objects.create(user)
+            sids.append(sid)
 
         for sid in sids:
             msg = settings.PASSWORD_RESTORE_REQUEST_MESSAGE % {
