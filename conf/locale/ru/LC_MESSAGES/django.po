@@ -1500,10 +1500,9 @@ msgid "Games"
 msgstr "Игры"
 
 #: apps/tabletop/models.py:204
-#, fuzzy
 #| msgid "Mission"
 msgid "Missions"
-msgstr "Миссия"
+msgstr "Миссии"
 
 #: apps/tabletop/models.py:214 templates/tabletop/report_list.html.py:6
 #: templates/tabletop/roster.html:8 templates/tabletop/roster_form.html:8
