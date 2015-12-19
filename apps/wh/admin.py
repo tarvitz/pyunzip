@@ -39,7 +39,7 @@ admin.site.register(Fraction, FractionAdmin)
 
 
 class SideAdmin(admin.ModelAdmin):
-    list_display = ('title', 'fraction')
+    list_display = ('name', 'fraction')
 admin.site.register(Side, SideAdmin)
 
 
