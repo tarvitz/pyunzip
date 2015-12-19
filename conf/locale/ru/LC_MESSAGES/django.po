@@ -1575,11 +1575,11 @@ msgstr "кодовое имя"
 
 #: apps/wh/models.py:24
 msgid "Universe"
-msgstr ""
+msgstr "Вселенная"
 
 #: apps/wh/models.py:25
 msgid "Universes"
-msgstr ""
+msgstr "Вселенные"
 
 #: apps/wh/models.py:31
 msgid "fraction"
