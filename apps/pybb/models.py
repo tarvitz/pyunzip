@@ -4,15 +4,17 @@ from datetime import datetime
 from django.db import models
 
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
-from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 from django.utils.html import strip_tags
+from django.utils import timezone
+from django.conf import settings
+from django.apps import apps
 
 from apps.accounts.models import User
 from apps.pybb import settings as pybb_settings
+from apps.comments import utils
 from apps.core.helpers import post_markup_filter, render_filter
 
 
@@ -147,6 +149,19 @@ class Topic(models.Model):
             return self.poll_set
         return None
 
+    def build_post_index(self):
+        """
+        build redis ranking index for post belongs to topic
+
+        :rtype: None
+        :return: None
+        """
+        client = apps.get_app_config('comments').redis_db
+        set_name = self._get_redis_db_rank_set_name()
+        for rank, post_pk in enumerate(self.posts.order_by('pk').values_list(
+                'pk', flat=True)):
+            client.zadd(set_name, *(rank, str(post_pk)))
+
     def save(self, *args, **kwargs):
         if self.id is None:
             self.created = datetime.now()
@@ -228,13 +243,35 @@ class Post(models.Model):
 
         super(Post, self).save(*args, **kwargs)
 
+    def _get_redis_db_rank_set_name(self):
+        """
+        get redis db rank set name for current post inside topic
+
+        :rtype: str
+        :return: set name
+        """
+        if not hasattr(self, '_redis_db_set_name'):
+            self._redis_db_set_name = (
+                '%(app_label)s.%(model_name)s.post.%(pk)i' % {
+                    'app_label': self._meta.app_label,
+                    'model_name': Topic._meta.model_name,
+                    'pk': self.pk
+                }
+            )
+        return self._redis_db_set_name
+
     def get_absolute_url(self):
-        return reverse('pybb:posts', args=[self.topic.pk]) + (
-            '?page=%(page)s#post-%(post)s' % {
-                'page': self.topic.get_last_page(),
-                'post': self.pk
-            }
-        )
+        if not hasattr(self, '_rank'):
+            client = apps.get_app_config('comments').redis_db
+            set_name = self._get_redis_db_rank_set_name()
+            self._rank = client.zrank(set_name, str(self.pk))
+        page = utils.get_page(self._rank + 1)
+        return '%(url)s?page=%(page)s#post-%(pk)s' % {
+            'url': reverse_lazy('pybb:posts', args=(self.topic.pk, )),
+            'page': page,
+            'pk': self.pk
+        }
+
 
     def get_edit_url(self):
         return reverse('pybb:post-edit', args=(self.pk, ))
