@@ -1,0 +1,50 @@
+[
+{
+    "model": "wh.ranktype",
+    "pk": 1,
+    "fields": {
+        "type": "Common",
+        "magnitude": 1000,
+        "style": "",
+        "css_class": "rank-common",
+        "css_id": "",
+        "group": null
+    }
+},
+{
+    "model": "wh.ranktype",
+    "pk": 6,
+    "fields": {
+        "type": "Master",
+        "magnitude": 0,
+        "style": "",
+        "css_class": "",
+        "css_id": "id-master",
+        "group": null
+    }
+},
+{
+    "model": "wh.ranktype",
+    "pk": 7,
+    "fields": {
+        "type": "Administratum",
+        "magnitude": 100,
+        "style": "",
+        "css_class": "rank-administratum",
+        "css_id": "",
+        "group": null
+    }
+},
+{
+    "model": "wh.ranktype",
+    "pk": 8,
+    "fields": {
+        "type": "Developers",
+        "magnitude": 100,
+        "style": "",
+        "css_class": "rank-developers",
+        "css_id": "",
+        "group": null
+    }
+}
+]
