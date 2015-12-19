@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the pybb package.
 # Grigoriy Petukhov <lizendir@gmail.com>, 2008
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: pybb\n"
@@ -32,7 +31,7 @@ msgstr "IM"
 
 #: apps/pybb/apps.py:16
 msgid "PyBB Application Module"
-msgstr ""
+msgstr "Модуль PyBB"
 
 #: apps/pybb/feeds.py:23 apps/pybb/feeds.py:24
 msgid "Latest posts on forum"
@@ -48,49 +47,49 @@ msgstr "Заголовок"
 
 #: apps/pybb/forms.py:85
 msgid "Title"
-msgstr ""
+msgstr "Заголовок"
 
 #: apps/pybb/forms.py:108 apps/pybb/forms.py:140
 msgid "Poll items amount"
-msgstr ""
+msgstr "Количество предметов опроса"
 
 #: apps/pybb/forms.py:109 apps/pybb/forms.py:141
 msgid "poll items amount for voting"
-msgstr ""
+msgstr "предметы опроса для голосования"
 
 #: apps/pybb/forms.py:152
 msgid ""
 "You can not set items amount less than the variants to select or variants "
 "already have been created."
 msgstr ""
+"Вы не можете установить количество меньше чем количество выбранных вариантов "
+"или вариантов уже созданных."
 
 #: apps/pybb/forms.py:168
-#, fuzzy
 #| msgid "Delete"
 msgid "Delete?"
-msgstr "Удалить"
+msgstr "Удалить?"
 
 #: apps/pybb/forms.py:169
-#, fuzzy
 #| msgid "Yes, I am sure."
 msgid "Yes, I agree"
-msgstr "Да, хочу удалить."
+msgstr "Да, я хочу."
 
 #: apps/pybb/forms.py:175
 msgid "Poll item title"
-msgstr ""
+msgstr "Название предмета опроса"
 
 #: apps/pybb/forms.py:176
 msgid "poll item title users would vote on"
-msgstr ""
+msgstr "название предмета опроса, за который пользователи будут голосовать"
 
 #: apps/pybb/forms.py:193 apps/pybb/tests/test_polls.py:192
 msgid "Title should be set"
-msgstr ""
+msgstr "Заголовок должен быть установлен"
 
 #: apps/pybb/forms.py:214 apps/pybb/forms.py:230
 msgid "Your option"
-msgstr ""
+msgstr "Ваша опция"
 
 #: apps/pybb/models.py:30 apps/pybb/models.py:61
 msgid "Name"
@@ -126,19 +125,19 @@ msgstr "Количество сообщений"
 
 #: apps/pybb/models.py:68
 msgid "Css icon"
-msgstr ""
+msgstr "Иконка из css"
 
 #: apps/pybb/models.py:70
 msgid "is hidden"
-msgstr ""
+msgstr "скрыт"
 
 #: apps/pybb/models.py:71
 msgid "is private"
-msgstr ""
+msgstr "приватный"
 
 #: apps/pybb/models.py:74
 msgid "private participants list"
-msgstr ""
+msgstr "список приватных участников"
 
 #: apps/pybb/models.py:79 apps/pybb/models.py:107
 msgid "Forum"
@@ -183,7 +182,7 @@ msgstr "Темы"
 
 #: apps/pybb/models.py:202
 msgid "Session key"
-msgstr ""
+msgstr "Ключ сессий"
 
 #: apps/pybb/models.py:206 apps/pybb/models.py:226
 msgid "Markup"
@@ -191,11 +190,11 @@ msgstr "Разметка"
 
 #: apps/pybb/models.py:211
 msgid "Anonymous post"
-msgstr ""
+msgstr "Анонимный пост"
 
 #: apps/pybb/models.py:212
 msgid "Anonymous posts"
-msgstr ""
+msgstr "Анонимные посты"
 
 #: apps/pybb/models.py:229
 msgid "HTML version"
@@ -222,124 +221,120 @@ msgid "Time"
 msgstr "Время"
 
 #: apps/pybb/models.py:348
-#, fuzzy
 #| msgid "Topic"
 msgid "Topic Read"
-msgstr "Тема"
+msgstr "Прочтение топка"
 
 #: apps/pybb/models.py:349
-#, fuzzy
 #| msgid "Topics"
 msgid "Topic Reads"
-msgstr "Темы"
+msgstr "Прочтение топиков"
 
 #: apps/pybb/models.py:364 apps/pybb/models.py:450
 msgid "title"
-msgstr ""
+msgstr "заголовок"
 
 #: apps/pybb/models.py:365
 msgid "poll title"
-msgstr ""
+msgstr "заголовок опроса"
 
 #: apps/pybb/models.py:367 apps/pybb/models.py:452
-#, fuzzy
 #| msgid "Post count"
 msgid "voted amount"
-msgstr "Количество сообщений"
+msgstr "количество проголосовавших"
 
 #: apps/pybb/models.py:367 apps/pybb/models.py:452
 msgid "amount of voted user, cache field"
-msgstr ""
+msgstr "количество проголосовавших, кеш-значение"
 
 #: apps/pybb/models.py:371
-#, fuzzy
 #| msgid "Views count"
 msgid "items amount"
-msgstr "Количество просмотров"
+msgstr "количество"
 
 #: apps/pybb/models.py:372
 msgid "positive amount of poll items for further creation"
-msgstr ""
+msgstr "количество вариантов опроса"
 
 #: apps/pybb/models.py:376
 msgid "is multiple"
-msgstr ""
+msgstr "множественный выбор"
 
 #: apps/pybb/models.py:376
 msgid "is multiple select allowed"
-msgstr ""
+msgstr "можно выбирать несколько вариантов"
 
 #: apps/pybb/models.py:380
 msgid "is prepared"
-msgstr ""
+msgstr "готов"
 
 #: apps/pybb/models.py:381
 msgid "marks if poll is prepared to rock n roll"
-msgstr ""
+msgstr "отмечает, если опрос готов"
 
 #: apps/pybb/models.py:385
 msgid "is finished"
-msgstr ""
+msgstr "окончен"
 
 #: apps/pybb/models.py:385
 msgid "marks if poll is finished"
-msgstr ""
+msgstr "отмечает, если опрос окончен"
 
 #: apps/pybb/models.py:389
 msgid "date expire"
-msgstr ""
+msgstr "дата истечения"
 
 #: apps/pybb/models.py:389
 msgid "date then poll is expired"
-msgstr ""
+msgstr "дата, когда опрос будет окончен"
 
 #: apps/pybb/models.py:443
 msgid "Poll"
-msgstr ""
+msgstr "Опрос"
 
 #: apps/pybb/models.py:444
 msgid "Polls"
-msgstr ""
+msgstr "Опросы"
 
 #: apps/pybb/models.py:456
 msgid "score"
-msgstr ""
+msgstr "счет"
 
 #: apps/pybb/models.py:456
 msgid "score in percent"
-msgstr ""
+msgstr "счет в процентах"
 
 #: apps/pybb/models.py:481
 msgid "Poll item"
-msgstr ""
+msgstr "Предмет опроса"
 
 #: apps/pybb/models.py:482
 msgid "Poll items"
-msgstr ""
+msgstr "Предметы опроса"
 
 #: apps/pybb/models.py:497
 msgid "Poll answer"
-msgstr ""
+msgstr "Ответ на опрос"
 
 #: apps/pybb/models.py:498
 msgid "Poll answers"
-msgstr ""
+msgstr "Ответы на опрос"
 
 #: apps/pybb/serializers.py:9
 msgid "You can not alter karma for yourself"
-msgstr ""
+msgstr "Вы не можете изменять собственную карму"
 
 #: apps/pybb/serializers.py:11
 msgid "You can not set custom karma amount, use `-1` and `1` values only."
-msgstr ""
+msgstr "Вы не можете устанавливать своё количество кармы, используйте `-1` и `1` значения."
 
 #: apps/pybb/serializers.py:14
 msgid "Timeout. You have exceeded amount of karma modification, please wait"
-msgstr ""
+msgstr "Ограничено. Вы исчерпали количество изменений кармы на сегодня, пожалуйста подождите."
 
 #: apps/pybb/serializers.py:17
 msgid "You can not set another user for voting. Use your own id"
-msgstr ""
+msgstr "Вы не можете установить другого пользователя при голосовании. Используйте свой идентификатор"
 
 #: apps/pybb/templatetags/pybb_extras.py:53
 msgid "seconds ago,seconds ago,seconds ago"
@@ -366,256 +361,3 @@ msgstr "сегодня, %s"
 #, python-format
 msgid "yesterday, %s"
 msgstr "вчера, %s"
-
-#~ msgid "Recipient"
-#~ msgstr "Получатель"
-
-#~ msgid "User with login %s does not exist"
-#~ msgstr "Пользователь с логином %s не существует"
-
-#~ msgid "Russian"
-#~ msgstr "Русский"
-
-#~ msgid "Site"
-#~ msgstr "Сайт"
-
-#~ msgid "Jabber"
-#~ msgstr "Jabber"
-
-#~ msgid "ICQ"
-#~ msgstr "ICQ"
-
-#~ msgid "MSN"
-#~ msgstr "MSN"
-
-#~ msgid "AIM"
-#~ msgstr "AIM"
-
-#~ msgid "Yahoo"
-#~ msgstr "Yahoo"
-
-#~ msgid "Location"
-#~ msgstr "Откуда"
-
-#~ msgid "Signature"
-#~ msgstr "Подпись"
-
-#~ msgid "Time zone"
-#~ msgstr "Временная зона"
-
-#~ msgid "Language"
-#~ msgstr "Язык"
-
-#~ msgid "Avatar"
-#~ msgstr "Аватар"
-
-#~ msgid "Show signatures"
-#~ msgstr "Показывать подписи"
-
-#~ msgid "Default markup"
-#~ msgstr "Разметка по умолчанию"
-
-#~ msgid "Profile"
-#~ msgstr "Профиль"
-
-#~ msgid "Profiles"
-#~ msgstr "Профили"
-
-#~ msgid "Read"
-#~ msgstr "Просмотр"
-
-#~ msgid "Reads"
-#~ msgstr "Просмотры"
-
-#~ msgid "Author"
-#~ msgstr "Автор"
-
-#~ msgid "Private message"
-#~ msgstr "Личное сообщение"
-
-#~ msgid "Private messages"
-#~ msgstr "Личные сообщения"
-
-#~ msgid "Root"
-#~ msgstr "Начало"
-
-#~ msgid "New topic"
-#~ msgstr "Новая тема"
-
-#~ msgid "New reply"
-#~ msgstr "Новый ответ"
-
-#~ msgid "Submit"
-#~ msgstr "Отправить"
-
-#~ msgid "New private message"
-#~ msgstr "Создание сообщения"
-
-#~ msgid "Are you sure you want to delete this message?"
-#~ msgstr "Вы уверены, что хотите удалить это сообщение?"
-
-#~ msgid "Editing the post"
-#~ msgstr "Редактирование сообщения"
-
-#~ msgid "Save"
-#~ msgstr "Сохранить"
-
-#~ msgid "Profile editing"
-#~ msgstr "Изменение профиля"
-
-#~ msgid "Change the password"
-#~ msgstr "Изменить пароль"
-
-#~ msgid "Inbox"
-#~ msgstr "Входящие сообщения"
-
-#~ msgid "outbox"
-#~ msgstr "исходящие сообщения"
-
-#~ msgid "Subscriptions on topics"
-#~ msgstr "Уведомления"
-
-#~ msgid "delete"
-#~ msgstr "удалить"
-
-#~ msgid "PYBB - django forum engine"
-#~ msgstr "PYBB - движок форума на django"
-
-#~ msgid "Important"
-#~ msgstr "Важно"
-
-#~ msgid "Search"
-#~ msgstr "Поиск"
-
-#~ msgid "Users"
-#~ msgstr "Пользователи"
-
-#~ msgid "My profile"
-#~ msgstr "Мой профиль"
-
-#~ msgid "PM"
-#~ msgstr "ЛС"
-
-#~ msgid "Admincp"
-#~ msgstr "Админка"
-
-#~ msgid "Log out"
-#~ msgstr "Выйти"
-
-#~ msgid "Logged in as "
-#~ msgstr "Ваш логин"
-
-#~ msgid "Sign up"
-#~ msgstr "Регистрация"
-
-#~ msgid "Log in"
-#~ msgstr "Войти"
-
-#~ msgid "Search powered by Google"
-#~ msgstr "Поиск осуществляется через Google"
-
-#~ msgid "Pages"
-#~ msgstr "Страницы"
-
-#~ msgid "Send PM"
-#~ msgstr "Отправить ЛС"
-
-#~ msgid "Edit"
-#~ msgstr "Редактировать"
-
-#~ msgid "Edited"
-#~ msgstr "Отредактировано"
-
-#~ msgid "quote"
-#~ msgstr "цитировать"
-
-#~ msgid "Last topics"
-#~ msgstr "Темы"
-
-#~ msgid "Last posts"
-#~ msgstr "Сообщения"
-
-#~ msgid "Statistics"
-#~ msgstr "Статистика"
-
-#~ msgid "Unstick topic"
-#~ msgstr "Снять закрепление"
-
-#~ msgid "Stick topic"
-#~ msgstr "Закрепить тему"
-
-#~ msgid "Open topic"
-#~ msgstr "Открыть тему"
-
-#~ msgid "Close topic"
-#~ msgstr "Закрыть тему"
-
-#~ msgid "Unsubscribe"
-#~ msgstr "Запретить уведомления"
-
-#~ msgid "Subscribe"
-#~ msgstr "Получать уведомления"
-
-#~ msgid "Number of posts"
-#~ msgstr "Количество сообщений"
-
-#~ msgid "Number of topics"
-#~ msgstr "Количество тем"
-
-#~ msgid "Date of registration"
-#~ msgstr "Дата регистрации"
-
-#~ msgid "Contacts"
-#~ msgstr "Контакты"
-
-#~ msgid "Outbox"
-#~ msgstr "Исходящие сообщения"
-
-#~ msgid "from"
-#~ msgstr "от"
-
-#~ msgid "Message from"
-#~ msgstr "Сообщение от"
-
-#~ msgid "Message for"
-#~ msgstr "Сообщение для"
-
-#~ msgid "Reply"
-#~ msgstr "Ответ"
-
-#~ msgid "to"
-#~ msgstr "для"
-
-#~ msgid ""
-#~ "New reply from %(username)s to topic that you have subscribed on.\n"
-#~ "---\n"
-#~ "%(message)s\n"
-#~ "---\n"
-#~ "See topic: %(post_url)s\n"
-#~ "Unsubscribe %(unsubscribe_url)s"
-#~ msgstr ""
-#~ "Новый ответ от %(username)s в тему, на которую вы подписаны.\n"
-#~ "---\n"
-#~ "%(message)s\n"
-#~ "---\n"
-#~ "Посмотреть тему: %(post_url)s\n"
-#~ "Отписаться %(unsubscribe_url)s"
-
-#~ msgid ""
-#~ "User %(username)s have sent your the new private message.\n"
-#~ "---\n"
-#~ "%(message)s\n"
-#~ "---\n"
-#~ "See message online: %(pm_url)s"
-#~ msgstr ""
-#~ "Пользователь %(username)s послал вам новое личное сообщение.\n"
-#~ "---\n"
-#~ "%(message)s\n"
-#~ "---\n"
-#~ "Посмотреть сообщение online: %(pm_url)s"
-
-#~ msgid "New private message for you"
-#~ msgstr "Новое личное сообщение для вас"
-
-#~ msgid "Change the email"
-#~ msgstr "Изменить email"
