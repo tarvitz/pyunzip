@@ -152,8 +152,8 @@ class PasswordRestoreInitiateView(generic.FormView):
     def form_valid(self, form):
         users = form.cleaned_data['users']
         sids = UserSID.objects.filter(user__in=users, expired=True)
-        sids = list(sids)
         if not sids:
+            sids = list(sids)
             for user in users:
                 sid = UserSID.objects.create(user)
                 sids.append(sid)
