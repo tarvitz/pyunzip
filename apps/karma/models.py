@@ -33,3 +33,5 @@ class Karma(models.Model):
 
     class Meta:
         ordering = ['-date']
+        verbose_name = _("Karma")
+        verbose_name_plural = _("Karma")

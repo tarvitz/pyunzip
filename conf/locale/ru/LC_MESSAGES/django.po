@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 22:18+0300\n"
+"POT-Creation-Date: 2015-12-19 22:20+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -786,6 +786,11 @@ msgstr "от кого"
 #: apps/karma/models.py:23 apps/menu/models.py:19 apps/menu/models.py:58
 msgid "URL"
 msgstr "УРЛ"
+
+#: apps/karma/models.py:36 apps/karma/models.py:37
+#: templates/karma/karma_list.html:10
+msgid "Karma"
+msgstr "Карма"
 
 #: apps/karma/serializers.py:11
 msgid "You can not set custom karma amount, use `-1` and `1` values only."
@@ -1586,12 +1591,10 @@ msgid "fraction"
 msgstr "фракция"
 
 #: apps/wh/models.py:40
-#| msgid "fraction"
 msgid "Fraction"
 msgstr "Фракция"
 
 #: apps/wh/models.py:41
-#| msgid "fraction"
 msgid "Fractions"
 msgstr "Фракции"
 
@@ -1600,7 +1603,6 @@ msgid "side"
 msgstr "сторона"
 
 #: apps/wh/models.py:56
-#| msgid "Side"
 msgid "Sides"
 msgstr "Сторона"
 
@@ -1633,12 +1635,10 @@ msgid "original content"
 msgstr "оригинальный контент"
 
 #: apps/wh/models.py:150
-#| msgid "expression"
 msgid "Expression"
 msgstr "Цитата"
 
 #: apps/wh/models.py:151
-#| msgid "expressions"
 msgid "Expressions"
 msgstr "Цитаты"
 
@@ -1663,12 +1663,10 @@ msgid "CSS id"
 msgstr "CSS id"
 
 #: apps/wh/models.py:173
-#| msgid "plain type"
 msgid "Rank type"
 msgstr "Тип ранга"
 
 #: apps/wh/models.py:174
-#| msgid "plain type"
 msgid "Rank types"
 msgstr "Типы рангов"
 
@@ -2414,10 +2412,6 @@ msgstr "Поднять карму пользователя"
 #: templates/karma/karma_change.html:16
 msgid "Down user's karma"
 msgstr "Понизить карму пользователя"
-
-#: templates/karma/karma_list.html:10
-msgid "Karma"
-msgstr "Карма"
 
 #: templates/karma/karma_list.html:28
 msgid "anonymous"
