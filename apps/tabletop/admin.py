@@ -1,9 +1,6 @@
 # coding: utf-8
 from django.contrib import admin
-from apps.tabletop.models import (
-    Roster, Game, Mission
-)
-
+from . import models
 
 class BattleReportAdmin(admin.ModelAdmin):
     list_display = ('title', 'layout', 'is_approved', 'ip_address')
@@ -20,6 +17,8 @@ class RosterAdmin(admin.ModelAdmin):
     list_display_links = ('show_player', 'codex', 'pts')
 
 
-admin.site.register(Game, GameAdmin)
-admin.site.register(Mission)
-admin.site.register(Roster, RosterAdmin)
+admin.site.register(models.Game, GameAdmin)
+admin.site.register(models.Mission)
+admin.site.register(models.Roster, RosterAdmin)
+admin.site.register(models.Codex)
+admin.site.register(models.Report)
