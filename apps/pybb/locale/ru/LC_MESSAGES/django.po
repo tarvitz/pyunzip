@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: pybb\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 21:46+0300\n"
+"POT-Creation-Date: 2015-12-19 22:07+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,12 +66,10 @@ msgstr ""
 "или вариантов уже созданных."
 
 #: apps/pybb/forms.py:168
-#| msgid "Delete"
 msgid "Delete?"
 msgstr "Удалить?"
 
 #: apps/pybb/forms.py:169
-#| msgid "Yes, I am sure."
 msgid "Yes, I agree"
 msgstr "Да, я хочу."
 
@@ -83,7 +81,7 @@ msgstr "Название предмета опроса"
 msgid "poll item title users would vote on"
 msgstr "название предмета опроса, за который пользователи будут голосовать"
 
-#: apps/pybb/forms.py:193 apps/pybb/tests/test_polls.py:192
+#: apps/pybb/forms.py:193
 msgid "Title should be set"
 msgstr "Заголовок должен быть установлен"
 
@@ -221,12 +219,10 @@ msgid "Time"
 msgstr "Время"
 
 #: apps/pybb/models.py:348
-#| msgid "Topic"
 msgid "Topic Read"
 msgstr "Прочтение топка"
 
 #: apps/pybb/models.py:349
-#| msgid "Topics"
 msgid "Topic Reads"
 msgstr "Прочтение топиков"
 
@@ -239,7 +235,6 @@ msgid "poll title"
 msgstr "заголовок опроса"
 
 #: apps/pybb/models.py:367 apps/pybb/models.py:452
-#| msgid "Post count"
 msgid "voted amount"
 msgstr "количество проголосовавших"
 
@@ -248,7 +243,6 @@ msgid "amount of voted user, cache field"
 msgstr "количество проголосовавших, кеш-значение"
 
 #: apps/pybb/models.py:371
-#| msgid "Views count"
 msgid "items amount"
 msgstr "количество"
 
@@ -326,15 +320,21 @@ msgstr "Вы не можете изменять собственную карм�
 
 #: apps/pybb/serializers.py:11
 msgid "You can not set custom karma amount, use `-1` and `1` values only."
-msgstr "Вы не можете устанавливать своё количество кармы, используйте `-1` и `1` значения."
+msgstr ""
+"Вы не можете устанавливать своё количество кармы, используйте `-1` и `1` "
+"значения."
 
 #: apps/pybb/serializers.py:14
 msgid "Timeout. You have exceeded amount of karma modification, please wait"
-msgstr "Ограничено. Вы исчерпали количество изменений кармы на сегодня, пожалуйста подождите."
+msgstr ""
+"Ограничено. Вы исчерпали количество изменений кармы на сегодня, пожалуйста "
+"подождите."
 
 #: apps/pybb/serializers.py:17
 msgid "You can not set another user for voting. Use your own id"
-msgstr "Вы не можете установить другого пользователя при голосовании. Используйте свой идентификатор"
+msgstr ""
+"Вы не можете установить другого пользователя при голосовании. Используйте "
+"свой идентификатор"
 
 #: apps/pybb/templatetags/pybb_extras.py:53
 msgid "seconds ago,seconds ago,seconds ago"

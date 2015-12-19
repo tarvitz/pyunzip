@@ -194,7 +194,8 @@ class Mission(models.Model):
             return self.title
 
     class Meta:
-        pass
+        verbose_name = _("Mission")
+        verbose_name_plural = _("Missions")
 
 
 @python_2_unicode_compatible
@@ -311,6 +312,5 @@ class Report(models.Model):
 
     class Meta:
         ordering = ['-id', ]
-
-from apps.tabletop.signals import setup_signals
-setup_signals()
+        verbose_name = _("Report")
+        verbose_name_plural = _("Reports")

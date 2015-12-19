@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 21:46+0300\n"
+"POT-Creation-Date: 2015-12-19 22:07+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -361,7 +361,7 @@ msgstr "адресат"
 #: apps/accounts/models.py:383 apps/files/models.py:122 apps/menu/models.py:10
 #: apps/news/models.py:56 apps/news/models.py:74 apps/news/models.py:274
 #: apps/news/models.py:295 apps/tabletop/models.py:52
-#: apps/tabletop/models.py:85 apps/tabletop/models.py:202 apps/wh/models.py:18
+#: apps/tabletop/models.py:85 apps/tabletop/models.py:203 apps/wh/models.py:18
 msgid "title"
 msgstr "заголовок"
 
@@ -390,7 +390,7 @@ msgid "deleted by addr"
 msgstr "удалено адресатом"
 
 #: apps/accounts/models.py:396 apps/news/models.py:61
-#: apps/tabletop/models.py:230 apps/wh/models.py:178
+#: apps/tabletop/models.py:231 apps/wh/models.py:178
 msgid "syntax"
 msgstr "синтаксис"
 
@@ -414,7 +414,7 @@ msgstr "пользователь"
 
 #: apps/accounts/models.py:448 apps/comments/models.py:73
 #: apps/comments/models.py:104 apps/comments/models.py:247
-#: apps/tabletop/models.py:221
+#: apps/tabletop/models.py:222
 msgid "comment"
 msgstr "комментарии"
 
@@ -424,7 +424,7 @@ msgstr "уровень"
 
 #: apps/accounts/models.py:452 apps/comments/models.py:252
 #: apps/core/models.py:26 apps/news/models.py:386 apps/news/models.py:412
-#: apps/tabletop/models.py:205
+#: apps/tabletop/models.py:206
 msgid "created on"
 msgstr "создано"
 
@@ -459,184 +459,8 @@ msgid "Policy warnings"
 msgstr "Предупреждение"
 
 #: apps/accounts/serializers.py:55
-#: apps/accounts/tests/api/test_private_messages.py:492
 msgid "You can not send pm for yourself"
 msgstr "Вам нельзя отсылать личные сообщения самим себе"
-
-#: apps/accounts/tests/api/test_policy_warnings.py:108
-#: apps/accounts/tests/api/test_policy_warnings.py:121
-#: apps/accounts/tests/api/test_policy_warnings.py:133
-#: apps/accounts/tests/api/test_policy_warnings.py:144
-#: apps/accounts/tests/api/test_policy_warnings.py:155
-#: apps/accounts/tests/api/test_policy_warnings.py:166
-#: apps/accounts/tests/api/test_private_messages.py:118
-#: apps/accounts/tests/api/test_private_messages.py:129
-#: apps/accounts/tests/api/test_private_messages.py:141
-#: apps/accounts/tests/api/test_private_messages.py:152
-#: apps/accounts/tests/api/test_private_messages.py:163
-#: apps/accounts/tests/api/test_private_messages.py:174
-#: apps/comments/tests/api/test_comment_watches.py:101
-#: apps/comments/tests/api/test_comment_watches.py:111
-#: apps/comments/tests/api/test_comment_watches.py:123
-#: apps/comments/tests/api/test_comment_watches.py:134
-#: apps/comments/tests/api/test_comment_watches.py:145
-#: apps/comments/tests/api/test_comment_watches.py:156
-#: apps/comments/tests/api/test_comments.py:157
-#: apps/comments/tests/api/test_comments.py:168
-#: apps/comments/tests/api/test_comments.py:179
-#: apps/comments/tests/api/test_comments.py:190
-#: apps/core/tests/__init__.py:390 apps/core/tests/__init__.py:400
-#: apps/core/tests/__init__.py:410 apps/core/tests/__init__.py:420
-#: apps/core/tests/__init__.py:691 apps/core/tests/__init__.py:702
-#: apps/core/tests/__init__.py:715 apps/core/tests/__init__.py:727
-#: apps/core/tests/__init__.py:739 apps/core/tests/__init__.py:751
-#: apps/karma/tests/api/test_karma.py:121
-#: apps/karma/tests/api/test_karma.py:132
-#: apps/karma/tests/api/test_karma.py:143
-#: apps/karma/tests/api/test_karma.py:154
-#: apps/news/tests/api/test_events.py:132
-#: apps/news/tests/api/test_events.py:143
-#: apps/news/tests/api/test_events.py:154
-#: apps/news/tests/api/test_events.py:165
-#: apps/tabletop/tests/api/test_codexes.py:113
-#: apps/tabletop/tests/api/test_codexes.py:124
-#: apps/tabletop/tests/api/test_codexes.py:135
-#: apps/tabletop/tests/api/test_codexes.py:146
-#: apps/tabletop/tests/api/test_games.py:99
-#: apps/tabletop/tests/api/test_games.py:110
-#: apps/tabletop/tests/api/test_games.py:121
-#: apps/tabletop/tests/api/test_games.py:132
-#: apps/tabletop/tests/api/test_missions.py:100
-#: apps/tabletop/tests/api/test_missions.py:111
-#: apps/tabletop/tests/api/test_missions.py:122
-#: apps/tabletop/tests/api/test_missions.py:133
-#: apps/tabletop/tests/api/test_reports.py:161
-#: apps/tabletop/tests/api/test_reports.py:172
-#: apps/tabletop/tests/api/test_reports.py:183
-#: apps/tabletop/tests/api/test_reports.py:194
-#: apps/tabletop/tests/api/test_rosters.py:116
-#: apps/tabletop/tests/api/test_rosters.py:127
-#: apps/tabletop/tests/api/test_rosters.py:140
-#: apps/tabletop/tests/api/test_rosters.py:152
-#: apps/tabletop/tests/api/test_rosters.py:163
-#: apps/tabletop/tests/api/test_rosters.py:174
-#: apps/wh/tests/api/test_armies.py:96 apps/wh/tests/api/test_armies.py:107
-#: apps/wh/tests/api/test_armies.py:118 apps/wh/tests/api/test_armies.py:129
-#: apps/wh/tests/api/test_expressions.py:106
-#: apps/wh/tests/api/test_expressions.py:117
-#: apps/wh/tests/api/test_expressions.py:128
-#: apps/wh/tests/api/test_expressions.py:139
-#: apps/wh/tests/api/test_fractions.py:97
-#: apps/wh/tests/api/test_fractions.py:108
-#: apps/wh/tests/api/test_fractions.py:119
-#: apps/wh/tests/api/test_fractions.py:130
-#: apps/wh/tests/api/test_miniquotes.py:97
-#: apps/wh/tests/api/test_miniquotes.py:108
-#: apps/wh/tests/api/test_miniquotes.py:117
-#: apps/wh/tests/api/test_miniquotes.py:128
-#: apps/wh/tests/api/test_rank_types.py:110
-#: apps/wh/tests/api/test_rank_types.py:121
-#: apps/wh/tests/api/test_rank_types.py:132
-#: apps/wh/tests/api/test_rank_types.py:143
-#: apps/wh/tests/api/test_ranks.py:123 apps/wh/tests/api/test_ranks.py:134
-#: apps/wh/tests/api/test_ranks.py:145 apps/wh/tests/api/test_ranks.py:156
-#: apps/wh/tests/api/test_sides.py:96 apps/wh/tests/api/test_sides.py:107
-#: apps/wh/tests/api/test_sides.py:118 apps/wh/tests/api/test_sides.py:129
-#: apps/wh/tests/api/test_universes.py:97
-#: apps/wh/tests/api/test_universes.py:108
-#: apps/wh/tests/api/test_universes.py:119
-#: apps/wh/tests/api/test_universes.py:130
-msgid "Authentication credentials were not provided."
-msgstr "Авторизационные данные не были предоставлены."
-
-#: apps/accounts/tests/api/test_policy_warnings.py:292
-#: apps/accounts/tests/api/test_private_messages.py:420
-#: apps/comments/tests/api/test_comment_watches.py:332
-msgid "Not found."
-msgstr "Не найден."
-
-#: apps/accounts/tests/api/test_policy_warnings.py:318
-#: apps/accounts/tests/api/test_policy_warnings.py:337
-#: apps/accounts/tests/api/test_policy_warnings.py:350
-#: apps/accounts/tests/api/test_policy_warnings.py:363
-#: apps/accounts/tests/api/test_private_messages.py:309
-#: apps/accounts/tests/api/test_private_messages.py:378
-#: apps/accounts/tests/api/test_private_messages.py:394
-#: apps/accounts/tests/api/test_private_messages.py:445
-#: apps/accounts/tests/api/test_private_messages.py:530
-#: apps/accounts/tests/api/test_private_messages.py:543
-#: apps/comments/tests/api/test_comments.py:326
-#: apps/comments/tests/api/test_comments.py:430
-#: apps/comments/tests/api/test_comments.py:512
-#: apps/comments/tests/api/test_comments.py:525
-#: apps/core/tests/__init__.py:619 apps/core/tests/__init__.py:655
-#: apps/core/tests/__init__.py:666 apps/karma/tests/api/test_karma.py:286
-#: apps/karma/tests/api/test_karma.py:392
-#: apps/news/tests/api/test_events.py:289
-#: apps/news/tests/api/test_events.py:302
-#: apps/news/tests/api/test_events.py:315
-#: apps/news/tests/api/test_events.py:328
-#: apps/tabletop/tests/api/test_codexes.py:278
-#: apps/tabletop/tests/api/test_codexes.py:293
-#: apps/tabletop/tests/api/test_codexes.py:308
-#: apps/tabletop/tests/api/test_codexes.py:322
-#: apps/tabletop/tests/api/test_codexes.py:337
-#: apps/tabletop/tests/api/test_games.py:265
-#: apps/tabletop/tests/api/test_games.py:280
-#: apps/tabletop/tests/api/test_games.py:295
-#: apps/tabletop/tests/api/test_games.py:309
-#: apps/tabletop/tests/api/test_games.py:324
-#: apps/tabletop/tests/api/test_missions.py:265
-#: apps/tabletop/tests/api/test_missions.py:280
-#: apps/tabletop/tests/api/test_missions.py:295
-#: apps/tabletop/tests/api/test_missions.py:309
-#: apps/tabletop/tests/api/test_missions.py:324
-#: apps/tabletop/tests/api/test_reports.py:448
-#: apps/tabletop/tests/api/test_reports.py:529
-#: apps/tabletop/tests/api/test_reports.py:540
-#: apps/tabletop/tests/api/test_rosters.py:403
-#: apps/tabletop/tests/api/test_rosters.py:462
-#: apps/tabletop/tests/api/test_rosters.py:475
-#: apps/wh/tests/api/test_armies.py:255 apps/wh/tests/api/test_armies.py:269
-#: apps/wh/tests/api/test_armies.py:283 apps/wh/tests/api/test_armies.py:297
-#: apps/wh/tests/api/test_armies.py:311
-#: apps/wh/tests/api/test_expressions.py:272
-#: apps/wh/tests/api/test_expressions.py:286
-#: apps/wh/tests/api/test_expressions.py:300
-#: apps/wh/tests/api/test_expressions.py:314
-#: apps/wh/tests/api/test_expressions.py:328
-#: apps/wh/tests/api/test_fractions.py:262
-#: apps/wh/tests/api/test_fractions.py:276
-#: apps/wh/tests/api/test_fractions.py:290
-#: apps/wh/tests/api/test_fractions.py:304
-#: apps/wh/tests/api/test_fractions.py:319
-#: apps/wh/tests/api/test_miniquotes.py:260
-#: apps/wh/tests/api/test_miniquotes.py:274
-#: apps/wh/tests/api/test_miniquotes.py:288
-#: apps/wh/tests/api/test_miniquotes.py:302
-#: apps/wh/tests/api/test_miniquotes.py:316
-#: apps/wh/tests/api/test_rank_types.py:269
-#: apps/wh/tests/api/test_rank_types.py:283
-#: apps/wh/tests/api/test_rank_types.py:297
-#: apps/wh/tests/api/test_rank_types.py:311
-#: apps/wh/tests/api/test_rank_types.py:325
-#: apps/wh/tests/api/test_ranks.py:282 apps/wh/tests/api/test_ranks.py:296
-#: apps/wh/tests/api/test_ranks.py:310 apps/wh/tests/api/test_ranks.py:324
-#: apps/wh/tests/api/test_ranks.py:338 apps/wh/tests/api/test_sides.py:261
-#: apps/wh/tests/api/test_sides.py:275 apps/wh/tests/api/test_sides.py:289
-#: apps/wh/tests/api/test_sides.py:303 apps/wh/tests/api/test_sides.py:317
-#: apps/wh/tests/api/test_universes.py:262
-#: apps/wh/tests/api/test_universes.py:276
-#: apps/wh/tests/api/test_universes.py:290
-#: apps/wh/tests/api/test_universes.py:304
-#: apps/wh/tests/api/test_universes.py:318
-msgid "You do not have permission to perform this action."
-msgstr "У вас нет прав для того, чтобы выполнить данное действие."
-
-#: apps/accounts/tests/tests.py:250
-#, python-format
-msgid "Another user with %s nickname exists."
-msgstr "Другой пользователь с ником %s уже существует."
 
 #: apps/accounts/views/views.py:168
 msgid "Your password requested to change"
@@ -771,7 +595,6 @@ msgid "Comment watches"
 msgstr "Слежение за комментариями"
 
 #: apps/comments/serializers.py:57
-#: apps/comments/tests/api/test_comments.py:451
 msgid "You can only post comment using your user id"
 msgstr ""
 "Вы можете отсылать комментарий, используя только свой идентификатор "
@@ -810,11 +633,6 @@ msgstr "UserSID'ы"
 msgid "You should use your own user id for owner field set"
 msgstr ""
 "Вы должны использовать собственный пользовательский id для поля владельца"
-
-#: apps/core/tests/__init__.py:809 apps/core/tests/__init__.py:820
-#: apps/core/tests/__init__.py:831
-msgid "Not found"
-msgstr "Не найден"
 
 #: apps/files/__init__.py:3
 msgid "files"
@@ -1389,7 +1207,6 @@ msgid "Note"
 msgstr "Заметка"
 
 #: apps/news/models.py:441
-#| msgid "Votes"
 msgid "Notes"
 msgstr "Заметки"
 
@@ -1428,7 +1245,7 @@ msgstr "Победители"
 msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
-#: apps/tabletop/forms.py:77
+#: apps/tabletop/forms.py:77 apps/tabletop/models.py:197
 msgid "Mission"
 msgstr "Миссия"
 
@@ -1484,7 +1301,7 @@ msgid "Free for all"
 msgstr "Свободный режим"
 
 #: apps/tabletop/forms.py:208 apps/tabletop/serializers.py:18
-#: apps/tabletop/tests/test_reports.py:236 apps/wh/serializers.py:17
+#: apps/wh/serializers.py:17
 #, python-format
 msgid "There's no such winner `%s` in rosters"
 msgstr "Такого победителя как `%s` в ростерах не обнаружено"
@@ -1670,51 +1487,66 @@ msgstr "Кодовое имя"
 msgid "Games"
 msgstr "Игры"
 
-#: apps/tabletop/models.py:207 templates/tabletop/report_list.html.py:6
+#: apps/tabletop/models.py:198
+#, fuzzy
+#| msgid "Mission"
+msgid "Missions"
+msgstr "Миссия"
+
+#: apps/tabletop/models.py:208 templates/tabletop/report_list.html.py:6
 #: templates/tabletop/roster.html:8 templates/tabletop/roster_form.html:8
 #: templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:210
+#: apps/tabletop/models.py:211
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:214
+#: apps/tabletop/models.py:215
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:216
+#: apps/tabletop/models.py:217
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:218
+#: apps/tabletop/models.py:219
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:223
+#: apps/tabletop/models.py:224
 msgid "comment cache"
 msgstr "кеш комментария"
 
-#: apps/tabletop/models.py:224
+#: apps/tabletop/models.py:225
 msgid "comment rendered cache"
 msgstr "кеш рендера комментария"
 
-#: apps/tabletop/models.py:225
+#: apps/tabletop/models.py:226
 msgid "is approved"
 msgstr "утвержден"
 
-#: apps/tabletop/models.py:228
+#: apps/tabletop/models.py:229
 msgid "is draw"
 msgstr "ничья"
 
-#: apps/tabletop/models.py:229
+#: apps/tabletop/models.py:230
 msgid "marks if match was finished with draw result"
 msgstr "отмечает, если матч прошел в ничью"
 
-#: apps/tabletop/models.py:269
+#: apps/tabletop/models.py:270
 msgid "[fuzzy] "
 msgstr "[плавающий]"
+
+#: apps/tabletop/models.py:315
+#| msgid "Reports"
+msgid "Report"
+msgstr "Репорт"
+
+#: apps/tabletop/models.py:316 templates/tabletop/report_list.html.py:13
+msgid "Reports"
+msgstr "Репорты"
 
 #: apps/wh/__init__.py:3
 msgid "w40k"
@@ -3258,10 +3090,6 @@ msgstr "Подтвердить удаление ростера"
 msgid "Add report"
 msgstr "Добавить репорт"
 
-#: templates/tabletop/report_list.html:13
-msgid "Reports"
-msgstr "Репорты"
-
 #: templates/tabletop/report_list.html:23
 #: templates/tabletop/roster_list.html:23
 msgid "No rosters found"
@@ -3377,6 +3205,21 @@ msgstr "создать ростер"
 #: templates/tabletop/roster_list.html:11
 msgid "Add roster"
 msgstr "Добавить ростер"
+
+#~ msgid "Authentication credentials were not provided."
+#~ msgstr "Авторизационные данные не были предоставлены."
+
+#~ msgid "Not found."
+#~ msgstr "Не найден."
+
+#~ msgid "You do not have permission to perform this action."
+#~ msgstr "У вас нет прав для того, чтобы выполнить данное действие."
+
+#~ msgid "Another user with %s nickname exists."
+#~ msgstr "Другой пользователь с ником %s уже существует."
+
+#~ msgid "Not found"
+#~ msgstr "Не найден"
 
 #~ msgid "A user with that username already exists."
 #~ msgstr "Пользователь с таким именем пользователя уже существуетev"
