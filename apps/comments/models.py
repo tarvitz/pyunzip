@@ -110,7 +110,7 @@ class Comment(BaseCommentAbstractModel):
     def save(self, *args, **kwargs):
         if self.submit_date is None:
             self.submit_date = timezone.now()
-        super(Comment, self).save(*args, **kwargs)
+        return super(Comment, self).save(*args, **kwargs)
 
     def _get_userinfo(self):
         """
@@ -299,7 +299,3 @@ class CommentWatch(models.Model):
         verbose_name = _("Comment watch")
         verbose_name_plural = _("Comment watches")
         unique_together = (('content_type', 'object_pk', 'user'), )
-
-
-from .signals import setup_signals
-setup_signals()

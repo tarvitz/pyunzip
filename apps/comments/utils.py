@@ -6,10 +6,10 @@
 .. moduleauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 .. sectionauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 """
-from django.apps import apps
 from django.conf import settings
 from django.apps import apps
 from django.contrib.contenttypes.models import ContentType
+
 
 def get_redis_client():
     """
@@ -49,7 +49,7 @@ def get_comment_position(content_object, comment_pk):
     """
     client = get_redis_client()
     set_name = get_redis_set_name(content_object)
-    return client.zrevrank(set_name, comment_pk)
+    return client.zrank(set_name, comment_pk)
 
 
 def get_count(content_object):
@@ -94,10 +94,35 @@ def store_comment_positions(content_object):
     app_content_type = ContentType.objects.get_for_model(content_object)
     comments = comment_model.objects.filter(
             content_type=app_content_type, object_pk=content_object.pk
-    ).order_by('-pk')
+    ).order_by('pk')
     redis_client = get_redis_client()
     set_name = get_redis_set_name(content_object)
     zadd = redis_client.zadd
 
     for rank, comment_pk in enumerate(comments.values_list('pk', flat=True)):
         zadd(set_name, *(rank, str(comment_pk)))
+
+
+def zadd(comment, rank=None):
+    """
+    add instance to rankings
+
+    :param apps.comments.models.Comment comment: comment instance
+    :param None | int rank: rank
+    :rtype: None
+    :return: None
+    """
+    comment_pk = str(comment.pk)
+    set_name = get_redis_set_name(comment.content_object)
+    comment_model = apps.get_model(app_label='comments', model_name='comment')
+
+    redis_client = get_redis_client()
+    has_rank = redis_client.zrank(set_name, comment_pk)
+    if has_rank is None:
+        rank = (
+            rank or comment_model.objects.filter(
+                    content_type=comment.content_type,
+                    object_pk=comment.content_object.pk
+            ).count()
+        )
+        redis_client.zadd(set_name, *(rank, comment_pk))
