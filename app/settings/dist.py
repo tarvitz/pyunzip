@@ -167,6 +167,7 @@ CRON_CLASSES = (
     'apps.pybb.cron.UpdatePollJob',
     'apps.news.cron.EventsMarkFinishedCronJob',
     'apps.accounts.cron.PolicyWarningsMarkExpireCronJob',
+    'apps.accounts.cron.UserSIDMarkExpireCronJob',
 )
 
 API_OBJECTS_ON_PAGE = 50
