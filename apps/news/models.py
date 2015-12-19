@@ -435,3 +435,7 @@ class Note(models.Model):
     def __str__(self):
         return "[%s] %s" % (self.created_on.date().isoformat(),
                             self.content[:100])
+
+    class Meta:
+        verbose_name = _("Note")
+        verbose_name_plural = _("Notes")
