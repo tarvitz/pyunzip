@@ -149,6 +149,23 @@ class Topic(models.Model):
             return self.poll_set
         return None
 
+    def _get_redis_db_rank_set_name(self):
+        """
+        get redis db rank set name for current post inside topic
+
+        :rtype: str
+        :return: set name
+        """
+        if not hasattr(self, '_redis_db_set_name'):
+            self._redis_db_set_name = (
+                '%(app_label)s.%(model_name)s.post.%(pk)i' % {
+                    'app_label': self._meta.app_label,
+                    'model_name': self._meta.model_name,
+                    'pk': self.pk
+                }
+            )
+        return self._redis_db_set_name
+
     def build_post_index(self):
         """
         build redis ranking index for post belongs to topic
@@ -243,6 +260,18 @@ class Post(models.Model):
 
         super(Post, self).save(*args, **kwargs)
 
+    def update_rank(self):
+        """
+        update redis post rank
+
+        :rtype: None
+        :return: None
+        """
+        set_name = self._get_redis_db_rank_set_name()
+        client = apps.get_app_config('comments').redis_db
+        rank = self.topic.post_count - 1
+        client.zadd(set_name, *(rank, str(self.pk)))
+
     def _get_redis_db_rank_set_name(self):
         """
         get redis db rank set name for current post inside topic
@@ -251,13 +280,7 @@ class Post(models.Model):
         :return: set name
         """
         if not hasattr(self, '_redis_db_set_name'):
-            self._redis_db_set_name = (
-                '%(app_label)s.%(model_name)s.post.%(pk)i' % {
-                    'app_label': self._meta.app_label,
-                    'model_name': Topic._meta.model_name,
-                    'pk': self.pk
-                }
-            )
+            self._redis_db_set_name = self.topic._get_redis_db_rank_set_name()
         return self._redis_db_set_name
 
     def get_absolute_url(self):
@@ -271,7 +294,6 @@ class Post(models.Model):
             'page': page,
             'pk': self.pk
         }
-
 
     def get_edit_url(self):
         return reverse('pybb:post-edit', args=(self.pk, ))
@@ -474,7 +496,3 @@ class PollAnswer(models.Model):
     class Meta:
         verbose_name = _("Poll answer")
         verbose_name_plural = _("Poll answers")
-
-
-from apps.pybb import signals
-signals.setup_signals()

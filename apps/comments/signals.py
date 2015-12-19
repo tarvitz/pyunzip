@@ -14,7 +14,7 @@ def on_comment_pre_save(instance, **kwargs):
 
 
 @receiver(post_save, sender=models.Comment)
-def on_comment_post_sve(instance, **kwargs):
+def on_comment_post_save(instance, **kwargs):
     utils.zadd(instance)
 
 
