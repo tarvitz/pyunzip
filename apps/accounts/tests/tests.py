@@ -46,6 +46,7 @@ class AccountTest(TestHelperMixin, TestCase):
             reverse_lazy('accounts:users'),
         ]
         self.get_object = get_object_or_None
+        self.user = User.objects.get(email='user@blacklibrary.ru')
 
     @allure.story('urls')
     @allure.severity(Severity.NORMAL)
@@ -179,31 +180,39 @@ class AccountTest(TestHelperMixin, TestCase):
         password recover
         """
         # user@blacklibrary.ru == user
-        init_url = reverse('accounts:password-restore-initiate')
+        with allure.step('setup environment'):
+            init_url = reverse('accounts:password-restore-initiate')
 
-        count = UserSID.objects.count()
-        post = {
-            'email': 'user@blacklibrary.ru'
-        }
+            count = UserSID.objects.count()
+            post = {
+                'email': 'user@blacklibrary.ru'
+            }
 
-        response = self.client.post(init_url, post, follow=True)
-        self.assertEqual(response.status_code, 200)
-        new_count = UserSID.objects.count()
-        users_amount = UserSID.objects.filter(
-            user__email='user@blacklibrary.ru').count()
-        self.assertEqual(count + users_amount, new_count)
-        sid = UserSID.objects.filter(user__email='user@blacklibrary.ru')[0]
-        post_url = reverse('accounts:password-restore', args=(sid.sid, ))
-        update = {
-            'password': 'new_pass',
-            'password2': 'new_pass'
-        }
+        with allure.step('initiate process'):
+            response = self.client.post(init_url, post, follow=True)
+            self.assertEqual(response.status_code, 200)
+            new_count = UserSID.objects.count()
+            users_amount = UserSID.objects.filter(
+                user__email='user@blacklibrary.ru').count()
 
-        response = self.client.post(post_url, update, follow=True)
-        self.assertEqual(response.status_code, 200)
-        logged = self.client.login(username=sid.user.username,
-                                   password='new_pass')
-        self.assertEqual(logged, True)
+        with allure.step('check sid'):
+            self.assertEqual(count + users_amount, new_count)
+            sid = UserSID.objects.filter(user__email='user@blacklibrary.ru')[0]
+            self.assertEqual(sid.expired, False)
+            self.assertEqual(sid.user, self.user)
+
+        with allure.step('restore process'):
+            post_url = reverse('accounts:password-restore', args=(sid.sid, ))
+            update = {
+                'password': 'new_pass',
+                'password2': 'new_pass'
+            }
+
+            response = self.client.post(post_url, update, follow=True)
+            self.assertEqual(response.status_code, 200)
+            logged = self.client.login(username=sid.user.username,
+                                       password='new_pass')
+            self.assertEqual(logged, True)
 
     @allure.story('register')
     @allure.severity(Severity.BLOCKER)
