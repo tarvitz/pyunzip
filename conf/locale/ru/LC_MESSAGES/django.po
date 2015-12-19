@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 22:14+0300\n"
+"POT-Creation-Date: 2015-12-19 22:18+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -301,7 +301,7 @@ msgstr "обычный аватар"
 msgid "photo"
 msgstr "фото"
 
-#: apps/accounts/models.py:126 apps/wh/models.py:50
+#: apps/accounts/models.py:126 apps/wh/models.py:62
 msgid "army"
 msgstr "армия"
 
@@ -390,7 +390,7 @@ msgid "deleted by addr"
 msgstr "удалено адресатом"
 
 #: apps/accounts/models.py:396 apps/news/models.py:61
-#: apps/tabletop/models.py:237 apps/wh/models.py:178
+#: apps/tabletop/models.py:237 apps/wh/models.py:194
 msgid "syntax"
 msgstr "синтаксис"
 
@@ -499,7 +499,7 @@ msgstr "URL пользователя"
 msgid "date/time submitted"
 msgstr "дата/время публикации"
 
-#: apps/comments/models.py:78 apps/wh/models.py:209
+#: apps/comments/models.py:78 apps/wh/models.py:225
 msgid "IP address"
 msgstr "IP адрес"
 
@@ -910,13 +910,13 @@ msgstr "Категория"
 msgid "Categories"
 msgstr "Категории"
 
-#: apps/news/models.py:57 apps/news/models.py:78 apps/wh/models.py:85
-#: apps/wh/models.py:127
+#: apps/news/models.py:57 apps/news/models.py:78 apps/wh/models.py:97
+#: apps/wh/models.py:139
 msgid "author"
 msgstr "автор"
 
 #: apps/news/models.py:58 apps/news/models.py:88 apps/news/models.py:298
-#: apps/news/models.py:421 apps/wh/models.py:71 apps/wh/models.py:117
+#: apps/news/models.py:421 apps/wh/models.py:83 apps/wh/models.py:129
 msgid "content"
 msgstr "контент"
 
@@ -1100,7 +1100,7 @@ msgstr "дата окончания"
 msgid "when event date ends"
 msgstr "когда событие оканчивается"
 
-#: apps/news/models.py:314 apps/wh/models.py:145
+#: apps/news/models.py:314 apps/wh/models.py:157
 msgid "type"
 msgstr "тип"
 
@@ -1360,11 +1360,11 @@ msgstr ""
 "Вы не можете ввести имя пользователя, количество символов которого превышает "
 "64"
 
-#: apps/tabletop/forms.py:433
+#: apps/tabletop/forms.py:433 apps/wh/models.py:55
 msgid "Side"
 msgstr "Сторона"
 
-#: apps/tabletop/forms.py:439 apps/wh/models.py:63
+#: apps/tabletop/forms.py:439 apps/wh/models.py:75
 msgid "Army"
 msgstr "Армия"
 
@@ -1561,7 +1561,7 @@ msgstr "Репорты"
 msgid "w40k"
 msgstr "w40k"
 
-#: apps/wh/admin.py:46 apps/wh/models.py:64
+#: apps/wh/admin.py:46 apps/wh/models.py:76
 msgid "Armies"
 msgstr "Армии"
 
@@ -1573,99 +1573,134 @@ msgstr "Модуль wh"
 msgid "сodename"
 msgstr "кодовое имя"
 
-#: apps/wh/models.py:27
+#: apps/wh/models.py:24
+msgid "Universe"
+msgstr ""
+
+#: apps/wh/models.py:25
+msgid "Universes"
+msgstr ""
+
+#: apps/wh/models.py:31
 msgid "fraction"
 msgstr "фракция"
 
-#: apps/wh/models.py:39
+#: apps/wh/models.py:40
+#| msgid "fraction"
+msgid "Fraction"
+msgstr "Фракция"
+
+#: apps/wh/models.py:41
+#| msgid "fraction"
+msgid "Fractions"
+msgstr "Фракции"
+
+#: apps/wh/models.py:47
 msgid "side"
 msgstr "сторона"
 
-#: apps/wh/models.py:78
+#: apps/wh/models.py:56
+#| msgid "Side"
+msgid "Sides"
+msgstr "Сторона"
+
+#: apps/wh/models.py:90
 msgid "Mini Quote"
 msgstr "Мини цитата"
 
-#: apps/wh/models.py:79
+#: apps/wh/models.py:91
 msgid "Mini Quotes"
 msgstr "Мини цитаты"
 
-#: apps/wh/models.py:88
+#: apps/wh/models.py:100
 msgid "original"
 msgstr "оригинал"
 
-#: apps/wh/models.py:89
+#: apps/wh/models.py:101
 msgid "Original text of expression"
 msgstr "Оригинал текста цитаты"
 
-#: apps/wh/models.py:93
+#: apps/wh/models.py:105
 msgid "translation"
 msgstr "перевод"
 
-#: apps/wh/models.py:94
+#: apps/wh/models.py:106
 msgid "translation of original sentence"
 msgstr "перевод оригинального предложения"
 
-#: apps/wh/models.py:107
+#: apps/wh/models.py:119
 msgid "original content"
 msgstr "оригинальный контент"
 
-#: apps/wh/models.py:138
-msgid "expression"
-msgstr "цитата"
+#: apps/wh/models.py:150
+#| msgid "expression"
+msgid "Expression"
+msgstr "Цитата"
 
-#: apps/wh/models.py:139
-msgid "expressions"
-msgstr "цитаты"
+#: apps/wh/models.py:151
+#| msgid "expressions"
+msgid "Expressions"
+msgstr "Цитаты"
 
-#: apps/wh/models.py:147 apps/wh/models.py:171
+#: apps/wh/models.py:159 apps/wh/models.py:187
 msgid "magnitude"
 msgstr "величина"
 
-#: apps/wh/models.py:147
+#: apps/wh/models.py:159
 msgid "lower magnitude id more powerfull"
 msgstr "чем величина меньше тем более мощная"
 
-#: apps/wh/models.py:150
+#: apps/wh/models.py:162
 msgid "CSS Style"
 msgstr "CSS стиль"
 
-#: apps/wh/models.py:152
+#: apps/wh/models.py:164
 msgid "CSS class"
 msgstr "CSS класс"
 
-#: apps/wh/models.py:153
+#: apps/wh/models.py:165
 msgid "CSS id"
 msgstr "CSS id"
 
-#: apps/wh/models.py:164
+#: apps/wh/models.py:173
+#| msgid "plain type"
+msgid "Rank type"
+msgstr "Тип ранга"
+
+#: apps/wh/models.py:174
+#| msgid "plain type"
+msgid "Rank types"
+msgstr "Типы рангов"
+
+#: apps/wh/models.py:180
 msgid "short name"
 msgstr "короткое имя"
 
-#: apps/wh/models.py:166
+#: apps/wh/models.py:182
 msgid "codename"
 msgstr "кодовое имя"
 
-#: apps/wh/models.py:169
+#: apps/wh/models.py:185
 msgid "description"
 msgstr "описание"
 
-#: apps/wh/models.py:171
+#: apps/wh/models.py:187
 msgid "Lower magnitude more powerfull"
 msgstr "Меньше величина более мощна"
 
-#: apps/wh/models.py:175
+#: apps/wh/models.py:191
 msgid "is General"
 msgstr "генеральный?"
 
-#: apps/wh/models.py:200
+#: apps/wh/models.py:216
 msgid "Rank"
 msgstr "Ранг"
 
-#: apps/wh/models.py:201
+#: apps/wh/models.py:217
 msgid "Ranks"
 msgstr "Ранги"
 
-#: apps/wh/models.py:207
+#: apps/wh/models.py:223
 msgid "dateTime activity"
 msgstr "дата-время активности"
 

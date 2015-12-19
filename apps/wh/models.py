@@ -20,6 +20,10 @@ class Universe(models.Model):
     def __str__(self):
         return self.codename
 
+    class Meta:
+        verbose_name = _("Universe")
+        verbose_name_plural = _("Universes")
+
 
 @python_2_unicode_compatible
 class Fraction(models.Model):
@@ -32,6 +36,10 @@ class Fraction(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta:
+        verbose_name = _("Fraction")
+        verbose_name_plural = _("Fractions")
+
 
 @python_2_unicode_compatible
 class Side(models.Model):
@@ -42,6 +50,10 @@ class Side(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name = _("Side")
+        verbose_name_plural = _("Sides")
 
 
 @python_2_unicode_compatible
@@ -135,8 +147,8 @@ class Expression(models.Model):
 
     class Meta:
         ordering = ['id']
-        verbose_name = _('expression')
-        verbose_name_plural = _('expressions')
+        verbose_name = _('Expression')
+        verbose_name_plural = _('Expressions')
 
 
 # noinspection PyShadowingBuiltins
@@ -156,6 +168,10 @@ class RankType(models.Model):
 
     def __str__(self):
         return self.type
+
+    class Meta:
+        verbose_name = _("Rank type")
+        verbose_name_plural = _("Rank types")
 
 
 # noinspection PyShadowingBuiltins
@@ -210,7 +226,3 @@ class AbstractActivity(models.Model):
 
     class Meta:
         abstract = True
-
-
-from apps.wh.signals import setup_signals
-setup_signals()
