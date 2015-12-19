@@ -6,7 +6,7 @@
     <div class="message-headline">
         <div class='transparency grey'></div>
         <span class='links'>
-          <a class="permalink" href="{{ comment.get_absolute_url }}">#</a>
+          <a class="permalink" href="#post-{{ comment.pk }}">#</a>
           {% include "karma/include/karma_power.html" with usr=comment.user %}
           {% if user.is_authenticated and comment_watch %}
             {% if comment_watch.comment.submit_date < comment.submit_date or not comment_watch.comment %}
