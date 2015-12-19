@@ -8,14 +8,14 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse_lazy
 from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
-from django.http import Http404
+from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.utils.text import force_text
 from django.conf import settings
 
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
 from apps.core.models import UserSID
-from apps.core.helpers import get_object_or_None, get_object_or_404
+
 from apps.core.views import (
     LoginRequiredMixin
 )
@@ -190,9 +190,7 @@ class PasswordRestoreView(generic.FormView):
     def get_form_kwargs(self):
         kwargs = super(PasswordRestoreView, self).get_form_kwargs()
         sid = self.kwargs.get('sid', 0)
-        instance = get_object_or_None(UserSID, sid=sid, expired=False)
-        if not instance:
-            raise Http404
+        instance = get_object_or_404(UserSID, sid=sid, expired=False)
         kwargs.update({
             'instance': instance,
             'request': self.request
