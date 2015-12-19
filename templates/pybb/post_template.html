@@ -10,7 +10,7 @@
 
 
         <span class='links'>
-            <a class="permalink" href="{{ post.get_absolute_url }}">#</a>
+            <a class="permalink" href="#post-{{ post.pk }}">#</a>
             {% include "karma/include/karma_power.html" with usr=post.user %}
             {% if perms.accounts.change_policywarning %}
               <a class="glyphicon glyphicon-warning-sign text-danger pull-right"
