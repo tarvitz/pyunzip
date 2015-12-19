@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.1 \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-19 22:07+0300\n"
+"POT-Creation-Date: 2015-12-19 22:10+0300\n"
 "PO-Revision-Date: 2015-12-19 21:43+0300\n"
 "Last-Translator: NickolasFox <lilfoxster@gmail.com>\n"
 "Language-Team: ru <ru>\n"
@@ -361,7 +361,7 @@ msgstr "адресат"
 #: apps/accounts/models.py:383 apps/files/models.py:122 apps/menu/models.py:10
 #: apps/news/models.py:56 apps/news/models.py:74 apps/news/models.py:274
 #: apps/news/models.py:295 apps/tabletop/models.py:52
-#: apps/tabletop/models.py:85 apps/tabletop/models.py:203 apps/wh/models.py:18
+#: apps/tabletop/models.py:89 apps/tabletop/models.py:209 apps/wh/models.py:18
 msgid "title"
 msgstr "заголовок"
 
@@ -390,7 +390,7 @@ msgid "deleted by addr"
 msgstr "удалено адресатом"
 
 #: apps/accounts/models.py:396 apps/news/models.py:61
-#: apps/tabletop/models.py:231 apps/wh/models.py:178
+#: apps/tabletop/models.py:237 apps/wh/models.py:178
 msgid "syntax"
 msgstr "синтаксис"
 
@@ -414,7 +414,7 @@ msgstr "пользователь"
 
 #: apps/accounts/models.py:448 apps/comments/models.py:73
 #: apps/comments/models.py:104 apps/comments/models.py:247
-#: apps/tabletop/models.py:222
+#: apps/tabletop/models.py:228
 msgid "comment"
 msgstr "комментарии"
 
@@ -424,7 +424,7 @@ msgstr "уровень"
 
 #: apps/accounts/models.py:452 apps/comments/models.py:252
 #: apps/core/models.py:26 apps/news/models.py:386 apps/news/models.py:412
-#: apps/tabletop/models.py:206
+#: apps/tabletop/models.py:212
 msgid "created on"
 msgstr "создано"
 
@@ -525,7 +525,7 @@ msgstr ""
 "содержимого сообщение \"Комментарий был удален\" будет отображено."
 
 #: apps/comments/models.py:90 apps/news/models.py:101
-#: apps/tabletop/models.py:110
+#: apps/tabletop/models.py:114
 msgid "Syntax"
 msgstr "Синтаксис"
 
@@ -533,7 +533,7 @@ msgstr "Синтаксис"
 msgid "cache comment"
 msgstr "кэш комментарий"
 
-#: apps/comments/models.py:105 apps/tabletop/models.py:93
+#: apps/comments/models.py:105 apps/tabletop/models.py:97
 msgid "comments"
 msgstr "комментарии"
 
@@ -676,7 +676,7 @@ msgid "Galleries"
 msgstr "Галереи"
 
 #: apps/files/models.py:67 apps/menu/models.py:44 apps/tabletop/forms.py:274
-#: apps/tabletop/models.py:177 apps/tabletop/models.py:190
+#: apps/tabletop/models.py:183 apps/tabletop/models.py:196
 #: templates/accounts/pm_list.html:35
 #: templates/comments/comment_watch_list.html:12
 #: templates/news/events/events.html:18 templates/tabletop/codex_list.html:19
@@ -992,7 +992,7 @@ msgstr "Может редактировать комментарии"
 msgid "Can purge comments"
 msgstr "Может удалять комментарии"
 
-#: apps/news/models.py:255 apps/tabletop/models.py:184
+#: apps/news/models.py:255 apps/tabletop/models.py:190
 msgid "Game"
 msgstr "Игра"
 
@@ -1227,7 +1227,8 @@ msgstr "Заголовок"
 msgid "battle report title, please be more creative"
 msgstr "заголовок для батлрепорта, будьте креативными ;)"
 
-#: apps/tabletop/forms.py:59 templates/tabletop/roster_list.html.py:13
+#: apps/tabletop/forms.py:59 apps/tabletop/models.py:178
+#: templates/tabletop/roster_list.html:13
 msgid "Rosters"
 msgstr "Ростеры"
 
@@ -1245,7 +1246,7 @@ msgstr "Победители"
 msgid "winner or winners, should be at least one"
 msgstr "победитель или победители, должен быть как минимум 1"
 
-#: apps/tabletop/forms.py:77 apps/tabletop/models.py:197
+#: apps/tabletop/forms.py:77 apps/tabletop/models.py:203
 msgid "Mission"
 msgstr "Миссия"
 
@@ -1338,7 +1339,8 @@ msgstr "Количество pts должно быть больше 500"
 msgid "Revision"
 msgstr "Ревизия"
 
-#: apps/tabletop/forms.py:353 templates/tabletop/include/report.html.py:27
+#: apps/tabletop/forms.py:353 apps/tabletop/models.py:77
+#: templates/tabletop/include/report.html:27
 #: templates/tabletop/include/roster.html:27
 msgid "Codex"
 msgstr "Кодекс"
@@ -1434,117 +1436,126 @@ msgstr "простая сторона"
 msgid "revisions"
 msgstr "издания"
 
-#: apps/tabletop/models.py:87
+#: apps/tabletop/models.py:78 templates/pybb/head.html.py:54
+#: templates/tabletop/codex_list.html:13
+msgid "Codexes"
+msgstr "Кодексы"
+
+#: apps/tabletop/models.py:91
 msgid "roster"
 msgstr "ростер"
 
-#: apps/tabletop/models.py:89
+#: apps/tabletop/models.py:93
 msgid "roster cache"
 msgstr "кеш ростера"
 
-#: apps/tabletop/models.py:90
+#: apps/tabletop/models.py:94
 msgid "rendered roster cache"
 msgstr "html рендер ростера"
 
-#: apps/tabletop/models.py:98
+#: apps/tabletop/models.py:102
 msgid "codex"
 msgstr "кодекс"
 
-#: apps/tabletop/models.py:103
+#: apps/tabletop/models.py:107
 msgctxt "revision"
 msgid "codex revision"
 msgstr "издание кодекса"
 
-#: apps/tabletop/models.py:105
+#: apps/tabletop/models.py:109
 msgid "revision means how new your codex is (bigger is newer)"
 msgstr "издание обозначает насколько нов ваш кодекс (чем больше тем новее)"
 
-#: apps/tabletop/models.py:108
+#: apps/tabletop/models.py:112
 msgid "pts"
 msgstr "очки"
 
-#: apps/tabletop/models.py:108
+#: apps/tabletop/models.py:112
 msgid "amount of codex points"
 msgstr "количество очков по кодексу"
 
-#: apps/tabletop/models.py:113
+#: apps/tabletop/models.py:117
 msgid "wins"
 msgstr "побед"
 
-#: apps/tabletop/models.py:114
+#: apps/tabletop/models.py:118
 msgid "defeats"
 msgstr "поражений"
 
-#: apps/tabletop/models.py:119
+#: apps/tabletop/models.py:123
 msgid "Player"
 msgstr "Игрок"
 
-#: apps/tabletop/models.py:178
+#: apps/tabletop/models.py:177 templates/tabletop/include/report.html.py:31
+#: templates/tabletop/include/roster.html:31
+msgid "Roster"
+msgstr "Ростер"
+
+#: apps/tabletop/models.py:184
 msgid "Codename"
 msgstr "Кодовое имя"
 
-#: apps/tabletop/models.py:185
+#: apps/tabletop/models.py:191
 msgid "Games"
 msgstr "Игры"
 
-#: apps/tabletop/models.py:198
+#: apps/tabletop/models.py:204
 #, fuzzy
 #| msgid "Mission"
 msgid "Missions"
 msgstr "Миссия"
 
-#: apps/tabletop/models.py:208 templates/tabletop/report_list.html.py:6
+#: apps/tabletop/models.py:214 templates/tabletop/report_list.html.py:6
 #: templates/tabletop/roster.html:8 templates/tabletop/roster_form.html:8
 #: templates/tabletop/roster_list.html:6
 msgid "rosters"
 msgstr "ростеры"
 
-#: apps/tabletop/models.py:211
+#: apps/tabletop/models.py:217
 msgid "winners"
 msgstr "Победители"
 
-#: apps/tabletop/models.py:215
+#: apps/tabletop/models.py:221
 msgid "mission"
 msgstr "миссия"
 
-#: apps/tabletop/models.py:217
+#: apps/tabletop/models.py:223
 msgid "layout"
 msgstr "формат"
 
-#: apps/tabletop/models.py:219
+#: apps/tabletop/models.py:225
 msgid "deployment"
 msgstr "расстановка"
 
-#: apps/tabletop/models.py:224
+#: apps/tabletop/models.py:230
 msgid "comment cache"
 msgstr "кеш комментария"
 
-#: apps/tabletop/models.py:225
+#: apps/tabletop/models.py:231
 msgid "comment rendered cache"
 msgstr "кеш рендера комментария"
 
-#: apps/tabletop/models.py:226
+#: apps/tabletop/models.py:232
 msgid "is approved"
 msgstr "утвержден"
 
-#: apps/tabletop/models.py:229
+#: apps/tabletop/models.py:235
 msgid "is draw"
 msgstr "ничья"
 
-#: apps/tabletop/models.py:230
+#: apps/tabletop/models.py:236
 msgid "marks if match was finished with draw result"
 msgstr "отмечает, если матч прошел в ничью"
 
-#: apps/tabletop/models.py:270
+#: apps/tabletop/models.py:276
 msgid "[fuzzy] "
 msgstr "[плавающий]"
 
-#: apps/tabletop/models.py:315
-#| msgid "Reports"
+#: apps/tabletop/models.py:321
 msgid "Report"
 msgstr "Репорт"
 
-#: apps/tabletop/models.py:316 templates/tabletop/report_list.html.py:13
+#: apps/tabletop/models.py:322 templates/tabletop/report_list.html.py:13
 msgid "Reports"
 msgstr "Репорты"
 
@@ -2736,10 +2747,6 @@ msgstr "Календарь"
 msgid "Subscriptions"
 msgstr "Подписки"
 
-#: templates/pybb/head.html:54 templates/tabletop/codex_list.html.py:13
-msgid "Codexes"
-msgstr "Кодексы"
-
 #: templates/pybb/head.html:60
 msgid "My profile"
 msgstr "Мой профиль"
@@ -3052,11 +3059,6 @@ msgstr "Количество очков"
 msgctxt "revision number"
 msgid "Revision"
 msgstr "Редакция"
-
-#: templates/tabletop/include/report.html:31
-#: templates/tabletop/include/roster.html:31
-msgid "Roster"
-msgstr "Ростер"
 
 #: templates/tabletop/report_detail.html:8
 #: templates/tabletop/report_form.html:8

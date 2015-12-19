@@ -73,6 +73,10 @@ class Codex(models.Model):
     def get_api_detail_url(self):
         return reverse('api:codex-detail', args=(self.pk, ))
 
+    class Meta:
+        verbose_name = _("Codex")
+        verbose_name_plural = _("Codexes")
+
 
 @python_2_unicode_compatible
 class Roster(models.Model):
@@ -170,6 +174,8 @@ class Roster(models.Model):
             ('edit_user_rosters', 'Can edit another user\'s rosters'),
         )
         ordering = ['-id']
+        verbose_name = _("Roster")
+        verbose_name = _("Rosters")
 
 
 @python_2_unicode_compatible
