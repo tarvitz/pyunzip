@@ -105,6 +105,9 @@ def zadd(comment, rank=None):
     :return: None
     """
     comment_pk = str(comment.pk)
+    if comment.content_object is None:
+        return
+
     set_name = get_redis_set_name(comment.content_object)
     comment_model = apps.get_model(app_label='comments', model_name='comment')
 
