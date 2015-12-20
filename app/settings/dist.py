@@ -286,3 +286,9 @@ REDIS = {
     'db': 1,
     'port': 6379
 }
+
+#: seconds
+MINUTE = 60
+HOUR = 60 * 60
+DAY = HOUR * 24
+WEEK = 7 * DAY

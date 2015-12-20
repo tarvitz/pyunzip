@@ -331,6 +331,8 @@ class User(AbstractBaseUser):
             else:
                 self._nickname = self.nickname or self.username
                 redis.hset(set_name, 'nickname', self._nickname)
+                #: setup two weeks expire
+                redis.expire(set_name, settings.WEEK * 2)
         return self._nickname
 
     def get_comments_count(self):
