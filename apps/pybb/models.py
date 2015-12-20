@@ -269,7 +269,7 @@ class Post(models.Model):
         :return: None
         """
         set_name = self._get_redis_db_rank_set_name()
-        client = apps.get_app_config('comments').redis_db
+        client = get_redis_client()
         rank = self.topic.post_count - 1
         client.zadd(set_name, *(rank, str(self.pk)))
 
