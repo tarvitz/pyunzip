@@ -9,6 +9,7 @@ from django.test import TestCase
 from apps.core.helpers import (
     post_markup_filter,
 )
+from apps.core.connections import get_redis_client
 from django.core.urlresolvers import reverse
 
 import allure
@@ -140,3 +141,15 @@ class CoreTest(TestCase):
             for msg in messages:
                 logging.warn(msg)
             raise AssertionError
+
+    @allure.story('redis')
+    @allure.severity(Severity.NORMAL)
+    def test_redis_client_single_instance(self):
+        """
+        redis client you can get in apps.core.connections is single instance
+        """
+        with allure.step('setup environment'):
+            connection_one = get_redis_client()
+            connection_two = get_redis_client()
+        with allure.step('check connections'):
+            self.assertEqual(id(connection_one), id(connection_two))
