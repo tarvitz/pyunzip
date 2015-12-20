@@ -325,12 +325,12 @@ class User(AbstractBaseUser):
                     '-magnitude').select_related().first()
                 span = render_to_string(
                     'accounts/include/nickname.html',
-                    {'object': rank, 'user': self}
+                    {'rank': rank, 'user': self}
                 )
                 redis.hset(set_name, 'nickname', span)
                 return span
-            return self.nickname or self.username
-        return nickname
+            self._nickname = self.nickname or self.username
+        return self._nickname
 
     def get_comments_count(self):
         from apps.comments.models import Comment
