@@ -90,7 +90,7 @@ class CommentWatchTest(TestHelperMixin, CommentWatchBase, TestCase):
         count = CommentWatch.objects.count()
         event_ct = get_content_type(self.event)
         url = reverse('comments:subscription-add',
-                      args=(event_ct.pk, self.event.pk))
+                      args=('news.event', self.event.pk))
 
         sign_up = dict(agree=True, content_type=event_ct.pk,
                        object_pk=self.event.pk)
