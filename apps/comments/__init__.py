@@ -6,6 +6,14 @@ from django.core import urlresolvers
 from django.core.exceptions import ImproperlyConfigured
 from importlib import import_module
 
+__title__ = 'Comments module'
+__version__ = '1.6.2'
+__author__ = 'Django foundation'
+__license__ = 'BSD'
+__copyright__ = 'Copyright 200x-2015 Django foundation'
+
+# Version synonym
+VERSION = __version__
 
 DEFAULT_COMMENTS_APP = 'apps.comments'
 
