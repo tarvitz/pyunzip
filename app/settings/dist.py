@@ -278,6 +278,8 @@ HAYSTACK_CONNECTIONS = {
     },
 }
 
+HAYSTACK_SEARCH_RESULTS_PER_PAGE = OBJECTS_ON_PAGE
+
 #: redis setup
 REDIS = {
     'host': 'localhost',
