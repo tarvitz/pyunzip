@@ -1,4 +1,5 @@
 # coding: utf-8
+from unittest import skipIf
 from django.test import TestCase
 from django.test.client import RequestFactory
 from django.conf import settings
@@ -8,6 +9,7 @@ import allure
 from allure.constants import Severity
 
 
+@skipIf('apps.menu' not in settings.INSTALLED_APPS, "Disabled")
 @allure.feature('General: Menus')
 class MenuTest(TestCase):
     fixtures = [
@@ -49,6 +51,7 @@ class MenuTest(TestCase):
             raise AssertionError
 
 
+@skipIf('apps.menu' not in settings.INSTALLED_APPS, "Disabled")
 @allure.feature('Cache: Menus')
 class CacheTest(TestCase):
     fixtures = [
