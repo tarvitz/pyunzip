@@ -1,44 +1,35 @@
 # coding: utf-8
 
-import six
-
-from functools import wraps, reduce
+import logging
 from datetime import datetime, date, time
-from functools import partial
 
-from apps.comments.models import Comment
-from apps.core import get_skin_template
-from apps.thirdpaty.textile import render_textile
-from apps.helpers.diggpaginator import DiggPaginator as Paginator
-
-from django.http import HttpResponse, Http404
+import re
+import simplejson as json
+import six
+from django.apps import apps
+from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ImproperlyConfigured
 from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
+from django.core.paginator import InvalidPage, EmptyPage
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404 as _get_object_or_404
 from django.shortcuts import (
     render_to_response, redirect
 )
-from django.template import RequestContext
-from django.template.loader import render_to_string
-
-from django.contrib.auth.models import AnonymousUser
-
-from django.conf import settings
-from django.contrib.contenttypes.models import ContentType
-from django.core.paginator import InvalidPage, EmptyPage
-from django.core.urlresolvers import reverse
-from django.template.loader import get_template
-try:
-    from django.db.models import get_model
-except ImportError:
-    from django.apps import apps
-    get_model = apps.get_model
-
-from django.core.exceptions import ImproperlyConfigured
 from django.template import Context
+from django.template import RequestContext
+from django.template.loader import get_template
+from django.template.loader import render_to_string
+from functools import partial
+from functools import wraps, reduce
 
-import simplejson as json
-import re
-import logging
+from apps.comments.models import Comment
+from apps.core import get_skin_template
+from apps.helpers.diggpaginator import DiggPaginator as Paginator
+from apps.thirdpaty.textile import render_textile
 logger = logging.getLogger(__name__)
 
 
@@ -72,7 +63,7 @@ get_int_or_zero = lambda x: int(x) if (
 # noinspection PyPep8Naming
 def get_object_or_None(object_source, *args, **kwargs):
     if isinstance(object_source, six.string_types):
-        object_source = get_model(*object_source.split('.'))
+        object_source = apps.get_model(*object_source.split('.'))
     try:
         return _get_object_or_404(object_source, *args, **kwargs)
     except (Http404, MultipleObjectsReturned):

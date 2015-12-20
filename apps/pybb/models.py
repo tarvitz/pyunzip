@@ -15,8 +15,9 @@ from django.apps import apps
 from apps.accounts.models import User
 from apps.pybb import settings as pybb_settings
 from apps.comments import utils
-from apps.core.helpers import post_markup_filter, render_filter
-
+from apps.core.helpers import (
+    post_markup_filter, render_filter)
+from apps.core.connections import get_redis_client
 
 MARKUP_CHOICES = (
     ('textile', 'textile'),
@@ -173,7 +174,7 @@ class Topic(models.Model):
         :rtype: None
         :return: None
         """
-        client = apps.get_app_config('comments').redis_db
+        client = get_redis_client()
         set_name = self._get_redis_db_rank_set_name()
         for rank, post_pk in enumerate(self.posts.order_by('pk').values_list(
                 'pk', flat=True)):
@@ -285,7 +286,7 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         if not hasattr(self, '_rank'):
-            client = apps.get_app_config('comments').redis_db
+            client = get_redis_client()
             set_name = self._get_redis_db_rank_set_name()
             self._rank = client.zrank(set_name, str(self.pk))
         page = utils.get_page(self._rank + 1)

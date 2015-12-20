@@ -6,19 +6,11 @@
 .. moduleauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 .. sectionauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 """
-from django.conf import settings
+from apps.core.connections import get_redis_client
+
 from django.apps import apps
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-
-
-def get_redis_client():
-    """
-    get redis client
-
-    :rtype: redis.client.StrictRedis
-    :return: client
-    """
-    return apps.get_app_config('comments').redis_db
 
 
 def get_redis_set_name(content_object):

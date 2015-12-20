@@ -1,4 +1,5 @@
 # coding: utf-8
+from apps.core.connections import get_redis_client
 from apps.news.models import Event
 from apps.accounts.models import User
 from apps.comments.models import CommentWatch, Comment
@@ -228,7 +229,7 @@ class CommentRanksTest(TestHelperMixin, TestCase):
     def setUp(self):
         self.event_ct = ContentType.objects.get_for_model(Event)
         self.event = Event.objects.get(pk=1)
-        self.redis_client = utils.get_redis_client()
+        self.redis_client = get_redis_client()
 
     def tearDown(self):
         self.redis_client.flushdb()

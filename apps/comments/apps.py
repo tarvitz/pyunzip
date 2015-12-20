@@ -21,5 +21,3 @@ class CommentConfig(AppConfig):
     def ready(self):
         from .signals import setup_signals
         setup_signals()
-        #: redis client
-        self.redis_db = redis.StrictRedis(**settings.REDIS)
