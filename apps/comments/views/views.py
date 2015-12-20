@@ -4,6 +4,7 @@ from ..forms import (CommentForm, SubscriptionRemoveForm,
 
 from django.shortcuts import redirect
 from django.views import generic
+from django.http import Http404
 
 from apps.core.helpers import get_object_or_404, get_object_or_None
 from apps.helpers.diggpaginator import DiggPaginator as Paginator
@@ -96,11 +97,22 @@ class SubscribeCommentWatchView(generic.FormView):
     form_class = CommentWatchSubscribeForm
     template_name = 'comments/subscribe_form.html'
 
+    def get_content_type(self):
+        app_label, model_name = self.kwargs.get('app_model').split('.')
+        try:
+            content_type = ContentType.objects.get_by_natural_key(
+                app_label=app_label, model=model_name
+            )
+        except ContentType.DoesNotExist:
+            raise Http404("not found")
+        return content_type
+
     def get_content_object(self):
         if hasattr(self, '_content_object'):
             return self._content_object
-        content_type = get_object_or_404(
-            ContentType, pk=self.kwargs.get('content_type', 0))
+        # content_type = get_object_or_404(
+        #     ContentType, pk=self.kwargs.get('content_type', 0))
+        content_type = self.get_content_type()
         self._content_object = get_object_or_404(
             content_type.model_class(), pk=self.kwargs.get('object_pk', 0)
         )
@@ -123,7 +135,7 @@ class SubscribeCommentWatchView(generic.FormView):
         return reverse('comments:subscribed')
 
     def get_form_kwargs(self):
-        content_type = self.kwargs.get('content_type', 0)
+        content_type = self.get_content_type()
         object_pk = self.kwargs.get('object_pk', 0)
 
         instance = get_object_or_None(CommentWatch,

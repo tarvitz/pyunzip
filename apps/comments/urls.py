@@ -10,7 +10,9 @@ urlpatterns = [
     url(r'^comments/(?P<pk>\d+)/update/$',
         login_required(views.CommentUpdateView.as_view()),
         name='comment-update'),
-    url(r'^comments/(?P<content_type>\d+)/(?P<object_pk>\d+)/subscribe/$',
+    url(
+        r'^comments/(?P<app_model>[\w_]+\.[\w_]+)/'
+        r'(?P<object_pk>\d+)/subscribe/$',
         login_required(views.SubscribeCommentWatchView.as_view()),
         name='subscription-add'),
     url(r'^subscriptions/$',

@@ -29,8 +29,7 @@
            data-title="{% trans "Remove subscription" %}">
             <i class="glyphicon glyphicon-delete glyphicon-log-out"></i></a>
       {% else %}
-        {% get_content_type object as object_ct %}
-        <a href="{% url "comments:subscription-add" object_ct.content_type.pk object.pk %}"
+        <a href="{% url "comments:subscription-add" object.model_name object.pk %}"
            rel="tooltip"
            class="btn btn-xs btn-default"
            data-title="{% trans "Subscribe for a new comments" %}">

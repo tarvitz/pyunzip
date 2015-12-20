@@ -370,6 +370,10 @@ class Event(models.Model):
         out = post_markup_filter(getattr(self, field))
         return render_filter(out, settings.DEFAULT_SYNTAX)
 
+    @property
+    def model_name(self):
+        return '%s.%s' % (self._meta.app_label, self._meta.model_name)
+
     class Meta:
         ordering = ['is_finished', 'date_start', ]
         verbose_name = _("Event")
