@@ -6,11 +6,11 @@
 .. moduleauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 .. sectionauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 """
-from django.apps import apps
+import redis
+from django.conf import settings
 
 
 #: closure get redis client
-
 def _get_redis_client():
     """
     get redis client
@@ -18,7 +18,7 @@ def _get_redis_client():
     :rtype: redis.client.StrictRedis
     :return: client
     """
-    return apps.get_app_config('core').redis_db
+    return redis.StrictRedis(**settings.REDIS)
 
 
 def _get_redis_connector():

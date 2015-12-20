@@ -2,6 +2,8 @@
 import re
 import os
 
+from apps.core.connections import get_redis_client
+
 from django.db import models
 from django.contrib import auth
 from django.contrib.auth.models import (
@@ -12,16 +14,19 @@ from django.utils.encoding import python_2_unicode_compatible
 from picklefield import PickledObjectField
 from django.db.models import Sum
 from django.core import validators
-from django.utils.translation import ugettext_lazy as _
+
+from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django.utils.encoding import force_text
-from django.core.cache import cache
-from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 
 from datetime import datetime, timedelta
 import logging
 logger = logging.getLogger(__name__)
+
+redis = get_redis_client()
 
 # Create your models here.
 GENDER_CHOICES = (
@@ -303,29 +308,27 @@ class User(AbstractBaseUser):
         idx = [self.gender in i[0] for i in GENDER_CHOICES].index(True)
         return GENDER_CHOICES[idx][1]
 
-    def get_nickname(self, no_cache=False):
-        nickname = (
-            cache.get('nick:%s' % self.username)
-            if not no_cache else None
-        )
+    def get_user_nickname(self):
+        return self.nickname or self.username
+
+    def get_nickname(self):
+        if hasattr(self, '_nickname'):
+            return self._nickname
+
+        set_name = 'users:%s' % self.pk
+        nickname = redis.hget(set_name, 'nickname')
+        self._nickname = nickname
+
         if not nickname:
-            if self.ranks.all():
-                rank = self.ranks.order_by('-magnitude')[0]
-                span = (
-                    "<span class='%(class)s' id='%(id)s' "
-                    "style='%(style)s'>%(nickname)s</span>" % {
-                        'class': rank.type.css_class,
-                        'id': rank.type.css_id,
-                        'style': rank.type.style,
-                        'nickname': self.nickname or self.username
-                    }
+            if self.ranks.exists():
+                rank = self.ranks.order_by(
+                    '-magnitude').select_related().first()
+                span = render_to_string(
+                    'accounts/include/nickname.html',
+                    {'object': rank, 'user': self}
                 )
-                if not no_cache:
-                    cache.set('nick:%s' % self.username, span)
+                redis.hset(set_name, 'nickname', span)
                 return span
-            if not no_cache:
-                cache.set('nick:%s' % self.username, self.nickname or
-                          self.username)
             return self.nickname or self.username
         return nickname
 

@@ -10,10 +10,6 @@ from django.dispatch import receiver
 
 @receiver(post_save, sender=User)
 def on_user_change(instance, **kwargs):
-    cache.set(
-        'nick:%s' % instance.username,
-        instance.get_nickname(no_cache=True)
-    )
     return instance
 
 
@@ -22,11 +18,10 @@ def on_rank_type_change(instance, **kwargs):
     users = User.objects.filter(
         ranks__in=instance.rank_set.all()
     )
+    redis = User._get_redis_client()
     for user in users:
-        cache.set(
-            'nick:%s' % user.username,
-            user.get_nickname(no_cache=True)
-        )
+        set_name = 'users:%s' % user.pk
+        redis.hset(set_name, 'nickname', user.get_nickname())
     return instance
 
 

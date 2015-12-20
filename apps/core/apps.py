@@ -6,10 +6,9 @@
 .. moduleauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 .. sectionauthor:: Nickolas Fox <tarvitz@blacklibary.ru>
 """
-import redis
+
 
 from django.apps import AppConfig
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -20,4 +19,3 @@ class CoreConfig(AppConfig):
     def ready(self):
         from .signals import setup_signals
         setup_signals()
-        self.redis_db = redis.StrictRedis(**settings.REDIS)
