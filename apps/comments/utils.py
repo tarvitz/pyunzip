@@ -29,7 +29,7 @@ def get_redis_set_name(content_object):
     :rtype: str
     :return: set name
     """
-    return '%(app_label)s.%(model_name)s.%(pk)s' % {
+    return '%(app_label)s.%(model_name)s.comment.%(pk)s' % {
         'app_label': content_object._meta.app_label,
         'model_name': content_object._meta.model_name,
         'pk': content_object.pk
