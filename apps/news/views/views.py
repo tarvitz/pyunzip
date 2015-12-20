@@ -11,8 +11,8 @@ from apps.core.helpers import render_to
 from apps.core.views import LoginRequiredMixin
 
 from apps.comments.forms import CommentForm
-from apps.core.helpers import get_content_type
-from apps.comments.models import Comment
+from apps.core.helpers import get_content_type, get_object_or_None
+from apps.comments.models import CommentWatch
 
 from django.core.paginator import InvalidPage, EmptyPage
 from django.conf import settings
@@ -167,19 +167,30 @@ class EventView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EventView, self).get_context_data(**kwargs)
+        user = self.request.user
         # create watch instance to mark this event is watched by user
         if (not self.object.is_finished
-                and self.request.user.is_authenticated()):
+                and user.is_authenticated()):
             EventWatch.objects.get_or_create(event=self.object,
-                                             user=self.request.user)
+                                             user=user)
 
         comments = self.object.comments.select_related('user')
         comments = paginate(
             comments, get_int_or_zero(self.request.GET.get('page', 1) or 1),
             pages=settings.OBJECTS_ON_PAGE
         )
+        event_ct = get_content_type(self.object)
+
+        comment_watch = None
+        if user.is_authenticated():
+            comment_watch = get_object_or_None(
+                CommentWatch, content_type=event_ct, object_pk=self.object.pk,
+                user=user,
+                is_disabled=False
+            )
         context.update({
-            'comments': comments
+            'comments': comments,
+            'comment_watch': comment_watch
         })
         return context
 

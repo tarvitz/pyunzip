@@ -1,4 +1,4 @@
-{% if user.is_authenticated and usr.warnings.count %}
+{% if user.is_authenticated and usr.warnings.exists %}
   {% with warn=usr.warnings.0 %}
     <span class="policy-warnings level-{{ warn.level }}">{% spaceless %}
       [

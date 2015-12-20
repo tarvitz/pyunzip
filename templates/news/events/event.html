@@ -1,5 +1,5 @@
 {% extends base_template %}
-{% load i18n coretags comments_extra %}
+{% load i18n coretags %}
 {% block content %}
   <ul class="breadcrumb">
     <li><a href="{% url "pybb:index" %}">{% trans "forum" %}</a></li>
@@ -20,8 +20,6 @@
 
 
   <div class="pull-right">
-    {% get_comment_watch object as comment_watch %}
-
     {% if user.is_authenticated %}
       {% if comment_watch %}
         <a href="{{ comment_watch.get_subscription_remove_url }}" rel="tooltip"
