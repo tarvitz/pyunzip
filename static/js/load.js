@@ -96,4 +96,22 @@ function csrfSafeMethod(method) {
     text = $('form').find('textarea').val();
     $('form').find('textarea').val(text + '\n' + quote);
   });
+  $.each($('[data-toggle=paginator]'), function(idx, item){
+    // register once
+    if ($(item).data('applied') === undefined){
+      $(item).on('click', function(e){
+        var search = document.location.search;
+        var pageRegex = new RegExp('[?|&]page=\\d+');
+        search = search.replace(pageRegex, '');
+        if (search){
+          search += $(this).attr('href').replace('?', '&');
+        } else {
+          search = $(this).attr('href');
+        }
+        document.location.search = search;
+        return false;
+      });
+      $(item).attr('data-applied', 'on');
+    }
+  });
 })();
