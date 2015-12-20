@@ -323,13 +323,14 @@ class User(AbstractBaseUser):
             if self.ranks.exists():
                 rank = self.ranks.order_by(
                     '-magnitude').select_related().first()
-                span = render_to_string(
+                self._nickname = render_to_string(
                     'accounts/include/nickname.html',
                     {'rank': rank, 'user': self}
                 )
-                redis.hset(set_name, 'nickname', span)
-                return span
-            self._nickname = self.nickname or self.username
+                redis.hset(set_name, 'nickname', self._nickname)
+            else:
+                self._nickname = self.nickname or self.username
+                redis.hset(set_name, 'nickname', self._nickname)
         return self._nickname
 
     def get_comments_count(self):
