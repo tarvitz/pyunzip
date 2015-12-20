@@ -2427,7 +2427,7 @@ msgstr "аноним"
 
 #: templates/karma/karma_list.html:33
 msgid "link"
-msgstr "сслыка"
+msgstr "ссылка"
 
 #: templates/karma/karma_list.html:43
 msgid "No karma registered"
