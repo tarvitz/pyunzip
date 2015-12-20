@@ -12,7 +12,7 @@
         {% empty %}
             <p>{% trans "No results found." %}.</p>
         {% endfor %}
-        {% include "generic/paginator.html" with paginator=page %}
+        {% include "search/paginator.html" %}
     {% else %}
       <div class="alert alert-warning">
         <strong><i class="glyphicon glyphicon-search"></i></strong>

@@ -1,0 +1,26 @@
+{% load i18n %}
+{% if paginator.num_pages > 1 %}
+    <ul class='pagination pagination-sm'>
+      {% if page.has_previous %}
+        <li><a data-toggle='paginator' href="?page={{ page.previous_page_number }}">«</a></li>
+      {% else %}
+        <li class='disabled'><a href='#'>«</a></li>
+      {% endif %}
+      {% for num in paginator.page_range %}
+        {% if not num %}
+          <li><a href="#">...</a></li>
+        {% else %}
+          {% if page.number == num %}
+            <li class='active'><a href='#'>{{ num }}</a></li>
+          {% else %}
+            <li><a data-toggle='paginator' href='?page={{ num }}{% if paginator.jump %}{{ paginator.jump }}{% endif %}'>{{ num }}</a></li>
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+      {% if page.has_next %}
+        <li><a data-toggle='paginator' href="?page={{ page.next_page_number }}">»</a></li>
+      {% else %}
+        <li class='disabled'><a href='#'>»</a></li>
+      {% endif %}
+    </ul>
+{% endif %}
