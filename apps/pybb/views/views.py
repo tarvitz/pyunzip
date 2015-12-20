@@ -634,7 +634,7 @@ class PostListView(generic.ListView):
     def get_queryset(self):
         return super(PostListView, self).get_queryset().filter(
             topic=self.kwargs.get('pk', 0)
-        )
+        ).select_related('user')
 
 
 class PostAddView(generic.CreateView):
