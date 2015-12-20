@@ -170,12 +170,10 @@ class EventView(generic.DetailView):
         # create watch instance to mark this event is watched by user
         if (not self.object.is_finished
                 and self.request.user.is_authenticated()):
-            watch, created = EventWatch.objects.get_or_create(
-                event=self.object,
-                user=self.request.user)
-        event_ct = get_content_type(Event)
-        comments = Comment.objects.filter(content_type=event_ct,
-                                          object_pk=self.get_object().pk)
+            EventWatch.objects.get_or_create(event=self.object,
+                                             user=self.request.user)
+
+        comments = self.object.comments.select_related('user')
         comments = paginate(
             comments, get_int_or_zero(self.request.GET.get('page', 1) or 1),
             pages=settings.OBJECTS_ON_PAGE
